@@ -4,7 +4,7 @@
       v-for="bank in banks"
       :key="Math.random()"
       class="calc-slider__item"
-      @click="$emit('currentInterestRate', bank.interestRate)"
+      @click="selectedBank(bank)"
     >
       <div class="calc-slider__wrapper-img">
         <img :src="bank.image" :alt="bank.title" class="calc-slider__img" />
@@ -22,7 +22,13 @@
 <script>
 export default {
   name: "TheBanks",
-  emits: ["currentInterestRate"],
+  emits: ["selectCurrentBank"],
+  mounted() {
+    $(".calc-slider").slick(this.sliderOptions);
+    if (this.banks.length) {
+      this.$emit("selectCurrentBank", this.banks[0]);
+    }
+  },
   props: {
     sliderOptions: {
       type: Object,
@@ -33,8 +39,11 @@ export default {
       default: () => [],
     },
   },
-  mounted() {
-    $(".calc-slider").slick(this.sliderOptions);
+
+  methods: {
+    selectedBank(bank) {
+      this.$emit("selectCurrentBank", bank);
+    },
   },
 };
 </script>

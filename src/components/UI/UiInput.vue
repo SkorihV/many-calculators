@@ -5,11 +5,24 @@
         {{ label }}
       </div>
       <input
+        ref="trueInput"
         :id="idName"
-        type="text"
+        :type="isTypeNumber"
         :value="resultValue"
-        @input="tryChangeValue"
-        class="calc__input"
+        @input="tryChangeValueInput"
+        @keydown.enter="trueTrueValue"
+        class="calc__input-item"
+        autocomplete="off"
+        v-if="!fakeValueHidden"
+      />
+
+      <input
+        @click="showTrueValue"
+        :type="isTypeNumber"
+        :value="resultValueDouble"
+        class="calc__input-item currency"
+        autocomplete="off"
+        v-if="fakeValueHidden"
       />
       <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
     </label>
@@ -31,7 +44,7 @@
 <script>
 export default {
   name: "UiInput",
-  emits: ["changeValue"],
+  emits: ["changeValue", "changeValid", "changeValueBlur"],
   props: {
     inputValue: {
       type: [Number, String],
@@ -66,85 +79,135 @@ export default {
     },
     notEmpty: {
       type: Boolean,
-      default: null,
+    },
+    typeNumber: {
+      type: Boolean,
+    },
+    isFixed: {
+      type: Boolean,
+    },
+    isCurrency: {
+      type: Boolean,
+      default: false,
     },
   },
   mounted() {
-    if (this.min ) {
+    if (this.min) {
       this.changeValue(this.min);
+    }
+
+    if (this.isCurrency) {
+      window.addEventListener("click", (e) => {
+        if (
+          !this.$el.contains(e.target) &&
+          !e.target.classList.contains("calc__input-item")
+        ) {
+          this.fakeValueHidden = true;
+        }
+      });
     }
   },
   data() {
     return {
       isErrorCustom: false,
-      errorTimeout: null
+      errorTimeout: null,
+      fakeValueHidden: this.isCurrency,
     };
   },
   methods: {
     resultWitchNumberValid() {
       try {
         let currentValue = this.inputValue;
+        this.clearTimer();
         if (this.isErrorNumber) {
           this.changeValueWitchTimer(this.min || 0);
         }
 
-        if (currentValue.lastIndexOf === ".") {
+        if (currentValue.toString().slice(-1) === ".") {
           return currentValue;
         }
-        // currentValue = this.checkingPerMaxMin;
 
-        return parseFloat(currentValue);
-
+        if (this.isFixed) {
+          return parseFloat(currentValue).toFixed(2);
+        }
+        return currentValue;
       } catch (e) {
-        console.error(e.message)
+        console.error(e.message);
       }
-
     },
-    tryChangeValue(e) {
-      if (this.errorTimeout) clearTimeout(this.errorTimeout);
-      let value = parseFloat(parseFloat(e.target.value).toFixed(2));
-      this.changeValue(value)
+    tryChangeValueInput(e) {
+      let value = parseFloat(e.target.value);
+      this.changeValue(value);
     },
     changeValue(value) {
-      this.$emit('changeValue', value);
+      this.$emit("changeValue", value);
+      this.checkValid();
     },
-    changeValueWitchTimer(value){
+    changeValueWitchTimer(value) {
       this.errorTimeout = setTimeout(() => {
         this.changeValue(value);
       }, 1500);
-    }
+    },
+    clearTimer() {
+      if (this.errorTimeout) clearTimeout(this.errorTimeout);
+    },
+    checkValid() {
+      this.$nextTick(() => {
+        let isInvalid = [
+          this.isErrorMin,
+          this.isErrorMax,
+          this.isErrorEmpty,
+          this.isErrorNumber,
+          this.isErrorCustom,
+        ].some((item) => item);
+        this.$emit("changeValid", isInvalid);
+        console.log(isInvalid);
+      });
+    },
+    showTrueValue() {
+      if (this.isCurrency) {
+        this.fakeValueHidden = false;
+        this.$nextTick(() => {
+          this.$refs.trueInput.focus();
+        });
+      }
+    },
+    trueTrueValue() {
+      this.fakeValueHidden = true;
+    },
+  },
+  watch: {
+    inputValue() {
+      this.checkValid();
+    },
   },
   computed: {
     resultValue() {
       if (this.onlyNumber) {
         return this.resultWitchNumberValid();
       } else {
-        return this.inputValue
+        return this.inputValue;
       }
     },
-
+    resultValueDouble() {
+      if (this.onlyNumber) {
+        return this.resultWitchNumberValid().toLocaleString("ru");
+      } else {
+        return this.inputValue;
+      }
+    },
     valueIsNaN() {
       return isNaN(parseFloat(this.inputValue));
     },
-    checkingPerMaxMin() {
-      if (this.isErrorMax) {
-        return parseFloat(this.max);
-      } else if (this.isErrorMin) {
-        return parseFloat(this.min);
-      }
-      return parseFloat(this.inputValue);
+    isTypeNumber() {
+      return this.typeNumber ? "Number" : "Text";
     },
+
     isErrorNumber() {
-      const isError = (
+      const isError =
         (this.onlyNumber || this.max !== null || this.min !== null) &&
-        isNaN(Number(this.inputValue))
-      )
-
-      if (isError) {
-        this.changeValueWitchTimer(this.min || 0);
-      }
-      return isError
-
+        isNaN(Number(this.inputValue));
+      return isError;
     },
     errorNumber() {
       return this.isErrorNumber ? "Только числа!" : null;
@@ -156,14 +219,10 @@ export default {
       return this.isErrorEmpty ? "Заполните поле!" : null;
     },
     isErrorMax() {
-      const isError = (
+      const isError =
         !this.valueIsNaN &&
         this.max !== null &&
-        parseFloat(this.inputValue) > parseFloat(this.max)
-      )
-      if (isError) {
-        this.changeValueWitchTimer(this.max);
-      }
+        parseFloat(this.inputValue) > parseFloat(this.max);
       return isError;
     },
     errorMax() {
@@ -175,15 +234,10 @@ export default {
     },
 
     isErrorMin() {
-      const isError = (
+      const isError =
         !this.valueIsNaN &&
         this.min !== null &&
-        parseFloat(this.inputValue) < parseFloat(this.min)
-      );
-
-      if (isError) {
-        this.changeValueWitchTimer(this.min)
-      }
+        parseFloat(this.inputValue) < parseFloat(this.min);
       return isError;
     },
     errorMin() {
