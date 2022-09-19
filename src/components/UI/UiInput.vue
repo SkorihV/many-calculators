@@ -22,7 +22,7 @@
         :value="resultValueDouble"
         class="calc__input-item currency"
         autocomplete="off"
-        v-if="fakeValueHidden"
+        v-show="fakeValueHidden"
       />
       <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
     </label>
@@ -118,6 +118,10 @@ export default {
     resultWitchNumberValid() {
       try {
         let currentValue = this.inputValue;
+        if (this.valueIsNaN) {
+          currentValue = "";
+        }
+
         this.clearTimer();
         if (this.isErrorNumber) {
           this.changeValueWitchTimer(this.min || 0);
@@ -136,8 +140,7 @@ export default {
       }
     },
     tryChangeValueInput(e) {
-      let value = parseFloat(e.target.value);
-      this.changeValue(value);
+      this.changeValue(e.target.value);
     },
     changeValue(value) {
       this.$emit("changeValue", value);
@@ -161,7 +164,6 @@ export default {
           this.isErrorCustom,
         ].some((item) => item);
         this.$emit("changeValid", isInvalid);
-        console.log(isInvalid);
       });
     },
     showTrueValue() {
@@ -190,11 +192,7 @@ export default {
       }
     },
     resultValueDouble() {
-      if (this.onlyNumber) {
-        return this.resultWitchNumberValid().toLocaleString("ru");
-      } else {
-        return this.inputValue;
-      }
+      return parseFloat(this.inputValue).toLocaleString("ru");
     },
     valueIsNaN() {
       return isNaN(parseFloat(this.inputValue));
@@ -204,10 +202,10 @@ export default {
     },
 
     isErrorNumber() {
-      const isError =
+      return (
         (this.onlyNumber || this.max !== null || this.min !== null) &&
-        isNaN(Number(this.inputValue));
-      return isError;
+        isNaN(Number(this.inputValue))
+      );
     },
     errorNumber() {
       return this.isErrorNumber ? "Только числа!" : null;
@@ -219,11 +217,11 @@ export default {
       return this.isErrorEmpty ? "Заполните поле!" : null;
     },
     isErrorMax() {
-      const isError =
+      return (
         !this.valueIsNaN &&
         this.max !== null &&
-        parseFloat(this.inputValue) > parseFloat(this.max);
-      return isError;
+        parseFloat(this.inputValue) > parseFloat(this.max)
+      );
     },
     errorMax() {
       return this.max !== null &&
@@ -234,11 +232,11 @@ export default {
     },
 
     isErrorMin() {
-      const isError =
+      return (
         !this.valueIsNaN &&
         this.min !== null &&
-        parseFloat(this.inputValue) < parseFloat(this.min);
-      return isError;
+        parseFloat(this.inputValue) < parseFloat(this.min)
+      );
     },
     errorMin() {
       return this.min !== null &&

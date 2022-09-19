@@ -1,12 +1,24 @@
 <template>
   <div class="calc calc-wrapper">
     <the-banks
+      v-if="!isHandlerRate"
       :slider-options="sliderOptions"
       :banks="banks"
       @selectCurrentBank="selectCurrentBank"
     />
     <div class="calc__wrapper-content content">
       <div class="content__left-side">
+        <ui-input
+          label="Годовая ставка: "
+          min="1"
+          max="50"
+          not-empty
+          only-number
+          is-name="handlerRate"
+          :input-value="currentInterestRate"
+          @changeValid="changeValid($event, 'handlerRate')"
+          @changeValue="changeCurrentRateOnHandler"
+        />
         <ui-input
           label="Стоимость объекта недвижимости:"
           :inputValue="propertyPrice"
@@ -34,7 +46,7 @@
             :inputValue="downPaymentPercentage"
             @changeValue="changeDownPaymentPercentage"
             @changeValid="changeValid($event, 'downPaymentPercentage')"
-            min="10"
+            min="0"
             max="90"
             unit="%"
             not-empty
@@ -55,7 +67,7 @@
         <ui-range
           :input-value="downPaymentPercentage"
           @changeValue="changeDownPaymentPercentage"
-          min="10"
+          min="0"
           max="90"
           show-steps
           step-prompt="5"
@@ -67,7 +79,7 @@
             @changeValid="changeValid($event, 'creditTerm')"
             @changeValue="changeCreditTerm"
             id-name="creditTerm"
-            min="1"
+            min="10"
             max="25"
             only-number
             not-empty
@@ -86,13 +98,19 @@
           </div>
         </div>
         <div v-else class="right-side__content-block">
-          <div v-if="currenSelectedBank.image" class="right-side__item">
+          <div
+            v-if="currenSelectedBank.image && !isHandlerRate"
+            class="right-side__item"
+          >
             <div class="right-side__content">
               <img :src="currenSelectedBank.image" />
             </div>
           </div>
 
-          <div v-if="currenSelectedBank.title" class="right-side__item">
+          <div
+            v-if="currenSelectedBank.title && !isHandlerRate"
+            class="right-side__item"
+          >
             <div class="right-side__label">Банк:</div>
             <div class="right-side__content right-side__content_little">
               {{ currenSelectedBank.title }}
@@ -102,7 +120,7 @@
           <div class="right-side__item">
             <div class="right-side__label">Ставка:</div>
             <div class="right-side__content">
-              {{ currenSelectedBank.interestRate }}
+              {{ currentInterestRate }}
             </div>
           </div>
 
@@ -126,6 +144,30 @@
         </div>
       </div>
     </div>
+    <template v-if="!isInvalid">
+      <div class="calc__title">Тип расчета:</div>
+      <div
+        v-if="typeCalculation === 'A'"
+        @click="typeCalculation = 'D'"
+        class="calc__toggle-btn"
+      >
+        Аннуитетный
+      </div>
+      <div
+        v-if="typeCalculation === 'D'"
+        @click="typeCalculation = 'A'"
+        class="calc__toggle-btn"
+      >
+        Дифференцированный
+      </div>
+      <payment-schedule
+        :start-credit-sum="startCreditSum"
+        :credit-term-month="amountMonth"
+        :monthly-payment="monthlyPayment"
+        :monthly-interest-rate="monthlyInterestRate"
+        :typeCalculation="typeCalculation"
+      ></payment-schedule>
+    </template>
   </div>
 </template>
 
@@ -134,6 +176,7 @@ import TheBanks from "@/components/TheBanks";
 import UiInput from "@/components/UI/UiInput";
 import UiRange from "@/components/UI/UiRange";
 import UiSelect from "@/components/UI/UiSelect";
+import PaymentSchedule from "@/components/PaymentSchedule";
 
 export default {
   name: "app_mortgage_calculator",
@@ -142,6 +185,7 @@ export default {
     UiInput,
     UiRange,
     UiSelect,
+    PaymentSchedule,
   },
   data() {
     return {
@@ -153,13 +197,14 @@ export default {
         autoplay: false,
         autoplaySpeed: 2000,
       },
+      currentInterestRate: 0,
       currenSelectedBank: {}, //текущая процентная ставка
       propertyPrice: 0, //стоимость покупаемого объекта недвижимости
       downPaymentPercentage: 0, //первоначальный взнос процент
       downPaymentCurrency: 0, //первоначальный взнос валюта
       creditTerm: 0, //срок кредита
       errorsInputs: new Set(),
-
+      isHandlerRate: false,
       typeTimes: [
         {
           title: "Мес",
@@ -170,7 +215,8 @@ export default {
           value: "year",
         },
       ],
-      currentTypeTime: {}, // текущие единицы времени для рассчета
+      currentTypeTime: {}, // текущие единицы времени для расчета
+      typeCalculation: "A",
       max: 100,
       min: 10,
       banks: [
@@ -193,7 +239,7 @@ export default {
         {
           title: "Банк 4",
           image: "https://dummyimage.com/150x100/cccccc/fff.jpg",
-          interestRate: 13.5,
+          interestRate: 15,
         },
       ],
     };
@@ -205,7 +251,12 @@ export default {
      */
     selectCurrentBank(bank) {
       this.currenSelectedBank = bank;
+      this.currentInterestRate = bank.interestRate;
     },
+    changeCurrentRateOnHandler(rate) {
+      this.currentInterestRate = parseFloat(rate).toFixed(2);
+    },
+
     /**
      * изменить стоимость объекта недвижимости
      * @param price
@@ -265,7 +316,6 @@ export default {
     },
   },
   watch: {
-    currentInterestRate() {},
     propertyPrice() {
       this.downPaymentCurrency = Math.ceil(
         this.propertyPrice -
@@ -294,37 +344,31 @@ export default {
       if (this.currentTypeTime.value === "year") {
         return this.creditTerm * 12;
       }
-      return this.creditTerm;
+
+      return parseFloat(this.creditTerm);
     },
     /**
      * месячная ставка исходя из годовой
      * @returns {number}
      */
     monthlyInterestRate() {
-      return this.aroundCeil(
-        this.currenSelectedBank.interestRate / 12 / 100,
-        1000
-      );
+      return this.aroundCeil(this.currentInterestRate / 12 / 100, 10000);
     },
     /**
      * общая ставка
      * @returns {number}
      */
     totalRate() {
-      return this.aroundCeil(
-        Math.pow(1 + this.monthlyInterestRate, this.amountMonth)
-      );
+      return Math.pow(1 + this.monthlyInterestRate, this.amountMonth);
     },
     /**
      * ежемесячный платеж
      * @returns {number}
      */
     monthlyPayment() {
-      const top =
-        this.monthlyInterestRate *
-        Math.pow(1 + this.monthlyInterestRate, this.amountMonth);
-      const bottom =
-        Math.pow(1 + this.monthlyInterestRate, this.amountMonth) - 1;
+      const top = this.totalRate * this.monthlyInterestRate;
+      const bottom = this.totalRate - 1;
+
       return this.aroundCeil(this.startCreditSum * (top / bottom));
     },
     monthlyPaymentInOut() {
@@ -356,7 +400,7 @@ export default {
      * @returns {number}
      */
     totalSumCredit() {
-      return this.aroundCeil(this.monthlyPayment * this.creditTerm * 12);
+      return this.aroundCeil(this.monthlyPayment * this.amountMonth);
     },
     totalSumCreditInOut() {
       return this.totalSumCredit.toLocaleString("ru");
@@ -585,15 +629,16 @@ $border-radius: 4px;
         @include style-flex-center;
         flex-direction: column;
         padding: 15px;
-        &__content-block {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
+
         .right-side {
           &__error-block-title {
             color: $color-orange-normal;
             font-size: 30px;
+          }
+          &__content-block {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
           }
 
           &__item {
@@ -613,6 +658,63 @@ $border-radius: 4px;
             }
           }
         }
+      }
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      display: flex;
+    }
+    &__toggle-btn {
+      font-weight: 600;
+      @include style-flex-center;
+      @include style-button;
+      padding: 10px;
+      cursor: pointer;
+      &:hover {
+        @include style-button-hover;
+        @include style-border-hover;
+      }
+    }
+
+    &__table-payment {
+      width: 100%;
+      &-show {
+        @include style-button;
+        padding: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        @include style-border;
+        &:hover {
+          @include style-button-hover;
+          @include style-border-hover;
+        }
+      }
+      &-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        max-height: 500px;
+        overflow-y: auto;
+      }
+      &-tr {
+        &_sticky {
+          position: sticky;
+          top: 0;
+          background-color: $color-gray-dark;
+        }
+      }
+      &-th {
+        border-bottom: 1px solid $color-gray-dark;
+        padding: 5px 0;
+      }
+      &-td {
+        border-bottom: 1px solid $color-gray-dark;
+        padding: 5px 0;
+        color: $color-dark-normal;
       }
     }
   }

@@ -1,4 +1,52 @@
-<template></template>
+<template>
+  <div class="calc__table-payment-wrapper">
+    <div class="calc__table-payment-show" @click="isShow = !isShow">
+      {{ isShow ? "Скрыть" : "Отобразить" }}
+    </div>
+    <table v-if="isShow" class="calc__table-payment">
+      <tr class="calc__table-payment-tr calc__table-payment-tr_sticky">
+        <th class="calc__table-payment-th">№</th>
+        <th class="calc__table-payment-th">Месяц</th>
+        <th class="calc__table-payment-th">Сумма платежа, руб</th>
+        <th class="calc__table-payment-th">Платеж по основному долгу, руб</th>
+        <th class="calc__table-payment-th">Платеж по процентам, руб</th>
+        <th class="calc__table-payment-th">Остаток долга, руб</th>
+      </tr>
+      <template v-if="typeCalculation === 'A'">
+        <tr
+          class="calc__table-payment-tr"
+          v-for="(month, inx) in dataListForCreditAnnuity"
+          :key="inx"
+        >
+          <td class="calc__table-payment-td">{{ inx + 1 }}</td>
+          <td class="calc__table-payment-td">
+            {{ monthNames[month.month] }} {{ month.year }}
+          </td>
+          <td class="calc__table-payment-td">{{ month.monthlyPayment }}</td>
+          <td class="calc__table-payment-td">{{ month.mainSimInMonth }}</td>
+          <td class="calc__table-payment-td">{{ month.percentageInMonth }}</td>
+          <td class="calc__table-payment-td">{{ month.mainSum }}</td>
+        </tr>
+      </template>
+      <template v-if="typeCalculation === 'D'">
+        <tr
+          class="calc__table-payment-tr"
+          v-for="(month, inx) in dataListForCreditDifferentiated"
+          :key="inx"
+        >
+          <td class="calc__table-payment-td">{{ inx + 1 }}</td>
+          <td class="calc__table-payment-td">
+            {{ monthNames[month.month] }} {{ month.year }}
+          </td>
+          <td class="calc__table-payment-td">{{ month.monthlyPayment }}</td>
+          <td class="calc__table-payment-td">{{ month.mainSimInMonth }}</td>
+          <td class="calc__table-payment-td">{{ month.percentageInMonth }}</td>
+          <td class="calc__table-payment-td">{{ month.mainSum }}</td>
+        </tr>
+      </template>
+    </table>
+  </div>
+</template>
 
 <script>
 // расчеты тут https://mobile-testing.ru/loancalc/rachet_dosrochnogo_pogashenia/
@@ -6,13 +54,8 @@
 export default {
   name: "PaymentSchedule",
   props: {
-    principalAmount: {
+    startCreditSum: {
       // сумма основного долга
-      type: Number,
-      default: null,
-    },
-    currenInterestRate: {
-      // текущая процентная ставка
       type: Number,
       default: null,
     },
@@ -24,6 +67,42 @@ export default {
     creditTermMonth: {
       type: Number, // срок кредита в месяцах
     },
+    monthlyPayment: {
+      //ежемесячный платеж
+      type: Number,
+    },
+    monthlyInterestRate: {
+      // ежемесячная ставка
+      type: Number,
+    },
+    typeCalculation: {
+      type: String,
+      default: "A",
+    },
+  },
+  data() {
+    return {
+      creditListAnnuity: [], // список данных по аннуитивному типу
+      creditListDifferentiated: [], // список данных по дифференцированному типу
+      monthlyRepaymentFoDebtDifferentiated: 0, //ежемесячное погашение долга по дифференцированному типу
+      mainSumAnnuity: 0, // сумма платежа
+      mainSumDifferentiated: 0, // сумма платежа
+      monthNames: [
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+      ],
+      isShow: false,
+    };
   },
   methods: {
     /**
@@ -49,12 +128,11 @@ export default {
     },
     /**
      * количество дней в году из timestamp
-     * @param timestamp
+     * @param year
      * @returns {number}
      */
-    getCurrentDayInYear(timestamp) {
-      const { year, month, day } = this.getDataDayInTimeStamp(timestamp);
-      return (new Date(year, month, day) - new Date(year, 0, 0)) / 86400000;
+    getCurrentDayInYear(year) {
+      return (new Date(year, 11, 31) - new Date(year, 0, 0)) / 86400000;
     },
 
     /**
@@ -97,90 +175,108 @@ export default {
     },
 
     /**
-     * получить первый день следующего месяца исходя из начальной даты
-     * если 1 число, то первое число, если 22, то 22.
-     * Если в текущем месяце дней больше чем в следующем, то первое
-     * Если в текущем месяце дней меньше чем в следующем, то первое
-     * @param timestamp
+     * получить данные за месяц по аннуитетному варианту расчета
      */
-    getFirstDayNextMonth(timestamp) {
-      let { oldYear, oldMonth, oldDay } = this.getDataDayInTimeStamp(timestamp);
-      let month = this.getNextMonth(oldMonth);
-      let year = oldYear;
-      let day = oldDay;
-      let daysInCurrentMonth = this.getDaysInMonth(oldMonth, oldYear);
-      let daysInNextMonth = this.getDaysInMonth(month, year);
-      if (month === 0) {
-        month++;
-      }
+    getLoanInterestInMonthAnnuity(stamp) {
+      let { year, month } = this.getDataDayInTimeStamp(stamp);
 
-      if (oldDay === 1) {
-        return this.getTimeStampInDate({ year, month, day });
-      }
+      let percentageOfTheDebt = this.mainSumAnnuity * this.monthlyInterestRate;
+      let mainPartOfTheDebt = this.monthlyPayment - percentageOfTheDebt;
+      this.mainSumAnnuity = this.mainSumAnnuity - mainPartOfTheDebt;
+
+      return {
+        percentageInMonth: this.aroundCeil(
+          percentageOfTheDebt,
+          100
+        ).toLocaleString("ru"),
+        mainSimInMonth: this.aroundCeil(mainPartOfTheDebt, 100).toLocaleString(
+          "ru"
+        ),
+        mainSum: this.aroundCeil(this.mainSumAnnuity, 100).toLocaleString("ru"),
+        monthlyPayment: this.monthlyPayment.toLocaleString("ru"),
+        month,
+        year,
+      };
     },
 
     /**
-     * проценты по кредиту за указанный промежуток времени
+     * получить данные за месяц по дифференцированному варианту расчета
      */
-    getLoanInterestInMonth(firstDay, lastDay) {
-      return (
-        (this.principalAmount *
-          this.currenInterestRate *
-          this.getDifferenceDays(firstDay, lastDay)) /
-        (100 * this.getCurrentDayInYear(firstDay))
-      );
+    getLoanInterestInDifferentiated(stamp) {
+      let { year, month } = this.getDataDayInTimeStamp(stamp);
+
+      let percentageOfTheDebt =
+        this.mainSumDifferentiated * this.monthlyInterestRate;
+      let mainPartOfTheDebt = this.monthlyRepaymentFoDebtDifferentiated;
+      let monthlyPayment = percentageOfTheDebt + mainPartOfTheDebt;
+      this.mainSumDifferentiated =
+        this.mainSumDifferentiated - mainPartOfTheDebt;
+
+      return {
+        percentageInMonth: this.aroundCeil(
+          percentageOfTheDebt,
+          100
+        ).toLocaleString("ru"),
+        mainSimInMonth: this.aroundCeil(mainPartOfTheDebt, 100).toLocaleString(
+          "ru"
+        ),
+        mainSum: this.aroundCeil(
+          this.mainSumDifferentiated,
+          100
+        ).toLocaleString("ru"),
+        monthlyPayment: monthlyPayment.toLocaleString("ru"),
+        month,
+        year,
+      };
     },
 
-    /**
-     * Получаем один или два промежутка дней в текущем периоде оплаты.
-     * Если первый день месяца, то будет один промежуток, если нет, то два.
-     */
-    datesInTheCurrentDueDate(stamp) {
-      let { year, month, day } = this.getDataDayInTimeStamp(stamp);
-      let firstDay = 1;
-
-      let nextMonth = this.getNextMonth(month);
-      let nextYear = year;
-      if (nextMonth === 0) {
-        nextYear++;
-      }
-
-      let dayInMonth = this.getDaysInMonth(month, year);
-
-      if (day === 1) {
-        return [
-          {
-            firstDay: stamp,
-            lastDay: this.getTimeStampInDate({ year, month, dayInMonth }),
-          },
-        ];
-      } else {
-        return [
-          {
-            firstDay: stamp,
-            lastDay: this.getTimeStampInDate({ year, month, dayInMonth }),
-          },
-          {
-            firstDay: this.getTimeStampInDate({
-              nextYear,
-              nextMonth,
-              firstDay,
-            }),
-            lastDay: this.getTimeStampInDate({ nextYear, nextMonth, day }),
-          },
-        ];
-      }
+    aroundCeil(value, factor = 100) {
+      return Math.ceil(value * factor) / factor;
     },
   },
   computed: {
-    dataListForCredit() {
-      let creditList = [];
-      let localPrincipalAmount = this.principalAmount;
-      let start = this.startDate;
+    dataListForCreditAnnuity() {
+      this.creditListAnnuity = [];
+      this.mainSumAnnuity = this.startCreditSum;
+      let { year, month } = this.getDataDayInTimeStamp(this.startDate);
+
+      let start = new Date(year, month).getTime();
 
       for (let i = 0; i < this.creditTermMonth; i++) {
-        this.datesInTheCurrentDueDate(start);
+        this.creditListAnnuity.push(this.getLoanInterestInMonthAnnuity(start));
+        let { year, month } = this.getDataDayInTimeStamp(start);
+
+        month = this.getNextMonth(month);
+        if (month === 0) {
+          year++;
+        }
+        start = new Date(year, month).getTime();
       }
+      return this.creditListAnnuity;
+    },
+    dataListForCreditDifferentiated() {
+      this.creditListDifferentiated = [];
+      this.mainSumDifferentiated = this.startCreditSum;
+      this.monthlyRepaymentFoDebtDifferentiated =
+        this.startCreditSum / this.creditTermMonth;
+
+      let { year, month } = this.getDataDayInTimeStamp(this.startDate);
+
+      let start = new Date(year, month).getTime();
+
+      for (let i = 0; i < this.creditTermMonth; i++) {
+        this.creditListDifferentiated.push(
+          this.getLoanInterestInDifferentiated(start)
+        );
+        let { year, month } = this.getDataDayInTimeStamp(start);
+
+        month = this.getNextMonth(month);
+        if (month === 0) {
+          year++;
+        }
+        start = new Date(year, month).getTime();
+      }
+      return this.creditListDifferentiated;
     },
   },
 };
