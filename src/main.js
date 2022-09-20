@@ -1,4 +1,5 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import router from "@/router";
 
-createApp(App).mount("#app_mortgage_calculator");
+createApp(App).use(router).mount("#App");

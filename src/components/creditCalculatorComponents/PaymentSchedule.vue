@@ -12,7 +12,7 @@
         <th class="calc__table-payment-th">Платеж по процентам, руб</th>
         <th class="calc__table-payment-th">Остаток долга, руб</th>
       </tr>
-      <template v-if="typeCalculation === 'A'">
+      <template v-if="typeCurrentCalculation === 'A'">
         <tr
           class="calc__table-payment-tr"
           v-for="(month, inx) in dataListForCreditAnnuity"
@@ -28,7 +28,7 @@
           <td class="calc__table-payment-td">{{ month.mainSum }}</td>
         </tr>
       </template>
-      <template v-if="typeCalculation === 'D'">
+      <template v-if="typeCurrentCalculation === 'D'">
         <tr
           class="calc__table-payment-tr"
           v-for="(month, inx) in dataListForCreditDifferentiated"
@@ -53,6 +53,7 @@
 
 export default {
   name: "PaymentSchedule",
+  emits: ["changeFirstItemForCreditDifferentiatedPayment"],
   props: {
     startCreditSum: {
       // сумма основного долга
@@ -75,7 +76,7 @@ export default {
       // ежемесячная ставка
       type: Number,
     },
-    typeCalculation: {
+    typeCurrentCalculation: {
       type: String,
       default: "A",
     },
@@ -84,7 +85,6 @@ export default {
     return {
       creditListAnnuity: [], // список данных по аннуитивному типу
       creditListDifferentiated: [], // список данных по дифференцированному типу
-      monthlyRepaymentFoDebtDifferentiated: 0, //ежемесячное погашение долга по дифференцированному типу
       mainSumAnnuity: 0, // сумма платежа
       mainSumDifferentiated: 0, // сумма платежа
       monthNames: [
@@ -176,6 +176,8 @@ export default {
 
     /**
      * получить данные за месяц по аннуитетному варианту расчета
+     * @param stamp
+     * @returns {{month: number, monthlyPayment: string, year: number, mainSimInMonth: *, mainSum: *, percentageInMonth: *}}
      */
     getLoanInterestInMonthAnnuity(stamp) {
       let { year, month } = this.getDataDayInTimeStamp(stamp);
@@ -201,25 +203,28 @@ export default {
 
     /**
      * получить данные за месяц по дифференцированному варианту расчета
+     * @param stamp
+     * @returns {{month: number, monthlyPayment: string, year: number, mainSimInMonth: *, mainSum: *, percentageInMonth: *}}
      */
     getLoanInterestInDifferentiated(stamp) {
       let { year, month } = this.getDataDayInTimeStamp(stamp);
-
+      // console.log(this.monthlyInterestRate);
       let percentageOfTheDebt =
         this.mainSumDifferentiated * this.monthlyInterestRate;
-      let mainPartOfTheDebt = this.monthlyRepaymentFoDebtDifferentiated;
-      let monthlyPayment = percentageOfTheDebt + mainPartOfTheDebt;
+      let monthlyPayment =
+        percentageOfTheDebt + this.monthlyRepaymentFoDebtDifferentiated;
       this.mainSumDifferentiated =
-        this.mainSumDifferentiated - mainPartOfTheDebt;
+        this.mainSumDifferentiated - this.monthlyRepaymentFoDebtDifferentiated;
 
       return {
         percentageInMonth: this.aroundCeil(
           percentageOfTheDebt,
           100
         ).toLocaleString("ru"),
-        mainSimInMonth: this.aroundCeil(mainPartOfTheDebt, 100).toLocaleString(
-          "ru"
-        ),
+        mainSimInMonth: this.aroundCeil(
+          this.monthlyRepaymentFoDebtDifferentiated,
+          100
+        ).toLocaleString("ru"),
         mainSum: this.aroundCeil(
           this.mainSumDifferentiated,
           100
@@ -234,7 +239,21 @@ export default {
       return Math.ceil(value * factor) / factor;
     },
   },
+  watch: {
+    dataListForCreditDifferentiated() {
+      if (this.dataListForCreditDifferentiated.length) {
+        this.$emit(
+          "changeFirstItemForCreditDifferentiatedPayment",
+          this.dataListForCreditDifferentiated[0]
+        );
+      }
+    },
+  },
   computed: {
+    /**
+     * данные аннуитетных платежей
+     * @returns {[]}
+     */
     dataListForCreditAnnuity() {
       this.creditListAnnuity = [];
       this.mainSumAnnuity = this.startCreditSum;
@@ -254,11 +273,14 @@ export default {
       }
       return this.creditListAnnuity;
     },
+
+    /**
+     * данные для дифференцированных платежей
+     * @returns {[]}
+     */
     dataListForCreditDifferentiated() {
       this.creditListDifferentiated = [];
       this.mainSumDifferentiated = this.startCreditSum;
-      this.monthlyRepaymentFoDebtDifferentiated =
-        this.startCreditSum / this.creditTermMonth;
 
       let { year, month } = this.getDataDayInTimeStamp(this.startDate);
 
@@ -277,6 +299,13 @@ export default {
         start = new Date(year, month).getTime();
       }
       return this.creditListDifferentiated;
+    },
+    /**
+     * ежемесячное погашение долга по дифференцированному типу
+     * @returns {number}
+     */
+    monthlyRepaymentFoDebtDifferentiated() {
+      return this.startCreditSum / this.creditTermMonth;
     },
   },
 };

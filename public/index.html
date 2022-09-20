@@ -29,7 +29,22 @@
   </style>
   <body>
     <div class="main-wrapper">
-      <div id="app_mortgage_calculator"></div>
+      <div id="App"></div>
+      <form class="calc__form" action="!#">
+        <textarea class="calc__form-textarea" id="teleport-element"></textarea>
+        <label class="calc__form-label" for="name"
+          >Имя: <input class="calc__form-input" type="text" id="name" required
+        /></label>
+        <label class="calc__form-label" for="email"
+          >Почта:
+          <input class="calc__form-input" type="email" id="email" required
+        /></label>
+        <label class="calc__form-label" for="phone"
+          >Телефон:
+          <input class="calc__form-input" type="text" id="phone" required
+        /></label>
+        <input class="calc__form-submit" type="submit" value="Отправить" />
+      </form>
     </div>
 
     <!-- built files will be auto injected -->

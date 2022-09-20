@@ -27,16 +27,16 @@
       <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
     </label>
     <div v-if="isErrorEmpty" class="empty calc__input-error">
-      {{ errorEmpty }}
+      {{ errorEmptyText }}
     </div>
     <div v-else-if="isErrorNumber" class="max calc__input-error">
-      {{ errorNumber }}
+      {{ errorNumberText }}
     </div>
     <div v-else-if="isErrorMax" class="max calc__input-error">
-      {{ errorMax }}
+      {{ errorMaxText }}
     </div>
     <div v-else-if="isErrorMin" class="min calc__input-error">
-      {{ errorMin }}
+      {{ errorMinText }}
     </div>
   </div>
 </template>
@@ -44,12 +44,14 @@
 <script>
 export default {
   name: "UiInput",
-  emits: ["changeValue", "changeValid", "changeValueBlur"],
+  emits: ["changeValue", "changeValid"],
   props: {
+    //данные для инпута
     inputValue: {
       type: [Number, String],
       default: 0,
     },
+    // имя необходимое для корректной работы Label
     idName: {
       type: String,
     },
@@ -59,9 +61,11 @@ export default {
     unit: {
       type: String,
     },
+    //текст для ошибки созданной в ручную
     customErrorText: {
       type: String,
     },
+    // шаблон rex для ручной валидации
     customErrorPattern: {
       type: String,
       default: null,
@@ -69,23 +73,25 @@ export default {
     onlyNumber: {
       type: Boolean,
     },
+    // максимальное значение в инпуте
     max: {
       type: [Number, String],
       default: null,
     },
+    // минимальное значение в инпуте
     min: {
       type: [Number, String],
       default: null,
     },
+    // инпут не должен быть пустым
     notEmpty: {
       type: Boolean,
     },
+    // изменить стандартный тип Text на Number
     typeNumber: {
       type: Boolean,
     },
-    isFixed: {
-      type: Boolean,
-    },
+    //разделять сотни пробелами
     isCurrency: {
       type: Boolean,
       default: false,
@@ -110,7 +116,7 @@ export default {
   data() {
     return {
       isErrorCustom: false,
-      errorTimeout: null,
+      nameTimer: null,
       fakeValueHidden: this.isCurrency,
     };
   },
@@ -123,7 +129,7 @@ export default {
         }
 
         this.clearTimer();
-        if (this.isErrorNumber) {
+        if (this.isErrorNumber || this.isErrorMin) {
           this.changeValueWitchTimer(this.min || 0);
         }
 
@@ -131,9 +137,6 @@ export default {
           return currentValue;
         }
 
-        if (this.isFixed) {
-          return parseFloat(currentValue).toFixed(2);
-        }
         return currentValue;
       } catch (e) {
         console.error(e.message);
@@ -147,13 +150,16 @@ export default {
       this.checkValid();
     },
     changeValueWitchTimer(value) {
-      this.errorTimeout = setTimeout(() => {
+      this.nameTimer = setTimeout(() => {
         this.changeValue(value);
       }, 1500);
     },
     clearTimer() {
-      if (this.errorTimeout) clearTimeout(this.errorTimeout);
+      if (this.nameTimer) clearTimeout(this.nameTimer);
     },
+    /**
+     * возвращает общее состояние не валидности инпута
+     */
     checkValid() {
       this.$nextTick(() => {
         let isInvalid = [
@@ -166,6 +172,9 @@ export default {
         this.$emit("changeValid", isInvalid);
       });
     },
+    /**
+     * при включенной обработки сотых отображает инпут с настоящим значением при фокусе
+     */
     showTrueValue() {
       if (this.isCurrency) {
         this.fakeValueHidden = false;
@@ -175,10 +184,15 @@ export default {
       }
     },
     trueTrueValue() {
-      this.fakeValueHidden = true;
+      if (this.isCurrency) {
+        this.fakeValueHidden = true;
+      }
     },
   },
   watch: {
+    /**
+     * после изменения содержимого инпута происходит общая проверка валидности
+     */
     inputValue() {
       this.checkValid();
     },
@@ -207,13 +221,13 @@ export default {
         isNaN(Number(this.inputValue))
       );
     },
-    errorNumber() {
+    errorNumberText() {
       return this.isErrorNumber ? "Только числа!" : null;
     },
     isErrorEmpty() {
       return this.notEmpty && !this.inputValue?.toString().length;
     },
-    errorEmpty() {
+    errorEmptyText() {
       return this.isErrorEmpty ? "Заполните поле!" : null;
     },
     isErrorMax() {
@@ -223,7 +237,7 @@ export default {
         parseFloat(this.inputValue) > parseFloat(this.max)
       );
     },
-    errorMax() {
+    errorMaxText() {
       return this.max !== null &&
         !this.valueIsNaN &&
         parseFloat(this.inputValue) > parseFloat(this.max)
@@ -238,7 +252,7 @@ export default {
         parseFloat(this.inputValue) < parseFloat(this.min)
       );
     },
-    errorMin() {
+    errorMinText() {
       return this.min !== null &&
         !this.valueIsNaN &&
         parseFloat(this.inputValue) < parseFloat(this.min)

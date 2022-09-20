@@ -77,7 +77,6 @@ export default {
       this.$emit("selectedValue", this.currentOption);
     },
   },
-  computed: {},
 };
 </script>
 

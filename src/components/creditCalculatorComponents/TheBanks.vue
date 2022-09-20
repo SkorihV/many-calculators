@@ -7,7 +7,13 @@
       @click="selectedBank(bank)"
     >
       <div class="calc-slider__wrapper-img">
-        <img :src="bank.image" :alt="bank.title" class="calc-slider__img" />
+        <img
+          :src="this.imageDir + bank.image.filename"
+          :alt="bank.title"
+          width="150"
+          height="100"
+          class="calc-slider__img"
+        />
       </div>
       <div class="calc-slider__wrapper-title">
         <span class="calc-slider__title">{{ bank.title }}</span
@@ -28,6 +34,7 @@ export default {
     if (this.banks.length) {
       this.$emit("selectCurrentBank", this.banks[0]);
     }
+    this.imageDir = window?.imageDir;
   },
   props: {
     sliderOptions: {
@@ -38,6 +45,11 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  data() {
+    return {
+      imageDir: null,
+    };
   },
 
   methods: {
