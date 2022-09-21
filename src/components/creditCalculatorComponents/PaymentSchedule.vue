@@ -3,6 +3,13 @@
     <div class="calc__table-payment-show" @click="isShow = !isShow">
       {{ isShow ? "Скрыть" : "Отобразить" }}
     </div>
+    <div v-if="isShow">
+      <br />
+      Вид расчета :
+      {{
+        typeCurrentCalculation === "A" ? "АННУИТЕТНЫЙ" : "ДИФФЕРЕНЦИРОВАННЫЙ"
+      }}
+    </div>
     <table v-if="isShow" class="calc__table-payment">
       <tr class="calc__table-payment-tr calc__table-payment-tr_sticky">
         <th class="calc__table-payment-th">№</th>

@@ -1,0 +1,82 @@
+{
+  "credit-calculator": {
+    "type_calculate": "Both",
+    "bank_list": {
+      "banks": [
+        {
+          "title": "test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234",
+          "interestRate": 1,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        },
+        {
+          "title": "test2",
+          "interestRate": 2,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        },
+        {
+          "title": "test3",
+          "interestRate": 3,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        },
+        {
+          "title": "test 4",
+          "interestRate": 4,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        },
+        {
+          "title": "test 5",
+          "interestRate": 5,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        },
+        {
+          "title": "test 6",
+          "interestRate": 6,
+          "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+        }
+      ]
+    },
+    "credit_term": {
+      "countTime": 5,
+      "max": 300,
+      "min": 10
+    },
+    "interest_rate": {
+      "is_rate": true,
+      "max": 100,
+      "min": 1,
+      "rate": 10
+    },
+    "payment_currency": {
+      "cost": 200000,
+      "max": 10000000000,
+      "min": 10000,
+      "unit": "руб"
+    },
+    "payment_percentage": {
+      "max": 100,
+      "min": 0,
+      "rate": 10,
+      "steps": 5,
+      "unit": "%"
+    },
+    "property_price": {
+      "cost": 1000000,
+      "max": 10000000000,
+      "min": 100000,
+      "steps": 50000,
+      "unit": "руб"
+    }
+  }
+}

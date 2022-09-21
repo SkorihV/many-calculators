@@ -1,5 +1,5 @@
 <template>
-  <div v-if="banks.length" class="calc-slider">
+  <div class="calc-slider" v-cloak>
     <div
       v-for="bank in banks"
       :key="Math.random()"
@@ -8,7 +8,8 @@
     >
       <div class="calc-slider__wrapper-img">
         <img
-          :src="this.imageDir + bank.image.filename"
+          v-if="bank?.image?.filename"
+          :src="this.imageDir + bank?.image?.filename"
           :alt="bank.title"
           width="150"
           height="100"
@@ -30,12 +31,15 @@ export default {
   name: "TheBanks",
   emits: ["selectCurrentBank"],
   mounted() {
-    $(".calc-slider").slick(this.sliderOptions);
-    if (this.banks.length) {
-      this.$emit("selectCurrentBank", this.banks[0]);
-    }
-    this.imageDir = window?.imageDir;
+    this.imageDir = window?.imageDir || "";
+    setTimeout(() => {
+      $(".calc-slider").slick(this.sliderOptions);
+      if (this.banks.length) {
+        this.$emit("selectCurrentBank", this.banks[0]);
+      }
+    }, 100);
   },
+
   props: {
     sliderOptions: {
       type: Object,

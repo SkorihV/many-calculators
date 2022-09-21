@@ -4,27 +4,29 @@
       <div v-if="label" class="calc__input-label-text">
         {{ label }}
       </div>
-      <input
-        ref="trueInput"
-        :id="idName"
-        :type="isTypeNumber"
-        :value="resultValue"
-        @input="tryChangeValueInput"
-        @keydown.enter="trueTrueValue"
-        class="calc__input-item"
-        autocomplete="off"
-        v-if="!fakeValueHidden"
-      />
+      <div class="calc__input-wrapper-data">
+        <input
+          ref="trueInput"
+          :id="idName"
+          :type="isTypeNumber"
+          :value="resultValue"
+          @input="tryChangeValueInput"
+          @keydown.enter="trueTrueValue"
+          class="calc__input-item"
+          autocomplete="off"
+          v-if="!fakeValueHidden"
+        />
 
-      <input
-        @click="showTrueValue"
-        :type="isTypeNumber"
-        :value="resultValueDouble"
-        class="calc__input-item currency"
-        autocomplete="off"
-        v-show="fakeValueHidden"
-      />
-      <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+        <input
+          @click="showTrueValue"
+          :type="isTypeNumber"
+          :value="resultValueDouble"
+          class="calc__input-item currency"
+          autocomplete="off"
+          v-show="fakeValueHidden"
+        />
+        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+      </div>
     </label>
     <div v-if="isErrorEmpty" class="empty calc__input-error">
       {{ errorEmptyText }}
@@ -37,6 +39,9 @@
     </div>
     <div v-else-if="isErrorMin" class="min calc__input-error">
       {{ errorMinText }}
+    </div>
+    <div v-else-if="isErrorCustom" class="min calc__input-error">
+      {{ customErrorTextOut }}
     </div>
   </div>
 </template>
@@ -67,7 +72,7 @@ export default {
     },
     // шаблон rex для ручной валидации
     customErrorPattern: {
-      type: String,
+      type: RegExp,
       default: null,
     },
     onlyNumber: {
@@ -115,7 +120,6 @@ export default {
   },
   data() {
     return {
-      isErrorCustom: false,
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
     };
@@ -252,12 +256,21 @@ export default {
         parseFloat(this.inputValue) < parseFloat(this.min)
       );
     },
+
     errorMinText() {
       return this.min !== null &&
         !this.valueIsNaN &&
         parseFloat(this.inputValue) < parseFloat(this.min)
         ? `Минимальное значение ${this.min}`
         : null;
+    },
+    isErrorCustom() {
+      return this.customErrorPattern
+        ? this.inputValue.toString().search(this.customErrorPattern) < 0
+        : false;
+    },
+    customErrorTextOut() {
+      return this.isErrorCustom ? this.customErrorText : "";
     },
   },
 };

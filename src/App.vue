@@ -17,7 +17,9 @@
 export default {
   name: "#App",
   mounted() {},
-  data() {},
+  data() {
+    return {};
+  },
   computed: {
     routes() {
       return this.$router.getRoutes();
@@ -148,12 +150,21 @@ $border-radius: 4px;
       position: relative;
       flex: 1 1 auto;
       padding-bottom: 15px;
+      &-data {
+        display: flex;
+        align-items: center;
+      }
     }
 
     &-label {
       @include style-flex-center;
       width: 100%;
       justify-content: space-between;
+      @media all and (max-width: 480px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
       &-text {
         flex: 1 0 auto;
         margin-right: auto;
@@ -167,11 +178,14 @@ $border-radius: 4px;
       font-size: 15px;
       line-height: 16px;
       padding: 10px;
-      max-width: 100px;
+      max-width: 120px;
       @include style-border;
+      border-bottom: 2px solid $color-orange-normal;
       &:hover,
       &:focus-visible {
         @include style-border-hover;
+        border-bottom: 2px solid $color-dark-normal;
+
         outline: none;
       }
     }
@@ -201,6 +215,7 @@ $border-radius: 4px;
       -webkit-appearance: none;
       width: 100%;
       height: 15px;
+      max-height: 30px;
       border-radius: 5px;
       background: #d3d3d3;
       outline: none;
@@ -237,11 +252,13 @@ $border-radius: 4px;
         @include style-flex-center;
         justify-content: space-around;
         margin: 5px 0;
+        max-height: 30px;
       }
       &-item {
         flex: 1 1 auto;
         position: relative;
         cursor: pointer;
+        max-height: 30px;
         &:after {
           content: "";
           display: block;
@@ -255,7 +272,7 @@ $border-radius: 4px;
           font-size: 10px;
           border-radius: $border-radius;
           &_selected {
-            background-color: $color-dark-normal;
+            background-color: $color-orange-normal;
             color: $color-gray-light;
           }
         }
@@ -284,6 +301,17 @@ $border-radius: 4px;
         line-height: 16px;
         background-color: white;
         position: relative;
+        border-bottom: 2px solid $color-orange-normal;
+        &:hover {
+          @include style-border-hover;
+          border-bottom: 2px solid $color-dark-normal;
+          .calc__select-change-item {
+            &:before {
+              border: solid $color-dark-normal;
+              border-width: 0 3px 3px 0;
+            }
+          }
+        }
       }
 
       &-item {
@@ -293,7 +321,7 @@ $border-radius: 4px;
           content: "";
           width: 7px;
           height: 7px;
-          border: solid $color-dark-normal;
+          border: solid $color-orange-normal;
           border-width: 0 3px 3px 0;
           display: inline-block;
           position: absolute;
@@ -318,7 +346,7 @@ $border-radius: 4px;
         position: absolute;
         width: 100%;
         left: 0;
-        top: 100%;
+        top: calc(100% + 2px);
         @include style-border;
       }
       &-item {
