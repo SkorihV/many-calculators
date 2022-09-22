@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__select-wrapper" :class="{ 'is-column': isColumn }">
+  <div class="calc__select-wrapper" :class="{ 'is-column': isColumn }" :style="maxWidthWrapper">
     <div class="calc__select-label" v-if="label">{{ label }}</div>
     <div class="calc__select-change-wrapper">
       <div
@@ -7,16 +7,22 @@
         @click="toggleOpenClose"
         :class="{ 'is-open': isOpen }"
       >
+        <div v-if="currentOption?.image?.filename" class="calc__select-image-wrapper">
+          <img alt="currentOption.title" class="calc__select-image-item"  :src="currentOption.image.filename">
+        </div>
         {{ currentOption.title }}
       </div>
 
       <div class="calc__select-option-wrapper" v-if="isOpen">
         <div
           class="calc__select-option-item"
-          @click="selected(option)"
-          v-for="option in options"
+          @click="selected(option, idx)"
+          v-for="(option, idx) in options"
           :key="option.value"
         >
+          <div v-if="option?.image?.filename" class="calc__select-image-wrapper">
+            <img alt="option.title" class="calc__select-image-item"  :src="option.image.filename">
+          </div>
           {{ option.title }}
         </div>
       </div>
@@ -50,11 +56,16 @@ export default {
     isColumn: {
       type: Boolean,
     },
+    maxWidth: {
+      type: [Number, String],
+      default: 200
+    }
   },
   data() {
     return {
       isOpen: false,
       currentOption: {},
+      currentIndexOption: 0
     };
   },
   methods: {
@@ -67,8 +78,9 @@ export default {
     close() {
       this.isOpen = false;
     },
-    selected(item) {
+    selected(item, idx) {
       this.currentOption = item;
+      this.currentIndexOption = idx;
       this.close();
     },
   },
@@ -76,7 +88,15 @@ export default {
     currentOption() {
       this.$emit("selectedValue", this.currentOption);
     },
+    options() {
+      this.currentOption = this.options[this.currentIndexOption];
+    }
   },
+  computed: {
+    maxWidthWrapper() {
+      return this.maxWidth ? `max-width:${this.maxWidth}px;` : '';
+    }
+  }
 };
 </script>
 

@@ -30,15 +30,14 @@ export default {
 
 <style lang="scss">
 $color-dark-normal: #464657;
-$color-orange-normal: #ff7044;
+$color-orange-normal: #ff5d2b;
 
 $color-dark-hover: #5a5a70;
-$color-orange-hover: #ff5d2b;
+$color-orange-hover: #ff7044;
 
 $color-danger: #ff4444;
-
-$color-font-dark: #000000;
-$color-font-white: #ffffff;
+$color-black: #000000;
+$color-white: #ffffff;
 
 $color-gray-light: #f2f2f2;
 $color-gray-middle: #e6e6e6;
@@ -56,7 +55,7 @@ $border-radius: 4px;
 }
 
 @mixin style-button {
-  color: $color-font-white;
+  color: $color-white;
   background-color: $color-dark-normal;
   @include style-flex-center;
   @include style-border;
@@ -79,9 +78,9 @@ $border-radius: 4px;
   object-fit: contain;
 }
 
-//normal orange - FF7044
+//normal orange - FF5D2B
 //normal dark- 464657
-//hover orange - FF5D2B
+//hover orange - FF7044
 //hover dark- 5A5A70
 //font - 00000
 //серый - CCCCCC
@@ -122,12 +121,12 @@ $border-radius: 4px;
     &:hover {
       @include style-border-hover;
       @include style-button-hover;
-      color: white;
+      color: $color-white;
     }
     &_active {
       @include style-border-hover;
       @include style-button-hover;
-      color: white;
+      color: $color-white;
     }
   }
 }
@@ -137,7 +136,7 @@ $border-radius: 4px;
     margin: 0;
     font-size: 15px;
     text-align: center;
-    color: $color-font-dark;
+    color: $color-dark-normal;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
   }
@@ -149,7 +148,6 @@ $border-radius: 4px;
       margin: 5px;
       position: relative;
       flex: 1 1 auto;
-      padding-bottom: 15px;
       &-data {
         display: flex;
         align-items: center;
@@ -167,10 +165,12 @@ $border-radius: 4px;
       }
       &-text {
         flex: 1 0 auto;
-        margin-right: auto;
         display: flex;
         justify-content: flex-start;
         text-transform: uppercase;
+        position: relative;
+        margin-right: 10px;
+        padding: 5px 0;
       }
     }
 
@@ -193,11 +193,22 @@ $border-radius: 4px;
       margin-left: 5px;
     }
     &-error {
-      font-size: 10px;
-      color: $color-danger;
-      font-weight: 600;
-      position: absolute;
-      bottom: 0;
+      &-wrapper {
+        @include style-flex-center;
+        position: absolute;
+        background-color: $color-gray-dark;
+        border-radius: $border-radius;
+        width: 100%;
+        height: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+
+      }
+      &-item {
+        font-size: 10px;
+        color: $color-danger;
+        font-weight: 600;
+      }
     }
   }
   //--------Стили input range-----
@@ -208,7 +219,7 @@ $border-radius: 4px;
       display: flex;
       flex-direction: column;
       width: 100%;
-      margin: 5px 0;
+      margin: 5px;
     }
 
     &-item {
@@ -219,7 +230,7 @@ $border-radius: 4px;
       border-radius: 5px;
       background: #d3d3d3;
       outline: none;
-      opacity: 0.7;
+
       -webkit-transition: 0.2s;
       transition: opacity 0.2s;
       &::-webkit-slider-thumb {
@@ -231,6 +242,7 @@ $border-radius: 4px;
         cursor: pointer;
         @include style-border;
         &:hover {
+          background-color: $color-dark-hover;
           @include style-border-hover;
         }
       }
@@ -285,10 +297,10 @@ $border-radius: 4px;
   &__select {
     &-wrapper {
       @include style-flex-center;
-      max-width: 100px;
-      width: 100%;
+      max-width: 200px;
+      margin: 5px;
       gap: 5px;
-      padding-bottom: 15px;
+      width: 100%;
       &.is-column {
         flex-direction: column;
       }
@@ -301,6 +313,7 @@ $border-radius: 4px;
         line-height: 16px;
         background-color: white;
         position: relative;
+        flex: 1 1 auto;
         border-bottom: 2px solid $color-orange-normal;
         &:hover {
           @include style-border-hover;
@@ -316,7 +329,11 @@ $border-radius: 4px;
 
       &-item {
         position: relative;
-        padding: 10px 25px 10px 20px;
+        padding: 10px 25px 10px 10px;
+        @include style-flex-center;
+        justify-content: space-between;
+        flex: 1 1 auto;
+        gap: 5px;
         &:before {
           content: "";
           width: 7px;
@@ -339,26 +356,262 @@ $border-radius: 4px;
       }
     }
 
+    &-image {
+      &-wrapper {
+        width: 50px;
+
+      }
+      &-item {
+        @include style-img;
+
+      }
+    }
+
     &-option {
       &-wrapper {
         display: flex;
         flex-direction: column;
         position: absolute;
-        width: 100%;
-        left: 0;
         top: calc(100% + 2px);
         @include style-border;
+        z-index: 10;
+        width: 100%;
+
       }
       &-item {
         background-color: white;
-        padding: 10px;
+        padding: 10px 25px 10px 10px;
+        @include style-flex-center;
+        justify-content: space-between;
+        gap: 5px;
         &:hover {
           background-color: $color-gray-middle;
         }
       }
     }
   }
+  //--------Стили чекбокса --------------
 
+  &__checkbox {
+    &-wrapper {
+      @include style-flex-center;
+      width: 100%;
+      margin: 5px;
+    }
+    &-label {
+      @include style-flex-center;
+      justify-content: space-between;
+      flex: 1 0 auto;
+      position: relative;
+      @media all and (max-width: 480px) {
+        flex-direction: column;
+      }
+    }
+    &-text {
+      @include style-flex-center;
+      justify-content: flex-start;
+      text-transform: uppercase;
+      position: relative;
+      &_second {
+        text-transform: uppercase;
+      }
+    }
+
+    &-element {
+      position: relative;
+      margin: 5px;
+      height: 30px;
+      &.base {
+        width: 30px;
+      }
+      &.switcher {
+        width: 70px;
+        &-vertical {
+          width: 25px;
+          height: 65px;
+        }
+      }
+
+      &:after,
+      &:before {
+        box-sizing: border-box;
+        cursor: pointer;
+        content: "";
+        position: absolute;
+        @include style-border;
+      }
+
+      &.switcher-vertical:after,
+      &.switcher:after,
+      &:before {
+        height: 22px;
+        top: 50%;
+        background-color: $color-gray-light;
+        transform: translateY(-50%);
+        border-width: 2px;
+        border-color: $color-orange-normal;
+        @include style-flex-center;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+      &.base:before {
+        width: 22px;
+      }
+      &.switcher-vertical:before,
+      &.switcher:before {
+        width: 35px;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-color: $color-dark-normal;
+        z-index: 1;
+        right: 0;
+      }
+      &.switcher:after {
+        width: 35px;
+        border-right: none;
+        background-color: $color-dark-normal;
+        box-shadow: 0 0 0 2px $color-gray-light inset;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        border-color: $color-dark-normal;
+        z-index: 1;
+        left: 0;
+      }
+      &.switcher-vertical:after,
+      &.switcher-vertical:before {
+        width: 25px;
+        height: 35px;
+        transform: translateY(0);
+      }
+
+      &.switcher-vertical:before {
+        right: auto;
+        top: 0;
+        border-top-left-radius: $border-radius;
+        border-bottom-right-radius: 0;
+        background-color: $color-dark-normal;
+        box-shadow: 0 0 0 2px $color-gray-light inset;
+      }
+      &.switcher-vertical:after {
+        border-color: $color-dark-normal;
+      }
+
+      &:hover {
+        &.base:before {
+          border-color: $color-dark-normal;
+        }
+
+        &.switcher:after {
+          background-color: $color-dark-hover;
+        }
+        &.switcher-vertical:before {
+          background-color: $color-dark-hover;
+
+        }
+
+      }
+    }
+
+    &-item {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+      display: block;
+      width: 0;
+      height: 0;
+      &:checked {
+        ~ .calc__checkbox-element {
+          &.base:before {
+            background-color: $color-dark-normal;
+            box-shadow: 0 0 0 2px $color-gray-light inset;
+            color: $color-white;
+          }
+          &.switcher-vertical:before,
+          &.switcher:after {
+            color: $color-dark-normal;
+            background-color: $color-gray-light;
+            border-color: $color-orange-normal;
+          }
+          &.switcher-vertical:after,
+          &.switcher:before {
+            background-color: $color-orange-hover;
+            border-color: $color-orange-hover;
+            box-shadow: 0 0 0 2px $color-gray-light inset;
+            color: $color-white;
+          }
+
+
+
+          &.switcher-vertical:before {}
+
+          &:hover {
+            &.switcher {
+            }
+            &.base:before {
+              background-color: $color-orange-normal;
+            }
+            &.switcher-vertical:after
+            &.switcher:before {
+              background-color: $color-orange-normal;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  //-------всплывающая подсказка ------
+  &__prompt {
+    &-wrapper {
+      position: relative;
+    }
+
+    &-button {
+      background-color: $color-gray-light;
+      cursor: pointer;
+      padding: 5px;
+      width: 10px;
+      height: 10px;
+      @include style-flex-center;
+      border: 1px solid $color-dark-normal;
+      border-radius: 50%;
+      font-weight: 600;
+      &:hover {
+        background-color: $color-dark-normal;
+        color: $color-white;
+        + .calc__prompt-popup {
+          display: block;
+          opacity: 1;
+        }
+      }
+    }
+    &-popup {
+      background-color: $color-gray-light;
+      position: absolute;
+      display: none;
+      left: calc(0px + 20px);
+      top: calc(0px + 10px);
+      max-width: 300px;
+      padding: 15px;
+      border: 1px solid $color-dark-normal;
+      border-radius: $border-radius;
+
+      transition-property: opacity;
+      transition-duration: 5s;
+      transition-timing-function: linear;
+      transition-delay: 5s;
+
+      &:hover {
+        display: block;
+      }
+    }
+  }
+
+
+
+
+//--------------форма-----------------
   &__form {
     @include style-flex-center;
     flex-direction: column;
@@ -383,6 +636,8 @@ $border-radius: 4px;
       padding: 10px;
       border-radius: $border-radius;
       outline: none;
+      width: 100%;
+      max-width: 200px;
     }
 
     &-textarea {

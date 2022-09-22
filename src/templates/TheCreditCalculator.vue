@@ -18,8 +18,8 @@
               only-number
               is-name="handlerRate"
               :input-value="currentInterestRate"
-              @change-valid="changeValid($event, 'handlerRate')"
               @change-value="changeCurrentRateOnHandler"
+              @change-valid="changeValid($event, 'handlerRate')"
               v-if="isHandlerRate"
             />
           </div>
@@ -90,14 +90,16 @@
                 @change-valid="changeValid($event, 'creditTerm')"
                 @change-value="changeCreditTerm"
                 id-name="creditTerm"
-                :min="outData?.credit_term?.min"
-                :max="outData?.credit_term?.max"
+                :max="maxTimeTerm"
+                :min="minTimeTerm"
                 only-number
                 not-empty
               />
               <ui-select
                 :options="typeTimes"
-                @selectedValue="changeMethodChoiceTime"
+                @selected-value="changeMethodChoiceTime"
+                max-width="100"
+                is-column
               />
             </div>
           </div>
@@ -126,7 +128,7 @@
           <div v-else class="right-side__content-block">
             <div v-if="currenSelectedBank?.image" class="right-side__item">
               <div class="right-side__content">
-                <img :src="imageDir + currenSelectedBank.image.filename" />
+                <img :src="imageDir + currenSelectedBank.image.filename" alt="Логотип банка"/>
               </div>
             </div>
 
@@ -190,11 +192,17 @@
       </div>
     </div>
 
-    <teleport to="#teleport-element">
-      Банк: {{ currenSelectedBank?.title }} || Ставка:
-      {{ currentInterestRate }} || Сумма кредита: {{ startCreditSumInOut }} ||
-      Начисленные проценты: {{ overpaymentAmountInOut }} || Долг + проценты:
-      {{ totalSumCreditInOut }} ||
+
+    <teleport v-if="!isInvalid"  to="#teleport-element">
+
+      Банк: {{ currenSelectedBank?.title }}
+      || Ставка:  {{ currentInterestRate }}
+      || Сумма кредита: {{ startCreditSumInOut }}
+      || Стоимость объекта недвижимости: {{propertyPrice}}
+      || Первоначальный взнос: {{downPaymentCurrency}}
+      || Срок кредита:  {{creditTerm}} {{currentTypeTime.title}}
+      || Начисленные проценты: {{ overpaymentAmountInOut }}
+      || Долг + проценты:  {{ totalSumCreditInOut }}
     </teleport>
   </div>
 </template>
@@ -263,7 +271,7 @@ export default {
       : "Both";
 
     this.showDifferentiatedPayment = {
-      name: "test",
+      name: "null",
       value: this.typeCalculate === "D",
     };
 
@@ -327,22 +335,14 @@ export default {
        */
       currenSelectedBank: {}, // выбранный банк из списка
       errorsInputs: new Set(), // список ошибок инпутов
-      typeTimes: [
-        {
-          title: "Мес",
-          value: "month",
-        },
-        {
-          title: "Год",
-          value: "year",
-        },
-      ],
+      typeTimes: [],
       showDifferentiatedPayment: {},
       currentTypeTime: {}, // текущие единицы времени для расчета год или месяц
       firstItemForCreditDifferentiatedPayment: 0, // данные по первому дифференцированному платежу
     };
   },
   methods: {
+
     /**
      * Изменить выбранный банк из списка
      * @param bank
@@ -451,8 +451,40 @@ export default {
         this.downPaymentCurrency / (parseFloat(this.propertyPrice) / 100)
       );
     },
+    creditTerm() {
+      let t1 = parseInt(this.creditTerm) % 10;
+      let t2 = parseInt(this.creditTerm) % 100;
+
+      let yearName = t1 === 1 && t2 !== 11 ? "Год" : t1 >= 2 && t1 <=4 && (t2 < 10 || t2 >=20) ? "Года" : "Лет";
+
+      this.typeTimes = [
+        {
+          title: "Мес",
+          value: "month",
+        },
+        {
+          title: yearName,
+          value: "year",
+        },
+      ]
+    }
   },
   computed: {
+    /**
+     * минимальное количество для поля срока кредита в зависимости от выбранной единицы времени
+      * @returns {*}
+     */
+    minTimeTerm() {
+      return  this.currentTypeTime.value === 'year' ? this.outData?.credit_term?.min_year : this.outData?.credit_term?.min_month;
+    },
+    /**
+     * максимальное количество для поля срока кредита в зависимости от выбранной единицы времени
+     * @returns {*}
+     */
+    maxTimeTerm(){
+      return this.currentTypeTime.value === 'year' ? this.outData?.credit_term?.max_year : this.outData?.credit_term?.max_month;
+    },
+
     /**
      *  // тип отображаемого варианта расчета А - аннуитет. D -дифференцированный
      */
@@ -548,9 +580,9 @@ export default {
 </script>
 
 <style lang="scss">
-//normal orange - FF7044
+//normal orange - FF5D2B
 //normal dark- 464657
-//hover orange - FF5D2B
+//hover orange - FF7044
 //hover dark- 5A5A70
 //font - 00000
 //серый - CCCCCC
@@ -558,15 +590,15 @@ export default {
 // background - F2F2F2
 
 $color-dark-normal: #464657;
-$color-orange-normal: #ff7044;
+$color-orange-normal: #ff5d2b;
 
 $color-dark-hover: #5a5a70;
-$color-orange-hover: #ff5d2b;
+$color-orange-hover: #ff7044;
 
 $color-danger: #ff4444;
 
-$color-font-dark: #000000;
-$color-font-white: #ffffff;
+$color-black: #000000;
+$color-white: #ffffff;
 
 $color-gray-light: #f2f2f2;
 $color-gray-middle: #e6e6e6;
@@ -584,7 +616,7 @@ $border-radius: 4px;
 }
 
 @mixin style-button {
-  color: $color-font-white;
+  color: $color-white;
   background-color: $color-dark-normal;
   @include style-flex-center;
   @include style-border;
@@ -731,6 +763,7 @@ $border-radius: 4px;
           margin-top: 2px;
           @include style-flex-center;
           list-style: none;
+          padding-left: 0;
 
           .slick-active {
             @include style-button-hover;
@@ -760,7 +793,7 @@ $border-radius: 4px;
         }
       }
       &-common-data {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         padding-left: 20px;
         border-left: 3px solid $color-orange-normal;
       }
@@ -778,6 +811,7 @@ $border-radius: 4px;
       }
       &__min-wrapper {
         @include style-flex-center;
+        align-items: flex-end;
       }
 
       &__right-side {
@@ -814,6 +848,7 @@ $border-radius: 4px;
           &__label {
             font-size: 18px;
             color: $color-dark-normal;
+            text-align: start;
           }
           &__content {
             color: $color-gray-dark;
@@ -848,6 +883,7 @@ $border-radius: 4px;
       }
     }
 
+    //----------таблица------------
     &__table-payment {
       width: 100%;
       &-show {
@@ -868,6 +904,7 @@ $border-radius: 4px;
         align-items: flex-start;
         max-height: 500px;
         overflow-y: auto;
+        border-top: 1px solid $color-dark-normal;
       }
       &-tr {
         &_sticky {

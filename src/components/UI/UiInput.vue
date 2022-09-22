@@ -3,6 +3,23 @@
     <label :for="idName" class="calc__input-label">
       <div v-if="label" class="calc__input-label-text">
         {{ label }}
+        <div class="calc__input-error-wrapper" v-if="isInvalid">
+          <div v-if="isErrorEmpty" class="empty calc__input-error-item">
+            {{ errorEmptyText }}
+          </div>
+          <div v-else-if="isErrorNumber" class="max calc__input-error-item">
+            {{ errorNumberText }}
+          </div>
+          <div v-else-if="isErrorMax" class="max calc__input-error-item">
+            {{ errorMaxText }}
+          </div>
+          <div v-else-if="isErrorMin" class="min calc__input-error-item">
+            {{ errorMinText }}
+          </div>
+          <div v-else-if="isErrorCustom" class="min calc__input-error-item">
+            {{ customErrorTextOut }}
+          </div>
+        </div>
       </div>
       <div class="calc__input-wrapper-data">
         <input
@@ -28,21 +45,6 @@
         <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
       </div>
     </label>
-    <div v-if="isErrorEmpty" class="empty calc__input-error">
-      {{ errorEmptyText }}
-    </div>
-    <div v-else-if="isErrorNumber" class="max calc__input-error">
-      {{ errorNumberText }}
-    </div>
-    <div v-else-if="isErrorMax" class="max calc__input-error">
-      {{ errorMaxText }}
-    </div>
-    <div v-else-if="isErrorMin" class="min calc__input-error">
-      {{ errorMinText }}
-    </div>
-    <div v-else-if="isErrorCustom" class="min calc__input-error">
-      {{ customErrorTextOut }}
-    </div>
   </div>
 </template>
 
@@ -122,6 +124,7 @@ export default {
     return {
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
+      isInvalid: false
     };
   },
   methods: {
@@ -166,14 +169,14 @@ export default {
      */
     checkValid() {
       this.$nextTick(() => {
-        let isInvalid = [
+        this.isInvalid = [
           this.isErrorMin,
           this.isErrorMax,
           this.isErrorEmpty,
           this.isErrorNumber,
           this.isErrorCustom,
         ].some((item) => item);
-        this.$emit("changeValid", isInvalid);
+        this.$emit("changeValid", this.isInvalid);
       });
     },
     /**
