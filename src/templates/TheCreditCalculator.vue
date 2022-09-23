@@ -1,6 +1,6 @@
 <template>
   <div id="app_mortgage_calculator" v-cloak>
-    <div class="calc calc-wrapper">
+    <div id="custom-style" class="calc calc-wrapper">
       <the-banks
         v-if="banks.length"
         :slider-options="sliderOptions"
@@ -43,7 +43,8 @@
               :min="outData?.property_price?.min"
               :max="outData?.property_price?.max"
               :step="outData?.property_price?.steps"
-            />
+            >
+            </ui-range>
           </div>
           <div class="calc__wrapper-common-data">
             <div class="content__min-wrapper">
@@ -94,6 +95,7 @@
                 :min="minTimeTerm"
                 only-number
                 not-empty
+                is-stretch
               />
               <ui-select
                 :options="typeTimes"
@@ -128,7 +130,10 @@
           <div v-else class="right-side__content-block">
             <div v-if="currenSelectedBank?.image" class="right-side__item">
               <div class="right-side__content">
-                <img :src="imageDir + currenSelectedBank.image.filename" alt="Логотип банка"/>
+                <img
+                  :src="imageDir + currenSelectedBank.image.filename"
+                  alt="Логотип банка"
+                />
               </div>
             </div>
 
@@ -192,17 +197,8 @@
       </div>
     </div>
 
-
-    <teleport v-if="!isInvalid"  to="#teleport-element">
-
-      Банк: {{ currenSelectedBank?.title }}
-      || Ставка:  {{ currentInterestRate }}
-      || Сумма кредита: {{ startCreditSumInOut }}
-      || Стоимость объекта недвижимости: {{propertyPrice}}
-      || Первоначальный взнос: {{downPaymentCurrency}}
-      || Срок кредита:  {{creditTerm}} {{currentTypeTime.title}}
-      || Начисленные проценты: {{ overpaymentAmountInOut }}
-      || Долг + проценты:  {{ totalSumCreditInOut }}
+    <teleport v-if="!isInvalid" to="#teleport-element">
+      {{resultForOut}}
     </teleport>
   </div>
 </template>
@@ -214,6 +210,7 @@ import UiRange from "@/components/UI/UiRange";
 import UiSelect from "@/components/UI/UiSelect";
 import PaymentSchedule from "@/components/creditCalculatorComponents/PaymentSchedule";
 import UiCheckbox from "@/components/UI/UiCheckbox";
+import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "TheCreditCalculator",
@@ -224,6 +221,7 @@ export default {
     UiRange,
     UiSelect,
     PaymentSchedule,
+    UiPrompt,
   },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
@@ -342,7 +340,6 @@ export default {
     };
   },
   methods: {
-
     /**
      * Изменить выбранный банк из списка
      * @param bank
@@ -455,7 +452,12 @@ export default {
       let t1 = parseInt(this.creditTerm) % 10;
       let t2 = parseInt(this.creditTerm) % 100;
 
-      let yearName = t1 === 1 && t2 !== 11 ? "Год" : t1 >= 2 && t1 <=4 && (t2 < 10 || t2 >=20) ? "Года" : "Лет";
+      let yearName =
+        t1 === 1 && t2 !== 11
+          ? "Год"
+          : t1 >= 2 && t1 <= 4 && (t2 < 10 || t2 >= 20)
+          ? "Года"
+          : "Лет";
 
       this.typeTimes = [
         {
@@ -466,23 +468,27 @@ export default {
           title: yearName,
           value: "year",
         },
-      ]
-    }
+      ];
+    },
   },
   computed: {
     /**
      * минимальное количество для поля срока кредита в зависимости от выбранной единицы времени
-      * @returns {*}
+     * @returns {*}
      */
     minTimeTerm() {
-      return  this.currentTypeTime.value === 'year' ? this.outData?.credit_term?.min_year : this.outData?.credit_term?.min_month;
+      return this.currentTypeTime.value === "year"
+        ? this.outData?.credit_term?.min_year
+        : this.outData?.credit_term?.min_month;
     },
     /**
      * максимальное количество для поля срока кредита в зависимости от выбранной единицы времени
      * @returns {*}
      */
-    maxTimeTerm(){
-      return this.currentTypeTime.value === 'year' ? this.outData?.credit_term?.max_year : this.outData?.credit_term?.max_month;
+    maxTimeTerm() {
+      return this.currentTypeTime.value === "year"
+        ? this.outData?.credit_term?.max_year
+        : this.outData?.credit_term?.max_month;
     },
 
     /**
@@ -575,6 +581,16 @@ export default {
     isInvalid() {
       return Boolean(this.errorsInputs.size);
     },
+    resultForOut() {
+      return "Банк: " + this.currenSelectedBank?.title +
+        "\n Ставка: " + this.currentInterestRate +
+        "\n Сумма кредита: " + this.startCreditSumInOut +
+        "\n Стоимость объекта недвижимости: " + this.propertyPrice +
+        "\n Первоначальный взнос: " + this.downPaymentCurrency +
+        "\n Срок кредита: " + this.creditTerm + " " + this.currentTypeTime.title +
+        "\n Начисленные проценты:" + this.overpaymentAmountInOut +
+        "\n Долг + проценты: " + this.totalSumCreditInOut;
+    }
   },
 };
 </script>

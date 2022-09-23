@@ -29,6 +29,15 @@ export default {
 </script>
 
 <style lang="scss">
+//normal orange - FF5D2B
+//normal dark- 464657
+//hover orange - FF7044
+//hover dark- 5A5A70
+//font - 00000
+//серый - CCCCCC
+// border - E6E6E6 -
+// background - F2F2F2
+
 $color-dark-normal: #464657;
 $color-orange-normal: #ff5d2b;
 
@@ -36,6 +45,7 @@ $color-dark-hover: #5a5a70;
 $color-orange-hover: #ff7044;
 
 $color-danger: #ff4444;
+
 $color-black: #000000;
 $color-white: #ffffff;
 
@@ -72,20 +82,17 @@ $border-radius: 4px;
   align-items: center;
 }
 
+@mixin style-flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 @mixin style-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
-//normal orange - FF5D2B
-//normal dark- 464657
-//hover orange - FF7044
-//hover dark- 5A5A70
-//font - 00000
-//серый - CCCCCC
-// border - E6E6E6 -
-// background - F2F2F2
 
 * {
   -webkit-font-smoothing: antialiased;
@@ -147,7 +154,9 @@ $border-radius: 4px;
       flex-direction: column;
       margin: 5px;
       position: relative;
-      flex: 1 1 auto;
+      &.is-stretch {
+        flex: 1 1 auto;
+      }
       &-data {
         display: flex;
         align-items: center;
@@ -158,19 +167,23 @@ $border-radius: 4px;
       @include style-flex-center;
       width: 100%;
       justify-content: space-between;
+      align-items: flex-start;
+      &.is-column {
+        flex-direction: column;
+      }
       @media all and (max-width: 480px) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
       }
       &-text {
-        flex: 1 0 auto;
+        flex: 1 1 auto;
         display: flex;
         justify-content: flex-start;
-        text-transform: uppercase;
         position: relative;
         margin-right: 10px;
         padding: 5px 0;
+        text-align: start;
       }
     }
 
@@ -185,7 +198,6 @@ $border-radius: 4px;
       &:focus-visible {
         @include style-border-hover;
         border-bottom: 2px solid $color-dark-normal;
-
         outline: none;
       }
     }
@@ -202,7 +214,6 @@ $border-radius: 4px;
         height: 100%;
         top: 50%;
         transform: translateY(-50%);
-
       }
       &-item {
         font-size: 10px;
@@ -221,7 +232,10 @@ $border-radius: 4px;
       width: 100%;
       margin: 5px;
     }
-
+    &-label {
+      @include style-flex-start;
+      padding: 5px;
+    }
     &-item {
       -webkit-appearance: none;
       width: 100%;
@@ -300,11 +314,18 @@ $border-radius: 4px;
       max-width: 200px;
       margin: 5px;
       gap: 5px;
+
       width: 100%;
       &.is-column {
         flex-direction: column;
+        align-items: flex-start;
       }
     }
+
+    &-label {
+      @include style-flex-start;
+    }
+
     &-change {
       &-wrapper {
         cursor: pointer;
@@ -313,7 +334,8 @@ $border-radius: 4px;
         line-height: 16px;
         background-color: white;
         position: relative;
-        flex: 1 1 auto;
+        flex: 1 1 100%;
+        width: 100%;
         border-bottom: 2px solid $color-orange-normal;
         &:hover {
           @include style-border-hover;
@@ -331,7 +353,8 @@ $border-radius: 4px;
         position: relative;
         padding: 10px 25px 10px 10px;
         @include style-flex-center;
-        justify-content: space-between;
+        justify-content: flex-start;
+        text-align: start;
         flex: 1 1 auto;
         gap: 5px;
         &:before {
@@ -359,11 +382,9 @@ $border-radius: 4px;
     &-image {
       &-wrapper {
         width: 50px;
-
       }
       &-item {
         @include style-img;
-
       }
     }
 
@@ -376,14 +397,14 @@ $border-radius: 4px;
         @include style-border;
         z-index: 10;
         width: 100%;
-
       }
       &-item {
         background-color: white;
         padding: 10px 25px 10px 10px;
         @include style-flex-center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 5px;
+        text-align: start;
         &:hover {
           background-color: $color-gray-middle;
         }
@@ -410,17 +431,14 @@ $border-radius: 4px;
     &-text {
       @include style-flex-center;
       justify-content: flex-start;
-      text-transform: uppercase;
       position: relative;
-      &_second {
-        text-transform: uppercase;
-      }
     }
 
     &-element {
       position: relative;
       margin: 5px;
       height: 30px;
+
       &.base {
         width: 30px;
       }
@@ -444,6 +462,7 @@ $border-radius: 4px;
       &.switcher-vertical:after,
       &.switcher:after,
       &:before {
+        transition: all 0.3s ease-in-out;
         height: 22px;
         top: 50%;
         background-color: $color-gray-light;
@@ -459,6 +478,7 @@ $border-radius: 4px;
       }
       &.switcher-vertical:before,
       &.switcher:before {
+        transition: all 0.3s ease-in-out;
         width: 35px;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
@@ -506,9 +526,7 @@ $border-radius: 4px;
         }
         &.switcher-vertical:before {
           background-color: $color-dark-hover;
-
         }
-
       }
     }
 
@@ -540,9 +558,8 @@ $border-radius: 4px;
             color: $color-white;
           }
 
-
-
-          &.switcher-vertical:before {}
+          &.switcher-vertical:before {
+          }
 
           &:hover {
             &.switcher {
@@ -550,8 +567,7 @@ $border-radius: 4px;
             &.base:before {
               background-color: $color-orange-normal;
             }
-            &.switcher-vertical:after
-            &.switcher:before {
+            &.switcher-vertical:after &.switcher:before {
               background-color: $color-orange-normal;
             }
           }
@@ -560,58 +576,63 @@ $border-radius: 4px;
     }
   }
 
-
   //-------всплывающая подсказка ------
   &__prompt {
     &-wrapper {
       position: relative;
+      margin: 0 5px;
+      .popup-enter-active {
+        transition: all 0.5s ease;
+      }
+      .popup-leave-to,
+      .popup-enter-from {
+        top: -10000px;
+        opacity: 0;
+        transform: perspective(1000px) rotateX(-90deg) scale(0.1);
+      }
+      .popup-leave-from,
+      .popup-enter-to {
+        top: 13px;
+        opacity: 1;
+        transform: perspective(1000px) rotateX(-360deg) scale(1.1);
+      }
     }
 
     &-button {
-      background-color: $color-gray-light;
+      background-color: #f2f2f2;
       cursor: pointer;
-      padding: 5px;
-      width: 10px;
-      height: 10px;
+      width: 20px;
+      height: 20px;
       @include style-flex-center;
-      border: 1px solid $color-dark-normal;
+      border: 1px solid #464657;
       border-radius: 50%;
       font-weight: 600;
       &:hover {
         background-color: $color-dark-normal;
         color: $color-white;
-        + .calc__prompt-popup {
-          display: block;
-          opacity: 1;
-        }
       }
     }
     &-popup {
-      background-color: $color-gray-light;
-      position: absolute;
-      display: none;
-      left: calc(0px + 20px);
-      top: calc(0px + 10px);
-      max-width: 300px;
-      padding: 15px;
-      border: 1px solid $color-dark-normal;
-      border-radius: $border-radius;
-
-      transition-property: opacity;
-      transition-duration: 5s;
-      transition-timing-function: linear;
-      transition-delay: 5s;
-
-      &:hover {
-        display: block;
+      &-wrapper {
+        background-color: $color-gray-light;
+        position: absolute;
+        @include style-flex-center;
+        left: 0;
+        min-width: 300px;
+        max-width: 450px;
+        padding: 15px;
+        border: 1px solid $color-dark-normal;
+        border-radius: $border-radius;
+        box-shadow: 0 0 9px 0 $color-gray-dark;
+        z-index: 100;
+      }
+      &-item {
+        @include style-flex-center;
       }
     }
   }
 
-
-
-
-//--------------форма-----------------
+  //--------------форма-----------------
   &__form {
     @include style-flex-center;
     flex-direction: column;

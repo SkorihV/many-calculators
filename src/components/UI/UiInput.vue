@@ -1,8 +1,12 @@
 <template>
-  <div class="calc__input-wrapper">
-    <label :for="idName" class="calc__input-label">
+  <div class="calc__input-wrapper" :class="{ 'is-stretch': isStretch }">
+    <label
+      :for="idName"
+      class="calc__input-label"
+      :class="{ 'is-column': isColumn }"
+    >
       <div v-if="label" class="calc__input-label-text">
-        {{ label }}
+        {{ label }}<slot name="prompt" />
         <div class="calc__input-error-wrapper" v-if="isInvalid">
           <div v-if="isErrorEmpty" class="empty calc__input-error-item">
             {{ errorEmptyText }}
@@ -56,7 +60,7 @@ export default {
     //данные для инпута
     inputValue: {
       type: [Number, String],
-      default: 0,
+      default: null,
     },
     // имя необходимое для корректной работы Label
     idName: {
@@ -101,7 +105,15 @@ export default {
     //разделять сотни пробелами
     isCurrency: {
       type: Boolean,
-      default: false,
+    },
+    isColumn: {
+      type: Boolean,
+    },
+    isStretch: {
+      type: Boolean,
+    },
+    isInteger: {
+      type: Boolean,
     },
   },
   mounted() {
@@ -124,7 +136,7 @@ export default {
     return {
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
-      isInvalid: false
+      isInvalid: false,
     };
   },
   methods: {
@@ -142,6 +154,10 @@ export default {
 
         if (currentValue.toString().slice(-1) === ".") {
           return currentValue;
+        }
+
+        if (this.isInteger) {
+          currentValue = parseInt(currentValue);
         }
 
         return currentValue;
@@ -207,7 +223,7 @@ export default {
   computed: {
     resultValue() {
       if (this.onlyNumber) {
-        return this.resultWitchNumberValid();
+        return this.resultWitchNumberValid(this.inputValue);
       } else {
         return this.inputValue;
       }

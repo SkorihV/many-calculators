@@ -1,14 +1,27 @@
 <template>
-  <div class="calc__select-wrapper" :class="{ 'is-column': isColumn }" :style="maxWidthWrapper">
-    <div class="calc__select-label" v-if="label">{{ label }}</div>
+  <div
+    class="calc__select-wrapper"
+    :class="{ 'is-column': isColumn }"
+    :style="maxWidthWrapper"
+  >
+    <div class="calc__select-label" v-if="label">
+      {{ label }}<slot name="prompt"></slot>
+    </div>
     <div class="calc__select-change-wrapper">
       <div
         class="calc__select-change-item"
         @click="toggleOpenClose"
         :class="{ 'is-open': isOpen }"
       >
-        <div v-if="currentOption?.image?.filename" class="calc__select-image-wrapper">
-          <img alt="currentOption.title" class="calc__select-image-item"  :src="currentOption.image.filename">
+        <div
+          v-if="currentOption?.image?.filename"
+          class="calc__select-image-wrapper"
+        >
+          <img
+            alt="currentOption.title"
+            class="calc__select-image-item"
+            :src="currentOption.image.filename"
+          />
         </div>
         {{ currentOption.title }}
       </div>
@@ -20,8 +33,15 @@
           v-for="(option, idx) in options"
           :key="option.value"
         >
-          <div v-if="option?.image?.filename" class="calc__select-image-wrapper">
-            <img alt="option.title" class="calc__select-image-item"  :src="option.image.filename">
+          <div
+            v-if="option?.image?.filename"
+            class="calc__select-image-wrapper"
+          >
+            <img
+              alt="option.title"
+              class="calc__select-image-item"
+              :src="option.image.filename"
+            />
           </div>
           {{ option.title }}
         </div>
@@ -58,14 +78,14 @@ export default {
     },
     maxWidth: {
       type: [Number, String],
-      default: 200
-    }
+      default: 200,
+    },
   },
   data() {
     return {
       isOpen: false,
       currentOption: {},
-      currentIndexOption: 0
+      currentIndexOption: 0,
     };
   },
   methods: {
@@ -90,13 +110,13 @@ export default {
     },
     options() {
       this.currentOption = this.options[this.currentIndexOption];
-    }
+    },
   },
   computed: {
     maxWidthWrapper() {
-      return this.maxWidth ? `max-width:${this.maxWidth}px;` : '';
-    }
-  }
+      return this.maxWidth ? `max-width:${this.maxWidth}px;` : "";
+    },
+  },
 };
 </script>
 

@@ -1,5 +1,4 @@
 {
-
   "credit-calculator": {
     "type_calculate": "Both",
     "bank_list": {
@@ -83,50 +82,71 @@
     }
   },
 
-  "stretch-ceiling-calculator" : {
-    "type_material" : [
+  "stretch-ceiling-calculator": {
+    "type_material": [
       {
-        "title" : "Ткань",
-        "value" : "1",
-        "cost"  : "500"
+        "title": "Ткань",
+        "value": 1,
+        "cost": 500,
+        "materialImage": {
+          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+        }
       },
       {
-        "title" : "Пленка РФ",
-        "value" : "2",
-        "cost"  : "700"
+        "title": "Пленка РФ",
+        "value": 2,
+        "cost": 700,
+        "materialImage": {
+          "filename": "https://dummyimage.com/500x300/a1a1a1/fff"
+        },
+        "prompt": "вот она подсказка"
       },
       {
-        "title" : "Пленка Китай Эконом",
-        "value" : "3",
-        "cost"  : 300
+        "title": "Пленка Китай Эконом",
+        "value": 3,
+        "cost": 300,
+        "materialImage": {
+          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+        }
       },
       {
-        "title" : "Пленка Китай Премиум",
-        "value" : "4",
-        "cost"  : 1000
+        "title": "Пленка Китай Премиум",
+        "value": 4,
+        "cost": 1000,
+        "materialImage": {
+          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+        }
       },
       {
-        "title" : "Пленка Германия",
-        "value" : "5",
-        "cost"  : 1500
+        "title": "Пленка Германия",
+        "value": 5,
+        "cost": 1500,
+        "materialImage": {
+          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+        }
       }
     ],
-    "extra_elements": [
+    "extra_options": [
       {
-        "title" : "Количество люстр",
-        "cost" : 500
+        "title": "Количество люстр",
+        "base_value": 0,
+        "cost": 500
       },
       {
-        "title" : "Количество светильников",
-        "cost" : 350
+        "title": "Количество светильников",
+        "base_value": 0,
+        "cost": 350,
+        "prompt": "тут подсказака"
       },
       {
-        "title" : "Количество углов",
-        "cost" : 150
+        "title": "Количество углов",
+        "base_value": 0,
+        "cost": 150
       },
       {
-        "title" : "Количество труб",
-        "cost" : 150
+        "title": "Количество труб",
+        "base_value": 0,
+        "cost": 150
       }
     ]
   }

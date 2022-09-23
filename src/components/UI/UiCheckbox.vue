@@ -10,7 +10,7 @@
         id="idName"
       />
       <div v-if="label" class="calc__checkbox-text">
-        {{ label }}
+        {{ label }}<slot name="prompt"></slot>
       </div>
       <div class="calc__checkbox-element" :class="checkboxType"></div>
       <div v-if="labelSecond" class="calc__checkbox-text_second">
@@ -23,6 +23,8 @@
 <script>
 export default {
   name: "UiCheckbox",
+  components: {},
+
   emits: ["update:checkboxValue"],
   props: {
     label: {
@@ -46,7 +48,7 @@ export default {
     switchToggleVertical: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   methods: {
     changeValue(e) {
@@ -58,12 +60,14 @@ export default {
   },
   computed: {
     checkboxType() {
-      return this.switchToggle ? "switcher"  : this.switchToggleVertical ? 'switcher-vertical' : "base";
+      return this.switchToggle
+        ? "switcher"
+        : this.switchToggleVertical
+        ? "switcher-vertical"
+        : "base";
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

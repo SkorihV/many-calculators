@@ -1,6 +1,8 @@
 <template>
   <div class="calc__range-wrapper">
-    <div v-if="label.length" class="calc__range-label">{{ label }}</div>
+    <div v-if="label.length" class="calc__range-label">
+      {{ label }}}<slot name="prompt"></slot>
+    </div>
     <input
       class="calc__range-item"
       type="range"

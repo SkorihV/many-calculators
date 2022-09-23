@@ -1,15 +1,11 @@
 <template>
-  <div class="calc__radio-wrapper">
-
-  </div>
+  <div class="calc__radio-wrapper"></div>
 </template>
 
 <script>
 export default {
-  name: "UiRadio"
+  name: "UiRadio",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
