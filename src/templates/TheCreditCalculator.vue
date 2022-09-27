@@ -16,7 +16,7 @@
               :max="outData?.interest_rate.max"
               not-empty
               only-number
-              is-name="handlerRate"
+              id-name="handlerRate"
               :input-value="currentInterestRate"
               @change-value="changeCurrentRateOnHandler"
               @change-valid="changeValid($event, 'handlerRate')"
@@ -49,7 +49,7 @@
           <div class="calc__wrapper-common-data">
             <div class="content__min-wrapper">
               <ui-input
-                label="первоначальный взнос:"
+                label="Первоначальный взнос:"
                 id-name="downPaymentPercentage"
                 :inputValue="downPaymentPercentage"
                 @change-value="changeDownPaymentPercentage"
@@ -60,6 +60,7 @@
                 not-empty
                 only-number
                 type-number
+                controls
               />
               <ui-input
                 :unit="outData?.payment_currency?.unit"
@@ -100,6 +101,7 @@
               <ui-select
                 :options="typeTimes"
                 @selected-value="changeMethodChoiceTime"
+                min-width="50"
                 max-width="100"
                 is-column
               />
@@ -115,7 +117,8 @@
                 label-second="Дифференцированный"
                 id-name="toggleTypeComputed"
                 switch-toggle
-                v-model:checkbox-value="showDifferentiatedPayment"
+                :checkbox-data="showDifferentiatedPayment"
+                @checkbox-checkbox="checkboxCheckbox"
               />
             </div>
           </div>
@@ -198,7 +201,7 @@
     </div>
 
     <teleport v-if="!isInvalid" to="#teleport-element">
-      {{resultForOut}}
+      {{ resultForOut }}
     </teleport>
   </div>
 </template>
@@ -221,7 +224,6 @@ export default {
     UiRange,
     UiSelect,
     PaymentSchedule,
-    UiPrompt,
   },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
@@ -429,6 +431,10 @@ export default {
     changeFirstItemForCreditDifferentiatedPayment(item) {
       this.firstItemForCreditDifferentiatedPayment = item;
     },
+    checkboxCheckbox(data) {
+      console.log(data);
+      this.showDifferentiatedPayment = data;
+    },
   },
   watch: {
     propertyPrice() {
@@ -582,15 +588,27 @@ export default {
       return Boolean(this.errorsInputs.size);
     },
     resultForOut() {
-      return "Банк: " + this.currenSelectedBank?.title +
-        "\n Ставка: " + this.currentInterestRate +
-        "\n Сумма кредита: " + this.startCreditSumInOut +
-        "\n Стоимость объекта недвижимости: " + this.propertyPrice +
-        "\n Первоначальный взнос: " + this.downPaymentCurrency +
-        "\n Срок кредита: " + this.creditTerm + " " + this.currentTypeTime.title +
-        "\n Начисленные проценты:" + this.overpaymentAmountInOut +
-        "\n Долг + проценты: " + this.totalSumCreditInOut;
-    }
+      return (
+        "Банк: " +
+        this.currenSelectedBank?.title +
+        "\n Ставка: " +
+        this.currentInterestRate +
+        "\n Сумма кредита: " +
+        this.startCreditSumInOut +
+        "\n Стоимость объекта недвижимости: " +
+        this.propertyPrice +
+        "\n Первоначальный взнос: " +
+        this.downPaymentCurrency +
+        "\n Срок кредита: " +
+        this.creditTerm +
+        " " +
+        this.currentTypeTime.title +
+        "\n Начисленные проценты:" +
+        this.overpaymentAmountInOut +
+        "\n Долг + проценты: " +
+        this.totalSumCreditInOut
+      );
+    },
   },
 };
 </script>
@@ -633,6 +651,7 @@ $border-radius: 4px;
 
 @mixin style-button {
   color: $color-white;
+  cursor: pointer;
   background-color: $color-dark-normal;
   @include style-flex-center;
   @include style-border;
@@ -741,7 +760,6 @@ $border-radius: 4px;
           -webkit-transform: translate(0, -50%);
           -ms-transform: translate(0, -50%);
           transform: translate(0, -50%);
-          cursor: pointer;
           border: none;
           outline: none;
           @include style-button;
@@ -785,10 +803,8 @@ $border-radius: 4px;
             @include style-button-hover;
           }
           button {
-            @include style-border;
             @include style-button;
             background-color: $color-dark-normal;
-            cursor: pointer;
             line-height: 0;
             font-size: 0;
             height: 17px;
@@ -892,7 +908,6 @@ $border-radius: 4px;
       @include style-flex-center;
       @include style-button;
       padding: 10px;
-      cursor: pointer;
       &:hover {
         @include style-button-hover;
         @include style-border-hover;
@@ -906,8 +921,6 @@ $border-radius: 4px;
         @include style-button;
         padding: 10px;
         margin-top: 10px;
-        cursor: pointer;
-        @include style-border;
         &:hover {
           @include style-button-hover;
           @include style-border-hover;

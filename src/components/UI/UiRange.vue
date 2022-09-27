@@ -53,13 +53,16 @@ export default {
       type: [Number, String],
       default: 10,
     },
+    //шаг на самом ползунке
     step: {
       type: [Number, String],
       default: 1,
     },
+    //отобразить шаги шкалы подсказок
     showSteps: {
       type: Boolean,
     },
+    // размер шага у шкалы с подсказками
     stepPrompt: {
       type: [Number, String],
       default: 1,

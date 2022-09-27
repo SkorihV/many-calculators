@@ -29,7 +29,7 @@
         <input
           ref="trueInput"
           :id="idName"
-          :type="isTypeNumber"
+          type="text"
           :value="resultValue"
           @input="tryChangeValueInput"
           @keydown.enter="trueTrueValue"
@@ -37,15 +37,20 @@
           autocomplete="off"
           v-if="!fakeValueHidden"
         />
-
-        <input
-          @click="showTrueValue"
-          :type="isTypeNumber"
-          :value="resultValueDouble"
-          class="calc__input-item currency"
-          autocomplete="off"
-          v-show="fakeValueHidden"
-        />
+        <template v-if="isCurrency">
+          <input
+            @click="showTrueValue"
+            type="text"
+            :value="resultValueDouble"
+            class="calc__input-item currency"
+            autocomplete="off"
+            v-show="fakeValueHidden"
+          />
+        </template>
+        <div v-if="controls" class="calc__input-buttons-wrapper">
+          <div class="calc__input-buttons-plus" @click="plus">+</div>
+          <div class="calc__input-buttons-minus" @click="minus">-</div>
+        </div>
         <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
       </div>
     </label>
@@ -65,24 +70,15 @@ export default {
     // имя необходимое для корректной работы Label
     idName: {
       type: String,
+      default: Math.random().toString(),
     },
+    //заголовок
     label: {
       type: String,
     },
+    // единицы измерения
     unit: {
       type: String,
-    },
-    //текст для ошибки созданной в ручную
-    customErrorText: {
-      type: String,
-    },
-    // шаблон rex для ручной валидации
-    customErrorPattern: {
-      type: RegExp,
-      default: null,
-    },
-    onlyNumber: {
-      type: Boolean,
     },
     // максимальное значение в инпуте
     max: {
@@ -94,30 +90,53 @@ export default {
       type: [Number, String],
       default: null,
     },
-    // инпут не должен быть пустым
+
+    // инпут не может быть пустым
     notEmpty: {
       type: Boolean,
     },
-    // изменить стандартный тип Text на Number
-    typeNumber: {
+    // только числа
+    onlyNumber: {
       type: Boolean,
+    },
+    // только целые числа
+    onlyInteger: {
+      type: Boolean,
+    },
+    // отобразить элементы управления
+    controls: {
+      type: Boolean,
+    },
+    // шаг при нажатии на + / -
+    step: {
+      type: Number,
+      default: 1,
     },
     //разделять сотни пробелами
     isCurrency: {
       type: Boolean,
     },
+    // отображать заголовок и инпут в колонку
     isColumn: {
       type: Boolean,
     },
+    // растягивать обертку по ширине
     isStretch: {
       type: Boolean,
     },
-    isInteger: {
-      type: Boolean,
+    // шаблон rex для ручной валидации
+
+    customErrorPattern: {
+      type: RegExp,
+      default: null,
+    },
+    //текст для ошибки созданной в ручную
+    customErrorText: {
+      type: String,
     },
   },
   mounted() {
-    if (this.min) {
+    if (this.min && this.min > this.inputValue) {
       this.changeValue(this.min);
     }
 
@@ -146,18 +165,25 @@ export default {
         if (this.valueIsNaN) {
           currentValue = "";
         }
-
         this.clearTimer();
         if (this.isErrorNumber || this.isErrorMin) {
           this.changeValueWitchTimer(this.min || 0);
         }
+        if (this.isErrorMax) {
+          this.changeValueWitchTimer(this.max);
+        }
 
-        if (currentValue.toString().slice(-1) === ".") {
+        if (
+          currentValue.toString().slice(-1) === "." ||
+          currentValue.toString().slice(0) === "-"
+        ) {
           return currentValue;
         }
 
-        if (this.isInteger) {
-          currentValue = parseInt(currentValue);
+        if (this.onlyInteger) {
+          currentValue = !isNaN(parseInt(currentValue))
+            ? parseInt(currentValue)
+            : null;
         }
 
         return currentValue;
@@ -211,6 +237,21 @@ export default {
         this.fakeValueHidden = true;
       }
     },
+    plus() {
+      let value = parseFloat(this.inputValue) + this.step;
+      if (this.max !== null && this.max !== "") {
+        value = value <= this.max ? value : this.max;
+      }
+
+      this.changeValue(value);
+    },
+    minus() {
+      let value = parseFloat(this.inputValue) - this.step;
+      if (this.min !== null && this.min !== "") {
+        value = value >= this.min ? value : this.min;
+      }
+      this.changeValue(value);
+    },
   },
   watch: {
     /**
@@ -234,10 +275,6 @@ export default {
     valueIsNaN() {
       return isNaN(parseFloat(this.inputValue));
     },
-    isTypeNumber() {
-      return this.typeNumber ? "Number" : "Text";
-    },
-
     isErrorNumber() {
       return (
         (this.onlyNumber || this.max !== null || this.min !== null) &&
@@ -275,7 +312,6 @@ export default {
         parseFloat(this.inputValue) < parseFloat(this.min)
       );
     },
-
     errorMinText() {
       return this.min !== null &&
         !this.valueIsNaN &&

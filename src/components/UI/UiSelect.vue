@@ -2,7 +2,7 @@
   <div
     class="calc__select-wrapper"
     :class="{ 'is-column': isColumn }"
-    :style="maxWidthWrapper"
+    :style="[minWidthWrapper, maxWidthWrapper]"
   >
     <div class="calc__select-label" v-if="label">
       {{ label }}<slot name="prompt"></slot>
@@ -76,9 +76,12 @@ export default {
     isColumn: {
       type: Boolean,
     },
-    maxWidth: {
+    minWidth: {
       type: [Number, String],
       default: 200,
+    },
+    maxWidth: {
+      type: [Number, String],
     },
   },
   data() {
@@ -113,6 +116,9 @@ export default {
     },
   },
   computed: {
+    minWidthWrapper() {
+      return this.minWidth ? `min-width:${this.minWidth}px;` : "";
+    },
     maxWidthWrapper() {
       return this.maxWidth ? `max-width:${this.maxWidth}px;` : "";
     },

@@ -3,66 +3,99 @@
     <div id="custom-style" class="calc calc__wrapper">
       <div class="calc__wrapper-content content">
         <div class="calc__left-side">
-          <div class="calc__wrapper-common-data">
+          <div class="calc__wrapper-group-data">
             <div class="calc__wrapper-content_min">
               <ui-select
                 label="Тип материала:"
                 :options="typeMaterial"
                 @selected-value="changeTypeMaterial"
                 is-column
+                min-width="200"
               >
                 <template #prompt v-if="currentTypeMaterial?.prompt">
-                  <ui-prompt>
-                    {{ currentTypeMaterial.prompt }}
-                  </ui-prompt>
+                  <ui-prompt :prompt-text="currentTypeMaterial.prompt" />
                 </template>
               </ui-select>
               <ui-input
                 label="Площадь, м2:"
                 :input-value="square"
                 @change-value="changeSquare"
-                only-number
                 not-empty
-                type-number
+                only-number
                 is-column
+                controls
                 min="0"
+                id-name="square"
                 @change-valid="changeValid($event, 'square')"
               />
-
-              <div class="calc__btn-more-options" @click="toggleOptions">
-                Больше настроек
-              </div>
             </div>
           </div>
-
-          <div class="calc__wrapper-common-data" v-if="optionsIsOpen">
-            <div class="calc__wrapper-options">
+          <div class="calc__wrapper-group-data" v-if="baseOptions.length">
+            <div class="calc__wrapper-group-title">Базовые опции опции:</div>
+            <div
+              class="calc__wrapper-options"
+              v-for="(option, idx) in baseOptions"
+            >
               <ui-input
-                v-for="(option, idx) in extraOptions"
-                @change-value="changeExtraOptions($event, idx)"
-                @change-valid="changeValid($event, 'option' + idx)"
-                only-number
-                min="0"
                 :label="option.title"
                 :input-value="option.base_value"
-                type-number
-                is-integer
+                :min="option.min_value"
+                :max="option.max_value"
+                :id-name="'baseOption' + idx"
+                :unit="option.unit"
+                @change-valid="changeValid($event, 'baseOption' + idx)"
+                @change-value="changeBaseOptions($event, idx)"
+                not-empty
+                only-number
+                only-integer
                 is-stretch
+                controls
               >
                 <template v-if="option.prompt" #prompt>
-                  <ui-prompt>
-                    {{ option.prompt }}
-                  </ui-prompt>
-                </template></ui-input
-              >
+                  <ui-prompt :prompt-text="option.prompt" />
+                </template>
+              </ui-input>
             </div>
           </div>
+          <div class="calc__wrapper-group-data" v-if="extraOptions">
+            <div class="calc__wrapper-group-title">Дополнительные опции:</div>
+            <div class="calc__btn-more-options" @click="toggleOptions">
+              Больше настроек
+            </div>
+            <template v-if="optionsIsOpen">
+              <div
+                class="calc__wrapper-options"
+                v-for="(option, idx) in extraOptions"
+              >
+                <ui-input
+                  :input-value="option.base_value"
+                  :min="option.min_value"
+                  :max="option.max_value"
+                  :id-name="'extraOption' + idx"
+                  :label="option.title"
+                  :unit="option.unit"
+                  min="0"
+                  @change-value="changeExtraOptions($event, idx)"
+                  @change-valid="changeValid($event, 'extraOption' + idx)"
+                  not-empty
+                  only-number
+                  only-integer
+                  is-stretch
+                  controls
+                >
+                  <template v-if="option.prompt" #prompt>
+                    <ui-prompt :prompt-text="option.prompt" />
+                  </template>
+                </ui-input>
+              </div>
+            </template>
+          </div>
 
-          <div
-            class="calc__wrapper-common-data"
-            v-if="summ && !errorsInputs.size"
-          >
-            <div class="calc__summ">Ваша цена: {{ summ }}</div>
+          <div class="calc__wrapper-group-data" v-if="summ">
+            <div class="calc__wrapper-controls">
+              <div class="calc__summ">Ваша цена: {{ summ }}</div>
+              <div class="calc__restart" @click="reset">Сбросить опции.</div>
+            </div>
           </div>
         </div>
         <div class="calc__right-side">
@@ -108,10 +141,13 @@ export default {
     }
 
     this.typeMaterial = this.outData?.type_material
-      ? this.outData?.type_material
+      ? JSON.parse(JSON.stringify(this.outData?.type_material))
+      : [];
+    this.baseOptions = this.outData?.base_options
+      ? JSON.parse(JSON.stringify(this.outData?.base_options))
       : [];
     this.extraOptions = this.outData?.extra_options
-      ? this.outData?.extra_options
+      ? JSON.parse(JSON.stringify(this.outData?.extra_options))
       : [];
     this.imageDir = window?.imageDir || "";
   },
@@ -121,6 +157,7 @@ export default {
       outData: {},
       typeMaterial: [],
       extraOptions: [],
+      baseOptions: [],
       currentTypeMaterial: null,
       optionsIsOpen: false,
       errorsInputs: new Set(),
@@ -137,6 +174,9 @@ export default {
     changeExtraOptions(value, idx) {
       this.extraOptions[idx].base_value = value;
     },
+    changeBaseOptions(value, idx) {
+      this.baseOptions[idx].base_value = value;
+    },
     changeSquare(value) {
       this.square = value;
     },
@@ -148,6 +188,33 @@ export default {
           this.errorsInputs.delete(targetValid);
       }
     },
+    getOptionsTemplateForResult(option) {
+      return (
+        option.title +
+        " - количество " +
+        option.base_value +
+        " - по цене " +
+        option.cost +
+        " за единицу \n"
+      );
+    },
+    reset() {
+      this.square = 0;
+
+      if (this.baseOptions.length) {
+        for (let i = 0; i < this.baseOptions.length; i++) {
+          this.baseOptions[i].base_value =
+            this.outData.base_options[i].base_value;
+        }
+      }
+
+      if (this.extraOptions.length) {
+        for (let i = 0; i < this.extraOptions.length; i++) {
+          this.extraOptions[i].base_value =
+            this.outData.extra_options[i].base_value;
+        }
+      }
+    },
   },
   computed: {
     summ() {
@@ -156,6 +223,10 @@ export default {
       }
       return (
         this.currentTypeMaterial.cost * this.square +
+        this.baseOptions.reduce(
+          (acc, item) => acc + item.base_value * item.cost,
+          0
+        ) +
         this.extraOptions.reduce(
           (acc, item) => acc + item.base_value * item.cost,
           0
@@ -171,18 +242,24 @@ export default {
         return "";
       }
       let dataExtraOptions = "";
+      let dataBaseOptions = "";
+
+      if (this.baseOptions) {
+        dataBaseOptions += "\n Базовые опции: \n";
+        this.baseOptions.forEach((item) => {
+          if (item.base_value > 0) {
+            dataExtraOptions += this.getOptionsTemplateForResult(item);
+          }
+        });
+      }
 
       if (this.extraOptions) {
-        this.extraOptions.forEach(
-          (item) =>
-            (dataExtraOptions +=
-              item.title +
-              " - количество " +
-              item.base_value +
-              " - по цене " +
-              item.cost +
-              " за единицу \n")
-        );
+        dataExtraOptions += "\n Дополнительные опции: \n";
+        this.extraOptions.forEach((item) => {
+          if (item.base_value > 0) {
+            dataExtraOptions += this.getOptionsTemplateForResult(item);
+          }
+        });
       }
 
       return (
@@ -192,7 +269,9 @@ export default {
         this.square +
         "\n Тип материала: " +
         this.currentTypeMaterial.title +
-        "\n Стоимость материала:" + this.currentTypeMaterial.cost  +
+        "\n Стоимость материала: " +
+        this.currentTypeMaterial.cost +
+        dataBaseOptions +
         dataExtraOptions
       );
     },
@@ -238,6 +317,7 @@ $border-radius: 4px;
 
 @mixin style-button {
   color: $color-white;
+  cursor: pointer;
   background-color: $color-dark-normal;
   @include style-flex-center;
   @include style-border;
@@ -273,6 +353,7 @@ $border-radius: 4px;
       @include style-flex-center;
       flex-direction: column;
       align-items: flex-start;
+      justify-content: start;
       width: 100%;
       padding: 5px;
       &-content {
@@ -292,27 +373,27 @@ $border-radius: 4px;
           }
         }
       }
-      &-common-data {
+      &-group-data {
         margin-bottom: 20px;
         padding-left: 20px;
         border-left: 3px solid $color-orange-normal;
-        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+      }
+      &-group-title {
+        font-size: 16px;
+        font-weight: 600;
       }
       &-options {
         @include style-flex-start;
         flex-wrap: wrap;
-        .calc__input-wrapper {
-          max-width: calc(50% - 20px);
-          width: 100%;
-          @media all and (max-width: 980px) {
-            max-width: 80%;
-          }
-        }
-
-        @media all and (max-width: 980px) {
-          flex-direction: column;
-          align-items: flex-start;
-        }
+        width: 100%;
+        margin-right: 10px;
+        border-bottom: 1px solid $color-gray-middle;
+      }
+      &-controls {
+        @include style-flex-start;
       }
       &-img {
         max-width: 300px;
@@ -321,10 +402,9 @@ $border-radius: 4px;
     &__btn-more-options {
       @include style-flex-center;
       @include style-button;
-      padding: 10px 5px;
+      padding: 10px;
       margin: 5px;
       flex: 1 1 100%;
-      cursor: pointer;
       &:hover {
         @include style-button-hover;
       }
@@ -349,11 +429,10 @@ $border-radius: 4px;
       @include style-img;
       aspect-ratio: 1/1;
     }
+    &__restart,
     &__summ {
-      padding: 5px;
-      background-color: $color-dark-normal;
-      color: $color-white;
-      @include style-flex-start;
+      padding: 10px;
+      @include style-button;
       flex: 1 1 auto;
       font-size: 20px;
       font-weight: 600;

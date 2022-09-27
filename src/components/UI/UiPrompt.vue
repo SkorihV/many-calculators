@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__prompt-wrapper" @mouseleave="hidden">
+  <div class="calc__prompt-wrapper" @mouseleave="hidden" v-if="promptText">
     <div
       class="calc__prompt-button"
       @mouseenter="show"
@@ -14,9 +14,7 @@
         @mouseenter="show"
         v-show="isShow"
       >
-        <div class="calc__prompt-popup-item">
-          <slot></slot>
-        </div>
+        <div class="calc__prompt-popup-item" v-html="promptText" />
       </div>
     </transition>
   </div>
@@ -25,6 +23,11 @@
 <script>
 export default {
   name: "UiPrompt",
+  props: {
+    promptText: {
+      type: String,
+    },
+  },
   data() {
     return {
       isShow: false,
@@ -33,7 +36,6 @@ export default {
   },
   methods: {
     show() {
-      console.log(this.$slots.default());
       clearTimeout(this.timerName);
       this.isShow = true;
     },

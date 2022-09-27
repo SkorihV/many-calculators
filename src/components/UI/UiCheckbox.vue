@@ -1,13 +1,13 @@
 <template>
   <div class="calc__checkbox-wrapper">
-    <label for="idName" class="calc__checkbox-label">
+    <label :for="idName" class="calc__checkbox-label">
       <input
         class="calc__checkbox-item"
         type="checkbox"
-        :checked="checkboxValue.value"
+        :checked="checkboxData.value"
         @input="changeValue($event)"
         :name="label"
-        id="idName"
+        :id="idName"
       />
       <div v-if="label" class="calc__checkbox-text">
         {{ label }}<slot name="prompt"></slot>
@@ -23,9 +23,7 @@
 <script>
 export default {
   name: "UiCheckbox",
-  components: {},
-
-  emits: ["update:checkboxValue"],
+  emits: ["checkboxCheckbox"],
   props: {
     label: {
       type: String,
@@ -37,8 +35,9 @@ export default {
     },
     idName: {
       type: String,
+      default: Math.random().toString(),
     },
-    checkboxValue: {
+    checkboxData: {
       type: Object,
     },
     switchToggle: {
@@ -52,7 +51,7 @@ export default {
   },
   methods: {
     changeValue(e) {
-      this.$emit("update:checkboxValue", {
+      this.$emit("checkboxCheckbox", {
         name: this.idName,
         value: e.target.checked,
       });

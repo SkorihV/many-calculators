@@ -66,6 +66,7 @@ $border-radius: 4px;
 
 @mixin style-button {
   color: $color-white;
+  cursor: pointer;
   background-color: $color-dark-normal;
   @include style-flex-center;
   @include style-border;
@@ -155,16 +156,17 @@ $border-radius: 4px;
       margin: 5px;
       position: relative;
       &.is-stretch {
-        flex: 1 1 auto;
+        flex: 1 1 100%;
       }
       &-data {
         display: flex;
         align-items: center;
+        position: relative;
       }
     }
 
     &-label {
-      @include style-flex-center;
+      @include style-flex-start;
       width: 100%;
       justify-content: space-between;
       align-items: flex-start;
@@ -173,7 +175,7 @@ $border-radius: 4px;
       }
       @media all and (max-width: 480px) {
         flex-direction: column;
-        align-items: center;
+        align-items: start;
         justify-content: center;
       }
       &-text {
@@ -199,6 +201,26 @@ $border-radius: 4px;
         @include style-border-hover;
         border-bottom: 2px solid $color-dark-normal;
         outline: none;
+      }
+    }
+
+    &-buttons {
+      &-wrapper {
+        @include style-flex-center;
+        flex-direction: column;
+        margin-left: 2px;
+      }
+
+      &-plus,
+      &-minus {
+        width: 18px;
+        height: 18px;
+        @include style-button;
+        font-weight: 600;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
     }
     &-unit {
@@ -663,13 +685,15 @@ $border-radius: 4px;
 
     &-textarea {
       width: 100%;
-      height: 100px;
+      min-height: 500px;
       margin-bottom: 10px;
       outline: none;
+      &[readonly] {
+        background-color: $color-gray-light;
+      }
     }
 
     &-submit {
-      cursor: pointer;
       @include style-button;
       padding: 10px;
       @include style-flex-center;

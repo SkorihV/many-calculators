@@ -126,27 +126,182 @@
         }
       }
     ],
-    "extra_options": [
+    "base_options": [
       {
-        "title": "Количество люстр",
-        "base_value": 0,
-        "cost": 500
-      },
-      {
-        "title": "Количество светильников",
-        "base_value": 0,
-        "cost": 350,
+        "title": "Количество углов",
+        "base_value": 4,
+        "min_value": 0,
+        "max_value": "",
+        "cost": 150,
+        "unit": "шт",
         "prompt": "тут подсказака"
       },
       {
         "title": "Количество углов",
         "base_value": 0,
-        "cost": 150
+        "min_value": 0,
+        "max_value": 10,
+        "cost": 150,
+        "prompt": "тут подсказака"
+      }
+    ],
+    "extra_options": [
+      {
+        "title": "Количество люстр",
+        "base_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+        "unit": "",
+        "cost": 500
+      },
+      {
+        "title": "Количество светильников",
+        "base_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+        "cost": 350,
+        "unit": "",
+        "prompt": "тут подсказака"
       },
       {
         "title": "Количество труб",
         "base_value": 0,
-        "cost": 150
+        "min_value": 0,
+        "max_value": 10,
+        "unit": "",
+        "cost": 150,
+        "prompt": "тут подсказака"
+      }
+    ]
+  },
+
+  "cleaning-calculator": {
+    "currency": "руб.",
+    "object_works": [
+      {
+        "title": "Квартира",
+        "prompt": "Какая-то подсказка с описанием",
+        "types_works": [
+          {
+            "title": "Послестроительная уборка",
+            "cost": 150,
+            "base_value": 0,
+            "unit": "м2",
+            "prompt": "Каая-то подсказка"
+          },
+          {
+            "title": "Генеральная уборка",
+            "cost": 100,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Жилая уборка",
+            "cost": 60,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Экспресс уборка",
+            "cost": 30,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Мойка холодильника",
+            "cost": 500,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Мойка духового шкафа (шт.)",
+            "cost": 500,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Мойка варочной панели (шт.)",
+            "cost": 350,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Мытье окон и фасадов",
+            "cost": 100,
+            "base_value": 0,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "title": "Офис, магазин, склад",
+        "types_works": [
+          {
+            "title": "Мойка витражей",
+            "cost": 80,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Ежедневная уборка (базовая)",
+            "cost": 25,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Послестроительная уборка",
+            "cost": 170,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Уборка офис Премиум",
+            "cost": 40,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Влажная уборка пола",
+            "cost": 35,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Уборка пола , полировка/шлифовка",
+            "cost": 65,
+            "base_value": 0,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "title": "Химчистка. Прачка.",
+        "types_works": [
+          {
+            "title": "Химчистка дивана\\кресла (за место)",
+            "cost": 80,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Химчистка стул\\пуф (за место)",
+            "cost": 25,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Химчистка ковровых покрытий",
+            "cost": 170,
+            "base_value": 0,
+            "unit": ""
+          },
+          {
+            "title": "Стирка. Сушка. Глажка. ( кг.)",
+            "cost": 40,
+            "base_value": 0,
+            "unit": ""
+          }
+        ]
       }
     ]
   }
