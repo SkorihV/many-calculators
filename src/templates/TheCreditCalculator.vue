@@ -16,9 +16,9 @@
               :max="outData?.interest_rate.max"
               not-empty
               only-number
-              id-name="handlerRate"
+              input-name="handlerRate"
               :input-value="currentInterestRate"
-              @change-value="changeCurrentRateOnHandler"
+              @changed-value="changeCurrentRateOnHandler"
               @change-valid="changeValid($event, 'handlerRate')"
               v-if="isHandlerRate"
             />
@@ -27,9 +27,9 @@
             <ui-input
               label="Стоимость объекта недвижимости:"
               :inputValue="propertyPrice"
-              @change-value="changePropertyPrice"
+              @changed-value="changePropertyPrice"
               @changeValid="changeValid($event, 'propertyPrice')"
-              id-name="propertyPrice"
+              input-name="propertyPrice"
               :unit="outData?.property_price?.unit || 'руб'"
               not-empty
               only-number
@@ -38,8 +38,8 @@
               is-currency
             />
             <ui-range
-              :input-value="propertyPrice"
-              @change-value="changePropertyPrice"
+              :range-value="propertyPrice"
+              @changed-value="changePropertyPrice"
               :min="outData?.property_price?.min"
               :max="outData?.property_price?.max"
               :step="outData?.property_price?.steps"
@@ -50,9 +50,9 @@
             <div class="content__min-wrapper">
               <ui-input
                 label="Первоначальный взнос:"
-                id-name="downPaymentPercentage"
+                input-name="downPaymentPercentage"
                 :inputValue="downPaymentPercentage"
-                @change-value="changeDownPaymentPercentage"
+                @changed-value="changeDownPaymentPercentage"
                 @change-valid="changeValid($event, 'downPaymentPercentage')"
                 :min="outData?.payment_percentage?.min"
                 :max="outData?.payment_percentage?.max"
@@ -65,8 +65,8 @@
               <ui-input
                 :unit="outData?.payment_currency?.unit"
                 :inputValue="downPaymentCurrency"
-                id-name="downPaymentCurrency"
-                @change-value="changeDownPaymentCurrency"
+                input-name="downPaymentCurrency"
+                @changed-value="changeDownPaymentCurrency"
                 @change-valid="changeValid($event, 'downPaymentCurrency')"
                 :min="outData?.payment_currency?.min"
                 :max="outData?.payment_currency?.max"
@@ -76,8 +76,8 @@
               />
             </div>
             <ui-range
-              :input-value="downPaymentPercentage"
-              @change-value="changeDownPaymentPercentage"
+              :range-value="downPaymentPercentage"
+              @changed-value="changeDownPaymentPercentage"
               :min="outData?.payment_percentage?.min"
               :max="outData?.payment_percentage?.max"
               show-steps
@@ -90,8 +90,8 @@
                 label="Срок кредита:"
                 :inputValue="creditTerm"
                 @change-valid="changeValid($event, 'creditTerm')"
-                @change-value="changeCreditTerm"
-                id-name="creditTerm"
+                @changed-value="changeCreditTerm"
+                input-name="creditTerm"
                 :max="maxTimeTerm"
                 :min="minTimeTerm"
                 only-number
@@ -100,7 +100,7 @@
               />
               <ui-select
                 :options="typeTimes"
-                @selected-value="changeMethodChoiceTime"
+                @changed-value="changeMethodChoiceTime"
                 min-width="50"
                 max-width="100"
                 is-column
@@ -115,10 +115,10 @@
               <ui-checkbox
                 label="Аннуитетный"
                 label-second="Дифференцированный"
-                id-name="toggleTypeComputed"
+                checkbox-name="toggleTypeComputed"
                 switch-toggle
-                :checkbox-data="showDifferentiatedPayment"
-                @checkbox-checkbox="checkboxCheckbox"
+                :checkbox-value="showDifferentiatedPayment"
+                @changed-value="changeCheckbox"
               />
             </div>
           </div>
@@ -270,10 +270,7 @@ export default {
       ? this.outData?.type_calculate
       : "Both";
 
-    this.showDifferentiatedPayment = {
-      name: "null",
-      value: this.typeCalculate === "D",
-    };
+    this.showDifferentiatedPayment = this.typeCalculate === "D";
 
     this.imageDir = window?.imageDir || "";
   },
@@ -336,7 +333,7 @@ export default {
       currenSelectedBank: {}, // выбранный банк из списка
       errorsInputs: new Set(), // список ошибок инпутов
       typeTimes: [],
-      showDifferentiatedPayment: {},
+      showDifferentiatedPayment: false,
       currentTypeTime: {}, // текущие единицы времени для расчета год или месяц
       firstItemForCreditDifferentiatedPayment: 0, // данные по первому дифференцированному платежу
     };
@@ -352,15 +349,15 @@ export default {
     },
     /**
      * изменить годовую ставку в ручную
-     * @param rate
+     * @param value
      */
-    changeCurrentRateOnHandler(rate) {
+    changeCurrentRateOnHandler({ value }) {
       this.currenSelectedBank = null;
       try {
-        if (rate.indexOf(".") > 0) {
-          this.currentInterestRate = parseFloat(rate).toFixed(2);
+        if (value.toString().indexOf(".") > 0) {
+          this.currentInterestRate = parseFloat(value).toFixed(2);
         } else {
-          this.currentInterestRate = rate;
+          this.currentInterestRate = value;
         }
       } catch (e) {
         console.error(e.message);
@@ -371,28 +368,28 @@ export default {
      * изменить стоимость объекта недвижимости
      * @param price
      */
-    changePropertyPrice(price) {
+    changePropertyPrice({ value: price }) {
       this.propertyPrice = price;
     },
     /**
      * изменить процент первоначального взноса
      * @param paymentPercent
      */
-    changeDownPaymentPercentage(paymentPercent) {
+    changeDownPaymentPercentage({value: paymentPercent}) {
       this.downPaymentPercentage = paymentPercent;
     },
     /**
      * изменить сумму первоначального взноса
      * @param paymentCurrency
      */
-    changeDownPaymentCurrency(paymentCurrency) {
+    changeDownPaymentCurrency({value: paymentCurrency}) {
       this.downPaymentCurrency = paymentCurrency;
     },
     /**
      * изменить срок кредита
      * @param creditTerm
      */
-    changeCreditTerm(creditTerm) {
+    changeCreditTerm({value : creditTerm}) {
       this.creditTerm = creditTerm;
     },
     /**
@@ -421,7 +418,7 @@ export default {
      * выбор единицы измерения срока кредита
      * @param item
      */
-    changeMethodChoiceTime(item) {
+    changeMethodChoiceTime({value : item}) {
       this.currentTypeTime = item;
     },
     /**
@@ -431,9 +428,8 @@ export default {
     changeFirstItemForCreditDifferentiatedPayment(item) {
       this.firstItemForCreditDifferentiatedPayment = item;
     },
-    checkboxCheckbox(data) {
-      console.log(data);
-      this.showDifferentiatedPayment = data;
+    changeCheckbox({ value: checkbox }) {
+      this.showDifferentiatedPayment = checkbox;
     },
   },
   watch: {
@@ -501,7 +497,7 @@ export default {
      *  // тип отображаемого варианта расчета А - аннуитет. D -дифференцированный
      */
     typeCurrentCalculation() {
-      return this.showDifferentiatedPayment.value ? "D" : "A";
+      return this.showDifferentiatedPayment ? "D" : "A";
     },
     /**
      * срок кредита в месяцах

@@ -8,7 +8,7 @@
               <ui-select
                 label="Тип материала:"
                 :options="typeMaterial"
-                @selected-value="changeTypeMaterial"
+                @changed-value="changeTypeMaterial"
                 is-column
                 min-width="200"
               >
@@ -19,13 +19,13 @@
               <ui-input
                 label="Площадь, м2:"
                 :input-value="square"
-                @change-value="changeSquare"
+                @changed-value="changeSquare"
                 not-empty
                 only-number
                 is-column
                 controls
                 min="0"
-                id-name="square"
+                input-name="square"
                 @change-valid="changeValid($event, 'square')"
               />
             </div>
@@ -41,17 +41,17 @@
                 :input-value="option.base_value"
                 :min="option.min_value"
                 :max="option.max_value"
-                :id-name="'baseOption' + idx"
+                :input-name="'baseOption' + idx"
                 :unit="option.unit"
-                @change-valid="changeValid($event, 'baseOption' + idx)"
-                @change-value="changeBaseOptions($event, idx)"
+                @changed-valid="changeValid($event, 'baseOption' + idx)"
+                @changed-value="changeBaseOptions($event, idx)"
                 not-empty
                 only-number
                 only-integer
                 is-stretch
                 controls
               >
-                <template v-if="option.prompt" #prompt>
+                <template v-if="option?.prompt" #prompt>
                   <ui-prompt :prompt-text="option.prompt" />
                 </template>
               </ui-input>
@@ -71,11 +71,11 @@
                   :input-value="option.base_value"
                   :min="option.min_value"
                   :max="option.max_value"
-                  :id-name="'extraOption' + idx"
+                  :input-name="'extraOption' + idx"
                   :label="option.title"
                   :unit="option.unit"
                   min="0"
-                  @change-value="changeExtraOptions($event, idx)"
+                  @changed-value="changeExtraOptions($event, idx)"
                   @change-valid="changeValid($event, 'extraOption' + idx)"
                   not-empty
                   only-number
@@ -165,19 +165,19 @@ export default {
     };
   },
   methods: {
-    changeTypeMaterial(material) {
-      this.currentTypeMaterial = material;
+    changeTypeMaterial({ value }) {
+      this.currentTypeMaterial = value;
     },
     toggleOptions() {
       this.optionsIsOpen = !this.optionsIsOpen;
     },
-    changeExtraOptions(value, idx) {
+    changeExtraOptions({ value }, idx) {
       this.extraOptions[idx].base_value = value;
     },
-    changeBaseOptions(value, idx) {
+    changeBaseOptions({ value }, idx) {
       this.baseOptions[idx].base_value = value;
     },
-    changeSquare(value) {
+    changeSquare({ value }) {
       this.square = value;
     },
     changeValid(dateValid, targetValid) {
@@ -380,6 +380,9 @@ $border-radius: 4px;
         display: flex;
         flex-direction: column;
         align-items: start;
+        &:hover {
+          background-color: $color-gray-middle;
+        }
       }
       &-group-title {
         font-size: 16px;

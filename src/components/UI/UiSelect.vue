@@ -53,7 +53,7 @@
 <script>
 export default {
   name: "UiSelect",
-  emits: ["selectedValue"],
+  emits: ["changedValue"],
   mounted() {
     if (this.options.length) {
       this.currentOption = this.options[0];
@@ -72,6 +72,10 @@ export default {
     options: {
       type: Array,
       default: () => [],
+    },
+    selectName: {
+      type: String,
+      default: Math.random().toString()
     },
     isColumn: {
       type: Boolean,
@@ -109,7 +113,7 @@ export default {
   },
   watch: {
     currentOption() {
-      this.$emit("selectedValue", this.currentOption);
+      this.$emit("changedValue", {value: this.currentOption, name: this.selectName, type: "select" });
     },
     options() {
       this.currentOption = this.options[this.currentIndexOption];

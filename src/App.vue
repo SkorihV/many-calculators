@@ -104,7 +104,7 @@ $border-radius: 4px;
 .main-wrapper {
   max-width: 980px;
   margin: 0 auto;
-  background-color: $color-gray-dark;
+  background-color: $color-gray-light;
   min-height: 100vh;
   padding: 3px;
 }
@@ -257,6 +257,7 @@ $border-radius: 4px;
     &-label {
       @include style-flex-start;
       padding: 5px;
+      font-weight: 600;
     }
     &-item {
       -webkit-appearance: none;
@@ -325,6 +326,14 @@ $border-radius: 4px;
           }
         }
       }
+    }
+
+    &-current-value {
+      margin-left: auto;
+      background-color: $color-dark-normal;
+      color: $color-white;
+      padding: 4px 6px;
+      border-radius: $border-radius;
     }
   }
 
@@ -601,6 +610,7 @@ $border-radius: 4px;
   //-------всплывающая подсказка ------
   &__prompt {
     &-wrapper {
+      color: $color-dark-normal;
       position: relative;
       margin: 0 5px;
       .popup-enter-active {
@@ -610,13 +620,13 @@ $border-radius: 4px;
       .popup-enter-from {
         top: -10000px;
         opacity: 0;
-        transform: perspective(1000px) rotateX(-90deg) scale(0.1);
+        transform: perspective(1000px) translateX(-50%) rotateX(-90deg) scale(0.1);
       }
       .popup-leave-from,
       .popup-enter-to {
         top: 13px;
         opacity: 1;
-        transform: perspective(1000px) rotateX(-360deg) scale(1.1);
+        transform: perspective(1000px) translateX(-50%) rotateX(-360deg) scale(1.1);
       }
     }
 
@@ -639,14 +649,25 @@ $border-radius: 4px;
         background-color: $color-gray-light;
         position: absolute;
         @include style-flex-center;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
         min-width: 300px;
-        max-width: 450px;
+        max-width: 700px;
         padding: 15px;
         border: 1px solid $color-dark-normal;
         border-radius: $border-radius;
         box-shadow: 0 0 9px 0 $color-gray-dark;
         z-index: 100;
+        &.isLeft {
+          left:auto;
+          right: 0;
+          transform: translateX(0);
+        }
+        &.isRight {
+          right: auto;
+          left: 0;
+          transform: translateX(0);
+        }
       }
       &-item {
         @include style-flex-center;

@@ -1,7 +1,7 @@
 <template>
   <div class="calc__input-wrapper" :class="{ 'is-stretch': isStretch }">
     <label
-      :for="idName"
+      :for="inputName"
       class="calc__input-label"
       :class="{ 'is-column': isColumn }"
     >
@@ -28,7 +28,7 @@
       <div class="calc__input-wrapper-data">
         <input
           ref="trueInput"
-          :id="idName"
+          :id="inputName"
           type="text"
           :value="resultValue"
           @input="tryChangeValueInput"
@@ -60,7 +60,7 @@
 <script>
 export default {
   name: "UiInput",
-  emits: ["changeValue", "changeValid"],
+  emits: ["changedValue", "changeValid"],
   props: {
     //данные для инпута
     inputValue: {
@@ -68,7 +68,7 @@ export default {
       default: null,
     },
     // имя необходимое для корректной работы Label
-    idName: {
+    inputName: {
       type: String,
       default: Math.random().toString(),
     },
@@ -195,7 +195,7 @@ export default {
       this.changeValue(e.target.value);
     },
     changeValue(value) {
-      this.$emit("changeValue", value);
+      this.$emit("changedValue", {value, name: this.inputName, type: "input"});
       this.checkValid();
     },
     changeValueWitchTimer(value) {

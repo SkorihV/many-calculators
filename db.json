@@ -304,5 +304,80 @@
         ]
       }
     ]
+  },
+
+  "base-calculator" : {
+    "building_data": {
+      "title" : "Тип строения:",
+      "buildingTypes": [
+        {
+          "label" : "Баня",
+          "prompt": "Небольшая подсказка по поводу типа строения - Баня"
+        },
+        {
+          "label" : "Дом",
+          "prompt": ""
+        },
+        {
+          "label" : "Забор",
+          "prompt": ""
+        },
+        {
+          "label" : "Пирс/Причал",
+          "prompt": ""
+        },
+        {
+          "label" : "Пристрой",
+          "prompt": ""
+        }
+      ]
+    },
+    "long_data" : {
+      "title": "Длинна:",
+      "base_value" : 5,
+      "min" : 2,
+      "max": 15,
+      "step": 2,
+      "prompt": "Небольшая подсказка о сути параметра"
+    },
+    "width_data" : {
+      "title": "Ширина:",
+      "base_value" : 5,
+      "min" : 2,
+      "max": 15,
+      "step": 2,
+      "prompt": "Небольшая подсказка о сути параметра"
+
+    },
+    "materials_side": {
+      "title" : "Материал стен:",
+      "materials" : [
+        {
+          "label" : "Sip-панель"
+        },
+        {
+          "label" : "Брус/Бревно"
+        },
+        {
+          "label" : "Пеноблок"
+        },
+        {
+          "label" : "Кирпич"
+        }
+      ],
+      "prompt" : "Небольшая подсказка о сути данного параметра"
+    },
+    "floors" : {
+      "title": "Этажность:",
+      "base_value": 1,
+      "min" : 1,
+      "max": 5,
+      "prompt": "подсказка"
+    },
+    "attic": {
+      "title": "Мансарда:",
+      "on": true,
+      "prompt": "Подсказка"
+    }
   }
 }

@@ -23,8 +23,8 @@
             <ui-input
               :label="type.title"
               :input-value="type.base_value"
-              :id-name="work.id + idx"
-              @change-value="changeValue($event, work.id, idx)"
+              :input-name="work.id + idx"
+              @changed-value="changeValue($event, work.id, idx)"
               @change-valid="changeValid($event, work.id, idx)"
               min="0"
               :unit="type.unit"
@@ -103,7 +103,7 @@ export default {
     };
   },
   methods: {
-    changeValue(data, workId, idx) {
+    changeValue({  value: data }, workId, idx) {
       this.object_works.forEach((obj) => {
         if (obj.id === workId) {
           obj.types_works[idx].base_value = data;

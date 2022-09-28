@@ -10,7 +10,10 @@
     </div>
     <transition name="popup">
       <div
+        ref="popup"
         class="calc__prompt-popup-wrapper"
+        :class="classPosition"
+        :style="widthPopup"
         @mouseenter="show"
         v-show="isShow"
       >
@@ -23,24 +26,55 @@
 <script>
 export default {
   name: "UiPrompt",
+  mounted() {
+    document.addEventListener('resize', () => this.checkPosition())
+  },
   props: {
     promptText: {
       type: String,
     },
+    minWidthPopup: {
+      type: [Number, String]
+    }
   },
   data() {
     return {
       isShow: false,
       timerName: null,
+      classPosition: null,
     };
   },
   methods: {
     show() {
+      this.checkPosition();
       clearTimeout(this.timerName);
       this.isShow = true;
     },
     hidden() {
       this.timerName = setTimeout(() => (this.isShow = false), 500);
+    },
+    checkPosition() {
+      setTimeout(() => {
+        this.classPosition = null;
+        const popupWidth =  this.$refs.popup.offsetWidth;
+        const promptBtnWidth = this.$refs.promptBtn.offsetWidth;
+        const promptBtnCenter = this.$refs.promptBtn.getBoundingClientRect().left + (promptBtnWidth / 2);
+
+        const popupRightSide = promptBtnCenter + (popupWidth / 2);
+        const popupLeftSide = promptBtnCenter - (popupWidth / 2);
+        const docWidth = document.documentElement.clientWidth;
+
+        if (popupRightSide > docWidth) {
+          this.classPosition = 'isLeft'
+        } else if (popupLeftSide < 50) {
+          this.classPosition = 'isRight'
+        }
+      },10);
+    }
+  },
+  computed: {
+    widthPopup() {
+      return this.minWidthPopup ? 'min-width:' + this.minWidthPopup + 'px;' : '';
     },
   },
 };

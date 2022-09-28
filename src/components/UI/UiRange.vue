@@ -1,7 +1,7 @@
 <template>
-  <div class="calc__range-wrapper">
+  <div class="calc__range-wrapper" v-if="rangeValue !== null">
     <div v-if="label.length" class="calc__range-label">
-      {{ label }}}<slot name="prompt"></slot>
+      {{ label }}<slot name="prompt"></slot><div class="calc__range-current-value" v-if="showValue">{{rangeValue}}</div>
     </div>
     <input
       class="calc__range-item"
@@ -9,21 +9,21 @@
       :min="min"
       :max="max"
       :step="step"
-      :value="inputValue"
+      :value="rangeValue"
       @input="tryChangeValue"
     />
     <div v-if="showSteps" class="calc__range-steps-wrapper">
       <div
         class="calc__range-steps-item"
         @click="changeValueStep(step)"
-        :class="{ 'calc__range-steps-item-selected': step === inputValue }"
+        :class="{ 'calc__range-steps-item-selected': step === rangeValue }"
         v-for="(step, inx) in returnSteps"
         :key="inx"
       >
         <div
           class="calc__range-steps-item-content"
           :class="{
-            'calc__range-steps-item-content_selected': step === inputValue,
+            'calc__range-steps-item-content_selected': step === rangeValue,
           }"
         >
           {{ step }}
@@ -36,14 +36,15 @@
 <script>
 export default {
   name: "UiRange",
+  emits:["changedValue"],
   props: {
     label: {
       type: String,
       default: "",
     },
-    inputValue: {
+    rangeValue: {
       type: [Number, String],
-      default: 0,
+      default: null,
     },
     min: {
       type: [Number, String],
@@ -53,6 +54,10 @@ export default {
       type: [Number, String],
       default: 10,
     },
+    rangeName: {
+      type: String,
+      default: Math.random().toString()
+    },
     //шаг на самом ползунке
     step: {
       type: [Number, String],
@@ -61,6 +66,10 @@ export default {
     //отобразить шаги шкалы подсказок
     showSteps: {
       type: Boolean,
+    },
+    //Отобразить текущее значение
+    showValue: {
+      type: Boolean
     },
     // размер шага у шкалы с подсказками
     stepPrompt: {
@@ -82,7 +91,7 @@ export default {
       this.changeValue(e.target.value);
     },
     changeValue(value) {
-      this.$emit("changeValue", parseFloat(value));
+      this.$emit("changedValue", {value: parseFloat(value), name: this.rangeName, type: "range"});
     },
   },
   computed: {

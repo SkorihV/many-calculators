@@ -93,6 +93,9 @@ $border-radius: 4px;
 .calc__wrapper-group-data {
   margin-bottom: 20px;
   padding-left: 20px;
-  border-left: 3px solid #ff5d2b;
+  border-left: 3px solid $color-orange-normal;
+  &:hover {
+    background-color: $color-gray-middle;
+  }
 }
 </style>
