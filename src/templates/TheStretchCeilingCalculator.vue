@@ -7,7 +7,7 @@
             <div class="calc__wrapper-content_min">
               <ui-select
                 label="Тип материала:"
-                :options="typeMaterial"
+                :selectValues="typeMaterial"
                 @changed-value="changeTypeMaterial"
                 is-column
                 min-width="200"
@@ -25,7 +25,7 @@
                 is-column
                 controls
                 min="0"
-                input-name="square"
+                element-name="square"
                 @change-valid="changeValid($event, 'square')"
               />
             </div>
@@ -37,11 +37,11 @@
               v-for="(option, idx) in baseOptions"
             >
               <ui-input
-                :label="option.title"
+                :label="option.label"
                 :input-value="option.base_value"
                 :min="option.min_value"
                 :max="option.max_value"
-                :input-name="'baseOption' + idx"
+                :element-name="'baseOption' + idx"
                 :unit="option.unit"
                 @changed-valid="changeValid($event, 'baseOption' + idx)"
                 @changed-value="changeBaseOptions($event, idx)"
@@ -71,8 +71,8 @@
                   :input-value="option.base_value"
                   :min="option.min_value"
                   :max="option.max_value"
-                  :input-name="'extraOption' + idx"
-                  :label="option.title"
+                  :element-name="'extraOption' + idx"
+                  :label="option.label"
                   :unit="option.unit"
                   min="0"
                   @changed-value="changeExtraOptions($event, idx)"
@@ -106,7 +106,7 @@
             <img
               class="calc__image"
               :src="imageDir + currentTypeMaterial.materialImage.filename"
-              :alt="currentTypeMaterial.title"
+              :alt="currentTypeMaterial.label"
             />
           </div>
         </div>
@@ -268,7 +268,7 @@ export default {
         "\n Площадь: " +
         this.square +
         "\n Тип материала: " +
-        this.currentTypeMaterial.title +
+        this.currentTypeMaterial.selectName +
         "\n Стоимость материала: " +
         this.currentTypeMaterial.cost +
         dataBaseOptions +

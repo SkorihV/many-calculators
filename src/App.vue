@@ -179,7 +179,6 @@ $border-radius: 4px;
         justify-content: center;
       }
       &-text {
-        flex: 1 1 auto;
         display: flex;
         justify-content: flex-start;
         position: relative;
@@ -328,12 +327,35 @@ $border-radius: 4px;
       }
     }
 
-    &-current-value {
-      margin-left: auto;
-      background-color: $color-dark-normal;
-      color: $color-white;
-      padding: 4px 6px;
-      border-radius: $border-radius;
+    &-current {
+      &-wrapper {
+        @include style-flex-start;
+        margin-left: auto;
+        gap: 5px;
+      }
+
+      &-static {
+        background-color: $color-dark-normal;
+        color: $color-white;
+        padding: 4px 6px;
+        border-radius: $border-radius;
+      }
+
+      &-dynamic {
+        font-size: 15px;
+        line-height: 16px;
+        padding: 5px;
+        max-width: 40px;
+        right: 0;
+        @include style-border;
+        border-bottom: 2px solid $color-orange-normal;
+        &:hover,
+        &:focus-visible {
+          @include style-border-hover;
+          border-bottom: 2px solid $color-dark-normal;
+          outline: none;
+        }
+      }
     }
   }
 
@@ -442,18 +464,127 @@ $border-radius: 4px;
       }
     }
   }
+
+  //-----------------Радио кнопки ---------------
+  &__radio {
+    &-wrapper {
+      @include style-flex-start;
+      align-items: stretch;
+      gap: 5px;
+      &.base {
+        .calc__radio {
+          &-indicator {
+            position: relative;
+            display: flex;
+            width: 16px;
+            height: 16px;
+            @include style-border;
+            border-radius: 50%;
+            margin-right: 4px;
+            flex-shrink: 0;
+          }
+        }
+      }
+
+      &.buttons {
+        .calc__radio-label {
+          &.checked {
+            background-color: $color-orange-normal;
+            color: $color-white;
+          }
+        }
+      }
+
+      &.column {
+        flex-direction: column;
+        align-items: start;
+        .calc__radio-wrapper-buttons {
+          flex-direction: column;
+        }
+        .calc__radio-label {
+          flex: 1 1 auto;
+          margin: 1px 0;
+        }
+      }
+      &.solid {
+        .calc__radio-wrapper-buttons {
+          gap: 0;
+        }
+        .calc__radio-label {
+          flex: 1 1 auto;
+          border-right: 1px solid $color-gray-middle;
+          border-radius: 0;
+        }
+      }
+      &.wrap {
+        flex-wrap: wrap;
+      }
+
+      &-buttons {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        flex: 1 1 auto;
+      }
+    }
+    &-title {
+      @include style-flex-start;
+      font-weight: 600;
+      flex: 0 1 auto;
+    }
+
+    &-label {
+      @include style-button;
+      @include style-flex-start;
+      border-bottom: 1px solid $color-orange-normal;
+      padding: 5px 10px;
+      position: relative;
+      &:hover {
+        @include style-button-hover;
+      }
+      &.checked {
+        .calc__radio-indicator {
+          &::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: $color-orange-normal;
+          }
+        }
+      }
+      &::after {
+        content: "";
+        display: block;
+        left: 0;
+        width: 100%;
+        position: absolute;
+        background-color: $color-white;
+        height: 1px;
+        bottom: 1px;
+      }
+    }
+    &-text {
+      display: flex;
+      color: $color-white;
+    }
+  }
+
   //--------Стили чекбокса --------------
 
   &__checkbox {
     &-wrapper {
       @include style-flex-center;
-      width: 100%;
       margin: 5px;
     }
     &-label {
       @include style-flex-center;
-      justify-content: space-between;
-      flex: 1 0 auto;
+      justify-content: flex-start;
+      flex: 1 1 auto;
       position: relative;
       @media all and (max-width: 480px) {
         flex-direction: column;
@@ -463,6 +594,11 @@ $border-radius: 4px;
       @include style-flex-center;
       justify-content: flex-start;
       position: relative;
+
+      &.button {
+        @include style-button;
+        padding: 5px 10px;
+      }
     }
 
     &-element {
@@ -472,6 +608,10 @@ $border-radius: 4px;
 
       &.base {
         width: 30px;
+      }
+
+      &.button {
+        display: none;
       }
       &.switcher {
         width: 70px;
@@ -603,6 +743,10 @@ $border-radius: 4px;
             }
           }
         }
+        ~ .calc__checkbox-text.button {
+          background-color: $color-orange-normal;
+          color: $color-white;
+        }
       }
     }
   }
@@ -620,13 +764,15 @@ $border-radius: 4px;
       .popup-enter-from {
         top: -10000px;
         opacity: 0;
-        transform: perspective(1000px) translateX(-50%) rotateX(-90deg) scale(0.1);
+        transform: perspective(1000px) translateX(-50%) rotateX(-90deg)
+          scale(0.1);
       }
       .popup-leave-from,
       .popup-enter-to {
         top: 13px;
         opacity: 1;
-        transform: perspective(1000px) translateX(-50%) rotateX(-360deg) scale(1.1);
+        transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
+          scale(1.1);
       }
     }
 
@@ -647,6 +793,7 @@ $border-radius: 4px;
     &-popup {
       &-wrapper {
         background-color: $color-gray-light;
+        font-weight: normal;
         position: absolute;
         @include style-flex-center;
         left: 50%;
@@ -659,7 +806,7 @@ $border-radius: 4px;
         box-shadow: 0 0 9px 0 $color-gray-dark;
         z-index: 100;
         &.isLeft {
-          left:auto;
+          left: auto;
           right: 0;
           transform: translateX(0);
         }

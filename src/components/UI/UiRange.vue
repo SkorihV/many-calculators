@@ -1,7 +1,24 @@
 <template>
   <div class="calc__range-wrapper" v-if="rangeValue !== null">
-    <div v-if="label.length" class="calc__range-label">
-      {{ label }}<slot name="prompt"></slot><div class="calc__range-current-value" v-if="showValue">{{rangeValue}}</div>
+    <div v-if="label" class="calc__range-label">
+      {{ label }}<slot name="prompt"></slot>
+      <div
+        class="calc__range-current-wrapper"
+        v-if="showDynamicValue || showStaticValue"
+      >
+        <div class="calc__range-current-static" v-if="showStaticValue">
+          {{ localRangeValue }}
+        </div>
+        <input
+          class="calc__range-current-dynamic"
+          v-if="showDynamicValue"
+          type="text"
+          v-model="localRangeValue"
+        />
+        <div class="calc__range-unit" v-if="unit">
+          {{unit}}
+        </div>
+      </div>
     </div>
     <input
       class="calc__range-item"
@@ -9,21 +26,20 @@
       :min="min"
       :max="max"
       :step="step"
-      :value="rangeValue"
+      :value="localRangeValue"
       @input="tryChangeValue"
     />
     <div v-if="showSteps" class="calc__range-steps-wrapper">
       <div
         class="calc__range-steps-item"
         @click="changeValueStep(step)"
-        :class="{ 'calc__range-steps-item-selected': step === rangeValue }"
         v-for="(step, inx) in returnSteps"
         :key="inx"
       >
         <div
           class="calc__range-steps-item-content"
           :class="{
-            'calc__range-steps-item-content_selected': step === rangeValue,
+            'calc__range-steps-item-content_selected': step === localRangeValue,
           }"
         >
           {{ step }}
@@ -36,11 +52,11 @@
 <script>
 export default {
   name: "UiRange",
-  emits:["changedValue"],
+  emits: ["changedValue"],
   props: {
     label: {
       type: String,
-      default: "",
+      default: null,
     },
     rangeValue: {
       type: [Number, String],
@@ -54,9 +70,17 @@ export default {
       type: [Number, String],
       default: 10,
     },
-    rangeName: {
+    unit: {
       type: String,
-      default: Math.random().toString()
+      default: null
+    },
+    cost: {
+      type: Number,
+      default: null,
+    },
+    elementName: {
+      type: String,
+      default: Math.random().toString(),
     },
     //шаг на самом ползунке
     step: {
@@ -65,11 +89,26 @@ export default {
     },
     //отобразить шаги шкалы подсказок
     showSteps: {
-      type: Boolean,
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
     },
-    //Отобразить текущее значение
-    showValue: {
-      type: Boolean
+    //Отобразить текущее значение статичное
+    showStaticValue: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
+    },
+    showDynamicValue: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
     },
     // размер шага у шкалы с подсказками
     stepPrompt: {
@@ -77,9 +116,20 @@ export default {
       default: 1,
     },
   },
+  mounted() {
+    let timer = setInterval(() => {
+      if (this.rangeValue !== null) {
+        this.localRangeValue = this.rangeValue;
+        clearInterval(timer);
+      }
+    }, 100);
+    setTimeout(() => {
+      clearInterval(timer);
+    }, 10000);
+  },
   data() {
     return {
-      value: 0,
+      localRangeValue: null,
     };
   },
   methods: {
@@ -87,12 +137,39 @@ export default {
       this.changeValue(step);
     },
     tryChangeValue(e) {
-      this.value = e.target.value;
-      this.changeValue(e.target.value);
+      let value = parseFloat(e.target.value);
+      this.changeValue(value);
     },
     changeValue(value) {
-      this.$emit("changedValue", {value: parseFloat(value), name: this.rangeName, type: "range"});
+      if (this.max) {
+        value = parseFloat(value) > this.max ? this.max : value;
+      }
+      if (this.min) {
+        value = parseFloat(value) < this.min ? this.min : value;
+      }
+      this.localRangeValue = value;
+      this.$emit("changedValue", {
+        value: parseFloat(value),
+        name: this.elementName,
+        type: "range",
+        cost: this.cost,
+        label: this.label,
+      });
     },
+  },
+  watch: {
+    inputValue(newValue, oldValue) {
+      if (isNaN(Number(newValue))) {
+        this.localRangeValue = oldValue;
+      } else if (!newValue) {
+        return false;
+      } else {
+        this.changeValue(newValue);
+      }
+    },
+    rangeValue(newValue) {
+      this.localRangeValue = newValue;
+    }
   },
   computed: {
     returnSteps() {

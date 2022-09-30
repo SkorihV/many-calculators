@@ -2,32 +2,41 @@
   <h1>Расчет фундамента</h1>
   <div id="app-base-calculator">
     <div id="custom-style" class="calc calc__wrapper">
-
       <div class="calc__wrapper-left-side">
-
         <div class="calc__wrapper-group-data">
           <ui-radio
             :radio-values="buildingData?.buildingTypes"
             @changed-value="changeCurrentType"
-            :title="buildingData?.title"
-            radio-type="buttons"
-            radio-name="buildersType"
+            :label="buildingData?.label"
+            type-button
+            element-name="buildersType"
             is-wrap
             is-solid
           >
-            <template #prompt><ui-prompt  prompt-text="какая-то подсказка какая-то подсказка какая-то подсказка какая-то подсказка"></ui-prompt></template>
+            <template #prompt
+              ><ui-prompt
+                prompt-text="какая-то подсказка какая-то подсказка какая-то подсказка какая-то подсказка"
+            /></template>
+            <template
+              v-for="(item, idx) in buildingData?.buildingTypes"
+              :key="idx"
+              v-slot:[idx]
+            >
+              <ui-prompt :prompt-text="item.prompt" />
+            </template>
           </ui-radio>
         </div>
 
         <div class="calc__wrapper-group-data">
           <ui-range
             :range-value="long?.base_value"
-            :label="long?.title"
+            :label="long?.label"
             :step="long?.step"
             :min="long?.min"
             :max="long?.max"
+            :step-prompt="long?.step"
             @changed-value="changeRangeLong"
-            show-value
+            show-static-value
             show-steps
           >
             <template #prompt>
@@ -39,12 +48,13 @@
         <div class="calc__wrapper-group-data">
           <ui-range
             :range-value="width?.base_value"
-            :label="width?.title"
+            :label="width?.label"
             :step="width?.step"
             :min="width?.min"
             :max="width?.max"
+            :step-prompt="width?.step"
             @changed-value="changeRangeWidth"
-            show-value
+            show-static-value
             show-steps
           >
             <template #prompt>
@@ -55,52 +65,58 @@
 
         <div class="calc__wrapper-group-data">
           <ui-radio
-            :title="materialsSide?.title"
+            :label="materialsSide?.label"
             :radio-values="materialsSide?.materials"
             @changed-value="changeCurrentMaterial"
             is-solid
-            radio-type="buttons"
+            type-button
           >
             <template #prompt>
-              <ui-prompt :prompt-text="materialsSide?.prompt"  />
+              <ui-prompt :prompt-text="materialsSide?.prompt" />
             </template>
-
+            <template
+              v-for="(item, idx) in materialsSide?.materials"
+              :key="idx"
+              v-slot:[idx]
+            >
+              <ui-prompt :prompt-text="item.prompt" />
+            </template>
           </ui-radio>
         </div>
-        </div>
+      </div>
 
-        <div class="calc__wrapper-right-side">
-          <div class="calc__wrapper-group-data">
-            <ui-range
-              :range-value="floors?.base_value"
-              :min="floors?.min"
-              :max="floors?.max"
-              :label="floors?.title"
-              @changed-value="changeFloor"
-              show-value
-              show-steps
-            >
-              <template #prompt>
-                <ui-prompt :prompt-text="floors?.prompt" />
-              </template>
-            </ui-range>
-          </div>
-
-          <div class="calc__wrapper-group-data" v-if="attic?.on">
-            <ui-checkbox
-              :checkbox-value="attic?.value"
-              :label="attic?.title"
-              @changed-value="changeAttic"
-            >
-              <template #prompt>
-                <ui-prompt :prompt-text="attic?.prompt" />
-              </template>
-            </ui-checkbox>
-          </div>
+      <div class="calc__wrapper-right-side">
+        <div class="calc__wrapper-group-data">
+          <ui-range
+            :range-value="floors?.base_value"
+            :min="floors?.min"
+            :max="floors?.max"
+            :label="floors?.label"
+            @changed-value="changeFloor"
+            show-static-value
+            show-steps
+          >
+            <template #prompt>
+              <ui-prompt :prompt-text="floors?.prompt" />
+            </template>
+          </ui-range>
         </div>
+        <div class="calc__wrapper-group-data" v-if="attic?.on">
+          <ui-checkbox
+            :checkbox-value="attic?.value"
+            :label="attic?.label"
+            @changed-value="changeAttic"
+            type-button
+          >
+            <template #prompt>
+              <ui-prompt :prompt-text="attic?.prompt" />
+            </template>
+          </ui-checkbox>
+        </div>
+      </div>
     </div>
     <teleport to="#teleport-element">
-      {{resultData}}
+      {{ resultData }}
     </teleport>
   </div>
 </template>
@@ -126,10 +142,14 @@ export default {
     } else {
       this.outData = window?.dataCalculator;
     }
-    this.buildingData = this.outData?.building_data ? this.outData.building_data : {};
+    this.buildingData = this.outData?.building_data
+      ? this.outData.building_data
+      : {};
     this.long = this.outData?.long_data ? this.outData.long_data : {};
     this.width = this.outData?.width_data ? this.outData.width_data : {};
-    this.materialsSide = this.outData?.materials_side ? this.outData.materials_side : {};
+    this.materialsSide = this.outData?.materials_side
+      ? this.outData.materials_side
+      : {};
     this.floors = this.outData?.floors ? this.outData.floors : {};
     this.attic = this.outData?.attic ? this.outData.attic : {};
     this.attic.value = false;
@@ -137,7 +157,7 @@ export default {
   data() {
     return {
       outData: {},
-      buildingData : {},
+      buildingData: {},
       long: {},
       width: {},
       materialsSide: {},
@@ -145,58 +165,64 @@ export default {
       attic: {},
       currentType: null,
       currentMaterial: null,
-      currentFloor: null
+      currentFloor: null,
     };
   },
   methods: {
     changeCurrentType({ value }) {
       this.currentType = value;
     },
-    changeCurrentMaterial({value}) {
+    changeCurrentMaterial({ value }) {
       this.currentMaterial = value;
     },
-    changeRangeLong({value}) {
+    changeRangeLong({ value }) {
       this.long.base_value = value;
     },
-    changeRangeWidth({value}) {
+    changeRangeWidth({ value }) {
       this.width.base_value = value;
     },
-    changeFloor({value}) {
+    changeFloor({ value }) {
       this.floors.base_value = value;
     },
-    changeAttic({value}) {
+    changeAttic({ value }) {
       this.attic.value = value;
-    }
+    },
   },
   computed: {
     resultData() {
-      let resultData = '';
+      let resultData = "";
 
       if (this.currentType) {
-        resultData += this.buildingData?.title + " - " + this.currentType.label + "\n";
+        resultData +=
+          this.buildingData?.label + " - " + this.currentType.radioName + "\n";
       }
       if (Object.keys(this.long).length) {
-        resultData += this.long?.title + " - " + this.long.base_value + "\n";
+        resultData += this.long?.label + " - " + this.long.base_value + "\n";
       }
 
       if (Object.keys(this.width).length) {
-        resultData += this.width?.title + " - " + this.width.base_value + "\n";
+        resultData += this.width?.label + " - " + this.width.base_value + "\n";
       }
 
       if (this.currentMaterial) {
-        resultData += this.materialsSide?.title + " - " + this.currentMaterial.label + "\n";
+        resultData +=
+          this.materialsSide?.label +
+          " - " +
+          this.currentMaterial.radioName +
+          "\n";
       }
 
       if (Object.keys(this.floors).length) {
-        resultData += this.floors?.title + " - " + this.floors.base_value + "\n";
+        resultData +=
+          this.floors?.label + " - " + this.floors.base_value + "\n";
       }
 
       if (this.attic?.on) {
-        resultData += this.attic.title + " - " ;
-        resultData += this.attic.value ? "Включена" : "Не включена"
+        resultData += this.attic.label + " - ";
+        resultData += this.attic.value ? "Включена" : "Не включена";
       }
-      return resultData
-    }
+      return resultData;
+    },
   },
 };
 </script>
@@ -268,7 +294,6 @@ $border-radius: 4px;
   object-fit: contain;
 }
 
-
 #app-base-calculator {
   .calc {
     &__wrapper {
@@ -277,7 +302,7 @@ $border-radius: 4px;
       width: 100%;
 
       @media all and (max-width: 760px) {
-       flex-direction: column;
+        flex-direction: column;
       }
 
       &-left-side {
@@ -305,7 +330,4 @@ $border-radius: 4px;
     }
   }
 }
-
-
-
 </style>

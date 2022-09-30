@@ -13,7 +13,7 @@
           <div class="calc__accordion-minus" v-if="accordions[work.id].show">
             -
           </div>
-          {{ work.title }}<ui-prompt :prompt-text="work.prompt"></ui-prompt>
+          {{ work.label }}<ui-prompt :prompt-text="work.prompt"></ui-prompt>
         </div>
         <div class="calc__accordion-content" v-if="accordions[work.id].show">
           <div
@@ -21,9 +21,9 @@
             v-for="(type, idx) in work.types_works"
           >
             <ui-input
-              :label="type.title"
+              :label="type.label"
               :input-value="type.base_value"
-              :input-name="work.id + idx"
+              :element-name="work.id + idx"
               @changed-value="changeValue($event, work.id, idx)"
               @change-valid="changeValid($event, work.id, idx)"
               min="0"
@@ -67,7 +67,6 @@ import UiPrompt from "@/components/UI/UiPrompt";
 export default {
   name: "TheCleaningCalculator",
   components: { UiInput, UiPrompt },
-
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
     const localPath = "http://localhost:3000/cleaning-calculator";
@@ -103,7 +102,7 @@ export default {
     };
   },
   methods: {
-    changeValue({  value: data }, workId, idx) {
+    changeValue({ value: data }, workId, idx) {
       this.object_works.forEach((obj) => {
         if (obj.id === workId) {
           obj.types_works[idx].base_value = data;
@@ -151,11 +150,11 @@ export default {
       let result = "";
       Object.values(this.object_works).forEach((obj) => {
         if (this.accordions[obj.id].summ) {
-          result += "\n" + obj.title + "\n";
+          result += "\n" + obj.label + "\n";
           Object.values(obj.types_works).forEach((type) => {
             if (Number(type.base_value) > 0) {
               result +=
-                type.title + " -  " + type.base_value + " " + type.unit + " \n";
+                type.label + " -  " + type.base_value + " " + type.unit + " \n";
             }
           });
           result +=
@@ -277,6 +276,7 @@ $border-radius: 4px;
         line-height: 20px;
         font-weight: bold;
         position: relative;
+        min-height: 40px;
       }
       &-plus,
       &-minus {

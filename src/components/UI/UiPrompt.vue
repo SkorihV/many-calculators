@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__prompt-wrapper" @mouseleave="hidden" v-if="promptText">
+  <div
+    class="calc__prompt-wrapper"
+    @mouseleave="hidden"
+    v-if="hiddenPromptWrapper"
+  >
     <div
       class="calc__prompt-button"
       @mouseenter="show"
@@ -27,15 +31,15 @@
 export default {
   name: "UiPrompt",
   mounted() {
-    document.addEventListener('resize', () => this.checkPosition())
+    document.addEventListener("resize", () => this.checkPosition());
   },
   props: {
     promptText: {
       type: String,
     },
     minWidthPopup: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
   data() {
     return {
@@ -46,9 +50,9 @@ export default {
   },
   methods: {
     show() {
-      this.checkPosition();
       clearTimeout(this.timerName);
       this.isShow = true;
+      this.checkPosition();
     },
     hidden() {
       this.timerName = setTimeout(() => (this.isShow = false), 500);
@@ -56,25 +60,33 @@ export default {
     checkPosition() {
       setTimeout(() => {
         this.classPosition = null;
-        const popupWidth =  this.$refs.popup.offsetWidth;
+        const popupWidth = this.$refs.popup.offsetWidth;
         const promptBtnWidth = this.$refs.promptBtn.offsetWidth;
-        const promptBtnCenter = this.$refs.promptBtn.getBoundingClientRect().left + (promptBtnWidth / 2);
+        const promptBtnCenter =
+          this.$refs.promptBtn.getBoundingClientRect().left +
+          promptBtnWidth / 2;
 
-        const popupRightSide = promptBtnCenter + (popupWidth / 2);
-        const popupLeftSide = promptBtnCenter - (popupWidth / 2);
+        const popupRightSide = promptBtnCenter + popupWidth / 2;
+        const popupLeftSide = promptBtnCenter - popupWidth / 2;
         const docWidth = document.documentElement.clientWidth;
 
         if (popupRightSide > docWidth) {
-          this.classPosition = 'isLeft'
+          this.classPosition = "isLeft";
         } else if (popupLeftSide < 50) {
-          this.classPosition = 'isRight'
+          this.classPosition = "isRight";
         }
-      },10);
-    }
+      }, 10);
+    },
   },
   computed: {
     widthPopup() {
-      return this.minWidthPopup ? 'min-width:' + this.minWidthPopup + 'px;' : '';
+      return this.minWidthPopup
+        ? "min-width:" + this.minWidthPopup + "px;"
+        : "";
+    },
+    hiddenPromptWrapper() {
+      const text = this.promptText;
+      return Boolean(text?.toString()?.trim().length);
     },
   },
 };

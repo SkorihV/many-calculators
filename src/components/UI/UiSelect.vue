@@ -9,6 +9,7 @@
     </div>
     <div class="calc__select-change-wrapper">
       <div
+        v-if="currentOption"
         class="calc__select-change-item"
         @click="toggleOpenClose"
         :class="{ 'is-open': isOpen }"
@@ -18,32 +19,31 @@
           class="calc__select-image-wrapper"
         >
           <img
-            alt="currentOption.title"
+            :alt="currentOption.selectName"
             class="calc__select-image-item"
             :src="currentOption.image.filename"
           />
         </div>
-        {{ currentOption.title }}
+        {{ currentOption.selectName }}
       </div>
-
       <div class="calc__select-option-wrapper" v-if="isOpen">
         <div
           class="calc__select-option-item"
-          @click="selected(option, idx)"
-          v-for="(option, idx) in options"
-          :key="option.value"
+          @click="changeSelect(option, idx)"
+          v-for="(option, idx) in selectValues"
+          :key="idx"
         >
           <div
             v-if="option?.image?.filename"
             class="calc__select-image-wrapper"
           >
             <img
-              alt="option.title"
+              :alt="option.selectName"
               class="calc__select-image-item"
               :src="option.image.filename"
             />
           </div>
-          {{ option.title }}
+          {{ option.selectName }}
         </div>
       </div>
     </div>
@@ -55,9 +55,22 @@ export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mounted() {
-    if (this.options.length) {
-      this.currentOption = this.options[0];
-    }
+    let timer = setInterval(() => {
+      if (this.currentIndexOption === null && this.selectValues.length) {
+        this.currentIndexOption =
+          parseInt(this.selectedItem) < this.selectValues.length
+            ? parseInt(this.selectedItem)
+            : this.selectValues.length - 1;
+        this.changeSelect(
+          this.selectValues[this.currentIndexOption],
+          this.currentIndexOption
+        );
+        clearInterval(timer);
+      }
+    }, 100);
+    setTimeout(() => {
+      clearInterval(timer);
+    }, 10000);
 
     document.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
@@ -69,16 +82,20 @@ export default {
     label: {
       type: String,
     },
-    options: {
+    selectValues: {
       type: Array,
       default: () => [],
     },
-    selectName: {
+    elementName: {
       type: String,
-      default: Math.random().toString()
+      default: Math.random().toString(),
     },
     isColumn: {
-      type: Boolean,
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
     },
     minWidth: {
       type: [Number, String],
@@ -87,12 +104,17 @@ export default {
     maxWidth: {
       type: [Number, String],
     },
+    // номер выбранного селекта
+    selectedItem: {
+      type: [Number, String],
+      default: 0,
+    },
   },
   data() {
     return {
       isOpen: false,
       currentOption: {},
-      currentIndexOption: 0,
+      currentIndexOption: null,
     };
   },
   methods: {
@@ -105,18 +127,23 @@ export default {
     close() {
       this.isOpen = false;
     },
-    selected(item, idx) {
-      this.currentOption = item;
+    changeSelect(item, idx) {
       this.currentIndexOption = idx;
+      this.currentOption = item;
       this.close();
     },
   },
   watch: {
     currentOption() {
-      this.$emit("changedValue", {value: this.currentOption, name: this.selectName, type: "select" });
+      this.$emit("changedValue", {
+        value: this.currentOption,
+        index: this.currentIndexOption,
+        name: this.elementName,
+        type: "select",
+      });
     },
     options() {
-      this.currentOption = this.options[this.currentIndexOption];
+      this.currentOption = this.selectValues[this.currentIndexOption];
     },
   },
   computed: {

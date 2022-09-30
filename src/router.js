@@ -4,6 +4,7 @@ import TheCreditCalculator from "@/templates/TheCreditCalculator";
 import TheStretchCeilingCalculator from "@/templates/TheStretchCeilingCalculator";
 import TheCleaningCalculator from "@/templates/TheCleaningCalculator";
 import TheBaseCalculator from "@/templates/TheBaseCalculator";
+import TheApartmentRenovationCalculator from "@/templates/TheApartmentRenovationCalculator";
 
 const routes = [
   { path: "/", component: TheMain, name: "Главная" },
@@ -22,6 +23,11 @@ const routes = [
     path: "/base",
     component: TheBaseCalculator,
     name: "Калькулятор фундамента",
+  },
+  {
+    path: "/apartment",
+    component: TheApartmentRenovationCalculator,
+    name: "Калькулятор ремонта квартир",
   },
 ];
 

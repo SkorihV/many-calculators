@@ -1,15 +1,21 @@
 <template>
   <div class="calc__checkbox-wrapper">
-    <label :for="checkboxName" class="calc__checkbox-label">
+    <label :for="elementName" class="calc__checkbox-label">
       <input
+        ref="checkbox"
         class="calc__checkbox-item"
         type="checkbox"
-        :checked="checkboxValue"
-        @input="changeValue($event)"
+        :checked="isChecked || checkboxValue"
+        :disabled="isChecked"
+        @input="changeValue($event.target.checked)"
         :name="label"
-        :id="checkboxName"
+        :id="elementName"
       />
-      <div v-if="label" class="calc__checkbox-text">
+      <div
+        v-if="label"
+        class="calc__checkbox-text"
+        :class="{ button: typeButton }"
+      >
         {{ label }}<slot name="prompt"></slot>
       </div>
       <div class="calc__checkbox-element" :class="checkboxType"></div>
@@ -33,37 +39,95 @@ export default {
       type: String,
       default: "",
     },
-    checkboxName: {
+    elementName: {
       type: String,
       default: Math.random().toString(),
     },
+    //Начальное значение
     checkboxValue: {
-      type: Boolean,
-    },
-    switchToggle: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
     },
-    switchToggleVertical: {
-      type: Boolean,
+    cost: {
+      type: Number,
+      default: null,
+    },
+    // отображать в виде горизонтального переключателя
+    typeSwitcher: {
+      type: [Boolean, Number],
       default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
+    },
+
+    // отображать в виде вертикального переключателя
+    typeSwitcherVertical: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
+    },
+    // отображать в виде кнопки
+    typeButton: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
+    },
+
+    // альтернативный способ смены вида чекбокас - текстом
+    // default - base
+    // switcher - горизонтальный переключатель
+    // switcher-vertical - вертикальный переключатель
+    // button - кнопка
+    typeDisplayClass: {
+      type: String,
+      default: null,
+    },
+    // всегда включена. Отключить нельзя
+    isChecked: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
     },
   },
-  methods: {
-    changeValue(e) {
+  mounted() {
       this.$emit("changedValue", {
-        value: e.target.checked,
-        name: this.checkboxName,
-        type: "checkbox"
+        value: true,
+        name: this.elementName,
+        type: "checkbox",
+        cost: this.cost,
       });
+  },
+  methods: {
+    changeValue(checked) {
+      if (!this.isChecked) {
+        this.$emit("changedValue", {
+          value: checked,
+          name: this.elementName,
+          type: "checkbox",
+          label: this.label,
+          cost: this.cost,
+        });
+      }
     },
   },
   computed: {
     checkboxType() {
-      return this.switchToggle
+      return this.typeSwitcher
         ? "switcher"
-        : this.switchToggleVertical
+        : this.typeSwitcherVertical
         ? "switcher-vertical"
+        : this.typeButton
+        ? "button"
         : "base";
     },
   },

@@ -16,7 +16,7 @@
               :max="outData?.interest_rate.max"
               not-empty
               only-number
-              input-name="handlerRate"
+              element-name="handlerRate"
               :input-value="currentInterestRate"
               @changed-value="changeCurrentRateOnHandler"
               @change-valid="changeValid($event, 'handlerRate')"
@@ -29,7 +29,7 @@
               :inputValue="propertyPrice"
               @changed-value="changePropertyPrice"
               @changeValid="changeValid($event, 'propertyPrice')"
-              input-name="propertyPrice"
+              element-name="propertyPrice"
               :unit="outData?.property_price?.unit || 'руб'"
               not-empty
               only-number
@@ -50,7 +50,7 @@
             <div class="content__min-wrapper">
               <ui-input
                 label="Первоначальный взнос:"
-                input-name="downPaymentPercentage"
+                element-name="downPaymentPercentage"
                 :inputValue="downPaymentPercentage"
                 @changed-value="changeDownPaymentPercentage"
                 @change-valid="changeValid($event, 'downPaymentPercentage')"
@@ -65,7 +65,7 @@
               <ui-input
                 :unit="outData?.payment_currency?.unit"
                 :inputValue="downPaymentCurrency"
-                input-name="downPaymentCurrency"
+                element-name="downPaymentCurrency"
                 @changed-value="changeDownPaymentCurrency"
                 @change-valid="changeValid($event, 'downPaymentCurrency')"
                 :min="outData?.payment_currency?.min"
@@ -91,7 +91,7 @@
                 :inputValue="creditTerm"
                 @change-valid="changeValid($event, 'creditTerm')"
                 @changed-value="changeCreditTerm"
-                input-name="creditTerm"
+                element-name="creditTerm"
                 :max="maxTimeTerm"
                 :min="minTimeTerm"
                 only-number
@@ -99,7 +99,7 @@
                 is-stretch
               />
               <ui-select
-                :options="typeTimes"
+                :selectValues="typeTimes"
                 @changed-value="changeMethodChoiceTime"
                 min-width="50"
                 max-width="100"
@@ -115,8 +115,8 @@
               <ui-checkbox
                 label="Аннуитетный"
                 label-second="Дифференцированный"
-                checkbox-name="toggleTypeComputed"
-                switch-toggle
+                element-name="toggleTypeComputed"
+                type-switcher
                 :checkbox-value="showDifferentiatedPayment"
                 @changed-value="changeCheckbox"
               />
@@ -375,21 +375,21 @@ export default {
      * изменить процент первоначального взноса
      * @param paymentPercent
      */
-    changeDownPaymentPercentage({value: paymentPercent}) {
+    changeDownPaymentPercentage({ value: paymentPercent }) {
       this.downPaymentPercentage = paymentPercent;
     },
     /**
      * изменить сумму первоначального взноса
      * @param paymentCurrency
      */
-    changeDownPaymentCurrency({value: paymentCurrency}) {
+    changeDownPaymentCurrency({ value: paymentCurrency }) {
       this.downPaymentCurrency = paymentCurrency;
     },
     /**
      * изменить срок кредита
      * @param creditTerm
      */
-    changeCreditTerm({value : creditTerm}) {
+    changeCreditTerm({ value: creditTerm }) {
       this.creditTerm = creditTerm;
     },
     /**
@@ -418,7 +418,7 @@ export default {
      * выбор единицы измерения срока кредита
      * @param item
      */
-    changeMethodChoiceTime({value : item}) {
+    changeMethodChoiceTime({ value: item }) {
       this.currentTypeTime = item;
     },
     /**
@@ -463,11 +463,11 @@ export default {
 
       this.typeTimes = [
         {
-          title: "Мес",
+          selectName: "Мес",
           value: "month",
         },
         {
-          title: yearName,
+          selectName: yearName,
           value: "year",
         },
       ];
@@ -598,7 +598,7 @@ export default {
         "\n Срок кредита: " +
         this.creditTerm +
         " " +
-        this.currentTypeTime.title +
+        this.currentTypeTime.selectName +
         "\n Начисленные проценты:" +
         this.overpaymentAmountInOut +
         "\n Долг + проценты: " +
