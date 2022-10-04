@@ -30,9 +30,6 @@
 <script>
 export default {
   name: "UiPrompt",
-  mounted() {
-    document.addEventListener("resize", () => this.checkPosition());
-  },
   props: {
     promptText: {
       type: String,

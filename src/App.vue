@@ -153,7 +153,6 @@ $border-radius: 4px;
     &-wrapper {
       @include style-flex-center;
       flex-direction: column;
-      margin: 5px;
       position: relative;
       &.is-stretch {
         flex: 1 1 100%;
@@ -225,23 +224,6 @@ $border-radius: 4px;
     &-unit {
       margin-left: 5px;
     }
-    &-error {
-      &-wrapper {
-        @include style-flex-center;
-        position: absolute;
-        background-color: $color-gray-dark;
-        border-radius: $border-radius;
-        width: 100%;
-        height: 100%;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      &-item {
-        font-size: 10px;
-        color: $color-danger;
-        font-weight: 600;
-      }
-    }
   }
   //--------Стили input range-----
 
@@ -251,7 +233,7 @@ $border-radius: 4px;
       display: flex;
       flex-direction: column;
       width: 100%;
-      margin: 5px;
+      position: relative;
     }
     &-label {
       @include style-flex-start;
@@ -364,10 +346,8 @@ $border-radius: 4px;
   &__select {
     &-wrapper {
       @include style-flex-center;
-      max-width: 200px;
-      margin: 5px;
       gap: 5px;
-
+      position: relative;
       width: 100%;
       &.is-column {
         flex-direction: column;
@@ -377,6 +357,7 @@ $border-radius: 4px;
 
     &-label {
       @include style-flex-start;
+      flex: 1 1 100%;
     }
 
     &-change {
@@ -407,6 +388,7 @@ $border-radius: 4px;
         padding: 10px 25px 10px 10px;
         @include style-flex-center;
         justify-content: flex-start;
+        min-height: 36px;
         text-align: start;
         flex: 1 1 auto;
         gap: 5px;
@@ -469,7 +451,9 @@ $border-radius: 4px;
   &__radio {
     &-wrapper {
       @include style-flex-start;
+      justify-content: space-between;
       align-items: stretch;
+      position: relative;
       gap: 5px;
       &.base {
         .calc__radio {
@@ -522,7 +506,7 @@ $border-radius: 4px;
 
       &-buttons {
         display: flex;
-        justify-content: flex-start;
+        justify-content: flex-end;
         flex-wrap: wrap;
         flex: 1 1 auto;
       }
@@ -578,7 +562,8 @@ $border-radius: 4px;
 
   &__checkbox {
     &-wrapper {
-      @include style-flex-center;
+      @include style-flex-start;
+      position: relative;
       margin: 5px;
     }
     &-label {
@@ -711,7 +696,7 @@ $border-radius: 4px;
       &:checked {
         ~ .calc__checkbox-element {
           &.base:before {
-            background-color: $color-dark-normal;
+            background-color: $color-orange-normal;
             box-shadow: 0 0 0 2px $color-gray-light inset;
             color: $color-white;
           }
@@ -756,7 +741,7 @@ $border-radius: 4px;
     &-wrapper {
       color: $color-dark-normal;
       position: relative;
-      margin: 0 5px;
+      margin-left: 5px;
       .popup-enter-active {
         transition: all 0.5s ease;
       }
@@ -819,6 +804,86 @@ $border-radius: 4px;
       &-item {
         @include style-flex-center;
       }
+    }
+  }
+
+  // tooltip
+  &__tooltip {
+    &-wrapper {
+      display: none;
+      position: absolute;
+      background-color: $color-gray-middle;
+      @include style-border;
+      border-color: $color-danger;
+      z-index: 100;
+      padding: 2px;
+      box-shadow: 0 0 3px 0 $color-danger;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      &.isLeft {
+        left: auto;
+        right: 0;
+        transform: none;
+      }
+      &.isFlex {
+        display: flex;
+      }
+
+      &.isRight {
+        left: 0;
+        right: auto;
+        transform: none;
+      }
+
+      &.tooltip-transition-enter-active {
+        transition: all 0.3s ease-in-out;
+      }
+
+      &.tooltip-transition-leave-to,
+      &.tooltip-transition-enter-from {
+        opacity: 0;
+        transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
+          scale(0.1);
+        &.isLeft,
+        &.isRight {
+          transform: perspective(1000px) rotateX(-360deg);
+        }
+      }
+      &.tooltip-transition-leave-from,
+      &.tooltip-transition-enter-to {
+        opacity: 1;
+        transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
+          scale(1.1);
+
+        &.isLeft,
+        &.isRight {
+          transform: perspective(1000px) rotateX(-360deg);
+        }
+      }
+    }
+    &-decor {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background-color: #e6e6e6;
+      position: absolute;
+      border-radius: 4px;
+      z-index: -1;
+      right: calc(50% - 10px);
+      top: calc(100% - 12px);
+      transform: translateX(-50%) rotate(45deg);
+      border-bottom: 1px solid #ff4444;
+      border-right: 1px solid #ff4444;
+    }
+    &-text {
+      display: flex;
+      color: $color-danger;
+      border-radius: $border-radius;
+      justify-content: center;
+      min-width: 300px;
+      background-color: $color-gray-middle;
     }
   }
 

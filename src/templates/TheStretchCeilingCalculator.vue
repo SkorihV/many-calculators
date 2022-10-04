@@ -9,7 +9,6 @@
                 label="Тип материала:"
                 :selectValues="typeMaterial"
                 @changed-value="changeTypeMaterial"
-                is-column
                 min-width="200"
               >
                 <template #prompt v-if="currentTypeMaterial?.prompt">
@@ -26,7 +25,7 @@
                 controls
                 min="0"
                 element-name="square"
-                @change-valid="changeValid($event, 'square')"
+                @change-valid="changeValid"
               />
             </div>
           </div>
@@ -43,7 +42,7 @@
                 :max="option.max_value"
                 :element-name="'baseOption' + idx"
                 :unit="option.unit"
-                @changed-valid="changeValid($event, 'baseOption' + idx)"
+                @change-valid="changeValid"
                 @changed-value="changeBaseOptions($event, idx)"
                 not-empty
                 only-number
@@ -76,7 +75,7 @@
                   :unit="option.unit"
                   min="0"
                   @changed-value="changeExtraOptions($event, idx)"
-                  @change-valid="changeValid($event, 'extraOption' + idx)"
+                  @change-valid="changeValid"
                   not-empty
                   only-number
                   only-integer
@@ -180,12 +179,11 @@ export default {
     changeSquare({ value }) {
       this.square = value;
     },
-    changeValid(dateValid, targetValid) {
-      if (dateValid) {
-        this.errorsInputs.add(targetValid);
+    changeValid({ isInvalid, name }) {
+      if (isInvalid) {
+        this.errorsInputs.add(name);
       } else {
-        if (this.errorsInputs.has(targetValid))
-          this.errorsInputs.delete(targetValid);
+        if (this.errorsInputs.has(name)) this.errorsInputs.delete(name);
       }
     },
     getOptionsTemplateForResult(option) {
@@ -358,7 +356,8 @@ $border-radius: 4px;
       padding: 5px;
       &-content {
         width: 100%;
-        @include style-flex-center;
+        @include style-flex-start;
+        gap: 5px;
         @media all and (max-width: 650px) {
           flex-direction: column;
           width: 100%;
@@ -366,6 +365,9 @@ $border-radius: 4px;
         &_min {
           @include style-flex-center;
           align-items: flex-end;
+          justify-content: space-between;
+          width: 100%;
+
           @media all and (max-width: 550px) {
             flex-direction: column;
             align-items: flex-start;

@@ -19,7 +19,7 @@
               element-name="handlerRate"
               :input-value="currentInterestRate"
               @changed-value="changeCurrentRateOnHandler"
-              @change-valid="changeValid($event, 'handlerRate')"
+              @change-valid="changeValid"
               v-if="isHandlerRate"
             />
           </div>
@@ -28,7 +28,7 @@
               label="Стоимость объекта недвижимости:"
               :inputValue="propertyPrice"
               @changed-value="changePropertyPrice"
-              @changeValid="changeValid($event, 'propertyPrice')"
+              @changeValid="changeValid"
               element-name="propertyPrice"
               :unit="outData?.property_price?.unit || 'руб'"
               not-empty
@@ -53,7 +53,7 @@
                 element-name="downPaymentPercentage"
                 :inputValue="downPaymentPercentage"
                 @changed-value="changeDownPaymentPercentage"
-                @change-valid="changeValid($event, 'downPaymentPercentage')"
+                @change-valid="changeValid"
                 :min="outData?.payment_percentage?.min"
                 :max="outData?.payment_percentage?.max"
                 :unit="outData?.payment_percentage?.unit"
@@ -67,7 +67,7 @@
                 :inputValue="downPaymentCurrency"
                 element-name="downPaymentCurrency"
                 @changed-value="changeDownPaymentCurrency"
-                @change-valid="changeValid($event, 'downPaymentCurrency')"
+                @change-valid="changeValid"
                 :min="outData?.payment_currency?.min"
                 :max="outData?.payment_currency?.max"
                 not-empty
@@ -89,7 +89,7 @@
               <ui-input
                 label="Срок кредита:"
                 :inputValue="creditTerm"
-                @change-valid="changeValid($event, 'creditTerm')"
+                @change-valid="changeValid"
                 @changed-value="changeCreditTerm"
                 element-name="creditTerm"
                 :max="maxTimeTerm"
@@ -103,7 +103,6 @@
                 @changed-value="changeMethodChoiceTime"
                 min-width="50"
                 max-width="100"
-                is-column
               />
             </div>
           </div>
@@ -393,16 +392,15 @@ export default {
       this.creditTerm = creditTerm;
     },
     /**
-     * изменить общее состояние валидности данных
-     * @param dateValid
-     * @param targetValid
+     *
+     * @param isInvalid
+     * @param name
      */
-    changeValid(dateValid, targetValid) {
-      if (dateValid) {
-        this.errorsInputs.add(targetValid);
+    changeValid({ isInvalid, name }) {
+      if (isInvalid) {
+        this.errorsInputs.add(name);
       } else {
-        if (this.errorsInputs.has(targetValid))
-          this.errorsInputs.delete(targetValid);
+        if (this.errorsInputs.has(name)) this.errorsInputs.delete(name);
       }
     },
     /**
@@ -664,6 +662,12 @@ $border-radius: 4px;
   align-items: center;
 }
 
+@mixin style-flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 @mixin style-img {
   width: 100%;
   height: 100%;
@@ -838,7 +842,7 @@ $border-radius: 4px;
         }
       }
       &__min-wrapper {
-        @include style-flex-center;
+        @include style-flex-start;
         align-items: flex-end;
       }
 

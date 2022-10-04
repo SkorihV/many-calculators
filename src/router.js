@@ -5,9 +5,15 @@ import TheStretchCeilingCalculator from "@/templates/TheStretchCeilingCalculator
 import TheCleaningCalculator from "@/templates/TheCleaningCalculator";
 import TheBaseCalculator from "@/templates/TheBaseCalculator";
 import TheApartmentRenovationCalculator from "@/templates/TheApartmentRenovationCalculator";
+import TheBasicCalculatorConstructor from "@/templates/TheBasicCalculatorConstructor";
 
 const routes = [
   { path: "/", component: TheMain, name: "Главная" },
+  {
+    path: "/constructor",
+    component: TheBasicCalculatorConstructor,
+    name: "Конструктор",
+  },
   { path: "/credit", component: TheCreditCalculator, name: "Кредитный" },
   {
     path: "/stretch",

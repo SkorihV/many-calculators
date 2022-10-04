@@ -1,33 +1,9 @@
 <template>
-  <div id="app-apartment-renovation-calculator">
+  <div id="app-base-constructor-calculator">
     <div class="calc calc__wrapper" id="custom-stile">
-      <div class="calc__wrapper-group-data">
-        {{ squareData }}
-        <ui-range
-          :is="squareData.template"
-          :label="squareData?.label"
-          :min="squareData?.min"
-          :max="squareData?.max"
-          :range-value="squareData?.value"
-          :step="squareData?.step"
-          :step-prompt="squareData?.stepPrompt"
-          :unit="squareData?.unit"
-          :cost="squareData?.cost"
-          :prompt="squareData?.prompt"
-          :showDynamicValue="squareData?.showDynamicValue"
-          :showStaticValue="squareData?.showStaticValue"
-          :showSteps="squareData?.showSteps"
-          @changedValue="changeValueSquare"
-        >
-          <template #prompt
-            ><ui-prompt :prompt-text="squareData.prompt"
-          /></template>
-        </ui-range>
-      </div>
-
       <div
         class="calc__wrapper-group-data"
-        v-for="(template, inx) in extraElementsData"
+        v-for="(template, inx) in calculatorTemplates"
         :key="inx"
       >
         <component
@@ -44,10 +20,12 @@
           :input-value="template?.value"
           :controls="template?.controls"
           :step="template?.step"
-          :currency="template?.currency"
+          :is-currency="template?.isCurrency"
+          :only-number="template?.onlyNumber"
+          :only-integer="template?.onlyInteger"
           :checkbox-value="template?.value"
           :label-second="template?.labelSecond"
-          :isChecked="template?.isChecked"
+          :is-checked="template?.isChecked"
           :radio-values="template?.values"
           :range-value="template?.value"
           :show-dynamic-value="template?.showDynamicValue"
@@ -57,17 +35,25 @@
           :select-values="template?.value"
           :selected-item:="template?.selectedItem"
           :not-empty="template?.notEmpty"
+          :element-name="template?.elementName"
           @changedValue="changeValue"
+          @changeValid="changeValid"
         >
           <template v-slot:prompt>
             <ui-prompt :prompt-text="template.prompt" />
           </template>
         </component>
       </div>
+     <div class="calc__wrapper-group-data">
+       <ui-input only-number max="100" min="10" input-value="4"/>
+     </div>
+      <div class="calc__wrapper-group-data">
+        <ui-checkbox />
+      </div>
+      <div class="calc__wrapper-group-data">
+        <ui-checkbox type-button label="dasdasda" element-name="234"/>
+      </div>
     </div>
-    {{ resultsExtraElements }}
-    <br />
-    Результат вычислений: {{ resultSumm }}
   </div>
 </template>
 
@@ -75,12 +61,12 @@
 import UiRange from "@/components/UI/UiRange";
 import UiInput from "@/components/UI/UiInput";
 import UiSelect from "@/components/UI/UiSelect";
-import UiPrompt from "@/components/UI/UiPrompt";
 import UiRadio from "@/components/UI/UiRadio";
 import UiCheckbox from "@/components/UI/UiCheckbox";
+import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
-  name: "TheApartmentRenovationCalculator",
+  name: "TheBasicCalculatorConstructor",
   components: { UiRange, UiInput, UiSelect, UiRadio, UiCheckbox, UiPrompt },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
@@ -92,21 +78,18 @@ export default {
           this.outData = data;
         });
     } else {
-      this.outData.dataCalculatorSquare = window?.dataCalculatorSquare;
-      this.outData.dataCalculatorExtra = window?.dataCalculatorExtra;
+      this.outData.calculatorTemplates = JSON.parse(JSON.stringify(window?.calculatorTemplates));
     }
-    this.squareData = this.outData?.dataCalculatorSquare
-      ? this.outData?.dataCalculatorSquare
-      : {};
-    this.extraElementsData = this.outData?.dataCalculatorExtra
-      ? this.outData?.dataCalculatorExtra
+    this.calculatorTemplates = this.outData?.calculatorTemplates
+      ? this.outData?.calculatorTemplates
       : [];
+    this.imageDir = window?.imageDir || "";
   },
   data() {
     return {
       outData: {},
-      squareData: {},
-      extraElementsData: [],
+      imageDir: "",
+      calculatorTemplates: [],
       square: 0,
       resultsExtraElements: {},
     };
@@ -116,6 +99,7 @@ export default {
       this.square = data.value;
     },
     changeValue(data) {
+      console.log("Данные по событию -  " + data);
       if (data.type === "radio") {
         this.resultsExtraElements[data.name] = {
           type: data.type,
@@ -131,6 +115,9 @@ export default {
         };
       }
     },
+    changeValid(data) {
+      console.log("Данные по валидации - " + data);
+    }
   },
   computed: {
     resultSumm() {
@@ -212,17 +199,22 @@ $border-radius: 4px;
   object-fit: contain;
 }
 
-#app-apartment-renovation-calculator {
+.button {
+  @include style-button;
+}
+
+.calc__wrapper-group-data {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-left: 3px solid $color-orange-normal;
+  &:hover {
+    background-color: $color-gray-middle;
+  }
+}
+
+#app-base-constructor-calculator {
   .calc {
     &__wrapper {
-      &-group-data {
-        margin-bottom: 20px;
-        padding-left: 20px;
-        border-left: 3px solid $color-orange-normal;
-        &:hover {
-          background-color: $color-gray-middle;
-        }
-      }
     }
   }
 }

@@ -1,20 +1,20 @@
 <template>
   <div class="calc__checkbox-wrapper">
-    <label :for="elementName" class="calc__checkbox-label">
+    <label :for="localElementName" class="calc__checkbox-label">
       <input
         ref="checkbox"
         class="calc__checkbox-item"
         type="checkbox"
-        :checked="isChecked || checkboxValue"
+        :checked="isChecked || localValue"
         :disabled="isChecked"
         @input="changeValue($event.target.checked)"
         :name="label"
-        :id="elementName"
+        :id="localElementName"
       />
       <div
         v-if="label"
         class="calc__checkbox-text"
-        :class="{ button: typeButton }"
+        :class="{ button: checkboxType === 'button' }"
       >
         {{ label }}<slot name="prompt"></slot>
       </div>
@@ -23,17 +23,21 @@
         {{ labelSecond }}
       </div>
     </label>
+    <ui-tooltip :is-show="isErrorEmpty" :tooltip-text="textErrorNotEmpty" />
   </div>
 </template>
 
 <script>
+import UiTooltip from "@/components/UI/UiTooltip";
+
 export default {
   name: "UiCheckbox",
-  emits: ["changedValue"],
+  emits: ["changedValue", "changeValid"],
+  components: { UiTooltip },
   props: {
     label: {
       type: String,
-      require: true,
+      default: "",
     },
     labelSecond: {
       type: String,
@@ -49,11 +53,14 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     cost: {
-      type: Number,
+      type: [Number, String],
       default: null,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
     },
     // отображать в виде горизонтального переключателя
     typeSwitcher: {
@@ -61,16 +68,15 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
-
     // отображать в виде вертикального переключателя
     typeSwitcherVertical: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     // отображать в виде кнопки
     typeButton: {
@@ -78,9 +84,8 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
-
     // альтернативный способ смены вида чекбокас - текстом
     // default - base
     // switcher - горизонтальный переключатель
@@ -90,8 +95,15 @@ export default {
       type: String,
       default: null,
     },
-    // всегда включена. Отключить нельзя
+    // Всегда включена. Отключить нельзя
     isChecked: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    isNeedChoice: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
@@ -100,28 +112,49 @@ export default {
     },
   },
   mounted() {
-      this.$emit("changedValue", {
-        value: true,
-        name: this.elementName,
-        type: "checkbox",
-        cost: this.cost,
-      });
+    this.localValue = Boolean(this.checkboxValue);
+    this.localCost = this.cost?.length !== 0 ? Number(this.cost) : null;
+    this.changeValue(this.localValue);
+    this.localElementName =  this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString()
+  },
+  data() {
+    return {
+      localValue: null,
+      textErrorNotEmpty: "Обязательное поле.",
+      localCost: null,
+      localElementName: null
+    };
   },
   methods: {
+    checkedValueOnVoid(value) {
+      return value?.length !== 0 && value !== undefined && value !== null;
+    },
     changeValue(checked) {
-      if (!this.isChecked) {
-        this.$emit("changedValue", {
-          value: checked,
-          name: this.elementName,
-          type: "checkbox",
-          label: this.label,
-          cost: this.cost,
-        });
-      }
+      this.localValue = checked;
+      this.$emit("changedValue", {
+        value: checked,
+        name: this.elementName,
+        type: "checkbox",
+        label: this.label,
+        cost: this.localCost,
+      });
+      this.changeValid();
+    },
+    changeValid() {
+      this.$emit("changeValid", {
+        error: this.isErrorEmpty,
+        name: this.elementName,
+        type: "checkbox",
+        label: this.label
+      });
     },
   },
   computed: {
     checkboxType() {
+      if (this.typeDisplayClass) {
+        return this.typeDisplayClass;
+      }
+
       return this.typeSwitcher
         ? "switcher"
         : this.typeSwitcherVertical
@@ -129,6 +162,9 @@ export default {
         : this.typeButton
         ? "button"
         : "base";
+    },
+    isErrorEmpty() {
+      return this.isNeedChoice && !this.localValue;
     },
   },
 };

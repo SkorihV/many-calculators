@@ -17,37 +17,43 @@
       >
         <span class="calc__radio-indicator" v-if="radioType === 'base'"></span>
         <span class="calc__radio-text">{{ radio.radioName }}</span>
-        <slot :name="idx"></slot>
-        <ui-prompt :prompt-text="radio.prompt"/>
+        <ui-prompt :prompt-text="radio.prompt" />
       </div>
     </div>
+    <ui-tooltip :is-show="isErrorEmpty" :tooltip-text="textErrorNotEmpty" />
   </div>
 </template>
 
 <script>
 import UiPrompt from "@/components/UI/UiPrompt";
+import UiTooltip from "@/components/UI/UiTooltip";
 
 export default {
   name: "UiRadio",
-  emits: ["changedValue"],
-  components: {UiPrompt},
+  emits: ["changedValue", "changeValid"],
+  components: { UiPrompt, UiTooltip },
   mounted() {
-    let timer = setInterval(() => {
-      if (this.currentIndexRadioButton === null && this.radioValues.length) {
-        this.currentIndexRadioButton =
-          parseInt(this.selectedItem) < this.radioValues.length
-            ? parseInt(this.selectedItem)
-            : this.radioValues.length - 1;
-        this.changeRadio(
-          this.radioValues[this.currentIndexRadioButton],
-          this.currentIndexRadioButton
-        );
+    this.localSelectedItem = this.checkedValueOnVoid(this.selectedItem) ? this.selectedItem : 0;
+    if (!this.isErrorEmpty) {
+      let timer = setInterval(() => {
+        if (this.currentIndexRadioButton === null && this.radioValues.length) {
+          this.currentIndexRadioButton =
+            parseInt(this.localSelectedItem) < this.radioValues.length
+              ? parseInt(this.localSelectedItem)
+              : this.radioValues.length - 1;
+          this.changeRadio(
+            this.radioValues[this.currentIndexRadioButton],
+            this.currentIndexRadioButton
+          );
+          clearInterval(timer);
+        }
+      }, 100);
+      setTimeout(() => {
         clearInterval(timer);
-      }
-    }, 100);
-    setTimeout(() => {
-      clearInterval(timer);
-    }, 10000);
+      }, 10000);
+    } else {
+      this.changeValid();
+    }
   },
 
   props: {
@@ -69,7 +75,7 @@ export default {
       default: true,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     // Радиокнопки отображаются без кружков
     typeButton: {
@@ -77,7 +83,7 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     // способ отображения - указать текстом
     // default - base
@@ -90,6 +96,25 @@ export default {
     selectedItem: {
       type: [Number, String],
       default: 0,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
+    },
+    // По умолчанию не выбрано - нужно сделать выбор.
+    isNeedChoice: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    // Выбор обязателен - будет выдавать ошибку
+    notEmpty: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
     },
     // вертикальное положение кнопок
     isColumn: {
@@ -97,7 +122,7 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     // в горизонтальном положении убрать пробелы между кнопками
     isSolid: {
@@ -105,23 +130,28 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     // включить перенос для заголовка и кнопок
     isWrap: {
       type: [Boolean, Number],
-      default: false,
+      default: true,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
   },
   data() {
     return {
       currentIndexRadioButton: null,
+      textErrorNotEmpty: "Обязательное поле.",
+      localSelectedItem: 0,
     };
   },
   methods: {
+    checkedValueOnVoid(value) {
+      return value?.length !== 0 && value !== undefined && value !== null;
+    },
     changeRadio(radio, index) {
       this.currentIndexRadioButton = index;
       this.$emit("changedValue", {
@@ -129,7 +159,17 @@ export default {
         index,
         name: this.elementName,
         type: "radio",
+        cost: this.checkedValueOnVoid(radio?.cost) ? radio.cost : null,
         label: this.label,
+      });
+      this.changeValid();
+    },
+    changeValid() {
+      this.$emit("changeValid", {
+        isInvalid: this.isErrorEmpty,
+        name: this.elementName,
+        type: "radio",
+        label: this.label
       });
     },
   },
@@ -140,6 +180,9 @@ export default {
       }
 
       return this.typeButton ? "buttons" : this.typeBase ? "base" : "base";
+    },
+    isErrorEmpty() {
+      return this.notEmpty && this.currentIndexRadioButton === null;
     },
   },
 };

@@ -17,13 +17,6 @@
               ><ui-prompt
                 prompt-text="какая-то подсказка какая-то подсказка какая-то подсказка какая-то подсказка"
             /></template>
-            <template
-              v-for="(item, idx) in buildingData?.buildingTypes"
-              :key="idx"
-              v-slot:[idx]
-            >
-              <ui-prompt :prompt-text="item.prompt" />
-            </template>
           </ui-radio>
         </div>
 
@@ -73,13 +66,6 @@
           >
             <template #prompt>
               <ui-prompt :prompt-text="materialsSide?.prompt" />
-            </template>
-            <template
-              v-for="(item, idx) in materialsSide?.materials"
-              :key="idx"
-              v-slot:[idx]
-            >
-              <ui-prompt :prompt-text="item.prompt" />
             </template>
           </ui-radio>
         </div>

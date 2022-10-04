@@ -382,66 +382,66 @@
   },
 
   "apartment-renovation-calculator": {
-      "dataCalculatorSquare" : {
-        "cost" : 500,
-        "label": "Площадь",
-        "max":"100",
-        "min" : 0,
-        "prompt": "Здесь будет небольшая подсказка",
-        "step": 1,
-        "stepPrompt": 1,
-        "template": "UiRange",
-        "unit": "м2",
-        "value": 0,
-        "showDynamicValue": 1
+    "dataCalculatorSquare": {
+      "cost": 500,
+      "label": "Площадь",
+      "max": "100",
+      "min": 0,
+      "prompt": "Здесь будет небольшая подсказка",
+      "step": 1,
+      "stepPrompt": 1,
+      "template": "UiRange",
+      "unit": "м2",
+      "value": 0,
+      "showDynamicValue": 1
+    },
+    "dataCalculatorExtra": [
+      {
+        "label": "Тип квартиры",
+        "prompt": "Подсказка",
+        "template": "UiRadio",
+        "typeDisplayClass": "buttons",
+        "values": [
+          {
+            "cost": 500,
+            "prompt": "Подсказка",
+            "radioName": "Новостройка"
+          },
+          {
+            "cost": 1000,
+            "prompt": "Подсказка 2",
+            "radioName": "Вторичка"
+          }
+        ]
       },
-      "dataCalculatorExtra": [
-        {
-          "label": "Тип квартиры",
-          "prompt": "Подсказка",
-          "template": "UiRadio",
-          "typeDisplayClass": "buttons",
-          "values": [
-            {
-              "cost": 500,
-              "prompt": "Подсказка",
-              "radioName": "Новостройка"
-            },
-            {
-              "cost": 1000,
-              "prompt": "Подсказка 2",
-              "radioName": "Вторичка"
-            }
-          ]
-        },
-        {
-          "label": "Тип ремонта",
-          "prompt": "",
-          "template": "UiRadio",
-          "typeDisplayClass": "buttons",
-          "values": [
-            {
-              "cost": 500,
-              "prompt": "Подсказка",
-              "radioName": "Капитальный"
-            },
-            {
-              "cost": 1000,
-              "prompt": "Подсказка 2",
-              "radioName": "Дизайнерский"
-            }
-          ]
-        },
-        {
-          "checkboxValue": 1,
-          "checked": false,
-          "cost": 500,
-          "label": "Дизайн интерьера",
-          "prompt": "",
-          "template": "UiCheckbox",
-          "typeDisplayClass": "button",
-          "labelSecond":"3D-Дизайн проект"
-        }
-      ]
+      {
+        "label": "Тип ремонта",
+        "prompt": "",
+        "template": "UiRadio",
+        "typeDisplayClass": "buttons",
+        "values": [
+          {
+            "cost": 500,
+            "prompt": "Подсказка",
+            "radioName": "Капитальный"
+          },
+          {
+            "cost": 1000,
+            "prompt": "Подсказка 2",
+            "radioName": "Дизайнерский"
+          }
+        ]
+      },
+      {
+        "checkboxValue": 1,
+        "checked": false,
+        "cost": 500,
+        "label": "Дизайн интерьера",
+        "prompt": "",
+        "template": "UiCheckbox",
+        "typeDisplayClass": "button",
+        "labelSecond": "3D-Дизайн проект"
+      }
+    ]
   }
 }
