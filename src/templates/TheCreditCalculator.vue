@@ -25,9 +25,10 @@
           </div>
           <div class="calc__wrapper-common-data">
             <ui-input
+              classes="mb5"
               label="Стоимость объекта недвижимости:"
               :inputValue="propertyPrice"
-              @changed-value="changePropertyPrice"
+              @changedValue="changePropertyPrice"
               @changeValid="changeValid"
               element-name="propertyPrice"
               :unit="outData?.property_price?.unit || 'руб'"
@@ -39,7 +40,7 @@
             />
             <ui-range
               :range-value="propertyPrice"
-              @changed-value="changePropertyPrice"
+              @changedValue="changePropertyPrice"
               :min="outData?.property_price?.min"
               :max="outData?.property_price?.max"
               :step="outData?.property_price?.steps"
@@ -49,11 +50,12 @@
           <div class="calc__wrapper-common-data">
             <div class="content__min-wrapper">
               <ui-input
+                classes="mb5"
                 label="Первоначальный взнос:"
                 element-name="downPaymentPercentage"
-                :inputValue="downPaymentPercentage"
-                @changed-value="changeDownPaymentPercentage"
-                @change-valid="changeValid"
+                :input-value="downPaymentPercentage"
+                @changedValue="changeDownPaymentPercentage"
+                @changeValid="changeValid"
                 :min="outData?.payment_percentage?.min"
                 :max="outData?.payment_percentage?.max"
                 :unit="outData?.payment_percentage?.unit"
@@ -63,11 +65,12 @@
                 controls
               />
               <ui-input
+                classes="mb5"
                 :unit="outData?.payment_currency?.unit"
                 :inputValue="downPaymentCurrency"
                 element-name="downPaymentCurrency"
-                @changed-value="changeDownPaymentCurrency"
-                @change-valid="changeValid"
+                @changedValue="changeDownPaymentCurrency"
+                @changeValid="changeValid"
                 :min="outData?.payment_currency?.min"
                 :max="outData?.payment_currency?.max"
                 not-empty
@@ -77,9 +80,10 @@
             </div>
             <ui-range
               :range-value="downPaymentPercentage"
-              @changed-value="changeDownPaymentPercentage"
+              @changedValue="changeDownPaymentPercentage"
               :min="outData?.payment_percentage?.min"
               :max="outData?.payment_percentage?.max"
+
               show-steps
               :step-prompt="outData?.payment_percentage?.steps"
             />
@@ -87,20 +91,34 @@
           <div class="calc__wrapper-common-data">
             <div class="content__min-wrapper">
               <ui-input
+                v-if="currentTypeTime.value === 'year'"
                 label="Срок кредита:"
-                :inputValue="creditTerm"
-                @change-valid="changeValid"
-                @changed-value="changeCreditTerm"
-                element-name="creditTerm"
-                :max="maxTimeTerm"
-                :min="minTimeTerm"
+                :inputValue="creditTermYear"
+                @changeValid="changeValid"
+                @changedValue="changeCreditTermYear"
+                element-name="creditTermYear"
+                :max="outData?.credit_term?.max_year"
+                :min="outData?.credit_term?.min_year"
+                only-number
+                not-empty
+                is-stretch
+              />
+              <ui-input
+                v-show="currentTypeTime.value === 'month'"
+                label="Срок кредита:"
+                :inputValue="creditTermMonth"
+                @changeValid="changeValid"
+                @changedValue="changeCreditTermMonth"
+                element-name="creditTermMonth"
+                :max="outData?.credit_term?.max_month"
+                :min="outData?.credit_term?.min_month"
                 only-number
                 not-empty
                 is-stretch
               />
               <ui-select
-                :selectValues="typeTimes"
-                @changed-value="changeMethodChoiceTime"
+                :select-values="timeFroSelect"
+                @changedValue="changeMethodChoiceTime"
                 min-width="50"
                 max-width="100"
               />
@@ -116,8 +134,8 @@
                 label-second="Дифференцированный"
                 element-name="toggleTypeComputed"
                 type-switcher
-                :checkbox-value="showDifferentiatedPayment"
-                @changed-value="changeCheckbox"
+                :checkboxValue="showDifferentiatedPayment"
+                @changedValue="changeCheckbox"
               />
             </div>
           </div>
@@ -212,7 +230,6 @@ import UiRange from "@/components/UI/UiRange";
 import UiSelect from "@/components/UI/UiSelect";
 import PaymentSchedule from "@/components/creditCalculatorComponents/PaymentSchedule";
 import UiCheckbox from "@/components/UI/UiCheckbox";
-import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "TheCreditCalculator",
@@ -253,8 +270,11 @@ export default {
       ? this.outData?.payment_currency?.cost
       : 100000;
 
-    this.creditTerm = this.outData?.credit_term?.countTime
-      ? this.outData?.credit_term?.countTime
+    this.creditTermYear = this.outData?.credit_term?.count_time_year
+      ? this.outData?.credit_term?.count_time_year
+      : 1;
+    this.creditTermMonth = this.outData?.credit_term?.count_time_month
+      ? this.outData?.credit_term?.count_time_month
       : 1;
 
     this.isHandlerRate = this.outData?.interest_rate?.is_rate
@@ -272,6 +292,10 @@ export default {
     this.showDifferentiatedPayment = this.typeCalculate === "D";
 
     this.imageDir = window?.imageDir || "";
+
+    if (this.banks?.length) {
+      this.selectCurrentBank(this.banks[0]);
+    }
   },
   data() {
     return {
@@ -321,7 +345,8 @@ export default {
       propertyPrice: 0, //стоимость покупаемого объекта недвижимости
       downPaymentPercentage: 0, //первоначальный взнос процент
       downPaymentCurrency: 0, //первоначальный взнос валюта
-      creditTerm: 0, //срок кредита
+      creditTermMonth: 0, //срок кредита в месяцах
+      creditTermYear: 0, //срок кредита в годах
       isHandlerRate: false, // ручная годовая ставка
       banks: [],
       typeCalculate: "Both", //варианты доступных расчетов  А - аннуитет. D -дифференцированный
@@ -343,12 +368,15 @@ export default {
      * @param bank
      */
     selectCurrentBank(bank) {
-      this.currenSelectedBank = bank;
-      this.currentInterestRate = bank.interestRate;
+      this.changeCurrentRateOnHandler( { value: bank.interestRate});
+      setTimeout(() => {
+        this.currenSelectedBank = bank ? bank : null;
+      },10)
     },
     /**
      * изменить годовую ставку в ручную
      * @param value
+     * @param bank
      */
     changeCurrentRateOnHandler({ value }) {
       this.currenSelectedBank = null;
@@ -388,16 +416,23 @@ export default {
      * изменить срок кредита
      * @param creditTerm
      */
-    changeCreditTerm({ value: creditTerm }) {
-      this.creditTerm = creditTerm;
+    changeCreditTermMonth({ value: creditTerm }) {
+      this.creditTermMonth = creditTerm;
+    },
+    /**
+     * изменить срок кредита
+     * @param creditTerm
+     */
+    changeCreditTermYear({ value: creditTerm }) {
+      this.creditTermYear = creditTerm;
     },
     /**
      *
-     * @param isInvalid
+     * @param error
      * @param name
      */
-    changeValid({ isInvalid, name }) {
-      if (isInvalid) {
+    changeValid({ error, name }) {
+      if (error) {
         this.errorsInputs.add(name);
       } else {
         if (this.errorsInputs.has(name)) this.errorsInputs.delete(name);
@@ -448,18 +483,20 @@ export default {
         this.downPaymentCurrency / (parseFloat(this.propertyPrice) / 100)
       );
     },
-    creditTerm() {
-      let t1 = parseInt(this.creditTerm) % 10;
-      let t2 = parseInt(this.creditTerm) % 100;
+  },
+  computed: {
+    timeFroSelect() {
+      let t1 = parseInt(this.creditTermYear) % 10;
+      let t2 = parseInt(this.creditTermYear) % 100;
 
       let yearName =
         t1 === 1 && t2 !== 11
           ? "Год"
           : t1 >= 2 && t1 <= 4 && (t2 < 10 || t2 >= 20)
-          ? "Года"
-          : "Лет";
+            ? "Года"
+            : "Лет";
 
-      this.typeTimes = [
+      return [
         {
           selectName: "Мес",
           value: "month",
@@ -470,27 +507,6 @@ export default {
         },
       ];
     },
-  },
-  computed: {
-    /**
-     * минимальное количество для поля срока кредита в зависимости от выбранной единицы времени
-     * @returns {*}
-     */
-    minTimeTerm() {
-      return this.currentTypeTime.value === "year"
-        ? this.outData?.credit_term?.min_year
-        : this.outData?.credit_term?.min_month;
-    },
-    /**
-     * максимальное количество для поля срока кредита в зависимости от выбранной единицы времени
-     * @returns {*}
-     */
-    maxTimeTerm() {
-      return this.currentTypeTime.value === "year"
-        ? this.outData?.credit_term?.max_year
-        : this.outData?.credit_term?.max_month;
-    },
-
     /**
      *  // тип отображаемого варианта расчета А - аннуитет. D -дифференцированный
      */
@@ -503,9 +519,9 @@ export default {
      */
     amountMonth() {
       if (this.currentTypeTime.value === "year") {
-        return this.creditTerm * 12;
+        return parseFloat(this.creditTermYear) * 12;
       }
-      return parseFloat(this.creditTerm);
+      return parseFloat(this.creditTermMonth);
     },
     /**
      * месячная ставка исходя из годовой
@@ -582,9 +598,10 @@ export default {
       return Boolean(this.errorsInputs.size);
     },
     resultForOut() {
+      let currentTerm = this.currentTypeTime.value === 'year' ? this.creditTermYear : this.creditTermMonth;
+     let textForBank = this.currenSelectedBank ?  "Банк: " +  this.currenSelectedBank?.title : ""
       return (
-        "Банк: " +
-        this.currenSelectedBank?.title +
+        textForBank  +
         "\n Ставка: " +
         this.currentInterestRate +
         "\n Сумма кредита: " +
@@ -594,7 +611,7 @@ export default {
         "\n Первоначальный взнос: " +
         this.downPaymentCurrency +
         "\n Срок кредита: " +
-        this.creditTerm +
+         + currentTerm +
         " " +
         this.currentTypeTime.selectName +
         "\n Начисленные проценты:" +
@@ -687,6 +704,9 @@ $border-radius: 4px;
 
 #app_mortgage_calculator {
   .calc {
+    .mb5 {
+      margin-bottom: 5px;
+    }
     //-------------------Стили слайдера-----
     &-slider {
       padding: 0 45px;

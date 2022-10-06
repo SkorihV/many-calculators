@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__input-wrapper" :class="{ 'is-stretch': isStretch }">
+  <div class="calc__input-wrapper" :class="[{ 'is-stretch': isStretch }, classes]">
     <label
       :for="localElementName"
       class="calc__input-label"
@@ -161,21 +161,30 @@ export default {
     // шаблон rex для ручной валидации
 
     customErrorPattern: {
-      type: RegExp,
+      type: [RegExp, String],
       default: null,
     },
     //текст для ошибки созданной в ручную
     customErrorText: {
       type: String,
     },
+    // необходимо для принудительного вывода в результат формы, даже если цена не указана
+    notOnlyForCalculations: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    classes: {
+      type: String,
+      default: null
+    }
   },
   mounted() {
-    this.localMax = this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
-    this.localMin = this.checkedValueOnVoid(this.min)  ? Number(this.min) : null;
-    this.localStep = this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
-    this.localElementName =  this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString()
+
     if (!isNaN(parseFloat(this.localMin)) && this.localMin > this.inputValue) {
-      this.currentInputValue = this.localMin;
+      this.currentInputValue = this.min;
       this.changeValue();
     } else {
       this.currentInputValue = this.inputValue;
@@ -199,15 +208,11 @@ export default {
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
       isInvalid: false,
-      localMax: null,
-      localMin: null,
-      localStep: 1,
-      localElementName: null
     };
   },
   methods: {
     checkedValueOnVoid(value) {
-     return value?.length !== 0 && value !== undefined && value !== null;
+      return value?.length !== 0 && value !== undefined && value !== null;
     },
     resultWitchNumberValid() {
       try {
@@ -216,7 +221,9 @@ export default {
           this.changeValueWitchTimer(this.localMin || 0);
           return null;
         }
-        if ( this.isErrorMin) {
+
+        if (this.isErrorMin) {
+
           this.changeValueWitchTimer(this.localMin || 0);
         }
 
@@ -231,7 +238,7 @@ export default {
           return this.currentInputValue;
         }
 
-        this.currentInputValue = parseFloat(this.currentInputValue)
+        this.currentInputValue = parseFloat(this.currentInputValue);
         if (this.valueIsNaN) {
           this.currentInputValue = "";
         }
@@ -256,8 +263,9 @@ export default {
         value: this.resultValue,
         name: this.localElementName,
         type: "input",
-        cost: this.cost,
+        cost: this.resultSumm,
         label: this.label,
+        alwaysOutput: Boolean(this.notOnlyForCalculations),
       });
       this.checkValid();
     },
@@ -283,10 +291,10 @@ export default {
           this.isErrorCustom,
         ].some((item) => item);
         this.$emit("changeValid", {
-          isInvalid: this.isInvalid,
+          error: this.isInvalid,
           name: this.localElementName,
           type: "input",
-          label: this.label
+          label: this.label,
         });
       });
     },
@@ -307,7 +315,7 @@ export default {
       }
     },
     plus() {
-      let value = this.currentInputValue + this.localStep;
+      let value = parseFloat(this.currentInputValue) + this.localStep;
       if (this.checkedValueOnVoid(this.localMax)) {
         value = value <= this.localMax ? value : this.localMax;
       }
@@ -315,7 +323,7 @@ export default {
       this.changeValue();
     },
     minus() {
-      let value = this.currentInputValue - this.localStep;
+      let value = parseFloat(this.currentInputValue) - this.localStep;
       if (this.checkedValueOnVoid(this.localMin)) {
         value = value >= this.localMin ? value : this.localMin;
       }
@@ -330,10 +338,27 @@ export default {
      */
     inputValue(newValue) {
       this.currentInputValue = newValue;
-      this.checkValid();
+      this.changeValue();
     },
   },
   computed: {
+    localMax() {
+      return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
+    },
+    localMin() {
+      return this.checkedValueOnVoid(this.min) ? Number(this.min) : null;
+    },
+    localStep() {
+      return this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
+    },
+    localElementName () {
+      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+    },
+    resultSumm() {
+      return this.onlyNumber && this.checkedValueOnVoid(this.cost)
+        ? this.cost * Math.abs(this.currentInputValue)
+        : null;
+    },
     resultValue() {
       if (this.onlyNumber) {
         return this.resultWitchNumberValid();

@@ -1,25 +1,151 @@
 {
+  "test-data" : {
+    "calculatorTemplates" : [
+      {"label":"Input - полностью пустой (default)","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":false,"onlyInteger":false,"template":"UiInput","elementName":"test","customErrorPattern":"","customErrorText":"","title":"Input - полностью пустой (default)","isCurrency":false},
+      {"title":"checkbox - полностью пустая (default)","label":"","labelSecond":"","value":1,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"radio - полностью пустой(default)","label":"","selectedItem":"","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"range - полностью пустой (default)","label":"","value":"0","min":"0","max":"100","cost":"","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"Input - полностью пустой (default)","label":"","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"Input c С заголовком","label":"Input c С заголовком","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с начальным значением","label":"input с начальным значением","value":"55","cost":"22","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":true,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"test1","customErrorPattern":"","customErrorText":""},
+      {"title":"Input - с базовой ценой за штуку","label":"Input - с базовой ценой за штуку","value":"100","cost":"30","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"test2","customErrorPattern":"","customErrorText":""},
+      {"title":"Input с подсказкой","label":"Input с подсказкой","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с единицей измерения","label":"input с единицей измерения","value":"33","cost":"500","unit":"кг","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с минимальным количеством","label":"input с минимальным количеством","value":"","cost":"","unit":"","min":"100","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":true,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с максимальным количеством","label":"input с максимальным количеством","value":"","cost":"","unit":"","min":"","max":"500","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с элементами управления и в столбик","label":"input с элементами управления и в столбик","value":"","cost":"","unit":"","min":"","max":"","controls":1,"step":"2","isColumn":1,"notEmpty":false,"onlyNumber":true,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с проверкой на пустоту","label":"input с проверкой на пустоту","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":1,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"Input с проверкой на числа","label":"Input с проверкой на числа","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"Input с разделением на тысячные","label":"Input с разделением на тысячные","value":"0","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":1,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"input с проверкой на целые числа","label":"input с проверкой на целые числа","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":false,"onlyInteger":1,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+      {"title":"checkbox с заголовком","label":"checkbox с заголовком","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox с дополнительным заголовком","label":"первый заголовок","labelSecond":"checkbox с дополнительным заголовком","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox - включенная сразу","label":"checkbox - включенная сразу","labelSecond":"","value":1,"cost":"","isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox со стоимостью","label":"checkbox со стоимостью","labelSecond":"","value":false,"cost":"500","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox с подсказкой","label":"checkbox с подсказкой","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox - обязательно выбрать","label":"checkbox - обязательно выбрать","labelSecond":"","value":false,"cost":"300","isColumn":false,"isNeedChoice":1,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox - сразу \\/ всегда включена","label":"checkbox - сразу \\/ всегда включена","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":1,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox - Переключатель горизонтальный","label":"checkbox - Переключатель горизонтальный","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"switcher","template":"UiCheckbox","elementName":""},
+      {"title":"checkbox - Переключатель вертикальный","label":"checkbox - Переключатель вертикальный","labelSecond":"","value":false,"cost":"","isNeedChoice":false,"isChecked":false,"typeDisplayClass":"switcher-vertical","template":"UiCheckbox","elementName":"2"},
+      {"title":"checkbox - кнопка","label":"checkbox - кнопка","labelSecond":"Заголовок дополнительный:","value":false,"cost":"","isNeedChoice":false,"isChecked":false,"typeDisplayClass":"button","template":"UiCheckbox","elementName":"1"},
+      {"title":"radio - c заголовком","values":[{"title":"Первый пункт","radioName":"Первый пункт"}],"label":"radio - c заголовком","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"radio - с ценой у пункте","values":[{"title":"Первый пункт","radioName":"Первый пункт","cost":300}],"prompt":"","label":"radio - с ценой у пункте","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":"test3"},
+      {"title":"radio - с  комментарием","values":[{"title":"Пункт с комментарием","radioName":"Пункт с комментарием","prompt":"<p>Вот тут вот комментарий какой-то написан<\\/p>"}],"prompt":"Вот тут вот комментарий какой-то написан","label":"radio - с  комментарием","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"radio - с измененным порядковым номером","values":[{"title":"Первый пункт","radioName":"Первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"},{"title":"Выбранный пункт","radioName":"Выбранный пункт"},{"title":"Четвертый пункт","radioName":"Четвертый пункт"}],"prompt":"","label":"radio - с измененным порядковым номером","selectedItem":"2","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"Radio - в виде колонки","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - в виде колонки","selectedItem":"0","isColumn":1,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"Radio - отключен предвыбор","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - отключен предвыбор","selectedItem":"0","isColumn":false,"isNeedChoice":1,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"radio - обязательно нужно выбрать","values":[{"title":"1","radioName":1},{"title":"2","radioName":2},{"title":"3","radioName":3}],"prompt":"","label":"radio - обязательно нужно выбрать","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":1,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"radio - отображение в виде кнопок","values":[{"title":"1","radioName":1},{"title":"2","radioName":2},{"title":"три","radioName":"три"}],"prompt":"","label":"radio - отображение в виде кнопок","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"buttons","template":"UiRadio","elementName":""},
+      {"title":"radio - длинный заголовок и много пунктов длинный","values":[{"title":"Первый длинный пункт","radioName":"Первый длинный пункт"},{"title":"Второй длинный пунктВторой длинный пунктВторой длинный пунктВторой длинный пунктВторой длинный пункт","radioName":"Второй длинный пунктВторой длинный пунктВторой дли"},{"title":"Третий длинный пункт Третий длинный пункт","radioName":"Третий длинный пункт мТретий длинный пункт"},{"title":"4 длинный пункт 4 длинный пункт 4 длинный пункт","radioName":"4 длинный пункт 4 длинный пункт 4 длинный пункт"},{"title":"5555555555555555555","radioName":5555555555555555555},{"title":"66666666666666666","radioName":666666666666666666}],"prompt":"","label":"radio - длинный заголовок и много пунктов длинный","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+      {"title":"range - с заголовком","label":"range - с заголовком","value":"0","min":"0","max":"100","cost":"","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - с указанным минимумом","label":"range - с указанным минимумом","value":"0","min":"5","max":"","cost":"","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - с указанным максимумом","label":"range - с указанным максимумом","value":"0","min":"30","max":"100","cost":"","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - со стоимостью за единицу","label":"range - со стоимостью за единицу","value":"0","min":"0","max":"100","cost":"500","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":"test4"},
+      {"title":"range - с единицами измерения","label":"range - с единицами измерения","value":"0","min":"0","max":"100","cost":"111","unit":"яблок","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - с текстом подсказки","label":"range - с текстом подсказки","value":"0","min":"0","max":"100","cost":"-10","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - включена лента шагов","label":"range - включена лента шагов","value":"0","min":"0","max":"20","cost":"","unit":"","step":"5","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - с отображением текущего значения в статике","label":"range - с отображением текущего значения в статике","value":"30","min":"20","max":"100","cost":"","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":false,"template":"UiRange","elementName":""},
+      {"title":"range - с отображением текущего значения в динамик","label":"range - с отображением текущего значения в динамик","value":"0","min":"0","max":"100","cost":"","unit":"","step":"1","showSteps":1,"stepPrompt":"5","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":1,"template":"UiRange","elementName":""},
+      {"title":"range - с отрицательными значениями","label":"range - с отрицательными значениями","value":"-5","min":"-30","max":"-1","cost":"-50","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":1,"template":"UiRange","elementName":""},
+      {"title":"select -  с заголовком и пунктами","values":[{"title":"Первый пункт","selectName":"Первый пункт"},{"title":"второй пункт","selectName":"второй пункт"},{"title":"третий пункт","selectName":"третий пункт"}],"prompt":"","label":"select -  с заголовком и пунктами","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"select - пункты с ценой","values":[{"title":"пункт первый","selectName":"пункт первый","cost":500},{"title":"второй пункт","selectName":"второй пункт","cost":600}],"prompt":"","label":"select - пункты с ценой","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":"test5"},
+      {"title":"select - с подсказками","values":[{"title":"пункт первый","selectName":"пункт первый","image":{"image_id":"1903102306","filename":"s-udio-xi-eleven-t5zd0437be4-unsplash.jpg","ver_id":2422030,"image_width":"640","image_height":"853","ext":"jpg"},"prompt":"Текст подсказки какой-то&nbsp;"},{"title":"пункт второй","selectName":"пункт второй","cost":1000,"image":{"image_id":"1903092506","filename":"1000_f_374662176_q04a7ohhfe2pytylkesyet7lxmev7whn.jpg","ver_id":2422030,"image_width":"1000","image_height":"667","ext":"jpg"},"prompt":"Другой текст подсказки"}],"prompt":"<p>Общая подсказка", "label":"select - с подсказками","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"select - с выбранным пунктом по умолчанию","values":[{"title":"Первый пункт","selectName":"Первый пункт","cost":30,"image":{"image_id":"1903082906","filename":"fix-the-metal-frame-for-the-stretch-ceiling-with-an-electric-screwdriver-repair-construction-diy-concept.jpg","ver_id":2422030,"image_width":"1000","image_height":"667","ext":"jpg"}},{"title":"Второй пункт","selectName":"Второй пункт"},{"title":"выбранный пункт","selectName":"выбранный пункт"},{"title":"4 пункт","selectName":"4 пункт"}],"prompt":"","label":"select - с выбранным пунктом по умолчанию","isColumn":false,"selectedItem":"2","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"select - Нужно что-то выбрать","values":[{"title":"первый пункт","selectName":"первый пункт"},{"title":"Второй пункт","selectName":"Второй пункт"}],"prompt":"","label":"select - Нужно что-то выбрать","isColumn":false,"selectedItem":"0","isNeedChoice":1,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"select - нужно обязательно что то выбрать","values":[{"title":"пункт первый","selectName":"пункт первый"},{"title":"2","selectName":2}],"prompt":"","label":"select - нужно обязательно что то выбрать","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":1,"typeDisplayClass":"","template":"UiSelect","elementName":""},
+      {"title":"Заголовок элемента в списке вида - Аккордеон:","label":"Заголовок над блоком аккордеона:","template":"UiAccordion","elementName":"","classes":"",
+        "items":[
+          {
+            "title":"Вкладка с инпутами",
+            "templates":[
+              {"title":"input с проверкой на целые числа","label":"input с проверкой на целые числа","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":false,"onlyInteger":1,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"Input с разделением на тысячные","label":"Input с разделением на тысячные","value":"0","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":1,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"input с элементами управления и в столбик","label":"input с элементами управления и в столбик","value":"","cost":"","unit":"","min":"","max":"","controls":1,"step":"2","isColumn":1,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"input с элементами управления и в столбик","label":"input с элементами управления и в столбик","value":"","cost":"","unit":"","min":"","max":"","controls":1,"step":"2","isColumn":1,"notEmpty":false,"onlyNumber":true,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"Input с разделением на тысячные","label":"Input с разделением на тысячные","value":"0","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":1,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""}
+            ]},
+          {
+            "title":"Вкладка с чекбоксами",
+            "templates":[
+              {"title":"checkbox - включенная сразу","label":"checkbox - включенная сразу","labelSecond":"","value":1,"cost":"","isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox со стоимостью","label":"checkbox со стоимостью","labelSecond":"","value":false,"cost":"500","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox с подсказкой","label":"checkbox с подсказкой","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox - обязательно выбрать","label":"checkbox - обязательно выбрать","labelSecond":"","value":false,"cost":"300","isColumn":false,"isNeedChoice":1,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox - сразу \\/ всегда включена","label":"checkbox - сразу \\/ всегда включена","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":1,"typeDisplayClass":"","template":"UiCheckbox","elementName":""}
+
+            ]},
+          {
+            "title":"Вкладка с радиокнопками",
+            "templates":[
+              {"title":"radio - с ценой у пункте","values":[{"title":"Первый пункт","radioName":"Первый пункт","cost":300}],"prompt":"","label":"radio - с ценой у пункте","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - с  комментарием","values":[{"title":"Пункт с комментарием","radioName":"Пункт с комментарием","prompt":"<p>Вот тут вот комментарий какой-то написан<\\/p>"}],"prompt":"Вот тут вот комментарий какой-то написан","label":"radio - с  комментарием","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - с измененным порядковым номером","values":[{"title":"Первый пункт","radioName":"Первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"},{"title":"Выбранный пункт","radioName":"Выбранный пункт"},{"title":"Четвертый пункт","radioName":"Четвертый пункт"}],"prompt":"","label":"radio - с измененным порядковым номером","selectedItem":"2","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"Radio - в виде колонки","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - в виде колонки","selectedItem":"0","isColumn":1,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"Radio - отключен предвыбор","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - отключен предвыбор","selectedItem":"0","isColumn":false,"isNeedChoice":1,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - обязательно нужно выбрать","values":[{"title":"1","radioName":1},{"title":"2","radioName":2},{"title":"3","radioName":3}],"prompt":"","label":"radio - обязательно нужно выбрать","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":1,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"range - с отрицательными значениями","label":"range - с отрицательными значениями","value":"-5","min":"-30","max":"-1","cost":"-50","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":1,"template":"UiRange","elementName":""}
+            ]}
+        ]},
+      {"title":"Заголовок элемента в списке вида - Аккордеон:","label":"Заголовок над блоком аккордеона:","template":"UiTab","elementName":"","classes":"",
+        "items":[
+          {
+            "title":"Вкладка с инпутами",
+            "templates":[
+              {"title":"input с проверкой на целые числа","label":"input с проверкой на целые числа","value":"","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":false,"onlyInteger":1,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"Input с разделением на тысячные","label":"Input с разделением на тысячные","value":"0","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":1,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"input с элементами управления и в столбик","label":"input с элементами управления и в столбик","value":"","cost":"","unit":"","min":"","max":"","controls":1,"step":"2","isColumn":1,"notEmpty":false,"onlyNumber":false,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"input с элементами управления и в столбик","label":"input с элементами управления и в столбик","value":"","cost":"","unit":"","min":"","max":"","controls":1,"step":"2","isColumn":1,"notEmpty":false,"onlyNumber":true,"isCurrency":false,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""},
+              {"title":"Input с разделением на тысячные","label":"Input с разделением на тысячные","value":"0","cost":"","unit":"","min":"","max":"","controls":false,"step":"1","isColumn":false,"notEmpty":false,"onlyNumber":1,"isCurrency":1,"onlyInteger":false,"template":"UiInput","elementName":"","customErrorPattern":"","customErrorText":""}
+            ]},
+          {
+            "title":"Вкладка с чекбоксами",
+            "templates":[
+              {"title":"checkbox - включенная сразу","label":"checkbox - включенная сразу","labelSecond":"","value":1,"cost":"","isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox со стоимостью","label":"checkbox со стоимостью","labelSecond":"","value":false,"cost":"500","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox с подсказкой","label":"checkbox с подсказкой","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox - обязательно выбрать","label":"checkbox - обязательно выбрать","labelSecond":"","value":false,"cost":"300","isColumn":false,"isNeedChoice":1,"isChecked":false,"typeDisplayClass":"","template":"UiCheckbox","elementName":""},
+              {"title":"checkbox - сразу \\/ всегда включена","label":"checkbox - сразу \\/ всегда включена","labelSecond":"","value":false,"cost":"","isColumn":false,"isNeedChoice":false,"isChecked":1,"typeDisplayClass":"","template":"UiCheckbox","elementName":""}
+
+            ]},
+          {
+            "title":"Вкладка с радиокнопками",
+            "templates":[
+              {"title":"radio - с ценой у пункте","values":[{"title":"Первый пункт","radioName":"Первый пункт","cost":300}],"prompt":"","label":"radio - с ценой у пункте","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - с  комментарием","values":[{"title":"Пункт с комментарием","radioName":"Пункт с комментарием","prompt":"<p>Вот тут вот комментарий какой-то написан<\\/p>"}],"prompt":"Вот тут вот комментарий какой-то написан","label":"radio - с  комментарием","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - с измененным порядковым номером","values":[{"title":"Первый пункт","radioName":"Первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"},{"title":"Выбранный пункт","radioName":"Выбранный пункт"},{"title":"Четвертый пункт","radioName":"Четвертый пункт"}],"prompt":"","label":"radio - с измененным порядковым номером","selectedItem":"2","isColumn":false,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"Radio - в виде колонки","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - в виде колонки","selectedItem":"0","isColumn":1,"isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"Radio - отключен предвыбор","values":[{"title":"первый пункт","radioName":"первый пункт"},{"title":"Второй пункт","radioName":"Второй пункт"}],"prompt":"","label":"Radio - отключен предвыбор","selectedItem":"0","isColumn":false,"isNeedChoice":1,"notEmpty":false,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"radio - обязательно нужно выбрать","values":[{"title":"1","radioName":1},{"title":"2","radioName":2},{"title":"3","radioName":3}],"prompt":"","label":"radio - обязательно нужно выбрать","selectedItem":"0","isColumn":false,"isNeedChoice":false,"notEmpty":1,"typeDisplayClass":"","template":"UiRadio","elementName":""},
+              {"title":"range - с отрицательными значениями","label":"range - с отрицательными значениями","value":"-5","min":"-30","max":"-1","cost":"-50","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":1,"template":"UiRange","elementName":""}
+            ]}
+        ]}
+    ]
+  },
+  "test-data-formula" : {
+    "formula" : "test1   + test2   - test3 * ( test4 + test5 )",
+    "dataFormula" : "use"
+  },
   "credit-calculator": {
     "type_calculate": "Both",
     "bank_list": {
       "banks": [
         {
           "title": "test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234",
-          "interestRate": 1,
+          "interestRate": 12,
           "image": {
             "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
           }
         },
         {
           "title": "test2",
-          "interestRate": 2,
+          "interestRate": 14,
           "image": {
             "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
           }
         },
         {
           "title": "test3",
-          "interestRate": 3,
+          "interestRate": 6,
           "image": {
             "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
           }
@@ -48,17 +174,18 @@
       ]
     },
     "credit_term": {
-      "countTime": 5,
+      "count_time_year": 1,
       "max_year": 15,
       "min_year": 1,
+      "count_time_month": 6,
       "max_month": 180,
-      "min_month": 5
+      "min_month": 6
     },
     "interest_rate": {
       "is_rate": true,
-      "max": 80,
+      "max": 50,
       "min": 1,
-      "rate": 0
+      "rate": 5
     },
     "payment_currency": {
       "cost": 200000,

@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__checkbox-wrapper">
+  <div class="calc__checkbox-wrapper" :class="classes">
     <label :for="localElementName" class="calc__checkbox-label">
       <input
         ref="checkbox"
@@ -19,7 +19,7 @@
         {{ label }}<slot name="prompt"></slot>
       </div>
       <div class="calc__checkbox-element" :class="checkboxType"></div>
-      <div v-if="labelSecond" class="calc__checkbox-text_second">
+      <div v-if="labelSecond.length" class="calc__checkbox-text_second">
         {{ labelSecond }}
       </div>
     </label>
@@ -110,19 +110,28 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    // необходимо для принудительного вывода в результат формы, даже если цена не указана
+    notOnlyForCalculations: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    classes: {
+      type: String,
+      default: null
+    }
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
-    this.localCost = this.cost?.length !== 0 ? Number(this.cost) : null;
     this.changeValue(this.localValue);
-    this.localElementName =  this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString()
+
   },
   data() {
     return {
       localValue: null,
       textErrorNotEmpty: "Обязательное поле.",
-      localCost: null,
-      localElementName: null
     };
   },
   methods: {
@@ -133,23 +142,36 @@ export default {
       this.localValue = checked;
       this.$emit("changedValue", {
         value: checked,
-        name: this.elementName,
+        name: this.localElementName,
         type: "checkbox",
         label: this.label,
-        cost: this.localCost,
+        cost: checked ? this.localCost : null,
+        alwaysOutput: Boolean(this.notOnlyForCalculations),
       });
       this.changeValid();
     },
     changeValid() {
       this.$emit("changeValid", {
         error: this.isErrorEmpty,
-        name: this.elementName,
+        name: this.localElementName,
         type: "checkbox",
-        label: this.label
+        label: this.label,
       });
     },
   },
+  watch: {
+    checkboxValue(newValue) {
+      this.localValue = Boolean(newValue);
+      this.changeValid();
+    }
+  },
   computed: {
+    localCost() {
+      return this.checkedValueOnVoid(this.cost) ? Number(this.cost) : null;
+    },
+    localElementName() {
+      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+    },
     checkboxType() {
       if (this.typeDisplayClass) {
         return this.typeDisplayClass;

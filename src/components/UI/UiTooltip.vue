@@ -24,7 +24,7 @@ export default {
     });
     setTimeout(() => {
       this.$el.classList.add("isFlex");
-    }, 100);
+    }, 1000);
   },
   props: {
     tooltipText: {

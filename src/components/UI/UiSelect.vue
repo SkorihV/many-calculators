@@ -1,7 +1,7 @@
 <template>
   <div
     class="calc__select-wrapper"
-    :class="{ 'is-column': isColumn }"
+    :class="[{ 'is-column': isColumn }, classes]"
     :style="[minWidthWrapper, maxWidthWrapper]"
   >
     <div class="calc__select-label" v-if="label">
@@ -21,7 +21,7 @@
           <img
             :alt="currentOption.selectName"
             class="calc__select-image-item"
-            :src="currentOption.image.filename"
+            :src="imageDir + currentOption.image.filename"
           />
         </div>
         {{ currentOption.selectName }}
@@ -33,6 +33,7 @@
           v-for="(option, idx) in selectValues"
           :key="idx"
         >
+          <template v-if="currentIndexOption !== idx">
           <div
             v-if="option?.image?.filename"
             class="calc__select-image-wrapper"
@@ -40,10 +41,15 @@
             <img
               :alt="option.selectName"
               class="calc__select-image-item"
-              :src="option.image.filename"
+              :src="imageDir + option.image.filename"
             />
           </div>
-          {{ option.selectName }}
+            <div class="calc__select-option-item-text">{{ option.selectName }}</div>
+          <ui-prompt
+            v-if="option?.prompt?.length"
+            :prompt-text="option.prompt"
+          ></ui-prompt>
+          </template>
         </div>
       </div>
     </div>
@@ -53,19 +59,19 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
+import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "UiSelect",
-  components: { UiTooltip },
+  components: { UiTooltip, UiPrompt },
   emits: ["changedValue", "changeValid"],
   mounted() {
-    this.localSelectedItem = this.checkedValueOnVoid(this.selectedItem) ? this.selectedItem : 0;
-    if (!this.isErrorEmpty) {
+    if (!this.isErrorEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
         if (this.currentIndexOption === null && this.selectValues.length) {
           this.currentIndexOption =
-            parseInt(this.localSelectedItem) < this.selectValues.length
-              ? parseInt(this.localSelectedItem)
+            this.checkedValueOnVoid(this.selectedItem) && parseInt(this.selectedItem) < this.selectValues.length
+              ? parseInt(this.selectedItem)
               : this.selectValues.length - 1;
           this.changeSelect(
             this.selectValues[this.currentIndexOption],
@@ -97,7 +103,7 @@ export default {
     },
     elementName: {
       type: String,
-      default: Math.random().toString(),
+      default: null,
     },
     isColumn: {
       type: [Boolean, Number],
@@ -137,6 +143,18 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    // необходимо для принудительного вывода в результат формы, даже если цена не указана
+    notOnlyForCalculations: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    classes: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -144,7 +162,6 @@ export default {
       currentOption: {},
       currentIndexOption: null,
       textErrorNotEmpty: "Обязательное поле.",
-      localSelectedItem: 0,
     };
   },
   methods: {
@@ -167,10 +184,10 @@ export default {
     },
     changeValid() {
       this.$emit("changeValid", {
-        isInvalid: this.isErrorEmpty,
-        name: this.elementName,
+        error: this.isErrorEmpty,
+        name: this.localElementName,
         type: "select",
-        label: this.label
+        label: this.label,
       });
     },
   },
@@ -179,19 +196,36 @@ export default {
       this.$emit("changedValue", {
         value: this.currentOption,
         index: this.currentIndexOption,
-        name: this.elementName,
+        name: this.localElementName,
         type: "select",
-        cost: this.currentCost
+        cost: this.currentCost,
+        label: this.label,
+        alwaysOutput: Boolean(this.notOnlyForCalculations),
       });
       this.changeValid();
     },
     options() {
       this.currentOption = this.selectValues[this.currentIndexOption];
     },
+    selectedItem(newValue) {
+      this.currentIndexOption =
+        this.checkedValueOnVoid(this.newValue) && parseInt(this.newValue) < this.selectValues.length
+          ? parseInt(this.newValue)
+          : this.selectValues.length - 1;
+      this.currentOption = this.selectValues[this.currentIndexOption];
+    },
   },
   computed: {
+    localElementName() {
+      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+    },
+    imageDir() {
+      return window?.imageDir ? window.imageDir : "";
+    },
     currentCost() {
-      return  this.checkedValueOnVoid(this.currentOption?.cost) ? this.currentOption.cost : null;
+      return this.checkedValueOnVoid(this.currentOption?.cost)
+        ? this.currentOption.cost
+        : null;
     },
     minWidthWrapper() {
       return this.minWidth ? `min-width:${this.minWidth}px;` : "";

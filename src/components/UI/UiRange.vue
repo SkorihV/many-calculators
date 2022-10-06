@@ -1,13 +1,16 @@
 <template>
-  <div class="calc__range-wrapper" v-if="rangeValue !== null">
+  <div class="calc__range-wrapper" :class="classes" v-if="rangeValue !== null">
     <div v-if="label" class="calc__range-label">
       {{ label }}<slot name="prompt"></slot>
       <div
         class="calc__range-current-wrapper"
-        v-if="showDynamicValue || showStaticValue"
+        v-if="showDynamicValue || showStaticValue || unit?.length"
       >
-        <div class="calc__range-current-static" v-if="showStaticValue">
-          {{localRangeValue}}
+        <div
+          class="calc__range-current-static"
+          v-if="showStaticValue || unit?.length"
+        >
+          {{ localRangeValue }}
         </div>
         <input
           class="calc__range-current-dynamic"
@@ -103,7 +106,7 @@ export default {
     },
     elementName: {
       type: String,
-      default: Math.random().toString(),
+      default: null,
     },
     //шаг на самом ползунке
     step: {
@@ -144,17 +147,24 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    // необходимо для принудительного вывода в результат формы, даже если цена не указана
+    notOnlyForCalculations: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    classes: {
+      type: String,
+      default: null
+    }
   },
   mounted() {
-    this.localMin = this.checkedValueOnVoid(this.min) ? this.min : 0;
-    this.localMax = this.checkedValueOnVoid(this.max) ? this.max : 10;
-    this.localStep = this.checkedValueOnVoid(this.step) ? this.step : 1;
-    this.localStepPrompt = this.checkedValueOnVoid(this.stepPrompt) ? this.stepPrompt : 1;
-
     if (!this.isErrorEmpty) {
       let timer = setInterval(() => {
         if (this.checkedValueOnVoid(this.rangeValue)) {
-          this.localRangeValue = this.rangeValue;
+          this.localRangeValue = parseFloat(this.rangeValue);
           clearInterval(timer);
         }
       }, 100);
@@ -168,12 +178,8 @@ export default {
   data() {
     return {
       localRangeValue: null,
-      localMin: 0,
-      localMax: 10,
-      localStep: 1,
-      localStepPrompt: 1,
-      localCost: null,
       textErrorNotEmpty: "Обязательное поле.",
+      updateValueTimer: null,
     };
   },
   methods: {
@@ -184,37 +190,41 @@ export default {
       this.changeValue(step);
     },
     tryChangeValue(e) {
-      let value = parseFloat(e.target.value);
-      this.changeValue(value);
+      this.changeValue(e.target.value);
     },
-    changeValue(value) {
-      if (this.localMax) {
-        value = parseFloat(value) > this.localMax ? this.localMax : value;
+  changeValue(value) {
+      value = parseFloat(value);
+      if (value > this.localMax) {
+        value = this.localMax;
       }
-      if (this.localMin) {
-        value = parseFloat(value) < this.localMin ? this.localMin : value;
+      if (value < this.localMin) {
+        value = this.localMin;
       }
       this.localRangeValue = value;
       this.$emit("changedValue", {
         value: this.localRangeValue,
-        name: this.elementName,
+        name: this.localElementName,
         type: "range",
-        cost:  this.resultSum,
+        cost: this.resultSum,
         label: this.label,
+        alwaysOutput: Boolean(this.notOnlyForCalculations),
       });
       this.changeValid();
     },
     changeValid() {
       this.$emit("changeValid", {
         error: this.isErrorEmpty,
-        name: this.elementName,
+        name: this.localElementName,
         type: "range",
-        label: this.label
+        label: this.label,
       });
     },
+    submitValue(value) {
+
+    }
   },
   watch: {
-    inputValue(newValue, oldValue) {
+    localRangeValue(newValue, oldValue) {
       if (isNaN(Number(newValue))) {
         this.localRangeValue = oldValue;
       } else if (!newValue) {
@@ -223,13 +233,40 @@ export default {
         this.changeValue(newValue);
       }
     },
+    /**
+     * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
+     * @param newValue
+     */
     rangeValue(newValue) {
-      this.localRangeValue = newValue;
+      clearTimeout(this.updateValueTimer);
+      this.updateValueTimer = setTimeout(() => {
+          this.localRangeValue = parseFloat(newValue);
+      }, 1500);
     },
   },
   computed: {
+    localMin () {
+      return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
+    },
+    localMax () {
+      return this.checkedValueOnVoid(this.max) ? parseFloat(this.max) : 10;
+    },
+
+    localStep() {
+      return this.checkedValueOnVoid(this.step) ? parseFloat(this.step) : 1;
+    } ,
+
+    localStepPrompt() {
+      return this.checkedValueOnVoid(this.stepPrompt) ? parseFloat(this.stepPrompt): 1;
+    },
+
+    localElementName() {
+     return this.checkedValueOnVoid(this.elementName) ? this.elementName: Math.random().toString();
+    },
     resultSum() {
-      return !isNaN(this.cost * this.localRangeValue) ? this.cost * this.localRangeValue : null;
+      return this.cost !== null
+        ? this.cost * Math.abs(this.localRangeValue)
+        : null;
     },
     returnSteps() {
       let steps = [];
@@ -237,8 +274,11 @@ export default {
       if (this.isHidePromptSteps) {
         return steps;
       }
-
-      for (let i = this.localMin; i <= this.localMax; i += this.stepPrompt) {
+      for (
+        let i = this.localMin;
+        i <= this.localMax;
+        i += this.localStepPrompt
+      ) {
         steps.push(i);
       }
       return steps;
@@ -247,8 +287,13 @@ export default {
       return this.isNeedChoice && this.localRangeValue === null;
     },
     isHidePromptSteps() {
-      return !this.showSteps && !this.localMin && !this.localMax && this.stepPrompt < 1;
-    }
+      return (
+        !this.showSteps &&
+        !this.localMin &&
+        !this.localMax &&
+        this.localStepPrompt < 1
+      );
+    },
   },
 };
 </script>

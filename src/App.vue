@@ -435,11 +435,12 @@ $border-radius: 4px;
       }
       &-item {
         background-color: white;
-        padding: 10px 25px 10px 10px;
-        @include style-flex-center;
         justify-content: flex-start;
         gap: 5px;
         text-align: start;
+        &-text {
+          padding: 10px 25px 10px 10px;
+        }
         &:hover {
           background-color: $color-gray-middle;
         }
@@ -801,9 +802,6 @@ $border-radius: 4px;
           transform: translateX(0);
         }
       }
-      &-item {
-        @include style-flex-center;
-      }
     }
   }
 
@@ -930,6 +928,86 @@ $border-radius: 4px;
       @include style-button;
       padding: 10px;
       @include style-flex-center;
+    }
+  }
+
+
+//---------------аккордеон----------------
+  &__accordion {
+    &-main-label {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+
+    }
+    &-wrapper {
+      @include style-flex-start;
+      align-items: start;
+      flex-direction: column;
+    }
+    &-item {
+      &-label {
+        @include style-button;
+        @include style-flex-start;
+        border-radius: 0;
+        padding: 10px;
+        width: 100%;
+        &:hover {
+          @include style-button-hover;
+        }
+        &.isOpen {
+          background-color: $color-orange-normal;
+        }
+        &-wrapper {
+          @include style-flex-start;
+          flex-direction: column;
+          flex: 1 1 auto;
+          width: 100%;
+        }
+      }
+      &-content {
+        @include style-flex-start;
+        width: 100%;
+      }
+
+    }
+  }
+
+  //---------------------табы-----------------
+  &__tab {
+    &-main-label {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+
+    }
+    &-wrapper {
+      @include style-flex-start;
+      align-items: start;
+      flex-direction: column;
+    }
+    &-item {
+      &-label {
+        @include style-button;
+        @include style-flex-start;
+        border-radius: 0;
+        padding: 10px;
+        &:hover {
+          @include style-button-hover;
+        }
+        &.isOpen {
+          background-color: $color-orange-normal;
+        }
+        &-wrapper {
+          @include style-flex-start;
+          flex: 1 1 auto;
+          width: 100%;
+        }
+      }
+      &-content {
+        @include style-flex-start;
+        width: 100%;
+      }
     }
   }
 }

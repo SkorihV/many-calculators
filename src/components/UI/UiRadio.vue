@@ -1,7 +1,7 @@
 <template>
   <div
     class="calc__radio-wrapper"
-    :class="[radioType, { column: isColumn, solid: isSolid, wrap: isWrap }]"
+    :class="[radioType, { column: isColumn, solid: isSolid, wrap: isWrap }, classes]"
   >
     <div class="calc__radio-title" v-if="label">
       {{ label }} <slot name="prompt" />
@@ -10,7 +10,7 @@
       <div
         class="calc__radio-label"
         v-for="(radio, idx) in radioValues"
-        :id="elementName + '_' + idx"
+        :id="localElementName + '_' + idx"
         :class="{ checked: idx === currentIndexRadioButton }"
         :key="idx"
         @click="changeRadio(radio, idx)"
@@ -33,13 +33,17 @@ export default {
   emits: ["changedValue", "changeValid"],
   components: { UiPrompt, UiTooltip },
   mounted() {
-    this.localSelectedItem = this.checkedValueOnVoid(this.selectedItem) ? this.selectedItem : 0;
-    if (!this.isErrorEmpty) {
+
+    this.localElementName = this.checkedValueOnVoid(this.elementName)
+      ? this.elementName
+      : Math.random().toString();
+
+    if (!this.isErrorEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
-        if (this.currentIndexRadioButton === null && this.radioValues.length) {
+        if (this.radioValues.length) {
           this.currentIndexRadioButton =
-            parseInt(this.localSelectedItem) < this.radioValues.length
-              ? parseInt(this.localSelectedItem)
+            this.checkedValueOnVoid(this.selectedItem) && parseInt(this.selectedItem) < this.radioValues.length
+              ? parseInt(this.selectedItem)
               : this.radioValues.length - 1;
           this.changeRadio(
             this.radioValues[this.currentIndexRadioButton],
@@ -63,7 +67,7 @@ export default {
     },
     elementName: {
       type: String,
-      default: Math.random().toString(),
+      default: null,
     },
     label: {
       type: String,
@@ -140,12 +144,24 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    // необходимо для принудительного вывода в результат формы, даже если цена не указана
+    notOnlyForCalculations: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    classes: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
       currentIndexRadioButton: null,
       textErrorNotEmpty: "Обязательное поле.",
-      localSelectedItem: 0,
+      localElementName: null,
     };
   },
   methods: {
@@ -157,21 +173,31 @@ export default {
       this.$emit("changedValue", {
         value: radio,
         index,
-        name: this.elementName,
+        name: this.localElementName,
         type: "radio",
-        cost: this.checkedValueOnVoid(radio?.cost) ? radio.cost : null,
+        cost: this.checkedValueOnVoid(radio?.cost) ? parseFloat(radio.cost) : null,
         label: this.label,
+        alwaysOutput: Boolean(this.notOnlyForCalculations),
       });
       this.changeValid();
     },
     changeValid() {
       this.$emit("changeValid", {
-        isInvalid: this.isErrorEmpty,
-        name: this.elementName,
+        error: this.isErrorEmpty,
+        name: this.localElementName,
         type: "radio",
-        label: this.label
+        label: this.label,
       });
     },
+  },
+  watch: {
+    selectedItem(newValue) {
+      let index =
+        this.checkedValueOnVoid(newValue) && parseInt(newValue) < this.radioValues.length
+          ? parseInt(this.selectedItem)
+          : this.radioValues.length - 1;
+      this.changeRadio(this.radioValues[index], index)
+    }
   },
   computed: {
     radioType() {

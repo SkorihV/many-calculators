@@ -37,7 +37,6 @@
             </template>
           </ui-range>
         </div>
-
         <div class="calc__wrapper-group-data">
           <ui-range
             :range-value="width?.base_value"
