@@ -1,5 +1,5 @@
 <template>
-  <transition name="tooltip-transition" v-cloak v-show="isShow && tooltipText">
+  <transition name="tooltip-transition" v-cloak v-show="isShow && tooltipText && canBeShown">
     <div
       class="calc__tooltip calc__tooltip-wrapper"
       ref="tooltip"
@@ -10,7 +10,6 @@
     </div>
   </transition>
 </template>
-
 <script>
 export default {
   name: "UiTooltip",
@@ -37,14 +36,19 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    localCanBeShown: {
+      type: Boolean,
+    }
   },
   data() {
     return {
       resizeTimer: null,
       classPosition: null,
       width: null,
+      canBeShown: false,
     };
   },
+  inject: ['globalCanBeShownTooltip'],
   methods: {
     checkPosition() {
       setTimeout(() => {
@@ -71,6 +75,16 @@ export default {
     isShow() {
       this.checkPosition();
     },
+    globalCanBeShownTooltip(newValue) {
+      if (newValue) {
+        this.canBeShown = true;
+      }
+    },
+    localCanBeShown(newValue) {
+      if (newValue) {
+        this.canBeShown = true;
+      }
+    }
   },
 };
 </script>

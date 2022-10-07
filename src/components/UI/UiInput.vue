@@ -39,6 +39,7 @@
       <ui-tooltip
         :is-show="tooltipError.error"
         :tooltip-text="tooltipError.errorText"
+        :local-can-be-shown="canBeShownTooltip"
       />
     </label>
   </div>
@@ -182,7 +183,6 @@ export default {
     }
   },
   mounted() {
-
     if (!isNaN(parseFloat(this.localMin)) && this.localMin > this.inputValue) {
       this.currentInputValue = this.min;
       this.changeValue();
@@ -208,6 +208,7 @@ export default {
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
       isInvalid: false,
+      canBeShownTooltip: false
     };
   },
   methods: {
@@ -257,6 +258,7 @@ export default {
     tryChangeValueInput(e) {
       this.currentInputValue = e.target.value;
       this.changeValue();
+      this.shownTooltip();
     },
     changeValue() {
       this.$emit("changedValue", {
@@ -273,6 +275,7 @@ export default {
       this.nameTimer = setTimeout(() => {
         this.currentInputValue = value;
         this.changeValue();
+        this.shownTooltip();
       }, 1500);
     },
     clearTimer() {
@@ -321,6 +324,7 @@ export default {
       }
       this.currentInputValue = value;
       this.changeValue();
+      this.shownTooltip();
     },
     minus() {
       let value = parseFloat(this.currentInputValue) - this.localStep;
@@ -329,7 +333,13 @@ export default {
       }
       this.currentInputValue = value;
       this.changeValue();
+      this.shownTooltip();
     },
+    shownTooltip() {
+      if (!this.canBeShownTooltip) {
+        this.canBeShownTooltip = true;
+      }
+    }
   },
   watch: {
     /**
@@ -339,6 +349,7 @@ export default {
     inputValue(newValue) {
       this.currentInputValue = newValue;
       this.changeValue();
+      this.shownTooltip();
     },
   },
   computed: {

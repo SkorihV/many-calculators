@@ -45,7 +45,7 @@
       {"title":"range - с текстом подсказки","label":"range - с текстом подсказки","value":"0","min":"0","max":"100","cost":"-10","unit":"","step":"1","showSteps":false,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
       {"title":"range - включена лента шагов","label":"range - включена лента шагов","value":"0","min":"0","max":"20","cost":"","unit":"","step":"5","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":false,"template":"UiRange","elementName":""},
       {"title":"range - с отображением текущего значения в статике","label":"range - с отображением текущего значения в статике","value":"30","min":"20","max":"100","cost":"","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":false,"template":"UiRange","elementName":""},
-      {"title":"range - с отображением текущего значения в динамик","label":"range - с отображением текущего значения в динамик","value":"0","min":"0","max":"100","cost":"","unit":"","step":"1","showSteps":1,"stepPrompt":"5","isNeedChoice":false,"showStaticValue":false,"showDynamicValue":1,"template":"UiRange","elementName":""},
+      {"title":"range - с отображением текущего значения в динамик","label":"range - с отображением текущего значения в динамик","value":"0","min":"0","max":"100","cost":"","unit":"","step":"1","showSteps":1,"stepPrompt":"5","isNeedChoice":true,"showStaticValue":false,"showDynamicValue":1,"template":"UiRange","elementName":""},
       {"title":"range - с отрицательными значениями","label":"range - с отрицательными значениями","value":"-5","min":"-30","max":"-1","cost":"-50","unit":"","step":"1","showSteps":1,"stepPrompt":"1","isNeedChoice":false,"showStaticValue":1,"showDynamicValue":1,"template":"UiRange","elementName":""},
       {"title":"select -  с заголовком и пунктами","values":[{"title":"Первый пункт","selectName":"Первый пункт"},{"title":"второй пункт","selectName":"второй пункт"},{"title":"третий пункт","selectName":"третий пункт"}],"prompt":"","label":"select -  с заголовком и пунктами","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":""},
       {"title":"select - пункты с ценой","values":[{"title":"пункт первый","selectName":"пункт первый","cost":500},{"title":"второй пункт","selectName":"второй пункт","cost":600}],"prompt":"","label":"select - пункты с ценой","isColumn":false,"selectedItem":"0","isNeedChoice":false,"notEmpty":false,"typeDisplayClass":"","template":"UiSelect","elementName":"test5"},
@@ -122,8 +122,8 @@
     ]
   },
   "test-data-formula" : {
-    "formula" : "test1   + test2   - test3 * ( test4 + test5 )",
-    "dataFormula" : "use"
+    "formula" : "test1   + test2   - test3 * ( test4 + test5 ) + _otherSumm_",
+    "useFormula" : true
   },
   "credit-calculator": {
     "type_calculate": "Both",

@@ -32,6 +32,7 @@
           class="calc__form-textarea"
           id="teleport-element"
           readonly="readonly"
+          required
         ></textarea>
         <label class="calc__form-label" for="name"
           >Имя: <input class="calc__form-input" type="text" id="name" required
@@ -44,7 +45,7 @@
           >Телефон:
           <input class="calc__form-input" type="text" id="phone" required
         /></label>
-        <input class="calc__form-submit" type="submit" value="Отправить" />
+        <input class="calc__form-submit" type="submit" id="send-result" disabled value="Отправить" />
       </form>
     </div>
     <script

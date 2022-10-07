@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       itemOpenId: null,
+      errorsElements: new Set(),
     };
   },
   methods: {
@@ -50,6 +51,13 @@ export default {
     },
     changeValid(data) {
       this.$emit("changeValid", data);
+      if (data.error) {
+        this.errorsElements.add(data.name);
+      } else {
+        if (this.errorsElements.has(data.name)) {
+          this.errorsElements.delete(data.name);
+        }
+      }
     }
   },
   computed: {
@@ -66,6 +74,12 @@ export default {
       return result.some(item => item);
     }
   },
+  isErrors() {
+    return Boolean(this.errorsElements.size)
+  },
+  showTooltip() {
+    return this.isErrors
+  }
 };
 </script>
 

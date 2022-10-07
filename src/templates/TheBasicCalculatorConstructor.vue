@@ -29,26 +29,19 @@
           @changeValid="changeValid"
         />
       </div>
+      <div v-if="isErrorCalc && shownAllTooltips" class="calc__error-block">
+        Возможно, не все поля заполнены или заполнены не корректно!
+      </div>
+      <div class="calc__show-result-btn" @click="calculateResult">Рассчитать</div>
     </div>
-    <div v-if="isErrorCalc">
-      Есть ошибка при заполнении!
-    </div>
-<pre>
-  {{formula}}
-  {{processingFormulaOnVariables}}
-  +++ {{findDataForVariablesOnFormula}} +++
-  --- {{putTogetherFormulaWithData}} ---
-<!--  {{resultDataFilter}}-->
-</pre>
-
-    <teleport to="#teleport-element">
-      {{ resultForForm }}
+    <teleport v-if="initTeleport && !isErrorCalc" to="#teleport-element">
+      {{ resultTextForForm }}
     </teleport>
-
   </div>
 </template>
 
 <script>
+import {computed} from 'vue'
 import UiAccordion from "@/components/UI/UiAccordion";
 import UiTab from "@/components/UI/UiTab";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
@@ -69,20 +62,23 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.formula = data?.formula?.length ? data.formula : null;
-          this.methodProcessingVariablesOnFormula = data?.processingOtherVariables ? data.processingOtherVariables : 'use';
+          this.isUseFormula = data?.useFormula;
         });
     } else {
       this.outData.calculatorTemplates = JSON.parse(
         JSON.stringify(window?.calculatorTemplates)
       );
       this.formula = window?.dataFormula?.formula?.length ? window.dataFormula.formula : null;
-      this.methodProcessingVariablesOnFormula = window?.dataFormula?.processingOtherVariables ? window.dataFormula.processingOtherVariables : 'use';
+      this.isUseFormula = window?.dataFormula?.useFormula ? window?.dataFormula?.useFormula : false;
     }
     this.calculatorTemplates = this.outData?.calculatorTemplates
       ? this.outData?.calculatorTemplates
       : [];
     delete(window?.calculatorTemplates)
     delete(window?.dataFormula)
+
+    this.submitResult = document.querySelector('#send-result');
+
   },
   data() {
     return {
@@ -91,8 +87,17 @@ export default {
       resultsElements: {},
       errorsElements: new Set(),
       formula: null,
-      methodProcessingVariablesOnFormula: 'use'
+      isUseFormula: false,
+      shownAllTooltips: false,
+      reserveVariableForOther: '_otherSumm_',
+      initTeleport: false,
+      submitResult: null
     };
+  },
+  provide() {
+    return {
+      globalCanBeShownTooltip: computed(() => this.shownAllTooltips) ,
+    }
   },
   methods: {
     changeValueSquare(data) {
@@ -118,6 +123,21 @@ export default {
           summ: data.cost,
           inOutput: data.cost !== null || data.alwaysOutput,
         }
+      } else if (data.type === "checkbox") {
+        if (data.value) {
+          this.resultsElements[data.name] = {
+            name: data.name,
+            type: data.type,
+            label: data.label,
+            value: data.value.selectName,
+            summ: data.cost,
+            inOutput: data.cost !== null || data.alwaysOutput,
+          }
+        } else {
+         if(this.resultsElements[data.name] ) {
+           delete this.resultsElements[data.name];
+         }
+        }
       } else {
         this.resultsElements[data.name] = {
           name: data.name,
@@ -130,6 +150,7 @@ export default {
       }
     },
     changeValid(data) {
+      // console.log("Данные по ошибке -  ", data);
       if (data.error) {
         this.errorsElements.add(data.name);
       } else {
@@ -137,8 +158,16 @@ export default {
           this.errorsElements.delete(data.name);
         }
       }
+      this.enabledResultButton();
     },
-
+    calculateResult() {
+      this.shownAllTooltips = true;
+      this.initTeleport = true;
+      this.enabledResultButton();
+    },
+    enabledResultButton() {
+      this.submitResult.disabled = !(this.initTeleport && !this.isErrorCalc)
+    },
   },
   computed: {
     /**
@@ -146,51 +175,88 @@ export default {
      * @returns {unknown[]}
      */
     resultDataFilter() {
-      return Object.values(this.resultsElements).filter((item) => item.inOutput || item.summ !== null)
+      return Object.values(this.resultsElements).filter((item) => item.inOutput || item.summ !== null || (item.type === "checkbox" && !item.value))
     },
 
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками. Избавляемся от лишнего.
      * @returns {*}
      */
-    processingFormulaOnVariables() {
-      return this.formula?.split(' ').filter(item => item.length);
+    listVariablesOnFormula() {
+      if (this.formula?.length) {
+        return this.formula?.split(' ').filter(item => item.length);
+      }
+      return [];
     },
     /**
-     * Преобразуем переменные в данные полученные с калькулятора
+     * Массив переменных не используеммых в формуле
      * @returns {*}
      */
-    findDataForVariablesOnFormula() {
-      return this.processingFormulaOnVariables?.map(item => {
-        let data = this.resultDataFilter.filter(itemInner => itemInner.name === item)
-        return  data.length ? data[0] : item;
+    otherVariables() {
+      return this.resultDataFilter?.map(dataOnCalcComponent => {
+        let isFormula = this.listVariablesOnFormula.filter(varOnFormula => varOnFormula === dataOnCalcComponent.name);
+        return  Boolean(isFormula.length) ? false : dataOnCalcComponent
+      }).filter(item => item);
+    },
+
+    /**
+     * сумма всех не используемых в формуле переменных
+     * @returns {*}
+     */
+    otherResultSumm() {
+      return this.otherVariables.reduce((sum, item) => {
+        if (item?.summ !== null) {
+          return sum + item.summ;
+        }
+        return sum + 0;
+      }, 0)
+    },
+    /**
+     * Список переменных из формулы вместе с данными
+     * @returns {*}
+     */
+    dataListVariablesOnFormula() {
+      return this.listVariablesOnFormula?.map(item => {
+        if (item === this.reserveVariableForOther) {
+          return new Proxy(
+            {
+              name: this.reserveVariableForOther,
+              summ: this.otherResultSumm
+            },
+            {
+              get: (target, name) => {
+                return name in target ? target[name] : null;
+              }
+            }
+          )
+        } else {
+          let data = this.resultDataFilter.filter(itemInner => itemInner.name === item)
+          return  data.length ? data[0] : item;
+        }
       });
     },
+
     putTogetherFormulaWithData() {
-     let test =  this.findDataForVariablesOnFormula?.reduce((resultText, item )=> {
-        return resultText += item?.summ ? item.summ : item;
+     let resultTextForComputed =  this.dataListVariablesOnFormula?.reduce((resultText, item )=> {
+       return resultText += typeof item.summ === 'number'  ? item.summ : item;
       }, '');
-
-
       try {
-        return eval(test);
+        return eval(resultTextForComputed);
       } catch (e) {
-        console.error(e.message );
         return false;
       }
     },
-
 
     /**
      * Данные нужные только для вывода в форму
      * @returns {*[]}
      */
-    resultDataFilterInOutput() {
+    resultDataFilterInOutputText() {
       return this.resultDataFilter.filter(item => item.inOutput)
     },
     resultTextDataForForm() {
       let result = '';
-      this.resultDataFilterInOutput.forEach(item => {
+      this.resultDataFilterInOutputText.forEach(item => {
         if (item.inOutput) {
           result += '\n' + item.label;
 
@@ -212,18 +278,23 @@ export default {
      * @returns {number}
      */
     resultSummForForm() {
-      return this.resultDataFilter.reduce((sum, item) => {
+
+      if (this.isUseFormula) {
+        return this.putTogetherFormulaWithData;
+      } else {
+        return this.resultDataFilter.reduce((sum, item) => {
           if (item.summ !== null) {
             return sum + item.summ;
           }
           return sum + 0;
         }, 0)
+      }
     },
     /**
      * Текст для вывода в форму
      * @returns {string}
      */
-    resultForForm () {
+    resultTextForForm () {
       let result = this.resultTextDataForForm;
       result += 'Общая сумма составляет = ' + this.resultSummForForm;
       return result;
@@ -232,7 +303,6 @@ export default {
       return Boolean(this.errorsElements.size);
     }
   },
-
 };
 </script>
 
@@ -311,6 +381,7 @@ $border-radius: 4px;
   margin-bottom: 20px;
   padding-left: 20px;
   border-left: 3px solid $color-orange-normal;
+  width: 100%;
   &:hover {
     background-color: $color-gray-middle;
   }
@@ -318,7 +389,29 @@ $border-radius: 4px;
 
 #app-base-constructor-calculator {
   .calc {
+    box-sizing: border-box;
     &__wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    &__error-block {
+      width: 100%;
+      @include style-flex-center;
+      margin: 10px 0;
+      padding: 20px;
+      background-color: $color-danger;
+      color: $color-white;
+
+    }
+    &__show-result-btn {
+      @include style-button;
+      padding: 20px;
+      align-self: center;
+      &:hover {
+        @include style-button-hover;
+        background-color: $color-orange-normal;
+      }
     }
   }
 }

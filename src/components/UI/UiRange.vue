@@ -49,7 +49,11 @@
         </div>
       </div>
     </div>
-    <ui-tooltip :is-show="isErrorEmpty" :tooltip-text="textErrorNotEmpty" />
+    <ui-tooltip
+      :is-show="isErrorEmpty"
+      :tooltip-text="textErrorNotEmpty"
+      :local-can-be-shown="canBeShownTooltip"
+    />
   </div>
 </template>
 
@@ -180,6 +184,7 @@ export default {
       localRangeValue: null,
       textErrorNotEmpty: "Обязательное поле.",
       updateValueTimer: null,
+      canBeShownTooltip: false,
     };
   },
   methods: {
@@ -188,18 +193,21 @@ export default {
     },
     changeValueStep(step) {
       this.changeValue(step);
+      this.shownTooltip();
     },
     tryChangeValue(e) {
       this.changeValue(e.target.value);
+      this.shownTooltip();
     },
   changeValue(value) {
-      value = parseFloat(value);
+      value = !isNaN(parseFloat(value)) ? parseFloat(value) : null;
       if (value > this.localMax) {
         value = this.localMax;
       }
       if (value < this.localMin) {
         value = this.localMin;
       }
+
       this.localRangeValue = value;
       this.$emit("changedValue", {
         value: this.localRangeValue,
@@ -219,19 +227,22 @@ export default {
         label: this.label,
       });
     },
-    submitValue(value) {
-
-    }
+    shownTooltip() {
+      if (!this.canBeShownTooltip) {
+        this.canBeShownTooltip = true;
+      }
+    },
   },
   watch: {
-    localRangeValue(newValue, oldValue) {
-      if (isNaN(Number(newValue))) {
-        this.localRangeValue = oldValue;
-      } else if (!newValue) {
-        return false;
+    localRangeValue(newValue) {
+      if (!this.checkedValueOnVoid(newValue)) {
+        this.localRangeValue = null;
+        this.changeValue(this.localRangeValue)
       } else {
-        this.changeValue(newValue);
+        this.localRangeValue = newValue;
+        this.changeValue(this.localRangeValue)
       }
+      this.shownTooltip();
     },
     /**
      * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов

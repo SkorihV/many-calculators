@@ -125,8 +125,10 @@ export default {
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
+    if (this.isChecked) {
+      this.localValue = true;
+    }
     this.changeValue(this.localValue);
-
   },
   data() {
     return {

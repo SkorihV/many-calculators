@@ -277,6 +277,7 @@ $border-radius: 4px;
         font-weight: bold;
         position: relative;
         min-height: 40px;
+        width: 100%;
       }
       &-plus,
       &-minus {

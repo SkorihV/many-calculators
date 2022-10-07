@@ -321,6 +321,8 @@ $border-radius: 4px;
         color: $color-white;
         padding: 4px 6px;
         border-radius: $border-radius;
+        min-width: 25px;
+        min-height: 27px;
       }
 
       &-dynamic {
@@ -574,6 +576,7 @@ $border-radius: 4px;
       position: relative;
       @media all and (max-width: 480px) {
         flex-direction: column;
+        align-items: flex-start;
       }
     }
     &-text {
@@ -928,6 +931,9 @@ $border-radius: 4px;
       @include style-button;
       padding: 10px;
       @include style-flex-center;
+      &:disabled {
+        background-color: $color-gray-dark;
+      }
     }
   }
 
@@ -966,7 +972,6 @@ $border-radius: 4px;
         }
       }
       &-content {
-        @include style-flex-start;
         width: 100%;
       }
 
