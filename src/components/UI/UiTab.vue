@@ -1,35 +1,69 @@
 <template>
   <div class="calc__tab-wrapper" :class="[classes]" v-if="showBlock">
-      <div class="calc__tab-main-label" v-if="tabData?.label?.length">{{ tabData.label }}</div>
-      <div class="calc__tab-item-label-wrapper">
-        <template v-for="(item, key) in tabData?.items" >
-          <div class="calc__tab-item-label" :class="{isOpen: key === itemOpenId}" v-if="item?.templates?.length" :key="key" @click="openItem(key)">{{item.title}}</div>
-        </template>
-      </div>
-      <div class="calc__tab-item-content-wrapper" v-if="tabData?.items?.length" v-for="(item, key) in tabData.items" :key="key">
-          <div class="calc__tab-item-content" v-show="key === itemOpenId" v-for="(template, key_in) in item?.templates" :key="key_in">
-            <templates-wrapper
-              :template="template"
-              :index="elementName + '_' + key_in"
-              @changedValue="changeValue"
-              @changeValid="changeValid"
-            />
+    <div class="calc__tab-main-label" v-if="tabData?.label?.length">
+      {{ tabData.label }}
+    </div>
+    <div class="calc__tab-item-label-wrapper">
+      <template v-for="(item, key) in tabData?.items">
+        <div
+          class="calc__tab-item-label"
+          :class="{
+            isOpen: key === itemOpenId,
+            isError: checkIsShowError(key),
+          }"
+          v-if="item?.templates?.length"
+          :key="key"
+          @click="openItem(key)"
+        >
+          {{ item.label }}
+          <ui-prompt
+            v-if="item?.prompt?.length"
+            :prompt-text="item.prompt"
+          />
+          <ui-tooltip
+            :is-show="checkIsShowError(key)"
+            tooltip-text="Во вкладке есть не корректно заполненные поля."
+          ></ui-tooltip>
         </div>
+      </template>
+    </div>
+    <div
+      class="calc__tab-item-content-wrapper"
+      v-if="tabData?.items?.length"
+      v-for="(item, key) in tabData.items"
+      :key="key"
+    >
+      <div
+        class="calc__tab-item-content"
+        v-show="key === itemOpenId"
+        v-for="(template, key_in) in item?.templates"
+        :key="key_in"
+      >
+        <templates-wrapper
+          :template="template"
+          :index="elementName + '_' + key + '_' + key_in"
+          @changedValue="changeValue"
+          @changeValid="changeValid($event, key)"
+        />
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import UiTooltip from "@/components/UI/UiTooltip";
+import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "UiTab",
-  components: {TemplatesWrapper},
+  components: { TemplatesWrapper, UiTooltip, UiPrompt },
   emits: ["changedValue", "changeValid"],
+  inject: ["globalCanBeShownTooltip"],
   props: {
     tabData: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     elementName: {
       type: String,
@@ -37,44 +71,61 @@ export default {
     },
     classes: {
       type: String,
-      default: null
+      default: null,
     },
   },
   data() {
     return {
       itemOpenId: null,
+      errorsElements: {},
     };
   },
   methods: {
     openItem(index) {
       this.itemOpenId = this.itemOpenId !== index ? index : null;
     },
-    changeValue(data){
+    changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data) {
+    changeValid(data, key) {
+      if (!(key in this.errorsElements)) {
+        this.errorsElements[key] = new Set();
+      }
+      if (data.error) {
+        this.errorsElements[key].add(data.name);
+      } else {
+        if (this.errorsElements[key].has(data.name)) {
+          this.errorsElements[key].delete(data.name);
+        }
+      }
       this.$emit("changeValid", data);
-    }
+    },
+    checkIsShowError(key) {
+      return (
+        key !== this.itemOpenId &&
+        this.errorsElements[key]?.size &&
+        this.globalCanBeShownTooltip
+      );
+    },
   },
   computed: {
     showBlock() {
       let result = [];
       if (this.tabData?.items.length) {
-        result = this.tabData?.items.map(item => {
+        result = this.tabData?.items.map((item) => {
           if (item?.templates?.length) {
-            return Boolean(item.templates.length)
+            return Boolean(item.templates.length);
           }
           return false;
-        })
+        });
       }
-      return result.some(item => item);
-    }
+      return result.some((item) => item);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-
 //normal orange - FF5D2B
 //normal dark- 464657
 //hover orange - FF7044
@@ -142,6 +193,5 @@ $border-radius: 4px;
 }
 
 .calc {
-
 }
 </style>

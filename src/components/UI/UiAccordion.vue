@@ -1,31 +1,63 @@
 <template>
   <div class="calc__accordion-wrapper" :class="[classes]" v-if="showBlock">
-      <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">{{accordionData.label}}</div>
-      <div class="calc__accordion-item-label-wrapper" v-if="accordionData?.items?.length" v-for="(item, key) in accordionData.items" :key="key">
-        <div class="calc__accordion-item-label" @click="openItem(key)" :class="{isOpen: key === itemOpenId}">{{item.title}}</div>
-        <div class="calc__accordion-item-content" v-show="key === itemOpenId" v-for="(template, key_in) in item?.templates" :key="key_in">
-            <templates-wrapper
-              :template="template"
-              :index="elementName + '_' + key_in"
-              @changedValue="changeValue"
-              @changeValid="changeValid"
-            />
-        </div>
+    <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">
+      {{ accordionData.label }}
+    </div>
+    <div
+      class="calc__accordion-item-label-wrapper"
+      v-if="accordionData?.items?.length"
+      v-for="(item, key) in accordionData.items"
+      :key="key"
+    >
+      <div
+        class="calc__accordion-item-label"
+        @click="openItem(key)"
+        :class="{ isOpen: key === itemOpenId, isError: checkIsShowError(key) }"
+      >
+        <div class="calc__accordion-item-plus" v-if="key !== itemOpenId"></div>
+        <div class="calc__accordion-item-minus" v-if="key === itemOpenId"></div>
+        {{ item.label }}
+        <ui-prompt
+          v-if="item?.prompt?.length"
+          :prompt-text="item.prompt"
+        />
+        <ui-tooltip
+          :is-show="checkIsShowError(key)"
+          tooltip-text="Во вкладке есть не корректно заполненные поля."
+        ></ui-tooltip>
       </div>
+
+      <div
+        class="calc__accordion-item-content"
+        v-show="key === itemOpenId"
+        v-for="(template, key_in) in item?.templates"
+        :key="key_in"
+      >
+        <templates-wrapper
+          :template="template"
+          :index="elementName + '_' + key + '_' + key_in"
+          @changedValue="changeValue"
+          @changeValid="changeValid($event, key)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import UiTooltip from "@/components/UI/UiTooltip";
+import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "UiAccordion",
-  components: {TemplatesWrapper},
+  components: { TemplatesWrapper, UiTooltip, UiPrompt },
   emits: ["changedValue", "changeValid"],
+  inject: ["globalCanBeShownTooltip"],
   props: {
     accordionData: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     elementName: {
       type: String,
@@ -33,58 +65,61 @@ export default {
     },
     classes: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       itemOpenId: null,
-      errorsElements: new Set(),
+      errorsElements: {},
     };
   },
   methods: {
     openItem(index) {
       this.itemOpenId = this.itemOpenId !== index ? index : null;
     },
-    changeValue(data){
+    changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data) {
-      this.$emit("changeValid", data);
+    changeValid(data, key) {
+      if (!(key in this.errorsElements)) {
+        this.errorsElements[key] = new Set();
+      }
       if (data.error) {
-        this.errorsElements.add(data.name);
+        this.errorsElements[key].add(data.name);
       } else {
-        if (this.errorsElements.has(data.name)) {
-          this.errorsElements.delete(data.name);
+        if (this.errorsElements[key].has(data.name)) {
+          this.errorsElements[key].delete(data.name);
         }
       }
-    }
+      this.$emit("changeValid", data);
+    },
+    checkIsShowError(key) {
+      return (
+        key !== this.itemOpenId &&
+        this.errorsElements[key]?.size &&
+        this.globalCanBeShownTooltip
+      );
+    },
   },
   computed: {
     showBlock() {
       let result = [];
       if (this.accordionData?.items.length) {
-        result = this.accordionData?.items.map(item => {
+        result = this.accordionData?.items.map((item) => {
           if (item?.templates?.length) {
-            return Boolean(item.templates.length)
+            return Boolean(item.templates.length);
           }
           return false;
-        })
+        });
       }
-      return result.some(item => item);
-    }
+      return result.some((item) => item);
+    },
   },
-  isErrors() {
-    return Boolean(this.errorsElements.size)
-  },
-  showTooltip() {
-    return this.isErrors
-  }
 };
 </script>
 
 <style scoped lang="scss">
-
 //normal orange - FF5D2B
 //normal dark- 464657
 //hover orange - FF7044
@@ -152,6 +187,5 @@ $border-radius: 4px;
 }
 
 .calc {
-
 }
 </style>

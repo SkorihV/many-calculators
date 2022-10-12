@@ -1,5 +1,9 @@
 <template>
-  <transition name="tooltip-transition" v-cloak v-show="isShow && tooltipText && canBeShown">
+  <transition
+    name="tooltip-transition"
+    v-cloak
+    v-show="isShow && tooltipText && canBeShown"
+  >
     <div
       class="calc__tooltip calc__tooltip-wrapper"
       ref="tooltip"
@@ -13,6 +17,7 @@
 <script>
 export default {
   name: "UiTooltip",
+  inject: ["globalCanBeShownTooltip"],
   mounted() {
     this.checkPosition();
     window.addEventListener("resize", () => {
@@ -21,34 +26,42 @@ export default {
         this.checkPosition();
       }, 500);
     });
-    setTimeout(() => {
-      this.$el.classList.add("isFlex");
-    }, 1000);
+    // setTimeout(() => {
+    //   this.$el.classList.add("isFlex");
+    // }, 1000);
   },
   props: {
+    /**
+     * Текст ошибки
+     */
     tooltipText: {
       type: String,
       default: null,
     },
+    /**
+     * Динамический параметр зависит от наличия ошибок в компоненте
+     */
     isShow: {
       type: [Boolean, Number],
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    /**
+     *  Инициализирует возможность показа как таковую
+     *  параметр зависит не от наличия ошибок в компоненте, а от сторонних параметров.
+     */
     localCanBeShown: {
       type: Boolean,
-    }
+    },
   },
   data() {
     return {
       resizeTimer: null,
       classPosition: null,
       width: null,
-      canBeShown: false,
     };
   },
-  inject: ['globalCanBeShownTooltip'],
   methods: {
     checkPosition() {
       setTimeout(() => {
@@ -72,19 +85,17 @@ export default {
     },
   },
   watch: {
+    /**
+     * Обновить позицию подсказки после инициализации отображения
+     */
     isShow() {
       this.checkPosition();
     },
-    globalCanBeShownTooltip(newValue) {
-      if (newValue) {
-        this.canBeShown = true;
-      }
+  },
+  computed: {
+    canBeShown() {
+      return this.globalCanBeShownTooltip || this.localCanBeShown;
     },
-    localCanBeShown(newValue) {
-      if (newValue) {
-        this.canBeShown = true;
-      }
-    }
   },
 };
 </script>

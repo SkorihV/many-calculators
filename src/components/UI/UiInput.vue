@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__input-wrapper" :class="[{ 'is-stretch': isStretch }, classes]">
+  <div
+    class="calc__input-wrapper"
+    :class="[{ 'is-stretch': isStretch }, classes]"
+    v-if="isVisibilityFromDependency"
+  >
     <label
       :for="localElementName"
       class="calc__input-label"
@@ -47,28 +51,25 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
+import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
 
 export default {
   name: "UiInput",
   emits: ["changedValue", "changeValid"],
+  mixins: [MixinsForWorkersTemplates],
+  inject: ["globalDataForDependencies"],
   components: { UiTooltip },
   props: {
-    //данные для инпута
+    /**
+     * данные для инпута
+     */
     inputValue: {
       type: [Number, String],
       default: null,
     },
-    // имя необходимое для корректной работы Label
-    elementName: {
-      type: String,
-      default: null,
-    },
-    //заголовок
-    label: {
-      type: String,
-      default: null,
-    },
-    // единицы измерения
+    /**
+     * единицы измерения
+     */
     unit: {
       type: String,
     },
@@ -79,15 +80,9 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // максимальное значение в инпуте
-    max: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    // минимальное значение в инпуте
+    /**
+     * минимальное значение в инпуте
+     */
     min: {
       type: [Number, String],
       default: null,
@@ -95,31 +90,19 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // инпут не может быть пустым
-    notEmpty: {
-      type: [Boolean, Number],
-      default: false,
+    /**
+     * максимальное значение в инпуте
+     */
+    max: {
+      type: [Number, String],
+      default: null,
       validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
+        return !isNaN(Number(value));
       },
     },
-    // только числа
-    onlyNumber: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // только целые числа
-    onlyInteger: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // отобразить элементы управления
+    /**
+     * отобразить элементы управления
+     */
     controls: {
       type: [Boolean, Number],
       default: false,
@@ -127,7 +110,9 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // шаг при нажатии на + / -
+    /**
+     * шаг при нажатии на + / -
+     */
     step: {
       type: [Number, String],
       default: 1,
@@ -135,15 +120,9 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    //разделять сотни пробелами
-    isCurrency: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // отображать заголовок и инпут в колонку
+    /**
+     * отображать заголовок и инпут в колонку
+     */
     isColumn: {
       type: [Boolean, Number],
       default: false,
@@ -151,7 +130,55 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // растягивать обертку по ширине
+
+    /**
+     * только числа
+     */
+    onlyNumber: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    /**
+     * разделять сотни пробелами
+     */
+    isCurrency: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    /**
+     * только целые числа
+     */
+    onlyInteger: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+
+    /**
+     *     шаблон rex для ручной валидации
+     */
+    customErrorPattern: {
+      type: [RegExp, String],
+      default: null,
+    },
+
+    /**
+     *     текст для ошибки созданной в ручную
+     */
+    customErrorText: {
+      type: String,
+    },
+    /**
+     *     растягивать обертку по ширине
+     */
     isStretch: {
       type: [Boolean, Number],
       default: false,
@@ -159,36 +186,14 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // шаблон rex для ручной валидации
-
-    customErrorPattern: {
-      type: [RegExp, String],
-      default: null,
-    },
-    //текст для ошибки созданной в ручную
-    customErrorText: {
-      type: String,
-    },
-    // необходимо для принудительного вывода в результат формы, даже если цена не указана
-    notOnlyForCalculations: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    classes: {
-      type: String,
-      default: null
-    }
   },
   mounted() {
     if (!isNaN(parseFloat(this.localMin)) && this.localMin > this.inputValue) {
-      this.currentInputValue = this.min;
-      this.changeValue();
+      this.localInputValue = this.min;
+      this.changeValue("mounted");
     } else {
-      this.currentInputValue = this.inputValue;
-      this.changeValue();
+      this.localInputValue = this.inputValue;
+      this.changeValue("mounted");
     }
 
     if (this.isCurrency) {
@@ -204,27 +209,31 @@ export default {
   },
   data() {
     return {
-      currentInputValue: null,
+      localInputValue: null,
       nameTimer: null,
       fakeValueHidden: this.isCurrency,
       isInvalid: false,
-      canBeShownTooltip: false
+      canBeShownTooltip: false,
     };
   },
   methods: {
-    checkedValueOnVoid(value) {
-      return value?.length !== 0 && value !== undefined && value !== null;
-    },
     resultWitchNumberValid() {
       try {
         this.clearTimer();
+
+        if (
+          this.localInputValue?.toString().slice(-1) === "." ||
+          this.localInputValue?.toString().slice(0) === "-"
+        ) {
+          return this.localInputValue;
+        }
+
         if (this.isErrorNumber) {
           this.changeValueWitchTimer(this.localMin || 0);
           return null;
         }
 
         if (this.isErrorMin) {
-
           this.changeValueWitchTimer(this.localMin || 0);
         }
 
@@ -232,49 +241,45 @@ export default {
           this.changeValueWitchTimer(this.localMax);
         }
 
-        if (
-          this.currentInputValue?.toString().slice(-1) === "." ||
-          this.currentInputValue?.toString().slice(0) === "-"
-        ) {
-          return this.currentInputValue;
-        }
-
-        this.currentInputValue = parseFloat(this.currentInputValue);
+        this.localInputValue = parseFloat(this.localInputValue);
         if (this.valueIsNaN) {
-          this.currentInputValue = "";
+          this.localInputValue = "";
         }
 
         if (this.onlyInteger) {
-          this.currentInputValue = !isNaN(parseInt(this.currentInputValue))
-            ? parseInt(this.currentInputValue)
+          this.localInputValue = !isNaN(parseInt(this.localInputValue))
+            ? parseInt(this.localInputValue)
             : null;
         }
 
-        return this.currentInputValue;
+        return this.localInputValue;
       } catch (e) {
         console.error(e.message);
       }
     },
     tryChangeValueInput(e) {
-      this.currentInputValue = e.target.value;
+      this.localInputValue = e.target.value;
       this.changeValue();
       this.shownTooltip();
     },
-    changeValue() {
+    changeValue(eventType = "input") {
       this.$emit("changedValue", {
         value: this.resultValue,
         name: this.localElementName,
         type: "input",
         cost: this.resultSumm,
         label: this.label,
-        alwaysOutput: Boolean(this.notOnlyForCalculations),
+        formOutputMethod:
+          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        unit: this.unit,
+        eventType,
       });
-      this.checkValid();
+      this.changeValid();
     },
     changeValueWitchTimer(value) {
       this.nameTimer = setTimeout(() => {
-        this.currentInputValue = value;
-        this.changeValue();
+        this.localInputValue = value;
+        this.changeValue("timer");
         this.shownTooltip();
       }, 1500);
     },
@@ -284,7 +289,7 @@ export default {
     /**
      * возвращает общее состояние не валидности инпута
      */
-    checkValid() {
+    changeValid() {
       this.$nextTick(() => {
         this.isInvalid = [
           this.isErrorMin,
@@ -318,28 +323,35 @@ export default {
       }
     },
     plus() {
-      let value = parseFloat(this.currentInputValue) + this.localStep;
+      if (this.localInputValue === null || !this.localInputValue?.toString().length) {
+        this.localInputValue = 0;
+      }
+      let value = parseFloat(this.localInputValue) + this.localStep;
+
       if (this.checkedValueOnVoid(this.localMax)) {
         value = value <= this.localMax ? value : this.localMax;
       }
-      this.currentInputValue = value;
-      this.changeValue();
+      this.localInputValue = value;
+      this.changeValue("plus");
       this.shownTooltip();
     },
     minus() {
-      let value = parseFloat(this.currentInputValue) - this.localStep;
+      if (this.localInputValue === null || !this.localInputValue?.toString().length) {
+        this.localInputValue = 0;
+      }
+      let value = parseFloat(this.localInputValue) - this.localStep;
       if (this.checkedValueOnVoid(this.localMin)) {
         value = value >= this.localMin ? value : this.localMin;
       }
-      this.currentInputValue = value;
-      this.changeValue();
+      this.localInputValue = value;
+      this.changeValue("minus");
       this.shownTooltip();
     },
     shownTooltip() {
       if (!this.canBeShownTooltip) {
         this.canBeShownTooltip = true;
       }
-    }
+    },
   },
   watch: {
     /**
@@ -347,7 +359,7 @@ export default {
      *
      */
     inputValue(newValue) {
-      this.currentInputValue = newValue;
+      this.localInputValue = newValue;
       this.changeValue();
       this.shownTooltip();
     },
@@ -362,38 +374,40 @@ export default {
     localStep() {
       return this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
     },
-    localElementName () {
-      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+    localElementName() {
+      return this.checkedValueOnVoid(this.elementName)
+        ? this.elementName
+        : Math.random().toString();
     },
     resultSumm() {
       return this.onlyNumber && this.checkedValueOnVoid(this.cost)
-        ? this.cost * Math.abs(this.currentInputValue)
+        ? this.cost * Math.abs(this.localInputValue)
         : null;
     },
     resultValue() {
       if (this.onlyNumber) {
         return this.resultWitchNumberValid();
       } else {
-        return this.currentInputValue;
+        return this.localInputValue;
       }
     },
     resultValueDouble() {
-      return parseFloat(this.currentInputValue).toLocaleString("ru");
+      return parseFloat(this.localInputValue).toLocaleString("ru");
     },
     valueIsNaN() {
-      return isNaN(parseFloat(this.currentInputValue));
+      return isNaN(parseFloat(this.localInputValue));
     },
     isErrorNumber() {
       return (
         (this.onlyNumber || this.localMax !== null || this.localMin !== null) &&
-        isNaN(Number(this.currentInputValue))
+        isNaN(Number(this.localInputValue))
       );
     },
     errorNumberText() {
       return this.isErrorNumber ? "Только числа!" : null;
     },
     isErrorEmpty() {
-      return this.notEmpty && !this.currentInputValue?.toString().length;
+      return this.notEmpty && !this.localInputValue?.toString().length;
     },
     errorEmptyText() {
       return this.isErrorEmpty ? "Заполните поле!" : null;
@@ -402,13 +416,13 @@ export default {
       return (
         !this.valueIsNaN &&
         this.localMax !== null &&
-        parseFloat(this.currentInputValue) > parseFloat(this.localMax)
+        parseFloat(this.localInputValue) > parseFloat(this.localMax)
       );
     },
     errorMaxText() {
       return this.localMax !== null &&
         !this.valueIsNaN &&
-        parseFloat(this.currentInputValue) > parseFloat(this.localMax)
+        parseFloat(this.localInputValue) > parseFloat(this.localMax)
         ? `Максимальное значение ${this.localMax}`
         : null;
     },
@@ -417,19 +431,19 @@ export default {
       return (
         !this.valueIsNaN &&
         this.localMin !== null &&
-        parseFloat(this.currentInputValue) < parseFloat(this.localMin)
+        parseFloat(this.localInputValue) < parseFloat(this.localMin)
       );
     },
     errorMinText() {
       return this.localMin !== null &&
         !this.valueIsNaN &&
-        parseFloat(this.currentInputValue) < parseFloat(this.localMin)
+        parseFloat(this.localInputValue) < parseFloat(this.localMin)
         ? `Минимальное значение ${this.localMin}`
         : null;
     },
     isErrorCustom() {
       return this.customErrorPattern
-        ? this.currentInputValue?.toString().search(this.customErrorPattern) < 0
+        ? this.localInputValue?.toString().search(this.customErrorPattern) < 0
         : false;
     },
     customErrorTextOut() {

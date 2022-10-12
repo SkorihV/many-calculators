@@ -63,6 +63,7 @@
 <script>
 import UiInput from "@/components/UI/UiInput";
 import UiPrompt from "@/components/UI/UiPrompt";
+import { computed } from "vue";
 
 export default {
   name: "TheCleaningCalculator",
@@ -92,6 +93,11 @@ export default {
       this.accordions["work_" + idx]["summ"] = 0;
     });
   },
+  provide() {
+    return {
+      globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
+    };
+  },
   data() {
     return {
       outData: {},
@@ -99,6 +105,7 @@ export default {
       object_works: {},
       accordions: {},
       errorsInputs: new Set(),
+      shownAllTooltips: true,
     };
   },
   methods: {
@@ -137,9 +144,6 @@ export default {
   computed: {
     isData() {
       return Boolean(Object.keys(this.object_works).length);
-    },
-    validInputs() {
-      return !Boolean(this.errorsInputs.size);
     },
     resultSumm() {
       return Object.values(this.accordions).reduce((acc, item) => {

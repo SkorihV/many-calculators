@@ -3,6 +3,8 @@
     class="calc__select-wrapper"
     :class="[{ 'is-column': isColumn }, classes]"
     :style="[minWidthWrapper, maxWidthWrapper]"
+    v-if="isVisibilityFromDependency"
+
   >
     <div class="calc__select-label" v-if="label">
       {{ label }}<slot name="prompt"></slot>
@@ -34,21 +36,23 @@
           :key="idx"
         >
           <template v-if="currentIndexOption !== idx">
-          <div
-            v-if="option?.image?.filename"
-            class="calc__select-image-wrapper"
-          >
-            <img
-              :alt="option.selectName"
-              class="calc__select-image-item"
-              :src="imageDir + option.image.filename"
-            />
-          </div>
-            <div class="calc__select-option-item-text">{{ option.selectName }}</div>
-          <ui-prompt
-            v-if="option?.prompt?.length"
-            :prompt-text="option.prompt"
-          ></ui-prompt>
+            <div
+              v-if="option?.image?.filename"
+              class="calc__select-image-wrapper"
+            >
+              <img
+                :alt="option.selectName"
+                class="calc__select-image-item"
+                :src="imageDir + option.image.filename"
+              />
+            </div>
+            <div class="calc__select-option-item-text">
+              {{ option.selectName }}
+            </div>
+            <ui-prompt
+              v-if="option?.prompt?.length"
+              :prompt-text="option.prompt"
+            ></ui-prompt>
           </template>
         </div>
       </div>
@@ -60,22 +64,26 @@
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
+import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
 
 export default {
   name: "UiSelect",
-  components: { UiTooltip, UiPrompt },
   emits: ["changedValue", "changeValid"],
+  mixins: [MixinsForWorkersTemplates],
+  components: { UiTooltip, UiPrompt },
   mounted() {
     if (!this.isErrorEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
         if (this.currentIndexOption === null && this.selectValues.length) {
           this.currentIndexOption =
-            this.checkedValueOnVoid(this.selectedItem) && parseInt(this.selectedItem) < this.selectValues.length
+            this.checkedValueOnVoid(this.selectedItem) &&
+            parseInt(this.selectedItem) < this.selectValues.length
               ? parseInt(this.selectedItem)
               : this.selectValues.length - 1;
           this.changeSelect(
             this.selectValues[this.currentIndexOption],
-            this.currentIndexOption
+            this.currentIndexOption,
+            "mounted"
           );
           clearInterval(timer);
         }
@@ -94,17 +102,11 @@ export default {
     });
   },
   props: {
-    label: {
-      type: String,
-    },
     selectValues: {
       type: Array,
       default: () => [],
     },
-    elementName: {
-      type: String,
-      default: null,
-    },
+
     isColumn: {
       type: [Boolean, Number],
       default: false,
@@ -112,30 +114,10 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // По умолчанию не выбрано - нужно сделать выбор.
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // Выбор обязателен - будет выдавать ошибку
-    notEmpty: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    minWidth: {
-      type: [Number, String],
-      default: 200,
-    },
-    maxWidth: {
-      type: [Number, String],
-    },
-    // номер выбранного селекта
+
+    /**
+     * номер выбранного селекта
+     */
     selectedItem: {
       type: [Number, String],
       default: 0,
@@ -143,25 +125,43 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // необходимо для принудительного вывода в результат формы, даже если цена не указана
-    notOnlyForCalculations: {
+
+    /**
+     * По умолчанию не выбрано - нужно сделать выбор.
+     */
+    isNeedChoice: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    classes: {
+
+    /**
+     * метод вывода данных в результирующую форму
+     */
+    formOutputMethod: {
       type: String,
-      default: null
-    }
+      default: "no",
+    },
+
+    minWidth: {
+      type: [Number, String],
+      default: 200,
+    },
+    maxWidth: {
+      type: [Number, String],
+    },
   },
   data() {
     return {
       isOpen: false,
-      currentOption: {},
+      currentOption: {
+        selectName: "Не выбрано!"
+      },
       currentIndexOption: null,
       textErrorNotEmpty: "Обязательное поле.",
+      eventType: "click",
     };
   },
   methods: {
@@ -177,10 +177,26 @@ export default {
     close() {
       this.isOpen = false;
     },
-    changeSelect(item, idx) {
+    changeSelect(item, idx, eventType = "click") {
+      this.eventType = eventType;
       this.currentIndexOption = idx;
       this.currentOption = item;
       this.close();
+    },
+    changeValue() {
+      this.$emit("changedValue", {
+        value: this.currentOption,
+        index: this.currentIndexOption,
+        name: this.localElementName,
+        type: "select",
+        cost: this.checkedValueOnVoid(this.currentCost)
+          ? parseFloat(this.currentCost)
+          : 0,
+        label: this.label,
+        formOutputMethod:
+          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        eventType: this.eventType,
+      });
     },
     changeValid() {
       this.$emit("changeValid", {
@@ -193,23 +209,13 @@ export default {
   },
   watch: {
     currentOption() {
-      this.$emit("changedValue", {
-        value: this.currentOption,
-        index: this.currentIndexOption,
-        name: this.localElementName,
-        type: "select",
-        cost: this.currentCost,
-        label: this.label,
-        alwaysOutput: Boolean(this.notOnlyForCalculations),
-      });
+      this.changeValue();
       this.changeValid();
-    },
-    options() {
-      this.currentOption = this.selectValues[this.currentIndexOption];
     },
     selectedItem(newValue) {
       this.currentIndexOption =
-        this.checkedValueOnVoid(this.newValue) && parseInt(this.newValue) < this.selectValues.length
+        this.checkedValueOnVoid(this.newValue) &&
+        parseInt(this.newValue) < this.selectValues.length
           ? parseInt(this.newValue)
           : this.selectValues.length - 1;
       this.currentOption = this.selectValues[this.currentIndexOption];
@@ -217,7 +223,9 @@ export default {
   },
   computed: {
     localElementName() {
-      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+      return this.checkedValueOnVoid(this.elementName)
+        ? this.elementName
+        : Math.random().toString();
     },
     imageDir() {
       return window?.imageDir ? window.imageDir : "";

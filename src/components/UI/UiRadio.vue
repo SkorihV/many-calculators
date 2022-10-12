@@ -1,7 +1,12 @@
 <template>
   <div
     class="calc__radio-wrapper"
-    :class="[radioType, { column: isColumn, solid: isSolid, wrap: isWrap }, classes]"
+    v-if="isVisibilityFromDependency"
+    :class="[
+      radioType,
+      { column: isColumn, solid: isSolid, wrap: isWrap },
+      classes,
+    ]"
   >
     <div class="calc__radio-title" v-if="label">
       {{ label }} <slot name="prompt" />
@@ -13,7 +18,7 @@
         :id="localElementName + '_' + idx"
         :class="{ checked: idx === currentIndexRadioButton }"
         :key="idx"
-        @click="changeRadio(radio, idx)"
+        @click="selectedCurrentRadio(idx)"
       >
         <span class="calc__radio-indicator" v-if="radioType === 'base'"></span>
         <span class="calc__radio-text">{{ radio.radioName }}</span>
@@ -27,13 +32,14 @@
 <script>
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
+import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
 
 export default {
   name: "UiRadio",
   emits: ["changedValue", "changeValid"],
+  mixins: [MixinsForWorkersTemplates],
   components: { UiPrompt, UiTooltip },
   mounted() {
-
     this.localElementName = this.checkedValueOnVoid(this.elementName)
       ? this.elementName
       : Math.random().toString();
@@ -42,12 +48,12 @@ export default {
       let timer = setInterval(() => {
         if (this.radioValues.length) {
           this.currentIndexRadioButton =
-            this.checkedValueOnVoid(this.selectedItem) && parseInt(this.selectedItem) < this.radioValues.length
+            this.checkedValueOnVoid(this.selectedItem) &&
+            parseInt(this.selectedItem) < this.radioValues.length
               ? parseInt(this.selectedItem)
               : this.radioValues.length - 1;
-          this.changeRadio(
-            this.radioValues[this.currentIndexRadioButton],
-            this.currentIndexRadioButton
+          this.changeValue(
+            "mounted"
           );
           clearInterval(timer);
         }
@@ -65,38 +71,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    elementName: {
-      type: String,
-      default: null,
-    },
-    label: {
-      type: String,
-      default: null,
-    },
-    // стандартное отображение с кружками
-    typeBase: {
-      type: [Boolean, Number],
-      default: true,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // Радиокнопки отображаются без кружков
-    typeButton: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // способ отображения - указать текстом
-    // default - base
-    // 1) buttons
-    typeDisplayClass: {
-      type: String,
-      default: null,
-    },
-    // номер предвыборной кнопки
+    /**
+     * номер предвыборной кнопки
+     */
     selectedItem: {
       type: [Number, String],
       default: 0,
@@ -104,23 +81,10 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // По умолчанию не выбрано - нужно сделать выбор.
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // Выбор обязателен - будет выдавать ошибку
-    notEmpty: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // вертикальное положение кнопок
+
+    /**
+     *   вертикальное положение кнопок
+     */
     isColumn: {
       type: [Boolean, Number],
       default: false,
@@ -128,7 +92,38 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // в горизонтальном положении убрать пробелы между кнопками
+
+    /**
+     * По умолчанию не выбрано - нужно сделать выбор.
+     */
+    isNeedChoice: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+
+    /**
+     *  способ отображения - указать текстом
+     *  default - base
+     *  1) buttons
+     */
+    typeDisplayClass: {
+      type: String,
+      default: "base",
+    },
+
+    /**
+     * метод вывода данных в результирующую форму
+     */
+    formOutputMethod: {
+      type: String,
+      default: "no",
+    },
+    /**
+     * в горизонтальном положении убрать пробелы между кнопками
+     */
     isSolid: {
       type: [Boolean, Number],
       default: false,
@@ -136,7 +131,10 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // включить перенос для заголовка и кнопок
+
+    /**
+     * включить перенос для заголовка и кнопок
+     */
     isWrap: {
       type: [Boolean, Number],
       default: true,
@@ -144,18 +142,6 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // необходимо для принудительного вывода в результат формы, даже если цена не указана
-    notOnlyForCalculations: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    classes: {
-      type: String,
-      default: null
-    }
   },
   data() {
     return {
@@ -168,16 +154,26 @@ export default {
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
-    changeRadio(radio, index) {
-      this.currentIndexRadioButton = index;
+    selectedCurrentRadio(index) {
+      this.currentIndexRadioButton = parseInt(index);
+
+      this.changeValue();
+    },
+    changeValue(eventType = "click") {
+      const radio =  this.radioValues[this.currentIndexRadioButton];
       this.$emit("changedValue", {
         value: radio,
-        index,
+        index: this.currentIndexRadioButton,
         name: this.localElementName,
         type: "radio",
-        cost: this.checkedValueOnVoid(radio?.cost) ? parseFloat(radio.cost) : null,
+        cost: this.checkedValueOnVoid(radio?.cost)
+          ? parseFloat(radio.cost)
+          : 0,
         label: this.label,
-        alwaysOutput: Boolean(this.notOnlyForCalculations),
+        formOutputMethod:
+          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        eventType,
+        unit: this.unit,
       });
       this.changeValid();
     },
@@ -192,20 +188,17 @@ export default {
   },
   watch: {
     selectedItem(newValue) {
-      let index =
-        this.checkedValueOnVoid(newValue) && parseInt(newValue) < this.radioValues.length
+      this.currentIndexRadioButton =
+        this.checkedValueOnVoid(newValue) &&
+        parseInt(newValue) < this.radioValues.length
           ? parseInt(this.selectedItem)
           : this.radioValues.length - 1;
-      this.changeRadio(this.radioValues[index], index)
-    }
+      this.changeValue("selected");
+    },
   },
   computed: {
     radioType() {
-      if (this.typeDisplayClass) {
-        return this.typeDisplayClass;
-      }
-
-      return this.typeButton ? "buttons" : this.typeBase ? "base" : "base";
+      return this.typeDisplayClass?.length ? this.typeDisplayClass : 'base'
     },
     isErrorEmpty() {
       return this.notEmpty && this.currentIndexRadioButton === null;

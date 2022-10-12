@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__range-wrapper" :class="classes" v-if="rangeValue !== null">
+  <div class="calc__range-wrapper" :class="classes" v-if="rangeValue !== null && isVisibilityFromDependency">
     <div v-if="label" class="calc__range-label">
       {{ label }}<slot name="prompt"></slot>
       <div
@@ -16,7 +16,8 @@
           class="calc__range-current-dynamic"
           v-if="showDynamicValue"
           type="text"
-          v-model="localRangeValue"
+          @input="changeDynamicValue"
+          :value="localRangeValue"
         />
         <div class="calc__range-unit" v-if="unit">
           {{ unit }}
@@ -59,16 +60,14 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
+import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
 
 export default {
   name: "UiRange",
   emits: ["changedValue", "changeValid"],
+  mixins: [MixinsForWorkersTemplates],
   components: { UiTooltip },
   props: {
-    label: {
-      type: String,
-      default: null,
-    },
     rangeValue: {
       type: [Number, String],
       default: 0,
@@ -90,10 +89,6 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    unit: {
-      type: String,
-      default: null,
-    },
     cost: {
       type: [Number, String],
       default: null,
@@ -101,18 +96,13 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    elementName: {
+    unit: {
       type: String,
       default: null,
     },
-    //шаг на самом ползунке
+    /**
+     * размер шага в ползунке
+     */
     step: {
       type: [Number, String],
       default: 1,
@@ -120,7 +110,9 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    //отобразить шаги шкалы подсказок
+    /**
+     * отобразить ленту с шагами под ползунком
+     */
     showSteps: {
       type: [Boolean, Number],
       default: false,
@@ -128,22 +120,10 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    //Отобразить текущее значение статичное
-    showStaticValue: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    showDynamicValue: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // размер шага у шкалы с подсказками
+    /**
+     *
+     * Шаг деления в ленте
+     */
     stepPrompt: {
       type: [Number, String],
       default: 1,
@@ -151,24 +131,55 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // необходимо для принудительного вывода в результат формы, даже если цена не указана
-    notOnlyForCalculations: {
+
+    /**
+     * Убран предвыбор
+     */
+    isNeedChoice: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    classes: {
+
+    /**
+     *
+     *     Отобразить текущее значение статичное
+     */
+    showStaticValue: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+
+    /**
+     * отобразить динамичное значение
+     */
+    showDynamicValue: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+
+    /**
+     * метод вывода данных в результирующую форму
+     */
+    formOutputMethod: {
       type: String,
-      default: null
-    }
+      default: "no",
+    },
   },
   mounted() {
-    if (!this.isErrorEmpty) {
+    if (!this.isNeedChoice) {
       let timer = setInterval(() => {
         if (this.checkedValueOnVoid(this.rangeValue)) {
           this.localRangeValue = parseFloat(this.rangeValue);
+          this.changeValue("mounted");
           clearInterval(timer);
         }
       }, 100);
@@ -188,26 +199,29 @@ export default {
     };
   },
   methods: {
-    checkedValueOnVoid(value) {
-      return value?.length !== 0 && value !== undefined && value !== null;
-    },
     changeValueStep(step) {
-      this.changeValue(step);
+      this.localRangeValue = step;
+      this.changeValue();
       this.shownTooltip();
     },
     tryChangeValue(e) {
-      this.changeValue(e.target.value);
+      this.localRangeValue = e.target.value
+      this.changeValue();
       this.shownTooltip();
     },
-  changeValue(value) {
-      value = !isNaN(parseFloat(value)) ? parseFloat(value) : null;
+    changeDynamicValue(e) {
+      this.localRangeValue = e.target.value
+      this.changeValue();
+      this.shownTooltip();
+    },
+    changeValue(value, eventType = "input") {
+      value = !isNaN(parseFloat(this.localRangeValue)) ? parseFloat(this.localRangeValue) : null;
       if (value > this.localMax) {
         value = this.localMax;
       }
       if (value < this.localMin) {
         value = this.localMin;
       }
-
       this.localRangeValue = value;
       this.$emit("changedValue", {
         value: this.localRangeValue,
@@ -215,7 +229,10 @@ export default {
         type: "range",
         cost: this.resultSum,
         label: this.label,
-        alwaysOutput: Boolean(this.notOnlyForCalculations),
+        formOutputMethod:
+          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        eventType,
+        unit: this.unit,
       });
       this.changeValid();
     },
@@ -234,16 +251,6 @@ export default {
     },
   },
   watch: {
-    localRangeValue(newValue) {
-      if (!this.checkedValueOnVoid(newValue)) {
-        this.localRangeValue = null;
-        this.changeValue(this.localRangeValue)
-      } else {
-        this.localRangeValue = newValue;
-        this.changeValue(this.localRangeValue)
-      }
-      this.shownTooltip();
-    },
     /**
      * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
      * @param newValue
@@ -251,31 +258,35 @@ export default {
     rangeValue(newValue) {
       clearTimeout(this.updateValueTimer);
       this.updateValueTimer = setTimeout(() => {
-          this.localRangeValue = parseFloat(newValue);
+        this.localRangeValue = parseFloat(newValue);
       }, 1500);
     },
   },
   computed: {
-    localMin () {
+    localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
     },
-    localMax () {
+    localMax() {
       return this.checkedValueOnVoid(this.max) ? parseFloat(this.max) : 10;
     },
 
     localStep() {
       return this.checkedValueOnVoid(this.step) ? parseFloat(this.step) : 1;
-    } ,
+    },
 
     localStepPrompt() {
-      return this.checkedValueOnVoid(this.stepPrompt) ? parseFloat(this.stepPrompt): 1;
+      return this.checkedValueOnVoid(this.stepPrompt)
+        ? parseFloat(this.stepPrompt)
+        : 1;
     },
 
     localElementName() {
-     return this.checkedValueOnVoid(this.elementName) ? this.elementName: Math.random().toString();
+      return this.checkedValueOnVoid(this.elementName)
+        ? this.elementName
+        : Math.random().toString();
     },
     resultSum() {
-      return this.cost !== null
+      return this.checkedValueOnVoid(this.cost)
         ? this.cost * Math.abs(this.localRangeValue)
         : null;
     },
@@ -295,7 +306,7 @@ export default {
       return steps;
     },
     isErrorEmpty() {
-      return this.isNeedChoice && this.localRangeValue === null;
+      return this.notEmpty && this.localRangeValue === null;
     },
     isHidePromptSteps() {
       return (

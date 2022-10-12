@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__checkbox-wrapper" :class="classes">
+  <div
+    class="calc__checkbox-wrapper"
+    :class="classes"
+    v-if="isVisibilityFromDependency"
+  >
     <label :for="localElementName" class="calc__checkbox-label">
       <input
         ref="checkbox"
@@ -7,7 +11,7 @@
         type="checkbox"
         :checked="isChecked || localValue"
         :disabled="isChecked"
-        @input="changeValue($event.target.checked)"
+        @input="localValue = $event.target.checked"
         :name="label"
         :id="localElementName"
       />
@@ -29,25 +33,22 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
+import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
 
 export default {
   name: "UiCheckbox",
   emits: ["changedValue", "changeValid"],
+  mixins: [MixinsForWorkersTemplates],
   components: { UiTooltip },
   props: {
-    label: {
-      type: String,
-      default: "",
-    },
     labelSecond: {
       type: String,
       default: "",
     },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    //Начальное значение
+
+    /**
+     *     Начальное значение
+     */
     checkboxValue: {
       type: [Boolean, Number],
       default: false,
@@ -62,47 +63,10 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    // отображать в виде горизонтального переключателя
-    typeSwitcher: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // отображать в виде вертикального переключателя
-    typeSwitcherVertical: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // отображать в виде кнопки
-    typeButton: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    // альтернативный способ смены вида чекбокас - текстом
-    // default - base
-    // switcher - горизонтальный переключатель
-    // switcher-vertical - вертикальный переключатель
-    // button - кнопка
-    typeDisplayClass: {
-      type: String,
-      default: null,
-    },
-    // Всегда включена. Отключить нельзя
-    isChecked: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
+
+    /**
+     * По умолчанию не выбрано - нужно сделать выбор.
+     */
     isNeedChoice: {
       type: [Boolean, Number],
       default: false,
@@ -110,25 +74,43 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    // необходимо для принудительного вывода в результат формы, даже если цена не указана
-    notOnlyForCalculations: {
+    /**
+     *     Всегда включена. Отключить нельзя
+     */
+    isChecked: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    classes: {
+
+    /**
+     *  альтернативный способ смены вида чекбокас - текстом
+     *  default - base
+     *  switcher - горизонтальный переключатель
+     *  switcher-vertical - вертикальный переключатель
+     *  button - кнопка
+     */
+    typeDisplayClass: {
       type: String,
-      default: null
-    }
+      default: "base",
+    },
+
+    /**
+     * метод вывода данных в результирующую форму
+     */
+    formOutputMethod: {
+      type: String,
+      default: "no",
+    },
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
     if (this.isChecked) {
       this.localValue = true;
     }
-    this.changeValue(this.localValue);
+    this.changeValue("mounted");
   },
   data() {
     return {
@@ -140,15 +122,16 @@ export default {
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
-    changeValue(checked) {
-      this.localValue = checked;
+    changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: checked,
+        value: this.localValue,
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
-        cost: checked ? this.localCost : null,
-        alwaysOutput: Boolean(this.notOnlyForCalculations),
+        cost: this.localValue ? this.cost : null,
+        formOutputMethod:
+          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        eventType,
       });
       this.changeValid();
     },
@@ -165,27 +148,16 @@ export default {
     checkboxValue(newValue) {
       this.localValue = Boolean(newValue);
       this.changeValid();
-    }
+    },
   },
   computed: {
-    localCost() {
-      return this.checkedValueOnVoid(this.cost) ? Number(this.cost) : null;
-    },
     localElementName() {
-      return this.checkedValueOnVoid(this.elementName) ? this.elementName : Math.random().toString();
+      return this.checkedValueOnVoid(this.elementName)
+        ? this.elementName
+        : Math.random().toString();
     },
     checkboxType() {
-      if (this.typeDisplayClass) {
-        return this.typeDisplayClass;
-      }
-
-      return this.typeSwitcher
-        ? "switcher"
-        : this.typeSwitcherVertical
-        ? "switcher-vertical"
-        : this.typeButton
-        ? "button"
-        : "base";
+      return this.typeDisplayClass ? this.typeDisplayClass : "base";
     },
     isErrorEmpty() {
       return this.isNeedChoice && !this.localValue;

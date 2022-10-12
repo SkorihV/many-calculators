@@ -1,5 +1,6 @@
 <template>
   <div
+    @click.stop
     class="calc__prompt-wrapper"
     @mouseleave="hidden"
     v-if="hiddenPromptWrapper"

@@ -437,7 +437,7 @@ $border-radius: 4px;
       }
       &-item {
         background-color: white;
-        justify-content: flex-start;
+        @include style-flex-start;
         gap: 5px;
         text-align: start;
         &-text {
@@ -511,7 +511,7 @@ $border-radius: 4px;
         display: flex;
         justify-content: flex-end;
         flex-wrap: wrap;
-        flex: 1 1 auto;
+        flex: 0 1 auto;
       }
     }
     &-title {
@@ -811,7 +811,7 @@ $border-radius: 4px;
   // tooltip
   &__tooltip {
     &-wrapper {
-      display: none;
+      display: flex;
       position: absolute;
       background-color: $color-gray-middle;
       @include style-border;
@@ -937,19 +937,18 @@ $border-radius: 4px;
     }
   }
 
-
-//---------------аккордеон----------------
+  //---------------аккордеон----------------
   &__accordion {
     &-main-label {
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 10px;
-
     }
     &-wrapper {
       @include style-flex-start;
       align-items: start;
       flex-direction: column;
+      width: 100%;
     }
     &-item {
       &-label {
@@ -958,11 +957,17 @@ $border-radius: 4px;
         border-radius: 0;
         padding: 10px;
         width: 100%;
+        margin-bottom: 5px;
+        position: relative;
+        gap: 5px;
         &:hover {
           @include style-button-hover;
         }
         &.isOpen {
           background-color: $color-orange-normal;
+        }
+        &.isError {
+          background-color: $color-danger;
         }
         &-wrapper {
           @include style-flex-start;
@@ -974,7 +979,36 @@ $border-radius: 4px;
       &-content {
         width: 100%;
       }
+      &-plus,
+      &-minus {
+        position: relative;
+        width: 30px;
+        height: 30px;
+      }
+      &-plus:before,
+      &-minus:before {
+        width: 30px;
+        height: 30px;
+        color: #ffffff;
+        font-size: 30px;
+        position: absolute;
+        border: 1px solid #ffffff;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
+      &-plus:before {
+        content: "+";
+      }
+
+      &-minus:before {
+        content: "-";
+      }
     }
   }
 
@@ -984,12 +1018,13 @@ $border-radius: 4px;
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 10px;
-
+      width: 100%;
     }
     &-wrapper {
       @include style-flex-start;
       align-items: start;
       flex-direction: column;
+      width: 100%;
     }
     &-item {
       &-label {
@@ -997,11 +1032,16 @@ $border-radius: 4px;
         @include style-flex-start;
         border-radius: 0;
         padding: 10px;
+        margin-bottom: 5px;
+        position: relative;
         &:hover {
           @include style-button-hover;
         }
         &.isOpen {
           background-color: $color-orange-normal;
+        }
+        &.isError {
+          background-color: $color-danger;
         }
         &-wrapper {
           @include style-flex-start;
@@ -1009,10 +1049,56 @@ $border-radius: 4px;
           width: 100%;
         }
       }
+      &-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
       &-content {
         @include style-flex-start;
         width: 100%;
       }
+    }
+  }
+
+  &__bisection {
+    &-label {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $color-dark-normal;
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+    &-content-wrapper {
+      display: flex;
+      width: 100%;
+      gap: 15px;
+      @media all and (max-width: 768px) {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+    &-left-side-wrapper,
+    &-right-side-wrapper {
+      flex: 1 1 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &-left-label,
+    &-right-label {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $color-dark-normal;
     }
   }
 }

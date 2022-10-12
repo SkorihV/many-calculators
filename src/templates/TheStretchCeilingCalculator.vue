@@ -121,6 +121,7 @@
 import UiSelect from "@/components/UI/UiSelect";
 import UiInput from "@/components/UI/UiInput";
 import UiPrompt from "@/components/UI/UiPrompt";
+import { computed } from "vue";
 
 export default {
   name: "TheStretchCeilingCalculator",
@@ -150,6 +151,11 @@ export default {
       : [];
     this.imageDir = window?.imageDir || "";
   },
+  provide() {
+    return {
+      globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
+    };
+  },
   data() {
     return {
       imageDir: "",
@@ -161,6 +167,7 @@ export default {
       optionsIsOpen: false,
       errorsInputs: new Set(),
       square: 0,
+      shownAllTooltips: true,
     };
   },
   methods: {

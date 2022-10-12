@@ -83,7 +83,6 @@
               @changedValue="changeDownPaymentPercentage"
               :min="outData?.payment_percentage?.min"
               :max="outData?.payment_percentage?.max"
-
               show-steps
               :step-prompt="outData?.payment_percentage?.steps"
             />
@@ -133,9 +132,10 @@
                 label="Аннуитетный"
                 label-second="Дифференцированный"
                 element-name="toggleTypeComputed"
-                type-switcher
+                type-display-class="switcher"
                 :checkboxValue="showDifferentiatedPayment"
                 @changedValue="changeCheckbox"
+                @change-valid="changeValid"
               />
             </div>
           </div>
@@ -224,6 +224,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import TheBanks from "@/components/creditCalculatorComponents/TheBanks";
 import UiInput from "@/components/UI/UiInput";
 import UiRange from "@/components/UI/UiRange";
@@ -297,6 +298,11 @@ export default {
       this.selectCurrentBank(this.banks[0]);
     }
   },
+  provide() {
+    return {
+      globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
+    };
+  },
   data() {
     return {
       /**
@@ -350,12 +356,12 @@ export default {
       isHandlerRate: false, // ручная годовая ставка
       banks: [],
       typeCalculate: "Both", //варианты доступных расчетов  А - аннуитет. D -дифференцированный
-
+      shownAllTooltips: true,
       /**
        * данные высчитывающиеся на лету
        */
       currenSelectedBank: {}, // выбранный банк из списка
-      errorsInputs: new Set(), // список ошибок инпутов
+      errorsElements: new Set(), // список ошибок инпутов
       typeTimes: [],
       showDifferentiatedPayment: false,
       currentTypeTime: {}, // текущие единицы времени для расчета год или месяц
@@ -368,10 +374,10 @@ export default {
      * @param bank
      */
     selectCurrentBank(bank) {
-      this.changeCurrentRateOnHandler( { value: bank.interestRate});
+      this.changeCurrentRateOnHandler({ value: bank.interestRate });
       setTimeout(() => {
         this.currenSelectedBank = bank ? bank : null;
-      },10)
+      }, 10);
     },
     /**
      * изменить годовую ставку в ручную
@@ -433,10 +439,12 @@ export default {
      */
     changeValid({ error, name }) {
       if (error) {
-        this.errorsInputs.add(name);
+        this.errorsElements.add(name);
       } else {
-        if (this.errorsInputs.has(name)) this.errorsInputs.delete(name);
+        if (this.errorsElements.has(name)) this.errorsElements.delete(name);
       }
+
+      this.checkEnabledResultButton();
     },
     /**
      * Округлить дробное число
@@ -464,6 +472,14 @@ export default {
     changeCheckbox({ value: checkbox }) {
       this.showDifferentiatedPayment = checkbox;
     },
+    /*
+    Разрешаем отправку формы
+     */
+    checkEnabledResultButton() {
+      if (this.submitSend !== null && this.submitSend !== undefined) {
+        this.submitSend.disabled = Boolean(this.errorsElements.size);
+      }
+    },
   },
   watch: {
     propertyPrice() {
@@ -485,6 +501,9 @@ export default {
     },
   },
   computed: {
+    submitSend() {
+      return document.querySelector("#send-result");
+    },
     timeFroSelect() {
       let t1 = parseInt(this.creditTermYear) % 10;
       let t2 = parseInt(this.creditTermYear) % 100;
@@ -493,8 +512,8 @@ export default {
         t1 === 1 && t2 !== 11
           ? "Год"
           : t1 >= 2 && t1 <= 4 && (t2 < 10 || t2 >= 20)
-            ? "Года"
-            : "Лет";
+          ? "Года"
+          : "Лет";
 
       return [
         {
@@ -595,13 +614,18 @@ export default {
      * @returns {boolean}
      */
     isInvalid() {
-      return Boolean(this.errorsInputs.size);
+      return Boolean(this.errorsElements.size);
     },
     resultForOut() {
-      let currentTerm = this.currentTypeTime.value === 'year' ? this.creditTermYear : this.creditTermMonth;
-     let textForBank = this.currenSelectedBank ?  "Банк: " +  this.currenSelectedBank?.title : ""
+      let currentTerm =
+        this.currentTypeTime.value === "year"
+          ? this.creditTermYear
+          : this.creditTermMonth;
+      let textForBank = this.currenSelectedBank
+        ? "Банк: " + this.currenSelectedBank?.title
+        : "";
       return (
-        textForBank  +
+        textForBank +
         "\n Ставка: " +
         this.currentInterestRate +
         "\n Сумма кредита: " +
@@ -611,7 +635,7 @@ export default {
         "\n Первоначальный взнос: " +
         this.downPaymentCurrency +
         "\n Срок кредита: " +
-         + currentTerm +
+        +currentTerm +
         " " +
         this.currentTypeTime.selectName +
         "\n Начисленные проценты:" +

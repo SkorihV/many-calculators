@@ -8,7 +8,7 @@
             :radio-values="buildingData?.buildingTypes"
             @changed-value="changeCurrentType"
             :label="buildingData?.label"
-            type-button
+            type-display-class="buttons"
             element-name="buildersType"
             is-wrap
             is-solid
@@ -61,7 +61,7 @@
             :radio-values="materialsSide?.materials"
             @changed-value="changeCurrentMaterial"
             is-solid
-            type-button
+            type-display-class="buttons"
           >
             <template #prompt>
               <ui-prompt :prompt-text="materialsSide?.prompt" />
@@ -91,7 +91,7 @@
             :checkbox-value="attic?.value"
             :label="attic?.label"
             @changed-value="changeAttic"
-            type-button
+            type-display-class="button"
           >
             <template #prompt>
               <ui-prompt :prompt-text="attic?.prompt" />
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import UiRadio from "@/components/UI/UiRadio";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiRange from "@/components/UI/UiRange";
@@ -139,6 +140,11 @@ export default {
     this.attic = this.outData?.attic ? this.outData.attic : {};
     this.attic.value = false;
   },
+  provide() {
+    return {
+      globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
+    };
+  },
   data() {
     return {
       outData: {},
@@ -151,6 +157,7 @@ export default {
       currentType: null,
       currentMaterial: null,
       currentFloor: null,
+      shownAllTooltips: false,
     };
   },
   methods: {
