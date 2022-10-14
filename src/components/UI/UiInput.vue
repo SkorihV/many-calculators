@@ -1,51 +1,52 @@
 <template>
-  <div
-    class="calc__input-wrapper"
-    :class="[{ 'is-stretch': isStretch }, classes]"
-    v-if="isVisibilityFromDependency"
-  >
-    <label
-      :for="localElementName"
-      class="calc__input-label"
-      :class="{ 'is-column': isColumn }"
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+    <div
+      class="calc__input-wrapper"
+      :class="[{ 'is-stretch': isStretch }, classes]"
     >
-      <div v-if="label" class="calc__input-label-text">
-        {{ label }}<slot name="prompt" />
-      </div>
-      <div class="calc__input-wrapper-data">
-        <input
-          ref="trueInput"
-          :id="localElementName"
-          type="text"
-          :value="resultValue"
-          @input="tryChangeValueInput"
-          @keydown.enter="trueTrueValue"
-          class="calc__input-item"
-          autocomplete="off"
-          v-if="!fakeValueHidden"
-        />
-        <template v-if="isCurrency">
-          <input
-            @click="showTrueValue"
-            type="text"
-            :value="resultValueDouble"
-            class="calc__input-item currency"
-            autocomplete="off"
-            v-show="fakeValueHidden"
-          />
-        </template>
-        <div v-if="controls" class="calc__input-buttons-wrapper">
-          <div class="calc__input-buttons-plus" @click="plus">+</div>
-          <div class="calc__input-buttons-minus" @click="minus">-</div>
+      <label
+        :for="localElementName"
+        class="calc__input-label"
+        :class="{ 'is-column': isColumn }"
+      >
+        <div v-if="label" class="calc__input-label-text">
+          {{ label }}<slot name="prompt" />
         </div>
-        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
-      </div>
-      <ui-tooltip
-        :is-show="tooltipError.error"
-        :tooltip-text="tooltipError.errorText"
-        :local-can-be-shown="canBeShownTooltip"
-      />
-    </label>
+        <div class="calc__input-wrapper-data">
+          <input
+            ref="trueInput"
+            :id="localElementName"
+            type="text"
+            :value="resultValue"
+            @input="tryChangeValueInput"
+            @keydown.enter="trueTrueValue"
+            class="calc__input-item"
+            autocomplete="off"
+            v-if="!fakeValueHidden"
+          />
+          <template v-if="isCurrency">
+            <input
+              @click="showTrueValue"
+              type="text"
+              :value="resultValueDouble"
+              class="calc__input-item currency"
+              autocomplete="off"
+              v-show="fakeValueHidden"
+            />
+          </template>
+          <div v-if="controls" class="calc__input-buttons-wrapper">
+            <div class="calc__input-buttons-plus" @click="plus">+</div>
+            <div class="calc__input-buttons-minus" @click="minus">-</div>
+          </div>
+          <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+        </div>
+        <ui-tooltip
+          :is-show="tooltipError.error"
+          :tooltip-text="tooltipError.errorText"
+          :local-can-be-shown="localCanBeShownTooltip"
+        />
+      </label>
+    </div>
   </div>
 </template>
 
@@ -57,7 +58,7 @@ export default {
   name: "UiInput",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForWorkersTemplates],
-  inject: ["globalDataForDependencies"],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     /**
@@ -79,6 +80,13 @@ export default {
       validator(value) {
         return !isNaN(Number(value));
       },
+    },
+    /**
+     * Список цен с зависимостями / условиями
+     */
+    dependencyPrices: {
+      type: Array,
+      default: () => [],
     },
     /**
      * минимальное значение в инпуте
@@ -274,7 +282,9 @@ export default {
         unit: this.unit,
         eventType,
       });
-      this.changeValid();
+      if (eventType !== "delete" || eventType !== "mounted") {
+        this.changeValid(eventType);
+      }
     },
     changeValueWitchTimer(value) {
       this.nameTimer = setTimeout(() => {
@@ -289,7 +299,7 @@ export default {
     /**
      * возвращает общее состояние не валидности инпута
      */
-    changeValid() {
+    changeValid(eventType) {
       this.$nextTick(() => {
         this.isInvalid = [
           this.isErrorMin,
@@ -303,6 +313,7 @@ export default {
           name: this.localElementName,
           type: "input",
           label: this.label,
+          eventType,
         });
       });
     },
@@ -323,7 +334,10 @@ export default {
       }
     },
     plus() {
-      if (this.localInputValue === null || !this.localInputValue?.toString().length) {
+      if (
+        this.localInputValue === null ||
+        !this.localInputValue?.toString().length
+      ) {
         this.localInputValue = 0;
       }
       let value = parseFloat(this.localInputValue) + this.localStep;
@@ -336,7 +350,10 @@ export default {
       this.shownTooltip();
     },
     minus() {
-      if (this.localInputValue === null || !this.localInputValue?.toString().length) {
+      if (
+        this.localInputValue === null ||
+        !this.localInputValue?.toString().length
+      ) {
         this.localInputValue = 0;
       }
       let value = parseFloat(this.localInputValue) - this.localStep;
@@ -354,14 +371,19 @@ export default {
     },
   },
   watch: {
-    /**
-     * после изменения содержимого инпута происходит общая проверка валидности
-     *
-     */
-    inputValue(newValue) {
-      this.localInputValue = newValue;
-      this.changeValue();
-      this.shownTooltip();
+    // /**
+    //  * после изменения содержимого инпута происходит общая проверка валидности
+    //  *
+    //  */
+    // localValue(newValue) {
+    //   this.localInputValue = newValue;
+    //   this.changeValue();
+    //   this.shownTooltip();
+    // },
+    globalCanBeShownTooltip() {
+      if (this.isVisibilityFromDependency) {
+        this.changeValid("global");
+      }
     },
   },
   computed: {
@@ -380,8 +402,8 @@ export default {
         : Math.random().toString();
     },
     resultSumm() {
-      return this.onlyNumber && this.checkedValueOnVoid(this.cost)
-        ? this.cost * Math.abs(this.localInputValue)
+      return this.onlyNumber && this.checkedValueOnVoid(this.localCost)
+        ? this.localCost * Math.abs(this.localInputValue)
         : null;
     },
     resultValue() {
@@ -466,6 +488,47 @@ export default {
       } else {
         return false;
       }
+    },
+    localCanBeShownTooltip() {
+      return this.canBeShownTooltip && this.isVisibilityFromDependency;
+    },
+
+    /**
+     * Существует список цен с зависимостями
+     * @returns {boolean}
+     */
+    isDependencyPriceExist() {
+      return Boolean(
+        this.dependencyPrices?.filter(
+          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+        )
+      );
+    },
+    /**
+     * Иницаилизировать проверку условий зависимых цен
+     *
+     * @returns {boolean}
+     */
+    initProcessingDependencyPrice() {
+      return this.isDependencyPriceExist && this.isDependencyNameExist;
+    },
+
+    /**
+     * Возвращает цену подходящую условию
+     * Если не одна цена не подходит, то возвращается стандартная
+     * @returns {Number|String|*}
+     */
+    localCost() {
+      if (this.initProcessingDependencyPrice) {
+        let newCost = this.costAfterProcessingDependencyPrice(
+          this.dependencyPrices
+        );
+        if (newCost !== null) {
+          return newCost;
+        }
+        return this.cost;
+      }
+      return this.cost;
     },
   },
 };

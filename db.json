@@ -1,4 +1,327 @@
 {
+  "test-dependency": {
+    "calculatorTemplates": [
+      {
+        "title": "Input Зависимости 1 уровень",
+        "label": "Input Зависимости 1 уровень",
+        "value": "1",
+        "cost": "10",
+        "unit": "",
+        "min": "",
+        "max": "",
+        "controls": true,
+        "step": "1",
+        "isColumn": false,
+        "notEmpty": false,
+        "onlyNumber": 1,
+        "isCurrency": false,
+        "onlyInteger": false,
+        "formOutputMethod": "valueSumm",
+        "elementName": "Inputlvl1",
+        "dependencyName": "",
+        "dependencyFormulaDisplay": "",
+        "customErrorPattern": "",
+        "customErrorText": "",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": null
+      },
+      {
+        "title": "checkbox - Зависимости уровень 2",
+        "label": "checkbox - Зависимости уровень 2",
+        "labelSecond": "",
+        "value": false,
+        "cost": "50",
+        "isNeedChoice": false,
+        "isChecked": false,
+        "typeDisplayClass": "",
+        "formOutputMethod": "valueSumm",
+        "elementName": "checklvl2",
+        "dependencyName": "Inputlvl1",
+        "dependencyFormulaDisplay": "( Inputlvl1 >= 80 &amp;&amp; Inputlvl1 <= 350 ) || Inputlvl1 === 50",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": [
+          {
+            "cost": 100,
+            "enabledFormula": 1,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 99",
+            "title": "100"
+          },
+          {
+            "cost": 200,
+            "enabledFormula": 1,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 199",
+            "title": "200"
+          },
+          {
+            "cost": 300,
+            "enabledFormula": 1,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 299",
+            "title": "300"
+          }
+        ]
+      },
+      {
+        "title": "Input с зависимостью для цены",
+        "label": "Input с зависимостью для цены",
+        "value": "10",
+        "cost": "100",
+        "unit": "",
+        "min": "",
+        "max": "",
+        "controls": true,
+        "step": "1",
+        "isColumn": false,
+        "notEmpty": false,
+        "onlyNumber": 1,
+        "isCurrency": false,
+        "onlyInteger": false,
+        "formOutputMethod": "valueSumm",
+        "elementName": "",
+        "dependencyName": "Inputlvl1",
+        "dependencyFormulaDisplay": "",
+        "customErrorPattern": "",
+        "customErrorText": "",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": [
+          {
+            "title": "200",
+            "enabledFormula": 1,
+            "cost": 200,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 100 &amp;&amp; Inputlvl1 &lt; 200"
+          },
+          {
+            "title": "300",
+            "enabledFormula": 1,
+            "cost": 300,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 200 &amp;&amp; Inputlvl1 &lt; 300"
+          },
+          {
+            "title": "400",
+            "enabledFormula": 1,
+            "cost": 400,
+            "dependencyFormulaCost": "Inputlvl1 &gt; 300 &amp;&amp; Inputlvl1 &lt; 400"
+          },
+          {
+            "title": "400",
+            "enabledFormula": 1,
+            "cost": 0,
+            "dependencyFormulaCost": "Inputlvl1 > 400"
+          }
+        ]
+      },
+      {
+        "title": "Зависимость цены range от галочки",
+        "label": "Зависимость цены от галочки",
+        "value": "0",
+        "min": "0",
+        "max": "100",
+        "cost": "500",
+        "unit": "",
+        "step": "1",
+        "showSteps": 1,
+        "stepPrompt": "10",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "showStaticValue": 1,
+        "showDynamicValue": 1,
+        "formOutputMethod": "summ",
+        "elementName": "range2",
+        "dependencyName": "checklvl2",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRange",
+        "dependencyPrices": [
+          {
+            "title": "1000",
+            "enabledFormula": 1,
+            "cost": 1000,
+            "dependencyFormulaCost": "checklvl2 === true"
+          }
+        ]
+      },
+      {
+        "title": "Зависимость radio",
+        "label": "radio Зависимость цены",
+        "selectedItem": "0",
+        "isColumn": false,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "buttons",
+        "formOutputMethod": "valueSumm",
+        "elementName": "radio1",
+        "dependencyName": "Inputlvl1",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "значение 1",
+            "radioName": "значение 1",
+            "cost": 100,
+            "dependencyPrices": [
+              {
+                "title": "200",
+                "enabledFormula": 1,
+                "cost": 200,
+                "dependencyFormulaCost": "Inputlvl1 &gt; 99"
+              },
+              {
+                "title": "300",
+                "enabledFormula": 1,
+                "cost": 300,
+                "dependencyFormulaCost": "Inputlvl1 &gt; 199"
+              }
+            ]
+          },
+          {
+            "title": "Значение 2",
+            "radioName": "Значение 2",
+            "cost": 55,
+            "dependencyPrices": [
+              {
+                "title": "66",
+                "enabledFormula": 1,
+                "cost": 66,
+                "dependencyFormulaCost": "Inputlvl1 &gt; 99"
+              },
+              {
+                "title": "77",
+                "enabledFormula": 1,
+                "cost": 77,
+                "dependencyFormulaCost": "Inputlvl1 &gt; 199"
+              }
+            ]
+          },
+          {
+            "title": "значение 3",
+            "radioName": "значение 3",
+            "cost": ""
+          }
+        ]
+      },
+      {
+        "title": "Зависимости select",
+        "label": "Зависимость от выбранного радио пункта",
+        "isColumn": false,
+        "selectedItem": "0",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "formOutputMethod": "valueSumm",
+        "elementName": "",
+        "dependencyName": "radio1",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Пункт первый",
+            "selectName": "Пункт первый",
+            "cost": 100,
+            "dependencyPrices": [
+              {
+                "title": "200",
+                "enabledFormula": 1,
+                "cost": 200,
+                "dependencyFormulaCost": "   radio1    ===    '  значение 1  '"
+              },
+              {
+                "title": "300",
+                "enabledFormula": 1,
+                "cost": 300,
+                "dependencyFormulaCost": "radio1 === 'Значение 2'"
+              }
+            ]
+          },
+          {
+            "title": "Пункта второй",
+            "selectName": "Пункта второй",
+            "cost": 99,
+            "dependencyPrices": [
+              {
+                "title": "55",
+                "enabledFormula": 1,
+                "cost": 55,
+                "dependencyFormulaCost": "(radio1 === 'значение 1') || radio1 > 33"
+              },
+              {
+                "title": "888",
+                "enabledFormula": 1,
+                "cost": 888,
+                "dependencyFormulaCost": "radio1 === 'Значение 2'"
+              }
+            ]
+          },
+          {
+            "title": "Третий пункт для скрытия",
+            "selectName": "Третий пункт для скрытия",
+            "cost": 155,
+            "enabledProcessingDependency": 1,
+            "dependencyFormulaItem": "radio1 !== 'значение 3'"
+          }
+        ]
+      },
+      {
+        "title": "Зависимость от ползунка Radio",
+        "label": "Зависимость от ползунка Radio",
+        "selectedItem": "0",
+        "isColumn": false,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "",
+        "formOutputMethod": "valueSumm",
+        "elementName": "",
+        "dependencyName": "range2",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "Пункт дефолтный есть всегда",
+            "radioName": "Пункт дефолтный есть всегда  без цены"
+          },
+          {
+            "title": "Пункт два",
+            "radioName": "Пункт два условие больше 30",
+            "cost": 150,
+            "enabledProcessingDependency": 1,
+            "dependencyFormulaItem": "range2 &gt; 30",
+            "dependencyPrices": [
+              {
+                "title": "300",
+                "enabledFormula": 1,
+                "cost": 300,
+                "dependencyFormulaCost": "range2 &gt; 35"
+              },
+              {
+                "title": "400",
+                "enabledFormula": 1,
+                "cost": 400,
+                "dependencyFormulaCost": "range2 &gt; 40"
+              }
+            ]
+          },
+          {
+            "title": "Пункт 3",
+            "radioName": "условие между 30 и 50",
+            "cost": 300,
+            "enabledProcessingDependency": 1,
+            "dependencyFormulaItem": "range2 > 30 &amp;&amp; range2 < 50"
+          },
+          {
+            "title": "пункт 4",
+            "radioName": "условие меньше 50",
+            "cost": 200,
+            "enabledProcessingDependency": 1,
+            "dependencyFormulaItem": "range2 &gt; 50"
+          }
+        ]
+      }
+    ]
+  },
+
   "test-data": {
     "calculatorTemplates": [
       {
@@ -93,7 +416,7 @@
         "customErrorPattern": "",
         "customErrorText": "",
         "dependencyName": "test",
-        "formulaDependency": "test > 10 && test < 30"
+        "dependencyFormulaCost": "test > 10 && test < 30"
       },
       {
         "title": "input с начальным значением",
@@ -1550,8 +1873,9 @@
   },
   "calculator-options": {
     "formula": "test1   + test2   - test3 * ( test4 + test5 ) + _otherSumm_",
-    "useFormula": true,
-    "methodProcessingMistakes": "useButton"
+    "useFormula": false,
+    "methodProcessingMistakes": "useAutomatic",
+    "currency": "руб"
   },
   "credit-calculator": {
     "type_calculate": "Both",

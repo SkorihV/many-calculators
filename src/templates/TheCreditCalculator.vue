@@ -123,10 +123,7 @@
               />
             </div>
           </div>
-          <div
-            class="calc__wrapper-common-data"
-            v-show="typeCalculate === 'Both' && !isInvalid"
-          >
+          <div v-show="typeCalculate === 'Both' && !isInvalid">
             <div class="content__min-wrapper">
               <ui-checkbox
                 label="Аннуитетный"
@@ -872,6 +869,9 @@ $border-radius: 4px;
         margin-bottom: 20px;
         padding-left: 20px;
         border-left: 3px solid $color-orange-normal;
+        .calc__wrapper-group-data {
+          border: none;
+        }
       }
     }
 

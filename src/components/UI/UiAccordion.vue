@@ -17,10 +17,7 @@
         <div class="calc__accordion-item-plus" v-if="key !== itemOpenId"></div>
         <div class="calc__accordion-item-minus" v-if="key === itemOpenId"></div>
         {{ item.label }}
-        <ui-prompt
-          v-if="item?.prompt?.length"
-          :prompt-text="item.prompt"
-        />
+        <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
         <ui-tooltip
           :is-show="checkIsShowError(key)"
           tooltip-text="Во вкладке есть не корректно заполненные поля."

@@ -61,9 +61,7 @@
     <teleport v-if="initTeleport && !isErrorCalc" to="#teleport-element">
       {{ resultTextForForm }}
     </teleport>
-    <pre>
-      {{dataForDependencies}}
-    </pre>
+    <pre></pre>
   </div>
 </template>
 
@@ -79,7 +77,7 @@ export default {
   components: { TemplatesWrapper, UiAccordion, UiTab, UiBisection },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
-    const localPath = "http://localhost:3000/test-data";
+    const localPath = "http://localhost:3000/test-dependency";
     if (!isGlobal) {
       await fetch(localPath)
         .then((response) => response.json())
@@ -109,18 +107,17 @@ export default {
     this.mistake = this.outOptions?.methodProcessingMistakes
       ? this.outOptions?.methodProcessingMistakes
       : "useButton";
-    this.currency =  this?.outOptions !== null
-      ? this?.outOptions?.currency
-      : "руб";
-    this.initEnabledSendForm = this?.outOptions?.methodProcessingMistakes === "useAutomatic"
-
+    this.currency =
+      this?.outOptions !== null ? this?.outOptions?.currency : "руб";
+    this.initEnabledSendForm =
+      this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
   provide() {
     return {
       globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
-      globalDataForDependencies: computed(() => this.dataForDependencies)
+      globalDataForDependencies: computed(() => this.dataForDependencies),
     };
   },
   data() {
@@ -142,19 +139,29 @@ export default {
     };
   },
   methods: {
-    changeValue({ name, type, label, cost, value, formOutputMethod, eventType, unit }) {
+    changeValue({
+      name,
+      type,
+      label,
+      cost,
+      value,
+      formOutputMethod,
+      eventType,
+      unit,
+    }) {
       // console.log("Данные по событию -  ", data);
-      console.log(name);
       if (eventType === "delete") {
         this.deleteElementOnResults(name);
+        this.deleteElementOnErrors(name);
+        this.deleteElementOnDependencies(name);
         this.checkEnabledResultButton();
         return false;
       }
 
       this.dataForDependencies[name] = {
         name,
-        value: null
-      }
+        value: null,
+      };
       this.resultsElements[name] = {
         name,
         type,
@@ -162,15 +169,15 @@ export default {
         formOutputMethod,
         summ: cost,
         value: null,
-        unit: unit ? unit : null
+        unit: unit ? unit : null,
       };
 
       if (type === "radio") {
-        this.dataForDependencies[name].value = value.radioName;
-        this.resultsElements[name].value = value.radioName;
+        this.dataForDependencies[name].value = value?.radioName;
+        this.resultsElements[name].value = value?.radioName;
       } else if (type === "select") {
-        this.dataForDependencies[name].value = value.selectName;
-        this.resultsElements[name].value = value.selectName;
+        this.dataForDependencies[name].value = value?.selectName;
+        this.resultsElements[name].value = value?.selectName;
       } else if (type === "checkbox") {
         this.dataForDependencies[name].value = value;
         this.resultsElements[name].value = value ? "Да" : "Нет";
@@ -178,25 +185,19 @@ export default {
         this.dataForDependencies[name].value = value;
         this.resultsElements[name].value = value;
       }
-
-      if (
-        this.mistake === "useAutomatic" &&
-        eventType !== "mounted" &&
-        this.shownAllTooltips === false
-      ) {
-        this.shownAllTooltips = true;
-      }
       this.checkEnabledResultButton();
     },
     changeValid(data) {
-      // console.log("Данные по ошибке -  ", data);
-      if (data.error) {
+      if (
+        data.error &&
+        data.eventType !== "mounted" &&
+        data.eventType !== "delete"
+      ) {
         this.errorsElements.add(data.name);
       } else {
-        if (this.errorsElements.has(data.name)) {
-          this.errorsElements.delete(data.name);
-        }
+        this.deleteElementOnErrors(data.name);
       }
+      this.tryChangeShownAllTooltips(data.eventType);
     },
     calculateResult() {
       this.shownAllTooltips = true;
@@ -208,7 +209,7 @@ export default {
      */
     checkEnabledResultButton() {
       if (!this.submitResult) {
-        this.submitResult =  document.querySelector("#send-result");
+        this.submitResult = document.querySelector("#send-result");
       }
       if (this.initEnabledSendForm && this.resultTextForForm?.length) {
         this.submitResult.disabled = false;
@@ -220,13 +221,27 @@ export default {
       if (name in this.resultsElements) {
         delete this.resultsElements[name];
       }
-      if (name in this.dataForDependencies) {
-        delete this.dataForDependencies[name]
-      }
+    },
+    deleteElementOnErrors(name) {
       if (this.errorsElements.has(name)) {
         this.errorsElements.delete(name);
       }
-    }
+    },
+    deleteElementOnDependencies(name) {
+      if (name in this.dataForDependencies) {
+        delete this.dataForDependencies[name];
+      }
+    },
+    tryChangeShownAllTooltips(eventType) {
+      if (
+        this.mistake === "useAutomatic" &&
+        eventType !== "mounted" &&
+        eventType !== "delete" &&
+        this.shownAllTooltips === false
+      ) {
+        this.shownAllTooltips = true;
+      }
+    },
   },
   watch: {
     initEnabledForm() {
@@ -234,7 +249,7 @@ export default {
     },
     isErrorCalc() {
       this.checkEnabledResultButton();
-    }
+    },
   },
   computed: {
     /**
@@ -350,13 +365,20 @@ export default {
         if (item.formOutputMethod && item.value) {
           result += "\n" + item.label;
 
-          if (item.formOutputMethod === 'value' || item.formOutputMethod === 'valueSumm') {
-            const unit = item.unit ? item.unit : ''
-            result += " - " + item.value + ' ' + unit;
+          if (
+            item.formOutputMethod === "value" ||
+            item.formOutputMethod === "valueSumm"
+          ) {
+            const unit = item.unit ? item.unit : "";
+            result += " - " + item.value + " " + unit;
           }
-          if (item.summ !== null && (item.formOutputMethod === 'summ' ||  item.formOutputMethod === 'valueSumm')) {
+          if (
+            item.summ !== null &&
+            (item.formOutputMethod === "summ" ||
+              item.formOutputMethod === "valueSumm")
+          ) {
             let sum = item.summ.toString();
-            result += " - " + sum  + ' ' + this.currency;
+            result += " - " + sum + " " + this.currency;
           }
           result += "\n";
         }
@@ -385,7 +407,12 @@ export default {
      */
     resultTextForForm() {
       let result = this.resultTextDataForForm;
-      result += this.resultSummForForm ? "Общая сумма составляет = " + this.resultSummForForm + ' ' + this.currency : '';
+      result += this.resultSummForForm
+        ? "Общая сумма составляет = " +
+          this.resultSummForForm +
+          " " +
+          this.currency
+        : "";
       return result;
     },
     /**
@@ -411,9 +438,8 @@ export default {
       return !this.isErrorCalc && this.initEnabledSendForm;
     },
     isEnabledSendForm() {
-
       return this.initTeleport && !Boolean(this.resultTextDataForForm.length);
-    }
+    },
   },
 };
 </script>

@@ -105,7 +105,6 @@ $border-radius: 4px;
   max-width: 980px;
   margin: 0 auto;
   background-color: $color-gray-light;
-  min-height: 100vh;
   padding: 3px;
 }
 

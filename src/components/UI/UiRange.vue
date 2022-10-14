@@ -1,60 +1,66 @@
 <template>
-  <div class="calc__range-wrapper" :class="classes" v-if="rangeValue !== null && isVisibilityFromDependency">
-    <div v-if="label" class="calc__range-label">
-      {{ label }}<slot name="prompt"></slot>
-      <div
-        class="calc__range-current-wrapper"
-        v-if="showDynamicValue || showStaticValue || unit?.length"
-      >
+  <div
+    class="calc__wrapper-group-data"
+    v-if="rangeValue !== null && isVisibilityFromDependency"
+  >
+    <div class="calc__range-wrapper" :class="classes">
+      <div v-if="label" class="calc__range-label">
+        {{ label }}<slot name="prompt"></slot>
         <div
-          class="calc__range-current-static"
-          v-if="showStaticValue || unit?.length"
+          class="calc__range-current-wrapper"
+          v-if="showDynamicValue || showStaticValue || unit?.length"
         >
-          {{ localRangeValue }}
-        </div>
-        <input
-          class="calc__range-current-dynamic"
-          v-if="showDynamicValue"
-          type="text"
-          @input="changeDynamicValue"
-          :value="localRangeValue"
-        />
-        <div class="calc__range-unit" v-if="unit">
-          {{ unit }}
+          <div
+            class="calc__range-current-static"
+            v-if="showStaticValue || unit?.length"
+          >
+            {{ localRangeValue }}
+          </div>
+          <input
+            class="calc__range-current-dynamic"
+            v-if="showDynamicValue"
+            type="text"
+            @input="changeDynamicValue"
+            :value="localRangeValue"
+          />
+          <div class="calc__range-unit" v-if="unit">
+            {{ unit }}
+          </div>
         </div>
       </div>
-    </div>
-    <input
-      class="calc__range-item"
-      type="range"
-      :min="localMin"
-      :max="localMax"
-      :step="localStep"
-      :value="localRangeValue"
-      @input="tryChangeValue"
-    />
-    <div v-if="showSteps" class="calc__range-steps-wrapper">
-      <div
-        class="calc__range-steps-item"
-        @click="changeValueStep(step)"
-        v-for="(step, inx) in returnSteps"
-        :key="inx"
-      >
+      <input
+        class="calc__range-item"
+        type="range"
+        :min="localMin"
+        :max="localMax"
+        :step="localStep"
+        :value="localRangeValue"
+        @input="tryChangeValue"
+      />
+      <div v-if="showSteps" class="calc__range-steps-wrapper">
         <div
-          class="calc__range-steps-item-content"
-          :class="{
-            'calc__range-steps-item-content_selected': step === localRangeValue,
-          }"
+          class="calc__range-steps-item"
+          @click="changeValueStep(step)"
+          v-for="(step, inx) in returnSteps"
+          :key="inx"
         >
-          {{ step }}
+          <div
+            class="calc__range-steps-item-content"
+            :class="{
+              'calc__range-steps-item-content_selected':
+                step === localRangeValue,
+            }"
+          >
+            {{ step }}
+          </div>
         </div>
       </div>
+      <ui-tooltip
+        :is-show="isErrorEmpty"
+        :tooltip-text="textErrorNotEmpty"
+        :local-can-be-shown="localCanBeShownTooltip"
+      />
     </div>
-    <ui-tooltip
-      :is-show="isErrorEmpty"
-      :tooltip-text="textErrorNotEmpty"
-      :local-can-be-shown="canBeShownTooltip"
-    />
   </div>
 </template>
 
@@ -66,6 +72,7 @@ export default {
   name: "UiRange",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForWorkersTemplates],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     rangeValue: {
@@ -95,6 +102,13 @@ export default {
       validator(value) {
         return !isNaN(Number(value));
       },
+    },
+    /**
+     * Список цен с зависимостями / условиями
+     */
+    dependencyPrices: {
+      type: Array,
+      default: () => [],
     },
     unit: {
       type: String,
@@ -187,7 +201,7 @@ export default {
         clearInterval(timer);
       }, 10000);
     } else {
-      this.changeValid();
+      this.changeValid("mounted");
     }
   },
   data() {
@@ -201,21 +215,24 @@ export default {
   methods: {
     changeValueStep(step) {
       this.localRangeValue = step;
+
       this.changeValue();
       this.shownTooltip();
     },
     tryChangeValue(e) {
-      this.localRangeValue = e.target.value
+      this.localRangeValue = e.target.value;
       this.changeValue();
       this.shownTooltip();
     },
     changeDynamicValue(e) {
-      this.localRangeValue = e.target.value
+      this.localRangeValue = e.target.value;
       this.changeValue();
       this.shownTooltip();
     },
-    changeValue(value, eventType = "input") {
-      value = !isNaN(parseFloat(this.localRangeValue)) ? parseFloat(this.localRangeValue) : null;
+    changeValue(eventType = "input") {
+      let value = !isNaN(parseFloat(this.localRangeValue))
+        ? parseFloat(this.localRangeValue)
+        : null;
       if (value > this.localMax) {
         value = this.localMax;
       }
@@ -234,14 +251,17 @@ export default {
         eventType,
         unit: this.unit,
       });
-      this.changeValid();
+      if (eventType !== "delete" || eventType !== "mounted") {
+        this.changeValid(eventType);
+      }
     },
-    changeValid() {
+    changeValid(eventType) {
       this.$emit("changeValid", {
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "range",
         label: this.label,
+        eventType,
       });
     },
     shownTooltip() {
@@ -260,6 +280,11 @@ export default {
       this.updateValueTimer = setTimeout(() => {
         this.localRangeValue = parseFloat(newValue);
       }, 1500);
+    },
+    globalCanBeShownTooltip() {
+      if (this.isVisibilityFromDependency) {
+        this.changeValid("global");
+      }
     },
   },
   computed: {
@@ -286,8 +311,8 @@ export default {
         : Math.random().toString();
     },
     resultSum() {
-      return this.checkedValueOnVoid(this.cost)
-        ? this.cost * Math.abs(this.localRangeValue)
+      return this.checkedValueOnVoid(this.localCost)
+        ? this.localCost * Math.abs(this.localRangeValue)
         : null;
     },
     returnSteps() {
@@ -315,6 +340,48 @@ export default {
         !this.localMax &&
         this.localStepPrompt < 1
       );
+    },
+    localCanBeShownTooltip() {
+      return this.canBeShownTooltip && this.isVisibilityFromDependency;
+    },
+    /**
+     * Существует список цен с зависимостями
+     * @returns {boolean}
+     */
+    isDependencyPriceExist() {
+      // console.log(this.dependencyPrices);
+      return Boolean(
+        this.dependencyPrices?.filter(
+          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+        )
+      );
+    },
+
+    /**
+     * Иницаилизировать проверку условий зависимых цен
+     *
+     * @returns {boolean}
+     */
+    initProcessingDependencyPrice() {
+      return this.isDependencyPriceExist && this.isDependencyNameExist;
+    },
+
+    /**
+     * Возвращает цену подходящую условию
+     * Если не одна цена не подходит, то возвращается стандартная
+     * @returns {Number|String|*}
+     */
+    localCost() {
+      if (this.initProcessingDependencyPrice) {
+        let newCost = this.costAfterProcessingDependencyPrice(
+          this.dependencyPrices
+        );
+        if (newCost !== null) {
+          return newCost;
+        }
+        return this.cost;
+      }
+      return this.cost;
     },
   },
 };

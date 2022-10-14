@@ -3,7 +3,7 @@
     <div id="custom-style" class="calc calc__wrapper">
       <div class="calc__wrapper-content content">
         <div class="calc__left-side">
-          <div class="calc__wrapper-group-data">
+          <div>
             <div class="calc__wrapper-content_min">
               <ui-select
                 label="Тип материала:"
@@ -29,7 +29,7 @@
               />
             </div>
           </div>
-          <div class="calc__wrapper-group-data" v-if="baseOptions.length">
+          <div v-if="baseOptions.length">
             <div class="calc__wrapper-group-title">Базовые опции опции:</div>
             <div
               class="calc__wrapper-options"
@@ -56,7 +56,7 @@
               </ui-input>
             </div>
           </div>
-          <div class="calc__wrapper-group-data" v-if="extraOptions">
+          <div v-if="extraOptions">
             <div class="calc__wrapper-group-title">Дополнительные опции:</div>
             <div class="calc__btn-more-options" @click="toggleOptions">
               Больше настроек
@@ -90,7 +90,7 @@
             </template>
           </div>
 
-          <div class="calc__wrapper-group-data" v-if="summ">
+          <div v-if="summ">
             <div class="calc__wrapper-controls">
               <div class="calc__summ">Ваша цена: {{ summ }}</div>
               <div class="calc__restart" @click="reset">Сбросить опции.</div>
@@ -374,7 +374,7 @@ $border-radius: 4px;
           align-items: flex-end;
           justify-content: space-between;
           width: 100%;
-
+          gap: 20px;
           @media all and (max-width: 550px) {
             flex-direction: column;
             align-items: flex-start;
@@ -388,7 +388,6 @@ $border-radius: 4px;
         border-left: 3px solid $color-orange-normal;
         display: flex;
         flex-direction: column;
-        align-items: start;
         &:hover {
           background-color: $color-gray-middle;
         }

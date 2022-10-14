@@ -1,33 +1,35 @@
 <template>
-  <div
-    class="calc__checkbox-wrapper"
-    :class="classes"
-    v-if="isVisibilityFromDependency"
-  >
-    <label :for="localElementName" class="calc__checkbox-label">
-      <input
-        ref="checkbox"
-        class="calc__checkbox-item"
-        type="checkbox"
-        :checked="isChecked || localValue"
-        :disabled="isChecked"
-        @input="localValue = $event.target.checked"
-        :name="label"
-        :id="localElementName"
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+    <div class="calc__checkbox-wrapper" :class="classes">
+      <label :for="localElementName" class="calc__checkbox-label">
+        <input
+          ref="checkbox"
+          class="calc__checkbox-item"
+          type="checkbox"
+          :checked="isChecked || localValue"
+          :disabled="isChecked"
+          @click="inputLocalValue($event.target.checked)"
+          :name="label"
+          :id="localElementName"
+        />
+        <div
+          v-if="label"
+          class="calc__checkbox-text"
+          :class="{ button: checkboxType === 'button' }"
+        >
+          {{ label }}<slot name="prompt"></slot>
+        </div>
+        <div class="calc__checkbox-element" :class="checkboxType"></div>
+        <div v-if="labelSecond.length" class="calc__checkbox-text_second">
+          {{ labelSecond }}
+        </div>
+      </label>
+      <ui-tooltip
+        :is-show="isErrorEmpty"
+        :tooltip-text="textErrorNotEmpty"
+        :local-can-be-shown="isVisibilityFromDependency"
       />
-      <div
-        v-if="label"
-        class="calc__checkbox-text"
-        :class="{ button: checkboxType === 'button' }"
-      >
-        {{ label }}<slot name="prompt"></slot>
-      </div>
-      <div class="calc__checkbox-element" :class="checkboxType"></div>
-      <div v-if="labelSecond.length" class="calc__checkbox-text_second">
-        {{ labelSecond }}
-      </div>
-    </label>
-    <ui-tooltip :is-show="isErrorEmpty" :tooltip-text="textErrorNotEmpty" />
+    </div>
   </div>
 </template>
 
@@ -39,6 +41,7 @@ export default {
   name: "UiCheckbox",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForWorkersTemplates],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     labelSecond: {
@@ -62,6 +65,14 @@ export default {
       validator(value) {
         return !isNaN(Number(value));
       },
+    },
+
+    /**
+     * Список цен с зависимостями / условиями
+     */
+    dependencyPrices: {
+      type: Array,
+      default: () => [],
     },
 
     /**
@@ -119,6 +130,10 @@ export default {
     };
   },
   methods: {
+    inputLocalValue(value) {
+      this.localValue = value;
+      this.changeValue("test");
+    },
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -128,26 +143,37 @@ export default {
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
-        cost: this.localValue ? this.cost : null,
+        cost:
+          this.localValue && this.checkedValueOnVoid(this.localCost)
+            ? this.localCost
+            : null,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
         eventType,
       });
-      this.changeValid();
+      if (eventType !== "delete" || eventType !== "mounted") {
+        this.changeValid(eventType);
+      }
     },
-    changeValid() {
+    changeValid(eventType) {
       this.$emit("changeValid", {
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
+        eventType,
       });
     },
   },
   watch: {
     checkboxValue(newValue) {
       this.localValue = Boolean(newValue);
-      this.changeValid();
+      this.changeValid("checkbox");
+    },
+    globalCanBeShownTooltip() {
+      if (this.isVisibilityFromDependency) {
+        this.changeValid("global");
+      }
     },
   },
   computed: {
@@ -161,6 +187,44 @@ export default {
     },
     isErrorEmpty() {
       return this.isNeedChoice && !this.localValue;
+    },
+
+    /**
+     * Существует список цен с зависимостями
+     * @returns {boolean}
+     */
+    isDependencyPriceExist() {
+      return Boolean(
+        this.dependencyPrices?.filter(
+          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+        )
+      );
+    },
+    /**
+     * Иницаилизировать проверку условий зависимых цен
+     *
+     * @returns {boolean}
+     */
+    initProcessingDependencyPrice() {
+      return this.isDependencyPriceExist && this.isDependencyNameExist;
+    },
+
+    /**
+     * Возвращает цену подходящую условию
+     * Если не одна цена не подходит, то возвращается стандартная
+     * @returns {Number|String|*}
+     */
+    localCost() {
+      if (this.initProcessingDependencyPrice) {
+        let newCost = this.costAfterProcessingDependencyPrice(
+          this.dependencyPrices
+        );
+        if (newCost !== null) {
+          return newCost;
+        }
+        return this.cost;
+      }
+      return this.cost;
     },
   },
 };

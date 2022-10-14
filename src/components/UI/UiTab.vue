@@ -16,10 +16,7 @@
           @click="openItem(key)"
         >
           {{ item.label }}
-          <ui-prompt
-            v-if="item?.prompt?.length"
-            :prompt-text="item.prompt"
-          />
+          <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
           <ui-tooltip
             :is-show="checkIsShowError(key)"
             tooltip-text="Во вкладке есть не корректно заполненные поля."

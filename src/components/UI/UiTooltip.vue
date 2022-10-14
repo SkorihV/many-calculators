@@ -14,6 +14,7 @@
     </div>
   </transition>
 </template>
+
 <script>
 export default {
   name: "UiTooltip",
@@ -68,9 +69,9 @@ export default {
         if (this.$refs.tooltip) {
           this.classPosition = null;
           const parent = this.$parent.$el;
-          const parentRightSide = parent.getBoundingClientRect().right;
-          const parentLeftSide = parent.getBoundingClientRect().left;
-          const parentWidth = parent.offsetWidth;
+          const parentRightSide = parent?.getBoundingClientRect().right;
+          const parentLeftSide = parent?.getBoundingClientRect().left;
+          const parentWidth = parent?.offsetWidth;
           const docWidth = document.documentElement.clientWidth;
           this.classPosition =
             parentWidth > 400
@@ -94,7 +95,7 @@ export default {
   },
   computed: {
     canBeShown() {
-      return this.globalCanBeShownTooltip || this.localCanBeShown;
+      return this.globalCanBeShownTooltip && this.localCanBeShown;
     },
   },
 };

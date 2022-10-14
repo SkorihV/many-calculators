@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__bisection-wrapper" :class="[classes]" v-if="templateData?.rightSide.length || templateData?.leftSide.length">
+  <div
+    class="calc__bisection-wrapper"
+    :class="[classes]"
+    v-if="templateData?.rightSide.length || templateData?.leftSide.length"
+  >
     <div class="calc__bisection-label" v-if="templateData?.label?.length">
       {{ templateData?.label }}
     </div>

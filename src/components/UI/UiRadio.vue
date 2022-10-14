@@ -1,31 +1,39 @@
 <template>
-  <div
-    class="calc__radio-wrapper"
-    v-if="isVisibilityFromDependency"
-    :class="[
-      radioType,
-      { column: isColumn, solid: isSolid, wrap: isWrap },
-      classes,
-    ]"
-  >
-    <div class="calc__radio-title" v-if="label">
-      {{ label }} <slot name="prompt" />
-    </div>
-    <div class="calc__radio-wrapper-buttons">
-      <div
-        class="calc__radio-label"
-        v-for="(radio, idx) in radioValues"
-        :id="localElementName + '_' + idx"
-        :class="{ checked: idx === currentIndexRadioButton }"
-        :key="idx"
-        @click="selectedCurrentRadio(idx)"
-      >
-        <span class="calc__radio-indicator" v-if="radioType === 'base'"></span>
-        <span class="calc__radio-text">{{ radio.radioName }}</span>
-        <ui-prompt :prompt-text="radio.prompt" />
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+    <div
+      class="calc__radio-wrapper"
+      :class="[
+        radioType,
+        { column: isColumn, solid: isSolid, wrap: isWrap },
+        classes,
+      ]"
+    >
+      <div class="calc__radio-title" v-if="label">
+        {{ label }} <slot name="prompt" />
       </div>
+      <div class="calc__radio-wrapper-buttons">
+        <div
+          class="calc__radio-label"
+          v-for="(radio, idx) in radioValuesAfterProcessingDependency"
+          :id="localElementName + '_' + idx"
+          :class="{ checked: idx === currentIndexRadioButton }"
+          :key="idx"
+          @click="selectedCurrentRadio(idx)"
+        >
+          <span
+            class="calc__radio-indicator"
+            v-if="radioType === 'base'"
+          ></span>
+          <span class="calc__radio-text">{{ radio.radioName }}</span>
+          <ui-prompt :prompt-text="radio.prompt" />
+        </div>
+      </div>
+      <ui-tooltip
+        :is-show="isErrorEmpty"
+        :tooltip-text="textErrorNotEmpty"
+        :local-can-be-shown="isVisibilityFromDependency"
+      />
     </div>
-    <ui-tooltip :is-show="isErrorEmpty" :tooltip-text="textErrorNotEmpty" />
   </div>
 </template>
 
@@ -38,6 +46,7 @@ export default {
   name: "UiRadio",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForWorkersTemplates],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiPrompt, UiTooltip },
   mounted() {
     this.localElementName = this.checkedValueOnVoid(this.elementName)
@@ -52,9 +61,7 @@ export default {
             parseInt(this.selectedItem) < this.radioValues.length
               ? parseInt(this.selectedItem)
               : this.radioValues.length - 1;
-          this.changeValue(
-            "mounted"
-          );
+          this.changeValue("mounted");
           clearInterval(timer);
         }
       }, 100);
@@ -62,7 +69,7 @@ export default {
         clearInterval(timer);
       }, 10000);
     } else {
-      this.changeValid();
+      this.changeValid("mounted");
     }
   },
 
@@ -156,18 +163,17 @@ export default {
     },
     selectedCurrentRadio(index) {
       this.currentIndexRadioButton = parseInt(index);
-
       this.changeValue();
     },
     changeValue(eventType = "click") {
-      const radio =  this.radioValues[this.currentIndexRadioButton];
+      const radio = this.changedRadio;
       this.$emit("changedValue", {
         value: radio,
         index: this.currentIndexRadioButton,
         name: this.localElementName,
         type: "radio",
-        cost: this.checkedValueOnVoid(radio?.cost)
-          ? parseFloat(radio.cost)
+        cost: this.checkedValueOnVoid(this.localCost)
+          ? parseFloat(this.localCost)
           : 0,
         label: this.label,
         formOutputMethod:
@@ -175,14 +181,17 @@ export default {
         eventType,
         unit: this.unit,
       });
-      this.changeValid();
+      if (eventType !== "delete" || eventType !== "mounted") {
+        this.changeValid(eventType);
+      }
     },
-    changeValid() {
+    changeValid(eventType) {
       this.$emit("changeValid", {
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "radio",
         label: this.label,
+        eventType,
       });
     },
   },
@@ -195,13 +204,91 @@ export default {
           : this.radioValues.length - 1;
       this.changeValue("selected");
     },
+    globalCanBeShownTooltip() {
+      if (this.isVisibilityFromDependency) {
+        this.changeValid("global");
+      }
+    },
+    radioValuesAfterProcessingDependency: {
+      handler(newValue, oldValue) {
+        if (newValue?.length !== oldValue?.length) {
+          this.currentIndexRadioButton = null;
+          this.changeValue("delete");
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
+    changedRadio() {
+      return this.radioValues[this.currentIndexRadioButton];
+    },
     radioType() {
-      return this.typeDisplayClass?.length ? this.typeDisplayClass : 'base'
+      return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
     },
     isErrorEmpty() {
       return this.notEmpty && this.currentIndexRadioButton === null;
+    },
+
+    /**
+     * Существует список цен с зависимостями
+     * @returns {boolean}
+     */
+    isDependencyPriceExist() {
+      return Boolean(
+        this.changedRadio?.dependencyPrices?.filter(
+          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+        )
+      );
+    },
+    /**
+     * Иницаилизировать проверку условий зависимых цен
+     *
+     * @returns {boolean}
+     */
+    initProcessingDependencyPrice() {
+      return this.isDependencyPriceExist && this.isDependencyNameExist;
+    },
+
+    /**
+     * Возвращает цену подходящую условию
+     * Если не одна цена не подходит, то возвращается стандартная
+     * @returns {Number|String|*}
+     */
+    localCost() {
+      if (this.initProcessingDependencyPrice) {
+        let newCost = this.costAfterProcessingDependencyPrice(
+          this.changedRadio?.dependencyPrices
+        );
+        if (newCost !== null) {
+          return newCost;
+        }
+        return this.changedRadio?.cost;
+      }
+      return this.changedRadio?.cost;
+    },
+    radioValuesAfterProcessingDependency() {
+      if (this.isDependencyNameExist) {
+        return this.radioValues.filter((radio) => {
+          if (
+            radio?.enabledProcessingDependency &&
+            radio?.dependencyFormulaItem.length
+          ) {
+            let formula = this.processingFormulaSpecialsSymbols(
+              radio.dependencyFormulaItem
+            );
+            formula = this.processingVariablesOnFormula(formula);
+            try {
+              return eval(formula);
+            } catch (e) {
+              console.error(e.message);
+              return false;
+            }
+          }
+          return true;
+        });
+      }
+      return this.radioValues;
     },
   },
 };
