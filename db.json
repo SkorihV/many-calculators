@@ -130,7 +130,7 @@
         "formOutputMethod": "summ",
         "elementName": "range2",
         "dependencyName": "checklvl2",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "checklvl2 === true",
         "classes": "",
         "template": "UiRange",
         "dependencyPrices": [
@@ -210,7 +210,7 @@
         "isNeedChoice": false,
         "notEmpty": false,
         "formOutputMethod": "valueSumm",
-        "elementName": "",
+        "elementName": "test123",
         "dependencyName": "radio1",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -318,6 +318,348 @@
             "dependencyFormulaItem": "range2 &gt; 50"
           }
         ]
+      },
+      {
+        "title":"Зависимости - галочка для отображения инпута",
+        "label":"Зависимости - галочка для отображения инпута",
+        "labelSecond":"",
+        "value":false,
+        "cost":"",
+        "isNeedChoice":false,
+        "isChecked":false,
+        "typeDisplayClass":"button",
+        "formOutputMethod":"no",
+        "elementName":"check-1",
+        "dependencyName":"asdasd2",
+        "dependencyFormulaDisplay":"",
+        "classes":"",
+        "template":"UiCheckbox"
+      },
+      {
+        "title":"Зависимости input для отображения ошибок",
+        "label":"Зависимости input для отображения ошибок",
+        "value":"0",
+        "cost":"100",
+        "unit":"м2",
+        "min":"5",
+        "max":"50",
+        "controls":1,
+        "step":"1",
+        "isColumn":1,
+        "notEmpty":1,
+        "onlyNumber":1,
+        "isCurrency":1,
+        "onlyInteger":false,
+        "formOutputMethod":"no",
+        "elementName":"",
+        "dependencyName":"check-1",
+        "dependencyFormulaDisplay":"check-1 === true",
+        "customErrorPattern":"",
+        "customErrorText":"",
+        "classes":"",
+        "template":"UiInput"
+      },
+      {
+        "title":"Зависимости аккордеон",
+        "label":"Зависимости аккордеон",
+        "template":"UiAccordion",
+        "elementName":"acc1",
+        "classes":"",
+        "dependencyName":"",
+        "dependencyFormulaDisplay":"",
+        "json_id" : "169744706",
+
+
+
+        "items":[
+          {
+            "title":"Дополнительные опции",
+            "json_id" : "157557506",
+            "templates":[
+              {
+                "json_id" : "157554906",
+                "title":"checkbox - Ремонт квартир - Вызова дизайнера на дом",
+                "label":"Вызова дизайнера на дом",
+                "labelSecond":"",
+                "value":false,
+                "cost":"",
+                "notOnlyForCalculations":1,
+                "isNeedChoice":false,
+                "isChecked":false,
+                "typeDisplayClass":"switcher",
+                "elementName":"test123",
+                "classes":"",
+                "template":"UiCheckbox",
+                "formOutputMethod":"no",
+                "dependencyName":"",
+                "formulaDependency":""
+              }
+            ],
+            "label":"Дополнительные опции"
+          },
+
+
+
+          {
+            "json_id" : "154986906",
+            "title":"Вкладка с радиокнопками",
+            "templates":[
+              {
+                "json_id" : "169748506",
+                "title":"Зависимости радио 1",
+                "label":"Зависимости радио 1",
+                "selectedItem":"0",
+                "isColumn":false,
+                "isNeedChoice":false,
+                "notEmpty":false,
+                "typeDisplayClass":"buttons",
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"chack3d",
+                "dependencyFormulaDisplay":"chack3d === true",
+                "classes":"",
+                "template":"UiRadio", "values" : [{"title":"1",
+                "radioName":1,
+                "cost":1},{"title":"2",
+                "radioName":2,
+                "cost":2},{"title":"3",
+                "radioName":3,
+                "cost":3}]},
+
+              {
+                "json_id" : "169748706",
+                "title":"Зависимости радио 2",
+                "label":"Зависимости радио 2",
+                "selectedItem":"0",
+                "isColumn":false,
+                "isNeedChoice":false,
+                "notEmpty":false,
+                "typeDisplayClass":"buttons",
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiRadio",
+                "values":[{"title":"11",
+                  "radioName":11,
+                  "cost":11},{"title":"22",
+                  "radioName":22,
+                  "cost":22},{"title":"33",
+                  "radioName":33,
+                  "cost":33}]
+              }
+            ],
+            "label":"Вкладка с радиокнопками",
+            "dependencyName":"",
+            "dependencyFormulaDisplay":""
+          },
+
+
+
+          {
+            "json_id" : "154986906",
+            "title":"Вкладка с чекбоксами",
+            "templates":[
+              {
+                "title":"зависимости чекбокс 1",
+                "label":"зависимости чекбокс 1",
+                "labelSecond":"3D-Дизайн проект",
+                "value":false,
+                "cost":"4",
+                "isNeedChoice":false,
+                "isChecked":false,
+                "typeDisplayClass":"",
+                "formOutputMethod":"valueSumm",
+                "elementName":"chack3d",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiCheckbox"
+              }
+            ],
+            "label":"Вкладка с чекбоксами",
+            "dependencyName":"",
+            "dependencyFormulaDisplay":""
+          },
+
+          {
+            "json_id" : "154876306",
+            "title":"Вкладка с инпутами",
+            "templates":[
+              {
+                "title":"Заголовок элемента в списке вида - Input:  4",
+                "label":"Заголовок элемента в списке вида - Input: 4",
+                "value":"6",
+                "cost":"44",
+                "unit":"",
+                "min":"1",
+                "max":"44",
+                "controls":1,
+                "step":"1",
+                "isColumn":false,
+                "notEmpty":1,
+                "onlyNumber":1,
+                "isCurrency":false,
+                "onlyInteger":false,
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"chack3d",
+                "dependencyFormulaDisplay":"chack3d === true",
+                "customErrorPattern":"",
+                "customErrorText":"",
+                "classes":"",
+                "template":"UiInput"
+              }
+            ],
+            "label":"Вкладка с инпутами",
+            "dependencyName":"",
+            "dependencyFormulaDisplay":""
+          }
+        ]
+      },
+
+      {
+        "title":"Зависимости табы",
+        "label":"Зависимости табы",
+        "items":[
+          {
+            "title":"Вкладка с селектами",
+            "label":"Вкладка с селектами",
+            "templates":[
+              {
+                "title":"Зависимости селект табы",
+                "label":"Зависимости селект табы",
+                "isColumn":false,
+                "selectedItem":"0",
+                "isNeedChoice":false,
+                "notEmpty":false,
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiSelect",
+                "values":[
+                  {
+                    "title":"селект для табов",
+                    "selectName":"селект для табов",
+                    "cost":12
+                  },
+                  {
+                    "title":"2",
+                    "selectName":2,
+                    "cost":123
+                  },
+                  {
+                    "title":"4",
+                    "selectName":22,
+                    "cost":32
+                  }
+                ]
+              },
+              {
+                "title":"селект для табов 2",
+                "label":"селект для табов 2",
+                "isColumn":false,
+                "selectedItem":"0",
+                "isNeedChoice":false,
+                "notEmpty":false,
+                "formOutputMethod":"no",
+                "elementName":"",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiSelect",
+                "values":[
+                  {
+                    "title":"1",
+                    "selectName":1,
+                    "cost":1
+                  },
+                  {
+                    "title":"2",
+                    "selectName":2,
+                    "cost":2
+                  },
+                  {
+                    "title":"3",
+                    "selectName":3,
+                    "cost":3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title":"Вкладка с галочками",
+            "templates":[
+              {
+                "title":"зависимость галочка табы 1",
+                "label":"зависимость галочка табы 1",
+                "labelSecond":"",
+                "value":false,
+                "cost":"",
+                "isNeedChoice":false,
+                "isChecked":false,
+                "typeDisplayClass":"",
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiCheckbox"},
+              {
+                "title":"зависимость галочка табы 2",
+                "label":"зависимость галочка табы 2",
+                "labelSecond":"",
+                "value":false,
+                "cost":"13",
+                "isNeedChoice":false,
+                "isChecked":false,
+                "typeDisplayClass":"",
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"",
+                "dependencyFormulaDisplay":"",
+                "classes":"",
+                "template":"UiCheckbox"}
+
+            ],
+            "label":"Вкладка с галочками"
+          },
+          {
+            "title":"Вкладка с кнопками",
+            "templates":[
+              {
+                "title":"зависимости табы диапазон 1",
+                "label":"зависимости табы диапазон 1",
+                "value":"0",
+                "min":"0",
+                "max":"100",
+                "cost":"34",
+                "unit":"",
+                "step":"1",
+                "showSteps":false,
+                "stepPrompt":"1",
+                "isNeedChoice":false,
+                "notEmpty":false,
+                "showStaticValue":false,
+                "showDynamicValue":false,
+                "formOutputMethod":"valueSumm",
+                "elementName":"",
+                "dependencyName":"range2",
+                "dependencyFormulaDisplay":"range2 > 10 && range2 < 30",
+                "classes":"",
+                "template":"UiRange"
+              }
+            ],
+            "label":"Вкладка с кнопками"
+          }
+        ],
+        "classes":"",
+        "template" : "UiTab",
+        "parent" : "0;"
       }
     ]
   },

@@ -291,7 +291,7 @@ export default {
         this.localInputValue = value;
         this.changeValue("timer");
         this.shownTooltip();
-      }, 1500);
+      }, 1000);
     },
     clearTimer() {
       if (this.nameTimer) clearTimeout(this.nameTimer);
@@ -519,14 +519,15 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.initProcessingDependencyPrice) {
-        let newCost = this.costAfterProcessingDependencyPrice(
-          this.dependencyPrices
-        );
-        if (newCost !== null) {
-          return newCost;
-        }
+      if (!this.initProcessingDependencyPrice) {
         return this.cost;
+      }
+
+      let newCost = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
       }
       return this.cost;
     },

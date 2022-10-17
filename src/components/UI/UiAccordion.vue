@@ -9,46 +9,24 @@
       v-for="(item, key) in accordionData.items"
       :key="key"
     >
-      <div
-        class="calc__accordion-item-label"
-        @click="openItem(key)"
-        :class="{ isOpen: key === itemOpenId, isError: checkIsShowError(key) }"
-      >
-        <div class="calc__accordion-item-plus" v-if="key !== itemOpenId"></div>
-        <div class="calc__accordion-item-minus" v-if="key === itemOpenId"></div>
-        {{ item.label }}
-        <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
-        <ui-tooltip
-          :is-show="checkIsShowError(key)"
-          tooltip-text="Во вкладке есть не корректно заполненные поля."
-        ></ui-tooltip>
-      </div>
-
-      <div
-        class="calc__accordion-item-content"
-        v-show="key === itemOpenId"
-        v-for="(template, key_in) in item?.templates"
-        :key="key_in"
-      >
-        <templates-wrapper
-          :template="template"
-          :index="elementName + '_' + key + '_' + key_in"
-          @changedValue="changeValue"
-          @changeValid="changeValid($event, key)"
-        />
-      </div>
+      <ui-accordion-item
+        :accordionItem="item"
+        :accordion-name="elementName"
+        :accordion-item-id="key"
+        :element-name="item?.json_id || 'accordionItem' + key"
+        @changedValue="changedValue"
+        @changeValid="changeValid"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import UiTooltip from "@/components/UI/UiTooltip";
-import UiPrompt from "@/components/UI/UiPrompt";
+import UiAccordionItem from "@/components/UI/UiAccordionItem";
 
 export default {
   name: "UiAccordion",
-  components: { TemplatesWrapper, UiTooltip, UiPrompt },
+  components: { UiAccordionItem },
   emits: ["changedValue", "changeValid"],
   inject: ["globalCanBeShownTooltip"],
   props: {
@@ -68,35 +46,17 @@ export default {
   data() {
     return {
       itemOpenId: null,
-      errorsElements: {},
     };
   },
   methods: {
     openItem(index) {
       this.itemOpenId = this.itemOpenId !== index ? index : null;
     },
-    changeValue(data) {
+    changedValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data, key) {
-      if (!(key in this.errorsElements)) {
-        this.errorsElements[key] = new Set();
-      }
-      if (data.error) {
-        this.errorsElements[key].add(data.name);
-      } else {
-        if (this.errorsElements[key].has(data.name)) {
-          this.errorsElements[key].delete(data.name);
-        }
-      }
+    changeValid(data) {
       this.$emit("changeValid", data);
-    },
-    checkIsShowError(key) {
-      return (
-        key !== this.itemOpenId &&
-        this.errorsElements[key]?.size &&
-        this.globalCanBeShownTooltip
-      );
     },
   },
   computed: {

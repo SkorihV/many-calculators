@@ -1018,12 +1018,14 @@ $border-radius: 4px;
       font-weight: 600;
       margin-bottom: 10px;
       width: 100%;
+      text-align: start;
     }
     &-wrapper {
       @include style-flex-start;
       align-items: start;
       flex-direction: column;
       width: 100%;
+      margin: 10px 0;
     }
     &-item {
       &-label {

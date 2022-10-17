@@ -69,6 +69,9 @@ export default {
         if (this.$refs.tooltip) {
           this.classPosition = null;
           const parent = this.$parent.$el;
+          if (!parent || parent.nodeType === 3) {
+            return false;
+          }
           const parentRightSide = parent?.getBoundingClientRect().right;
           const parentLeftSide = parent?.getBoundingClientRect().left;
           const parentWidth = parent?.offsetWidth;

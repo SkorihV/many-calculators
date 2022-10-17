@@ -6,11 +6,7 @@
           v-if="template.template === 'UiAccordion'"
           :accordion-data="template"
           :classes="template?.classes"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiAccordion' + inx
-          "
+          :element-name=" template?.json_id || 'UiAccordion' + inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -18,11 +14,7 @@
           v-if="template.template === 'UiTab'"
           :tab-data="template"
           :classes="template?.classes"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiTab' + inx
-          "
+          :element-name="template?.json_id || 'UiTab' + inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -31,11 +23,7 @@
           :template-data="template"
           :width-left-side="template?.widthLeftSide"
           :classes="template?.classes"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiTab' + inx
-          "
+          :element-name="template?.json_id || 'UiBisection' + inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -58,11 +46,12 @@
         Рассчитать
       </div>
     </div>
+    <error-unique-names-templates :templates="calculatorTemplates"/>
     <teleport v-if="initTeleport && !isErrorCalc" to="#teleport-element">
       {{ resultTextForForm }}
     </teleport>
-    <pre></pre>
   </div>
+  <pre>{{this.resultDataFilter}}</pre>
 </template>
 
 <script>
@@ -71,10 +60,11 @@ import UiAccordion from "@/components/UI/UiAccordion";
 import UiTab from "@/components/UI/UiTab";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
+import ErrorUniqueNamesTemplates from "@/components/UI/ErrorUniqueNamesTemplates";
 
 export default {
   name: "TheBasicCalculatorConstructor",
-  components: { TemplatesWrapper, UiAccordion, UiTab, UiBisection },
+  components: { TemplatesWrapper, UiAccordion, UiTab, UiBisection, ErrorUniqueNamesTemplates },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
     const localPath = "http://localhost:3000/test-dependency";
@@ -395,7 +385,7 @@ export default {
       } else {
         return this.resultDataFilter.reduce((sum, item) => {
           if (item.summ !== null) {
-            return sum + item.summ;
+            return sum + Number(item.summ);
           }
           return sum + 0;
         }, 0);

@@ -4,14 +4,16 @@
       {{ tabData.label }}
     </div>
     <div class="calc__tab-item-label-wrapper">
-      <template v-for="(item, key) in tabData?.items">
+      <template
+        v-for="(item, key) in tabData?.items"
+      >
         <div
           class="calc__tab-item-label"
           :class="{
             isOpen: key === itemOpenId,
             isError: checkIsShowError(key),
           }"
-          v-if="item?.templates?.length"
+          v-if="visibilityListTabs.get(key)"
           :key="key"
           @click="openItem(key)"
         >
@@ -30,19 +32,15 @@
       v-for="(item, key) in tabData.items"
       :key="key"
     >
-      <div
-        class="calc__tab-item-content"
-        v-show="key === itemOpenId"
-        v-for="(template, key_in) in item?.templates"
-        :key="key_in"
-      >
-        <templates-wrapper
-          :template="template"
-          :index="elementName + '_' + key + '_' + key_in"
-          @changedValue="changeValue"
-          @changeValid="changeValid($event, key)"
-        />
-      </div>
+      <ui-tab-item
+        :tab-item="item"
+        :tab-name="elementName + '_' + key"
+        :tab-item-id="key"
+        :element-name="item?.json_id || 'tabItem' + '_' + key"
+        :shown-id-tab="shownIdTab"
+        @changedValue="changedValue"
+        @changeValid="changeValid"
+      />
     </div>
   </div>
 </template>
@@ -51,10 +49,11 @@
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
+import UiTabItem from "@/components/UI/UiTabItem";
 
 export default {
   name: "UiTab",
-  components: { TemplatesWrapper, UiTooltip, UiPrompt },
+  components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue", "changeValid"],
   inject: ["globalCanBeShownTooltip"],
   props: {
@@ -74,27 +73,34 @@ export default {
   data() {
     return {
       itemOpenId: null,
-      errorsElements: {},
+      errorsElements: new Set(),
+      visibilityListTabs: new Map(),
+      shownIdTab: null
     };
   },
   methods: {
     openItem(index) {
-      this.itemOpenId = this.itemOpenId !== index ? index : null;
+      this.shownIdTab = index;
     },
-    changeValue(data) {
+    changedValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data, key) {
-      if (!(key in this.errorsElements)) {
-        this.errorsElements[key] = new Set();
-      }
-      if (data.error) {
-        this.errorsElements[key].add(data.name);
+    changeValid({ data, infoOnTab }) {
+
+      if (
+        data.error &&
+        data.eventType !== "mounted" &&
+        data.eventType !== "delete"
+      ) {
+        this.errorsElements.add(data.name);
       } else {
-        if (this.errorsElements[key].has(data.name)) {
-          this.errorsElements[key].delete(data.name);
+        if (this.errorsElements.has(data.name)) {
+          this.errorsElements.delete(data.name);
         }
       }
+
+      this.visibilityListTabs.set(infoOnTab.index, infoOnTab.isShown);
+
       this.$emit("changeValid", data);
     },
     checkIsShowError(key) {
@@ -117,6 +123,9 @@ export default {
         });
       }
       return result.some((item) => item);
+    },
+    isShowError() {
+      return Boolean(this.errorsElements.size)
     },
   },
 };

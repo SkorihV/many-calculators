@@ -67,6 +67,11 @@ export const MixinsForWorkersTemplates = {
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
+    /**
+     *
+     * @param formula
+     * @returns {*}
+     */
     processingFormulaSpecialsSymbols(formula) {
       this.spec.forEach((specItem) => {
         formula = formula.replaceAll(specItem[0], specItem[1]);
@@ -74,19 +79,19 @@ export const MixinsForWorkersTemplates = {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /(<[A-Wa-wА-Яа-яЁё0-9]*>)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/g
+          /([A-Wa-wА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
-        .filter((item) => item?.length);
+        .filter((item) => item?.trim()?.length);
+
       formula = formula.map((item) => {
         //удаляем пробелы по краям
         let nextItem = item.replace(/^\s*|\s*$/g, "");
-
         // если по краям есть кавычки, то удаляем пробелы между
-        // кавычками и текстом в середине не трогая пробелы внутри текста
-        // console.log(nextItem);
+        // кавычками и текстом в середине, не трогая пробелы внутри текста
         if (nextItem.match(/^('|").*('|")$/)) {
           nextItem = "'" + nextItem.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
         }
+
         return nextItem;
       });
       return formula;
@@ -98,24 +103,25 @@ export const MixinsForWorkersTemplates = {
      * @returns {string}
      */
     processingVariablesOnFormula(formula) {
-      if (this.majorElementDependency) {
-        return formula.reduce((resultText, item) => {
-          if (item === this.dependencyName) {
-            if (!isNaN(parseFloat(this.majorElementDependency?.value))) {
-              return resultText + this.majorElementDependency.value;
-            } else if (
-              this.majorElementDependency?.value === false ||
-              this.majorElementDependency?.value === true
-            ) {
-              return resultText + Boolean(this.majorElementDependency?.value);
-            } else {
-              return resultText + "'" + this.majorElementDependency.value + "'";
-            }
-          }
-          return resultText + item;
-        }, "");
+      if (!this.getMajorElementDependency) {
+        return '';
       }
-      return "";
+
+      return formula.reduce((resultText, item) => {
+        if (item === this.dependencyName) {
+          if (!isNaN(parseFloat(this.getMajorElementDependency?.value))) {
+            return resultText + this.getMajorElementDependency.value;
+          } else if (
+            this.getMajorElementDependency?.value === false ||
+            this.getMajorElementDependency?.value === true
+          ) {
+            return resultText + Boolean(this.getMajorElementDependency?.value);
+          } else {
+            return resultText + "'" + this.getMajorElementDependency.value + "'";
+          }
+        }
+        return resultText + item;
+      }, "");
     },
     /**     *
      * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -126,25 +132,31 @@ export const MixinsForWorkersTemplates = {
     costAfterProcessingDependencyPrice(dependencyPrice) {
       let result = dependencyPrice.reduce(
         (resultReduce, item) => {
-          if (item?.enabledFormula) {
-            let formula = this.processingFormulaSpecialsSymbols(
-              item?.dependencyFormulaCost
-            );
-            formula = this.processingVariablesOnFormula(formula);
-            try {
-              if (eval(formula)) {
-                resultReduce.changed = true;
-                resultReduce.cost = item.cost ? item.cost : 0;
-                return resultReduce;
-              }
-              return resultReduce;
-            } catch (e) {
-              console.log(e.message);
+          if (!item.enabledFormula) {
+            return resultReduce;
+          }
+
+          let formula = this.processingFormulaSpecialsSymbols(
+            item?.dependencyFormulaCost
+          );
+
+          formula = this.processingVariablesOnFormula(formula);
+          try {
+            if (eval(formula)) {
+              resultReduce.changed = true;
+              resultReduce.cost = item.cost ? item.cost : 0;
               return resultReduce;
             }
+            return resultReduce;
+          } catch (e) {
+            console.log(e.message);
+            return resultReduce;
           }
-          return resultReduce;
         },
+        /**
+         * changed - необходим для понимания сработала формула хоть раз или нет,
+         * если не сработала, то блок с зависимыми ценами пропускается и выводится стандартная
+         */
         { cost: 0, changed: false }
       );
       return result.changed ? result.cost : null;
@@ -159,9 +171,15 @@ export const MixinsForWorkersTemplates = {
       if (newValue) {
         this.changeValue("dependency");
       } else {
-        this.changeValue("delete");
+        setTimeout(() => {
+          this.changeValue("delete");
+        }, 10)
+
       }
     },
+    /**
+     * При изменении состояния элемента от которого зависит текущий - повторно производить вычисления состояния текущего
+     */
     majorElementDependency: {
       handler(newValue, oldValue) {
         if (
@@ -176,8 +194,12 @@ export const MixinsForWorkersTemplates = {
   },
 
   computed: {
+    /**
+     * Отобразить текущий элемент
+     * @returns {boolean|any}
+     */
     isVisibilityFromDependency() {
-      if (this.isDependencyElementVisibility && this.majorElementDependency) {
+      if (this.isDependencyElementVisibility && this.getMajorElementDependency) {
         try {
           return eval(this.parsingFormulaVariables);
         } catch (e) {
@@ -187,7 +209,7 @@ export const MixinsForWorkersTemplates = {
       return true;
     },
     /**
-     * Для отображения поля указана зависимость
+     * Отобразить поле
      * @returns {boolean}
      */
     isDependencyElementVisibility() {
@@ -206,27 +228,28 @@ export const MixinsForWorkersTemplates = {
      * Элемент от которого идет зависимость
      * @returns {*|null}
      */
-    majorElementDependency() {
-      if (this.dependencyName?.length) {
-        return this.dependencyName in this.globalDataForDependencies
-          ? this.globalDataForDependencies[this.dependencyName]
-          : null;
+    getMajorElementDependency() {
+      if (!this.dependencyName.length) {
+        return null;
       }
-      return null;
+
+      return this.dependencyName in this.globalDataForDependencies
+        ? this.globalDataForDependencies[this.dependencyName]
+        : null;
     },
     /**
      * Получить массив значений из формулы
      * @returns {string|*[]}
      */
     parsingFormulaVariables() {
-      if (this.dependencyFormulaDisplay?.length) {
-        let formula = this.processingFormulaSpecialsSymbols(
-          this.dependencyFormulaDisplay
-        );
-
-        return this.processingVariablesOnFormula(formula);
+      if (!this.dependencyFormulaDisplay.length) {
+        return [];
       }
-      return [];
-    },
+      let formula = this.processingFormulaSpecialsSymbols(
+        this.dependencyFormulaDisplay
+      );
+
+      return this.processingVariablesOnFormula(formula);
+    }
   },
 };

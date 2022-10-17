@@ -312,6 +312,7 @@ export default {
               select.dependencyFormulaItem
             );
             formula = this.processingVariablesOnFormula(formula);
+            // console.log(formula);
             try {
               return eval(formula);
             } catch (e) {
