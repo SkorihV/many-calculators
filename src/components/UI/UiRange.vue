@@ -66,12 +66,13 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiRange",
   emits: ["changedValue", "changeValid"],
-  mixins: [MixinsForWorkersTemplates],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
@@ -187,6 +188,7 @@ export default {
       type: String,
       default: "no",
     },
+
   },
   mounted() {
     if (!this.isNeedChoice) {
@@ -248,8 +250,10 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
-        eventType,
+        excludeFromCalculations: this.excludeFromCalculations,
+        isShow: this.isVisibilityFromDependency,
         unit: this.unit,
+        eventType,
       });
       if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
@@ -262,6 +266,7 @@ export default {
         type: "range",
         label: this.label,
         eventType,
+        isShow: this.isVisibilityFromDependency,
       });
     },
     shownTooltip() {
@@ -280,11 +285,6 @@ export default {
       this.updateValueTimer = setTimeout(() => {
         this.localRangeValue = parseFloat(newValue);
       }, 1500);
-    },
-    globalCanBeShownTooltip() {
-      if (this.isVisibilityFromDependency) {
-        this.changeValid("global");
-      }
     },
   },
   computed: {
@@ -344,42 +344,23 @@ export default {
     localCanBeShownTooltip() {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
     },
-    /**
-     * Существует список цен с зависимостями
-     * @returns {boolean}
-     */
-    isDependencyPriceExist() {
-      // console.log(this.dependencyPrices);
-      return Boolean(
-        this.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
-        )
-      );
-    },
+
 
     /**
-     * Иницаилизировать проверку условий зависимых цен
-     *
-     * @returns {boolean}
-     */
-    initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
-    },
-
-    /**
-     * Возвращает цену подходящую условию
+     * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.initProcessingDependencyPrice) {
-        let newCost = this.costAfterProcessingDependencyPrice(
-          this.dependencyPrices
-        );
-        if (newCost !== null) {
-          return newCost;
-        }
+      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
         return this.cost;
+      }
+
+      let newCost = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
       }
       return this.cost;
     },

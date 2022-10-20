@@ -35,12 +35,13 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiCheckbox",
   emits: ["changedValue", "changeValid"],
-  mixins: [MixinsForWorkersTemplates],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
@@ -115,6 +116,7 @@ export default {
       type: String,
       default: "no",
     },
+
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
@@ -132,7 +134,7 @@ export default {
   methods: {
     inputLocalValue(value) {
       this.localValue = value;
-      this.changeValue("test");
+      this.changeValue('test');
     },
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
@@ -146,11 +148,14 @@ export default {
         cost:
           this.localValue && this.checkedValueOnVoid(this.localCost)
             ? this.localCost
-            : null,
+            : 0,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        excludeFromCalculations: this.excludeFromCalculations,
+        isShow: this.isVisibilityFromDependency,
         eventType,
       });
+
       if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
       }
@@ -162,6 +167,7 @@ export default {
         type: "checkbox",
         label: this.label,
         eventType,
+        isShow: this.isVisibilityFromDependency,
       });
     },
   },
@@ -169,11 +175,6 @@ export default {
     checkboxValue(newValue) {
       this.localValue = Boolean(newValue);
       this.changeValid("checkbox");
-    },
-    globalCanBeShownTooltip() {
-      if (this.isVisibilityFromDependency) {
-        this.changeValid("global");
-      }
     },
   },
   computed: {
@@ -189,40 +190,22 @@ export default {
       return this.isNeedChoice && !this.localValue;
     },
 
-    /**
-     * Существует список цен с зависимостями
-     * @returns {boolean}
-     */
-    isDependencyPriceExist() {
-      return Boolean(
-        this.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
-        )
-      );
-    },
-    /**
-     * Иницаилизировать проверку условий зависимых цен
-     *
-     * @returns {boolean}
-     */
-    initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
-    },
 
     /**
-     * Возвращает цену подходящую условию
+     * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.initProcessingDependencyPrice) {
-        let newCost = this.costAfterProcessingDependencyPrice(
-          this.dependencyPrices
-        );
-        if (newCost !== null) {
-          return newCost;
-        }
+      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
         return this.cost;
+      }
+
+      let newCost = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
       }
       return this.cost;
     },

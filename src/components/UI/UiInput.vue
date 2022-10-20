@@ -52,12 +52,12 @@
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
-
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 export default {
   name: "UiInput",
   emits: ["changedValue", "changeValid"],
-  mixins: [MixinsForWorkersTemplates],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
@@ -68,6 +68,7 @@ export default {
       type: [Number, String],
       default: null,
     },
+
     /**
      * единицы измерения
      */
@@ -194,6 +195,14 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    /**
+     * метод вывода данных в результирующую форму
+     */
+    formOutputMethod: {
+      type: String,
+      default: "no",
+    },
+
   },
   mounted() {
     if (!isNaN(parseFloat(this.localMin)) && this.localMin > this.inputValue) {
@@ -279,6 +288,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        isShow: this.isVisibilityFromDependency,
+        excludeFromCalculations: this.excludeFromCalculations,
         unit: this.unit,
         eventType,
       });
@@ -314,6 +325,7 @@ export default {
           type: "input",
           label: this.label,
           eventType,
+          isShow: this.isVisibilityFromDependency,
         });
       });
     },
@@ -370,22 +382,6 @@ export default {
       }
     },
   },
-  watch: {
-    // /**
-    //  * после изменения содержимого инпута происходит общая проверка валидности
-    //  *
-    //  */
-    // localValue(newValue) {
-    //   this.localInputValue = newValue;
-    //   this.changeValue();
-    //   this.shownTooltip();
-    // },
-    globalCanBeShownTooltip() {
-      if (this.isVisibilityFromDependency) {
-        this.changeValid("global");
-      }
-    },
-  },
   computed: {
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
@@ -403,7 +399,7 @@ export default {
     },
     resultSumm() {
       return this.onlyNumber && this.checkedValueOnVoid(this.localCost)
-        ? this.localCost * Math.abs(this.localInputValue)
+        ? this.localCost * this.localInputValue
         : null;
     },
     resultValue() {
@@ -493,33 +489,14 @@ export default {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
     },
 
-    /**
-     * Существует список цен с зависимостями
-     * @returns {boolean}
-     */
-    isDependencyPriceExist() {
-      return Boolean(
-        this.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
-        )
-      );
-    },
-    /**
-     * Иницаилизировать проверку условий зависимых цен
-     *
-     * @returns {boolean}
-     */
-    initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
-    },
 
     /**
-     * Возвращает цену подходящую условию
+     * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice) {
+      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
         return this.cost;
       }
 

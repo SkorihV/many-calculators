@@ -26,6 +26,8 @@
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-prices="template?.dependencyPrices"
     :form-output-method="template?.formOutputMethod"
+    :exclude-from-calculations="template?.excludeFromCalculations"
+    :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
   >
@@ -52,7 +54,9 @@
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :dependency-prices="template?.dependencyPrices"
+    :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
+    :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
   >
@@ -78,7 +82,9 @@
     :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
+    :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
+    :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
   >
@@ -111,7 +117,9 @@
     :dependency-prices="template?.dependencyPrices"
     :not-empty="template?.notEmpty"
     :form-output-method="template?.formOutputMethod"
+    :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
+    :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
   >
@@ -136,7 +144,9 @@
     :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
+    :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
+    :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
   >
@@ -167,6 +177,10 @@ export default {
       type: [Number, String],
       default: null,
     },
+    parentIsShow: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     changeValue(data) {

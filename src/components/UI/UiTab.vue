@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__tab-wrapper" :class="[classes]" v-if="showBlock">
+  <div class="calc__tab-wrapper" :class="[classes]" v-show="showBlock && isVisibilityFromDependency">
     <div class="calc__tab-main-label" v-if="tabData?.label?.length">
       {{ tabData.label }}
     </div>
@@ -10,7 +10,7 @@
         <div
           class="calc__tab-item-label"
           :class="{
-            isOpen: key === itemOpenId,
+            isOpen: key === shownIdTab,
             isError: checkIsShowError(key),
           }"
           v-if="visibilityListTabs.get(key)"
@@ -33,12 +33,13 @@
       :key="key"
     >
       <ui-tab-item
+        :parent-is-show="isVisibilityFromDependency"
         :tab-item="item"
         :tab-name="elementName + '_' + key"
         :tab-item-id="key"
         :element-name="item?.json_id || 'tabItem' + '_' + key"
         :shown-id-tab="shownIdTab"
-        @changedValue="changedValue"
+        @changedValue="changeValue"
         @changeValid="changeValid"
       />
     </div>
@@ -50,16 +51,26 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 export default {
   name: "UiTab",
   components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue", "changeValid"],
-  inject: ["globalCanBeShownTooltip"],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  mixins: [MixinsForProcessingFormula],
   props: {
+
     tabData: {
       type: Object,
       default: () => {},
+    },
+    /**
+     * заголовок
+     */
+    label: {
+      type: String,
+      default: "",
     },
     elementName: {
       type: String,
@@ -73,7 +84,7 @@ export default {
   data() {
     return {
       itemOpenId: null,
-      errorsElements: new Set(),
+      errorsElements: {},
       visibilityListTabs: new Map(),
       shownIdTab: null
     };
@@ -82,33 +93,44 @@ export default {
     openItem(index) {
       this.shownIdTab = index;
     },
-    changedValue(data) {
+    changeValue(data) {
       this.$emit("changedValue", data);
     },
     changeValid({ data, infoOnTab }) {
 
-      if (
-        data.error &&
-        data.eventType !== "mounted" &&
-        data.eventType !== "delete"
-      ) {
-        this.errorsElements.add(data.name);
+      if ( this.checkAllowedErrors(data)) {
+        if (!this.errorsElements[infoOnTab.index]) {
+          this.errorsElements[infoOnTab.index] = new Set();
+        }
+        this.errorsElements[infoOnTab.index].add(data.name)
+
       } else {
-        if (this.errorsElements.has(data.name)) {
-          this.errorsElements.delete(data.name);
+        if (this.errorsElements[infoOnTab.index]?.has(data.name)) {
+          this.errorsElements[infoOnTab.index].delete(data.name);
         }
       }
 
       this.visibilityListTabs.set(infoOnTab.index, infoOnTab.isShown);
-
       this.$emit("changeValid", data);
     },
     checkIsShowError(key) {
       return (
-        key !== this.itemOpenId &&
+        key !== this.shownIdTab &&
         this.errorsElements[key]?.size &&
         this.globalCanBeShownTooltip
       );
+    },
+    /**
+     * Проверяем можно ли собрать ошибки вложенных элементов
+     * @param data
+     * @returns {boolean}
+     */
+    checkAllowedErrors(data) {
+      return data.error &&
+        data.eventType !== "mounted" &&
+        data.eventType !== "delete" &&
+        data.isShow &&
+        this.globalCanBeShownTooltip;
     },
   },
   computed: {

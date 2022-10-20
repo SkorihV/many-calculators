@@ -354,6 +354,9 @@ $border-radius: 4px;
         flex-direction: column;
         align-items: flex-start;
       }
+      @media all and (max-width: 480px) {
+        flex-direction: column;
+      }
     }
 
     &-label {
@@ -585,7 +588,7 @@ $border-radius: 4px;
 
       &.button {
         @include style-button;
-        padding: 5px 10px;
+        padding: 10px 15px;
       }
     }
 
@@ -1100,6 +1103,50 @@ $border-radius: 4px;
       font-weight: 600;
       margin-bottom: 10px;
       color: $color-dark-normal;
+    }
+  }
+
+  &__error {
+    &-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      @include style-button;
+    }
+    &-wrapper {
+      display: none;
+      position: fixed;
+      right: 0;
+      flex-direction: column;
+      bottom: 0;
+      margin: 10px;
+      background-color: $color-dark-normal;
+      padding: 10px;
+      color: $color-white;
+      border-radius: $border-radius;
+      max-width: 450px;
+      max-height: 500px;
+      box-shadow: 0 0 2px 2px $color-danger;
+      min-height: 22px;
+      min-width: 22px;
+      &.isShow {
+        display: flex;
+      }
+    }
+    &-label {
+      color: $color-orange-normal;
+      margin-top: 35px;
+    }
+    &-item {
+      display: flex;
+      flex-direction: column;
+      margin: 5px 0;
+    }
+    &-alert {
+      margin-top: 15px;
+      font-size: 18px;
     }
   }
 }

@@ -6,6 +6,7 @@
     :key="key_in"
   >
     <templates-wrapper
+      :parent-is-show="parentIsShow"
       :template="template"
       :index="itemName + key_in"
       @changedValue="changeValue"
@@ -15,13 +16,11 @@
 </template>
 
 <script>
-import UiTooltip from "@/components/UI/UiTooltip";
-import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 export default {
   name: "UiTabItem",
-  components: {UiTooltip, UiPrompt, TemplatesWrapper},
+  components: {TemplatesWrapper},
   emits: ["changedValue", "changeValid"],
   props: {
     tabItem: {
@@ -42,6 +41,10 @@ export default {
     shownIdTab: {
       type: Number,
       default: null
+    },
+    parentIsShow: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -56,12 +59,12 @@ export default {
     },
     changeValid(data) {
 
-      if (data.eventType === "delete" ) {
+      if (data.isShow) {
+        this.visibilityList.add(data.name);
+      } else {
         if (this.visibilityList.has(data.name)) {
           this.visibilityList.delete(data.name);
         }
-      } else {
-        this.visibilityList.add(data.name);
       }
 
       let infoOnTab = {
@@ -81,7 +84,7 @@ export default {
     itemName() {
       return this.tabName + '_' + this.elementName;
     }
-  }
+  },
 };
 </script>
 

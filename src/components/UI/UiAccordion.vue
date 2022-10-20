@@ -1,43 +1,61 @@
 <template>
-  <div class="calc__accordion-wrapper" :class="[classes]" v-if="showBlock">
+  <div class="calc__accordion-wrapper" :class="[classes]" v-show="showBlock && isVisibilityFromDependency">
     <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">
       {{ accordionData.label }}
     </div>
-    <div
-      class="calc__accordion-item-label-wrapper"
-      v-if="accordionData?.items?.length"
-      v-for="(item, key) in accordionData.items"
-      :key="key"
-    >
-      <ui-accordion-item
-        :accordionItem="item"
-        :accordion-name="elementName"
-        :accordion-item-id="key"
-        :element-name="item?.json_id || 'accordionItem' + key"
-        @changedValue="changedValue"
-        @changeValid="changeValid"
-      />
-    </div>
+    <template v-if="accordionData?.items?.length">
+       <div
+        class="calc__accordion-item-label-wrapper"
+        v-for="(item, key) in accordionData.items"
+        :key="key"
+      >
+        <ui-accordion-item
+          :parent-is-show="isVisibilityFromDependency"
+          :accordionItem="item"
+          :accordion-name="elementName"
+          :accordion-item-id="key"
+          :element-name="item?.json_id || 'accordionItem' + '_' + key"
+          @changedValue="changeValue"
+          @changeValid="changeValid"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import UiAccordionItem from "@/components/UI/UiAccordionItem";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 export default {
   name: "UiAccordion",
   components: { UiAccordionItem },
   emits: ["changedValue", "changeValid"],
-  inject: ["globalCanBeShownTooltip"],
+  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  mixins: [MixinsForProcessingFormula],
   props: {
+
     accordionData: {
       type: Object,
       default: () => {},
     },
+    /**
+     * заголовок
+     */
+    label: {
+      type: String,
+      default: "",
+    },
+    /**
+     * имя необходимое для корректной работы Label
+     */
     elementName: {
       type: String,
-      default: Math.random().toString(),
+      default: '',
     },
+    /**
+     * Список классов для переопределения стилей на обертке
+     */
     classes: {
       type: String,
       default: null,
@@ -52,7 +70,7 @@ export default {
     openItem(index) {
       this.itemOpenId = this.itemOpenId !== index ? index : null;
     },
-    changedValue(data) {
+    changeValue(data) {
       this.$emit("changedValue", data);
     },
     changeValid(data) {

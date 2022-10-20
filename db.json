@@ -28,11 +28,11 @@
       },
       {
         "title": "checkbox - Зависимости уровень 2",
-        "label": "checkbox - Зависимости уровень 2",
+        "label": "checkbox - Зависимости уровень 21111111",
         "labelSecond": "",
         "value": false,
         "cost": "50",
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "isChecked": false,
         "typeDisplayClass": "",
         "formOutputMethod": "valueSumm",
@@ -156,6 +156,7 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiRadio",
+        "excludeFromCalculations": true,
         "values": [
           {
             "title": "значение 1",
@@ -330,7 +331,7 @@
         "typeDisplayClass":"button",
         "formOutputMethod":"no",
         "elementName":"check-1",
-        "dependencyName":"asdasd2",
+        "dependencyName":"",
         "dependencyFormulaDisplay":"",
         "classes":"",
         "template":"UiCheckbox"
@@ -365,8 +366,8 @@
         "template":"UiAccordion",
         "elementName":"acc1",
         "classes":"",
-        "dependencyName":"",
-        "dependencyFormulaDisplay":"",
+        "dependencyName":"test123",
+        "dependencyFormulaDisplay":"test123 === 'Пункта второй'",
         "json_id" : "169744706",
 
 
@@ -387,10 +388,10 @@
                 "isNeedChoice":false,
                 "isChecked":false,
                 "typeDisplayClass":"switcher",
-                "elementName":"test123",
+                "elementName":"",
                 "classes":"",
                 "template":"UiCheckbox",
-                "formOutputMethod":"no",
+                "formOutputMethod":"valueSumm",
                 "dependencyName":"",
                 "formulaDependency":""
               }
@@ -437,17 +438,45 @@
                 "typeDisplayClass":"buttons",
                 "formOutputMethod":"valueSumm",
                 "elementName":"",
-                "dependencyName":"",
+                "dependencyName":"qwe1",
                 "dependencyFormulaDisplay":"",
                 "classes":"",
                 "template":"UiRadio",
-                "values":[{"title":"11",
+                "values":[
+                  {"title":"11",
                   "radioName":11,
-                  "cost":11},{"title":"22",
+                  "cost":11
+                  },
+                  {
+                    "title":"22",
                   "radioName":22,
-                  "cost":22},{"title":"33",
+                  "cost":22,
+                    "dependencyPrices" : [
+                      {
+                        "cost": 20,
+                        "enabledFormula": 1,
+                        "dependencyFormulaCost": "qwe1 < 10",
+                        "title": "33"
+                      },
+                      {
+                        "cost": 25,
+                        "enabledFormula": 1,
+                        "dependencyFormulaCost": "qwe1 > 25",
+                        "title": "200"
+                      },
+                      {
+                        "cost": 35,
+                        "enabledFormula": 1,
+                        "dependencyFormulaCost": "qwe1 > 35",
+                        "title": "300"
+                      }
+                    ]
+
+                  },
+                  {"title":"33",
                   "radioName":33,
-                  "cost":33}]
+                  "cost":33}
+                ]
               }
             ],
             "label":"Вкладка с радиокнопками",
@@ -467,7 +496,7 @@
                 "labelSecond":"3D-Дизайн проект",
                 "value":false,
                 "cost":"4",
-                "isNeedChoice":false,
+                "isNeedChoice":true,
                 "isChecked":false,
                 "typeDisplayClass":"",
                 "formOutputMethod":"valueSumm",
@@ -510,6 +539,30 @@
                 "customErrorText":"",
                 "classes":"",
                 "template":"UiInput"
+              },
+              {
+                "title":"Заголовок элемента в списке вида - 222",
+                "label":"Заголовок элемента в списке вида - 222",
+                "value":"6",
+                "cost":"44",
+                "unit":"",
+                "min":"1",
+                "max":"44",
+                "controls":1,
+                "step":"1",
+                "isColumn":false,
+                "notEmpty":1,
+                "onlyNumber":1,
+                "isCurrency":false,
+                "onlyInteger":false,
+                "formOutputMethod":"valueSumm",
+                "elementName":"qwe1",
+                "dependencyName":"qwe123",
+                "dependencyFormulaDisplay":"qwe123 > 20  && qwe123 < 40",
+                "customErrorPattern":"",
+                "customErrorText":"",
+                "classes":"",
+                "template":"UiInput"
               }
             ],
             "label":"Вкладка с инпутами",
@@ -522,6 +575,8 @@
       {
         "title":"Зависимости табы",
         "label":"Зависимости табы",
+        "dependencyName":"test123",
+        "dependencyFormulaDisplay":"test123 === 'Пункта второй'",
         "items":[
           {
             "title":"Вкладка с селектами",
@@ -536,8 +591,8 @@
                 "notEmpty":false,
                 "formOutputMethod":"valueSumm",
                 "elementName":"",
-                "dependencyName":"",
-                "dependencyFormulaDisplay":"",
+                "dependencyName":"test123",
+                "dependencyFormulaDisplay":"test123 === 'Пункта второй'",
                 "classes":"",
                 "template":"UiSelect",
                 "values":[
@@ -600,7 +655,7 @@
                 "labelSecond":"",
                 "value":false,
                 "cost":"",
-                "isNeedChoice":false,
+                "isNeedChoice":true,
                 "isChecked":false,
                 "typeDisplayClass":"",
                 "formOutputMethod":"valueSumm",
@@ -639,15 +694,15 @@
                 "max":"100",
                 "cost":"34",
                 "unit":"",
-                "step":"1",
-                "showSteps":false,
-                "stepPrompt":"1",
+                "step":"5",
+                "showSteps":true,
+                "stepPrompt":"5",
                 "isNeedChoice":false,
                 "notEmpty":false,
-                "showStaticValue":false,
+                "showStaticValue":true,
                 "showDynamicValue":false,
                 "formOutputMethod":"valueSumm",
-                "elementName":"",
+                "elementName":"qwe123",
                 "dependencyName":"range2",
                 "dependencyFormulaDisplay":"range2 > 10 && range2 < 30",
                 "classes":"",
@@ -2214,10 +2269,13 @@
     ]
   },
   "calculator-options": {
-    "formula": "test1   + test2   - test3 * ( test4 + test5 ) + _otherSumm_",
-    "useFormula": false,
-    "methodProcessingMistakes": "useAutomatic",
-    "currency": "руб"
+    "formula": "Inputlvl1 * _otherSumma_",
+    "useFormula": true,
+    "methodProcessingMistakes": "useButton",
+    "displayResultData" : true,
+    "currency": "руб",
+    "showErrorTemplate": true
+
   },
   "credit-calculator": {
     "type_calculate": "Both",

@@ -2,7 +2,7 @@
   <div
     class="calc__bisection-wrapper"
     :class="[classes]"
-    v-if="templateData?.rightSide.length || templateData?.leftSide.length"
+    v-show="(templateData?.rightSide.length || templateData?.leftSide.length) && isVisibilityFromDependency"
   >
     <div class="calc__bisection-label" v-if="templateData?.label?.length">
       {{ templateData?.label }}
@@ -20,6 +20,7 @@
         </div>
         <templates-wrapper
           v-for="(template, inx) in templateData?.leftSide"
+          :parent-is-show="isVisibilityFromDependency"
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'left' + '_' + inx"
@@ -39,6 +40,7 @@
         </div>
         <templates-wrapper
           v-for="(template, inx) in templateData?.rightSide"
+          :parent-is-show="isVisibilityFromDependency"
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'right' + '_' + inx"
@@ -52,15 +54,25 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 export default {
   name: "UiBisection",
   components: { TemplatesWrapper },
   emits: ["changedValue", "changeValid"],
+  inject: ["globalDataForDependencies"],
+  mixins: [MixinsForProcessingFormula],
   props: {
     templateData: {
       type: Object,
       default: () => {},
+    },
+    /**
+     * заголовок
+     */
+    label: {
+      type: String,
+      default: "",
     },
     widthLeftSide: {
       type: [Number, String],

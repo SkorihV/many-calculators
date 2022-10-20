@@ -1,37 +1,5 @@
-export const MixinsForWorkersTemplates = {
+export const MixinsForProcessingFormula = {
   props: {
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    /**
-     * инпут не может быть пустым
-     */
-    notEmpty: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: null,
-    },
     /**
      * Название элемента от значения которого будет строиться зависимость
      */
@@ -46,13 +14,10 @@ export const MixinsForWorkersTemplates = {
       type: String,
       default: "",
     },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
+    parentIsShow: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -74,18 +39,18 @@ export const MixinsForWorkersTemplates = {
      */
     processingFormulaSpecialsSymbols(formula) {
       this.spec.forEach((specItem) => {
-        formula = formula.replaceAll(specItem[0], specItem[1]);
+        formula = formula?.replaceAll(specItem[0], specItem[1]);
       });
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /([A-Wa-wА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         .filter((item) => item?.trim()?.length);
 
       formula = formula.map((item) => {
         //удаляем пробелы по краям
-        let nextItem = item.replace(/^\s*|\s*$/g, "");
+        let nextItem = item?.replace(/^\s*|\s*$/g, "");
         // если по краям есть кавычки, то удаляем пробелы между
         // кавычками и текстом в середине, не трогая пробелы внутри текста
         if (nextItem.match(/^('|").*('|")$/)) {
@@ -112,8 +77,7 @@ export const MixinsForWorkersTemplates = {
           if (!isNaN(parseFloat(this.getMajorElementDependency?.value))) {
             return resultText + this.getMajorElementDependency.value;
           } else if (
-            this.getMajorElementDependency?.value === false ||
-            this.getMajorElementDependency?.value === true
+            typeof this.getMajorElementDependency?.value === 'boolean'
           ) {
             return resultText + Boolean(this.getMajorElementDependency?.value);
           } else {
@@ -130,7 +94,7 @@ export const MixinsForWorkersTemplates = {
      * @returns {number|number|*|null}
      */
     costAfterProcessingDependencyPrice(dependencyPrice) {
-      let result = dependencyPrice.reduce(
+      let result = dependencyPrice?.reduce(
         (resultReduce, item) => {
           if (!item.enabledFormula) {
             return resultReduce;
@@ -180,31 +144,35 @@ export const MixinsForWorkersTemplates = {
     /**
      * При изменении состояния элемента от которого зависит текущий - повторно производить вычисления состояния текущего
      */
-    majorElementDependency: {
+    getMajorElementDependency: {
       handler(newValue, oldValue) {
-        if (
-          newValue?.value !== oldValue?.value &&
-          this.isVisibilityFromDependency
+        if ((newValue !== null && oldValue !== null)
+          &&
+          (newValue.value !== oldValue.value
+            ||
+            newValue.isShow !== oldValue.isShow)
         ) {
-          this.changeValue();
+          this.changeValue('changeMajor');
         }
       },
       deep: true,
     },
   },
-
   computed: {
     /**
      * Отобразить текущий элемент
      * @returns {boolean|any}
      */
     isVisibilityFromDependency() {
-      if (this.isDependencyElementVisibility && this.getMajorElementDependency) {
-        try {
-          return eval(this.parsingFormulaVariables);
-        } catch (e) {
-          return false;
+      if (this.isDependencyElementVisibility || !this.parentIsShow) {
+        if (this.getMajorElementDependency?.isShow) {
+          try {
+            return eval(this.parsingFormulaVariables);
+          } catch (e) {
+            return false;
+          }
         }
+        return false;
       }
       return true;
     },
@@ -229,10 +197,9 @@ export const MixinsForWorkersTemplates = {
      * @returns {*|null}
      */
     getMajorElementDependency() {
-      if (!this.dependencyName.length) {
+      if (!this.isDependencyNameExist) {
         return null;
       }
-
       return this.dependencyName in this.globalDataForDependencies
         ? this.globalDataForDependencies[this.dependencyName]
         : null;
@@ -248,7 +215,6 @@ export const MixinsForWorkersTemplates = {
       let formula = this.processingFormulaSpecialsSymbols(
         this.dependencyFormulaDisplay
       );
-
       return this.processingVariablesOnFormula(formula);
     }
   },

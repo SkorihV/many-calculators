@@ -68,12 +68,13 @@
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
-import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue", "changeValid"],
-  mixins: [MixinsForWorkersTemplates],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip, UiPrompt },
   mounted() {
@@ -112,7 +113,6 @@ export default {
       type: Array,
       default: () => [],
     },
-
     isColumn: {
       type: [Boolean, Number],
       default: false,
@@ -158,6 +158,7 @@ export default {
     maxWidth: {
       type: [Number, String],
     },
+
   },
   data() {
     return {
@@ -188,6 +189,7 @@ export default {
     changeSelect(item, idx, eventType = "click") {
       this.currentIndexOption = idx;
       this.currentOption = item;
+
       this.changeValue(eventType);
       this.close();
     },
@@ -203,6 +205,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        excludeFromCalculations: this.excludeFromCalculations,
+        isShow: this.isVisibilityFromDependency,
         eventType,
       });
       if (eventType !== "delete" || eventType !== "mounted") {
@@ -216,6 +220,7 @@ export default {
         type: "select",
         label: this.label,
         eventType,
+        isShow: this.isVisibilityFromDependency,
       });
     },
   },
@@ -229,21 +234,17 @@ export default {
       this.currentOption = this.selectValues[this.currentIndexOption];
       this.changeValue();
     },
-    globalCanBeShownTooltip() {
-      if (this.isVisibilityFromDependency) {
-        this.changeValid("global");
-      }
-    },
-    selectValuesAfterProcessingDependency: {
-      handler(newValue, oldValue) {
-        if (newValue?.length !== oldValue?.length) {
-          this.currentOption = this.mockOption;
-          this.currentIndexOption = -1;
-          this.changeValue("delete");
-        }
-      },
-      deep: true,
-    },
+
+    // selectValuesAfterProcessingDependency: {
+    //   handler(newValue, oldValue) {
+    //     if (newValue?.length !== oldValue?.length) {
+    //       this.currentOption = this.mockOption;
+    //       this.currentIndexOption = -1;
+    //       this.changeValue();
+    //     }
+    //   },
+    //   deep: true,
+    // },
   },
   computed: {
     localElementName() {
@@ -264,64 +265,49 @@ export default {
       return this.notEmpty && this.currentIndexOption === null;
     },
 
-    /**
-     * Существует список цен с зависимостями
-     * @returns {boolean}
-     */
-    isDependencyPriceExist() {
-      return Boolean(
-        this.currentOption?.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
-        )
-      );
-    },
-    /**
-     * Иницаилизировать проверку условий зависимых цен
-     *
-     * @returns {boolean}
-     */
-    initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
-    },
 
     /**
-     * Возвращает цену подходящую условию
+     * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.initProcessingDependencyPrice) {
-        let newCost = this.costAfterProcessingDependencyPrice(
-          this.currentOption?.dependencyPrices
-        );
-        if (newCost !== null) {
-          return newCost;
-        }
+      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.currentOption?.dependencyPrices) {
         return this.currentOption?.cost;
+      }
+
+      let newCost = this.costAfterProcessingDependencyPrice(
+        this.currentOption?.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
       }
       return this.currentOption?.cost;
     },
+
+
+    /**
+     * Получить список селектов после обработки формул на отображение самих селектов
+     * @returns {*[]}
+     */
     selectValuesAfterProcessingDependency() {
       if (this.isDependencyNameExist) {
-        return this.selectValues.filter((select) => {
-          if (
-            select?.enabledProcessingDependency &&
-            select?.dependencyFormulaItem.length
-          ) {
-            let formula = this.processingFormulaSpecialsSymbols(
-              select.dependencyFormulaItem
-            );
-            formula = this.processingVariablesOnFormula(formula);
-            // console.log(formula);
-            try {
-              return eval(formula);
-            } catch (e) {
-              console.error(e.message);
-              return false;
-            }
+        return this.selectValues.filter(selectItem => {
+          if (!selectItem?.enabledProcessingDependency || !selectItem?.dependencyFormulaItem.length) {
+            return true;
           }
-          return true;
-        });
+
+          let formula = this.processingFormulaSpecialsSymbols(
+            selectItem.dependencyFormulaItem
+          );
+          formula = this.processingVariablesOnFormula(formula);
+          try {
+            return (eval(formula))
+          } catch (e) {
+            console.error(e.message);
+            return false;
+          }
+        })
       }
       return this.selectValues;
     },

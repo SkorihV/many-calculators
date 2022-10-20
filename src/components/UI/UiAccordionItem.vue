@@ -2,8 +2,8 @@
   <div
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
-    v-if="isShowAccordionItem"
-    :class="{ isOpen: isOpen, isError: isShowError }"
+    v-show="isShowAccordionItem"
+    :class="{ isOpen: isOpen, isError: isShowError && !isOpen }"
   >
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>
     <div class="calc__accordion-item-minus" v-if="isOpen"></div>
@@ -22,6 +22,7 @@
     :key="key_in"
   >
     <templates-wrapper
+      :parent-is-show="parentIsShow"
       :template="template"
       :index="itemIdName + '_' + key_in"
       @changedValue="changeValue"
@@ -35,11 +36,11 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
-
 export default {
   name: "UiAccordionItem",
   components: {UiTooltip, UiPrompt, TemplatesWrapper},
   emits: ["changedValue", "changeValid"],
+  inject: ["globalCanBeShownTooltip"],
   props: {
     accordionItem: {
       type: Object,
@@ -55,6 +56,10 @@ export default {
     elementName: {
       type: String,
       default: Math.random().toString(),
+    },
+    parentIsShow: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -69,39 +74,52 @@ export default {
       this.$emit("changedValue", data);
     },
     changeValid(data) {
-      if (
-        data.error &&
-        data.eventType !== "mounted" &&
-        data.eventType !== "delete"
-      ) {
+
+      if (this.checkAllowedErrors(data)) {
         this.errorsElements.add(data.name);
       } else {
         if (this.errorsElements.has(data.name)) {
           this.errorsElements.delete(data.name);
         }
       }
-      if (data.eventType === "delete" ) {
+      if (data.isShow) {
+        this.visibilityList.add(data.name);
+      } else {
         if (this.visibilityList.has(data.name)) {
           this.visibilityList.delete(data.name);
         }
-      } else {
-        this.visibilityList.add(data.name);
+      }
+
+      if (!this.parentIsShow) {
+        return false;
       }
 
       this.$emit("changeValid", data);
+    },
+    /**
+     * Проверяем можно ли собрать ошибки вложенных элементов
+     *
+     * @param data
+     * @returns {boolean}
+     */
+    checkAllowedErrors(data) {
+      return (data.error &&
+        data.eventType !== "delete" &&
+        data.isShow &&
+        this.globalCanBeShownTooltip);
     },
   },
   computed: {
     isShowError() {
       return Boolean(this.errorsElements.size)
     },
-    isShowAccordionItem(){
+    isShowAccordionItem( ){
       return Boolean(this.visibilityList.size);
     },
     itemIdName() {
       return this.accordionName + '_' + this.elementName + '_' + this.accordionItemId;
     }
-  }
+  },
 };
 </script>
 

@@ -40,12 +40,13 @@
 <script>
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForWorkersTemplates } from "@/components/UI/MixinsForWorkersTemplates";
+import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiRadio",
   emits: ["changedValue", "changeValid"],
-  mixins: [MixinsForWorkersTemplates],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiPrompt, UiTooltip },
   mounted() {
@@ -72,7 +73,6 @@ export default {
       this.changeValid("mounted");
     }
   },
-
   props: {
     radioValues: {
       type: Array,
@@ -178,6 +178,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        excludeFromCalculations: this.excludeFromCalculations,
+        isShow: this.isVisibilityFromDependency,
         eventType,
         unit: this.unit,
       });
@@ -192,6 +194,7 @@ export default {
         type: "radio",
         label: this.label,
         eventType,
+        isShow: this.isVisibilityFromDependency,
       });
     },
   },
@@ -204,16 +207,11 @@ export default {
           : this.radioValues.length - 1;
       this.changeValue("selected");
     },
-    globalCanBeShownTooltip() {
-      if (this.isVisibilityFromDependency) {
-        this.changeValid("global");
-      }
-    },
     radioValuesAfterProcessingDependency: {
       handler(newValue, oldValue) {
         if (newValue?.length !== oldValue?.length) {
           this.currentIndexRadioButton = null;
-          this.changeValue("delete");
+          this.changeValue("selected");
         }
       },
       deep: true,
@@ -221,7 +219,7 @@ export default {
   },
   computed: {
     changedRadio() {
-      return this.radioValues[this.currentIndexRadioButton];
+      return this.currentIndexRadioButton !== null ? this.radioValues[this.currentIndexRadioButton] : null;
     },
     radioType() {
       return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
@@ -231,39 +229,20 @@ export default {
     },
 
     /**
-     * Существует список цен с зависимостями
-     * @returns {boolean}
-     */
-    isDependencyPriceExist() {
-      return Boolean(
-        this.changedRadio?.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
-        )
-      );
-    },
-    /**
-     * Иницаилизировать проверку условий зависимых цен
-     *
-     * @returns {boolean}
-     */
-    initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
-    },
-
-    /**
-     * Возвращает цену подходящую условию
+     * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.initProcessingDependencyPrice) {
-        let newCost = this.costAfterProcessingDependencyPrice(
-          this.changedRadio?.dependencyPrices
-        );
-        if (newCost !== null) {
-          return newCost;
-        }
+      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.changedRadio?.dependencyPrices) {
         return this.changedRadio?.cost;
+      }
+
+      let newCost = this.costAfterProcessingDependencyPrice(
+        this.changedRadio?.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
       }
       return this.changedRadio?.cost;
     },
