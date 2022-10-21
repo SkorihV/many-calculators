@@ -1149,5 +1149,25 @@ $border-radius: 4px;
       font-size: 18px;
     }
   }
+
+  &__image {
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      &-image {
+        width: 100%;
+        img {
+          @include style-img;
+        }
+      }
+    }
+    &-label {
+      &-wrapper {
+        display: flex;
+        margin: 5px 0;
+      }
+    }
+  }
 }
 </style>

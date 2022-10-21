@@ -113,6 +113,79 @@
         ]
       },
       {
+        "json_id" : "177045506",
+        "title":"Потолки картинка",
+        "label":"Ткань",
+        "defaultImage":{"image_id":"1903009706",
+          "filename":"https://dummyimage.com/150x100/a1a1a1/fff",
+          "ver_id":2422030,
+          "image_width":"1000",
+          "image_height":"667",
+          "ext":"jpg"
+        },
+        "dependencyName":"range2",
+        "dependencyFormulaDisplay":"range2 > 2",
+        "classes":"",
+        "template":"UiImage",
+        "maxWidth": 150,
+        "dependencyImages":[
+          {
+            "title":"Пленка",
+            "label":"Пленка",
+            "image":{
+              "image_id":"1903011706",
+              "filename":"https://dummyimage.com/150x100/a1a1a1/ccc",
+              "ver_id":2422030,
+              "image_width":"1000",
+              "image_height":"667",
+              "ext":"jpg"
+            },
+            "prompt":"Текст подсказки второй",
+            "dependencyFormulaDisplay":"range2 > 10"
+          },
+          {
+            "title":"Пленка Китай Премиум",
+            "label":"Пленка Китай Премиум",
+            "image":{
+              "image_id":"1903092506",
+              "filename":"https://dummyimage.com/150x100/a1a1a1/c1c1c1",
+              "ver_id":2422030,
+              "image_width":"1000",
+              "image_height":"667",
+              "ext":"jpg"
+            },
+            "dependencyFormulaDisplay":"range2 > 20"
+          },
+          {
+            "title":"Пленка Китай Эконом",
+            "label":"Пленка Китай Эконом",
+            "image":{
+              "image_id":"1903082906",
+              "filename":"https://dummyimage.com/150x100/a1a1a1/ddd",
+              "ver_id":2422030,
+              "image_width":"1000",
+              "image_height":"667",
+              "ext":"jpg"
+            },
+            "dependencyFormulaDisplay":"range2 > 30"
+          },
+          {
+            "title":"Пленка Германия",
+            "label":"Пленка Германия",
+            "image":{
+              "image_id":"1903102306",
+              "filename":"https://dummyimage.com/150x100/a1a1a1/c2c3c4",
+              "ver_id":2422030,
+              "image_width":"640",
+              "image_height":"853",
+              "ext":"jpg"
+            },
+            "dependencyFormulaDisplay":"range2 > 40"
+          }
+        ],
+        "prompt":"Текст подсказки"
+      },
+      {
         "title": "Зависимость цены range от галочки",
         "label": "Зависимость цены от галочки",
         "value": "0",
@@ -221,6 +294,7 @@
             "title": "Пункт первый",
             "selectName": "Пункт первый",
             "cost": 100,
+            "prompt" : "тест",
             "dependencyPrices": [
               {
                 "title": "200",
@@ -240,6 +314,7 @@
             "title": "Пункта второй",
             "selectName": "Пункта второй",
             "cost": 99,
+            "prompt" : "тест 2",
             "dependencyPrices": [
               {
                 "title": "55",

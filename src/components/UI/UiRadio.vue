@@ -234,7 +234,7 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.changedRadio?.dependencyPrices) {
+      if (!this.getMajorElementDependency?.isShow || !this.changedRadio?.dependencyPrices?.length) {
         return this.changedRadio?.cost;
       }
 

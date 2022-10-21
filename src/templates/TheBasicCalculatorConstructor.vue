@@ -125,7 +125,13 @@ export default {
   },
   provide() {
     return {
+      /**
+       * Инициализирует возможность отображения всех подсказок с ошибками
+       */
       globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
+      /**
+       * глобальный массив с данными для зависимостей
+       */
       globalDataForDependencies: computed(() => this.dataForDependencies),
     };
   },

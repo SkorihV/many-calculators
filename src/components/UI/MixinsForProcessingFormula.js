@@ -71,7 +71,6 @@ export const MixinsForProcessingFormula = {
       if (!this.getMajorElementDependency) {
         return '';
       }
-
       return formula.reduce((resultText, item) => {
         if (item === this.dependencyName) {
           if (!isNaN(parseFloat(this.getMajorElementDependency?.value))) {
@@ -125,6 +124,19 @@ export const MixinsForProcessingFormula = {
       );
       return result.changed ? result.cost : null;
     },
+    /**
+     * Элемент от которого идет зависимость
+     * @returns {*|null}
+     */
+    isElementDependency(name) {
+      if (!name?.length) {
+        return false;
+      }
+      return name in this.globalDataForDependencies
+    },
+    putElementDependencyLocalList(name){
+
+    }
   },
   watch: {
     /**

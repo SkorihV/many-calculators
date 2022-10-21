@@ -154,6 +154,22 @@
       <ui-prompt :prompt-text="template.prompt" />
     </template>
   </ui-select>
+
+  <ui-image
+    v-if="template.template === 'UiImage'"
+    :label="template?.label"
+
+    :default-image="template?.defaultImage"
+    :dependency-images="template?.dependencyImages"
+    :max-width="template?.maxWidth"
+    :prompt="template?.prompt"
+    :element-name="template?.json_id || 'UiImage' + inx"
+    :dependency-name="template?.dependencyName"
+    :dependency-formula-display="template?.dependencyFormulaDisplay"
+    :classes="template?.classes"
+    :parent-is-show="parentIsShow"
+  ></ui-image>
+
 </template>
 
 <script>
@@ -163,11 +179,12 @@ import UiSelect from "@/components/UI/UiSelect";
 import UiRadio from "@/components/UI/UiRadio";
 import UiCheckbox from "@/components/UI/UiCheckbox";
 import UiPrompt from "@/components/UI/UiPrompt";
+import UiImage from "@/components/UI/UiImage";
 
 export default {
   name: "TemplatesWrapper",
   emits: ["changedValue", "changeValid"],
-  components: { UiRange, UiInput, UiSelect, UiRadio, UiCheckbox, UiPrompt },
+  components: { UiRange, UiInput, UiSelect, UiRadio, UiCheckbox, UiPrompt, UiImage },
   props: {
     template: {
       type: Object,

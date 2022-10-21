@@ -26,6 +26,10 @@
             />
           </div>
           {{ currentOption.selectName }}
+          <ui-prompt
+            v-if="currentOption?.prompt?.length"
+            :prompt-text="currentOption.prompt"
+          ></ui-prompt>
         </div>
         <div class="calc__select-option-wrapper" v-if="isOpen">
           <div
@@ -235,16 +239,16 @@ export default {
       this.changeValue();
     },
 
-    // selectValuesAfterProcessingDependency: {
-    //   handler(newValue, oldValue) {
-    //     if (newValue?.length !== oldValue?.length) {
-    //       this.currentOption = this.mockOption;
-    //       this.currentIndexOption = -1;
-    //       this.changeValue();
-    //     }
-    //   },
-    //   deep: true,
-    // },
+    selectValuesAfterProcessingDependency: {
+      handler(newValue, oldValue) {
+        if (newValue?.length !== oldValue?.length) {
+          this.currentOption = this.mockOption;
+          this.currentIndexOption = -1;
+          this.changeValue();
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
     localElementName() {
@@ -272,7 +276,7 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.currentOption?.dependencyPrices) {
+      if (!this.getMajorElementDependency?.isShow || !this.currentOption?.dependencyPrices?.length) {
         return this.currentOption?.cost;
       }
 
@@ -291,6 +295,7 @@ export default {
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
+
       if (this.isDependencyNameExist) {
         return this.selectValues.filter(selectItem => {
           if (!selectItem?.enabledProcessingDependency || !selectItem?.dependencyFormulaItem.length) {
@@ -309,6 +314,7 @@ export default {
           }
         })
       }
+
       return this.selectValues;
     },
   },
