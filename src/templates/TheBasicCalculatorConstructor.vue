@@ -183,9 +183,9 @@ export default {
         isShow,
         excludeFromCalculations,
       } = data;
-
-      if (eventType === "delete" || !isShow) {
-        this.deleteElementOnResults(name);
+// || !isShow
+      if (eventType === "delete") {
+        this.hiddenElementOnResults(name);
         this.deleteElementOnErrors(name);
         this.addDataForDependencies(data);
         this.checkEnabledResultButton();
@@ -199,22 +199,12 @@ export default {
         label,
         formOutputMethod,
         summ: cost,
-        value: null,
+        value,
         displayValue,
         unit: unit ? unit : null,
         isShow,
         excludeFromCalculations,
       };
-
-      if (type === "radio") {
-        this.resultsElements[name].value = value?.radioName;
-      } else if (type === "select") {
-        this.resultsElements[name].value = value?.selectName;
-      } else if (type === "checkbox") {
-        this.resultsElements[name].value = value ? "Да" : "Нет";
-      } else {
-        this.resultsElements[name].value = value;
-      }
 
       this.checkEnabledResultButton();
     },
@@ -247,9 +237,9 @@ export default {
         this.submitResult.disabled = true;
       }
     },
-    deleteElementOnResults(name) {
+    hiddenElementOnResults(name) {
       if (name in this.resultsElements) {
-        delete this.resultsElements[name];
+        this.resultsElements[name].isShow = false;
       }
     },
     deleteElementOnErrors(name) {
@@ -270,20 +260,10 @@ export default {
     addDataForDependencies({ name, value, displayValue, isShow, type }) {
       this.dataForDependencies[name] = {
         name,
-        value: null,
+        value,
         isShow,
         displayValue,
       };
-
-      if (type === "radio") {
-        this.dataForDependencies[name].value = value?.radioName;
-      } else if (type === "select") {
-        this.dataForDependencies[name].value = value;
-      } else if (type === "checkbox") {
-        this.dataForDependencies[name].value = value;
-      } else {
-        this.dataForDependencies[name].value = value;
-      }
     },
   },
   watch: {
@@ -338,7 +318,11 @@ export default {
      */
     summaFreeVariables() {
       return this.freeVariablesOutsideFormula.reduce((sum, item) => {
-        if (item?.summ !== null && !item.excludeFromCalculations) {
+        if (
+          item?.summ !== null &&
+          !item.excludeFromCalculations &&
+          item.isShow
+        ) {
           return sum + parseFloat(item.summ);
         }
         return sum + 0;
@@ -354,6 +338,7 @@ export default {
         {
           name: this.reserveVariableForOther,
           summ: this.summaFreeVariables,
+          isShow: Boolean(this.summaFreeVariables),
         },
         {
           get: (target, name) => {
@@ -387,8 +372,13 @@ export default {
     combinedFormulaDataTogether() {
       const resultTextForComputed = this.dataListVariablesOnFormula?.reduce(
         (resultText, item) => {
-          return (resultText +=
-            typeof item?.summ === "number" ? item.summ : item);
+          if (typeof item?.summ === "number" && item?.isShow) {
+            return (resultText += item.summ);
+          }
+          if (typeof item?.summ === "number" && !item?.isShow) {
+            return (resultText += "0");
+          }
+          return (resultText += item);
         },
         ""
       );
@@ -415,7 +405,7 @@ export default {
     resultTextDataForForm() {
       let result = "";
       this.dataForOutputText.forEach((item) => {
-        if (item.formOutputMethod && item.displayValue) {
+        if (item.formOutputMethod && item.displayValue && item.isShow) {
           result += "\n" + item.label;
 
           if (

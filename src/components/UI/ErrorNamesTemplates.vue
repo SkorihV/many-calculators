@@ -243,26 +243,28 @@ export default {
         formula = formula?.replaceAll(specItem[0], specItem[1]);
       });
       //разбиваем формулу на массив отдельных данных
-      formula = formula?.split(
-        /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
-      );
-
       formula = formula
-        ?.map((item) => {
-          //удаляем пробелы по краям
-          let nextItem = item?.replace(/^\s*|\s*$/g, "");
-          // если по краям есть кавычки, то удаляем пробелы между
-          // кавычками и текстом в середине, не трогая пробелы внутри текста
-          if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
-            nextItem = "";
-            // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
-          }
-          return nextItem;
-        })
-        .filter(
-          (item) =>
-            item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
-        );
+        ?.split(
+          /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+        )
+        .filter((item) => item?.length);
+
+      // formula = formula
+      //   ?.map((item) => {
+      //     //удаляем пробелы по краям
+      //     let nextItem = item?.replace(/^\s*|\s*$/g, "");
+      //     // если по краям есть кавычки, то удаляем пробелы между
+      //     // кавычками и текстом в середине, не трогая пробелы внутри текста
+      //     if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
+      //       nextItem = "";
+      //       // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+      //     }
+      //     return nextItem;
+      //   })
+      //   .filter(
+      //     (item) =>
+      //       item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
+      //   );
       return formula;
     },
 

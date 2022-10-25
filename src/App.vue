@@ -927,7 +927,7 @@ $border-radius: 4px;
   &__form {
     @include style-flex-center;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 700px;
     width: 100%;
     padding: 10px;
     @include style-border;

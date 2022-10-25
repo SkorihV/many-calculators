@@ -43,7 +43,7 @@ export const MixinsForProcessingFormula = {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         .filter((item) => item?.trim()?.length);
 
@@ -159,7 +159,7 @@ export const MixinsForProcessingFormula = {
      * @param newValue
      */
     isVisibilityFromDependency(newValue) {
-      if (newValue) {
+      if (newValue && this.globalCanBeShownTooltip) {
         this.changeValue("dependency");
       } else {
         setTimeout(() => {

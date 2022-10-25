@@ -12,21 +12,25 @@
         {{ label }} <slot name="prompt" />
       </div>
       <div class="calc__radio-wrapper-buttons">
-        <div
-          class="calc__radio-label"
+        <template
           v-for="(radio, idx) in radioValuesAfterProcessingDependency"
-          :id="localElementName + '_' + idx"
-          :class="{ checked: idx === currentIndexRadioButton }"
           :key="idx"
-          @click="selectedCurrentRadio(idx)"
         >
-          <span
-            class="calc__radio-indicator"
-            v-if="radioType === 'base'"
-          ></span>
-          <span class="calc__radio-text">{{ radio.radioName }}</span>
-          <ui-prompt :prompt-text="radio.prompt" />
-        </div>
+          <div
+            class="calc__radio-label"
+            :id="localElementName + '_' + idx"
+            :class="{ checked: idx === currentIndexRadioButton }"
+            v-if="radio.isShow"
+            @click="selectedCurrentRadio(idx)"
+          >
+            <span
+              class="calc__radio-indicator"
+              v-if="radioType === 'base'"
+            ></span>
+            <span class="calc__radio-text">{{ radio.radioName }}</span>
+            <ui-prompt :prompt-text="radio.prompt" />
+          </div>
+        </template>
       </div>
       <ui-tooltip
         :is-show="isErrorEmpty"
@@ -167,8 +171,9 @@ export default {
     },
     changeValue(eventType = "click") {
       const radio = this.changedRadio;
+      console.log(radio);
       this.$emit("changedValue", {
-        value: radio,
+        value: radio.value,
         displayValue: radio?.radioName,
         index: this.currentIndexRadioButton,
         name: this.localElementName,
@@ -219,6 +224,12 @@ export default {
     },
   },
   computed: {
+    amountVisibleRadioButtons() {
+      return this.radioValuesAfterProcessingDependency.filter(
+        (item) => item.isShow
+      ).length;
+    },
+
     changedRadio() {
       return this.currentIndexRadioButton !== null
         ? this.radioValues[this.currentIndexRadioButton]
@@ -249,23 +260,36 @@ export default {
       }
       return this.changedRadio?.cost;
     },
+
+    mutationRadioValue() {
+      return this.radioValues.map((radioItem, index) => {
+        radioItem.value = radioItem.value?.toString()?.length
+          ? radioItem.value
+          : index + 1;
+        return radioItem;
+      });
+    },
+
     radioValuesAfterProcessingDependency() {
-      return this.radioValues.filter((radio) => {
+      return this.mutationRadioValue.map((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
           let formula = this.processingFormulaSpecialsSymbols(
             radio.dependencyFormulaItem
           );
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          setTimeout(() => {
+            formula = this.processingVariablesOnFormula(formula);
 
-          try {
-            return eval(formula);
-          } catch (e) {
-            // console.error(e.message);
-            return false;
-          }
+            try {
+              radio.isShow = eval(formula);
+            } catch (e) {
+              // console.error(e.message);
+              radio.isShow = false;
+            }
+          }, 10);
         }
-        return true;
+        radio.isShow = true;
+        return radio;
       });
     },
   },

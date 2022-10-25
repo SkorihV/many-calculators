@@ -388,11 +388,10 @@ export default {
         }
 
         formula = formula.map((item) =>
-          item.toLowerCase() === "self"
-            ? "'" + selectItem.selectName + "'"
-            : item
+          item.toLowerCase() === "self" ? selectItem.value : item
         );
         this.constructLocalListElementDependencyInFormula(formula);
+
         formula = this.processingVariablesOnFormula(formula);
 
         try {

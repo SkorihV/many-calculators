@@ -287,7 +287,6 @@
         "notEmpty": false,
         "formOutputMethod": "valueSumm",
         "elementName": "test123",
-        "dependencyName": "radio1",
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiSelect",
@@ -302,13 +301,13 @@
                 "title": "200",
                 "enabledFormula": 1,
                 "cost": 200,
-                "dependencyFormulaCost": "   radio1    ===    '  значение 1  '"
+                "dependencyFormulaCost": "   radio1    ===    1"
               },
               {
                 "title": "300",
                 "enabledFormula": 1,
                 "cost": 300,
-                "dependencyFormulaCost": "radio1 === 'Значение 2'"
+                "dependencyFormulaCost": "radio1 === 2"
               }
             ]
           },
@@ -322,13 +321,13 @@
                 "title": "55",
                 "enabledFormula": 1,
                 "cost": 55,
-                "dependencyFormulaCost": "(radio1 === 'значение 1') || radio1 > 33"
+                "dependencyFormulaCost": "(radio1 === 1) || radio1 > 33"
               },
               {
                 "title": "888",
                 "enabledFormula": 1,
                 "cost": 888,
-                "dependencyFormulaCost": "radio1 === 'Значение 2'"
+                "dependencyFormulaCost": "radio1 === 2"
               }
             ]
           },
@@ -337,7 +336,7 @@
             "selectName": "Третий пункт для скрытия",
             "cost": 155,
             "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "radio1 !== 'значение 3'"
+            "dependencyFormulaItem": "radio1 !== 3"
           }
         ]
       },
