@@ -38,7 +38,7 @@
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
             :key="idx"
           >
-            <template v-if="currentIndexOption !== idx">
+            <template v-if="currentOption.selectName !== option.selectName">
               <div
                 v-if="option?.image?.filename"
                 class="calc__select-image-wrapper"
@@ -82,14 +82,19 @@ export default {
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip, UiPrompt },
   mounted() {
-    if (!this.isErrorEmpty && !this.isNeedChoice) {
+    this.localSelectValues = this.selectValues;
+    if (this.notEmpty || this.isNeedChoice) {
+      this.localSelectValues.unshift(this.mockOption);
+    }
+
+    if (!this.notEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
-        if (this.currentIndexOption === null && this.selectValues.length) {
+        if (this.currentIndexOption === null && this.localSelectValues.length) {
           this.currentIndexOption =
             this.checkedValueOnVoid(this.selectedItem) &&
-            parseInt(this.selectedItem) < this.selectValues.length
+            parseInt(this.selectedItem) < this.localSelectValues.length
               ? parseInt(this.selectedItem)
-              : this.selectValues.length - 1;
+              : this.localSelectValues.length - 1;
 
           this.changeSelect(
             this.selectValues[this.currentIndexOption],
@@ -103,7 +108,7 @@ export default {
         clearInterval(timer);
       }, 10000);
     } else {
-      this.changeValid("mounted");
+      this.changeSelect(this.localSelectValues[0], null, "mounted");
     }
 
     document.addEventListener("click", (e) => {
@@ -162,7 +167,6 @@ export default {
     maxWidth: {
       type: [Number, String],
     },
-
   },
   data() {
     return {
@@ -174,7 +178,9 @@ export default {
       textErrorNotEmpty: "Обязательное поле.",
       mockOption: {
         selectName: "Не выбрано!",
+        value: null,
       },
+      localSelectValues: [],
     };
   },
   methods: {
@@ -191,7 +197,11 @@ export default {
       this.isOpen = false;
     },
     changeSelect(item, idx, eventType = "click") {
-      this.currentIndexOption = idx;
+      if (this.notEmpty && idx === 0) {
+        this.currentIndexOption = null;
+      } else {
+        this.currentIndexOption = idx;
+      }
       this.currentOption = item;
 
       this.changeValue(eventType);
@@ -227,28 +237,34 @@ export default {
         isShow: this.isVisibilityFromDependency,
       });
     },
+    resetSelectedValue() {
+      this.currentIndexOption = 0;
+      this.currentOption = this.selectValuesAfterProcessingDependency[0];
+      this.changeValue("click");
+    }
   },
   watch: {
     selectedItem(newValue) {
       this.currentIndexOption =
         this.checkedValueOnVoid(this.newValue) &&
-        parseInt(this.newValue) < this.selectValues.length
+        parseInt(this.newValue) < this.localSelectValues.length
           ? parseInt(this.newValue)
-          : this.selectValues.length - 1;
-      this.currentOption = this.selectValues[this.currentIndexOption];
+          : this.localSelectValues.length - 1;
+      this.currentOption = this.localSelectValues[this.currentIndexOption];
       this.changeValue();
     },
 
-    selectValuesAfterProcessingDependency: {
-      handler(newValue, oldValue) {
-        if (newValue?.length !== oldValue?.length) {
-          this.currentOption = this.mockOption;
-          this.currentIndexOption = -1;
-          this.changeValue();
-        }
-      },
-      deep: true,
-    },
+    // selectValuesAfterProcessingDependency: {
+    //   handler(newValue, oldValue) {
+    //     if (newValue?.length !== oldValue?.length) {
+    //       this.resetSelectedValue();
+    //     }
+    //   },
+    //   deep: true
+    // }
+
+
+
   },
   computed: {
     localElementName() {
@@ -269,14 +285,13 @@ export default {
       return this.notEmpty && this.currentIndexOption === null;
     },
 
-
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.getMajorElementDependency?.isShow || !this.currentOption?.dependencyPrices?.length) {
+      if (!this.currentOption?.dependencyPrices?.length) {
         return this.currentOption?.cost;
       }
 
@@ -289,33 +304,48 @@ export default {
       return this.currentOption?.cost;
     },
 
-
     /**
      * Получить список селектов после обработки формул на отображение самих селектов
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
 
-      if (this.isDependencyNameExist) {
-        return this.selectValues.filter(selectItem => {
-          if (!selectItem?.enabledProcessingDependency || !selectItem?.dependencyFormulaItem.length) {
-            return true;
-          }
+      return this.localSelectValues.filter((selectItem) => {
+        if (!selectItem?.dependencyFormulaItem?.length) {
+          return true;
+        }
 
-          let formula = this.processingFormulaSpecialsSymbols(
-            selectItem.dependencyFormulaItem
-          );
-          formula = this.processingVariablesOnFormula(formula);
-          try {
-            return (eval(formula))
-          } catch (e) {
-            console.error(e.message);
-            return false;
+        let formula = this.processingFormulaSpecialsSymbols(
+          selectItem.dependencyFormulaItem
+        );
+
+        let allDependencyShow = formula.every(item => {
+
+          if (this.isElementDependency(item)) {
+            return this.localListElementDependency[item]?.isShow
           }
+          return true
         })
-      }
 
-      return this.selectValues;
+        if (!allDependencyShow) {
+          return true
+        }
+
+        formula = formula.map((item) =>
+          item.toLowerCase() === "self"
+            ? "'" + selectItem.selectName + "'"
+            : item
+        );
+
+        formula = this.processingVariablesOnFormula(formula);
+
+        try {
+          return eval(formula);
+        } catch (e) {
+          // console.error(e.message);
+          return false;
+        }
+      });
     },
   },
 };

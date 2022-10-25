@@ -7,8 +7,7 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name=" template?.json_id || 'UiAccordion' + inx"
-          :dependency-name="template?.dependencyName"
+          :element-name="template?.json_id || 'UiAccordion' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
@@ -19,7 +18,6 @@
           :label="template?.label"
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiTab' + inx"
-          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
@@ -31,8 +29,9 @@
           :width-left-side="template?.widthLeftSide"
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiBisection' + inx"
-          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
+          :dependency-formula-display-left-side="template?.dependencyFormulaDisplayLeftSide"
+          :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -43,13 +42,13 @@
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
-
       </template>
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Возможно, некоторые поля не заполнены или заполнены не корректно!
       </div>
       <div v-if="showErrorSummBlock" class="calc__error-block">
-        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы не выбраны.
+        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы
+        не выбраны.
       </div>
       <div
         class="calc__show-result-btn"
@@ -81,7 +80,13 @@ import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
 
 export default {
   name: "TheBasicCalculatorConstructor",
-  components: { TemplatesWrapper, UiAccordion, UiTab, UiBisection, ErrorNamesTemplates },
+  components: {
+    TemplatesWrapper,
+    UiAccordion,
+    UiTab,
+    UiBisection,
+    ErrorNamesTemplates,
+  },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
     const localPath = "http://localhost:3000/test-dependency";
@@ -117,7 +122,7 @@ export default {
     this.currency =
       this?.outOptions !== null ? this?.outOptions?.currency : "руб";
     this.initEnabledSendForm =
-      this?.outOptions?.methodProcessingMistakes === "useAutomatic" ;
+      this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.initTemplateError = this.outOptions?.showErrorTemplate;
     this.displayResultData = this.outOptions?.displayResultData;
     delete window?.calculatorTemplates;
@@ -157,8 +162,7 @@ export default {
   },
   methods: {
     changeValue(data) {
-
-      if (typeof data !== 'object') {
+      if (typeof data !== "object") {
         return null;
       }
       let {
@@ -171,7 +175,7 @@ export default {
         eventType,
         unit,
         isShow,
-        excludeFromCalculations
+        excludeFromCalculations,
       } = data;
 
       if (eventType === "delete" || !isShow) {
@@ -192,7 +196,7 @@ export default {
         value: null,
         unit: unit ? unit : null,
         isShow,
-        excludeFromCalculations
+        excludeFromCalculations,
       };
 
       if (type === "radio") {
@@ -208,11 +212,7 @@ export default {
       this.checkEnabledResultButton();
     },
     changeValid(data) {
-      if (
-        data.error &&
-        data.eventType !== "mounted" &&
-        data.isShow
-      ) {
+      if (data.error && data.eventType !== "mounted" && data.isShow) {
         this.errorsElements.add(data.name);
       }
 
@@ -260,11 +260,11 @@ export default {
         this.shownAllTooltips = true;
       }
     },
-    addDataForDependencies({name, value, isShow, type}) {
+    addDataForDependencies({ name, value, isShow, type }) {
       this.dataForDependencies[name] = {
         name,
         value: null,
-        isShow
+        isShow,
       };
 
       if (type === "radio") {
@@ -276,7 +276,7 @@ export default {
       } else {
         this.dataForDependencies[name].value = value;
       }
-    }
+    },
   },
   watch: {
     initEnabledForm() {
@@ -292,7 +292,7 @@ export default {
      * @returns {{length}|unknown[]|*[]}
      */
     baseDataForCalculate() {
-      const dataList = Object.values(this.resultsElements)
+      const dataList = Object.values(this.resultsElements);
       return dataList?.length ? dataList : [];
     },
 
@@ -330,7 +330,7 @@ export default {
      */
     summaFreeVariables() {
       return this.freeVariablesOutsideFormula.reduce((sum, item) => {
-        if (item?.summ !== null  && !item.excludeFromCalculations) {
+        if (item?.summ !== null && !item.excludeFromCalculations) {
           return sum + parseFloat(item.summ);
         }
         return sum + 0;
@@ -381,7 +381,9 @@ export default {
         (resultText, item) => {
           return (resultText +=
             typeof item?.summ === "number" ? item.summ : item);
-        },"");
+        },
+        ""
+      );
       try {
         return eval(resultTextForComputed);
       } catch (e) {
@@ -394,7 +396,9 @@ export default {
      * @returns {*[]}
      */
     dataForOutputText() {
-      return this.baseDataForCalculate.filter((item) => item.formOutputMethod !== "no");
+      return this.baseDataForCalculate.filter(
+        (item) => item.formOutputMethod !== "no"
+      );
     },
     /**
      * Текст со всеми полями которые должны отображаться в форме
@@ -457,9 +461,10 @@ export default {
       }
 
       if (this.finalSummaForOutput === false) {
-        result += "Есть ошибка в расчетах!"
+        result += "Есть ошибка в расчетах!";
       } else {
-        result += "Общая сумма составляет = " +
+        result +=
+          "Общая сумма составляет = " +
           this.finalSummaForOutput +
           " " +
           this.currency;
@@ -487,17 +492,29 @@ export default {
      * @returns {boolean}
      */
     initTeleport() {
-      return !this.isErrorCalc && this.initEnabledSendForm && this.shownAllTooltips;
+      return (
+        !this.isErrorCalc && this.initEnabledSendForm && this.shownAllTooltips
+      );
     },
     isEnabledSendForm() {
-      return this.initEnabledSendForm && this.finalTextForOutput?.length && this.shownAllTooltips && !this.isErrorCalc;
+      return (
+        this.initEnabledSendForm &&
+        this.finalTextForOutput?.length &&
+        this.shownAllTooltips &&
+        !this.isErrorCalc
+      );
     },
     showResultBtn() {
-      return this.mistake === 'useButton';
+      return this.mistake === "useButton";
     },
     showErrorSummBlock() {
-      return (this.finalSummaForOutput === null || this.finalSummaForOutput === false) && this.shownAllTooltips && this.displayResultData;
-    }
+      return (
+        (this.finalSummaForOutput === null ||
+          this.finalSummaForOutput === false) &&
+        this.shownAllTooltips &&
+        this.displayResultData
+      );
+    },
   },
 };
 </script>
@@ -573,41 +590,7 @@ $border-radius: 4px;
   @include style-button;
 }
 
-.calc__wrapper-group-data {
-  margin-bottom: 20px;
-  padding-left: 20px;
-  border-left: 3px solid $color-orange-normal;
-  width: 100%;
-  &:hover {
-    background-color: $color-gray-middle;
-  }
-}
 
 #app-base-constructor-calculator {
-  .calc {
-    box-sizing: border-box;
-    &__wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    &__error-block {
-      width: 100%;
-      @include style-flex-center;
-      margin: 10px 0;
-      padding: 20px;
-      background-color: $color-danger;
-      color: $color-white;
-    }
-    &__show-result-btn {
-      @include style-button;
-      padding: 20px;
-      align-self: center;
-      &:hover {
-        @include style-button-hover;
-        background-color: $color-orange-normal;
-      }
-    }
-  }
 }
 </style>

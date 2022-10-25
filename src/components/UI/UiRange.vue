@@ -188,7 +188,6 @@ export default {
       type: String,
       default: "no",
     },
-
   },
   mounted() {
     if (!this.isNeedChoice) {
@@ -345,14 +344,13 @@ export default {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
     },
 
-
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
+      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.cost;
       }
 

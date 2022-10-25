@@ -1,6 +1,5 @@
 export const MixinsGeneralItemData = {
   props: {
-
     /**
      * заголовок
      */
@@ -35,7 +34,7 @@ export const MixinsGeneralItemData = {
      */
     elementName: {
       type: String,
-      default: '',
+      default: "",
     },
     /**
      * Список классов для переопределения стилей на обертке
@@ -67,7 +66,6 @@ export const MixinsGeneralItemData = {
   },
 
   computed: {
-
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}
@@ -85,7 +83,7 @@ export const MixinsGeneralItemData = {
      * @returns {boolean}
      */
     initProcessingDependencyPrice() {
-      return this.isDependencyPriceExist && this.isDependencyNameExist;
+      return this.isDependencyPriceExist;
     },
-  }
-}
+  },
+};

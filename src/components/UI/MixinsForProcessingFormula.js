@@ -1,13 +1,6 @@
 export const MixinsForProcessingFormula = {
   props: {
     /**
-     * Название элемента от значения которого будет строиться зависимость
-     */
-    dependencyName: {
-      type: String,
-      default: "",
-    },
-    /**
      * Формула на результатах вычисления которой будет строиться результат отображения элемента
      */
     dependencyFormulaDisplay: {
@@ -16,8 +9,8 @@ export const MixinsForProcessingFormula = {
     },
     parentIsShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -25,7 +18,12 @@ export const MixinsForProcessingFormula = {
         "&gt;": ">",
         "&lt;": "<",
         "&amp;": "&",
+        "&quot;": '"',
       }),
+      /**
+       * список переменных от которого зависит именно текущий элемент
+       */
+      localListElementDependency: {},
     };
   },
   methods: {
@@ -48,13 +46,13 @@ export const MixinsForProcessingFormula = {
         )
         .filter((item) => item?.trim()?.length);
 
-      formula = formula.map((item) => {
+      formula = formula?.map((item) => {
         //удаляем пробелы по краям
         let nextItem = item?.replace(/^\s*|\s*$/g, "");
         // если по краям есть кавычки, то удаляем пробелы между
         // кавычками и текстом в середине, не трогая пробелы внутри текста
         if (nextItem.match(/^('|").*('|")$/)) {
-          nextItem = "'" + nextItem.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+          nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
         }
 
         return nextItem;
@@ -68,21 +66,28 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     processingVariablesOnFormula(formula) {
-      if (!this.getMajorElementDependency) {
-        return '';
-      }
-      return formula.reduce((resultText, item) => {
-        if (item === this.dependencyName) {
-          if (!isNaN(parseFloat(this.getMajorElementDependency?.value))) {
-            return resultText + this.getMajorElementDependency.value;
-          } else if (
-            typeof this.getMajorElementDependency?.value === 'boolean'
-          ) {
-            return resultText + Boolean(this.getMajorElementDependency?.value);
+      return formula?.reduce((resultText, item) => {
+        if (
+          this.isElementDependency(item) &&
+          !this.existLocalElementDependency(item)
+        ) {
+          this.putElementDependencyInLocalList(item);
+        }
+        let elementDependency =
+          item in this.localListElementDependency
+            ? this.localListElementDependency[item]
+            : null;
+
+        if (elementDependency && elementDependency.isShow) {
+          if (!isNaN(parseFloat(elementDependency?.value))) {
+            return resultText + elementDependency?.value;
+          } else if (typeof elementDependency?.value === "boolean") {
+            return resultText + Boolean(elementDependency?.value);
           } else {
-            return resultText + "'" + this.getMajorElementDependency.value + "'";
+            return resultText + "'" + elementDependency.value + "'";
           }
         }
+
         return resultText + item;
       }, "");
     },
@@ -112,7 +117,7 @@ export const MixinsForProcessingFormula = {
             }
             return resultReduce;
           } catch (e) {
-            console.log(e.message);
+            // console.log(e.message);
             return resultReduce;
           }
         },
@@ -132,11 +137,15 @@ export const MixinsForProcessingFormula = {
       if (!name?.length) {
         return false;
       }
-      return name in this.globalDataForDependencies
+      return name in this.globalDataForDependencies;
     },
-    putElementDependencyLocalList(name){
-
-    }
+    existLocalElementDependency(name) {
+      return name in this.localListElementDependency;
+    },
+    putElementDependencyInLocalList(name) {
+      this.localListElementDependency[name] =
+        this.globalDataForDependencies[name];
+    },
   },
   watch: {
     /**
@@ -149,22 +158,28 @@ export const MixinsForProcessingFormula = {
       } else {
         setTimeout(() => {
           this.changeValue("delete");
-        }, 10)
-
+        }, 10);
       }
     },
-    /**
-     * При изменении состояния элемента от которого зависит текущий - повторно производить вычисления состояния текущего
-     */
-    getMajorElementDependency: {
-      handler(newValue, oldValue) {
-        if ((newValue !== null && oldValue !== null)
-          &&
-          (newValue.value !== oldValue.value
-            ||
-            newValue.isShow !== oldValue.isShow)
-        ) {
-          this.changeValue('changeMajor');
+
+    globalDataForDependencies: {
+      handler(newValue) {
+        let isUpdated = false;
+        for (let key in newValue) {
+          if (this.existLocalElementDependency(key)) {
+            if (
+              newValue[key].value !==
+                this.localListElementDependency[key].value ||
+              newValue[key].isShow !==
+                this.localListElementDependency[key].isShow
+            ) {
+              this.localListElementDependency[key] = newValue[key];
+              isUpdated = true;
+            }
+          }
+        }
+        if (isUpdated) {
+          this.changeValue("changeValueDependenciesElements");
         }
       },
       deep: true,
@@ -177,14 +192,11 @@ export const MixinsForProcessingFormula = {
      */
     isVisibilityFromDependency() {
       if (this.isDependencyElementVisibility || !this.parentIsShow) {
-        if (this.getMajorElementDependency?.isShow) {
-          try {
-            return eval(this.parsingFormulaVariables);
-          } catch (e) {
-            return false;
-          }
+        try {
+          return eval(this.parsingFormulaVariables);
+        } catch (e) {
+          return false;
         }
-        return false;
       }
       return true;
     },
@@ -193,41 +205,21 @@ export const MixinsForProcessingFormula = {
      * @returns {boolean}
      */
     isDependencyElementVisibility() {
-      return Boolean(
-        this.isDependencyNameExist && this.dependencyFormulaDisplay?.length
-      );
+      return Boolean(this.dependencyFormulaDisplay?.length);
     },
-    /**
-     * Для поля указано имя от которого оно будет зависеть
-     * @returns {boolean}
-     */
-    isDependencyNameExist() {
-      return Boolean(this.dependencyName?.length);
-    },
-    /**
-     * Элемент от которого идет зависимость
-     * @returns {*|null}
-     */
-    getMajorElementDependency() {
-      if (!this.isDependencyNameExist) {
-        return null;
-      }
-      return this.dependencyName in this.globalDataForDependencies
-        ? this.globalDataForDependencies[this.dependencyName]
-        : null;
-    },
+
     /**
      * Получить массив значений из формулы
-     * @returns {string|*[]}
+     * @returns {string|boolean}
      */
     parsingFormulaVariables() {
-      if (!this.dependencyFormulaDisplay.length) {
-        return [];
+      if (!this.isDependencyElementVisibility) {
+        return false;
       }
       let formula = this.processingFormulaSpecialsSymbols(
         this.dependencyFormulaDisplay
       );
       return this.processingVariablesOnFormula(formula);
-    }
+    },
   },
 };

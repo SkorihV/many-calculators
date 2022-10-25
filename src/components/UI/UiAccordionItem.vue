@@ -8,7 +8,10 @@
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>
     <div class="calc__accordion-item-minus" v-if="isOpen"></div>
     {{ accordionItem.label }}
-    <ui-prompt v-if="accordionItem?.prompt?.length" :prompt-text="accordionItem.prompt" />
+    <ui-prompt
+      v-if="accordionItem?.prompt?.length"
+      :prompt-text="accordionItem.prompt"
+    />
     <ui-tooltip
       :is-show="isShowError"
       tooltip-text="Во вкладке есть не корректно заполненные поля."
@@ -38,20 +41,20 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 export default {
   name: "UiAccordionItem",
-  components: {UiTooltip, UiPrompt, TemplatesWrapper},
+  components: { UiTooltip, UiPrompt, TemplatesWrapper },
   emits: ["changedValue", "changeValid"],
   inject: ["globalCanBeShownTooltip"],
   props: {
     accordionItem: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     accordionName: {
       type: String,
-      default: ''
+      default: "",
     },
     accordionItemId: {
-      type: Number
+      type: Number,
     },
     elementName: {
       type: String,
@@ -59,8 +62,8 @@ export default {
     },
     parentIsShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -74,7 +77,6 @@ export default {
       this.$emit("changedValue", data);
     },
     changeValid(data) {
-
       if (this.checkAllowedErrors(data)) {
         this.errorsElements.add(data.name);
       } else {
@@ -103,26 +105,28 @@ export default {
      * @returns {boolean}
      */
     checkAllowedErrors(data) {
-      return (data.error &&
+      return (
+        data.error &&
         data.eventType !== "delete" &&
         data.isShow &&
-        this.globalCanBeShownTooltip);
+        this.globalCanBeShownTooltip
+      );
     },
   },
   computed: {
     isShowError() {
-      return Boolean(this.errorsElements.size)
+      return Boolean(this.errorsElements.size);
     },
-    isShowAccordionItem( ){
+    isShowAccordionItem() {
       return Boolean(this.visibilityList.size);
     },
     itemIdName() {
-      return this.accordionName + '_' + this.elementName + '_' + this.accordionItemId;
-    }
+      return (
+        this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
+      );
+    },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

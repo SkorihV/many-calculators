@@ -1,10 +1,14 @@
 <template>
-  <div class="calc__accordion-wrapper" :class="[classes]" v-show="showBlock && isVisibilityFromDependency">
+  <div
+    class="calc__accordion-wrapper"
+    :class="[classes]"
+    v-show="showBlock && isVisibilityFromDependency"
+  >
     <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">
       {{ accordionData.label }}
     </div>
     <template v-if="accordionData?.items?.length">
-       <div
+      <div
         class="calc__accordion-item-label-wrapper"
         v-for="(item, key) in accordionData.items"
         :key="key"
@@ -34,7 +38,6 @@ export default {
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
-
     accordionData: {
       type: Object,
       default: () => {},
@@ -51,7 +54,7 @@ export default {
      */
     elementName: {
       type: String,
-      default: '',
+      default: "",
     },
     /**
      * Список классов для переопределения стилей на обертке

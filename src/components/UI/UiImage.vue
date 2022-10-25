@@ -1,15 +1,21 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency && localDataForDisplay?.url?.length">
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency && localDataForDisplay?.url?.length"
+  >
     <div class="calc__image-wrapper" :class="classes">
-      <div class="calc__image-label-wrapper" v-if="localDataForDisplay.label.length">
-        <div class="calc__image-label">{{localDataForDisplay.label}}</div>
+      <div
+        class="calc__image-label-wrapper"
+        v-if="localDataForDisplay.label.length"
+      >
+        <div class="calc__image-label">{{ localDataForDisplay.label }}</div>
         <ui-prompt
           v-if="localDataForDisplay?.prompt.length"
           :prompt-text="localDataForDisplay.prompt"
         ></ui-prompt>
       </div>
       <div class="calc__image-wrapper-image" :style="'max-width:' + width">
-        <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label">
+        <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label" />
       </div>
     </div>
   </div>
@@ -21,7 +27,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 
 export default {
   name: "UiImage",
-  components: {UiPrompt},
+  components: { UiPrompt },
   mixins: [MixinsForProcessingFormula],
   inject: ["globalDataForDependencies"],
   props: {
@@ -34,27 +40,26 @@ export default {
     },
     defaultImage: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     dependencyImages: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     prompt: {
       type: String,
-      default: null
+      default: null,
     },
     maxWidth: {
       type: [Number, String],
-      default: 250
+      default: 250,
     },
     /**
      * имя необходимое для корректной работы Label
      */
     elementName: {
       type: String,
-      default: '',
+      default: "",
     },
     /**
      * Список классов для переопределения стилей на обертке
@@ -67,26 +72,29 @@ export default {
   methods: {
     changeValue() {
       return null;
-    }
+    },
   },
   computed: {
     imageDir() {
       return window?.imageDir ? window.imageDir : "";
     },
     width() {
-      return this.maxWidth + 'px'
+      return this.maxWidth + "px";
     },
     localDataForDisplay() {
       let dataForOut = {
         label: this.label,
         url: this.imageDir + this.defaultImage.filename,
-        prompt: this.prompt
-      }
-      if (!this.getMajorElementDependency?.isShow || !this.dependencyImages?.length) {
+        prompt: this.prompt,
+      };
+      if (!this.dependencyImages?.length) {
         return dataForOut;
       }
-      this.dependencyImages.forEach(imageItem => {
-        if (imageItem.dependencyFormulaDisplay?.length && imageItem?.image?.filename.length) {
+      this.dependencyImages.forEach((imageItem) => {
+        if (
+          imageItem.dependencyFormulaDisplay?.length &&
+          imageItem?.image?.filename.length
+        ) {
           let formula = this.processingFormulaSpecialsSymbols(
             imageItem.dependencyFormulaDisplay
           );
@@ -96,20 +104,21 @@ export default {
             if (eval(formula)) {
               dataForOut = {
                 label: imageItem.label,
-                url: this.imageDir +  imageItem.image.filename,
-                prompt: imageItem?.prompt?.length ? imageItem.prompt : this.prompt
-              }
+                url: this.imageDir + imageItem.image.filename,
+                prompt: imageItem?.prompt?.length
+                  ? imageItem.prompt
+                  : this.prompt,
+              };
             }
           } catch (e) {
             console.log(e.message);
           }
         }
-      })
+      });
       return dataForOut;
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

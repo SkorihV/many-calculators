@@ -116,7 +116,6 @@ export default {
       type: String,
       default: "no",
     },
-
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
@@ -134,7 +133,7 @@ export default {
   methods: {
     inputLocalValue(value) {
       this.localValue = value;
-      this.changeValue('test');
+      this.changeValue("test");
     },
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
@@ -190,14 +189,13 @@ export default {
       return this.isNeedChoice && !this.localValue;
     },
 
-
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
+      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.cost;
       }
 

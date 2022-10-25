@@ -2,13 +2,17 @@
   <div
     class="calc__bisection-wrapper"
     :class="[classes]"
-    v-show="(templateData?.rightSide.length || templateData?.leftSide.length) && isVisibilityFromDependency"
+    v-show="
+      (templateData?.rightSide.length || templateData?.leftSide.length) &&
+      isVisibilityFromDependency
+    "
   >
     <div class="calc__bisection-label" v-if="templateData?.label?.length">
       {{ templateData?.label }}
     </div>
     <div class="calc__bisection-content-wrapper">
       <div
+        v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
         :style="styleWidthLeftSide"
       >
@@ -20,7 +24,7 @@
         </div>
         <templates-wrapper
           v-for="(template, inx) in templateData?.leftSide"
-          :parent-is-show="isVisibilityFromDependency"
+          :parent-is-show="isVisibilityFromDependency && isShowLeftSide"
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'left' + '_' + inx"
@@ -29,6 +33,7 @@
         />
       </div>
       <div
+        v-show="isShowRightSide"
         class="calc__bisection-right-side-wrapper"
         :style="styleWidthRightSide"
       >
@@ -40,7 +45,7 @@
         </div>
         <templates-wrapper
           v-for="(template, inx) in templateData?.rightSide"
-          :parent-is-show="isVisibilityFromDependency"
+          :parent-is-show="isVisibilityFromDependency && isShowRightSide"
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'right' + '_' + inx"
@@ -82,6 +87,14 @@ export default {
       type: String,
       default: Math.random().toString(),
     },
+    dependencyFormulaDisplayLeftSide: {
+      type: String,
+      default: null,
+    },
+    dependencyFormulaDisplayRightSide: {
+      type: String,
+      default: null,
+    },
     classes: {
       type: String,
       default: null,
@@ -104,8 +117,30 @@ export default {
     changeValid(data) {
       this.$emit("changeValid", data);
     },
+    processingFormula(formula) {
+      let result = this.processingFormulaSpecialsSymbols(formula);
+      result = this.processingVariablesOnFormula(result);
+      try {
+        return eval(result);
+      } catch (e) {
+        return false;
+      }
+    }
   },
   computed: {
+    isShowLeftSide () {
+      if (!this.dependencyFormulaDisplayLeftSide?.length) {
+        return true;
+      }
+      return this.processingFormula(this.dependencyFormulaDisplayLeftSide)
+      },
+    isShowRightSide() {
+      if (!this.dependencyFormulaDisplayRightSide?.length) {
+        return true;
+      }
+      return this.processingFormula(this.dependencyFormulaDisplayRightSide)
+      },
+
     styleWidthLeftSide() {
       if (this.widthLeftSide > 80) {
         this.widthLeftSide = 70;

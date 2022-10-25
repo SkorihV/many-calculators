@@ -13,31 +13,33 @@
           {{ label }}<slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
+          <div class="calc__input-buttons-minus" @click="minus">-</div>
+
           <input
             ref="trueInput"
             :id="localElementName"
             type="text"
             :value="resultValue"
+            :placeholder="inputPlaceholder"
             @input="tryChangeValueInput"
             @keydown.enter="trueTrueValue"
+            @keydown.up="plus"
+            @keydown.down="minus"
             class="calc__input-item"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
-          <template v-if="isCurrency">
+          <template v-if="fakeValueHidden">
             <input
               @click="showTrueValue"
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
               autocomplete="off"
-              v-show="fakeValueHidden"
+              :placeholder="inputPlaceholder"
             />
           </template>
-          <div v-if="controls" class="calc__input-buttons-wrapper">
-            <div class="calc__input-buttons-plus" @click="plus">+</div>
-            <div class="calc__input-buttons-minus" @click="minus">-</div>
-          </div>
+          <div class="calc__input-buttons-plus" @click="plus">+</div>
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
         </div>
         <ui-tooltip
@@ -68,7 +70,9 @@ export default {
       type: [Number, String],
       default: null,
     },
-
+    inputPlaceholder: {
+      type: String,
+    },
     /**
      * единицы измерения
      */
@@ -202,10 +206,9 @@ export default {
       type: String,
       default: "no",
     },
-
   },
   mounted() {
-    if (!isNaN(parseFloat(this.localMin)) && this.localMin > this.inputValue) {
+    if (!this.valueIsNaN && this.localMin > this.inputValue) {
       this.localInputValue = this.min;
       this.changeValue("mounted");
     } else {
@@ -213,7 +216,7 @@ export default {
       this.changeValue("mounted");
     }
 
-    if (this.isCurrency) {
+    if (this.isCurrency && this.onlyNumber) {
       window.addEventListener("click", (e) => {
         if (
           !this.$el.contains(e.target) &&
@@ -228,7 +231,7 @@ export default {
     return {
       localInputValue: null,
       nameTimer: null,
-      fakeValueHidden: this.isCurrency,
+      fakeValueHidden: this.isCurrency && this.onlyNumber,
       isInvalid: false,
       canBeShownTooltip: false,
     };
@@ -245,13 +248,13 @@ export default {
           return this.localInputValue;
         }
 
-        if (this.isErrorNumber) {
-          this.changeValueWitchTimer(this.localMin || 0);
+        if (this.isErrorNumber || (this.onlyNumber && this.isErrorEmpty)) {
+          this.resetNumberValue();
           return null;
         }
 
         if (this.isErrorMin) {
-          this.changeValueWitchTimer(this.localMin || 0);
+          this.resetNumberValue();
         }
 
         if (this.isErrorMax) {
@@ -264,14 +267,14 @@ export default {
         }
 
         if (this.onlyInteger) {
-          this.localInputValue = !isNaN(parseInt(this.localInputValue))
+          this.localInputValue = !this.valueIsNaN
             ? parseInt(this.localInputValue)
             : null;
         }
 
         return this.localInputValue;
       } catch (e) {
-        console.error(e.message);
+        // console.error(e.message);
       }
     },
     tryChangeValueInput(e) {
@@ -346,12 +349,10 @@ export default {
       }
     },
     plus() {
-      if (
-        this.localInputValue === null ||
-        !this.localInputValue?.toString().length
-      ) {
-        this.localInputValue = 0;
+      if (this.valueIsNaN) {
+        this.resetNumberValue();
       }
+
       let value = parseFloat(this.localInputValue) + this.localStep;
 
       if (this.checkedValueOnVoid(this.localMax)) {
@@ -362,12 +363,10 @@ export default {
       this.shownTooltip();
     },
     minus() {
-      if (
-        this.localInputValue === null ||
-        !this.localInputValue?.toString().length
-      ) {
-        this.localInputValue = 0;
+      if (this.valueIsNaN) {
+        this.resetNumberValue();
       }
+
       let value = parseFloat(this.localInputValue) - this.localStep;
       if (this.checkedValueOnVoid(this.localMin)) {
         value = value >= this.localMin ? value : this.localMin;
@@ -380,6 +379,9 @@ export default {
       if (!this.canBeShownTooltip) {
         this.canBeShownTooltip = true;
       }
+    },
+    resetNumberValue() {
+      this.changeValueWitchTimer(this.localMin || 0);
     },
   },
   computed: {
@@ -410,7 +412,9 @@ export default {
       }
     },
     resultValueDouble() {
-      return parseFloat(this.localInputValue).toLocaleString("ru");
+      return this.localInputValue?.toString().length
+        ? parseFloat(this.localInputValue).toLocaleString("ru")
+        : "";
     },
     valueIsNaN() {
       return isNaN(parseFloat(this.localInputValue));
@@ -418,7 +422,8 @@ export default {
     isErrorNumber() {
       return (
         (this.onlyNumber || this.localMax !== null || this.localMin !== null) &&
-        isNaN(Number(this.localInputValue))
+        this.valueIsNaN &&
+        this.localInputValue?.toString()?.length
       );
     },
     errorNumberText() {
@@ -489,14 +494,13 @@ export default {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
     },
 
-
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.initProcessingDependencyPrice || !this.getMajorElementDependency?.isShow || !this.dependencyPrices) {
+      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.cost;
       }
 

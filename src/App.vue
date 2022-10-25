@@ -147,6 +147,37 @@ $border-radius: 4px;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
   }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &-group-data {
+      margin-bottom: 5px;
+      padding-left: 20px;
+      border-left: 3px solid $color-orange-normal;
+      width: 100%;
+      &:hover {
+        background-color: $color-gray-middle;
+      }
+    }
+  }
+  &__error-block {
+    width: 100%;
+    @include style-flex-center;
+    padding: 20px;
+    background-color: $color-danger;
+    color: $color-white;
+  }
+  &__show-result-btn {
+    @include style-button;
+    padding: 20px;
+    align-self: center;
+    &:hover {
+      @include style-button-hover;
+      background-color: $color-orange-normal;
+    }
+  }
   //--------Стили input text-----
   &__input {
     &-wrapper {
@@ -160,6 +191,7 @@ $border-radius: 4px;
         display: flex;
         align-items: center;
         position: relative;
+        gap: 2px;
       }
     }
 
@@ -189,7 +221,7 @@ $border-radius: 4px;
     &-item {
       font-size: 15px;
       line-height: 16px;
-      padding: 10px;
+      padding: 5px;
       max-width: 120px;
       @include style-border;
       border-bottom: 2px solid $color-orange-normal;
@@ -202,22 +234,19 @@ $border-radius: 4px;
     }
 
     &-buttons {
-      &-wrapper {
-        @include style-flex-center;
-        flex-direction: column;
-        margin-left: 2px;
-      }
-
       &-plus,
       &-minus {
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
         @include style-button;
         font-weight: 600;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        &:hover {
+          background-color: $color-orange-normal;
+        }
       }
     }
     &-unit {
@@ -389,7 +418,7 @@ $border-radius: 4px;
 
       &-item {
         position: relative;
-        padding: 10px 25px 10px 10px;
+        padding: 5px 25px 5px 10px;
         @include style-flex-center;
         justify-content: flex-start;
         min-height: 36px;
@@ -436,6 +465,10 @@ $border-radius: 4px;
         @include style-border;
         z-index: 10;
         width: 100%;
+
+        border-left: 1px solid $color-orange-normal;
+        border-right: 1px solid $color-orange-normal;
+        border-bottom: 1px solid $color-orange-normal;
       }
       &-item {
         background-color: white;
@@ -569,8 +602,7 @@ $border-radius: 4px;
     &-wrapper {
       @include style-flex-start;
       position: relative;
-      margin: 5px;
-    }
+     }
     &-label {
       @include style-flex-center;
       justify-content: flex-start;
@@ -796,6 +828,7 @@ $border-radius: 4px;
         border-radius: $border-radius;
         box-shadow: 0 0 9px 0 $color-gray-dark;
         z-index: 100;
+        cursor: default;
         &.isLeft {
           left: auto;
           right: 0;

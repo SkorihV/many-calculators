@@ -1,32 +1,65 @@
 <template>
-  <div class="calc__error-wrapper" v-if="isShow" :class="{isShow:isShow }" v-cloak>
-    <div class="calc__error-toggle" @click="displayAlert = !displayAlert">X</div>
+  <div
+    class="calc__error-wrapper"
+    v-if="isShow"
+    :class="{ isShow: isShow }"
+    v-cloak
+  >
+    <div class="calc__error-toggle" @click="displayAlert = !displayAlert">
+      X
+    </div>
     <template v-if="displayAlert">
       <template v-if="Object.keys(recurringTemplateNames).length">
         <div class="calc__error-label">Обнаружены дубли имен:</div>
-        <div class="calc__error-item" v-for="(error, key) in recurringTemplateNames" :key="key">
-          <div class="calc__error-item-name">Имя элемента '{{key}}' обнаружено у следующих элементов:</div>
-          <div class="calc__error-item-label" v-for="label in error">Заголовок: {{label.length ? label : 'Отсутствует'}}</div>
+        <div
+          class="calc__error-item"
+          v-for="(error, key) in recurringTemplateNames"
+          :key="key"
+        >
+          <div class="calc__error-item-name">
+            Имя элемента '{{ key }}' обнаружено у следующих элементов:
+          </div>
+          <div class="calc__error-item-label" v-for="label in error">
+            Заголовок: {{ label.length ? label : "Отсутствует" }}
+          </div>
         </div>
         <p class="calc__error-alert">Имена должны быть уникальными!</p>
       </template>
-
-
-      <template  v-if="notExistDependencyNames.length">
-        <div class="calc__error-label">Обнаружены не существующие имена в зависимостях:</div>
-        <div class="calc__error-item" v-for="(error, key) in notExistDependencyNames" :key="key">
-          <div class="calc__error-item-name">Имя элемента: '{{error?.label?.length ? error?.label : 'Отсутствует'}}' Значение: '{{error.dependencyName}}' - не существует.</div>
+      <template v-if="notExistUsedNamesInFormulaInOut.length">
+        <div class="calc__error-label">
+          Обнаружены не существующие имена в зависимостях:
         </div>
-        <p class="calc__error-alert">Измените существующие имена или добавьте недостающие.</p>
+        <div
+          class="calc__error-item"
+          v-for="(error, key) in notExistUsedNamesInFormulaInOut"
+          :key="key"
+        >
+          <div class="calc__error-item-name">
+            Имя элемента: '{{
+              error?.label?.length ? error?.label : "Отсутствует"
+            }}' Значение: '{{ error.name }}' - не существует.
+          </div>
+        </div>
+        <p class="calc__error-alert">
+          Измените существующие имена или добавьте недостающие.
+        </p>
       </template>
 
-      <template  v-if="notExistNamesInMainFormula.length">
-        <div class="calc__error-label">В результирующей формуле есть не существующие переменные.</div>
-        <div class="calc__error-item" v-for="(error, key) in notExistNamesInMainFormula" :key="key">
-          {{error}}
+      <template v-if="notExistNamesInMainFormula.length">
+        <div class="calc__error-label">
+          В результирующей формуле есть не существующие переменные.
+        </div>
+        <div
+          class="calc__error-item"
+          v-for="(error, key) in notExistNamesInMainFormula"
+          :key="key"
+        >
+          {{ error }}
         </div>
       </template>
-      <p>В случае наличия ошибок, калькулятор может вести расчет некорректно!</p>
+      <p>
+        В случае наличия ошибок, калькулятор может вести расчет некорректно!
+      </p>
     </template>
   </div>
 </template>
@@ -37,33 +70,39 @@ export default {
   props: {
     templates: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     initTemplate: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     formula: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   mounted() {
     setTimeout(() => {
       this.processingAllTemplatesForDependencyNames();
       this.checkInShowing();
-    },2000)
+    }, 2000);
   },
   data() {
     return {
-      existsNamesDependency: [],  // Список всех имен элементов которые могут участвовать в расчетах
-      usedNamesDependencyList: [], //список используемых имен для создания зависимостей
+      existsNamesDependencyData: [], // Список всех имен элементов которые могут участвовать в расчетах
+      usedNamesDependencyListData: [], //список используемых имен для создания зависимостей
       displayAlert: false,
-      exceptionVariablesFormula: ["-", "+", "/", "*", "(", ")", "_otherSumma_"],
-      isShow: false
+      exceptionVariablesFormula: ["-", "+", "/", "*", "(", ")", "!==", "!=", "=", "==", "===", "_otherSumma_", "self", "true", "false"],
+      isShow: false,
+      spec: Object.entries({
+        "&gt;": ">",
+        "&lt;": "<",
+        "&amp;": "&",
+        "&quot;": '"',
+      }),
     };
   },
   methods: {
@@ -74,13 +113,35 @@ export default {
      * @returns {boolean}
      */
     recursivelyTraverseAllTemplateElements(template) {
-      this.isElementNameExist(template) ? this.existsNamesDependency.push({label: template.label, elementName:  template.elementName }) : false;
-      this.isDependencyNameExist(template) ? this.usedNamesDependencyList.push({label: template.label, dependencyName:  template.dependencyName }) : false;
+      this.isElementNameExist(template)
+        ? this.existsNamesDependencyData.push({
+            label: template.label,
+            elementName: template.elementName,
+          })
+        : false;
+
+      let currentFormulaTemplate = this.getFormulaTemplate(template)
+      if (currentFormulaTemplate.length) {
+        this.usedNamesDependencyListData.push({
+          label: template?.label ? template.label ? template?.title : template?.title : null,
+          dependencyNames: currentFormulaTemplate,
+        })
+      }
+
       for (let prop in template) {
-        if (typeof template[prop] === 'object' && !Array.isArray(template[prop])) {
-          this.recursivelyTraverseAllTemplateElements(template[prop])
-        } else if (Array.isArray(template[prop]) && template[prop].length) {
-          template[prop].forEach(item => this.recursivelyTraverseAllTemplateElements(item))
+        if (
+          typeof template[prop] === "object" &&
+          !Array.isArray(template[prop]) &&
+          template[prop] !== null
+        ) {
+          this.recursivelyTraverseAllTemplateElements(template[prop]);
+        } else if (
+          Array.isArray(template[prop]) && template[prop].length &&
+          template[prop] !== null
+        ) {
+          template[prop].forEach((item) =>
+            this.recursivelyTraverseAllTemplateElements(item)
+          );
         }
       }
       return false;
@@ -92,68 +153,124 @@ export default {
       const length = this.templates.length;
       for (let i = 0; i < length; i++) {
         const currentTemplate = this.templates[i];
-        this.recursivelyTraverseAllTemplateElements(currentTemplate)
+        this.recursivelyTraverseAllTemplateElements(currentTemplate);
       }
     },
 
     isElementNameExist(template) {
-      return Boolean(template?.elementName?.length)
+      return Boolean(template?.elementName?.length);
     },
-    isDependencyNameExist(template) {
-      return Boolean(template?.dependencyName?.length)
+
+    getFormulaTemplate(template) {
+      let formula = []
+      if ('dependencyFormulaDisplay' in template && template.dependencyFormulaDisplay?.length) {
+        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplay);
+      } else if ('dependencyFormulaItem' in template && template.dependencyFormulaItem?.length) {
+        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaItem);
+
+      } else if ('dependencyFormulaCost' in template && template.dependencyFormulaCost?.length) {
+        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaCost);
+      }
+
+      if ('dependencyFormulaDisplayLeftSide' in template && template.dependencyFormulaDisplayLeftSide?.length) {
+        formula = [...formula, ...this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplayLeftSide)]
+      }
+
+      if ('dependencyFormulaDisplayRightSide' in template && template.dependencyFormulaDisplayRightSide?.length) {
+        formula = [...formula, ...this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplayRightSide)]
+      }
+
+        return formula;
     },
+    /**
+     *
+     * @param formula
+     * @returns {*}
+     */
+    processingFormulaSpecialsSymbols(formula) {
+      this.spec.forEach((specItem) => {
+        formula = formula?.replaceAll(specItem[0], specItem[1]);
+      });
+      //разбиваем формулу на массив отдельных данных
+      formula = formula
+        ?.split(
+          /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+        )
+
+      formula = formula?.map((item) => {
+        //удаляем пробелы по краям
+        let nextItem = item?.replace(/^\s*|\s*$/g, "");
+        // если по краям есть кавычки, то удаляем пробелы между
+        // кавычками и текстом в середине, не трогая пробелы внутри текста
+        if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
+          nextItem = '';
+          // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+        }
+        return nextItem;
+      })
+        .filter((item) => item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g));
+      return formula;
+    },
+
     /**
      *
      */
     checkInShowing() {
-      this.isShow =  Boolean((Object.keys(this.recurringTemplateNames)?.length || this.notExistDependencyNames?.length || this.notExistNamesInMainFormula?.length) && this.initTemplate);
-    }
+      this.isShow = Boolean(
+        (Object.keys(this.recurringTemplateNames)?.length ||
+          this.notExistUsedNamesInFormulaInOut?.length ||
+          this.notExistNamesInMainFormula?.length) &&
+          this.initTemplate
+      );
+    },
   },
   computed: {
-    existsNames() {
-      return this.existsNamesDependency;
-    },
-
-    recurringTemplateNames() {
-      let recurring = {};
-      let resultrecurring = {};
-      this.existsNames.forEach(item => {
-        if (item.elementName in recurring) {
-          recurring[item.elementName].push(item.label)
-        } else {
-          recurring[item.elementName] = [];
-          recurring[item.elementName].push(item.label)
-        }
+    existNames() {
+      return this.existsNamesDependencyData.map(item => {
+        return item.elementName;
       })
-      for (let key in recurring) {
-        recurring[key].length > 1 ? resultrecurring[key] = recurring[key] : false;
-      }
-      return resultrecurring;
     },
 
     /**
      * Не существующие переменные указанные в формулах зависимостей
      * @returns {*[]}
      */
-    notExistDependencyNames() {
-      let resultList = []
-      let lengthList = this.usedNamesDependencyList.length
-
-      for (let i = 0; i < lengthList; i++) {
-        let isExist = false;
-        this.existsNames.forEach(item => {
-          if (item.elementName === this.usedNamesDependencyList[i].dependencyName) {
-            isExist = true;
+    notExistUsedNamesInFormulaInOut() {
+      let usedNamesDependencyListOut = []
+      this.usedNamesDependencyListData.filter(item => {
+        item.dependencyNames.map(name => {
+          if (!this.existNames.includes(name) && !this.exceptionVariablesFormula.includes(name)) {
+            usedNamesDependencyListOut.push({
+              label: item.label,
+              name: name
+            })
           }
         })
+      })
+      return usedNamesDependencyListOut;
+    },
 
-        if (!isExist) {
-          resultList.push(this.usedNamesDependencyList[i])
+    /**
+     * Повторяющиеся имена переменных
+     * @returns {{}}
+     */
+    recurringTemplateNames() {
+      let recurring = {};
+      let resultRecurring = {};
+      this.existsNamesDependencyData.forEach((item) => {
+        if (item.elementName in recurring) {
+          recurring[item.elementName].push(item.label);
+        } else {
+          recurring[item.elementName] = [];
+          recurring[item.elementName].push(item.label);
         }
-
+      });
+      for (let key in recurring) {
+        recurring[key].length > 1
+          ? (resultRecurring[key] = recurring[key])
+          : false;
       }
-      return resultList;
-
+      return resultRecurring;
     },
     /**
      * Не существующие переменные указанные в основной формуле
@@ -163,25 +280,29 @@ export default {
       if (this.formula?.length) {
         let outputDataFormula = [];
         let innerFormula = this.formula
-                    .split(" ")
-                    .filter(item => item.length && !this.exceptionVariablesFormula.includes(item));
+          .split(" ")
+          .filter(
+            (item) =>
+              item.length && !this.exceptionVariablesFormula.includes(item)
+          );
+
         const lengthFormula = innerFormula.length;
 
-        for(let i = 0; i < lengthFormula; i++) {
-          const length = this.existsNamesDependency.length
+        for (let i = 0; i < lengthFormula; i++) {
+          const length = this.existsNamesDependencyData.length;
           let isEmpty = true;
           for (let j = 0; j < length; j++) {
-            if (this.existsNamesDependency[j].elementName === innerFormula[i]) {
+            if (this.existsNamesDependencyData[j].elementName === innerFormula[i]) {
               isEmpty = false;
-              break
+              break;
             }
           }
           if (isEmpty) {
-            outputDataFormula.push(innerFormula[i])
+            outputDataFormula.push(innerFormula[i]);
           }
         }
 
-        return outputDataFormula
+        return outputDataFormula;
       }
       return [];
     },
@@ -189,5 +310,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

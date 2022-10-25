@@ -20,19 +20,19 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 export default {
   name: "UiTabItem",
-  components: {TemplatesWrapper},
+  components: { TemplatesWrapper },
   emits: ["changedValue", "changeValid"],
   props: {
     tabItem: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     tabName: {
       type: String,
-      default: ''
+      default: "",
     },
     tabItemId: {
-      type: Number
+      type: Number,
     },
     elementName: {
       type: String,
@@ -40,12 +40,12 @@ export default {
     },
     shownIdTab: {
       type: Number,
-      default: null
+      default: null,
     },
     parentIsShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -58,7 +58,6 @@ export default {
       this.$emit("changedValue", data);
     },
     changeValid(data) {
-
       if (data.isShow) {
         this.visibilityList.add(data.name);
       } else {
@@ -69,25 +68,23 @@ export default {
 
       let infoOnTab = {
         index: this.tabItemId,
-        isShown: this.isShowTabsItem
-      }
-      this.$emit("changeValid", { data, infoOnTab});
+        isShown: this.isShowTabsItem,
+      };
+      this.$emit("changeValid", { data, infoOnTab });
     },
   },
   computed: {
-    isShowItem(){
+    isShowItem() {
       return this.tabItemId === this.shownIdTab && this.isShowTabsItem;
     },
-    isShowTabsItem(){
+    isShowTabsItem() {
       return Boolean(this.visibilityList.size);
     },
     itemName() {
-      return this.tabName + '_' + this.elementName;
-    }
+      return this.tabName + "_" + this.elementName;
+    },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

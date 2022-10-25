@@ -1,12 +1,14 @@
 <template>
-  <div class="calc__tab-wrapper" :class="[classes]" v-show="showBlock && isVisibilityFromDependency">
+  <div
+    class="calc__tab-wrapper"
+    :class="[classes]"
+    v-show="showBlock && isVisibilityFromDependency"
+  >
     <div class="calc__tab-main-label" v-if="tabData?.label?.length">
       {{ tabData.label }}
     </div>
     <div class="calc__tab-item-label-wrapper">
-      <template
-        v-for="(item, key) in tabData?.items"
-      >
+      <template v-for="(item, key) in tabData?.items">
         <div
           class="calc__tab-item-label"
           :class="{
@@ -60,7 +62,6 @@ export default {
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
-
     tabData: {
       type: Object,
       default: () => {},
@@ -86,7 +87,7 @@ export default {
       itemOpenId: null,
       errorsElements: {},
       visibilityListTabs: new Map(),
-      shownIdTab: null
+      shownIdTab: null,
     };
   },
   methods: {
@@ -97,13 +98,11 @@ export default {
       this.$emit("changedValue", data);
     },
     changeValid({ data, infoOnTab }) {
-
-      if ( this.checkAllowedErrors(data)) {
+      if (this.checkAllowedErrors(data)) {
         if (!this.errorsElements[infoOnTab.index]) {
           this.errorsElements[infoOnTab.index] = new Set();
         }
-        this.errorsElements[infoOnTab.index].add(data.name)
-
+        this.errorsElements[infoOnTab.index].add(data.name);
       } else {
         if (this.errorsElements[infoOnTab.index]?.has(data.name)) {
           this.errorsElements[infoOnTab.index].delete(data.name);
@@ -126,11 +125,13 @@ export default {
      * @returns {boolean}
      */
     checkAllowedErrors(data) {
-      return data.error &&
+      return (
+        data.error &&
         data.eventType !== "mounted" &&
         data.eventType !== "delete" &&
         data.isShow &&
-        this.globalCanBeShownTooltip;
+        this.globalCanBeShownTooltip
+      );
     },
   },
   computed: {
@@ -147,7 +148,7 @@ export default {
       return result.some((item) => item);
     },
     isShowError() {
-      return Boolean(this.errorsElements.size)
+      return Boolean(this.errorsElements.size);
     },
   },
 };

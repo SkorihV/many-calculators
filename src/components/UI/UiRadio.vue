@@ -219,7 +219,9 @@ export default {
   },
   computed: {
     changedRadio() {
-      return this.currentIndexRadioButton !== null ? this.radioValues[this.currentIndexRadioButton] : null;
+      return this.currentIndexRadioButton !== null
+        ? this.radioValues[this.currentIndexRadioButton]
+        : null;
     },
     radioType() {
       return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
@@ -234,7 +236,7 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-      if (!this.getMajorElementDependency?.isShow || !this.changedRadio?.dependencyPrices?.length) {
+      if (!this.changedRadio?.dependencyPrices?.length) {
         return this.changedRadio?.cost;
       }
 
@@ -247,27 +249,24 @@ export default {
       return this.changedRadio?.cost;
     },
     radioValuesAfterProcessingDependency() {
-      if (this.isDependencyNameExist) {
-        return this.radioValues.filter((radio) => {
-          if (
-            radio?.enabledProcessingDependency &&
-            radio?.dependencyFormulaItem.length
-          ) {
-            let formula = this.processingFormulaSpecialsSymbols(
-              radio.dependencyFormulaItem
-            );
-            formula = this.processingVariablesOnFormula(formula);
-            try {
-              return eval(formula);
-            } catch (e) {
-              console.error(e.message);
-              return false;
-            }
+
+      return this.radioValues.filter((radio) => {
+        if (radio?.dependencyFormulaItem?.length) {
+          let formula = this.processingFormulaSpecialsSymbols(
+            radio.dependencyFormulaItem
+          );
+
+          formula = this.processingVariablesOnFormula(formula);
+
+          try {
+            return eval(formula);
+          } catch (e) {
+            // console.error(e.message);
+            return false;
           }
-          return true;
-        });
-      }
-      return this.radioValues;
+        }
+        return true;
+      });
     },
   },
 };

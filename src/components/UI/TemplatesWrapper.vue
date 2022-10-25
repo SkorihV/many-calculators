@@ -7,6 +7,7 @@
     :unit="template?.unit"
     :step="template?.step"
     :label="template?.label"
+    :input-placeholder="template?.placeholder"
     :controls="template?.controls"
     :input-value="template?.value"
     :is-column="template?.isColumn"
@@ -22,7 +23,6 @@
         ? template?.elementName
         : template?.json_id || 'UiInput' + index
     "
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-prices="template?.dependencyPrices"
     :form-output-method="template?.formOutputMethod"
@@ -50,7 +50,6 @@
         ? template?.elementName
         : template?.json_id || 'UiCheckbox' + index
     "
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :dependency-prices="template?.dependencyPrices"
@@ -79,7 +78,6 @@
         ? template?.elementName
         : template?.json_id || 'UiRadio' + index
     "
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :exclude-from-calculations="template?.excludeFromCalculations"
@@ -112,7 +110,6 @@
         ? template?.elementName
         : template?.json_id || 'UiRange' + index
     "
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-prices="template?.dependencyPrices"
     :not-empty="template?.notEmpty"
@@ -141,7 +138,6 @@
         ? template?.elementName
         : template?.json_id || 'UiSelect' + index
     "
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :exclude-from-calculations="template?.excludeFromCalculations"
@@ -158,18 +154,15 @@
   <ui-image
     v-if="template.template === 'UiImage'"
     :label="template?.label"
-
     :default-image="template?.defaultImage"
     :dependency-images="template?.dependencyImages"
     :max-width="template?.maxWidth"
     :prompt="template?.prompt"
     :element-name="template?.json_id || 'UiImage' + inx"
-    :dependency-name="template?.dependencyName"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
   ></ui-image>
-
 </template>
 
 <script>
@@ -184,7 +177,15 @@ import UiImage from "@/components/UI/UiImage";
 export default {
   name: "TemplatesWrapper",
   emits: ["changedValue", "changeValid"],
-  components: { UiRange, UiInput, UiSelect, UiRadio, UiCheckbox, UiPrompt, UiImage },
+  components: {
+    UiRange,
+    UiInput,
+    UiSelect,
+    UiRadio,
+    UiCheckbox,
+    UiPrompt,
+    UiImage,
+  },
   props: {
     template: {
       type: Object,
@@ -196,8 +197,8 @@ export default {
     },
     parentIsShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   methods: {
     changeValue(data) {
