@@ -30,8 +30,12 @@
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiBisection' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :dependency-formula-display-left-side="template?.dependencyFormulaDisplayLeftSide"
-          :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
+          :dependency-formula-display-left-side="
+            template?.dependencyFormulaDisplayLeftSide
+          "
+          :dependency-formula-display-right-side="
+            template?.dependencyFormulaDisplayRightSide
+          "
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -67,6 +71,7 @@
     <teleport v-if="initTeleport && !isErrorCalc" to="#teleport-element">
       {{ finalTextForOutput }}
     </teleport>
+    <!--    <pre>{{dataForDependencies}}</pre>-->
   </div>
 </template>
 
@@ -171,6 +176,7 @@ export default {
         label,
         cost,
         value,
+        displayValue,
         formOutputMethod,
         eventType,
         unit,
@@ -194,6 +200,7 @@ export default {
         formOutputMethod,
         summ: cost,
         value: null,
+        displayValue,
         unit: unit ? unit : null,
         isShow,
         excludeFromCalculations,
@@ -260,17 +267,18 @@ export default {
         this.shownAllTooltips = true;
       }
     },
-    addDataForDependencies({ name, value, isShow, type }) {
+    addDataForDependencies({ name, value, displayValue, isShow, type }) {
       this.dataForDependencies[name] = {
         name,
         value: null,
         isShow,
+        displayValue,
       };
 
       if (type === "radio") {
         this.dataForDependencies[name].value = value?.radioName;
       } else if (type === "select") {
-        this.dataForDependencies[name].value = value?.selectName;
+        this.dataForDependencies[name].value = value;
       } else if (type === "checkbox") {
         this.dataForDependencies[name].value = value;
       } else {
@@ -407,7 +415,7 @@ export default {
     resultTextDataForForm() {
       let result = "";
       this.dataForOutputText.forEach((item) => {
-        if (item.formOutputMethod && item.value) {
+        if (item.formOutputMethod && item.displayValue) {
           result += "\n" + item.label;
 
           if (
@@ -415,7 +423,7 @@ export default {
             item.formOutputMethod === "valueSumm"
           ) {
             const unit = item.unit ? item.unit : "";
-            result += " - " + item.value + " " + unit;
+            result += " - " + item.displayValue + " " + unit;
           }
           if (
             item.summ !== null &&
@@ -589,7 +597,6 @@ $border-radius: 4px;
 .button {
   @include style-button;
 }
-
 
 #app-base-constructor-calculator {
 }

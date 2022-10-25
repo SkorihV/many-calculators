@@ -243,6 +243,7 @@ export default {
       this.localRangeValue = value;
       this.$emit("changedValue", {
         value: this.localRangeValue,
+        displayValue: this.localRangeValue,
         name: this.localElementName,
         type: "range",
         cost: this.resultSum,

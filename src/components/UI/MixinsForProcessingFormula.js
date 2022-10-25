@@ -12,6 +12,7 @@ export const MixinsForProcessingFormula = {
       default: true,
     },
   },
+  mounted() {},
   data() {
     return {
       spec: Object.entries({
@@ -60,6 +61,17 @@ export const MixinsForProcessingFormula = {
       return formula;
     },
 
+    constructLocalListElementDependencyInFormula(formula) {
+      formula.forEach((name) => {
+        if (
+          this.isElementDependency(name) &&
+          !this.existLocalElementDependency(name)
+        ) {
+          this.putElementDependencyInLocalList(name);
+        }
+      });
+    },
+
     /**
      * Обработать полученные переменные из формулы
      * и получить строку со значениями
@@ -67,12 +79,7 @@ export const MixinsForProcessingFormula = {
      */
     processingVariablesOnFormula(formula) {
       return formula?.reduce((resultText, item) => {
-        if (
-          this.isElementDependency(item) &&
-          !this.existLocalElementDependency(item)
-        ) {
-          this.putElementDependencyInLocalList(item);
-        }
+        // this.constructLocalListElementDependencyInFormula(formula)
         let elementDependency =
           item in this.localListElementDependency
             ? this.localListElementDependency[item]
@@ -87,7 +94,6 @@ export const MixinsForProcessingFormula = {
             return resultText + "'" + elementDependency.value + "'";
           }
         }
-
         return resultText + item;
       }, "");
     },
@@ -107,7 +113,7 @@ export const MixinsForProcessingFormula = {
           let formula = this.processingFormulaSpecialsSymbols(
             item?.dependencyFormulaCost
           );
-
+          this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
           try {
             if (eval(formula)) {
@@ -216,9 +222,11 @@ export const MixinsForProcessingFormula = {
       if (!this.isDependencyElementVisibility) {
         return false;
       }
+
       let formula = this.processingFormulaSpecialsSymbols(
         this.dependencyFormulaDisplay
       );
+      this.constructLocalListElementDependencyInFormula(formula);
       return this.processingVariablesOnFormula(formula);
     },
   },

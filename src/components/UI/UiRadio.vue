@@ -169,6 +169,7 @@ export default {
       const radio = this.changedRadio;
       this.$emit("changedValue", {
         value: radio,
+        displayValue: radio?.radioName,
         index: this.currentIndexRadioButton,
         name: this.localElementName,
         type: "radio",
@@ -249,13 +250,12 @@ export default {
       return this.changedRadio?.cost;
     },
     radioValuesAfterProcessingDependency() {
-
       return this.radioValues.filter((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
           let formula = this.processingFormulaSpecialsSymbols(
             radio.dependencyFormulaItem
           );
-
+          this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 
           try {

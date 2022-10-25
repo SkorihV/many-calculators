@@ -141,6 +141,7 @@ export default {
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
         value: this.localValue,
+        displayValue: this.localValue ? "Да" : "Нет",
         name: this.localElementName,
         type: "checkbox",
         label: this.label,

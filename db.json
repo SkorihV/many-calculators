@@ -444,7 +444,7 @@
         "elementName": "acc1",
         "classes": "",
         "dependencyName": "test123",
-        "dependencyFormulaDisplay": "test123 === 'Пункта второй'",
+        "dependencyFormulaDisplay": "test123 === 1",
         "json_id": "169744706",
 
         "items": [

@@ -98,6 +98,7 @@ export default {
           let formula = this.processingFormulaSpecialsSymbols(
             imageItem.dependencyFormulaDisplay
           );
+          this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 
           try {

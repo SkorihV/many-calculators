@@ -285,6 +285,7 @@ export default {
     changeValue(eventType = "input") {
       this.$emit("changedValue", {
         value: this.resultValue,
+        displayValue: this.resultValue,
         name: this.localElementName,
         type: "input",
         cost: this.resultSumm,

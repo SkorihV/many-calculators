@@ -602,7 +602,7 @@ $border-radius: 4px;
     &-wrapper {
       @include style-flex-start;
       position: relative;
-     }
+    }
     &-label {
       @include style-flex-center;
       justify-content: flex-start;

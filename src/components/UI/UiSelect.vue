@@ -38,7 +38,9 @@
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
             :key="idx"
           >
-            <template v-if="currentOption.selectName !== option.selectName">
+            <template
+              v-if="currentOption.value !== option.value && option.isShow"
+            >
               <div
                 v-if="option?.image?.filename"
                 class="calc__select-image-wrapper"
@@ -83,7 +85,7 @@ export default {
   components: { UiTooltip, UiPrompt },
   mounted() {
     this.localSelectValues = this.selectValues;
-    if (this.notEmpty || this.isNeedChoice) {
+    if (this.needMockValue) {
       this.localSelectValues.unshift(this.mockOption);
     }
 
@@ -97,7 +99,7 @@ export default {
               : this.localSelectValues.length - 1;
 
           this.changeSelect(
-            this.selectValues[this.currentIndexOption],
+            this.localSelectValues[this.currentIndexOption],
             this.currentIndexOption,
             "mounted"
           );
@@ -110,7 +112,6 @@ export default {
     } else {
       this.changeSelect(this.localSelectValues[0], null, "mounted");
     }
-
     document.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
         this.close();
@@ -171,14 +172,12 @@ export default {
   data() {
     return {
       isOpen: false,
-      currentOption: {
-        selectName: "Не выбрано!",
-      },
+      currentOption: this.mockOption,
       currentIndexOption: null,
       textErrorNotEmpty: "Обязательное поле.",
       mockOption: {
         selectName: "Не выбрано!",
-        value: null,
+        value: "empty",
       },
       localSelectValues: [],
     };
@@ -196,12 +195,13 @@ export default {
     close() {
       this.isOpen = false;
     },
-    changeSelect(item, idx, eventType = "click") {
-      if (this.notEmpty && idx === 0) {
+    changeSelect(item, inx, eventType = "click") {
+      if (this.notEmpty && inx === 0) {
         this.currentIndexOption = null;
       } else {
-        this.currentIndexOption = idx;
+        this.currentIndexOption = inx;
       }
+
       this.currentOption = item;
 
       this.changeValue(eventType);
@@ -209,7 +209,8 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.currentOption,
+        value: this.currentOption.value,
+        displayValue: this.currentOption?.selectName,
         index: this.currentIndexOption,
         name: this.localElementName,
         type: "select",
@@ -241,7 +242,7 @@ export default {
       this.currentIndexOption = 0;
       this.currentOption = this.selectValuesAfterProcessingDependency[0];
       this.changeValue("click");
-    }
+    },
   },
   watch: {
     selectedItem(newValue) {
@@ -254,6 +255,19 @@ export default {
       this.changeValue();
     },
 
+    isOpen(newValue) {
+      if (newValue && !Object.keys(this.localListElementDependency)?.length) {
+        this.localSelectValues?.forEach((select) => {
+          if (select?.dependencyFormulaItem?.length) {
+            let formula = this.processingFormulaSpecialsSymbols(
+              select.dependencyFormulaItem
+            );
+            this.constructLocalListElementDependencyInFormula(formula);
+          }
+        });
+      }
+    },
+
     // selectValuesAfterProcessingDependency: {
     //   handler(newValue, oldValue) {
     //     if (newValue?.length !== oldValue?.length) {
@@ -263,10 +277,42 @@ export default {
     //   deep: true
     // }
 
+    amountVisibleSelects() {
+      let length = this.selectValuesAfterProcessingDependency.length;
+      if (!this.currentOption) {
+        return null;
+      }
+      for (let i = 0; i < length; i++) {
+        if (
+          this.selectValuesAfterProcessingDependency[i].value ===
+            this.currentOption.value &&
+          this.currentOption.isShow
+        ) {
+          return;
+        }
+      }
 
-
+      for (let i = 0; i < length; i++) {
+        if (this.selectValuesAfterProcessingDependency[i].isShow) {
+          this.changeSelect(
+            this.selectValuesAfterProcessingDependency[i],
+            i,
+            "changeAmountSelectList"
+          );
+          return;
+        }
+      }
+    },
   },
   computed: {
+    amountVisibleSelects() {
+      return this.selectValuesAfterProcessingDependency.filter(
+        (item) => item.isShow
+      ).length;
+    },
+    needMockValue() {
+      return this.notEmpty || this.isNeedChoice;
+    },
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName
@@ -304,31 +350,41 @@ export default {
       return this.currentOption?.cost;
     },
 
+    mutationSelectValue() {
+      return this.localSelectValues.map((selectItem, index) => {
+        const localIndex = this.needMockValue ? index : index + 1;
+        selectItem.value = selectItem.value?.toString()?.length
+          ? selectItem.value
+          : localIndex;
+        return selectItem;
+      });
+    },
+
     /**
      * Получить список селектов после обработки формул на отображение самих селектов
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
-
-      return this.localSelectValues.filter((selectItem) => {
+      return this.mutationSelectValue.map((selectItem) => {
         if (!selectItem?.dependencyFormulaItem?.length) {
-          return true;
+          selectItem.isShow = true;
+          return selectItem;
         }
 
         let formula = this.processingFormulaSpecialsSymbols(
           selectItem.dependencyFormulaItem
         );
 
-        let allDependencyShow = formula.every(item => {
-
+        let allDependencyShow = formula.every((item) => {
           if (this.isElementDependency(item)) {
-            return this.localListElementDependency[item]?.isShow
+            return this.localListElementDependency[item]?.isShow;
           }
-          return true
-        })
+          return true;
+        });
 
         if (!allDependencyShow) {
-          return true
+          selectItem.isShow = true;
+          return selectItem;
         }
 
         formula = formula.map((item) =>
@@ -336,14 +392,16 @@ export default {
             ? "'" + selectItem.selectName + "'"
             : item
         );
-
+        this.constructLocalListElementDependencyInFormula(formula);
         formula = this.processingVariablesOnFormula(formula);
 
         try {
-          return eval(formula);
+          selectItem.isShow = eval(formula);
+          return selectItem;
         } catch (e) {
           // console.error(e.message);
-          return false;
+          selectItem.isShow = false;
+          return selectItem;
         }
       });
     },

@@ -95,7 +95,23 @@ export default {
       existsNamesDependencyData: [], // Список всех имен элементов которые могут участвовать в расчетах
       usedNamesDependencyListData: [], //список используемых имен для создания зависимостей
       displayAlert: false,
-      exceptionVariablesFormula: ["-", "+", "/", "*", "(", ")", "!==", "!=", "=", "==", "===", "_otherSumma_", "self", "true", "false"],
+      exceptionVariablesFormula: [
+        "-",
+        "+",
+        "/",
+        "*",
+        "(",
+        ")",
+        "!==",
+        "!=",
+        "=",
+        "==",
+        "===",
+        "_otherSumma_",
+        "self",
+        "true",
+        "false",
+      ],
       isShow: false,
       spec: Object.entries({
         "&gt;": ">",
@@ -120,12 +136,16 @@ export default {
           })
         : false;
 
-      let currentFormulaTemplate = this.getFormulaTemplate(template)
+      let currentFormulaTemplate = this.getFormulaTemplate(template);
       if (currentFormulaTemplate.length) {
         this.usedNamesDependencyListData.push({
-          label: template?.label ? template.label ? template?.title : template?.title : null,
+          label: template?.label
+            ? template.label
+              ? template?.title
+              : template?.title
+            : null,
           dependencyNames: currentFormulaTemplate,
-        })
+        });
       }
 
       for (let prop in template) {
@@ -136,7 +156,8 @@ export default {
         ) {
           this.recursivelyTraverseAllTemplateElements(template[prop]);
         } else if (
-          Array.isArray(template[prop]) && template[prop].length &&
+          Array.isArray(template[prop]) &&
+          template[prop].length &&
           template[prop] !== null
         ) {
           template[prop].forEach((item) =>
@@ -162,25 +183,55 @@ export default {
     },
 
     getFormulaTemplate(template) {
-      let formula = []
-      if ('dependencyFormulaDisplay' in template && template.dependencyFormulaDisplay?.length) {
-        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplay);
-      } else if ('dependencyFormulaItem' in template && template.dependencyFormulaItem?.length) {
-        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaItem);
-
-      } else if ('dependencyFormulaCost' in template && template.dependencyFormulaCost?.length) {
-        formula = this.processingFormulaSpecialsSymbols(template.dependencyFormulaCost);
+      let formula = [];
+      if (
+        "dependencyFormulaDisplay" in template &&
+        template.dependencyFormulaDisplay?.length
+      ) {
+        formula = this.processingFormulaSpecialsSymbols(
+          template.dependencyFormulaDisplay
+        );
+      } else if (
+        "dependencyFormulaItem" in template &&
+        template.dependencyFormulaItem?.length
+      ) {
+        formula = this.processingFormulaSpecialsSymbols(
+          template.dependencyFormulaItem
+        );
+      } else if (
+        "dependencyFormulaCost" in template &&
+        template.dependencyFormulaCost?.length
+      ) {
+        formula = this.processingFormulaSpecialsSymbols(
+          template.dependencyFormulaCost
+        );
       }
 
-      if ('dependencyFormulaDisplayLeftSide' in template && template.dependencyFormulaDisplayLeftSide?.length) {
-        formula = [...formula, ...this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplayLeftSide)]
+      if (
+        "dependencyFormulaDisplayLeftSide" in template &&
+        template.dependencyFormulaDisplayLeftSide?.length
+      ) {
+        formula = [
+          ...formula,
+          ...this.processingFormulaSpecialsSymbols(
+            template.dependencyFormulaDisplayLeftSide
+          ),
+        ];
       }
 
-      if ('dependencyFormulaDisplayRightSide' in template && template.dependencyFormulaDisplayRightSide?.length) {
-        formula = [...formula, ...this.processingFormulaSpecialsSymbols(template.dependencyFormulaDisplayRightSide)]
+      if (
+        "dependencyFormulaDisplayRightSide" in template &&
+        template.dependencyFormulaDisplayRightSide?.length
+      ) {
+        formula = [
+          ...formula,
+          ...this.processingFormulaSpecialsSymbols(
+            template.dependencyFormulaDisplayRightSide
+          ),
+        ];
       }
 
-        return formula;
+      return formula;
     },
     /**
      *
@@ -192,23 +243,26 @@ export default {
         formula = formula?.replaceAll(specItem[0], specItem[1]);
       });
       //разбиваем формулу на массив отдельных данных
-      formula = formula
-        ?.split(
-          /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
-        )
+      formula = formula?.split(
+        /([A-Za-zА-Яа-яЁё0-9-_'" ]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+      );
 
-      formula = formula?.map((item) => {
-        //удаляем пробелы по краям
-        let nextItem = item?.replace(/^\s*|\s*$/g, "");
-        // если по краям есть кавычки, то удаляем пробелы между
-        // кавычками и текстом в середине, не трогая пробелы внутри текста
-        if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
-          nextItem = '';
-          // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
-        }
-        return nextItem;
-      })
-        .filter((item) => item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g));
+      formula = formula
+        ?.map((item) => {
+          //удаляем пробелы по краям
+          let nextItem = item?.replace(/^\s*|\s*$/g, "");
+          // если по краям есть кавычки, то удаляем пробелы между
+          // кавычками и текстом в середине, не трогая пробелы внутри текста
+          if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
+            nextItem = "";
+            // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+          }
+          return nextItem;
+        })
+        .filter(
+          (item) =>
+            item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
+        );
       return formula;
     },
 
@@ -226,9 +280,9 @@ export default {
   },
   computed: {
     existNames() {
-      return this.existsNamesDependencyData.map(item => {
+      return this.existsNamesDependencyData.map((item) => {
         return item.elementName;
-      })
+      });
     },
 
     /**
@@ -236,17 +290,20 @@ export default {
      * @returns {*[]}
      */
     notExistUsedNamesInFormulaInOut() {
-      let usedNamesDependencyListOut = []
-      this.usedNamesDependencyListData.filter(item => {
-        item.dependencyNames.map(name => {
-          if (!this.existNames.includes(name) && !this.exceptionVariablesFormula.includes(name)) {
+      let usedNamesDependencyListOut = [];
+      this.usedNamesDependencyListData.filter((item) => {
+        item.dependencyNames.map((name) => {
+          if (
+            !this.existNames.includes(name) &&
+            !this.exceptionVariablesFormula.includes(name)
+          ) {
             usedNamesDependencyListOut.push({
               label: item.label,
-              name: name
-            })
+              name: name,
+            });
           }
-        })
-      })
+        });
+      });
       return usedNamesDependencyListOut;
     },
 
@@ -292,7 +349,9 @@ export default {
           const length = this.existsNamesDependencyData.length;
           let isEmpty = true;
           for (let j = 0; j < length; j++) {
-            if (this.existsNamesDependencyData[j].elementName === innerFormula[i]) {
+            if (
+              this.existsNamesDependencyData[j].elementName === innerFormula[i]
+            ) {
               isEmpty = false;
               break;
             }

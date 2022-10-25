@@ -119,27 +119,28 @@ export default {
     },
     processingFormula(formula) {
       let result = this.processingFormulaSpecialsSymbols(formula);
+      this.constructLocalListElementDependencyInFormula(result);
       result = this.processingVariablesOnFormula(result);
       try {
         return eval(result);
       } catch (e) {
         return false;
       }
-    }
+    },
   },
   computed: {
-    isShowLeftSide () {
+    isShowLeftSide() {
       if (!this.dependencyFormulaDisplayLeftSide?.length) {
         return true;
       }
-      return this.processingFormula(this.dependencyFormulaDisplayLeftSide)
-      },
+      return this.processingFormula(this.dependencyFormulaDisplayLeftSide);
+    },
     isShowRightSide() {
       if (!this.dependencyFormulaDisplayRightSide?.length) {
         return true;
       }
-      return this.processingFormula(this.dependencyFormulaDisplayRightSide)
-      },
+      return this.processingFormula(this.dependencyFormulaDisplayRightSide);
+    },
 
     styleWidthLeftSide() {
       if (this.widthLeftSide > 80) {
