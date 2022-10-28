@@ -1,3 +1,5 @@
+
+
 export const MixinsForProcessingFormula = {
   props: {
     /**
@@ -168,6 +170,12 @@ export const MixinsForProcessingFormula = {
       }
     },
 
+    globalCanBeShownTooltip(newValue) {
+      if (newValue && this.isVisibilityFromDependency) {
+        this.changeValue("dependency");
+      }
+    },
+
     globalDataForDependencies: {
       handler(newValue) {
         let isUpdated = false;
@@ -175,9 +183,9 @@ export const MixinsForProcessingFormula = {
           if (this.existLocalElementDependency(key)) {
             if (
               newValue[key].value !==
-                this.localListElementDependency[key].value ||
+              this.localListElementDependency[key].value ||
               newValue[key].isShow !==
-                this.localListElementDependency[key].isShow
+              this.localListElementDependency[key].isShow
             ) {
               this.localListElementDependency[key] = newValue[key];
               isUpdated = true;

@@ -10,7 +10,8 @@
         "min": "",
         "max": "",
         "controls": true,
-        "step": "1",
+        "step": "7",
+        "discreteStep" : "true",
         "isColumn": false,
         "notEmpty": true,
         "onlyNumber": true,
@@ -287,7 +288,7 @@
         "notEmpty": false,
         "formOutputMethod": "valueSumm",
         "elementName": "test123",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "refge > 1",
         "classes": "",
         "template": "UiSelect",
         "values": [

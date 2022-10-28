@@ -28,7 +28,6 @@ export const MixinsGeneralItemData = {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-
     /**
      * имя необходимое для корректной работы Label
      */

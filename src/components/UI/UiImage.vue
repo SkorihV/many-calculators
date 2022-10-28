@@ -6,7 +6,7 @@
     <div class="calc__image-wrapper" :class="classes">
       <div
         class="calc__image-label-wrapper"
-        v-if="localDataForDisplay.label.length"
+        v-if="localDataForDisplay?.label?.toString()?.length"
       >
         <div class="calc__image-label">{{ localDataForDisplay.label }}</div>
         <ui-prompt
@@ -14,7 +14,7 @@
           :prompt-text="localDataForDisplay.prompt"
         ></ui-prompt>
       </div>
-      <div class="calc__image-wrapper-image" :style="'max-width:' + width">
+      <div class="calc__image-wrapper-image" :style="width + height">
         <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label" />
       </div>
     </div>
@@ -54,6 +54,10 @@ export default {
       type: [Number, String],
       default: 250,
     },
+    maxHeight: {
+      type: [Number, String],
+      default: 250,
+    },
     /**
      * имя необходимое для корректной работы Label
      */
@@ -79,7 +83,10 @@ export default {
       return window?.imageDir ? window.imageDir : "";
     },
     width() {
-      return this.maxWidth + "px";
+      return "max-width:" + this.maxWidth + "px";
+    },
+    height() {
+      return "max-height:" + this.maxHeight + "px";
     },
     localDataForDisplay() {
       let dataForOut = {
@@ -104,7 +111,7 @@ export default {
           try {
             if (eval(formula)) {
               dataForOut = {
-                label: imageItem.label,
+                label: imageItem.label?.toString().length ? imageItem.label : this.label,
                 url: this.imageDir + imageItem.image.filename,
                 prompt: imageItem?.prompt?.length
                   ? imageItem.prompt

@@ -143,7 +143,7 @@ export default {
     },
 
     styleWidthLeftSide() {
-      if (this.widthLeftSide > 80) {
+      if (this.widthLeftSide > 70) {
         this.widthLeftSide = 70;
       }
       if (this.widthLeftSide < 30) {
@@ -155,7 +155,7 @@ export default {
       return "max-width:" + this.widthLeftSide + "%";
     },
     styleWidthRightSide() {
-      if (this.widthLeftSide > 80) {
+      if (this.widthLeftSide > 70) {
         this.widthLeftSide = 70;
       }
       if (this.widthLeftSide < 30) {

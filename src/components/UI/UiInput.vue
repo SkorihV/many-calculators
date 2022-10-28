@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency && !systemField">
     <div
       class="calc__input-wrapper"
       :class="[{ 'is-stretch': isStretch }, classes]"
@@ -13,7 +13,7 @@
           {{ label }}<slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
-          <div class="calc__input-buttons-minus" @click="minus">-</div>
+          <div class="calc__input-buttons-minus" v-if="controls" @click="minus">-</div>
 
           <input
             ref="trueInput"
@@ -39,12 +39,12 @@
               :placeholder="inputPlaceholder"
             />
           </template>
-          <div class="calc__input-buttons-plus" @click="plus">+</div>
+          <div class="calc__input-buttons-plus" v-if="controls" @click="plus">+</div>
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
         </div>
         <ui-tooltip
-          :is-show="tooltipError.error"
-          :tooltip-text="tooltipError.errorText"
+          :is-show="tooltipError?.error"
+          :tooltip-text="tooltipError?.errorText"
           :local-can-be-shown="localCanBeShownTooltip"
         />
       </label>
@@ -133,6 +133,13 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    discreteStep: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
     /**
      * отображать заголовок и инпут в колонку
      */
@@ -206,6 +213,17 @@ export default {
       type: String,
       default: "no",
     },
+    /**
+     * Системное поле используемое для расчетов
+     * без возможности редактировать содержимое со стороны сайта
+     */
+    systemField: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
   },
   mounted() {
     if (!this.valueIsNaN && this.localMin > this.inputValue) {
@@ -226,11 +244,13 @@ export default {
         }
       });
     }
+
   },
   data() {
     return {
       localInputValue: null,
       nameTimer: null,
+      nameTimerForUpdateInputValue: null,
       fakeValueHidden: this.isCurrency && this.onlyNumber,
       isInvalid: false,
       canBeShownTooltip: false,
@@ -239,7 +259,7 @@ export default {
   methods: {
     resultWitchNumberValid() {
       try {
-        this.clearTimer();
+        this.clearTimer(this.nameTimer);
 
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
@@ -261,7 +281,15 @@ export default {
           this.changeValueWitchTimer(this.localMax);
         }
 
-        this.localInputValue = parseFloat(this.localInputValue);
+        if (this.discreteStep) {
+          this.clearTimer(this.nameTimerForUpdateInputValue);
+          this.nameTimerForUpdateInputValue = setTimeout(() => {
+            this.localInputValue = Math.round(parseFloat(this.localInputValue) / this.step) * this.step ;
+          }, 1500)
+        } else {
+          this.localInputValue = parseFloat(this.localInputValue);
+        }
+
         if (this.valueIsNaN) {
           this.localInputValue = "";
         }
@@ -293,11 +321,11 @@ export default {
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
         isShow: this.isVisibilityFromDependency,
-        excludeFromCalculations: this.excludeFromCalculations,
+        excludeFromCalculations: this.systemField ? true : this.excludeFromCalculations,
         unit: this.unit,
         eventType,
       });
-      if (eventType !== "delete" || eventType !== "mounted") {
+      if ((eventType !== "delete" || eventType !== "mounted") && !this.systemField) {
         this.changeValid(eventType);
       }
     },
@@ -308,8 +336,8 @@ export default {
         this.shownTooltip();
       }, 1000);
     },
-    clearTimer() {
-      if (this.nameTimer) clearTimeout(this.nameTimer);
+    clearTimer(name) {
+      if (name) clearTimeout(name);
     },
     /**
      * возвращает общее состояние не валидности инпута
@@ -332,6 +360,7 @@ export default {
           isShow: this.isVisibilityFromDependency,
         });
       });
+      this.shownTooltip();
     },
     /**
      * при включенной обработки сотых отображает инпут с настоящим значением при фокусе

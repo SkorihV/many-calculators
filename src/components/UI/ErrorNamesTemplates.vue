@@ -111,6 +111,7 @@ export default {
         "self",
         "true",
         "false",
+        "empty"
       ],
       isShow: false,
       spec: Object.entries({
@@ -136,7 +137,7 @@ export default {
           })
         : false;
 
-      let currentFormulaTemplate = this.getFormulaTemplate(template);
+      let currentFormulaTemplate = this.getFormulaTemplate(template)
       if (currentFormulaTemplate.length) {
         this.usedNamesDependencyListData.push({
           label: template?.label
@@ -230,7 +231,6 @@ export default {
           ),
         ];
       }
-
       return formula;
     },
     /**
@@ -246,25 +246,25 @@ export default {
       formula = formula
         ?.split(
           /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
-        )
-        .filter((item) => item?.length);
+        )?.map((item) => {
+          //удаляем пробелы по краям
+          let nextItem = item?.replace(/^\s*|\s*$/g, "");
+          // если по краям есть кавычки, то удаляем пробелы между
+          // кавычками и текстом в середине, не трогая пробелы внутри текста
+          if (item?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
+            item = "";
+            // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+          }
+          return item;
+        })
+        .filter(
+          (item) =>
+            item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
+        );
+      // formula = formula.filter((item) => {
+      //    return item && item?.length && isNaN(Number(item))
+      //   });
 
-      // formula = formula
-      //   ?.map((item) => {
-      //     //удаляем пробелы по краям
-      //     let nextItem = item?.replace(/^\s*|\s*$/g, "");
-      //     // если по краям есть кавычки, то удаляем пробелы между
-      //     // кавычками и текстом в середине, не трогая пробелы внутри текста
-      //     if (nextItem?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
-      //       nextItem = "";
-      //       // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
-      //     }
-      //     return nextItem;
-      //   })
-      //   .filter(
-      //     (item) =>
-      //       item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
-      //   );
       return formula;
     },
 
@@ -342,7 +342,7 @@ export default {
           .split(" ")
           .filter(
             (item) =>
-              item.length && !this.exceptionVariablesFormula.includes(item)
+              item.length && !this.exceptionVariablesFormula.includes(item) && isNaN(Number(item))
           );
 
         const lengthFormula = innerFormula.length;

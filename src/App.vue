@@ -477,6 +477,7 @@ $border-radius: 4px;
         text-align: start;
         &-text {
           padding: 10px 25px 10px 10px;
+          text-align: start;
         }
         &:hover {
           background-color: $color-gray-middle;
@@ -1162,8 +1163,9 @@ $border-radius: 4px;
       max-width: 450px;
       max-height: 500px;
       box-shadow: 0 0 2px 2px $color-danger;
-      min-height: 22px;
-      min-width: 22px;
+      min-height: 42px;
+      min-width: 42px;
+      overflow: auto;
       &.isShow {
         display: flex;
       }
@@ -1190,6 +1192,8 @@ $border-radius: 4px;
       align-items: start;
       &-image {
         width: 100%;
+        height: 100%;
+        overflow: hidden;
         img {
           @include style-img;
         }
