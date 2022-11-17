@@ -211,28 +211,31 @@ export default {
       textErrorNotEmpty: "Обязательное поле.",
       updateValueTimer: null,
       canBeShownTooltip: false,
+      timerNameForLocalValue: null,
     };
   },
   methods: {
     changeValueStep(step) {
-      this.localRangeValue = step;
-
+      this.localRangeValue = this.checkValidValueReturnNumber(step);
       this.changeValue();
       this.shownTooltip();
     },
     tryChangeValue(e) {
-      this.localRangeValue = e.target.value;
-      this.changeValue();
-      this.shownTooltip();
+      clearTimeout(this.timerNameForLocalValue);
+      this.localRangeValue = this.checkValidValueReturnNumber(e.target.value);
+      this.timerNameForLocalValue = setTimeout(() => {
+        this.changeValue();
+        this.shownTooltip();
+      }, 500)
     },
     changeDynamicValue(e) {
-      this.localRangeValue = e.target.value;
+      this.localRangeValue = this.checkValidValueReturnNumber(e.target.value);
       this.changeValue();
       this.shownTooltip();
     },
-    changeValue(eventType = "input") {
-      let value = !isNaN(parseFloat(this.localRangeValue))
-        ? parseFloat(this.localRangeValue)
+    checkValidValueReturnNumber(checkedValue) {
+      let value = !isNaN(parseFloat(checkedValue))
+        ? parseFloat(checkedValue)
         : null;
       if (value > this.localMax) {
         value = this.localMax;
@@ -240,7 +243,10 @@ export default {
       if (value < this.localMin) {
         value = this.localMin;
       }
-      this.localRangeValue = value;
+      return value;
+    },
+    changeValue(eventType = "input") {
+      this.localRangeValue = this.checkValidValueReturnNumber(this.localRangeValue);
       this.$emit("changedValue", {
         value: this.localRangeValue,
         displayValue: this.localRangeValue,

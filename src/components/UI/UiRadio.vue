@@ -13,7 +13,7 @@
       </div>
       <div class="calc__radio-wrapper-buttons">
         <template
-          v-for="(radio, idx) in radioValuesAfterProcessingDependency"
+          v-for="(radio, idx) in localRadioListInOut"
           :key="idx"
         >
           <div
@@ -57,7 +57,7 @@ export default {
     this.localElementName = this.checkedValueOnVoid(this.elementName)
       ? this.elementName
       : Math.random().toString();
-
+    this.updateRadioListInOut();
     if (!this.isErrorEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
         if (this.radioValues.length) {
@@ -159,6 +159,8 @@ export default {
       currentIndexRadioButton: null,
       textErrorNotEmpty: "Обязательное поле.",
       localElementName: null,
+      timerName: null,
+      localRadioListInOut: [],
     };
   },
   methods: {
@@ -171,9 +173,8 @@ export default {
     },
     changeValue(eventType = "click") {
       const radio = this.changedRadio;
-      console.log(radio);
       this.$emit("changedValue", {
-        value: radio.value,
+        value: radio?.value,
         displayValue: radio?.radioName,
         index: this.currentIndexRadioButton,
         name: this.localElementName,
@@ -203,6 +204,38 @@ export default {
         isShow: this.isVisibilityFromDependency,
       });
     },
+    getNewListValuesBeforeCheckedDependency() {
+
+      return this.mutationRadioValue.map((radio) => {
+        if (radio?.dependencyFormulaItem?.length) {
+          let formula = this.processingFormulaSpecialsSymbols(
+            radio.dependencyFormulaItem
+          );
+          this.constructLocalListElementDependencyInFormula(formula);
+          setTimeout(() => {
+            formula = this.processingVariablesOnFormula(formula);
+
+            try {
+              radio.isShow = eval(formula);
+            } catch (e) {
+              // console.error(e.message);
+              radio.isShow = false;
+            }
+          }, 10);
+        }
+        radio.isShow = true;
+        return radio;
+      });
+    },
+    updateRadioListInOut() {
+      this.localRadioListInOut = [];
+      if (this.timerName) {
+        clearTimeout(this.timerName)
+      }
+      this.timerName = setTimeout(()=> {
+        this.localRadioListInOut = this.radioValuesAfterProcessingDependency;
+      }, 100);
+    }
   },
   watch: {
     selectedItem(newValue) {
@@ -219,17 +252,12 @@ export default {
           this.currentIndexRadioButton = null;
           this.changeValue("selected");
         }
+        this.updateRadioListInOut();
       },
       deep: true,
     },
   },
   computed: {
-    amountVisibleRadioButtons() {
-      return this.radioValuesAfterProcessingDependency.filter(
-        (item) => item.isShow
-      ).length;
-    },
-
     changedRadio() {
       return this.currentIndexRadioButton !== null
         ? this.radioValues[this.currentIndexRadioButton]
@@ -271,26 +299,7 @@ export default {
     },
 
     radioValuesAfterProcessingDependency() {
-      return this.mutationRadioValue.map((radio) => {
-        if (radio?.dependencyFormulaItem?.length) {
-          let formula = this.processingFormulaSpecialsSymbols(
-            radio.dependencyFormulaItem
-          );
-          this.constructLocalListElementDependencyInFormula(formula);
-          setTimeout(() => {
-            formula = this.processingVariablesOnFormula(formula);
-
-            try {
-              radio.isShow = eval(formula);
-            } catch (e) {
-              // console.error(e.message);
-              radio.isShow = false;
-            }
-          }, 10);
-        }
-        radio.isShow = true;
-        return radio;
-      });
+        return this.getNewListValuesBeforeCheckedDependency();
     },
   },
 };

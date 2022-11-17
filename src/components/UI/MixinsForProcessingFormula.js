@@ -1,5 +1,3 @@
-
-
 export const MixinsForProcessingFormula = {
   props: {
     /**
@@ -142,7 +140,7 @@ export const MixinsForProcessingFormula = {
      * @returns {*|null}
      */
     isElementDependency(name) {
-      if (!name?.length) {
+      if (!name?.length && !this.globalDataForDependencies) {
         return false;
       }
       return name in this.globalDataForDependencies;

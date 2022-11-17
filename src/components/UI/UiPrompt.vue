@@ -13,19 +13,14 @@
     >
       &#63;
     </div>
-    <transition name="popup">
-      <div
-        ref="popup"
-        class="calc__prompt-popup-wrapper"
-        :class="classPosition"
-        :style="widthPopup"
-        @mouseenter="show"
-        v-show="isShow"
-      >
-        <div class="calc__prompt-popup-item" v-html="promptText" />
+  </div>
+  <teleport to="#prompt-text-element">
+    <transition name="prompt">
+      <div class="prompt-wrapper" v-if="isShow" :style="topPopupWrapper">
+        <div @mouseenter="show" @mouseleave="hidden" class="prompt-content" v-html="promptText"></div>
       </div>
     </transition>
-  </div>
+  </teleport>
 </template>
 
 <script>
@@ -35,57 +30,42 @@ export default {
     promptText: {
       type: String,
     },
-    minWidthPopup: {
-      type: [Number, String],
-    },
   },
   data() {
     return {
       isShow: false,
       timerName: null,
-      classPosition: null,
+      topCalcWrapper: null,
+      topBtnPrompt: null,
     };
   },
   methods: {
     show() {
       clearTimeout(this.timerName);
+      this.getTopForCalcWrapper();
+      this.getTopBtnPrompt()
       this.isShow = true;
-      this.checkPosition();
     },
     hidden() {
       this.timerName = setTimeout(() => (this.isShow = false), 500);
     },
-    checkPosition() {
-      setTimeout(() => {
-        this.classPosition = null;
-        const popupWidth = this.$refs.popup.offsetWidth;
-        const promptBtnWidth = this.$refs.promptBtn.offsetWidth;
-        const promptBtnCenter =
-          this.$refs.promptBtn.getBoundingClientRect().left +
-          promptBtnWidth / 2;
-
-        const popupRightSide = promptBtnCenter + popupWidth / 2;
-        const popupLeftSide = promptBtnCenter - popupWidth / 2;
-        const docWidth = document.documentElement.clientWidth;
-
-        if (popupRightSide > docWidth) {
-          this.classPosition = "isLeft";
-        } else if (popupLeftSide < 50) {
-          this.classPosition = "isRight";
-        }
-      }, 10);
+    getTopForCalcWrapper() {
+      this.topCalcWrapper = document.querySelector('#app-base-constructor-calculator').getBoundingClientRect().top + window.pageYOffset;
     },
+    getTopBtnPrompt() {
+      this.topBtnPrompt = this.$refs.promptBtn.getBoundingClientRect().top;
+    }
   },
   computed: {
-    widthPopup() {
-      return this.minWidthPopup
-        ? "min-width:" + this.minWidthPopup + "px;"
-        : "";
-    },
     hiddenPromptWrapper() {
       const text = this.promptText;
       return Boolean(text?.toString()?.trim().length);
     },
+    topPopupWrapper() {
+      const btn = this.$refs.promptBtn.getBoundingClientRect();
+      const btnCoordTop =  this.topBtnPrompt - this.topCalcWrapper + window.pageYOffset + 5 + btn.height;
+      return `top: ${btnCoordTop}px;`
+    }
   },
 };
 </script>

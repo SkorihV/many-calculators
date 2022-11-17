@@ -31,7 +31,7 @@
             :prompt-text="currentOption.prompt"
           ></ui-prompt>
         </div>
-        <div class="calc__select-option-wrapper" v-if="isOpen">
+        <div class="calc__select-option-wrapper" v-if="isOpen && selectValuesAfterProcessingDependency.length > 1">
           <div
             class="calc__select-option-item"
             @click="changeSelect(option, idx)"
@@ -209,7 +209,7 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.currentOption.value,
+        value: this.currentOption?.value,
         displayValue: this.currentOption?.selectName,
         index: this.currentIndexOption,
         name: this.localElementName,

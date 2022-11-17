@@ -7,7 +7,8 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiAccordion' + inx"
+          :element-name=" template?.json_id || 'UiAccordion' + inx"
+          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
@@ -18,6 +19,7 @@
           :label="template?.label"
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiTab' + inx"
+          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
@@ -30,12 +32,8 @@
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiBisection' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :dependency-formula-display-left-side="
-            template?.dependencyFormulaDisplayLeftSide
-          "
-          :dependency-formula-display-right-side="
-            template?.dependencyFormulaDisplayRightSide
-          "
+          :dependency-formula-display-left-side="template?.dependencyFormulaDisplayLeftSide"
+          :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
@@ -46,13 +44,13 @@
           @changedValue="changeValue"
           @changeValid="changeValid"
         />
+
       </template>
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Возможно, некоторые поля не заполнены или заполнены не корректно!
       </div>
       <div v-if="showErrorSummBlock" class="calc__error-block">
-        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы
-        не выбраны.
+        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы не выбраны.
       </div>
       <div
         class="calc__show-result-btn"
@@ -61,17 +59,20 @@
       >
         Рассчитать
       </div>
+      <error-names-templates
+        v-if="initTemplateError"
+        :templates="calculatorTemplates"
+        :init-template="initTemplateError"
+        :formula="formula?.length && isUseFormula ? formula : ''"
+      />
+      <pre class="resultDataBlock" v-if="showResultDataForBlock && initTeleport">
+	      {{finalTextForOutput}}
+	    </pre>
+      <div id="prompt-text-element"></div>
     </div>
-    <error-names-templates
-      v-if="initTemplateError"
-      :templates="calculatorTemplates"
-      :init-template="initTemplateError"
-      :formula="formula?.length && isUseFormula ? formula : ''"
-    />
-    <teleport v-if="initTeleport && !isErrorCalc" to="#teleport-element">
+    <teleport v-if="initTeleport && submitResult" to="#teleportelement">
       {{ finalTextForOutput }}
     </teleport>
-    <!--    <pre>{{dataForDependencies}}</pre>-->
   </div>
 </template>
 
@@ -130,6 +131,7 @@ export default {
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.initTemplateError = this.outOptions?.showErrorTemplate;
     this.displayResultData = this.outOptions?.displayResultData;
+    this.showResultDataForBlock = this.outOptions.showResultDataForBlock;
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
@@ -163,6 +165,7 @@ export default {
       dataForDependencies: {}, // набор данных для зависимостей полей.
       initTemplateError: false,
       displayResultData: false, // включить работу формул и вывод данных
+      showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
     };
   },
   methods: {
@@ -227,14 +230,21 @@ export default {
      * Разрешаем отправку формы
      */
     checkEnabledResultButton() {
-      if (!this.submitResult) {
-        this.submitResult = document.querySelector("#send-result");
+      const textAreaTeleportElement = document.querySelector("#teleportelement");
+      if (textAreaTeleportElement) {
+        textAreaTeleportElement.readOnly = true;
       }
 
-      if (this.isEnabledSendForm) {
+      if (!this.submitResult) {
+        this.submitResult = document.querySelector("#App + .tpl-anketa input[type=submit]");
+      }
+
+      if (this.isEnabledSendForm && this.submitResult) {
         this.submitResult.disabled = false;
-      } else {
+        this.submitResult.style.opacity = 1;
+      } else if (!this.isEnabledSendForm && this.submitResult) {
         this.submitResult.disabled = true;
+        this.submitResult.style.opacity = 0.5;
       }
     },
     hiddenElementOnResults(name) {

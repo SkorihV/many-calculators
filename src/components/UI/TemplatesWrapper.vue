@@ -166,6 +166,19 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
   ></ui-image>
+  <ui-system
+    v-if="template.template === 'UiSystem'"
+    :cost="template?.cost"
+    :dependency-prices="template?.dependencyPrices"
+    :parent-is-show="parentIsShow"
+    :element-name="
+      template?.elementName?.length
+        ? template?.elementName
+        : template?.json_id || 'UiSystem' + index
+    "
+    @changedValue="changeValue"
+    @changeValid="changeValid"
+  ></ui-system>
 </template>
 
 <script>
@@ -176,6 +189,7 @@ import UiRadio from "@/components/UI/UiRadio";
 import UiCheckbox from "@/components/UI/UiCheckbox";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiImage from "@/components/UI/UiImage";
+import UiSystem from "@/components/UI/UiSystem";
 
 export default {
   name: "TemplatesWrapper",
@@ -188,6 +202,7 @@ export default {
     UiCheckbox,
     UiPrompt,
     UiImage,
+    UiSystem,
   },
   props: {
     template: {

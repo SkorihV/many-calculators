@@ -11,7 +11,7 @@
         "max": "",
         "controls": true,
         "step": "7",
-        "discreteStep" : "true",
+        "discreteStep" : true,
         "isColumn": false,
         "notEmpty": true,
         "onlyNumber": true,
@@ -26,7 +26,8 @@
         "classes": "",
         "template": "UiInput",
         "dependencyPrices": null,
-        "placeholder": "тест"
+        "placeholder": "тест",
+        "prompt" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       },
       {
         "title": "checkbox - Зависимости уровень 2",
@@ -355,6 +356,7 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiRadio",
+        "prompt" : "ada ad asd asd ads ads asd ads",
         "values": [
           {
             "title": "Пункт дефолтный есть всегда",

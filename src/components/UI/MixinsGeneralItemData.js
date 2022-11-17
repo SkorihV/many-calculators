@@ -8,7 +8,7 @@ export const MixinsGeneralItemData = {
       default: "",
     },
     /**
-     * инпут не может быть пустым
+     * элемент не может быть пустым и требуется выбор
      */
     notEmpty: {
       type: [Boolean, Number],

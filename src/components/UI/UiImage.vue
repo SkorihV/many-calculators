@@ -14,7 +14,7 @@
           :prompt-text="localDataForDisplay.prompt"
         ></ui-prompt>
       </div>
-      <div class="calc__image-wrapper-image" :style="width + height">
+      <div class="calc__image-wrapper-image" :style="[width,  height]">
         <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label" />
       </div>
     </div>

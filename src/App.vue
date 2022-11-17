@@ -29,52 +29,66 @@ export default {
 </script>
 
 <style lang="scss">
-//normal orange - FF5D2B
-//normal dark- 464657
-//hover orange - FF7044
-//hover dark- 5A5A70
-//font - 00000
-//серый - CCCCCC
-// border - E6E6E6 -
-// background - F2F2F2
 
-$color-dark-normal: #464657;
-$color-orange-normal: #ff5d2b;
 
-$color-dark-hover: #5a5a70;
-$color-orange-hover: #ff7044;
+//$calc-color-text : var(--calc-color-text);
+//
+//$calc-color-btn : var(--calc-color-btn);
+//$calc-color-btn-text : var(--calc-color-btn-text);
+//
+//$calc-color-btn-hover : var(--calc-color-btn-hover);
+//$calc-color-btn-text-hover : var(--calc-color-btn-text-hover);
+//
+//$calc-color-btn-checked : var(--calc-color-btn-checked);
+//$calc-color-btn-checked-text : var(--calc-color-btn-checked-text);
+//
+//$calc-color-danger : var(--calc-color-danger);
+//$calc-color-danger-text : var(--calc-color-danger-text);
+//
+//$calc-color-more : var(--calc-color-more);
 
-$color-danger: #ff4444;
 
-$color-black: #000000;
-$color-white: #ffffff;
 
-$color-gray-light: #f2f2f2;
-$color-gray-middle: #e6e6e6;
-$color-gray-dark: #cccccc;
+	$calc-color-text : #464657;
+	$calc-color-btn : #464657;
+	$calc-color-btn-text : #ffffff;
+
+	$calc-color-btn-hover : #6f6fdc;
+	$calc-color-btn-text-hover : white;
+
+	$calc-color-btn-checked :  #ff7044;
+	$calc-color-btn-checked-text : #464657;
+
+	$calc-color-danger : red;
+	$calc-color-danger-text : white;
+
+	$calc-color-more : yellow;
+
 
 $border-radius: 4px;
 
+
 @mixin style-border {
-  border: 1px solid $color-gray-middle;
+  border: 1px solid $calc-color-btn;
   border-radius: $border-radius;
+  margin: 1px;
 }
 
 @mixin style-border-hover {
-  border: 1px solid $color-gray-dark;
+  border: 1px solid $calc-color-more;
 }
 
 @mixin style-button {
-  color: $color-white;
+  color: $calc-color-btn-text;
   cursor: pointer;
-  background-color: $color-dark-normal;
+  background-color: $calc-color-btn;
   @include style-flex-center;
   @include style-border;
 }
 
 @mixin style-button-hover {
-  background-color: $color-dark-hover;
-  box-shadow: 0 0 3px 1px $color-gray-dark;
+  background-color: $calc-color-btn-hover;
+  box-shadow: 0 0 3px 1px $calc-color-btn-hover;
 }
 
 @mixin style-flex-center {
@@ -104,7 +118,7 @@ $border-radius: 4px;
 .main-wrapper {
   max-width: 980px;
   margin: 0 auto;
-  background-color: $color-gray-light;
+  background-color: #f6f2f2;
   padding: 3px;
 }
 
@@ -122,28 +136,29 @@ $border-radius: 4px;
     justify-content: center;
     @include style-border;
     @include style-button;
-    color: $color-dark-normal;
-    background-color: $color-gray-middle;
+    color: white;
+    background-color: gray;
     font-weight: 500;
     &:hover {
       @include style-border-hover;
       @include style-button-hover;
-      color: $color-white;
+      color: white;
     }
     &_active {
       @include style-border-hover;
       @include style-button-hover;
-      color: $color-white;
+      color: white;
     }
   }
 }
 
 .calc {
+  position: relative;
   * {
     margin: 0;
     font-size: 15px;
     text-align: center;
-    color: $color-dark-normal;
+    color: $calc-color-text;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
   }
@@ -155,27 +170,27 @@ $border-radius: 4px;
     &-group-data {
       margin-bottom: 5px;
       padding-left: 20px;
-      border-left: 3px solid $color-orange-normal;
+      border-left: 3px solid $calc-color-btn-hover;
       width: 100%;
-      &:hover {
-        background-color: $color-gray-middle;
-      }
+      position: relative;
     }
   }
   &__error-block {
     width: 100%;
     @include style-flex-center;
     padding: 20px;
-    background-color: $color-danger;
-    color: $color-white;
+    background-color: $calc-color-danger ;
+    color: $calc-color-danger-text;
+
   }
   &__show-result-btn {
     @include style-button;
     padding: 20px;
+    margin: 5px 0;
     align-self: center;
     &:hover {
       @include style-button-hover;
-      background-color: $color-orange-normal;
+      background-color: $calc-color-btn-hover;
     }
   }
   //--------Стили input text-----
@@ -183,7 +198,6 @@ $border-radius: 4px;
     &-wrapper {
       @include style-flex-center;
       flex-direction: column;
-      position: relative;
       &.is-stretch {
         flex: 1 1 100%;
       }
@@ -211,7 +225,6 @@ $border-radius: 4px;
       &-text {
         display: flex;
         justify-content: flex-start;
-        position: relative;
         margin-right: 10px;
         padding: 5px 0;
         text-align: start;
@@ -224,11 +237,11 @@ $border-radius: 4px;
       padding: 5px;
       max-width: 120px;
       @include style-border;
-      border-bottom: 2px solid $color-orange-normal;
+      border-bottom: 2px solid $calc-color-btn-hover;
       &:hover,
       &:focus-visible {
         @include style-border-hover;
-        border-bottom: 2px solid $color-dark-normal;
+        border-bottom: 2px solid $calc-color-btn;
         outline: none;
       }
     }
@@ -245,7 +258,7 @@ $border-radius: 4px;
         -ms-user-select: none;
         user-select: none;
         &:hover {
-          background-color: $color-orange-normal;
+          @include style-button-hover;
         }
       }
     }
@@ -257,7 +270,6 @@ $border-radius: 4px;
 
   &__range {
     &-wrapper {
-      background-color: $color-gray-middle;
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -284,19 +296,19 @@ $border-radius: 4px;
         appearance: none;
         width: 25px;
         height: 25px;
-        background: $color-dark-normal;
+        background: $calc-color-btn;
         cursor: pointer;
-        @include style-border;
+        @include style-button;
         &:hover {
-          background-color: $color-dark-hover;
-          @include style-border-hover;
+          background-color: $calc-color-btn-hover;
+          @include style-button-hover;
         }
       }
       &::-moz-range-thumb {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        background: $color-dark-normal;
+        background: $calc-color-btn;
         cursor: pointer;
         @include style-border;
         &:hover {
@@ -330,8 +342,8 @@ $border-radius: 4px;
           font-size: 10px;
           border-radius: $border-radius;
           &_selected {
-            background-color: $color-orange-normal;
-            color: $color-gray-light;
+            background-color: $calc-color-btn ;
+            color: $calc-color-btn-text;
           }
         }
       }
@@ -345,10 +357,10 @@ $border-radius: 4px;
       }
 
       &-static {
-        background-color: $color-dark-normal;
-        color: $color-white;
+
+        color: $calc-color-btn-text;
         padding: 4px 6px;
-        border-radius: $border-radius;
+        @include style-button;
         min-width: 25px;
         min-height: 27px;
       }
@@ -360,11 +372,11 @@ $border-radius: 4px;
         max-width: 40px;
         right: 0;
         @include style-border;
-        border-bottom: 2px solid $color-orange-normal;
+        border-bottom: 2px solid $calc-color-btn-hover;
         &:hover,
         &:focus-visible {
           @include style-border-hover;
-          border-bottom: 2px solid $color-dark-normal;
+          border-bottom: 2px solid $calc-color-btn;
           outline: none;
         }
       }
@@ -399,17 +411,17 @@ $border-radius: 4px;
         @include style-border;
         font-size: 15px;
         line-height: 16px;
-        background-color: white;
         position: relative;
         flex: 1 1 100%;
         width: 100%;
-        border-bottom: 2px solid $color-orange-normal;
+        border-bottom: 2px solid $calc-color-btn-hover;
+        background-color: white;
         &:hover {
           @include style-border-hover;
-          border-bottom: 2px solid $color-dark-normal;
+          border-bottom: 2px solid $calc-color-btn;
           .calc__select-change-item {
             &:before {
-              border: solid $color-dark-normal;
+              border: solid $calc-color-btn;
               border-width: 0 3px 3px 0;
             }
           }
@@ -417,7 +429,6 @@ $border-radius: 4px;
       }
 
       &-item {
-        position: relative;
         padding: 5px 25px 5px 10px;
         @include style-flex-center;
         justify-content: flex-start;
@@ -425,11 +436,13 @@ $border-radius: 4px;
         text-align: start;
         flex: 1 1 auto;
         gap: 5px;
+
+
         &:before {
           content: "";
           width: 7px;
           height: 7px;
-          border: solid $color-orange-normal;
+          border: solid $calc-color-btn-hover;
           border-width: 0 3px 3px 0;
           display: inline-block;
           position: absolute;
@@ -466,21 +479,24 @@ $border-radius: 4px;
         z-index: 10;
         width: 100%;
 
-        border-left: 1px solid $color-orange-normal;
-        border-right: 1px solid $color-orange-normal;
-        border-bottom: 1px solid $color-orange-normal;
+        border-left: 1px solid $calc-color-btn-hover;
+        border-right: 1px solid $calc-color-btn-hover;
+        border-bottom: 1px solid $calc-color-btn-hover;
       }
       &-item {
         background-color: white;
         @include style-flex-start;
+        &:hover {
+          background-color: $calc-color-btn-hover;
+          .calc__select-option-item-text {
+            color: $calc-color-btn-text-hover;
+          }
+        }
         gap: 5px;
         text-align: start;
         &-text {
           padding: 10px 25px 10px 10px;
           text-align: start;
-        }
-        &:hover {
-          background-color: $color-gray-middle;
         }
       }
     }
@@ -494,6 +510,7 @@ $border-radius: 4px;
       align-items: stretch;
       position: relative;
       gap: 5px;
+      min-height:31px;
       &.base {
         .calc__radio {
           &-indicator {
@@ -501,19 +518,46 @@ $border-radius: 4px;
             display: flex;
             width: 16px;
             height: 16px;
-            @include style-border;
+            border: 1px solid $calc-color-btn-text;
+            border-radius: $border-radius;
             border-radius: 50%;
             margin-right: 4px;
             flex-shrink: 0;
+            &:hover {
+              border: 1px solid $calc-color-btn-text-hover;
+            }
+          }
+        }
+        .calc__radio-label:hover {
+          box-shadow: 0 0 3px 1px $calc-color-btn-hover;
+          background-color: $calc-color-btn-hover;
+          .calc__radio-text {
+            color: $calc-color-btn-text-hover;
+          }
+        }
+        .calc__radio-label.checked:hover {
+          box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+          background-color: $calc-color-btn;
+          .calc__radio-text {
+            color: $calc-color-btn-text;
           }
         }
       }
 
       &.buttons {
         .calc__radio-label {
+          &:hover {
+            background-color: $calc-color-btn-hover;
+            .calc__radio-text {
+              color: $calc-color-btn-text-hover;
+            }
+          }
           &.checked {
-            background-color: $color-orange-normal;
-            color: $color-white;
+            background-color: $calc-color-btn-checked;
+            color: $calc-color-btn-checked-text;
+            &:hover {
+              box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+            }
           }
         }
       }
@@ -535,7 +579,6 @@ $border-radius: 4px;
         }
         .calc__radio-label {
           flex: 1 1 auto;
-          border-right: 1px solid $color-gray-middle;
           border-radius: 0;
         }
       }
@@ -559,7 +602,7 @@ $border-radius: 4px;
     &-label {
       @include style-button;
       @include style-flex-start;
-      border-bottom: 1px solid $color-orange-normal;
+      border-bottom: 1px solid $calc-color-btn;
       padding: 5px 10px;
       position: relative;
       &:hover {
@@ -567,6 +610,7 @@ $border-radius: 4px;
       }
       &.checked {
         .calc__radio-indicator {
+          box-shadow: 0 0 1px 3px $calc-color-more inset;
           &::after {
             content: "";
             position: absolute;
@@ -574,10 +618,17 @@ $border-radius: 4px;
             top: 50%;
             transform: translate(-50%, -50%);
             border-radius: 50%;
-            width: 10px;
-            height: 10px;
-            background-color: $color-orange-normal;
+            width: 8px;
+            height: 8px;
+            background-color: $calc-color-btn-checked;
           }
+          +.calc__radio-text {
+            color: $calc-color-btn-text;
+          }
+
+        }
+        .calc__radio-text {
+          color: $calc-color-btn-checked-text;
         }
       }
       &::after {
@@ -586,14 +637,14 @@ $border-radius: 4px;
         left: 0;
         width: 100%;
         position: absolute;
-        background-color: $color-white;
+        background-color: $calc-color-btn-text;
         height: 1px;
         bottom: 1px;
       }
     }
     &-text {
       display: flex;
-      color: $color-white;
+      color: $calc-color-btn-text;
     }
   }
 
@@ -622,6 +673,9 @@ $border-radius: 4px;
       &.button {
         @include style-button;
         padding: 10px 15px;
+        &:hover {
+          @include style-button-hover;
+        }
       }
     }
 
@@ -632,6 +686,9 @@ $border-radius: 4px;
 
       &.base {
         width: 30px;
+        &:after {
+          display: none;
+        }
       }
 
       &.button {
@@ -660,10 +717,9 @@ $border-radius: 4px;
         transition: all 0.3s ease-in-out;
         height: 22px;
         top: 50%;
-        background-color: $color-gray-light;
         transform: translateY(-50%);
         border-width: 2px;
-        border-color: $color-orange-normal;
+        border-color:$calc-color-btn;
         @include style-flex-center;
         font-size: 13px;
         box-sizing: border-box;
@@ -677,20 +733,31 @@ $border-radius: 4px;
         width: 35px;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
-        border-color: $color-dark-normal;
+        border-color: $calc-color-btn;
         z-index: 1;
         right: 0;
       }
-      &.switcher:after {
-        width: 35px;
-        border-right: none;
-        background-color: $color-dark-normal;
-        box-shadow: 0 0 0 2px $color-gray-light inset;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-        border-color: $color-dark-normal;
-        z-index: 1;
-        left: 0;
+      &.switcher {
+        &:after {
+          width: 35px;
+          border-right: none;
+          background-color: $calc-color-btn;
+          border-color: $calc-color-btn;
+          border-style:solid;
+          box-shadow: 0 0 0 2px $calc-color-more inset;
+          border-right-width: 2px;
+          border-bottom-right-radius: 0;
+          border-top-right-radius: 0;
+          z-index: 1;
+          left: 0;
+        }
+        &:hover:after {
+          background-color: $calc-color-btn-hover;
+          border-color: $calc-color-btn-hover;
+        }
+        &:hover:before {
+          border-color: $calc-color-btn-hover;
+        }
       }
       &.switcher-vertical:after,
       &.switcher-vertical:before {
@@ -699,28 +766,34 @@ $border-radius: 4px;
         transform: translateY(0);
       }
 
-      &.switcher-vertical:before {
-        right: auto;
-        top: 0;
-        border-top-left-radius: $border-radius;
-        border-bottom-right-radius: 0;
-        background-color: $color-dark-normal;
-        box-shadow: 0 0 0 2px $color-gray-light inset;
+      &.switcher-vertical {
+        &:before {
+          right: auto;
+          top: 0;
+          border-top-left-radius: $border-radius;
+          border-bottom-right-radius: 0;
+          background-color: $calc-color-btn;
+          box-shadow: 0 0 0 2px $calc-color-more inset;
+        }
+        &:hover:before {
+          background-color: $calc-color-btn-hover;
+          border-color: $calc-color-btn-hover;
+        }
       }
-      &.switcher-vertical:after {
-        border-color: $color-dark-normal;
+      &.switcher-vertical {
+        &:after {
+          border-color: $calc-color-btn;
+        }
+        &:hover:after {
+          border-color: $calc-color-btn-hover;
+        }
       }
 
       &:hover {
         &.base:before {
-          border-color: $color-dark-normal;
-        }
-
-        &.switcher:after {
-          background-color: $color-dark-hover;
-        }
-        &.switcher-vertical:before {
-          background-color: $color-dark-hover;
+          border-color: $calc-color-btn-hover;
+          background-color: $calc-color-btn-hover;
+          box-shadow: 0 0 0 2px $calc-color-more inset;
         }
       }
     }
@@ -734,42 +807,45 @@ $border-radius: 4px;
       height: 0;
       &:checked {
         ~ .calc__checkbox-element {
-          &.base:before {
-            background-color: $color-orange-normal;
-            box-shadow: 0 0 0 2px $color-gray-light inset;
-            color: $color-white;
+          &.base {
+            &:before {
+              background-color: $calc-color-btn-checked;
+              box-shadow: 0 0 0 2px $calc-color-more inset;
+            }
+            &:hover:before {
+              background-color: $calc-color-btn-hover;
+            }
           }
           &.switcher-vertical:before,
           &.switcher:after {
-            color: $color-dark-normal;
-            background-color: $color-gray-light;
-            border-color: $color-orange-normal;
+            border-color: $calc-color-btn-checked;
+            background-color: inherit;
+            box-shadow:none;
           }
+          &.switcher-vertical:hover:before,
+          &.switcher:hover:after {
+            border-color: $calc-color-btn-hover;
+          }
+
+
           &.switcher-vertical:after,
           &.switcher:before {
-            background-color: $color-orange-hover;
-            border-color: $color-orange-hover;
-            box-shadow: 0 0 0 2px $color-gray-light inset;
-            color: $color-white;
+            background-color: $calc-color-btn-checked;
+            border-color: $calc-color-btn-checked;
+            box-shadow: 0 0 0 2px $calc-color-more inset;
           }
 
-          &.switcher-vertical:before {
+          &.switcher-vertical:hover:after,
+          &.switcher:hover:before {
+            background-color: $calc-color-btn-hover;
+            border-color: $calc-color-btn-hover;
           }
 
-          &:hover {
-            &.switcher {
-            }
-            &.base:before {
-              background-color: $color-orange-normal;
-            }
-            &.switcher-vertical:after &.switcher:before {
-              background-color: $color-orange-normal;
-            }
-          }
+
         }
         ~ .calc__checkbox-text.button {
-          background-color: $color-orange-normal;
-          color: $color-white;
+          background-color: $calc-color-btn-checked;
+          color: $calc-color-btn-checked-text;
         }
       }
     }
@@ -778,26 +854,7 @@ $border-radius: 4px;
   //-------всплывающая подсказка ------
   &__prompt {
     &-wrapper {
-      color: $color-dark-normal;
-      position: relative;
       margin-left: 5px;
-      .popup-enter-active {
-        transition: all 0.5s ease;
-      }
-      .popup-leave-to,
-      .popup-enter-from {
-        top: -10000px;
-        opacity: 0;
-        transform: perspective(1000px) translateX(-50%) rotateX(-90deg)
-          scale(0.1);
-      }
-      .popup-leave-from,
-      .popup-enter-to {
-        top: 13px;
-        opacity: 1;
-        transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
-          scale(1.1);
-      }
     }
 
     &-button {
@@ -806,41 +863,51 @@ $border-radius: 4px;
       width: 20px;
       height: 20px;
       @include style-flex-center;
-      border: 1px solid #464657;
+      border: 1px solid $calc-color-btn;
       border-radius: 50%;
       font-weight: 600;
+      line-height: 15px;
       &:hover {
-        background-color: $color-dark-normal;
-        color: $color-white;
+        background-color: $calc-color-btn-hover;
+        color: $calc-color-btn-text-hover;
       }
     }
-    &-popup {
-      &-wrapper {
-        background-color: $color-gray-light;
-        font-weight: normal;
-        position: absolute;
-        @include style-flex-center;
-        left: 50%;
-        transform: translateX(-50%);
-        min-width: 300px;
-        max-width: 700px;
-        padding: 15px;
-        border: 1px solid $color-dark-normal;
-        border-radius: $border-radius;
-        box-shadow: 0 0 9px 0 $color-gray-dark;
-        z-index: 100;
-        cursor: default;
-        &.isLeft {
-          left: auto;
-          right: 0;
-          transform: translateX(0);
-        }
-        &.isRight {
-          right: auto;
-          left: 0;
-          transform: translateX(0);
-        }
+  }
+  .prompt {
+    &-wrapper {
+      z-index: 100;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+      &.prompt-enter-active,
+      &.prompt-leave-active {
+        transition: all 0.3s ease;
+        opacity: 1;
+        max-height: 80vh;
+        transform: scale(1);
       }
+
+      &.prompt-enter-from,
+      &.prompt-leave-to {
+        transition: all 0.3s ease;
+        opacity: 0;
+        max-height: 0;
+        transform: scale(0.8);
+      }
+    }
+
+    &-content {
+      background-color: white;
+      padding: 30px;
+      max-width: 80%;
+      overflow-y: auto;
+      border: 1px solid $calc-color-btn;
+      border-radius: $border-radius;
+      box-shadow: 0 0 9px 0 $calc-color-btn;
     }
   }
 
@@ -849,15 +916,15 @@ $border-radius: 4px;
     &-wrapper {
       display: flex;
       position: absolute;
-      background-color: $color-gray-middle;
       @include style-border;
-      border-color: $color-danger;
+      border-color: $calc-color-danger;
       z-index: 100;
       padding: 2px;
-      box-shadow: 0 0 3px 0 $color-danger;
+      box-shadow: 0 0 3px 0 $calc-color-danger;
       bottom: calc(100% + 10px);
       left: 50%;
       transform: translateX(-50%);
+      background-color: white;
 
       &.isLeft {
         left: auto;
@@ -882,7 +949,7 @@ $border-radius: 4px;
       &.tooltip-transition-enter-from {
         opacity: 0;
         transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
-          scale(0.1);
+        scale(0.1);
         &.isLeft,
         &.isRight {
           transform: perspective(1000px) rotateX(-360deg);
@@ -892,7 +959,7 @@ $border-radius: 4px;
       &.tooltip-transition-enter-to {
         opacity: 1;
         transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
-          scale(1.1);
+        scale(1.1);
 
         &.isLeft,
         &.isRight {
@@ -904,72 +971,23 @@ $border-radius: 4px;
       content: "";
       width: 20px;
       height: 20px;
-      background-color: #e6e6e6;
+      background-color: white;
       position: absolute;
       border-radius: 4px;
       z-index: -1;
       right: calc(50% - 10px);
       top: calc(100% - 12px);
       transform: translateX(-50%) rotate(45deg);
-      border-bottom: 1px solid #ff4444;
-      border-right: 1px solid #ff4444;
+      border-bottom: 1px solid $calc-color-danger;
+      border-right: 1px solid $calc-color-danger;
+      display:block;
     }
     &-text {
       display: flex;
-      color: $color-danger;
+      color: $calc-color-danger;
       border-radius: $border-radius;
       justify-content: center;
       min-width: 300px;
-      background-color: $color-gray-middle;
-    }
-  }
-
-  //--------------форма-----------------
-  &__form {
-    @include style-flex-center;
-    flex-direction: column;
-    max-width: 700px;
-    width: 100%;
-    padding: 10px;
-    @include style-border;
-    border-color: $color-dark-normal;
-    margin: 10px auto;
-    background-color: $color-gray-light;
-
-    &-label {
-      @include style-flex-center;
-      justify-content: space-between;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-
-    &-input {
-      font-size: 15px;
-      line-height: 16px;
-      padding: 10px;
-      border-radius: $border-radius;
-      outline: none;
-      width: 100%;
-      max-width: 200px;
-    }
-
-    &-textarea {
-      width: 100%;
-      min-height: 500px;
-      margin-bottom: 10px;
-      outline: none;
-      &[readonly] {
-        background-color: $color-gray-light;
-      }
-    }
-
-    &-submit {
-      @include style-button;
-      padding: 10px;
-      @include style-flex-center;
-      &:disabled {
-        background-color: $color-gray-dark;
-      }
     }
   }
 
@@ -998,12 +1016,27 @@ $border-radius: 4px;
         gap: 5px;
         &:hover {
           @include style-button-hover;
+          .calc__accordion-item-plus:before,
+          .calc__accordion-item-minus:before {
+            border: 1px solid $calc-color-btn-text;
+            color: $calc-color-btn-text;
+          }
         }
         &.isOpen {
-          background-color: $color-orange-normal;
+          background-color: $calc-color-btn-checked;
+          color: $calc-color-btn-checked-text;
+          .calc__accordion-item-plus:before,
+          .calc__accordion-item-minus:before {
+            border: 1px solid $calc-color-btn-checked-text;
+            color: $calc-color-btn-checked-text;
+          }
+          &:hover {
+            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+          }
         }
         &.isError {
-          background-color: $color-danger;
+          background-color: $calc-color-danger;
+          color: $calc-color-danger-text;
         }
         &-wrapper {
           @include style-flex-start;
@@ -1028,7 +1061,8 @@ $border-radius: 4px;
         color: #ffffff;
         font-size: 30px;
         position: absolute;
-        border: 1px solid #ffffff;
+        border: 1px solid $calc-color-btn-text;
+        color: $calc-color-btn-text;
         border-radius: 50%;
         left: 50%;
         top: 50%;
@@ -1072,19 +1106,27 @@ $border-radius: 4px;
         padding: 10px;
         margin-bottom: 5px;
         position: relative;
+        flex: 0 1 auto;
+
         &:hover {
           @include style-button-hover;
         }
         &.isOpen {
-          background-color: $color-orange-normal;
+          background-color: $calc-color-btn-checked;
+          color: $calc-color-btn-checked-text;
+          &:hover {
+            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+          }
         }
         &.isError {
-          background-color: $color-danger;
+          background-color: $calc-color-danger;
+          color: $calc-color-danger-text;
         }
         &-wrapper {
           @include style-flex-start;
           flex: 1 1 auto;
           width: 100%;
+          flex-wrap: wrap;
         }
       }
       &-content-wrapper {
@@ -1104,7 +1146,7 @@ $border-radius: 4px;
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 10px;
-      color: $color-dark-normal;
+      color: $calc-color-text;
     }
 
     &-wrapper {
@@ -1136,11 +1178,11 @@ $border-radius: 4px;
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 10px;
-      color: $color-dark-normal;
+      color: $calc-color-text;
     }
   }
 
-  &__error {
+  .calc__error {
     &-toggle {
       position: absolute;
       right: 0;
@@ -1156,30 +1198,36 @@ $border-radius: 4px;
       flex-direction: column;
       bottom: 0;
       margin: 10px;
-      background-color: $color-dark-normal;
+      background-color: $calc-color-btn;
       padding: 10px;
-      color: $color-white;
+      color: $calc-color-btn-text;
       border-radius: $border-radius;
       max-width: 450px;
       max-height: 500px;
-      box-shadow: 0 0 2px 2px $color-danger;
+      box-shadow: 0 0 2px 2px $calc-color-danger ;
       min-height: 42px;
       min-width: 42px;
       overflow: auto;
+      box-sizing: border-box;
       &.isShow {
         display: flex;
       }
     }
     &-label {
-      color: $color-orange-normal;
+      color: $calc-color-danger;
       margin-top: 35px;
     }
     &-item {
+      color: $calc-color-btn-text;
       display: flex;
       flex-direction: column;
       margin: 5px 0;
+      &-name {
+        color: $calc-color-btn-text;
+      }
     }
     &-alert {
+      color: $calc-color-danger;
       margin-top: 15px;
       font-size: 18px;
     }
@@ -1205,6 +1253,10 @@ $border-radius: 4px;
         margin: 5px 0;
       }
     }
+  }
+  .resultDataBlock {
+    color: $calc-color-text;
+    margin: 0 auto;
   }
 }
 </style>

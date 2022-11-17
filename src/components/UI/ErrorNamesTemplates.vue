@@ -57,7 +57,7 @@
           {{ error }}
         </div>
       </template>
-      <p>
+      <p class="calc__error-item">
         В случае наличия ошибок, калькулятор может вести расчет некорректно!
       </p>
     </template>
