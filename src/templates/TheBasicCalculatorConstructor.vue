@@ -100,6 +100,7 @@ import UiDuplicator from "@/components/UI/UiDuplicator";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -153,15 +154,6 @@ export default {
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
-  provide() {
-    return {
-      /**
-       * Инициализирует возможность отображения всех подсказок с ошибками
-       */
-      globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
-
-    };
-  },
   data() {
     return {
       outData: {}, // внешние данные с шаблонами элементов калькулятора
@@ -183,6 +175,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["showAllTooltipsOn", "showAllTooltipsOff"]),
     changeValue(data) {
       if (typeof data !== "object") {
         return null;
@@ -233,7 +226,7 @@ export default {
       this.tryChangeShownAllTooltips(data.eventType);
     },
     calculateResult() {
-      this.shownAllTooltips = true;
+      this.showAllTooltipsOn();
       this.initEnabledSendForm = true;
       this.checkEnabledResultButton();
     },
@@ -273,9 +266,9 @@ export default {
         this.mistake === "useAutomatic" &&
         eventType !== "mounted" &&
         eventType !== "delete" &&
-        this.shownAllTooltips === false
+        this.isCanShowAllTooltips === false
       ) {
-        this.shownAllTooltips = true;
+        this.showAllTooltipsOn();
       }
     },
   },
@@ -288,6 +281,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
@@ -496,7 +490,7 @@ export default {
      * @returns {false|boolean}
      */
     showErrorTextBlock() {
-      return this.isErrorCalc && this.shownAllTooltips;
+      return this.isErrorCalc && this.isCanShowAllTooltips;
     },
     /**
      * Добавить данные в форму если нет ошибок валидации
@@ -504,14 +498,14 @@ export default {
      */
     initTeleport() {
       return (
-        !this.isErrorCalc && this.initEnabledSendForm && this.shownAllTooltips
+        !this.isErrorCalc && this.initEnabledSendForm && this.isCanShowAllTooltips
       );
     },
     isEnabledSendForm() {
       return (
         this.initEnabledSendForm &&
         this.finalTextForOutput?.length &&
-        this.shownAllTooltips &&
+        this.isCanShowAllTooltips &&
         !this.isErrorCalc
       );
     },
@@ -522,7 +516,7 @@ export default {
       return (
         (this.finalSummaForOutput === null ||
           this.finalSummaForOutput === false) &&
-        this.shownAllTooltips &&
+        this.isCanShowAllTooltips &&
         this.displayResultData
       );
     },

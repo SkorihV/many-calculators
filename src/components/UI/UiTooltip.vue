@@ -16,9 +16,11 @@
 </template>
 
 <script>
+
+import {mapGetters} from "vuex";
+
 export default {
   name: "UiTooltip",
-  inject: ["globalCanBeShownTooltip"],
   mounted() {
     this.checkPosition();
     window.addEventListener("resize", () => {
@@ -97,8 +99,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     canBeShown() {
-      return this.globalCanBeShownTooltip && this.localCanBeShown;
+      return this.isCanShowAllTooltips && this.localCanBeShown;
     },
   },
 };

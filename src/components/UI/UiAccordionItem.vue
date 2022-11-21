@@ -38,12 +38,12 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiAccordionItem",
   components: { UiTooltip, UiPrompt, TemplatesWrapper },
   emits: ["changedValue", "changeValid"],
-  inject: ["globalCanBeShownTooltip"],
   props: {
     accordionItem: {
       type: Object,
@@ -110,11 +110,12 @@ export default {
         data.error &&
         data.eventType !== "delete" &&
         data.isShow &&
-        this.globalCanBeShownTooltip
+        this.isCanShowAllTooltips
       );
     },
   },
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     isShowError() {
       return Boolean(this.errorsElements.size);
     },

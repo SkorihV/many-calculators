@@ -1,3 +1,5 @@
+import { mapGetters } from "vuex";
+
 export const MixinsGeneralItemData = {
   props: {
     /**
@@ -47,7 +49,7 @@ export const MixinsGeneralItemData = {
     /**
      * При глобальном включении возможности отображать подсказки - отправить состояние элемента
      */
-    globalCanBeShownTooltip() {
+    isCanShowAllTooltips() {
       if (this.parentIsShow) {
         this.changeValid("global");
       }
@@ -65,6 +67,7 @@ export const MixinsGeneralItemData = {
   },
 
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}

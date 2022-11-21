@@ -82,7 +82,6 @@ export default {
   name: "UiSelect",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: [ "globalCanBeShownTooltip"],
   components: { UiTooltip, UiPrompt },
   mounted() {
     this.localSelectValues = this.selectValues;
@@ -268,7 +267,7 @@ export default {
     },
 
     isOpen(newValue) {
-      if (newValue && !Object.keys(this.localListElementDependency)?.length) {
+      if (newValue && !Object.keys(this.localDependencyList)?.length) {
         this.localSelectValues?.forEach((select) => {
           if (select?.dependencyFormulaItem?.length) {
             let formula = this.processingFormulaSpecialsSymbols(
@@ -389,7 +388,7 @@ export default {
 
         let allDependencyShow = formula.every((item) => {
           if (this.isElementDependency(item)) {
-            return this.localListElementDependency[item]?.isShow;
+            return this.localDependencyList[item]?.isShow;
           }
           return true;
         });

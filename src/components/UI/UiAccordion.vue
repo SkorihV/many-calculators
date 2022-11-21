@@ -35,7 +35,6 @@ export default {
   name: "UiAccordion",
   components: { UiAccordionItem },
   emits: ["changedValue", "changeValid"],
-  inject: ["globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
     accordionData: {

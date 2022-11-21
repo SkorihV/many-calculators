@@ -52,7 +52,6 @@ export default {
   name: "UiRadio",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalCanBeShownTooltip"],
   components: { UiPrompt, UiTooltip },
   mounted() {
     this.localElementName = this.checkedValueOnVoid(this.elementName)

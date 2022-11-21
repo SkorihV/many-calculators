@@ -11,7 +11,6 @@ export default {
   name: "UiSystem",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalCanBeShownTooltip"],
   props: {
     cost: {
       type: [Number, String],

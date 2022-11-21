@@ -26,7 +26,7 @@ export const MixinsForProcessingFormula = {
       /**
        * список переменных от которого зависит именно текущий элемент
        */
-      localListElementDependency: {},
+      localDependencyList: {},
     };
   },
   methods: {
@@ -83,8 +83,8 @@ export const MixinsForProcessingFormula = {
       return formula?.reduce((resultText, item) => {
         // this.constructLocalListElementDependencyInFormula(formula)
         let elementDependency =
-          item in this.localListElementDependency
-            ? this.localListElementDependency[item]
+          item in this.localDependencyList
+            ? this.localDependencyList[item]
             : null;
 
         if (elementDependency && elementDependency.isShow) {
@@ -148,10 +148,10 @@ export const MixinsForProcessingFormula = {
       return name in this.globalDependenciesList;
     },
     existLocalElementDependency(name) {
-      return name in this.localListElementDependency;
+      return name in this.localDependencyList;
     },
     putElementDependencyInLocalList(name) {
-      this.localListElementDependency[name] =
+      this.localDependencyList[name] =
         this.globalDependenciesList[name];
     },
   },
@@ -161,7 +161,7 @@ export const MixinsForProcessingFormula = {
      * @param newValue
      */
     isVisibilityFromDependency(newValue) {
-      if (newValue && this.globalCanBeShownTooltip) {
+      if (newValue && this.isCanShowAllTooltips) {
         this.changeValue("dependency");
       } else {
         setTimeout(() => {
@@ -170,7 +170,7 @@ export const MixinsForProcessingFormula = {
       }
     },
 
-    globalCanBeShownTooltip(newValue) {
+    isCanShowAllTooltips(newValue) {
       if (newValue && this.isVisibilityFromDependency) {
         this.changeValue("dependency");
       }
@@ -183,11 +183,11 @@ export const MixinsForProcessingFormula = {
           if (this.existLocalElementDependency(key)) {
             if (
               newValue[key].value !==
-              this.localListElementDependency[key].value ||
+              this.localDependencyList[key].value ||
               newValue[key].isShow !==
-              this.localListElementDependency[key].isShow
+              this.localDependencyList[key].isShow
             ) {
-              this.localListElementDependency[key] = newValue[key];
+              this.localDependencyList[key] = newValue[key];
               isUpdated = true;
             }
           }
@@ -200,7 +200,7 @@ export const MixinsForProcessingFormula = {
     },
   },
   computed: {
-    ...mapGetters(["globalDependenciesList"]),
+    ...mapGetters(["globalDependenciesList", "isCanShowAllTooltips"]),
     /**
      * Отобразить текущий элемент
      * @returns {boolean|any}

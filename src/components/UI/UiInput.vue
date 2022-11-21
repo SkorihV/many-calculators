@@ -63,7 +63,6 @@ export default {
   name: "UiInput",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     /**

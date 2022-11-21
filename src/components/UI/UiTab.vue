@@ -54,12 +54,12 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiTab",
   components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue", "changeValid"],
-  inject: ["globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
     tabData: {
@@ -116,7 +116,7 @@ export default {
       return (
         key !== this.shownIdTab &&
         this.errorsElements[key]?.size &&
-        this.globalCanBeShownTooltip
+        this.isCanShowAllTooltips
       );
     },
     /**
@@ -130,11 +130,12 @@ export default {
         data.eventType !== "mounted" &&
         data.eventType !== "delete" &&
         data.isShow &&
-        this.globalCanBeShownTooltip
+        this.isCanShowAllTooltips
       );
     },
   },
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     showBlock() {
       let result = [];
       if (this.tabData?.items.length) {

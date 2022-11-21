@@ -25,7 +25,6 @@ export default {
   components: { TemplatesWrapper },
   emits: ["changedValue", "changeValid", "duplicate", "deleteDuplicate"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalCanBeShownTooltip"],
   props: {
     calculatorTemplates: {
       type: Object,

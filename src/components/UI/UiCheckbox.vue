@@ -43,7 +43,6 @@ export default {
   name: "UiCheckbox",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     labelSecond: {

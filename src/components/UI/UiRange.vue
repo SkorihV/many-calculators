@@ -74,7 +74,6 @@ export default {
   name: "UiRange",
   emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: [ "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     rangeValue: {
