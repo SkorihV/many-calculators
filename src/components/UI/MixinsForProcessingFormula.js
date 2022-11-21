@@ -109,10 +109,10 @@ export const MixinsForProcessingFormula = {
           if (!item.enabledFormula) {
             return resultReduce;
           }
-
           let formula = this.processingFormulaSpecialsSymbols(
             item?.dependencyFormulaCost
           );
+
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
           try {

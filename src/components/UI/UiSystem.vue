@@ -7,7 +7,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 export default {
   name: "UiSystem",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   props: {
@@ -32,14 +32,14 @@ export default {
   methods: {
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
-        value: null,
+        value: parseFloat(this.localCost),
         displayValue: null,
         name: this.localElementName,
         type: "system",
         cost: parseFloat(this.localCost),
         label: "",
         formOutputMethod: null,
-        isShow: true,
+        isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: false,
         unit: "",
         eventType,
@@ -60,6 +60,15 @@ export default {
         eventType,
         isShow: true,
       });
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: parseFloat(this.localCost),
+        isShow: this.isVisibilityFromDependency,
+        displayValue: null,
+        type: "system",
+      })
     },
   },
   watch: {

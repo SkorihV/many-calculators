@@ -21,6 +21,7 @@
           :element-name="item?.json_id || 'accordionItem' + '_' + key"
           @changedValue="changeValue"
           @changeValid="changeValid"
+          @passDependency="tryPassDependency"
         />
       </div>
     </template>
@@ -34,7 +35,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiAccordion",
   components: { UiAccordionItem },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -79,6 +80,9 @@ export default {
     changeValid(data) {
       this.$emit("changeValid", data);
     },
+    tryPassDependency(data) {
+      this.$emit("passDependency", data)
+    }
   },
   computed: {
     showBlock() {

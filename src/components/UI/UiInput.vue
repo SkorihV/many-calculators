@@ -58,7 +58,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 export default {
   name: "UiInput",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
@@ -325,19 +325,10 @@ export default {
         unit: this.unit,
         eventType,
       });
+      this.tryPassDependency();
       if ((eventType !== "delete" || eventType !== "mounted") && !this.systemField) {
         this.changeValid(eventType);
       }
-    },
-    changeValueWitchTimer(value) {
-      this.nameTimer = setTimeout(() => {
-        this.localInputValue = value;
-        this.changeValue("timer");
-        this.shownTooltip();
-      }, 1000);
-    },
-    clearTimer(name) {
-      if (name) clearTimeout(name);
     },
     /**
      * возвращает общее состояние не валидности инпута
@@ -361,6 +352,25 @@ export default {
         });
       });
       this.shownTooltip();
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: this.resultValue,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.resultValue,
+        type: "input",
+      })
+    },
+    changeValueWitchTimer(value) {
+      this.nameTimer = setTimeout(() => {
+        this.localInputValue = value;
+        this.changeValue("timer");
+        this.shownTooltip();
+      }, 1000);
+    },
+    clearTimer(name) {
+      if (name) clearTimeout(name);
     },
     /**
      * при включенной обработки сотых отображает инпут с настоящим значением при фокусе

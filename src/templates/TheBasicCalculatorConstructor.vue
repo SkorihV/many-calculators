@@ -8,24 +8,24 @@
           :label="template?.label"
           :classes="template?.classes"
           :element-name=" template?.json_id || 'UiAccordion' + inx"
-          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
+          @passDependency="tryPassDependency"
         />
         <ui-tab
-          v-if="template.template === 'UiTab'"
+          v-else-if="template.template === 'UiTab'"
           :tab-data="template"
           :label="template?.label"
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiTab' + inx"
-          :dependency-name="template?.dependencyName"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
+          @passDependency="tryPassDependency"
         />
         <ui-bisection
-          v-if="template.template === 'UiBisection'"
+          v-else-if="template.template === 'UiBisection'"
           :template-data="template"
           :label="template?.label"
           :width-left-side="template?.widthLeftSide"
@@ -36,6 +36,27 @@
           :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
           @changedValue="changeValue"
           @changeValid="changeValid"
+          @passDependency="tryPassDependency"
+
+        />
+        <ui-duplicator
+          v-else-if="template.template === 'UiDuplicator'"
+          :label="template?.label"
+          :element-name="
+            template?.elementName?.length
+              ? template?.elementName
+              : template?.json_id || 'UiRange' + index
+          "
+          :index="inx"
+          :calculator-templates="template.templates"
+          :classes="template?.classes"
+          :dependency-formula-display="template?.dependencyFormulaDisplay"
+          :form-output-method="template?.formOutputMethod"
+          :exclude-from-calculations="template?.excludeFromCalculations"
+          :formula="template?.formula"
+          @changedValue="changeValue"
+          @changeValid="changeValid"
+          @passDependency="tryPassDependency"
         />
         <templates-wrapper
           v-else
@@ -43,6 +64,7 @@
           :index="inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
+          @passDependency="tryPassDependency"
         />
 
       </template>
@@ -80,6 +102,7 @@
 import { computed } from "vue";
 import UiAccordion from "@/components/UI/UiAccordion";
 import UiTab from "@/components/UI/UiTab";
+import UiDuplicator from "@/components/UI/UiDuplicator";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
@@ -91,6 +114,7 @@ export default {
     UiAccordion,
     UiTab,
     UiBisection,
+    UiDuplicator,
     ErrorNamesTemplates,
   },
   async mounted() {
@@ -190,12 +214,9 @@ export default {
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
         this.deleteElementOnErrors(name);
-        this.addDataForDependencies(data);
         this.checkEnabledResultButton();
         return false;
       }
-      this.addDataForDependencies(data);
-
       this.resultsElements[name] = {
         name,
         type,
@@ -266,6 +287,9 @@ export default {
       ) {
         this.shownAllTooltips = true;
       }
+    },
+    tryPassDependency(data) {
+      this.addDataForDependencies(data);
     },
     addDataForDependencies({ name, value, displayValue, isShow, type }) {
       this.dataForDependencies[name] = {

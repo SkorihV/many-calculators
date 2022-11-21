@@ -79,7 +79,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiSelect",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip, UiPrompt },
@@ -224,6 +224,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         eventType,
       });
+      this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
       }
@@ -237,6 +238,15 @@ export default {
         eventType,
         isShow: this.isVisibilityFromDependency,
       });
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: this.currentOption?.value,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.currentOption?.selectName,
+        type: "select",
+      })
     },
     resetSelectedValue() {
       this.currentIndexOption = 0;

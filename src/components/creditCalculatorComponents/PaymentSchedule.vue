@@ -215,7 +215,6 @@ export default {
      */
     getLoanInterestInDifferentiated(stamp) {
       let { year, month } = this.getDataDayInTimeStamp(stamp);
-      // console.log(this.monthlyInterestRate);
       let percentageOfTheDebt =
         this.mainSumDifferentiated * this.monthlyInterestRate;
       let monthlyPayment =

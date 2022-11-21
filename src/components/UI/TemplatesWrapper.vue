@@ -32,6 +32,7 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -39,7 +40,7 @@
   </ui-input>
 
   <ui-checkbox
-    v-if="template.template === 'UiCheckbox'"
+    v-else-if="template.template === 'UiCheckbox'"
     :cost="template?.cost"
     :label="template?.label"
     :checkbox-value="template?.value"
@@ -60,6 +61,7 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -67,7 +69,7 @@
   </ui-checkbox>
 
   <UiRadio
-    v-if="template.template === 'UiRadio'"
+    v-else-if="template.template === 'UiRadio'"
     :label="template?.label"
     :is-column="template?.isColumn"
     :radio-values="template?.values"
@@ -87,6 +89,7 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -94,7 +97,7 @@
   </UiRadio>
 
   <ui-range
-    v-if="template.template === 'UiRange'"
+    v-else-if="template.template === 'UiRange'"
     :min="template?.min"
     :max="template?.max"
     :unit="template?.unit"
@@ -121,6 +124,7 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -128,7 +132,7 @@
   </ui-range>
 
   <ui-select
-    v-if="template.template === 'UiSelect'"
+    v-else-if="template.template === 'UiSelect'"
     :label="template?.label"
     :not-empty="template?.notEmpty"
     :is-column="template?.isColumn"
@@ -147,6 +151,7 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -154,7 +159,7 @@
   </ui-select>
 
   <ui-image
-    v-if="template.template === 'UiImage'"
+    v-else-if="template.template === 'UiImage'"
     :label="template?.label"
     :default-image="template?.defaultImage"
     :dependency-images="template?.dependencyImages"
@@ -178,6 +183,7 @@
     "
     @changedValue="changeValue"
     @changeValid="changeValid"
+    @passDependency="tryPassDependency"
   ></ui-system>
 </template>
 
@@ -193,7 +199,7 @@ import UiSystem from "@/components/UI/UiSystem";
 
 export default {
   name: "TemplatesWrapper",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   components: {
     UiRange,
     UiInput,
@@ -225,6 +231,9 @@ export default {
     changeValid(data) {
       this.$emit("changeValid", data);
     },
+    tryPassDependency(data) {
+      this.$emit("passDependency", data)
+    }
   },
 };
 </script>

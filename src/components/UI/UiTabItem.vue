@@ -11,6 +11,7 @@
       :index="itemName + key_in"
       @changedValue="changeValue"
       @changeValid="changeValid"
+      @passDependency="tryPassDependency"
     />
   </div>
 </template>
@@ -21,7 +22,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 export default {
   name: "UiTabItem",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   props: {
     tabItem: {
       type: Object,
@@ -71,6 +72,9 @@ export default {
         isShown: this.isShowTabsItem,
       };
       this.$emit("changeValid", { data, infoOnTab });
+    },
+    tryPassDependency(data) {
+      this.$emit("passDependency", data);
     },
   },
   computed: {

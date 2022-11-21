@@ -71,7 +71,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiRange",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
@@ -274,6 +274,15 @@ export default {
         eventType,
         isShow: this.isVisibilityFromDependency,
       });
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: this.localRangeValue,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.localRangeValue,
+        type: "range",
+      })
     },
     shownTooltip() {
       if (!this.canBeShownTooltip) {

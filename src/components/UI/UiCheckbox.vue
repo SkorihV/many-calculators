@@ -40,7 +40,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiCheckbox",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiTooltip },
@@ -155,7 +155,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         eventType,
       });
-
+      this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
       }
@@ -169,6 +169,15 @@ export default {
         eventType,
         isShow: this.isVisibilityFromDependency,
       });
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: this.localValue,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.localValue ? "Да" : "Нет",
+        type: "checkbox",
+      })
     },
   },
   watch: {

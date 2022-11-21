@@ -30,6 +30,7 @@
       :index="itemIdName + '_' + key_in"
       @changedValue="changeValue"
       @changeValid="changeValid"
+      @passDependency="tryPassDependency"
     />
   </div>
 </template>
@@ -42,7 +43,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 export default {
   name: "UiAccordionItem",
   components: { UiTooltip, UiPrompt, TemplatesWrapper },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   inject: ["globalCanBeShownTooltip"],
   props: {
     accordionItem: {
@@ -97,6 +98,9 @@ export default {
       }
 
       this.$emit("changeValid", data);
+    },
+    tryPassDependency(data) {
+      this.$emit("passDependency", data);
     },
     /**
      * Проверяем можно ли собрать ошибки вложенных элементов

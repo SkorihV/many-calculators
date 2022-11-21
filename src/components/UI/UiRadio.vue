@@ -49,7 +49,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 export default {
   name: "UiRadio",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue", "changeValid", "passDependency"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
   components: { UiPrompt, UiTooltip },
@@ -190,6 +190,7 @@ export default {
         eventType,
         unit: this.unit,
       });
+      this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
       }
@@ -203,6 +204,15 @@ export default {
         eventType,
         isShow: this.isVisibilityFromDependency,
       });
+    },
+    tryPassDependency() {
+      this.$emit("passDependency", {
+        name: this.localElementName,
+        value: this.changedRadio?.value,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.changedRadio?.radioName,
+        type: "radio",
+      })
     },
     getNewListValuesBeforeCheckedDependency() {
 
