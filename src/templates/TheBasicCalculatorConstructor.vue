@@ -11,7 +11,6 @@
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
         />
         <ui-tab
           v-else-if="template.template === 'UiTab'"
@@ -22,7 +21,6 @@
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
         />
         <ui-bisection
           v-else-if="template.template === 'UiBisection'"
@@ -36,8 +34,6 @@
           :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
-
         />
         <ui-duplicator
           v-else-if="template.template === 'UiDuplicator'"
@@ -56,7 +52,6 @@
           :formula="template?.formula"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
         />
         <templates-wrapper
           v-else
@@ -64,7 +59,6 @@
           :index="inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
         />
 
       </template>
@@ -165,10 +159,7 @@ export default {
        * Инициализирует возможность отображения всех подсказок с ошибками
        */
       globalCanBeShownTooltip: computed(() => this.shownAllTooltips),
-      /**
-       * глобальный массив с данными для зависимостей
-       */
-      globalDataForDependencies: computed(() => this.dataForDependencies),
+
     };
   },
   data() {
@@ -186,7 +177,6 @@ export default {
       currency: "руб",
       submitResult: null,
       initEnabledSendForm: false,
-      dataForDependencies: {}, // набор данных для зависимостей полей.
       initTemplateError: false,
       displayResultData: false, // включить работу формул и вывод данных
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
@@ -287,17 +277,6 @@ export default {
       ) {
         this.shownAllTooltips = true;
       }
-    },
-    tryPassDependency(data) {
-      this.addDataForDependencies(data);
-    },
-    addDataForDependencies({ name, value, displayValue, isShow, type }) {
-      this.dataForDependencies[name] = {
-        name,
-        value,
-        isShow,
-        displayValue,
-      };
     },
   },
   watch: {

@@ -1258,5 +1258,10 @@ $border-radius: 4px;
     color: $calc-color-text;
     margin: 0 auto;
   }
+  &__duplicator {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

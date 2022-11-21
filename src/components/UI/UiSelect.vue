@@ -76,12 +76,13 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { mapActions } from "vuex";
 
 export default {
   name: "UiSelect",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: [ "globalCanBeShownTooltip"],
   components: { UiTooltip, UiPrompt },
   mounted() {
     this.localSelectValues = this.selectValues;
@@ -183,6 +184,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['tryAddDependencyElement']),
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -240,13 +242,13 @@ export default {
       });
     },
     tryPassDependency() {
-      this.$emit("passDependency", {
+      this.tryAddDependencyElement({
         name: this.localElementName,
         value: this.currentOption?.value,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.currentOption?.selectName,
         type: "select",
-      })
+      });
     },
     resetSelectedValue() {
       this.currentIndexOption = 0;

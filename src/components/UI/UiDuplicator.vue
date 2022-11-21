@@ -1,5 +1,4 @@
 <template>
-
   <div class="calc__duplicator" v-if="isVisibilityFromDependency">
     <template v-for="(template, inx) in calculatorTemplates" :key="inx">
       <templates-wrapper
@@ -8,7 +7,6 @@
         :index="inx"
         @changedValue="changeValue"
         @changeValid="changeValid"
-        @passDependency="tryPassDependency"
       />
     </template>
     <button class="calc__duplicator-duplicate">Дублировать</button>
@@ -25,9 +23,9 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiDuplicator",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid", "duplicate", "deleteDuplicate", "passDependency"],
+  emits: ["changedValue", "changeValid", "duplicate", "deleteDuplicate"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: ["globalCanBeShownTooltip"],
   props: {
     calculatorTemplates: {
       type: Object,
@@ -133,9 +131,6 @@ export default {
       if (!data.isShow || !data.error) {
         this.deleteElementOnErrors(data.name);
       }
-    },
-    tryPassDependency(data) {
-      this.$emit("passDependency", data);
     },
     calculateResult() {
       this.shownAllTooltips = true;

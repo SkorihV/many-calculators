@@ -56,11 +56,14 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { mapActions } from "vuex";
+
+
 export default {
   name: "UiInput",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: ["globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     /**
@@ -257,6 +260,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["tryAddDependencyElement"]),
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
@@ -354,13 +358,13 @@ export default {
       this.shownTooltip();
     },
     tryPassDependency() {
-      this.$emit("passDependency", {
+      this.tryAddDependencyElement({
         name: this.localElementName,
         value: this.resultValue,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.resultValue,
         type: "input",
-      })
+      });
     },
     changeValueWitchTimer(value) {
       this.nameTimer = setTimeout(() => {

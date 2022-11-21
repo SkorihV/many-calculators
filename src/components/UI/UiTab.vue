@@ -43,7 +43,6 @@
         :shown-id-tab="shownIdTab"
         @changedValue="changeValue"
         @changeValid="changeValid"
-        @passDependency="tryPassDependency"
       />
     </div>
   </div>
@@ -59,8 +58,8 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiTab",
   components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
-  emits: ["changedValue", "changeValid", "passDependency"],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  emits: ["changedValue", "changeValid"],
+  inject: ["globalCanBeShownTooltip"],
   mixins: [MixinsForProcessingFormula],
   props: {
     tabData: {
@@ -112,9 +111,6 @@ export default {
 
       this.visibilityListTabs.set(infoOnTab.index, infoOnTab.isShown);
       this.$emit("changeValid", data);
-    },
-    tryPassDependency(data) {
-      this.$emit("passDependency", data);
     },
     checkIsShowError(key) {
       return (

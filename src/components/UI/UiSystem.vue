@@ -5,11 +5,13 @@
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { mapActions } from "vuex";
+
 export default {
   name: "UiSystem",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: ["globalCanBeShownTooltip"],
   props: {
     cost: {
       type: [Number, String],
@@ -30,6 +32,7 @@ export default {
     this.changeValue("mounted")
   },
   methods: {
+    ...mapActions(["tryAddDependencyElement"]),
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
         value: parseFloat(this.localCost),
@@ -62,13 +65,13 @@ export default {
       });
     },
     tryPassDependency() {
-      this.$emit("passDependency", {
+      this.tryAddDependencyElement({
         name: this.localElementName,
         value: parseFloat(this.localCost),
         isShow: this.isVisibilityFromDependency,
         displayValue: null,
         type: "system",
-      })
+      });
     },
   },
   watch: {

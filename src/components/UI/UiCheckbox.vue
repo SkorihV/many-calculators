@@ -37,12 +37,13 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { mapActions } from "vuex";
 
 export default {
   name: "UiCheckbox",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: ["globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     labelSecond: {
@@ -131,6 +132,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["tryAddDependencyElement"]),
     inputLocalValue(value) {
       this.localValue = value;
       this.changeValue("test");
@@ -171,9 +173,9 @@ export default {
       });
     },
     tryPassDependency() {
-      this.$emit("passDependency", {
+      this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.localValue,
+        value:  this.localValue,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.localValue ? "Да" : "Нет",
         type: "checkbox",

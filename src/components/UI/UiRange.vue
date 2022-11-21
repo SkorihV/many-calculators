@@ -68,12 +68,13 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { mapActions } from "vuex";
 
 export default {
   name: "UiRange",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  inject: ["globalDataForDependencies", "globalCanBeShownTooltip"],
+  inject: [ "globalCanBeShownTooltip"],
   components: { UiTooltip },
   props: {
     rangeValue: {
@@ -215,6 +216,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["tryAddDependencyElement"]),
     changeValueStep(step) {
       this.localRangeValue = this.checkValidValueReturnNumber(step);
       this.changeValue();
@@ -276,13 +278,13 @@ export default {
       });
     },
     tryPassDependency() {
-      this.$emit("passDependency", {
+      this.tryAddDependencyElement({
         name: this.localElementName,
         value: this.localRangeValue,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.localRangeValue,
         type: "range",
-      })
+      });
     },
     shownTooltip() {
       if (!this.canBeShownTooltip) {

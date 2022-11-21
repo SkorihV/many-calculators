@@ -29,7 +29,6 @@ export default {
   name: "UiImage",
   components: { UiPrompt },
   mixins: [MixinsForProcessingFormula],
-  inject: ["globalDataForDependencies"],
   props: {
     /**
      * заголовок

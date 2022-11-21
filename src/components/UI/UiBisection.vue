@@ -51,7 +51,6 @@
           :index="elementName + '_' + 'right' + '_' + inx"
           @changedValue="changeValue"
           @changeValid="changeValid"
-          @passDependency="tryPassDependency"
         />
       </div>
     </div>
@@ -65,8 +64,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiBisection",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid", "passDependency"],
-  inject: ["globalDataForDependencies"],
+  emits: ["changedValue", "changeValid"],
   mixins: [MixinsForProcessingFormula],
   props: {
     templateData: {
@@ -117,9 +115,6 @@ export default {
     },
     changeValid(data) {
       this.$emit("changeValid", data);
-    },
-    tryPassDependency(data){
-      this.$emit("passDependency", data);
     },
     processingFormula(formula) {
       let result = this.processingFormulaSpecialsSymbols(formula);

@@ -32,7 +32,6 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -61,7 +60,6 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -89,7 +87,6 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -124,7 +121,6 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -151,7 +147,6 @@
     :parent-is-show="parentIsShow"
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -183,7 +178,6 @@
     "
     @changedValue="changeValue"
     @changeValid="changeValid"
-    @passDependency="tryPassDependency"
   ></ui-system>
 </template>
 
@@ -199,7 +193,7 @@ import UiSystem from "@/components/UI/UiSystem";
 
 export default {
   name: "TemplatesWrapper",
-  emits: ["changedValue", "changeValid", "passDependency"],
+  emits: ["changedValue", "changeValid"],
   components: {
     UiRange,
     UiInput,
@@ -231,9 +225,6 @@ export default {
     changeValid(data) {
       this.$emit("changeValid", data);
     },
-    tryPassDependency(data) {
-      this.$emit("passDependency", data)
-    }
   },
 };
 </script>

@@ -1,3 +1,5 @@
+import { mapGetters } from "vuex";
+
 export const MixinsForProcessingFormula = {
   props: {
     /**
@@ -140,17 +142,17 @@ export const MixinsForProcessingFormula = {
      * @returns {*|null}
      */
     isElementDependency(name) {
-      if (!name?.length && !this.globalDataForDependencies) {
+      if (!name?.length && !this.globalDependenciesList) {
         return false;
       }
-      return name in this.globalDataForDependencies;
+      return name in this.globalDependenciesList;
     },
     existLocalElementDependency(name) {
       return name in this.localListElementDependency;
     },
     putElementDependencyInLocalList(name) {
       this.localListElementDependency[name] =
-        this.globalDataForDependencies[name];
+        this.globalDependenciesList[name];
     },
   },
   watch: {
@@ -174,7 +176,7 @@ export const MixinsForProcessingFormula = {
       }
     },
 
-    globalDataForDependencies: {
+    globalDependenciesList: {
       handler(newValue) {
         let isUpdated = false;
         for (let key in newValue) {
@@ -198,6 +200,7 @@ export const MixinsForProcessingFormula = {
     },
   },
   computed: {
+    ...mapGetters(["globalDependenciesList"]),
     /**
      * Отобразить текущий элемент
      * @returns {boolean|any}
