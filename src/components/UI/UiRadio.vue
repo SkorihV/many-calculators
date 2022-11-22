@@ -12,10 +12,7 @@
         {{ label }} <slot name="prompt" />
       </div>
       <div class="calc__radio-wrapper-buttons">
-        <template
-          v-for="(radio, idx) in localRadioListInOut"
-          :key="idx"
-        >
+        <template v-for="(radio, idx) in localRadioListInOut" :key="idx">
           <div
             class="calc__radio-label"
             :id="localElementName + '_' + idx"
@@ -50,7 +47,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "UiRadio",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiPrompt, UiTooltip },
   mounted() {
@@ -164,7 +161,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement"]),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -192,18 +189,17 @@ export default {
         unit: this.unit,
       });
       this.tryPassDependency();
-      if (eventType !== "delete" || eventType !== "mounted") {
-        this.changeValid(eventType);
-      }
+      this.changeValid(eventType);
     },
     changeValid(eventType) {
-      this.$emit("changeValid", {
+      this.checkValidationDataAndToggle({
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "radio",
         label: this.label,
         eventType,
         isShow: this.isVisibilityFromDependency,
+        parentName: this.parentName,
       });
     },
     tryPassDependency() {
@@ -213,10 +209,9 @@ export default {
         isShow: this.isVisibilityFromDependency,
         displayValue: this.changedRadio?.radioName,
         type: "radio",
-      })
+      });
     },
     getNewListValuesBeforeCheckedDependency() {
-
       return this.mutationRadioValue.map((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
           let formula = this.processingFormulaSpecialsSymbols(
@@ -241,12 +236,12 @@ export default {
     updateRadioListInOut() {
       this.localRadioListInOut = [];
       if (this.timerName) {
-        clearTimeout(this.timerName)
+        clearTimeout(this.timerName);
       }
-      this.timerName = setTimeout(()=> {
+      this.timerName = setTimeout(() => {
         this.localRadioListInOut = this.radioValuesAfterProcessingDependency;
       }, 100);
-    }
+    },
   },
   watch: {
     selectedItem(newValue) {
@@ -310,7 +305,7 @@ export default {
     },
 
     radioValuesAfterProcessingDependency() {
-        return this.getNewListValuesBeforeCheckedDependency();
+      return this.getNewListValuesBeforeCheckedDependency();
     },
   },
 };

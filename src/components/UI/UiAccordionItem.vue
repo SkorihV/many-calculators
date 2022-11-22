@@ -28,8 +28,8 @@
       :parent-is-show="parentIsShow"
       :template="template"
       :index="itemIdName + '_' + key_in"
+      :parent-name="elementName"
       @changedValue="changeValue"
-      @changeValid="changeValid"
     />
   </div>
 </template>
@@ -43,7 +43,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "UiAccordionItem",
   components: { UiTooltip, UiPrompt, TemplatesWrapper },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   props: {
     accordionItem: {
       type: Object,
@@ -115,17 +115,34 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isCanShowAllTooltips"]),
+    ...mapGetters(["isCanShowAllTooltips", "getValidationListOnParentName"]),
     isShowError() {
-      return Boolean(this.errorsElements.size);
+      return this.localListValidationError.some(
+        (item) => item.error && item.isShow && this.isCanShowAllTooltips
+      );
+      //
+      // return Boolean(this.errorsElements.size);
     },
     isShowAccordionItem() {
-      return Boolean(this.visibilityList.size);
+      return this.currentChildrenItem !== this.currentHiddenItem;
+      // return Boolean(this.visibilityList.size);
     },
     itemIdName() {
       return (
         this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
       );
+    },
+    localListValidationError() {
+      return this.getValidationListOnParentName(this.elementName);
+    },
+    currentChildrenItem() {
+      return this.accordionItem?.templates.length
+        ? this.accordionItem?.templates.length
+        : 0;
+    },
+    currentHiddenItem() {
+      return this.localListValidationError.filter((item) => !item.isShow)
+        .length;
     },
   },
 };

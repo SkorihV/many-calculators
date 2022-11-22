@@ -151,8 +151,7 @@ export const MixinsForProcessingFormula = {
       return name in this.localDependencyList;
     },
     putElementDependencyInLocalList(name) {
-      this.localDependencyList[name] =
-        this.globalDependenciesList[name];
+      this.localDependencyList[name] = this.globalDependenciesList[name];
     },
   },
   watch: {
@@ -182,10 +181,8 @@ export const MixinsForProcessingFormula = {
         for (let key in newValue) {
           if (this.existLocalElementDependency(key)) {
             if (
-              newValue[key].value !==
-              this.localDependencyList[key].value ||
-              newValue[key].isShow !==
-              this.localDependencyList[key].isShow
+              newValue[key].value !== this.localDependencyList[key].value ||
+              newValue[key].isShow !== this.localDependencyList[key].isShow
             ) {
               this.localDependencyList[key] = newValue[key];
               isUpdated = true;

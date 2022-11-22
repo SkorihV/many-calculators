@@ -1,5 +1,8 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency && !systemField">
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency && !systemField"
+  >
     <div
       class="calc__input-wrapper"
       :class="[{ 'is-stretch': isStretch }, classes]"
@@ -13,7 +16,9 @@
           {{ label }}<slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
-          <div class="calc__input-buttons-minus" v-if="controls" @click="minus">-</div>
+          <div class="calc__input-buttons-minus" v-if="controls" @click="minus">
+            -
+          </div>
 
           <input
             ref="trueInput"
@@ -39,7 +44,9 @@
               :placeholder="inputPlaceholder"
             />
           </template>
-          <div class="calc__input-buttons-plus" v-if="controls" @click="plus">+</div>
+          <div class="calc__input-buttons-plus" v-if="controls" @click="plus">
+            +
+          </div>
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
         </div>
         <ui-tooltip
@@ -58,10 +65,9 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { mapActions } from "vuex";
 
-
 export default {
   name: "UiInput",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
@@ -246,7 +252,6 @@ export default {
         }
       });
     }
-
   },
   data() {
     return {
@@ -259,7 +264,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement"]),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
@@ -287,8 +292,10 @@ export default {
         if (this.discreteStep) {
           this.clearTimer(this.nameTimerForUpdateInputValue);
           this.nameTimerForUpdateInputValue = setTimeout(() => {
-            this.localInputValue = Math.round(parseFloat(this.localInputValue) / this.step) * this.step ;
-          }, 1500)
+            this.localInputValue =
+              Math.round(parseFloat(this.localInputValue) / this.step) *
+              this.step;
+          }, 1500);
         } else {
           this.localInputValue = parseFloat(this.localInputValue);
         }
@@ -324,12 +331,17 @@ export default {
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
         isShow: this.isVisibilityFromDependency,
-        excludeFromCalculations: this.systemField ? true : this.excludeFromCalculations,
+        excludeFromCalculations: this.systemField
+          ? true
+          : this.excludeFromCalculations,
         unit: this.unit,
         eventType,
       });
       this.tryPassDependency();
-      if ((eventType !== "delete" || eventType !== "mounted") && !this.systemField) {
+      if (
+        (eventType !== "delete" || eventType !== "mounted") &&
+        !this.systemField
+      ) {
         this.changeValid(eventType);
       }
     },
@@ -345,13 +357,15 @@ export default {
           this.isErrorNumber,
           this.isErrorCustom,
         ].some((item) => item);
-        this.$emit("changeValid", {
+
+        this.checkValidationDataAndToggle({
           error: this.isInvalid,
           name: this.localElementName,
           type: "input",
           label: this.label,
           eventType,
           isShow: this.isVisibilityFromDependency,
+          parentName: this.parentName,
         });
       });
       this.shownTooltip();

@@ -13,16 +13,31 @@
           class="calc__tab-item-label"
           :class="{
             isOpen: key === shownIdTab,
-            isError: checkIsShowError(key),
+            isError: checkIsShowError(
+              elementName + item?.json_id + '_' + key ||
+                elementName + 'tabItem' + '_' + key,
+              key
+            ),
           }"
-          v-if="visibilityListTabs.get(key)"
+          v-if="
+            isValidationShowOnParentName(
+              elementName + item?.json_id + '_' + key ||
+                elementName + 'tabItem' + '_' + key
+            )
+          "
           :key="key"
           @click="openItem(key)"
         >
           {{ item.label }}
           <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
           <ui-tooltip
-            :is-show="checkIsShowError(key)"
+            :is-show="
+              checkIsShowError(
+                elementName + item?.json_id + '_' + key ||
+                  elementName + 'tabItem' + '_' + key,
+                key
+              )
+            "
             tooltip-text="Во вкладке есть не корректно заполненные поля."
           ></ui-tooltip>
         </div>
@@ -39,10 +54,12 @@
         :tab-item="item"
         :tab-name="elementName + '_' + key"
         :tab-item-id="key"
-        :element-name="item?.json_id || 'tabItem' + '_' + key"
+        :element-name="
+          elementName + item?.json_id + '_' + key ||
+          elementName + 'tabItem' + '_' + key
+        "
         :shown-id-tab="shownIdTab"
         @changedValue="changeValue"
-        @changeValid="changeValid"
       />
     </div>
   </div>
@@ -59,7 +76,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "UiTab",
   components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
     tabData: {
@@ -97,45 +114,19 @@ export default {
     changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid({ data, infoOnTab }) {
-      if (this.checkAllowedErrors(data)) {
-        if (!this.errorsElements[infoOnTab.index]) {
-          this.errorsElements[infoOnTab.index] = new Set();
-        }
-        this.errorsElements[infoOnTab.index].add(data.name);
-      } else {
-        if (this.errorsElements[infoOnTab.index]?.has(data.name)) {
-          this.errorsElements[infoOnTab.index].delete(data.name);
-        }
-      }
+    checkIsShowError(parentName, key) {
 
-      this.visibilityListTabs.set(infoOnTab.index, infoOnTab.isShown);
-      this.$emit("changeValid", data);
-    },
-    checkIsShowError(key) {
-      return (
-        key !== this.shownIdTab &&
-        this.errorsElements[key]?.size &&
-        this.isCanShowAllTooltips
-      );
-    },
-    /**
-     * Проверяем можно ли собрать ошибки вложенных элементов
-     * @param data
-     * @returns {boolean}
-     */
-    checkAllowedErrors(data) {
-      return (
-        data.error &&
-        data.eventType !== "mounted" &&
-        data.eventType !== "delete" &&
-        data.isShow &&
-        this.isCanShowAllTooltips
-      );
+      const isError = this.isValidationErrorOnParentName(parentName);
+      return key !== this.shownIdTab && isError && this.isCanShowAllTooltips;
     },
   },
   computed: {
-    ...mapGetters(["isCanShowAllTooltips"]),
+    ...mapGetters([
+      "isCanShowAllTooltips",
+      "isValidationShowOnParentName",
+      "getValidationListOnParentName",
+      "isValidationErrorOnParentName",
+    ]),
     showBlock() {
       let result = [];
       if (this.tabData?.items.length) {
@@ -147,9 +138,6 @@ export default {
         });
       }
       return result.some((item) => item);
-    },
-    isShowError() {
-      return Boolean(this.errorsElements.size);
     },
   },
 };

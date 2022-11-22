@@ -37,6 +37,10 @@ export const MixinsGeneralItemData = {
       type: String,
       default: "",
     },
+    parentName: {
+      type: String,
+      default: null,
+    },
     /**
      * Список классов для переопределения стилей на обертке
      */

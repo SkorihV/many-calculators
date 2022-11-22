@@ -58,7 +58,7 @@
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="localCanBeShownTooltip"
+        :local-can-be-shown="localCanBeShownTooltip || isCanShowAllTooltips"
       />
     </div>
   </div>
@@ -68,11 +68,11 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiRange",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
@@ -215,7 +215,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement"]),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     changeValueStep(step) {
       this.localRangeValue = this.checkValidValueReturnNumber(step);
       this.changeValue();
@@ -227,7 +227,7 @@ export default {
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue();
         this.shownTooltip();
-      }, 500)
+      }, 500);
     },
     changeDynamicValue(e) {
       this.localRangeValue = this.checkValidValueReturnNumber(e.target.value);
@@ -247,7 +247,9 @@ export default {
       return value;
     },
     changeValue(eventType = "input") {
-      this.localRangeValue = this.checkValidValueReturnNumber(this.localRangeValue);
+      this.localRangeValue = this.checkValidValueReturnNumber(
+        this.localRangeValue
+      );
       this.$emit("changedValue", {
         value: this.localRangeValue,
         displayValue: this.localRangeValue,
@@ -262,18 +264,17 @@ export default {
         unit: this.unit,
         eventType,
       });
-      if (eventType !== "delete" || eventType !== "mounted") {
-        this.changeValid(eventType);
-      }
+      this.changeValid(eventType);
     },
     changeValid(eventType) {
-      this.$emit("changeValid", {
+      this.checkValidationDataAndToggle({
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "range",
         label: this.label,
         eventType,
         isShow: this.isVisibilityFromDependency,
+        parentName: this.parentName,
       });
     },
     tryPassDependency() {
@@ -304,6 +305,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["isCanShowAllTooltips"]),
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
     },

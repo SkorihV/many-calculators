@@ -18,9 +18,8 @@
           :accordionItem="item"
           :accordion-name="elementName"
           :accordion-item-id="key"
-          :element-name="item?.json_id || 'accordionItem' + '_' + key"
+          :element-name="elementName + item?.json_id + '_' + key"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
       </div>
     </template>
@@ -34,7 +33,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiAccordion",
   components: { UiAccordionItem },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
     accordionData: {
@@ -74,9 +73,6 @@ export default {
     },
     changeValue(data) {
       this.$emit("changedValue", data);
-    },
-    changeValid(data) {
-      this.$emit("changeValid", data);
     },
   },
   computed: {

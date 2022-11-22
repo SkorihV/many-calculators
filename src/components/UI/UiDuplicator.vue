@@ -1,15 +1,18 @@
 <template>
+  <pre>
+  {{index}}
+
+  </pre>
   <div class="calc__duplicator" v-if="isVisibilityFromDependency">
-    <template v-for="(template, inx) in calculatorTemplates" :key="inx">
+    <template v-for="(template, inx) in mutationTemplatesAfterDuplicatopr" :key="inx">
       <templates-wrapper
         :parent-is-show="isVisibilityFromDependency"
         :template="template"
         :index="inx"
         @changedValue="changeValue"
-        @changeValid="changeValid"
       />
     </template>
-    <button class="calc__duplicator-duplicate">Дублировать</button>
+    <button class="calc__duplicator-duplicate" @click="tryDuplicate">Дублировать</button>
     <button class="calc__duplicator-delete">Удалить</button>
   </div>
 </template>
@@ -19,11 +22,10 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
-
 export default {
   name: "UiDuplicator",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid", "duplicate", "deleteDuplicate"],
+  emits: ["changedValue", "duplicate", "deleteDuplicate"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
     calculatorTemplates: {
@@ -36,11 +38,11 @@ export default {
     },
     formula: {
       type: String,
-      default: null
+      default: null,
     },
     isDuplicate: {
       type: Boolean,
-      default: null
+      default: null,
     },
     /**
      * метод вывода данных в результирующую форму
@@ -49,16 +51,22 @@ export default {
       type: String,
       default: "no",
     },
+    localTemplate: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
       errorsElements: new Set(), // список элементов с ошибками валидации
       localResultsElements: {},
       reserveVariableForOther: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
-      localDataForDependencies: {},
-    }
+    };
   },
   methods: {
+    changeValid() {
+      return null;
+    },
     // changeValue(data) {
     //   this.$emit("changedValue", data);
     // },
@@ -76,11 +84,10 @@ export default {
     //   this.$emit("changeValid", data);
     // },
     duplicate() {
-
-      this.$emit("duplicate", "duplicate")
+      this.$emit("duplicate", "duplicate");
     },
     deleteDuplicate() {
-      this.$emit("deleteDuplicate", "deleteDuplicate")
+      this.$emit("deleteDuplicate", "deleteDuplicate");
     },
     changeValue(data) {
       if (typeof data !== "object") {
@@ -99,14 +106,12 @@ export default {
         isShow,
         excludeFromCalculations,
       } = data;
-// || !isShow
+      // || !isShow
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
-        this.deleteElementOnErrors(name);
-        this.addDataForDependencies(data);
         return false;
       }
-      this.addDataForDependencies(data);
+
 
       this.localResultsElements[name] = {
         name,
@@ -120,16 +125,6 @@ export default {
         isShow,
         excludeFromCalculations,
       };
-
-    },
-    changeValid(data) {
-      if (data.error && data.eventType !== "mounted" && data.isShow) {
-        this.errorsElements.add(data.name);
-      }
-
-      if (!data.isShow || !data.error) {
-        this.deleteElementOnErrors(data.name);
-      }
     },
     calculateResult() {
       this.shownAllTooltips = true;
@@ -140,21 +135,23 @@ export default {
         this.localResultsElements[name].isShow = false;
       }
     },
-    deleteElementOnErrors(name) {
-      if (this.errorsElements.has(name)) {
-        this.errorsElements.delete(name);
-      }
-    },
-    addDataForDependencies({ name, value, displayValue, isShow, type }) {
-      this.localDataForDependencies[name] = {
-        name,
-        value,
-        isShow,
-        displayValue,
-      };
-    },
+
+    tryDuplicate() {
+      const returnData = this.localTemplate;
+
+
+    }
   },
   computed: {
+
+    mutationTemplatesAfterDuplicatopr() {
+      return this.calculatorTemplates.map(item => {
+        const newName = this.elementName + "_" + item.elementName;
+        item.elementName = newName;
+        return item;
+      });
+    },
+
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
@@ -328,19 +325,8 @@ export default {
         }, 0);
       }
     },
-
-    /**
-     * Есть ошибки валидации
-     * @returns {boolean}
-     */
-    isErrorCalc() {
-      return Boolean(this.errorsElements.size);
-    },
-
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

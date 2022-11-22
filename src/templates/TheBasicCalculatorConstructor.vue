@@ -7,10 +7,9 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name=" template?.json_id || 'UiAccordion' + inx"
+          :element-name="template?.json_id || 'UiAccordion' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
         <ui-tab
           v-else-if="template.template === 'UiTab'"
@@ -20,7 +19,6 @@
           :element-name="template?.json_id || 'UiTab' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
         <ui-bisection
           v-else-if="template.template === 'UiBisection'"
@@ -30,10 +28,13 @@
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiBisection' + inx"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :dependency-formula-display-left-side="template?.dependencyFormulaDisplayLeftSide"
-          :dependency-formula-display-right-side="template?.dependencyFormulaDisplayRightSide"
+          :dependency-formula-display-left-side="
+            template?.dependencyFormulaDisplayLeftSide
+          "
+          :dependency-formula-display-right-side="
+            template?.dependencyFormulaDisplayRightSide
+          "
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
         <ui-duplicator
           v-else-if="template.template === 'UiDuplicator'"
@@ -50,23 +51,22 @@
           :form-output-method="template?.formOutputMethod"
           :exclude-from-calculations="template?.excludeFromCalculations"
           :formula="template?.formula"
+          :localTemplate="template"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
         <templates-wrapper
           v-else
           :template="template"
           :index="inx"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
-
       </template>
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Возможно, некоторые поля не заполнены или заполнены не корректно!
       </div>
       <div v-if="showErrorSummBlock" class="calc__error-block">
-        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы не выбраны.
+        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы
+        не выбраны.
       </div>
       <div
         class="calc__show-result-btn"
@@ -81,9 +81,13 @@
         :init-template="initTemplateError"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <pre class="resultDataBlock" v-if="showResultDataForBlock && initTeleport">
-	      {{finalTextForOutput}}
-	    </pre>
+      <pre
+        class="resultDataBlock"
+        v-if="showResultDataForBlock && initTeleport"
+      >
+	      {{ finalTextForOutput }}
+	    </pre
+      >
       <div id="prompt-text-element"></div>
     </div>
     <teleport v-if="initTeleport && submitResult" to="#teleportelement">
@@ -93,7 +97,6 @@
 </template>
 
 <script>
-import { computed } from "vue";
 import UiAccordion from "@/components/UI/UiAccordion";
 import UiTab from "@/components/UI/UiTab";
 import UiDuplicator from "@/components/UI/UiDuplicator";
@@ -160,7 +163,6 @@ export default {
       outOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
       resultsElements: {}, // список элементов которые будут участвовать в расчетах результата
-      errorsElements: new Set(), // список элементов с ошибками валидации
       formula: null, // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       shownAllTooltips: false, // глобальная переменная дающая разрешение показывать ошибки валидации для всех шаблонов
@@ -180,6 +182,7 @@ export default {
       if (typeof data !== "object") {
         return null;
       }
+
       let {
         name,
         type,
@@ -193,10 +196,10 @@ export default {
         isShow,
         excludeFromCalculations,
       } = data;
-// || !isShow
+
+      // || !isShow
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
-        this.deleteElementOnErrors(name);
         this.checkEnabledResultButton();
         return false;
       }
@@ -213,17 +216,18 @@ export default {
         excludeFromCalculations,
       };
 
-      this.checkEnabledResultButton();
-    },
-    changeValid(data) {
-      if (data.error && data.eventType !== "mounted" && data.isShow) {
-        this.errorsElements.add(data.name);
+      if (
+        eventType !== "delete" &&
+        eventType !== "mounted" &&
+        eventType !== "dependency" &&
+        eventType !== "timer"
+      ) {
+        if (this.mistake === "useAutomatic") {
+          this.showAllTooltipsOn();
+        }
       }
 
-      if (!data.isShow || !data.error) {
-        this.deleteElementOnErrors(data.name);
-      }
-      this.tryChangeShownAllTooltips(data.eventType);
+      this.checkEnabledResultButton();
     },
     calculateResult() {
       this.showAllTooltipsOn();
@@ -234,13 +238,16 @@ export default {
      * Разрешаем отправку формы
      */
     checkEnabledResultButton() {
-      const textAreaTeleportElement = document.querySelector("#teleportelement");
+      const textAreaTeleportElement =
+        document.querySelector("#teleportelement");
       if (textAreaTeleportElement) {
         textAreaTeleportElement.readOnly = true;
       }
 
       if (!this.submitResult) {
-        this.submitResult = document.querySelector("#App + .tpl-anketa input[type=submit]");
+        this.submitResult = document.querySelector(
+          "#App + .tpl-anketa input[type=submit]"
+        );
       }
 
       if (this.isEnabledSendForm && this.submitResult) {
@@ -256,32 +263,26 @@ export default {
         this.resultsElements[name].isShow = false;
       }
     },
-    deleteElementOnErrors(name) {
-      if (this.errorsElements.has(name)) {
-        this.errorsElements.delete(name);
-      }
-    },
-    tryChangeShownAllTooltips(eventType) {
-      if (
-        this.mistake === "useAutomatic" &&
-        eventType !== "mounted" &&
-        eventType !== "delete" &&
-        this.isCanShowAllTooltips === false
-      ) {
-        this.showAllTooltipsOn();
-      }
-    },
   },
   watch: {
+    mistake() {
+      if (this.mistake === "useAutomatic") {
+        // this.showAllTooltipsOn();
+      }
+    },
     initEnabledForm() {
       this.checkEnabledResultButton();
     },
-    isErrorCalc() {
+    isCheckedGlobalValidation() {
       this.checkEnabledResultButton();
     },
   },
   computed: {
-    ...mapGetters(["isCanShowAllTooltips"]),
+    ...mapGetters([
+      "isCanShowAllTooltips",
+      "isCheckedGlobalValidation",
+      "validationList",
+    ]),
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
@@ -478,19 +479,12 @@ export default {
       return result;
     },
     /**
-     * Есть ошибки валидации
-     * @returns {boolean}
-     */
-    isErrorCalc() {
-      return Boolean(this.errorsElements.size);
-    },
-    /**
      * Отобразить блок с текстом о наличии ошибок,
      * если ошибки есть и глобально разрешено их отображение
      * @returns {false|boolean}
      */
     showErrorTextBlock() {
-      return this.isErrorCalc && this.isCanShowAllTooltips;
+      return this.isCheckedGlobalValidation && this.isCanShowAllTooltips;
     },
     /**
      * Добавить данные в форму если нет ошибок валидации
@@ -498,7 +492,9 @@ export default {
      */
     initTeleport() {
       return (
-        !this.isErrorCalc && this.initEnabledSendForm && this.isCanShowAllTooltips
+        !this.isCheckedGlobalValidation &&
+        this.initEnabledSendForm &&
+        this.isCanShowAllTooltips
       );
     },
     isEnabledSendForm() {
@@ -506,7 +502,7 @@ export default {
         this.initEnabledSendForm &&
         this.finalTextForOutput?.length &&
         this.isCanShowAllTooltips &&
-        !this.isErrorCalc
+        !this.isCheckedGlobalValidation
       );
     },
     showResultBtn() {

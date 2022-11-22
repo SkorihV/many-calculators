@@ -9,7 +9,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "UiSystem",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
     cost: {
@@ -28,10 +28,10 @@ export default {
     },
   },
   mounted() {
-    this.changeValue("mounted")
+    this.changeValue("mounted");
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement"]),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
         value: parseFloat(this.localCost),
@@ -46,21 +46,20 @@ export default {
         unit: "",
         eventType,
       });
-      if (eventType !== "delete" || eventType !== "mounted") {
-        this.changeValid(eventType);
-      }
+      this.changeValid(eventType);
     },
     /**
      * возвращает общее состояние не валидности инпута
      */
     changeValid(eventType) {
-      this.$emit("changeValid", {
+      this.checkValidationDataAndToggle({
         error: false,
         name: this.localElementName,
         type: "system",
         label: "",
         eventType,
         isShow: true,
+        parentName: this.parentName,
       });
     },
     tryPassDependency() {
@@ -80,8 +79,8 @@ export default {
           this.changeValue();
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
     localElementName() {

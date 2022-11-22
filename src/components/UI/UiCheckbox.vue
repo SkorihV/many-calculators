@@ -41,7 +41,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "UiCheckbox",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
@@ -131,10 +131,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement"]),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     inputLocalValue(value) {
       this.localValue = value;
-      this.changeValue("test");
+      this.changeValue("click");
     },
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
@@ -157,28 +157,27 @@ export default {
         eventType,
       });
       this.tryPassDependency();
-      if (eventType !== "delete" || eventType !== "mounted") {
-        this.changeValid(eventType);
-      }
+      this.changeValid(eventType);
     },
     changeValid(eventType) {
-      this.$emit("changeValid", {
+      this.checkValidationDataAndToggle({
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
         eventType,
         isShow: this.isVisibilityFromDependency,
+        parentName: this.parentName,
       });
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value:  this.localValue,
+        value: this.localValue,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.localValue ? "Да" : "Нет",
         type: "checkbox",
-      })
+      });
     },
   },
   watch: {

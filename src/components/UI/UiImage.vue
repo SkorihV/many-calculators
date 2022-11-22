@@ -14,7 +14,7 @@
           :prompt-text="localDataForDisplay.prompt"
         ></ui-prompt>
       </div>
-      <div class="calc__image-wrapper-image" :style="[width,  height]">
+      <div class="calc__image-wrapper-image" :style="[width, height]">
         <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label" />
       </div>
     </div>
@@ -110,7 +110,9 @@ export default {
           try {
             if (eval(formula)) {
               dataForOut = {
-                label: imageItem.label?.toString().length ? imageItem.label : this.label,
+                label: imageItem.label?.toString().length
+                  ? imageItem.label
+                  : this.label,
                 url: this.imageDir + imageItem.image.filename,
                 prompt: imageItem?.prompt?.length
                   ? imageItem.prompt

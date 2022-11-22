@@ -17,7 +17,12 @@
   <teleport to="#prompt-text-element">
     <transition name="prompt">
       <div class="prompt-wrapper" v-if="isShow" :style="topPopupWrapper">
-        <div @mouseenter="show" @mouseleave="hidden" class="prompt-content" v-html="promptText"></div>
+        <div
+          @mouseenter="show"
+          @mouseleave="hidden"
+          class="prompt-content"
+          v-html="promptText"
+        ></div>
       </div>
     </transition>
   </teleport>
@@ -43,18 +48,21 @@ export default {
     show() {
       clearTimeout(this.timerName);
       this.getTopForCalcWrapper();
-      this.getTopBtnPrompt()
+      this.getTopBtnPrompt();
       this.isShow = true;
     },
     hidden() {
       this.timerName = setTimeout(() => (this.isShow = false), 500);
     },
     getTopForCalcWrapper() {
-      this.topCalcWrapper = document.querySelector('#app-base-constructor-calculator').getBoundingClientRect().top + window.pageYOffset;
+      this.topCalcWrapper =
+        document
+          .querySelector("#app-base-constructor-calculator")
+          .getBoundingClientRect().top + window.pageYOffset;
     },
     getTopBtnPrompt() {
       this.topBtnPrompt = this.$refs.promptBtn.getBoundingClientRect().top;
-    }
+    },
   },
   computed: {
     hiddenPromptWrapper() {
@@ -63,9 +71,14 @@ export default {
     },
     topPopupWrapper() {
       const btn = this.$refs.promptBtn.getBoundingClientRect();
-      const btnCoordTop =  this.topBtnPrompt - this.topCalcWrapper + window.pageYOffset + 5 + btn.height;
-      return `top: ${btnCoordTop}px;`
-    }
+      const btnCoordTop =
+        this.topBtnPrompt -
+        this.topCalcWrapper +
+        window.pageYOffset +
+        5 +
+        btn.height;
+      return `top: ${btnCoordTop}px;`;
+    },
   },
 };
 </script>

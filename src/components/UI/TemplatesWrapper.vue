@@ -30,8 +30,8 @@
     :form-output-method="template?.formOutputMethod"
     :exclude-from-calculations="template?.excludeFromCalculations"
     :parent-is-show="parentIsShow"
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -58,8 +58,8 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -85,8 +85,8 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -119,8 +119,8 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -145,8 +145,8 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   >
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
@@ -164,6 +164,7 @@
     :element-name="template?.json_id || 'UiImage' + inx"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :classes="template?.classes"
+    :parent-name="parentName"
     :parent-is-show="parentIsShow"
   ></ui-image>
   <ui-system
@@ -176,8 +177,8 @@
         ? template?.elementName
         : template?.json_id || 'UiSystem' + index
     "
+    :parent-name="parentName"
     @changedValue="changeValue"
-    @changeValid="changeValid"
   ></ui-system>
 </template>
 
@@ -193,7 +194,7 @@ import UiSystem from "@/components/UI/UiSystem";
 
 export default {
   name: "TemplatesWrapper",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   components: {
     UiRange,
     UiInput,
@@ -217,13 +218,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    parentName: {
+      type: String,
+      default: null,
+    },
   },
   methods: {
     changeValue(data) {
       this.$emit("changedValue", data);
-    },
-    changeValid(data) {
-      this.$emit("changeValid", data);
     },
   },
 };

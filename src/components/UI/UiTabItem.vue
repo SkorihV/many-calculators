@@ -9,19 +9,20 @@
       :parent-is-show="parentIsShow"
       :template="template"
       :index="itemName + key_in"
+      :parent-name="elementName"
       @changedValue="changeValue"
-      @changeValid="changeValid"
     />
   </div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiTabItem",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   props: {
     tabItem: {
       type: Object,
@@ -57,25 +58,14 @@ export default {
     changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data) {
-      if (data.isShow) {
-        this.visibilityList.add(data.name);
-      } else {
-        if (this.visibilityList.has(data.name)) {
-          this.visibilityList.delete(data.name);
-        }
-      }
-
-      let infoOnTab = {
-        index: this.tabItemId,
-        isShown: this.isShowTabsItem,
-      };
-      this.$emit("changeValid", { data, infoOnTab });
-    },
   },
   computed: {
+    ...mapGetters([
+      "isValidationShowOnParentName",
+      "getValidationListOnParentName",
+    ]),
     isShowItem() {
-      return this.tabItemId === this.shownIdTab && this.isShowTabsItem;
+      return this.tabItemId === this.shownIdTab;
     },
     isShowTabsItem() {
       return Boolean(this.visibilityList.size);

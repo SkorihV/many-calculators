@@ -31,7 +31,10 @@
             :prompt-text="currentOption.prompt"
           ></ui-prompt>
         </div>
-        <div class="calc__select-option-wrapper" v-if="isOpen && selectValuesAfterProcessingDependency.length > 1">
+        <div
+          class="calc__select-option-wrapper"
+          v-if="isOpen && selectValuesAfterProcessingDependency.length > 1"
+        >
           <div
             class="calc__select-option-item"
             @click="changeSelect(option, idx)"
@@ -80,7 +83,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "UiSelect",
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip, UiPrompt },
   mounted() {
@@ -183,7 +186,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['tryAddDependencyElement']),
+    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -226,18 +229,17 @@ export default {
         eventType,
       });
       this.tryPassDependency();
-      if (eventType !== "delete" || eventType !== "mounted") {
-        this.changeValid(eventType);
-      }
+      this.changeValid(eventType);
     },
     changeValid(eventType) {
-      this.$emit("changeValid", {
+      this.checkValidationDataAndToggle({
         error: this.isErrorEmpty,
         name: this.localElementName,
         type: "select",
         label: this.label,
         eventType,
         isShow: this.isVisibilityFromDependency,
+        parentName: this.parentName,
       });
     },
     tryPassDependency() {

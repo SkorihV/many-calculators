@@ -29,7 +29,6 @@
           :template="template"
           :index="elementName + '_' + 'left' + '_' + inx"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
       </div>
       <div
@@ -50,7 +49,6 @@
           :template="template"
           :index="elementName + '_' + 'right' + '_' + inx"
           @changedValue="changeValue"
-          @changeValid="changeValid"
         />
       </div>
     </div>
@@ -64,7 +62,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 export default {
   name: "UiBisection",
   components: { TemplatesWrapper },
-  emits: ["changedValue", "changeValid"],
+  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
     templateData: {
@@ -113,9 +111,7 @@ export default {
     changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data) {
-      this.$emit("changeValid", data);
-    },
+
     processingFormula(formula) {
       let result = this.processingFormulaSpecialsSymbols(formula);
       this.constructLocalListElementDependencyInFormula(result);

@@ -111,7 +111,7 @@ export default {
         "self",
         "true",
         "false",
-        "empty"
+        "empty",
       ],
       isShow: false,
       spec: Object.entries({
@@ -137,7 +137,7 @@ export default {
           })
         : false;
 
-      let currentFormulaTemplate = this.getFormulaTemplate(template)
+      let currentFormulaTemplate = this.getFormulaTemplate(template);
       if (currentFormulaTemplate.length) {
         this.usedNamesDependencyListData.push({
           label: template?.label
@@ -246,7 +246,8 @@ export default {
       formula = formula
         ?.split(
           /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
-        )?.map((item) => {
+        )
+        ?.map((item) => {
           //удаляем пробелы по краям
           let nextItem = item?.replace(/^\s*|\s*$/g, "");
           // если по краям есть кавычки, то удаляем пробелы между
@@ -342,7 +343,9 @@ export default {
           .split(" ")
           .filter(
             (item) =>
-              item.length && !this.exceptionVariablesFormula.includes(item) && isNaN(Number(item))
+              item.length &&
+              !this.exceptionVariablesFormula.includes(item) &&
+              isNaN(Number(item))
           );
 
         const lengthFormula = innerFormula.length;

@@ -29,8 +29,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 //$calc-color-text : var(--calc-color-text);
 //
 //$calc-color-btn : var(--calc-color-btn);
@@ -47,26 +45,22 @@ export default {
 //
 //$calc-color-more : var(--calc-color-more);
 
+$calc-color-text: #464657;
+$calc-color-btn: #464657;
+$calc-color-btn-text: #ffffff;
 
+$calc-color-btn-hover: #6f6fdc;
+$calc-color-btn-text-hover: white;
 
-	$calc-color-text : #464657;
-	$calc-color-btn : #464657;
-	$calc-color-btn-text : #ffffff;
+$calc-color-btn-checked: #ff7044;
+$calc-color-btn-checked-text: #464657;
 
-	$calc-color-btn-hover : #6f6fdc;
-	$calc-color-btn-text-hover : white;
+$calc-color-danger: red;
+$calc-color-danger-text: white;
 
-	$calc-color-btn-checked :  #ff7044;
-	$calc-color-btn-checked-text : #464657;
-
-	$calc-color-danger : red;
-	$calc-color-danger-text : white;
-
-	$calc-color-more : yellow;
-
+$calc-color-more: yellow;
 
 $border-radius: 4px;
-
 
 @mixin style-border {
   border: 1px solid $calc-color-btn;
@@ -179,9 +173,8 @@ $border-radius: 4px;
     width: 100%;
     @include style-flex-center;
     padding: 20px;
-    background-color: $calc-color-danger ;
+    background-color: $calc-color-danger;
     color: $calc-color-danger-text;
-
   }
   &__show-result-btn {
     @include style-button;
@@ -342,7 +335,7 @@ $border-radius: 4px;
           font-size: 10px;
           border-radius: $border-radius;
           &_selected {
-            background-color: $calc-color-btn ;
+            background-color: $calc-color-btn;
             color: $calc-color-btn-text;
           }
         }
@@ -357,7 +350,6 @@ $border-radius: 4px;
       }
 
       &-static {
-
         color: $calc-color-btn-text;
         padding: 4px 6px;
         @include style-button;
@@ -437,7 +429,6 @@ $border-radius: 4px;
         flex: 1 1 auto;
         gap: 5px;
 
-
         &:before {
           content: "";
           width: 7px;
@@ -510,7 +501,7 @@ $border-radius: 4px;
       align-items: stretch;
       position: relative;
       gap: 5px;
-      min-height:31px;
+      min-height: 31px;
       &.base {
         .calc__radio {
           &-indicator {
@@ -622,10 +613,9 @@ $border-radius: 4px;
             height: 8px;
             background-color: $calc-color-btn-checked;
           }
-          +.calc__radio-text {
+          + .calc__radio-text {
             color: $calc-color-btn-text;
           }
-
         }
         .calc__radio-text {
           color: $calc-color-btn-checked-text;
@@ -719,7 +709,7 @@ $border-radius: 4px;
         top: 50%;
         transform: translateY(-50%);
         border-width: 2px;
-        border-color:$calc-color-btn;
+        border-color: $calc-color-btn;
         @include style-flex-center;
         font-size: 13px;
         box-sizing: border-box;
@@ -743,7 +733,7 @@ $border-radius: 4px;
           border-right: none;
           background-color: $calc-color-btn;
           border-color: $calc-color-btn;
-          border-style:solid;
+          border-style: solid;
           box-shadow: 0 0 0 2px $calc-color-more inset;
           border-right-width: 2px;
           border-bottom-right-radius: 0;
@@ -820,13 +810,12 @@ $border-radius: 4px;
           &.switcher:after {
             border-color: $calc-color-btn-checked;
             background-color: inherit;
-            box-shadow:none;
+            box-shadow: none;
           }
           &.switcher-vertical:hover:before,
           &.switcher:hover:after {
             border-color: $calc-color-btn-hover;
           }
-
 
           &.switcher-vertical:after,
           &.switcher:before {
@@ -840,8 +829,6 @@ $border-radius: 4px;
             background-color: $calc-color-btn-hover;
             border-color: $calc-color-btn-hover;
           }
-
-
         }
         ~ .calc__checkbox-text.button {
           background-color: $calc-color-btn-checked;
@@ -949,7 +936,7 @@ $border-radius: 4px;
       &.tooltip-transition-enter-from {
         opacity: 0;
         transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
-        scale(0.1);
+          scale(0.1);
         &.isLeft,
         &.isRight {
           transform: perspective(1000px) rotateX(-360deg);
@@ -959,7 +946,7 @@ $border-radius: 4px;
       &.tooltip-transition-enter-to {
         opacity: 1;
         transform: perspective(1000px) translateX(-50%) rotateX(-360deg)
-        scale(1.1);
+          scale(1.1);
 
         &.isLeft,
         &.isRight {
@@ -980,7 +967,7 @@ $border-radius: 4px;
       transform: translateX(-50%) rotate(45deg);
       border-bottom: 1px solid $calc-color-danger;
       border-right: 1px solid $calc-color-danger;
-      display:block;
+      display: block;
     }
     &-text {
       display: flex;
@@ -1204,7 +1191,7 @@ $border-radius: 4px;
       border-radius: $border-radius;
       max-width: 450px;
       max-height: 500px;
-      box-shadow: 0 0 2px 2px $calc-color-danger ;
+      box-shadow: 0 0 2px 2px $calc-color-danger;
       min-height: 42px;
       min-width: 42px;
       overflow: auto;
