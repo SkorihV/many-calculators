@@ -115,7 +115,6 @@ export default {
       this.$emit("changedValue", data);
     },
     checkIsShowError(parentName, key) {
-
       const isError = this.isValidationErrorOnParentName(parentName);
       return key !== this.shownIdTab && isError && this.isCanShowAllTooltips;
     },
@@ -124,7 +123,6 @@ export default {
     ...mapGetters([
       "isCanShowAllTooltips",
       "isValidationShowOnParentName",
-      "getValidationListOnParentName",
       "isValidationErrorOnParentName",
     ]),
     showBlock() {

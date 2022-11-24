@@ -101,7 +101,7 @@ export default {
           imageItem.dependencyFormulaDisplay?.length &&
           imageItem?.image?.filename.length
         ) {
-          let formula = this.processingFormulaSpecialsSymbols(
+          let formula = this.getArrayElementsFromFormula(
             imageItem.dependencyFormulaDisplay
           );
           this.constructLocalListElementDependencyInFormula(formula);

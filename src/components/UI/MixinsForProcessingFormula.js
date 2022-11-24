@@ -1,6 +1,8 @@
 import { mapGetters } from "vuex";
+import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 export const MixinsForProcessingFormula = {
+  mixins: [MixinsUtilityServices],
   props: {
     /**
      * Формула на результатах вычисления которой будет строиться результат отображения элемента
@@ -17,12 +19,6 @@ export const MixinsForProcessingFormula = {
   mounted() {},
   data() {
     return {
-      spec: Object.entries({
-        "&gt;": ">",
-        "&lt;": "<",
-        "&amp;": "&",
-        "&quot;": '"',
-      }),
       /**
        * список переменных от которого зависит именно текущий элемент
        */
@@ -33,36 +29,11 @@ export const MixinsForProcessingFormula = {
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
+
     /**
-     *
+     * Собираем локальный список зависимостей из глобмального на основе формулы
      * @param formula
-     * @returns {*}
      */
-    processingFormulaSpecialsSymbols(formula) {
-      this.spec.forEach((specItem) => {
-        formula = formula?.replaceAll(specItem[0], specItem[1]);
-      });
-      //разбиваем формулу на массив отдельных данных
-      formula = formula
-        ?.split(
-          /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
-        )
-        .filter((item) => item?.trim()?.length);
-
-      formula = formula?.map((item) => {
-        //удаляем пробелы по краям
-        let nextItem = item?.replace(/^\s*|\s*$/g, "");
-        // если по краям есть кавычки, то удаляем пробелы между
-        // кавычками и текстом в середине, не трогая пробелы внутри текста
-        if (nextItem.match(/^('|").*('|")$/)) {
-          nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
-        }
-
-        return nextItem;
-      });
-      return formula;
-    },
-
     constructLocalListElementDependencyInFormula(formula) {
       formula.forEach((name) => {
         if (
@@ -111,7 +82,7 @@ export const MixinsForProcessingFormula = {
           if (!item.enabledFormula) {
             return resultReduce;
           }
-          let formula = this.processingFormulaSpecialsSymbols(
+          let formula = this.getArrayElementsFromFormula(
             item?.dependencyFormulaCost
           );
 
@@ -229,9 +200,10 @@ export const MixinsForProcessingFormula = {
         return false;
       }
 
-      let formula = this.processingFormulaSpecialsSymbols(
+      let formula = this.getArrayElementsFromFormula(
         this.dependencyFormulaDisplay
       );
+
       this.constructLocalListElementDependencyInFormula(formula);
       return this.processingVariablesOnFormula(formula);
     },

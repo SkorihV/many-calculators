@@ -60,15 +60,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      "isValidationShowOnParentName",
-      "getValidationListOnParentName",
-    ]),
+    ...mapGetters(["getValidationListOnParentName"]),
     isShowItem() {
       return this.tabItemId === this.shownIdTab;
-    },
-    isShowTabsItem() {
-      return Boolean(this.visibilityList.size);
     },
     itemName() {
       return this.tabName + "_" + this.elementName;

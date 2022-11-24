@@ -1249,6 +1249,35 @@ $border-radius: 4px;
     width: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+    margin-bottom: 5px;
+    &-wrapper {
+      position: relative;
+      padding: 30px 0 10px;
+      &::before {
+        position: absolute;
+        content: "";
+        bottom: 0;
+        width: 30%;
+        transform: translateX(-50%);
+        border: 1px solid $calc-color-btn;
+      }
+    }
+    &-duplicate,
+    &-delete {
+      position: absolute;
+      display: flex;
+      right: 0;
+      top: 0;
+      @include style-button;
+      padding: 5px;
+    }
+    &-duplicate {
+    }
+    &-delete {
+      color: $calc-color-danger-text;
+      background-color: $calc-color-danger;
+    }
   }
 }
 </style>

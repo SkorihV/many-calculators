@@ -214,7 +214,7 @@ export default {
     getNewListValuesBeforeCheckedDependency() {
       return this.mutationRadioValue.map((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
-          let formula = this.processingFormulaSpecialsSymbols(
+          let formula = this.getArrayElementsFromFormula(
             radio.dependencyFormulaItem
           );
           this.constructLocalListElementDependencyInFormula(formula);

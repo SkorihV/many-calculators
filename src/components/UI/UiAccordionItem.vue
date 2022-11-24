@@ -76,43 +76,6 @@ export default {
     changeValue(data) {
       this.$emit("changedValue", data);
     },
-    changeValid(data) {
-      if (this.checkAllowedErrors(data)) {
-        this.errorsElements.add(data.name);
-      } else {
-        if (this.errorsElements.has(data.name)) {
-          this.errorsElements.delete(data.name);
-        }
-      }
-      if (data.isShow) {
-        this.visibilityList.add(data.name);
-      } else {
-        if (this.visibilityList.has(data.name)) {
-          this.visibilityList.delete(data.name);
-        }
-      }
-
-      if (!this.parentIsShow) {
-        return false;
-      }
-
-      this.$emit("changeValid", data);
-    },
-
-    /**
-     * Проверяем можно ли собрать ошибки вложенных элементов
-     *
-     * @param data
-     * @returns {boolean}
-     */
-    checkAllowedErrors(data) {
-      return (
-        data.error &&
-        data.eventType !== "delete" &&
-        data.isShow &&
-        this.isCanShowAllTooltips
-      );
-    },
   },
   computed: {
     ...mapGetters(["isCanShowAllTooltips", "getValidationListOnParentName"]),

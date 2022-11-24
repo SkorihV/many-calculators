@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="calc__wrapper-group-data"
-    v-if="isVisibilityFromDependency && !systemField"
-  >
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
     <div
       class="calc__input-wrapper"
       :class="[{ 'is-stretch': isStretch }, classes]"
@@ -221,17 +218,6 @@ export default {
       type: String,
       default: "no",
     },
-    /**
-     * Системное поле используемое для расчетов
-     * без возможности редактировать содержимое со стороны сайта
-     */
-    systemField: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
   },
   mounted() {
     if (!this.valueIsNaN && this.localMin > this.inputValue) {
@@ -331,17 +317,12 @@ export default {
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
         isShow: this.isVisibilityFromDependency,
-        excludeFromCalculations: this.systemField
-          ? true
-          : this.excludeFromCalculations,
+        excludeFromCalculations: this.excludeFromCalculations,
         unit: this.unit,
         eventType,
       });
       this.tryPassDependency();
-      if (
-        (eventType !== "delete" || eventType !== "mounted") &&
-        !this.systemField
-      ) {
+      if (eventType !== "delete" || eventType !== "mounted") {
         this.changeValid(eventType);
       }
     },

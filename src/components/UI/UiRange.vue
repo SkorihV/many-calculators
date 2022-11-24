@@ -276,6 +276,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
+      this.tryPassDependency();
     },
     tryPassDependency() {
       this.tryAddDependencyElement({

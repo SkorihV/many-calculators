@@ -113,7 +113,7 @@ export default {
     },
 
     processingFormula(formula) {
-      let result = this.processingFormulaSpecialsSymbols(formula);
+      let result = this.getArrayElementsFromFormula(formula);
       this.constructLocalListElementDependencyInFormula(result);
       result = this.processingVariablesOnFormula(result);
       try {

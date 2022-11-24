@@ -1,49 +1,40 @@
 <template>
-  <pre>
-  {{index}}
-
-  </pre>
-  <div class="calc__duplicator" v-if="isVisibilityFromDependency">
-    <template v-for="(template, inx) in mutationTemplatesAfterDuplicatopr" :key="inx">
-      <templates-wrapper
-        :parent-is-show="isVisibilityFromDependency"
-        :template="template"
-        :index="inx"
-        @changedValue="changeValue"
-      />
-    </template>
-    <button class="calc__duplicator-duplicate" @click="tryDuplicate">Дублировать</button>
-    <button class="calc__duplicator-delete">Удалить</button>
+  <!--    <div class="calc__duplicator" v-if="isVisibilityFromDependency"-->
+  <div class="calc__duplicator" v-if="true" :class="classes">
+    <ui-duplicator-wrapper
+      v-for="(duplicator, key) in localTemplates"
+      :key="duplicator?.index ? duplicator.index : 0"
+      :index="duplicator?.index ? duplicator.index : 0"
+      :duplicator-data="duplicator"
+      :is-duplicate="duplicator?.index !== undefined"
+      :formula="duplicateTemplate?.formula"
+      :parent-name="duplicator.name"
+      :parent-is-show="true"
+      :origin-variables="originVariablesInDuplicator"
+      @duplicate="duplicate"
+      @deleteDuplicator="deleteDuplicator"
+      @changedValue="changeValue"
+    >
+    </ui-duplicator-wrapper>
   </div>
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import UiDuplicatorWrapper from "@/components/UI/UiDuplicatorWrapper";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 export default {
   name: "UiDuplicator",
-  components: { TemplatesWrapper },
-  emits: ["changedValue", "duplicate", "deleteDuplicate"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  components: { UiDuplicatorWrapper },
+  emits: ["changedValue"],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinsUtilityServices,
+  ],
   props: {
-    calculatorTemplates: {
-      type: Object,
-      default: null,
-    },
-    index: {
-      type: [Number, String],
-      default: null,
-    },
-    formula: {
-      type: String,
-      default: null,
-    },
-    isDuplicate: {
-      type: Boolean,
-      default: null,
-    },
     /**
      * метод вывода данных в результирующую форму
      */
@@ -51,80 +42,62 @@ export default {
       type: String,
       default: "no",
     },
-    localTemplate: {
+    duplicateTemplate: {
       type: Object,
       default: () => {},
+    },
+  },
+  mounted() {
+    let mutationDuplicateTemplate = this.duplicateTemplate;
+    if (this.duplicateTemplate?.templates?.length) {
+      mutationDuplicateTemplate.templates =
+        this.duplicateTemplate.templates.map((item, key) => {
+          item.elementName = item?.elementName?.length
+            ? item?.elementName
+            : item?.json_id || "UiDuplicator" + key;
+          return item;
+        });
     }
+
+    this.localTemplates.push(mutationDuplicateTemplate);
   },
   data() {
     return {
       errorsElements: new Set(), // список элементов с ошибками валидации
       localResultsElements: {},
       reserveVariableForOther: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
+      counterDuplicate: 0,
+      localTemplates: [],
+      localSummaCosts: 0,
     };
   },
   methods: {
     changeValid() {
       return null;
     },
-    // changeValue(data) {
-    //   this.$emit("changedValue", data);
-    // },
-    // changeValid(data) {
-    //
-    //   if (data.error && data.eventType !== "mounted" && data.isShow) {
-    //     this.errorsElements.add(data.name);
-    //   }
-    //
-    //   if (!data.isShow || !data.error) {
-    //     this.deleteElementOnErrors(data.name);
-    //   }
-    //
-    //
-    //   this.$emit("changeValid", data);
-    // },
-    duplicate() {
-      this.$emit("duplicate", "duplicate");
-    },
-    deleteDuplicate() {
-      this.$emit("deleteDuplicate", "deleteDuplicate");
-    },
     changeValue(data) {
-      if (typeof data !== "object") {
-        return null;
-      }
-      let {
-        name,
-        type,
-        label,
-        cost,
-        value,
-        displayValue,
-        formOutputMethod,
-        eventType,
-        unit,
-        isShow,
-        excludeFromCalculations,
-      } = data;
-      // || !isShow
-      if (eventType === "delete") {
-        this.hiddenElementOnResults(name);
-        return false;
-      }
-
-
-      this.localResultsElements[name] = {
-        name,
-        type,
-        label,
-        formOutputMethod,
-        summ: cost,
-        value,
-        displayValue,
-        unit: unit ? unit : null,
-        isShow,
-        excludeFromCalculations,
-      };
+      this.localResultsElements[data.name] = data;
+      this.localSummaCosts = 0;
+      Object.values(this.localResultsElements).forEach((item) => {
+        if (item.cost !== null) {
+          this.localSummaCosts += parseFloat(item.cost);
+        }
+      });
+      console.log(this.localResultsElements);
+      this.$emit("changedValue", {
+        name: this.duplicateTemplate.elementName,
+        type: "duplicator",
+        label: this.duplicateTemplate.label,
+        cost: this.localSummaCosts,
+        value: null,
+        displayValue: null,
+        formOutputMethod: this.duplicateTemplate.formOutputMethod,
+        eventType: data.eventType,
+        unit: "",
+        isShow: this.isVisibilityFromDependency,
+        excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
+        insertedTemplates: this.localResultsElements,
+      });
     },
     calculateResult() {
       this.shownAllTooltips = true;
@@ -135,195 +108,43 @@ export default {
         this.localResultsElements[name].isShow = false;
       }
     },
+    duplicate(duplicateElement) {
+      this.localTemplates.push(duplicateElement);
+    },
+    deleteDuplicator(elementName) {
+      let index = this.localTemplates.findIndex(
+        (item) => item.elementName === elementName
+      );
+      this.localTemplates.splice(index, 1);
 
-    tryDuplicate() {
-      const returnData = this.localTemplate;
-
-
-    }
+      delete this.localResultsElements[elementName];
+      this.localSummaCosts = 0;
+      Object.values(this.localResultsElements).forEach((item) => {
+        if (item.cost !== null) {
+          this.localSummaCosts += parseFloat(item.cost);
+        }
+      });
+      this.$emit("changedValue", {
+        name: this.duplicateTemplate.elementName,
+        type: "duplicator",
+        label: this.duplicateTemplate.label,
+        cost: this.localSummaCosts,
+        value: null,
+        displayValue: null,
+        formOutputMethod: this.duplicateTemplate.formOutputMethod,
+        eventType: "deleteDuplicate",
+        unit: "",
+        isShow: this.isVisibilityFromDependency,
+        excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
+        insertedTemplates: this.localResultsElements,
+      });
+    },
   },
   computed: {
-
-    mutationTemplatesAfterDuplicatopr() {
-      return this.calculatorTemplates.map(item => {
-        const newName = this.elementName + "_" + item.elementName;
-        item.elementName = newName;
-        return item;
+    originVariablesInDuplicator() {
+      return this.duplicateTemplate?.templates?.map((item) => {
+        return item.elementName;
       });
-    },
-
-    /**
-     * Данные которые подходят для вывода или расчета
-     * @returns {{length}|unknown[]|*[]}
-     */
-    baseDataForCalculate() {
-      const dataList = Object.values(this.localResultsElements);
-      return dataList?.length ? dataList : [];
-    },
-
-    /**
-     * Разбиваем полученную формулу на массив с переменными и знаками.
-     * Избавляемся от пустых элементов.
-     * @returns {*[]|*}
-     */
-    variablesInFormula() {
-      if (this.formula !== null && this.formula?.length) {
-        return this.formula?.split(" ").filter((item) => item.length);
-      }
-      return [];
-    },
-    /**
-     * Список переменных не используемых в формуле
-     * @returns {[]}
-     */
-    freeVariablesOutsideFormula() {
-      return this.baseDataForCalculate
-        ?.filter((dataOnCalcComponent) => {
-          const isFormula = this.variablesInFormula.some(
-            (varOnFormula) => varOnFormula === dataOnCalcComponent.name
-          );
-          return !isFormula;
-        })
-        .filter((item) => {
-          return item;
-        });
-    },
-
-    /**
-     * сумма всех не используемых в формуле переменных
-     * @returns {*}
-     */
-    summaFreeVariables() {
-      return this.freeVariablesOutsideFormula.reduce((sum, item) => {
-        if (
-          item?.summ !== null &&
-          !item.excludeFromCalculations &&
-          item.isShow
-        ) {
-          return sum + parseFloat(item.summ);
-        }
-        return sum + 0;
-      }, 0);
-    },
-
-    /**
-     * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
-     * @returns {{summ: *, name: string}}
-     */
-    proxyDataIncludingFreeVariables() {
-      return new Proxy(
-        {
-          name: this.reserveVariableForOther,
-          summ: this.summaFreeVariables,
-          isShow: Boolean(this.summaFreeVariables),
-        },
-        {
-          get: (target, name) => {
-            return name in target ? target[name] : null;
-          },
-        }
-      );
-    },
-
-    /**
-     * Список переменных из формулы вместе с данными
-     * @returns {*}
-     */
-    dataListVariablesOnFormula() {
-      return this.variablesInFormula?.map((item) => {
-        if (item === this.reserveVariableForOther) {
-          return this.proxyDataIncludingFreeVariables;
-        } else {
-          const data = this.baseDataForCalculate.filter(
-            (itemInner) => itemInner.name === item
-          );
-          return data.length ? data[0] : item;
-        }
-      });
-    },
-
-    /**
-     * Собираем всю формулу целиком и рассчитываем через eval
-     * @returns {boolean|any}
-     */
-    combinedFormulaDataTogether() {
-      const resultTextForComputed = this.dataListVariablesOnFormula?.reduce(
-        (resultText, item) => {
-          if (typeof item?.summ === "number" && item?.isShow) {
-            return (resultText += item.summ);
-          }
-          if (typeof item?.summ === "number" && !item?.isShow) {
-            return (resultText += "0");
-          }
-          return (resultText += item);
-        },
-        ""
-      );
-      try {
-        return eval(resultTextForComputed);
-      } catch (e) {
-        return false;
-      }
-    },
-
-    /**
-     * Данные нужные только для вывода в форму
-     * @returns {*[]}
-     */
-    dataForOutputText() {
-      return this.baseDataForCalculate.filter(
-        (item) => item.formOutputMethod !== "no"
-      );
-    },
-    /**
-     * Текст со всеми полями которые должны отображаться в форме
-     * @returns {string}
-     */
-    resultTextDataForForm() {
-      let result = "";
-      this.dataForOutputText.forEach((item) => {
-        if (item.formOutputMethod && item.displayValue && item.isShow) {
-          result += "\n" + item.label;
-
-          if (
-            item.formOutputMethod === "value" ||
-            item.formOutputMethod === "valueSumm"
-          ) {
-            const unit = item.unit ? item.unit : "";
-            result += " - " + item.displayValue + " " + unit;
-          }
-          if (
-            item.summ !== null &&
-            (item.formOutputMethod === "summ" ||
-              item.formOutputMethod === "valueSumm")
-          ) {
-            let sum = item.summ.toString();
-            result += " - " + sum + " " + this.currency;
-          }
-          result += "\n";
-        }
-      });
-      return result;
-    },
-    /**
-     * Общая сумма расчета
-     * @returns {*|boolean}
-     */
-    finalSummaForOutput() {
-      if (!this.displayResultData) {
-        return null;
-      }
-
-      if (this.isUseFormula && this.formula?.length) {
-        return this.combinedFormulaDataTogether;
-      } else {
-        return this.baseDataForCalculate.reduce((sum, item) => {
-          if (item.summ !== null && !item.excludeFromCalculations) {
-            return sum + parseFloat(item.summ);
-          }
-          return sum + 0;
-        }, 0);
-      }
     },
   },
 };

@@ -44,14 +44,11 @@
               ? template?.elementName
               : template?.json_id || 'UiRange' + index
           "
-          :index="inx"
-          :calculator-templates="template.templates"
           :classes="template?.classes"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           :form-output-method="template?.formOutputMethod"
           :exclude-from-calculations="template?.excludeFromCalculations"
-          :formula="template?.formula"
-          :localTemplate="template"
+          :duplicate-template="template"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -76,9 +73,9 @@
         Рассчитать
       </div>
       <error-names-templates
-        v-if="initTemplateError"
+        v-if="devMode"
         :templates="calculatorTemplates"
-        :init-template="initTemplateError"
+        :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
       <pre
@@ -94,6 +91,9 @@
       {{ finalTextForOutput }}
     </teleport>
   </div>
+  <pre
+    >{{ getAllResultsElements }}
+  </pre>
 </template>
 
 <script>
@@ -104,9 +104,11 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
 import { mapActions, mapGetters } from "vuex";
+import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 export default {
   name: "TheBasicCalculatorConstructor",
+  mixins: [MixinsUtilityServices],
   components: {
     TemplatesWrapper,
     UiAccordion,
@@ -151,7 +153,7 @@ export default {
       this?.outOptions !== null ? this?.outOptions?.currency : "руб";
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
-    this.initTemplateError = this.outOptions?.showErrorTemplate;
+    this.tryToggleDevMode(Boolean(this.outOptions?.showErrorTemplate));
     this.displayResultData = this.outOptions?.displayResultData;
     this.showResultDataForBlock = this.outOptions.showResultDataForBlock;
     delete window?.calculatorTemplates;
@@ -166,18 +168,21 @@ export default {
       formula: null, // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       shownAllTooltips: false, // глобальная переменная дающая разрешение показывать ошибки валидации для всех шаблонов
-      reserveVariableForOther: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
       mistake: "no",
       currency: "руб",
       submitResult: null,
       initEnabledSendForm: false,
-      initTemplateError: false,
       displayResultData: false, // включить работу формул и вывод данных
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
     };
   },
   methods: {
-    ...mapActions(["showAllTooltipsOn", "showAllTooltipsOff"]),
+    ...mapActions([
+      "showAllTooltipsOn",
+      "tryAddResultElement",
+      "tryModifiedResultElement",
+      "tryToggleDevMode",
+    ]),
     changeValue(data) {
       if (typeof data !== "object") {
         return null;
@@ -196,25 +201,35 @@ export default {
         isShow,
         excludeFromCalculations,
       } = data;
-
       // || !isShow
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
         this.checkEnabledResultButton();
         return false;
       }
-      this.resultsElements[name] = {
+      this.tryAddResultElement({
         name,
-        type,
-        label,
-        formOutputMethod,
-        summ: cost,
-        value,
-        displayValue,
-        unit: unit ? unit : null,
-        isShow,
-        excludeFromCalculations,
-      };
+        data: {
+          name,
+          type,
+          label,
+          cost,
+          formOutputMethod,
+          value,
+          summ: cost,
+          displayValue,
+          unit: unit ? unit : null,
+          isShow,
+          excludeFromCalculations,
+        },
+      });
+      if (type === "duplicator") {
+        this.tryModifiedResultElement({
+          elementName: name,
+          modifiedFieldName: "insertedTemplates",
+          newData: data.insertedTemplates,
+        });
+      }
 
       if (
         eventType !== "delete" &&
@@ -259,20 +274,16 @@ export default {
       }
     },
     hiddenElementOnResults(name) {
-      if (name in this.resultsElements) {
-        this.resultsElements[name].isShow = false;
+      if (name in this.getAllResultsElements) {
+        this.tryModifiedResultElement({
+          elementName: name,
+          modifiedFieldName: "isShow",
+          newData: false,
+        });
       }
     },
   },
   watch: {
-    mistake() {
-      if (this.mistake === "useAutomatic") {
-        // this.showAllTooltipsOn();
-      }
-    },
-    initEnabledForm() {
-      this.checkEnabledResultButton();
-    },
     isCheckedGlobalValidation() {
       this.checkEnabledResultButton();
     },
@@ -282,14 +293,17 @@ export default {
       "isCanShowAllTooltips",
       "isCheckedGlobalValidation",
       "validationList",
+      "globalDependenciesList",
+      "getNameReserveVariable",
+      "getAllResultsElements",
+      "devMode",
     ]),
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
      */
     baseDataForCalculate() {
-      const dataList = Object.values(this.resultsElements);
-      return dataList?.length ? dataList : [];
+      return this.getBaseDataForCalculateInArray(this.getAllResultsElements);
     },
 
     /**
@@ -299,7 +313,7 @@ export default {
      */
     variablesInFormula() {
       if (this.formula !== null && this.formula?.length) {
-        return this.formula?.split(" ").filter((item) => item.length);
+        return this.getArrayElementsFromFormula(this.formula);
       }
       return [];
     },
@@ -308,16 +322,10 @@ export default {
      * @returns {[]}
      */
     freeVariablesOutsideFormula() {
-      return this.baseDataForCalculate
-        ?.filter((dataOnCalcComponent) => {
-          const isFormula = this.variablesInFormula.some(
-            (varOnFormula) => varOnFormula === dataOnCalcComponent.name
-          );
-          return !isFormula;
-        })
-        .filter((item) => {
-          return item;
-        });
+      return this.getListVariablesMissedInFormula(
+        this.baseDataForCalculate,
+        this.variablesInFormula
+      );
     },
 
     /**
@@ -325,45 +333,18 @@ export default {
      * @returns {*}
      */
     summaFreeVariables() {
-      return this.freeVariablesOutsideFormula.reduce((sum, item) => {
-        if (
-          item?.summ !== null &&
-          !item.excludeFromCalculations &&
-          item.isShow
-        ) {
-          return sum + parseFloat(item.summ);
-        }
-        return sum + 0;
-      }, 0);
-    },
-
-    /**
-     * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
-     * @returns {{summ: *, name: string}}
-     */
-    proxyDataIncludingFreeVariables() {
-      return new Proxy(
-        {
-          name: this.reserveVariableForOther,
-          summ: this.summaFreeVariables,
-          isShow: Boolean(this.summaFreeVariables),
-        },
-        {
-          get: (target, name) => {
-            return name in target ? target[name] : null;
-          },
-        }
+      return this.getSummaFreeVariablesInFormula(
+        this.freeVariablesOutsideFormula
       );
     },
-
     /**
      * Список переменных из формулы вместе с данными
      * @returns {*}
      */
     dataListVariablesOnFormula() {
       return this.variablesInFormula?.map((item) => {
-        if (item === this.reserveVariableForOther) {
-          return this.proxyDataIncludingFreeVariables;
+        if (item === this.getNameReserveVariable) {
+          return this.getProxyFreeVariables(this.summaFreeVariables);
         } else {
           const data = this.baseDataForCalculate.filter(
             (itemInner) => itemInner.name === item
@@ -378,17 +359,8 @@ export default {
      * @returns {boolean|any}
      */
     combinedFormulaDataTogether() {
-      const resultTextForComputed = this.dataListVariablesOnFormula?.reduce(
-        (resultText, item) => {
-          if (typeof item?.summ === "number" && item?.isShow) {
-            return (resultText += item.summ);
-          }
-          if (typeof item?.summ === "number" && !item?.isShow) {
-            return (resultText += "0");
-          }
-          return (resultText += item);
-        },
-        ""
+      const resultTextForComputed = this.parsingDataInFormulaOnSumma(
+        this.dataListVariablesOnFormula
       );
       try {
         return eval(resultTextForComputed);
@@ -424,11 +396,11 @@ export default {
             result += " - " + item.displayValue + " " + unit;
           }
           if (
-            item.summ !== null &&
+            item.cost !== null &&
             (item.formOutputMethod === "summ" ||
               item.formOutputMethod === "valueSumm")
           ) {
-            let sum = item.summ.toString();
+            let sum = item.cost.toString();
             result += " - " + sum + " " + this.currency;
           }
           result += "\n";
@@ -449,8 +421,8 @@ export default {
         return this.combinedFormulaDataTogether;
       } else {
         return this.baseDataForCalculate.reduce((sum, item) => {
-          if (item.summ !== null && !item.excludeFromCalculations) {
-            return sum + parseFloat(item.summ);
+          if (item.cost !== null && !item.excludeFromCalculations) {
+            return sum + parseFloat(item.cost);
           }
           return sum + 0;
         }, 0);

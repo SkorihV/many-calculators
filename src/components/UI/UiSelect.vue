@@ -272,7 +272,7 @@ export default {
       if (newValue && !Object.keys(this.localDependencyList)?.length) {
         this.localSelectValues?.forEach((select) => {
           if (select?.dependencyFormulaItem?.length) {
-            let formula = this.processingFormulaSpecialsSymbols(
+            let formula = this.getArrayElementsFromFormula(
               select.dependencyFormulaItem
             );
             this.constructLocalListElementDependencyInFormula(formula);
@@ -384,7 +384,7 @@ export default {
           return selectItem;
         }
 
-        let formula = this.processingFormulaSpecialsSymbols(
+        let formula = this.getArrayElementsFromFormula(
           selectItem.dependencyFormulaItem
         );
 
