@@ -7,7 +7,6 @@
     :unit="template?.unit"
     :step="template?.step"
     :discrete-step="template?.discreteStep"
-    :system-field="template?.systemField"
     :label="template?.label"
     :input-placeholder="template?.placeholder"
     :controls="template?.controls"
@@ -31,6 +30,7 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -59,6 +59,7 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -86,6 +87,7 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -120,6 +122,7 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -146,6 +149,7 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -166,6 +170,7 @@
     :classes="template?.classes"
     :parent-name="parentName"
     :parent-is-show="parentIsShow"
+    :template-name="template.template"
   ></ui-image>
   <ui-system
     v-if="template.template === 'UiSystem'"
@@ -178,6 +183,7 @@
         : template?.json_id || 'UiSystem' + index
     "
     :parent-name="parentName"
+    :template-name="template.template"
     @changedValue="changeValue"
   ></ui-system>
 </template>

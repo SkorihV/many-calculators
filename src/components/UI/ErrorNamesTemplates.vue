@@ -112,6 +112,7 @@ export default {
         "true",
         "false",
         "empty",
+        "null"
       ],
       isShow: false,
       spec: Object.entries({
@@ -231,6 +232,15 @@ export default {
           ),
         ];
       }
+
+      if (template?.formula) {
+        formula = [
+          ...formula,
+          ...this.processingFormulaSpecialsSymbols(
+            template.formula
+          ),
+        ];
+      }
       return formula;
     },
     /**
@@ -245,7 +255,7 @@ export default {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /([A-Za-z0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /(\w*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         ?.map((item) => {
           //удаляем пробелы по краям

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false"></div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>

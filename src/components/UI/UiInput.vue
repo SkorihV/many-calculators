@@ -10,7 +10,7 @@
         :class="{ 'is-column': isColumn }"
       >
         <div v-if="label" class="calc__input-label-text">
-          {{ label }}<slot name="prompt" />
+          {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
           <div class="calc__input-buttons-minus" v-if="controls" @click="minus">
@@ -54,6 +54,7 @@
       </label>
     </div>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -312,7 +313,7 @@ export default {
         displayValue: this.resultValue,
         name: this.localElementName,
         type: "input",
-        cost: this.resultSumm,
+        cost: this.resultSumma,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -437,7 +438,7 @@ export default {
         ? this.elementName
         : Math.random().toString();
     },
-    resultSumm() {
+    resultSumma() {
       return this.onlyNumber && this.checkedValueOnVoid(this.localCost)
         ? this.localCost * this.localInputValue
         : null;

@@ -52,7 +52,7 @@ export const MixinsForProcessingFormula = {
      */
     processingVariablesOnFormula(formula) {
       return formula?.reduce((resultText, item) => {
-        // this.constructLocalListElementDependencyInFormula(formula)
+
         let elementDependency =
           item in this.localDependencyList
             ? this.localDependencyList[item]

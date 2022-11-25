@@ -207,6 +207,7 @@ $border-radius: 4px;
       width: 100%;
       justify-content: space-between;
       align-items: flex-start;
+      font-weight: 600;
       &.is-column {
         flex-direction: column;
       }
@@ -395,6 +396,7 @@ $border-radius: 4px;
     &-label {
       @include style-flex-start;
       flex: 1 1 100%;
+      font-weight: 600;
     }
 
     &-change {
@@ -1196,6 +1198,7 @@ $border-radius: 4px;
       min-width: 42px;
       overflow: auto;
       box-sizing: border-box;
+      z-index: 10000;
       &.isShow {
         display: flex;
       }
@@ -1263,6 +1266,10 @@ $border-radius: 4px;
         border: 1px solid $calc-color-btn;
       }
     }
+    &-label {
+      color: $calc-color-text;
+      font-weight: 600;
+    }
     &-duplicate,
     &-delete {
       position: absolute;
@@ -1278,6 +1285,22 @@ $border-radius: 4px;
       color: $calc-color-danger-text;
       background-color: $calc-color-danger;
     }
+  }
+  .dev-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    border: 2px dotted gray;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .empty-block {
+    color: $calc-color-danger;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 0 0 3px white;
   }
 }
 </style>

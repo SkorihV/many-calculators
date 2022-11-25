@@ -91,9 +91,7 @@
       {{ finalTextForOutput }}
     </teleport>
   </div>
-  <pre
-    >{{ getAllResultsElements }}
-  </pre>
+  <div class="dev-mode" v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -282,6 +280,30 @@ export default {
         });
       }
     },
+    parseResultValueObjectItem(item) {
+      let result = '';
+      if (item.formOutputMethod && item.displayValue !== null && item.isShow) {
+        result += "\n" + item.label;
+
+        if (
+          item.formOutputMethod === "value" ||
+          item.formOutputMethod === "valueSumm"
+        ) {
+          const unit = item.unit ? item.unit : "";
+          result += " - " + item.displayValue + " " + unit;
+        }
+        if (
+          item.cost !== null &&
+          (item.formOutputMethod === "summ" ||
+            item.formOutputMethod === "valueSumm")
+        ) {
+          let sum = item.cost.toString();
+          result += " - " + sum + " " + this.currency;
+        }
+        result += "\n";
+      }
+      return result;
+    },
   },
   watch: {
     isCheckedGlobalValidation() {
@@ -355,15 +377,22 @@ export default {
     },
 
     /**
-     * Собираем всю формулу целиком и рассчитываем через eval
+     * Отдает формулу с подставленными значениями
+     * @returns {*}
+     */
+    resultTextForComputed() {
+      return this.parsingDataInFormulaOnSumma(
+        this.dataListVariablesOnFormula
+      );
+    },
+
+    /**
+     *  рассчитываем формулу  через eval
      * @returns {boolean|any}
      */
     combinedFormulaDataTogether() {
-      const resultTextForComputed = this.parsingDataInFormulaOnSumma(
-        this.dataListVariablesOnFormula
-      );
       try {
-        return eval(resultTextForComputed);
+        return eval(this.resultTextForComputed);
       } catch (e) {
         return false;
       }
@@ -385,29 +414,24 @@ export default {
     resultTextDataForForm() {
       let result = "";
       this.dataForOutputText.forEach((item) => {
-        if (item.formOutputMethod && item.displayValue && item.isShow) {
-          result += "\n" + item.label;
+        if (item.type === 'duplicator') {
+          console.log(item);
+          if (Object.keys(item?.insertedTemplates)) {
+            Object.values(item?.insertedTemplates).forEach(temp => {
+              if (Object.keys(temp?.insertedTemplates)) {
+                result += this.parseResultValueObjectItem(temp);
+              }
+            })
+          }
+        } else {
+          result += this.parseResultValueObjectItem(item)
 
-          if (
-            item.formOutputMethod === "value" ||
-            item.formOutputMethod === "valueSumm"
-          ) {
-            const unit = item.unit ? item.unit : "";
-            result += " - " + item.displayValue + " " + unit;
-          }
-          if (
-            item.cost !== null &&
-            (item.formOutputMethod === "summ" ||
-              item.formOutputMethod === "valueSumm")
-          ) {
-            let sum = item.cost.toString();
-            result += " - " + sum + " " + this.currency;
-          }
-          result += "\n";
         }
+
       });
       return result;
     },
+
     /**
      * Общая сумма расчета
      * @returns {*|boolean}
@@ -488,81 +512,17 @@ export default {
         this.displayResultData
       );
     },
+    devModeData() {
+      const textFormula = this.variablesInFormula?.length ? `<div>Формула расчета: ${this.variablesInFormula.join(' ')}</div>` : ''
+      const textFormulaVariables =  this.formula?.length ? `<div>Формула с подставленными значениями: ${this.resultTextForComputed}</div>` : ''
+      return`
+      ${textFormula}
+      ${textFormulaVariables}
+      `
+    }
   },
 };
 </script>
 
 <style lang="scss">
-//normal orange - FF5D2B
-//normal dark- 464657
-//hover orange - FF7044
-//hover dark- 5A5A70
-//font - 00000
-//серый - CCCCCC
-// border - E6E6E6 -
-// background - F2F2F2
-
-$color-dark-normal: #464657;
-$color-orange-normal: #ff5d2b;
-
-$color-dark-hover: #5a5a70;
-$color-orange-hover: #ff7044;
-
-$color-danger: #ff4444;
-
-$color-black: #000000;
-$color-white: #ffffff;
-
-$color-gray-light: #f2f2f2;
-$color-gray-middle: #e6e6e6;
-$color-gray-dark: #cccccc;
-
-$border-radius: 4px;
-
-@mixin style-border {
-  border: 1px solid $color-gray-middle;
-  border-radius: $border-radius;
-}
-
-@mixin style-border-hover {
-  border: 1px solid $color-gray-dark;
-}
-
-@mixin style-button {
-  color: $color-white;
-  cursor: pointer;
-  background-color: $color-dark-normal;
-  @include style-flex-center;
-  @include style-border;
-}
-
-@mixin style-button-hover {
-  background-color: $color-dark-hover;
-  box-shadow: 0 0 3px 1px $color-gray-dark;
-}
-
-@mixin style-flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin style-flex-start {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-@mixin style-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.button {
-  @include style-button;
-}
-
-#app-base-constructor-calculator {
-}
 </style>

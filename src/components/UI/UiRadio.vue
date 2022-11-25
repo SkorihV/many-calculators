@@ -9,7 +9,7 @@
       ]"
     >
       <div class="calc__radio-title" v-if="label">
-        {{ label }} <slot name="prompt" />
+        {{ label }}<div class="empty-block" v-if="notEmpty">*</div> <slot name="prompt" />
       </div>
       <div class="calc__radio-wrapper-buttons">
         <template v-for="(radio, idx) in localRadioListInOut" :key="idx">
@@ -36,6 +36,7 @@
       />
     </div>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -172,8 +173,8 @@ export default {
     changeValue(eventType = "click") {
       const radio = this.changedRadio;
       this.$emit("changedValue", {
-        value: radio?.value,
-        displayValue: radio?.radioName,
+        value: radio?.value ? radio?.value : null,
+        displayValue: radio?.radioName ? radio?.radioName : null,
         index: this.currentIndexRadioButton,
         name: this.localElementName,
         type: "radio",
@@ -205,7 +206,7 @@ export default {
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.changedRadio?.value,
+        value: this.changedRadio?.value ? this.changedRadio?.value : null,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.changedRadio?.radioName,
         type: "radio",
@@ -283,7 +284,7 @@ export default {
      */
     localCost() {
       if (!this.changedRadio?.dependencyPrices?.length) {
-        return this.changedRadio?.cost;
+        return this.changedRadio?.cost ? this.changedRadio?.cost : null;
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
@@ -292,7 +293,7 @@ export default {
       if (newCost !== null) {
         return newCost;
       }
-      return this.changedRadio?.cost;
+      return this.changedRadio?.cost ? this.changedRadio?.cost : null;
     },
 
     mutationRadioValue() {

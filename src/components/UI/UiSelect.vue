@@ -1,12 +1,13 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+  <div class="calc__wrapper-group-data">
     <div
+      v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
       :class="[{ 'is-column': isColumn }, classes]"
       :style="[minWidthWrapper, maxWidthWrapper]"
     >
       <div class="calc__select-label" v-if="label">
-        {{ label }}<slot name="prompt"></slot>
+        {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt"></slot>
       </div>
       <div class="calc__select-change-wrapper">
         <div
@@ -71,6 +72,7 @@
         :local-can-be-shown="isVisibilityFromDependency"
       />
     </div>
+    <div v-if="devMode" v-html="devModeData"></div>
   </div>
 </template>
 
@@ -115,7 +117,7 @@ export default {
     } else {
       this.changeSelect(this.localSelectValues[0], null, "mounted");
     }
-    document.addEventListener("click", (e) => {
+    window.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
         this.close();
       }
@@ -174,13 +176,13 @@ export default {
   },
   data() {
     return {
-      isOpen: false,
+      isOpen: true,
       currentOption: this.mockOption,
       currentIndexOption: null,
       textErrorNotEmpty: "Обязательное поле.",
       mockOption: {
         selectName: "Не выбрано!",
-        value: "empty",
+        value: "null",
       },
       localSelectValues: [],
     };
@@ -351,7 +353,7 @@ export default {
      */
     localCost() {
       if (!this.currentOption?.dependencyPrices?.length) {
-        return this.currentOption?.cost;
+        return this.currentOption?.cost ? this.currentOption?.cost : null;
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
@@ -360,7 +362,7 @@ export default {
       if (newCost !== null) {
         return newCost;
       }
-      return this.currentOption?.cost;
+      return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
 
     mutationSelectValue() {
@@ -406,7 +408,6 @@ export default {
         this.constructLocalListElementDependencyInFormula(formula);
 
         formula = this.processingVariablesOnFormula(formula);
-
         try {
           selectItem.isShow = eval(formula);
           return selectItem;

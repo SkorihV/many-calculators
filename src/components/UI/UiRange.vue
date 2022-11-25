@@ -5,7 +5,7 @@
   >
     <div class="calc__range-wrapper" :class="classes">
       <div v-if="label" class="calc__range-label">
-        {{ label }}<slot name="prompt"></slot>
+        {{ label }}<div class="empty-block" v-if="notEmpty">*</div> <slot name="prompt"></slot>
         <div
           class="calc__range-current-wrapper"
           v-if="showDynamicValue || showStaticValue || unit?.length"
@@ -14,14 +14,14 @@
             class="calc__range-current-static"
             v-if="showStaticValue || unit?.length"
           >
-            {{ localRangeValue }}
+            {{ resultValue }}
           </div>
           <input
             class="calc__range-current-dynamic"
             v-if="showDynamicValue"
             type="text"
             @input="changeDynamicValue"
-            :value="localRangeValue"
+            :value="resultValue"
           />
           <div class="calc__range-unit" v-if="unit">
             {{ unit }}
@@ -34,7 +34,7 @@
         :min="localMin"
         :max="localMax"
         :step="localStep"
-        :value="localRangeValue"
+        :value="resultValue"
         @input="tryChangeValue"
       />
       <div v-if="showSteps" class="calc__range-steps-wrapper">
@@ -48,7 +48,7 @@
             class="calc__range-steps-item-content"
             :class="{
               'calc__range-steps-item-content_selected':
-                step === localRangeValue,
+                step === resultValue,
             }"
           >
             {{ step }}
@@ -62,6 +62,7 @@
       />
     </div>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -193,7 +194,7 @@ export default {
     if (!this.isNeedChoice) {
       let timer = setInterval(() => {
         if (this.checkedValueOnVoid(this.rangeValue)) {
-          this.localRangeValue = parseFloat(this.rangeValue);
+          this.resultValue = parseFloat(this.rangeValue);
           this.changeValue("mounted");
           clearInterval(timer);
         }
@@ -207,7 +208,7 @@ export default {
   },
   data() {
     return {
-      localRangeValue: null,
+      resultValue: null,
       textErrorNotEmpty: "Обязательное поле.",
       updateValueTimer: null,
       canBeShownTooltip: false,
@@ -217,20 +218,20 @@ export default {
   methods: {
     ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     changeValueStep(step) {
-      this.localRangeValue = this.checkValidValueReturnNumber(step);
+      this.resultValue = this.checkValidValueReturnNumber(step);
       this.changeValue();
       this.shownTooltip();
     },
     tryChangeValue(e) {
       clearTimeout(this.timerNameForLocalValue);
-      this.localRangeValue = this.checkValidValueReturnNumber(e.target.value);
+      this.resultValue = this.checkValidValueReturnNumber(e.target.value);
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue();
         this.shownTooltip();
       }, 500);
     },
     changeDynamicValue(e) {
-      this.localRangeValue = this.checkValidValueReturnNumber(e.target.value);
+      this.resultValue = this.checkValidValueReturnNumber(e.target.value);
       this.changeValue();
       this.shownTooltip();
     },
@@ -247,15 +248,15 @@ export default {
       return value;
     },
     changeValue(eventType = "input") {
-      this.localRangeValue = this.checkValidValueReturnNumber(
-        this.localRangeValue
+      this.resultValue = this.checkValidValueReturnNumber(
+        this.resultValue
       );
       this.$emit("changedValue", {
-        value: this.localRangeValue,
-        displayValue: this.localRangeValue,
+        value: this.resultValue,
+        displayValue: this.resultValue,
         name: this.localElementName,
         type: "range",
-        cost: this.resultSum,
+        cost: this.resultSumma,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -281,9 +282,9 @@ export default {
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.localRangeValue,
+        value: this.resultValue,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.localRangeValue,
+        displayValue: this.resultValue,
         type: "range",
       });
     },
@@ -301,7 +302,7 @@ export default {
     rangeValue(newValue) {
       clearTimeout(this.updateValueTimer);
       this.updateValueTimer = setTimeout(() => {
-        this.localRangeValue = parseFloat(newValue);
+        this.resultValue = parseFloat(newValue);
       }, 1500);
     },
   },
@@ -329,9 +330,9 @@ export default {
         ? this.elementName
         : Math.random().toString();
     },
-    resultSum() {
+    resultSumma() {
       return this.checkedValueOnVoid(this.localCost)
-        ? this.localCost * Math.abs(this.localRangeValue)
+        ? this.localCost * Math.abs(this.resultValue)
         : null;
     },
     returnSteps() {
@@ -350,7 +351,7 @@ export default {
       return steps;
     },
     isErrorEmpty() {
-      return this.notEmpty && this.localRangeValue === null;
+      return this.notEmpty && this.resultValue === null;
     },
     isHidePromptSteps() {
       return (

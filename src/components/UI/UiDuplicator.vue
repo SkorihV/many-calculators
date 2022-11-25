@@ -1,6 +1,6 @@
 <template>
   <!--    <div class="calc__duplicator" v-if="isVisibilityFromDependency"-->
-  <div class="calc__duplicator" v-if="true" :class="classes">
+  <div class="calc__duplicator" v-if="isVisibilityFromDependency" :class="classes">
     <ui-duplicator-wrapper
       v-for="(duplicator, key) in localTemplates"
       :key="duplicator?.index ? duplicator.index : 0"
@@ -17,6 +17,7 @@
     >
     </ui-duplicator-wrapper>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -24,6 +25,7 @@ import UiDuplicatorWrapper from "@/components/UI/UiDuplicatorWrapper";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiDuplicator",
@@ -60,6 +62,7 @@ export default {
     }
 
     this.localTemplates.push(mutationDuplicateTemplate);
+    this.changeValue({eventType: "mounted"})
   },
   data() {
     return {
@@ -68,7 +71,7 @@ export default {
       reserveVariableForOther: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
       counterDuplicate: 0,
       localTemplates: [],
-      localSummaCosts: 0,
+      localCost: 0,
     };
   },
   methods: {
@@ -76,21 +79,29 @@ export default {
       return null;
     },
     changeValue(data) {
-      this.localResultsElements[data.name] = data;
-      this.localSummaCosts = 0;
+
+      if (data === "dependency") {
+        data = {eventType: "dependency"}
+      }
+      if ( typeof data !== "object" ) {
+        return false;
+      }
+      if (data?.name) {
+        this.localResultsElements[data.name] = data;
+      }
+      this.localCost = 0;
       Object.values(this.localResultsElements).forEach((item) => {
         if (item.cost !== null) {
-          this.localSummaCosts += parseFloat(item.cost);
+          this.localCost += parseFloat(item.cost);
         }
       });
-      console.log(this.localResultsElements);
       this.$emit("changedValue", {
         name: this.duplicateTemplate.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
-        cost: this.localSummaCosts,
+        cost: this.localCost,
         value: null,
-        displayValue: null,
+        displayValue: this.localCost,
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
         eventType: data.eventType,
         unit: "",
@@ -118,17 +129,17 @@ export default {
       this.localTemplates.splice(index, 1);
 
       delete this.localResultsElements[elementName];
-      this.localSummaCosts = 0;
+      this.localCost = 0;
       Object.values(this.localResultsElements).forEach((item) => {
         if (item.cost !== null) {
-          this.localSummaCosts += parseFloat(item.cost);
+          this.localCost += parseFloat(item.cost);
         }
       });
       this.$emit("changedValue", {
         name: this.duplicateTemplate.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
-        cost: this.localSummaCosts,
+        cost: this.localCost,
         value: null,
         displayValue: null,
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
@@ -141,6 +152,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode"]),
     originVariablesInDuplicator() {
       return this.duplicateTemplate?.templates?.map((item) => {
         return item.elementName;

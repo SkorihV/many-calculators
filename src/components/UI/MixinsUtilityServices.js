@@ -29,7 +29,6 @@ export const MixinsUtilityServices = {
      * @returns {*}
      */
     getArrayOnFormulaElements(formula) {
-      console.log(formula);
       let formulaInOut = formula
         ?.split(
           // /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
@@ -48,7 +47,6 @@ export const MixinsUtilityServices = {
 
         return nextItem;
       });
-      console.log(formulaInOut);
       return formulaInOut;
     },
     /**

@@ -19,11 +19,13 @@
       </div>
     </div>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import UiPrompt from "@/components/UI/UiPrompt";
+import {mapGetters} from "vuex";
 
 export default {
   name: "UiImage",
@@ -78,6 +80,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode"]),
     imageDir() {
       return window?.imageDir ? window.imageDir : "";
     },

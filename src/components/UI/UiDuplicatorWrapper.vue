@@ -3,7 +3,7 @@
     class="calc__duplicator-wrapper"
     v-if="mutationsInputData?.templates.length"
   >
-    <div class="calc__duplicator-name">{{ mutationsInputData.label }}</div>
+    <div class="calc__duplicator-label">{{ mutationsInputData.label }}</div>
     <template
       v-for="(template, inx) in mutationsInputData.templates"
       :key="index + '_' + inx"
@@ -31,10 +31,7 @@
       X
     </button>
   </div>
-  <pre
-    >{{ localCost }}
-    {{ compileFormulaWitchData }}
-  </pre>
+  <div class="dev-block" v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -101,7 +98,7 @@ export default {
         label: this.mutationsInputData.label,
         cost: this.localCost,
         value: null,
-        displayValue: null,
+        displayValue: this.localCost,
         formOutputMethod: this.mutationsInputData.formOutputMethod,
         eventType: data.eventType,
         unit: "",
@@ -165,6 +162,7 @@ export default {
       "getAllResultsElements",
       "getNameReserveVariable",
       "getResultElementOnName",
+      "devMode"
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -338,6 +336,18 @@ export default {
         return null;
       }
     },
+    devModeData() {
+      const textLabel = `<div>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`
+      const textFormula = `<div>Базовая формула: ${this.formula?.length ? this.getArrayElementsFromFormula(this.formula).join(' '): 'Нет'}</div>`
+      const textFormulaOnData = `<div>Формула с данными: ${this.compileFormulaWitchData?.length ? this.compileFormulaWitchData : 'Нет'}</div>`
+
+      return `
+      <hr/>
+      ${textLabel}
+      ${textFormula}
+      ${textFormulaOnData}
+      `;
+    }
   },
 };
 </script>

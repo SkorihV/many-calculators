@@ -40,26 +40,26 @@
         "elementName": "checklvl2",
         "classes": "",
         "template": "UiCheckbox",
-        "dependencyFormulaDisplay": "Inputlvl1 === 50",
+        "dependencyFormulaDisplay": "Inputlvl1 === 50 || Inputlvl1 !== 'null'",
         "prompt": "",
         "dependencyPrices": [
           {
             "title": "100",
             "enabledFormula": 1,
             "cost": 100,
-            "dependencyFormulaCost": "Inputlvl &gt; 99"
+            "dependencyFormulaCost": "Inputlvl1 &gt; 99"
           },
           {
             "title": "200",
             "enabledFormula": 1,
             "cost": 200,
-            "dependencyFormulaCost": "Inputlvl &gt; 199"
+            "dependencyFormulaCost": "Inputlvl1 &gt; 199"
           },
           {
             "title": "300",
             "enabledFormula": 1,
             "cost": 300,
-            "dependencyFormulaCost": "Inputlvl &gt; 299"
+            "dependencyFormulaCost": "Inputlvl1 &gt; 299"
           }
         ]
       },
@@ -76,11 +76,11 @@
         "step": "1",
         "isColumn": false,
         "notEmpty": false,
-        "onlyNumber": 1,
+        "onlyNumber": true,
         "isCurrency": false,
         "onlyInteger": false,
         "formOutputMethod": "valueSumm",
-        "elementName": "",
+        "elementName": "inputName1",
         "classes": "",
         "template": "UiInput",
         "dependencyFormulaDisplay": "",
@@ -136,6 +136,12 @@
             "enabledFormula": 1,
             "cost": 999,
             "dependencyFormulaCost": "checklvl2 === true"
+          },
+          {
+            "title": "1000",
+            "enabledFormula": 1,
+            "cost": 1,
+            "dependencyFormulaCost": "Inputlvl1 === inputName1"
           }
         ],
         "prompt": ""
@@ -282,7 +288,8 @@
         "values": [
           {
             "title": "Пункт дефолтный есть всегда",
-            "radioName": "Пункт дефолтный есть всегда  без цены"
+            "radioName": "Пункт дефолтный есть всегда без цены",
+            "cost": 1
           },
           {
             "title": "Пункт два",
@@ -324,7 +331,7 @@
       },
 
       {
-        "json_id": "64756733",
+        "json_id": "64753425236733",
         "title": "Зависимости - галочка для отображения инпута",
         "label": "Зависимости - галочка для отображения инпута",
         "labelSecond": "",
@@ -771,7 +778,7 @@
             "json_id": "219632306",
             "title": "Зависимости диапазон дупликатор",
             "label": "Диапазон",
-            "value": "0",
+            "value": "",
             "min": "0",
             "max": "100",
             "cost": "2",
@@ -779,8 +786,8 @@
             "step": "1",
             "showSteps": false,
             "stepPrompt": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
+            "isNeedChoice": true,
+            "notEmpty": true,
             "showStaticValue": 1,
             "showDynamicValue": 1,
             "formOutputMethod": "no",
@@ -821,8 +828,8 @@
         "formOutputMethod": "summ",
         "excludeFromCalculations": false,
         "elementName": "duplicatorName",
-        "formula": "(RangeFOrDuplicator * checkboxForDuplicator + radioForDuplicate) + 25.5 + _otherSumma_",
-        "dependencyFormulaDisplay": "radio1 === 0",
+        "formula": "(RangeFOrDuplicator * checkboxForDuplicator345 + radioForDuplicate) + _otherSumma_",
+        "dependencyFormulaDisplay": "radio1 === 1",
         "classes": "",
         "template": "UiDuplicator",
         "prompt": "Текст подсказки для дупликатора!"
@@ -2380,7 +2387,7 @@
   },
 
   "calculator-options": {
-    "formula": "_otherSumma_ + system1",
+    "formula": "_otherSumma_ + system1 * duplicatorName",
     "useFormula": 1,
     "methodProcessingMistakes": "useButton",
     "currency": "руб",

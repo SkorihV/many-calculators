@@ -17,7 +17,7 @@
           class="calc__checkbox-text"
           :class="{ button: checkboxType === 'button' }"
         >
-          {{ label }}<slot name="prompt"></slot>
+          {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt"></slot>
         </div>
         <div class="calc__checkbox-element" :class="checkboxType"></div>
         <div v-if="labelSecond.length" class="calc__checkbox-text_second">
@@ -31,6 +31,7 @@
       />
     </div>
   </div>
+  <div v-if="devMode" v-html="devModeData"></div>
 </template>
 
 <script>
