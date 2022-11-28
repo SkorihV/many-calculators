@@ -146,6 +146,14 @@ $border-radius: 4px;
   }
 }
 
+.calc__form .tpl-anketa {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
 .calc {
   position: relative;
   * {
@@ -1191,7 +1199,7 @@ $border-radius: 4px;
       padding: 10px;
       color: $calc-color-btn-text;
       border-radius: $border-radius;
-      max-width: 450px;
+      max-width: 650px;
       max-height: 500px;
       box-shadow: 0 0 2px 2px $calc-color-danger;
       min-height: 42px;

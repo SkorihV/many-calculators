@@ -18,7 +18,7 @@
         "isCurrency": false,
         "onlyInteger": false,
         "formOutputMethod": "no",
-        "elementName": "Inputlvl1",
+        "elementName": "первыйИнпут",
         "classes": "",
         "template": "UiInput",
         "placeholder": "",
@@ -40,26 +40,26 @@
         "elementName": "checklvl2",
         "classes": "",
         "template": "UiCheckbox",
-        "dependencyFormulaDisplay": "Inputlvl1 === 50 || Inputlvl1 !== 'null'",
+        "dependencyFormulaDisplay": "первыйИнпут === 50 || первыйИнпут !== 'null'",
         "prompt": "",
         "dependencyPrices": [
           {
             "title": "100",
             "enabledFormula": 1,
             "cost": 100,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 99"
+            "dependencyFormulaCost": "первыйИнпут &gt; 99"
           },
           {
             "title": "200",
             "enabledFormula": 1,
             "cost": 200,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 199"
+            "dependencyFormulaCost": "первыйИнпут &gt; 199"
           },
           {
             "title": "300",
             "enabledFormula": 1,
             "cost": 300,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 299"
+            "dependencyFormulaCost": "первыйИнпут &gt; 299"
           }
         ]
       },
@@ -92,19 +92,19 @@
             "title": "200",
             "enabledFormula": 1,
             "cost": 200,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 10"
+            "dependencyFormulaCost": "первыйИнпут &gt; 10"
           },
           {
             "title": "300",
             "enabledFormula": 1,
             "cost": 300,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 20"
+            "dependencyFormulaCost": "первыйИнпут &gt; 20"
           },
           {
             "title": "400",
             "enabledFormula": 1,
             "cost": 400,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 30"
+            "dependencyFormulaCost": "первыйИнпут &gt; 30"
           }
         ],
         "prompt": ""
@@ -141,7 +141,7 @@
             "title": "1000",
             "enabledFormula": 1,
             "cost": 1,
-            "dependencyFormulaCost": "Inputlvl1 === inputName1"
+            "dependencyFormulaCost": "первыйИнпут === inputName1"
           }
         ],
         "prompt": ""
@@ -170,13 +170,13 @@
                 "title": "200",
                 "enabledFormula": 1,
                 "cost": 200,
-                "dependencyFormulaCost": "Inputlvl1 &gt; 99"
+                "dependencyFormulaCost": "первыйИнпут &gt; 99"
               },
               {
                 "title": "300",
                 "enabledFormula": 1,
                 "cost": 300,
-                "dependencyFormulaCost": "Inputlvl1 &gt; 199"
+                "dependencyFormulaCost": "первыйИнпут &gt; 199"
               }
             ]
           },
@@ -189,13 +189,13 @@
                 "title": "66",
                 "enabledFormula": 1,
                 "cost": 66,
-                "dependencyFormulaCost": "Inputlvl1 &gt; 99"
+                "dependencyFormulaCost": "первыйИнпут &gt; 99"
               },
               {
                 "title": "77",
                 "enabledFormula": 1,
                 "cost": 77,
-                "dependencyFormulaCost": "Inputlvl1 &gt; 199"
+                "dependencyFormulaCost": "первыйИнпут &gt; 199"
               }
             ]
           },
@@ -733,7 +733,7 @@
             "title": "Значение 2",
             "enabledFormula": 1,
             "cost": 2,
-            "dependencyFormulaCost": "Inputlvl1 &gt; 999"
+            "dependencyFormulaCost": "первыйИнпут &gt; 999"
           },
           {
             "title": "Значение 3",
@@ -761,7 +761,7 @@
             "formOutputMethod": "no",
             "excludeFromCalculations": false,
             "elementName": "checkboxForDuplicator",
-            "dependencyFormulaDisplay": "Inputlvl1 > 30 && check_1 === true",
+            "dependencyFormulaDisplay": "первыйИнпут > 30 && check_1 === true",
             "classes": "",
             "template": "UiCheckbox",
             "prompt": "Текст галочки",
@@ -770,7 +770,7 @@
                 "title": "15",
                 "enabledFormula": 1,
                 "cost": 15,
-                "dependencyFormulaCost": "Inputlvl1 > 40"
+                "dependencyFormulaCost": "первыйИнпут > 40"
               }
             ]
           },
@@ -828,7 +828,7 @@
         "formOutputMethod": "summ",
         "excludeFromCalculations": false,
         "elementName": "duplicatorName",
-        "formula": "(RangeFOrDuplicator * checkboxForDuplicator345 + radioForDuplicate) + _otherSumma_",
+        "formula": "(RangeFOrDuplicator * checkboxForDuplicator + radioForDuplicate) + _otherSumma_",
         "dependencyFormulaDisplay": "radio1 === 1",
         "classes": "",
         "template": "UiDuplicator",

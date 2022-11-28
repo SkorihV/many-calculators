@@ -9,8 +9,22 @@
       X
     </div>
     <template v-if="displayAlert">
+
+      <template v-if="listExistElementNames.length" >
+        <div class="calc__error-label">Список всех имен элементов Заголовок / Имя:</div>
+        <div
+          class="calc__error-item"
+          v-for="(data, key) in listExistElementNames"
+          :key="key"
+        >
+          <div class="calc__error-item-name">
+              {{ data.label ? data.label : "Без заголовка - " }} / {{data.elementName}}
+          </div>
+        </div>
+      </template>
+
       <template v-if="Object.keys(recurringTemplateNames).length">
-        <div class="calc__error-label">Обнаружены дубли имен:</div>
+        <div class="calc__error-label">Дубли имен:</div>
         <div
           class="calc__error-item"
           v-for="(error, key) in recurringTemplateNames"
@@ -19,19 +33,20 @@
           <div class="calc__error-item-name">
             Имя элемента '{{ key }}' обнаружено у следующих элементов:
           </div>
-          <div class="calc__error-item-label" v-for="label in error">
-            Заголовок: {{ label.length ? label : "Отсутствует" }}
+          <div class="calc__error-item-name" v-for="label in error">
+           {{ label.length ? label : "Отсутствует" }}
           </div>
         </div>
         <p class="calc__error-alert">Имена должны быть уникальными!</p>
       </template>
-      <template v-if="notExistUsedNamesInFormulaInOut.length">
+
+      <template v-if="notExistNamesInDisplayFormula.length">
         <div class="calc__error-label">
-          Обнаружены не существующие имена в зависимостях:
+         Не существующие имена в формулах на отображение Заголовок / Имя:
         </div>
         <div
           class="calc__error-item"
-          v-for="(error, key) in notExistUsedNamesInFormulaInOut"
+          v-for="(error, key) in notExistNamesInDisplayFormula"
           :key="key"
         >
           <div class="calc__error-item-name">
@@ -45,18 +60,26 @@
         </p>
       </template>
 
-      <template v-if="notExistNamesInMainFormula.length">
+      <template v-if="notExistNamesInComputedFormula.length">
         <div class="calc__error-label">
-          В результирующей формуле есть не существующие переменные.
+         Не существующие имена в формулах на расчет Заголовок / Имя:
         </div>
         <div
           class="calc__error-item"
-          v-for="(error, key) in notExistNamesInMainFormula"
+          v-for="(error, key) in notExistNamesInComputedFormula"
           :key="key"
         >
-          {{ error }}
+          <div class="calc__error-item-name">
+            Имя элемента: '{{
+              error?.label?.length ? error?.label : "Отсутствует"
+            }}' Значение: '{{ error.name }}' - не существует.
+          </div>
         </div>
+        <p class="calc__error-alert">
+          Измените существующие имена или добавьте недостающие.
+        </p>
       </template>
+
       <p class="calc__error-item">
         В случае наличия ошибок, калькулятор может вести расчет некорректно!
       </p>
@@ -86,14 +109,16 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.processingAllTemplatesForDependencyNames();
+      this.processingAllTemplatesOnData();
       this.checkInShowing();
     }, 2000);
   },
   data() {
     return {
-      existsNamesDependencyData: [], // Список всех имен элементов которые могут участвовать в расчетах
-      usedNamesDependencyListData: [], //список используемых имен для создания зависимостей
+      listExistElementNames: [], // Список всех имен элементов которые могут участвовать в расчетах
+      listDisplayFormula: [], //список всех формул отвечающих за отображение
+      listComputedFormula: [], //Список всех формул отвечающих за расчет
+      usedArrayNamesInElements: new Set(), //список используемых имен для создания зависимостей
       displayAlert: false,
       exceptionVariablesFormula: [
         "-",
@@ -105,8 +130,14 @@ export default {
         "!==",
         "!=",
         "=",
+        ">=",
+        "<=",
+        "<",
+        ">",
         "==",
         "===",
+        "||",
+        "&&",
         "_otherSumma_",
         "self",
         "true",
@@ -125,124 +156,91 @@ export default {
   },
   methods: {
     /**
-     * рекурсивная функция обходящая все шаблоны
-     * и собирающая имена переменных участвующих в формулах
+     * рекурсивно обходим все шаблоны и получаем нужный массив данных
+     * по указанному полю в указанную переменную
      * @param template
+     * @param desiredField
+     * @param accumulatorVariable
+     * @param nameFieldOnResult
      * @returns {boolean}
      */
-    recursivelyTraverseAllTemplateElements(template) {
-      this.isElementNameExist(template)
-        ? this.existsNamesDependencyData.push({
-            label: template.label,
-            elementName: template.elementName,
-          })
-        : false;
+    getNeedleDataInTemplates(template, desiredField, accumulatorVariable, nameFieldOnResult, label = null) {
+      if (template?.label) {
+        label = template.label
+      }
+      if(Array.isArray(desiredField) ) {
 
-      let currentFormulaTemplate = this.getFormulaTemplate(template);
-      if (currentFormulaTemplate.length) {
-        this.usedNamesDependencyListData.push({
-          label: template?.label
-            ? template.label
-              ? template?.title
-              : template?.title
-            : null,
-          dependencyNames: currentFormulaTemplate,
-        });
+        desiredField?.forEach(field => {
+          this.isExistField(template, field)
+            ? this[accumulatorVariable].push({
+              label: template?.label ? template?.label : label ? label : null,
+              [nameFieldOnResult]: template[field],
+            })
+            : false;
+        })
+      } else {
+        this.isExistField(template, desiredField)
+          ? this[accumulatorVariable].push({
+            label: template?.label ? template?.label : label,
+            [nameFieldOnResult]: template[desiredField],
+          })
+          : false;
       }
 
       for (let prop in template) {
-        if (
-          typeof template[prop] === "object" &&
-          !Array.isArray(template[prop]) &&
-          template[prop] !== null
-        ) {
-          this.recursivelyTraverseAllTemplateElements(template[prop]);
-        } else if (
-          Array.isArray(template[prop]) &&
-          template[prop].length &&
-          template[prop] !== null
-        ) {
+        if (this.isDataObject(template[prop])) {
+          this.getNeedleDataInTemplates(template[prop], desiredField, accumulatorVariable, nameFieldOnResult, label);
+        } else if ( this.isDataArray(template[prop]) ) {
           template[prop].forEach((item) =>
-            this.recursivelyTraverseAllTemplateElements(item)
+            this.getNeedleDataInTemplates(item, desiredField, accumulatorVariable, nameFieldOnResult, label)
           );
         }
       }
       return false;
     },
-    processingAllTemplatesForDependencyNames() {
+    /**
+     * поле существует
+     * @param template
+     * @param field
+     * @returns {boolean}
+     */
+    isExistField(template, field) {
+      return Boolean(template[field]?.length);
+    },
+    /**
+     * @param data
+     */
+    isDataObject(data) {
+      return typeof data === "object" && !Array.isArray(data) && data !== null && data !== "undefined";
+    },
+    isDataArray(data) {
+      return Array.isArray(data) && data?.length && data !== null && data !== "undefined";
+    },
+
+    processingAllTemplatesOnData() {
       if (!this.templates?.length) {
         return [];
       }
-      const length = this.templates.length;
-      for (let i = 0; i < length; i++) {
-        const currentTemplate = this.templates[i];
-        this.recursivelyTraverseAllTemplateElements(currentTemplate);
+      const listFieldsInFormula = ["dependencyFormulaDisplay", "dependencyFormulaItem", "dependencyFormulaDisplayLeftSide", "dependencyFormulaDisplayRightSide"];
+
+      this.getNeedleDataInTemplates(this.templates, "elementName", "listExistElementNames", "elementName" );
+      this.getNeedleDataInTemplates(this.templates,  listFieldsInFormula, "listDisplayFormula", "displayFormula" );
+      this.getNeedleDataInTemplates(this.templates,  ["formula", "dependencyFormulaCost"], "listComputedFormula", "formula" );
+      if (this.formula?.length) {
+        this.listComputedFormula.push({label: "Основная формула", formula: this.formula})
       }
+
+      this.listDisplayFormula = this.listDisplayFormula.map(item => {
+        item.displayFormula = this.processingFormulaSpecialsSymbols(item.displayFormula);
+        return item;
+      });
+      this.listComputedFormula = this.listComputedFormula.map(item => {
+        item.formula = this.processingFormulaSpecialsSymbols(item.formula);
+        return item;
+      })
+      this.listExistElementNames.forEach(item => this.usedArrayNamesInElements.add(item.elementName))
     },
 
-    isElementNameExist(template) {
-      return Boolean(template?.elementName?.length);
-    },
-
-    getFormulaTemplate(template) {
-      let formula = [];
-      if (
-        "dependencyFormulaDisplay" in template &&
-        template.dependencyFormulaDisplay?.length
-      ) {
-        formula = this.processingFormulaSpecialsSymbols(
-          template.dependencyFormulaDisplay
-        );
-      } else if (
-        "dependencyFormulaItem" in template &&
-        template.dependencyFormulaItem?.length
-      ) {
-        formula = this.processingFormulaSpecialsSymbols(
-          template.dependencyFormulaItem
-        );
-      } else if (
-        "dependencyFormulaCost" in template &&
-        template.dependencyFormulaCost?.length
-      ) {
-        formula = this.processingFormulaSpecialsSymbols(
-          template.dependencyFormulaCost
-        );
-      }
-
-      if (
-        "dependencyFormulaDisplayLeftSide" in template &&
-        template.dependencyFormulaDisplayLeftSide?.length
-      ) {
-        formula = [
-          ...formula,
-          ...this.processingFormulaSpecialsSymbols(
-            template.dependencyFormulaDisplayLeftSide
-          ),
-        ];
-      }
-
-      if (
-        "dependencyFormulaDisplayRightSide" in template &&
-        template.dependencyFormulaDisplayRightSide?.length
-      ) {
-        formula = [
-          ...formula,
-          ...this.processingFormulaSpecialsSymbols(
-            template.dependencyFormulaDisplayRightSide
-          ),
-        ];
-      }
-
-      if (template?.formula) {
-        formula = [
-          ...formula,
-          ...this.processingFormulaSpecialsSymbols(
-            template.formula
-          ),
-        ];
-      }
-      return formula;
-    },
     /**
      *
      * @param formula
@@ -255,7 +253,7 @@ export default {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /(\w*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         ?.map((item) => {
           //удаляем пробелы по краям
@@ -264,7 +262,6 @@ export default {
           // кавычками и текстом в середине, не трогая пробелы внутри текста
           if (item?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
             item = "";
-            // nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
           }
           return item;
         })
@@ -272,10 +269,6 @@ export default {
           (item) =>
             item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
         );
-      // formula = formula.filter((item) => {
-      //    return item && item?.length && isNaN(Number(item))
-      //   });
-
       return formula;
     },
 
@@ -285,38 +278,50 @@ export default {
     checkInShowing() {
       this.isShow = Boolean(
         (Object.keys(this.recurringTemplateNames)?.length ||
-          this.notExistUsedNamesInFormulaInOut?.length ||
-          this.notExistNamesInMainFormula?.length) &&
+          this.notExistNamesInComputedFormula?.length ||
+          this.notExistNamesInDisplayFormula?.length ||
+          this.usedArrayNamesInElements.size) &&
           this.initTemplate
       );
     },
   },
   computed: {
-    existNames() {
-      return this.existsNamesDependencyData.map((item) => {
-        return item.elementName;
-      });
-    },
-
     /**
-     * Не существующие переменные указанные в формулах зависимостей
+     * не существующие имена в формулах отвечающих за отображение элементов
      * @returns {*[]}
      */
-    notExistUsedNamesInFormulaInOut() {
+    notExistNamesInDisplayFormula () {
       let usedNamesDependencyListOut = [];
-      this.usedNamesDependencyListData.filter((item) => {
-        item.dependencyNames.map((name) => {
-          if (
-            !this.existNames.includes(name) &&
-            !this.exceptionVariablesFormula.includes(name)
-          ) {
+      this.listDisplayFormula.forEach(item => {
+        item.displayFormula.forEach(name => {
+          if(!this.usedArrayNamesInElements.has(name) && !this.exceptionVariablesFormula.includes(name)) {
+            console.log(this.usedArrayNamesInElements);
             usedNamesDependencyListOut.push({
               label: item.label,
               name: name,
             });
           }
-        });
-      });
+        })
+      })
+      return usedNamesDependencyListOut;
+    },
+
+    /**
+     * не существующие имена в формулах на расчет
+     * @returns {*[]}
+     */
+    notExistNamesInComputedFormula () {
+      let usedNamesDependencyListOut = [];
+      this.listComputedFormula.forEach(item => {
+        item.formula.forEach(name => {
+          if(!this.usedArrayNamesInElements.has(name) && !this.exceptionVariablesFormula.includes(name)) {
+            usedNamesDependencyListOut.push({
+              label: item.label,
+              name: name,
+            });
+          }
+        })
+      })
       return usedNamesDependencyListOut;
     },
 
@@ -327,7 +332,7 @@ export default {
     recurringTemplateNames() {
       let recurring = {};
       let resultRecurring = {};
-      this.existsNamesDependencyData.forEach((item) => {
+      this.listExistElementNames.forEach((item) => {
         if (item.elementName in recurring) {
           recurring[item.elementName].push(item.label);
         } else {
@@ -341,44 +346,6 @@ export default {
           : false;
       }
       return resultRecurring;
-    },
-    /**
-     * Не существующие переменные указанные в основной формуле
-     * @returns {*[]}
-     */
-    notExistNamesInMainFormula() {
-      if (this.formula?.length) {
-        let outputDataFormula = [];
-        let innerFormula = this.formula
-          .split(" ")
-          .filter(
-            (item) =>
-              item.length &&
-              !this.exceptionVariablesFormula.includes(item) &&
-              isNaN(Number(item))
-          );
-
-        const lengthFormula = innerFormula.length;
-
-        for (let i = 0; i < lengthFormula; i++) {
-          const length = this.existsNamesDependencyData.length;
-          let isEmpty = true;
-          for (let j = 0; j < length; j++) {
-            if (
-              this.existsNamesDependencyData[j].elementName === innerFormula[i]
-            ) {
-              isEmpty = false;
-              break;
-            }
-          }
-          if (isEmpty) {
-            outputDataFormula.push(innerFormula[i]);
-          }
-        }
-
-        return outputDataFormula;
-      }
-      return [];
     },
   },
 };

@@ -1,6 +1,11 @@
 import { mapGetters } from "vuex";
 
 export const MixinsUtilityServices = {
+  data() {
+    return {
+
+    }
+  },
   methods: {
     /**
      * получить из формулы массив элементов
@@ -31,8 +36,7 @@ export const MixinsUtilityServices = {
     getArrayOnFormulaElements(formula) {
       let formulaInOut = formula
         ?.split(
-          // /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
-          /(\w*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
+          /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
         )
         .filter((item) => item?.trim()?.length);
 
