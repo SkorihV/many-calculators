@@ -24,6 +24,7 @@
         ? template?.elementName
         : template?.json_id || 'UiInput' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-prices="template?.dependencyPrices"
     :form-output-method="template?.formOutputMethod"
@@ -52,6 +53,7 @@
         ? template?.elementName
         : template?.json_id || 'UiCheckbox' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :dependency-prices="template?.dependencyPrices"
@@ -81,6 +83,7 @@
         ? template?.elementName
         : template?.json_id || 'UiRadio' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :exclude-from-calculations="template?.excludeFromCalculations"
@@ -114,6 +117,7 @@
         ? template?.elementName
         : template?.json_id || 'UiRange' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-prices="template?.dependencyPrices"
     :not-empty="template?.notEmpty"
@@ -143,6 +147,7 @@
         ? template?.elementName
         : template?.json_id || 'UiSelect' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :form-output-method="template?.formOutputMethod"
     :exclude-from-calculations="template?.excludeFromCalculations"
@@ -168,9 +173,7 @@
     :element-name="template?.json_id || 'UiImage' + inx"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :classes="template?.classes"
-    :parent-name="parentName"
     :parent-is-show="parentIsShow"
-    :template-name="template.template"
   ></ui-image>
   <ui-system
     v-if="template.template === 'UiSystem'"
@@ -182,6 +185,7 @@
         ? template?.elementName
         : template?.json_id || 'UiSystem' + index
     "
+    :formula-processing-logic="template?.formulaProcessingLogic"
     :parent-name="parentName"
     :template-name="template.template"
     @changedValue="changeValue"

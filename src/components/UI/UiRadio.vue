@@ -9,7 +9,9 @@
       ]"
     >
       <div class="calc__radio-title" v-if="label">
-        {{ label }}<div class="empty-block" v-if="notEmpty">*</div> <slot name="prompt" />
+        {{ label }}
+        <div class="empty-block" v-if="notEmpty">*</div>
+        <slot name="prompt" />
       </div>
       <div class="calc__radio-wrapper-buttons">
         <template v-for="(radio, idx) in localRadioListInOut" :key="idx">
@@ -36,7 +38,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -44,7 +46,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiRadio",
@@ -188,6 +190,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         eventType,
         unit: this.unit,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -265,6 +268,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["showInsideElementStatus", "devMode"]),
     changedRadio() {
       return this.currentIndexRadioButton !== null
         ? this.radioValues[this.currentIndexRadioButton]

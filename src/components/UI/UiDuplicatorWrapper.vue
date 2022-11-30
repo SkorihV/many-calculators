@@ -3,9 +3,9 @@
     class="calc__duplicator-wrapper"
     v-if="mutationsInputData?.templates.length"
   >
-    <div class="calc__duplicator-label">{{ mutationsInputData.label }}</div>
+    <div class="calc__duplicator-label">{{ mutationsInputData?.label }}</div>
     <template
-      v-for="(template, inx) in mutationsInputData.templates"
+      v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
     >
       <templates-wrapper
@@ -31,7 +31,11 @@
       X
     </button>
   </div>
-  <div class="dev-block" v-if="devMode" v-html="devModeData"></div>
+  <div
+    class="dev-block"
+    v-if="devMode && showInsideElementStatus"
+    v-html="devModeData"
+  ></div>
 </template>
 
 <script>
@@ -42,7 +46,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { TemplatesWrapper },
+  components: { TemplatesWrapper  },
   mixins: [MixinsForProcessingFormula],
   props: {
     duplicatorData: {
@@ -92,6 +96,7 @@ export default {
     ...mapActions(["tryDeleteDependencyElementOnName"]),
     changeValue(data) {
       this.localResultData[data.name] = data;
+
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,
         type: "duplicator",
@@ -106,6 +111,7 @@ export default {
         excludeFromCalculations:
           this.mutationsInputData.excludeFromCalculations,
         insertedTemplates: this.localResultData,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
     },
     tryDuplicate() {
@@ -162,7 +168,8 @@ export default {
       "getAllResultsElements",
       "getNameReserveVariable",
       "getResultElementOnName",
-      "devMode"
+      "devMode",
+      "showInsideElementStatus",
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -183,7 +190,7 @@ export default {
           !this.originVariables.includes(item) &&
           !Boolean(
             item.match(
-              /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|([0-9]+(\.[0-9]+)?)/
+              /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
             )
           ) &&
           item !== this.getNameReserveVariable
@@ -195,12 +202,13 @@ export default {
      * @returns {*}
      */
     listLocalVariablesUsedInFormula() {
+
       return this.variablesInFormula
         .filter(
           (item) =>
             !Boolean(
               item.match(
-                /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|([0-9]+(\.[0-9]+)?)/
+                /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
               )
             ) && item !== this.getNameReserveVariable
         )
@@ -246,7 +254,7 @@ export default {
     resultSummaDataFriVariablesOutsideFormula() {
       return this.dataFreeVariablesOutsideFormula?.reduce(
         (reduceSumma, item) => {
-          if (item.cost !== null && !item.excludeFromCalculations) {
+          if (item.cost !== null && !item.excludeFromCalculations && item.isShow) {
             return reduceSumma + parseFloat(item.cost);
           }
           return reduceSumma + 0;
@@ -263,7 +271,7 @@ export default {
       return this.variablesInFormula.map((item) => {
         const isFind = !Boolean(
           item.match(
-            /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|([0-9]+(\.[0-9]+)?)/
+            /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
           )
         );
         if (isFind && this.originVariables.includes(item)) {
@@ -306,7 +314,11 @@ export default {
      * @returns {*}
      */
     compileFormulaWitchData() {
-      return this.dataListVariablesOnFormula
+      if (!this.variablesInFormula.length) {
+        return this.resultSummaDataFriVariablesOutsideFormula;
+      }
+
+      return this.processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
         .map((item) => {
           if (!item?.name?.length) {
             return item;
@@ -314,22 +326,28 @@ export default {
             return item.cost;
           } else if (
             this.listLocalVariablesUsedInFormulaForPrefix.includes(item.name) &&
-            this.localResultData[item.name]?.isShow
+            this.localResultData[item.name]?.isShow &&
+            !item.excludeFromCalculations
           ) {
             return this.localResultData[item.name].cost;
           } else if (
             this.listGlobalsVariables.includes(item.name) &&
-            this.getResultElementOnName(item.name)?.isShow
+            this.getResultElementOnName(item.name)?.isShow &&
+            !item.excludeFromCalculations
           ) {
             return this.getResultElementOnName(item.name)?.cost;
           } else {
-            return false;
+            return "null";
           }
         })
-        .join(" ");
+        .join(" ")?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, '');
     },
 
     localCost() {
+      if (typeof this.compileFormulaWitchData === 'string' && this.compileFormulaWitchData?.includes('null')) {
+        return null;
+      }
+
       try {
         return eval(this.compileFormulaWitchData);
       } catch (e) {
@@ -337,17 +355,47 @@ export default {
       }
     },
     devModeData() {
-      const textLabel = `<div>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`
-      const textFormula = `<div>Базовая формула: ${this.formula?.length ? this.getArrayElementsFromFormula(this.formula).join(' '): 'Нет'}</div>`
-      const textFormulaOnData = `<div>Формула с данными: ${this.compileFormulaWitchData?.length ? this.compileFormulaWitchData : 'Нет'}</div>`
+      const textLabel = `<div>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`;
+      if (!this.formula?.length) {
+        return `
+        <hr/>
+        ${textLabel}
+      `;
+      }
+
+      const textFormula = `<div>Базовая формула: ${
+        this.formula?.length
+          ? this.getArrayElementsFromFormula(this.formula).join(" ")
+          : "Нет"
+      }</div>`;
+      let isCompiledFormula = false;
+      try {
+        if (this.localCost !== null) {
+          isCompiledFormula = true;
+        }
+      } catch (e) {
+        isCompiledFormula = false;
+      }
+
+      const textFormulaOnData = `<div>Формула с данными: ${
+        this.compileFormulaWitchData?.length
+          ? this.compileFormulaWitchData
+          : "Нет"
+      }</div>`;
+      const resultProcessingFormula = `<div>Результат расчета: ${
+        isCompiledFormula
+          ? this.localCost
+          : "не возможно посчитать!"
+      }</div>`;
 
       return `
       <hr/>
       ${textLabel}
       ${textFormula}
       ${textFormulaOnData}
+      ${resultProcessingFormula}
       `;
-    }
+    },
   },
 };
 </script>

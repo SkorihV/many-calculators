@@ -49,6 +49,7 @@
           :form-output-method="template?.formOutputMethod"
           :exclude-from-calculations="template?.excludeFromCalculations"
           :duplicate-template="template"
+          :formula-processing-logic="template?.formulaProcessingLogic"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -61,7 +62,7 @@
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Возможно, некоторые поля не заполнены или заполнены не корректно!
       </div>
-      <div v-if="showErrorSummBlock" class="calc__error-block">
+      <div v-if="showErrorSummaBlock" class="calc__error-block">
         Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы
         не выбраны.
       </div>
@@ -81,17 +82,20 @@
       <pre
         class="resultDataBlock"
         v-if="showResultDataForBlock && initTeleport"
-      >
-	      {{ finalTextForOutput }}
-	    </pre
+        v-html="finalTextForOutput"
+      ></pre
       >
       <div id="prompt-text-element"></div>
     </div>
     <teleport v-if="initTeleport && submitResult" to="#teleportelement">
-      {{ finalTextForOutput }}
+      {{ finalTextForOutputForTeleport }}
     </teleport>
   </div>
-  <div class="dev-mode" v-if="devMode" v-html="devModeData"></div>
+  <div
+    class="dev-mode"
+    v-if="devMode && showInsideElementStatus"
+    v-html="devModeData"
+  ></div>
 </template>
 
 <script>
@@ -151,7 +155,7 @@ export default {
       this?.outOptions !== null ? this?.outOptions?.currency : "руб";
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
-    this.tryToggleDevMode(Boolean(this.outOptions?.showErrorTemplate));
+    this.tryToggleDevMode(Boolean(this.outOptions?.devMode));
     this.displayResultData = this.outOptions?.displayResultData;
     this.showResultDataForBlock = this.outOptions.showResultDataForBlock;
     delete window?.calculatorTemplates;
@@ -172,6 +176,7 @@ export default {
       initEnabledSendForm: false,
       displayResultData: false, // включить работу формул и вывод данных
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
+      eventNotShowTooltips: ["delete", "mounted", "timer", "dependency"], // События при которых не должно срабатывать отображение ошибок
     };
   },
   methods: {
@@ -185,42 +190,15 @@ export default {
       if (typeof data !== "object") {
         return null;
       }
-
-      let {
-        name,
-        type,
-        label,
-        cost,
-        value,
-        displayValue,
-        formOutputMethod,
-        eventType,
-        unit,
-        isShow,
-        excludeFromCalculations,
-      } = data;
-      // || !isShow
+      const { name, type, eventType } = data;
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
         this.checkEnabledResultButton();
         return false;
       }
-      this.tryAddResultElement({
-        name,
-        data: {
-          name,
-          type,
-          label,
-          cost,
-          formOutputMethod,
-          value,
-          summ: cost,
-          displayValue,
-          unit: unit ? unit : null,
-          isShow,
-          excludeFromCalculations,
-        },
-      });
+
+      this.tryAddResultElement(data);
+
       if (type === "duplicator") {
         this.tryModifiedResultElement({
           elementName: name,
@@ -230,14 +208,10 @@ export default {
       }
 
       if (
-        eventType !== "delete" &&
-        eventType !== "mounted" &&
-        eventType !== "dependency" &&
-        eventType !== "timer"
+        !this.eventNotShowTooltips.includes(eventType) &&
+        this.mistake === "useAutomatic"
       ) {
-        if (this.mistake === "useAutomatic") {
-          this.showAllTooltipsOn();
-        }
+        this.showAllTooltipsOn();
       }
 
       this.checkEnabledResultButton();
@@ -271,6 +245,11 @@ export default {
         this.submitResult.style.opacity = 0.5;
       }
     },
+
+    /**
+     * Скрыть поле с данными
+     * @param name
+     */
     hiddenElementOnResults(name) {
       if (name in this.getAllResultsElements) {
         this.tryModifiedResultElement({
@@ -281,7 +260,7 @@ export default {
       }
     },
     parseResultValueObjectItem(item) {
-      let result = '';
+      let result = "";
       if (item.formOutputMethod && item.displayValue !== null && item.isShow) {
         result += "\n" + item.label;
 
@@ -319,13 +298,14 @@ export default {
       "getNameReserveVariable",
       "getAllResultsElements",
       "devMode",
+      "showInsideElementStatus",
     ]),
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
      */
     baseDataForCalculate() {
-      return this.getBaseDataForCalculateInArray(this.getAllResultsElements);
+      return Object.values(this.getAllResultsElements);
     },
 
     /**
@@ -355,6 +335,7 @@ export default {
      * @returns {*}
      */
     summaFreeVariables() {
+
       return this.getSummaFreeVariablesInFormula(
         this.freeVariablesOutsideFormula
       );
@@ -381,9 +362,9 @@ export default {
      * @returns {*}
      */
     resultTextForComputed() {
-      return this.parsingDataInFormulaOnSumma(
-        this.dataListVariablesOnFormula
-      );
+      let resultString = this.parsingDataInFormulaOnSumma(this.processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula));
+      return resultString?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, '');
+
     },
 
     /**
@@ -414,20 +395,30 @@ export default {
     resultTextDataForForm() {
       let result = "";
       this.dataForOutputText.forEach((item) => {
-        if (item.type === 'duplicator') {
-          console.log(item);
-          if (Object.keys(item?.insertedTemplates)) {
-            Object.values(item?.insertedTemplates).forEach(temp => {
-              if (Object.keys(temp?.insertedTemplates)) {
-                result += this.parseResultValueObjectItem(temp);
+        if (item.type === "duplicator") {
+          if (Object.keys(item?.insertedTemplates) && item?.cost > 0) {
+            Object.values(item?.insertedTemplates).forEach((duplicator) => {
+              if (Object.keys(duplicator?.insertedTemplates)) {
+                if (this.parseResultValueObjectItem(duplicator)?.length) {
+                  result += this.parseResultValueObjectItem(duplicator);
+                }
+                Object.values(duplicator?.insertedTemplates).forEach(
+                  (templateInDuplicator) => {
+                    if (this.parseResultValueObjectItem(templateInDuplicator)?.length) {
+                      result +=
+                        "<p>" + this.parseResultValueObjectItem(templateInDuplicator) + "</p>";
+                    }
+                    }
+
+                );
               }
-            })
+            });
           }
         } else {
-          result += this.parseResultValueObjectItem(item)
-
+          if (this.parseResultValueObjectItem(item)?.length) {
+            result += "<p>" + this.parseResultValueObjectItem(item) + "</p>";
+          }
         }
-
       });
       return result;
     },
@@ -471,9 +462,13 @@ export default {
           " " +
           this.currency;
       }
-
       return result;
     },
+
+    finalTextForOutputForTeleport() {
+      return this.finalTextForOutput.replace(/<p>|<\/p\>/g, '');
+    },
+
     /**
      * Отобразить блок с текстом о наличии ошибок,
      * если ошибки есть и глобально разрешено их отображение
@@ -504,7 +499,7 @@ export default {
     showResultBtn() {
       return this.mistake === "useButton";
     },
-    showErrorSummBlock() {
+    showErrorSummaBlock() {
       return (
         (this.finalSummaForOutput === null ||
           this.finalSummaForOutput === false) &&
@@ -513,16 +508,19 @@ export default {
       );
     },
     devModeData() {
-      const textFormula = this.variablesInFormula?.length ? `<div>Формула расчета: ${this.variablesInFormula.join(' ')}</div>` : ''
-      const textFormulaVariables =  this.formula?.length ? `<div>Формула с подставленными значениями: ${this.resultTextForComputed}</div>` : ''
-      return`
+      const textFormula = this.variablesInFormula?.length
+        ? `<div>Формула расчета: ${this.variablesInFormula.join(" ")}</div>`
+        : "";
+      const textFormulaVariables = this.formula?.length
+        ? `<div>Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
+        : "";
+      return `
       ${textFormula}
       ${textFormulaVariables}
-      `
-    }
+      `;
+    },
   },
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

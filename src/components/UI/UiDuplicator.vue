@@ -1,6 +1,9 @@
 <template>
-  <!--    <div class="calc__duplicator" v-if="isVisibilityFromDependency"-->
-  <div class="calc__duplicator" v-if="isVisibilityFromDependency" :class="classes">
+  <div
+    class="calc__duplicator"
+    v-if="isVisibilityFromDependency"
+    :class="classes"
+  >
     <ui-duplicator-wrapper
       v-for="(duplicator, key) in localTemplates"
       :key="duplicator?.index ? duplicator.index : 0"
@@ -17,7 +20,7 @@
     >
     </ui-duplicator-wrapper>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -62,14 +65,11 @@ export default {
     }
 
     this.localTemplates.push(mutationDuplicateTemplate);
-    this.changeValue({eventType: "mounted"})
+    this.changeValue({ eventType: "mounted" });
   },
   data() {
     return {
-      errorsElements: new Set(), // список элементов с ошибками валидации
       localResultsElements: {},
-      reserveVariableForOther: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
-      counterDuplicate: 0,
       localTemplates: [],
       localCost: 0,
     };
@@ -79,11 +79,10 @@ export default {
       return null;
     },
     changeValue(data) {
-
       if (data === "dependency") {
-        data = {eventType: "dependency"}
+        data = { eventType: "dependency" };
       }
-      if ( typeof data !== "object" ) {
+      if (typeof data !== "object") {
         return false;
       }
       if (data?.name) {
@@ -108,6 +107,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
         insertedTemplates: this.localResultsElements,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
     },
     calculateResult() {
@@ -152,7 +152,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode"]),
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     originVariablesInDuplicator() {
       return this.duplicateTemplate?.templates?.map((item) => {
         return item.elementName;

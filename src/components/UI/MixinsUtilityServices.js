@@ -1,11 +1,6 @@
 import { mapGetters } from "vuex";
 
 export const MixinsUtilityServices = {
-  data() {
-    return {
-
-    }
-  },
   methods: {
     /**
      * получить из формулы массив элементов
@@ -36,7 +31,7 @@ export const MixinsUtilityServices = {
     getArrayOnFormulaElements(formula) {
       let formulaInOut = formula
         ?.split(
-          /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
+          /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/g
         )
         .filter((item) => item?.trim()?.length);
 
@@ -70,15 +65,6 @@ export const MixinsUtilityServices = {
           },
         }
       );
-    },
-    /**
-     * преобразовать объект с результирующими данными в массив
-     * @param currentListData
-     * @returns {{length}|unknown[]|*[]}
-     */
-    getBaseDataForCalculateInArray(currentListData) {
-      const dataList = Object.values(currentListData);
-      return dataList?.length ? dataList : [];
     },
     /**
      * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных отсутствующих в формуле
@@ -135,6 +121,38 @@ export const MixinsUtilityServices = {
         return (resultText += item);
       }, "");
     },
+
+    processingArrayOnFormulaProcessingLogic(dataList) {
+      let resultList = []
+      let localDataList = dataList;
+      let singsList = ['+', '-', '*', '/'];
+      for (let i = 0; i < localDataList.length; i++) {
+        let currentItemList = localDataList[i];
+        if (typeof currentItemList !== 'object') {
+          resultList.push(currentItemList)
+        } else if  (currentItemList?.formulaProcessingLogic?.length && (currentItemList?.cost === null || currentItemList?.cost === 0 || !currentItemList.isShow)) {
+
+          if (currentItemList.formulaProcessingLogic === 'error') {
+            resultList.push(currentItemList)
+          } else if (currentItemList.formulaProcessingLogic === 'zero') {
+            resultList.push(0);
+          } else if (currentItemList.formulaProcessingLogic === 'ignored') {
+            if (i === 0 && singsList.includes(currentItemList[i+1])) {
+              i++;
+            }
+
+            if (i > 0 && singsList.includes(resultList[resultList.length-1])) {
+              resultList.pop();
+            } else if(i > 0 && singsList.includes(currentItemList[i+1])) {
+              i++;
+            }
+          }
+        } else {
+          resultList.push(currentItemList)
+        }
+      }
+      return resultList;
+    }
   },
   computed: {
     ...mapGetters(["getSpecSymbols"]),

@@ -15,17 +15,17 @@
         ></ui-prompt>
       </div>
       <div class="calc__image-wrapper-image" :style="[width, height]">
-        <img :src="localDataForDisplay.url" :alt="localDataForDisplay.label" />
+        <img :src="localDataForDisplay.url" :style="[width, height]" :alt="localDataForDisplay.label" />
       </div>
     </div>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import UiPrompt from "@/components/UI/UiPrompt";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiImage",
@@ -80,7 +80,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode"]),
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     imageDir() {
       return window?.imageDir ? window.imageDir : "";
     },
@@ -123,7 +123,7 @@ export default {
               };
             }
           } catch (e) {
-            console.log(e.message);
+            // console.log(e.message);
           }
         }
       });

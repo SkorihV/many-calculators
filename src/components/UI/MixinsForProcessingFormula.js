@@ -31,7 +31,7 @@ export const MixinsForProcessingFormula = {
     },
 
     /**
-     * Собираем локальный список зависимостей из глобмального на основе формулы
+     * Собираем локальный список зависимостей из глобального на основе формулы
      * @param formula
      */
     constructLocalListElementDependencyInFormula(formula) {
@@ -52,7 +52,6 @@ export const MixinsForProcessingFormula = {
      */
     processingVariablesOnFormula(formula) {
       return formula?.reduce((resultText, item) => {
-
         let elementDependency =
           item in this.localDependencyList
             ? this.localDependencyList[item]
@@ -133,10 +132,6 @@ export const MixinsForProcessingFormula = {
     isVisibilityFromDependency(newValue) {
       if (newValue && this.isCanShowAllTooltips) {
         this.changeValue("dependency");
-      } else {
-        setTimeout(() => {
-          this.changeValue("delete");
-        }, 10);
       }
     },
 

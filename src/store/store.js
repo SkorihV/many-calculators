@@ -6,7 +6,7 @@ export default createStore({
       dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
-      reserveVariableForOtherSumma: "_otherSumma_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
+      reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
       specSymbols: Object.entries({
         "&gt;": ">",
         "&lt;": "<",
@@ -15,6 +15,7 @@ export default createStore({
       }),
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
       devMode: false,
+      showInsideElementStatus: false,
     };
   },
   actions: {
@@ -63,13 +64,45 @@ export default createStore({
     tryToggleDevMode({ commit }, flag) {
       commit("toggleDevMode", flag);
     },
+    tryToggleShowInsideElementStatus({ commit }, flag) {
+      commit("toggleShowInsideElementStatus", flag);
+    },
   },
   mutations: {
-    addResultElement(state, { name, data }) {
-      state.globalResultsElements[name] = data;
+    addResultElement(state, data) {
+      const {
+        name,
+        type,
+        label,
+        cost,
+        value,
+        displayValue,
+        formOutputMethod,
+        eventType,
+        unit,
+        isShow,
+        excludeFromCalculations,
+        formulaProcessingLogic,
+      } = data;
+
+      state.globalResultsElements[name] = {
+        name,
+        type,
+        label,
+        cost,
+        formOutputMethod,
+        value,
+        summ: cost,
+        displayValue,
+        unit: unit ? unit : null,
+        isShow,
+        excludeFromCalculations,
+        eventType,
+        formulaProcessingLogic
+      };
     },
     /**
-     * Модифицировать поле данными
+     * Модифицировать поле с данными
      * @param state
      * @param nameElement
      * @param nameModifiedField
@@ -104,6 +137,9 @@ export default createStore({
     },
     toggleDevMode(state, flag) {
       state.devMode = flag;
+    },
+    toggleShowInsideElementStatus(state, flag) {
+      state.showInsideElementStatus = flag;
     },
   },
   getters: {
@@ -196,5 +232,6 @@ export default createStore({
     getNameReserveVariable: (state) => state.reserveVariableForOtherSumma,
     getSpecSymbols: (state) => state.specSymbols,
     devMode: (state) => state.devMode,
+    showInsideElementStatus: (state) => state.showInsideElementStatus,
   },
 });

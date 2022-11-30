@@ -14,8 +14,10 @@
 </template>
 
 <script>
+import UiCheckbox from "@/components/UI/UiCheckbox";
 export default {
   name: "#App",
+  components: { UiCheckbox },
   mounted() {},
   data() {
     return {};
@@ -150,9 +152,6 @@ $border-radius: 4px;
   display: flex;
   flex-direction: column;
 }
-
-
-
 
 .calc {
   position: relative;
@@ -464,6 +463,8 @@ $border-radius: 4px;
     &-image {
       &-wrapper {
         width: 50px;
+        max-height: 50px;
+        margin-left: 10px;
       }
       &-item {
         @include style-img;
@@ -604,7 +605,7 @@ $border-radius: 4px;
       @include style-button;
       @include style-flex-start;
       border-bottom: 1px solid $calc-color-btn;
-      padding: 5px 10px;
+      padding: 10px 20px;
       position: relative;
       &:hover {
         @include style-button-hover;
@@ -1188,6 +1189,20 @@ $border-radius: 4px;
       height: 40px;
       @include style-button;
     }
+    &-checkbox {
+      &-label {
+        display: flex;
+      }
+      &-text {
+        color: $calc-color-btn-text;
+      }
+      &-input {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+      }
+    }
+
     &-wrapper {
       display: none;
       position: fixed;
@@ -1285,7 +1300,7 @@ $border-radius: 4px;
       right: 0;
       top: 0;
       @include style-button;
-      padding: 5px;
+      padding: 10px;
     }
     &-duplicate {
     }

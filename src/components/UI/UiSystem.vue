@@ -1,11 +1,11 @@
 <template>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiSystem",
@@ -45,6 +45,7 @@ export default {
         excludeFromCalculations: false,
         unit: "",
         eventType,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.changeValid(eventType);
     },
@@ -83,6 +84,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName

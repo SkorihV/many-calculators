@@ -17,7 +17,9 @@
           class="calc__checkbox-text"
           :class="{ button: checkboxType === 'button' }"
         >
-          {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt"></slot>
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt"></slot>
         </div>
         <div class="calc__checkbox-element" :class="checkboxType"></div>
         <div v-if="labelSecond.length" class="calc__checkbox-text_second">
@@ -31,14 +33,14 @@
       />
     </div>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiCheckbox",
@@ -146,7 +148,7 @@ export default {
         displayValue: this.localValue ? "Да" : "Нет",
         name: this.localElementName,
         type: "checkbox",
-        label: this.label,
+        label: this.label?.length ? this.label : this.labelSecond,
         cost:
           this.localValue && this.checkedValueOnVoid(this.localCost)
             ? this.localCost
@@ -156,6 +158,7 @@ export default {
         excludeFromCalculations: this.excludeFromCalculations,
         isShow: this.isVisibilityFromDependency,
         eventType,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -188,6 +191,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName

@@ -5,7 +5,9 @@
   >
     <div class="calc__range-wrapper" :class="classes">
       <div v-if="label" class="calc__range-label">
-        {{ label }}<div class="empty-block" v-if="notEmpty">*</div> <slot name="prompt"></slot>
+        {{ label }}
+        <div class="empty-block" v-if="notEmpty">*</div>
+        <slot name="prompt"></slot>
         <div
           class="calc__range-current-wrapper"
           v-if="showDynamicValue || showStaticValue || unit?.length"
@@ -47,8 +49,7 @@
           <div
             class="calc__range-steps-item-content"
             :class="{
-              'calc__range-steps-item-content_selected':
-                step === resultValue,
+              'calc__range-steps-item-content_selected': step === resultValue,
             }"
           >
             {{ step }}
@@ -62,7 +63,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -203,7 +204,7 @@ export default {
         clearInterval(timer);
       }, 10000);
     } else {
-      this.changeValid("mounted");
+      this.changeValue("mounted");
     }
   },
   data() {
@@ -248,9 +249,7 @@ export default {
       return value;
     },
     changeValue(eventType = "input") {
-      this.resultValue = this.checkValidValueReturnNumber(
-        this.resultValue
-      );
+      this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
       this.$emit("changedValue", {
         value: this.resultValue,
         displayValue: this.resultValue,
@@ -264,6 +263,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         unit: this.unit,
         eventType,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.changeValid(eventType);
     },
@@ -307,7 +307,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isCanShowAllTooltips"]),
+    ...mapGetters([
+      "isCanShowAllTooltips",
+      "showInsideElementStatus",
+      "devMode",
+    ]),
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
     },

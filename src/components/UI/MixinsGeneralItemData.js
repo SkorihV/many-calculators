@@ -1,6 +1,4 @@
 import { mapGetters } from "vuex";
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
-
 export const MixinsGeneralItemData = {
   props: {
     /**
@@ -42,6 +40,10 @@ export const MixinsGeneralItemData = {
       type: String,
       default: null,
     },
+    formulaProcessingLogic: {
+      type: String,
+      default: "error",
+    },
     /**
      * Список классов для переопределения стилей на обертке
      */
@@ -52,7 +54,7 @@ export const MixinsGeneralItemData = {
     templateName: {
       type: String,
       default: null,
-    }
+    },
   },
   watch: {
     /**
@@ -66,9 +68,9 @@ export const MixinsGeneralItemData = {
     /**
      * При изменении состояния видимости родителя - отправить состояние элемента.
      */
-    parentIsShow() {
-      if (this.parentIsShow) {
-        this.changeValid("global");
+    parentIsShow(newValue) {
+      if (newValue) {
+        this.changeValue("global");
       } else {
         this.changeValue("delete");
       }
@@ -98,25 +100,38 @@ export const MixinsGeneralItemData = {
     },
     devModeData() {
       if (this.devMode) {
-        const textLabel = `<div>Заголовок элемента: ${this.label}</div>`
-        const textElementName = `<div>Имя элемента: ${this.elementName}</div>`
-        const textDependencyFormula = this.dependencyFormulaDisplay?.length ?  `<div> Формула зависимости отображения: ${this.getArrayElementsFromFormula(this.dependencyFormulaDisplay).join(' ')}</div>` : '';
-        const textDependencyFormulaBeforeProcessing = this.parsingFormulaVariables?.length ? `<div>Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>` : '';
-        const textInfoVisibility = `Отображается: ${this.isVisibilityFromDependency}`
+        const textLabel = `<div>Заголовок элемента: ${this.label}</div>`;
+        const textElementName = `<div>Имя элемента: ${this.elementName}</div>`;
+        const textDependencyFormula = this.dependencyFormulaDisplay?.length
+          ? `<div> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
+              this.dependencyFormulaDisplay
+            ).join(" ")}</div>`
+          : "";
+        const textDependencyFormulaBeforeProcessing = this
+          .parsingFormulaVariables?.length
+          ? `<div>Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
+          : "";
+        const textInfoVisibility = `Отображается: ${this.isVisibilityFromDependency}`;
 
         const textValue = `<div>Значение элемента: ${
-          this.templateName === "UiInput" || this.templateName === "UiRange"  ? this.resultValue :
-            this.templateName === "UiRadio"  ?  (this.changedRadio?.value ? this.changedRadio?.value : null) :
-              this.templateName === "UiSelect" ?  this.currentOption?.value :
-                this.templateName === "UiCheckbox" ? this.localValue : null
-        }</div>`
-
-
-
+          this.templateName === "UiInput" || this.templateName === "UiRange"
+            ? this.resultValue
+            : this.templateName === "UiRadio"
+            ? this.changedRadio?.value
+              ? this.changedRadio?.value
+              : null
+            : this.templateName === "UiSelect"
+            ? this.currentOption?.value
+            : this.templateName === "UiCheckbox"
+            ? this.localValue
+            : null
+        }</div>`;
 
         const textLocalCost = `<div>Текущая стоимость: ${
-          this.templateName === "UiInput" || this.templateName === "UiRange"  ? this.resultSumma : this.localCost
-        }</div>`
+          this.templateName === "UiInput" || this.templateName === "UiRange"
+            ? this.resultSumma
+            : this.localCost
+        }</div>`;
         return `
           <div class="dev-block">
            ${textLabel}
@@ -128,9 +143,9 @@ export const MixinsGeneralItemData = {
            ${textInfoVisibility}
 
            ${textLocalCost}
-          </div>        `
+          </div>        `;
       }
       return false;
-    }
+    },
   },
 };

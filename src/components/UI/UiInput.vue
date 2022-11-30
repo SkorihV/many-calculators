@@ -10,7 +10,9 @@
         :class="{ 'is-column': isColumn }"
       >
         <div v-if="label" class="calc__input-label-text">
-          {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt" />
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
           <div class="calc__input-buttons-minus" v-if="controls" @click="minus">
@@ -54,14 +56,14 @@
       </label>
     </div>
   </div>
-  <div v-if="devMode" v-html="devModeData"></div>
+  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiInput",
@@ -321,6 +323,7 @@ export default {
         excludeFromCalculations: this.excludeFromCalculations,
         unit: this.unit,
         eventType,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {
@@ -424,6 +427,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
     },

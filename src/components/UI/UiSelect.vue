@@ -7,7 +7,9 @@
       :style="[minWidthWrapper, maxWidthWrapper]"
     >
       <div class="calc__select-label" v-if="label">
-        {{ label }}<div class="empty-block" v-if="notEmpty">*</div><slot name="prompt"></slot>
+        {{ label }}
+        <div class="empty-block" v-if="notEmpty">*</div>
+        <slot name="prompt"></slot>
       </div>
       <div class="calc__select-change-wrapper">
         <div
@@ -43,7 +45,7 @@
             :key="idx"
           >
             <template
-              v-if="currentOption.value !== option.value && option.isShow"
+              v-if="currentOption?.value !== option?.value && option.isShow"
             >
               <div
                 v-if="option?.image?.filename"
@@ -72,7 +74,7 @@
         :local-can-be-shown="isVisibilityFromDependency"
       />
     </div>
-    <div v-if="devMode" v-html="devModeData"></div>
+    <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
   </div>
 </template>
 
@@ -81,7 +83,7 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UiSelect",
@@ -229,6 +231,7 @@ export default {
         excludeFromCalculations: this.excludeFromCalculations,
         isShow: this.isVisibilityFromDependency,
         eventType,
+        formulaProcessingLogic: this.formulaProcessingLogic,
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -300,7 +303,7 @@ export default {
       for (let i = 0; i < length; i++) {
         if (
           this.selectValuesAfterProcessingDependency[i].value ===
-            this.currentOption.value &&
+            this.currentOption?.value &&
           this.currentOption.isShow
         ) {
           return;
@@ -320,6 +323,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["devMode", "showInsideElementStatus"]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
         (item) => item.isShow
