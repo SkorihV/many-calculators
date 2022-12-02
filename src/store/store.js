@@ -233,5 +233,6 @@ export default createStore({
     getSpecSymbols: (state) => state.specSymbols,
     devMode: (state) => state.devMode,
     showInsideElementStatus: (state) => state.showInsideElementStatus,
+    getImageDir: () => window?.imageDir ? window.imageDir : "",
   },
 });

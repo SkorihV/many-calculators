@@ -40,6 +40,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { mapGetters } from "vuex";
 
+
 export default {
   name: "UiAccordionItem",
   components: { UiTooltip, UiPrompt, TemplatesWrapper },
@@ -83,12 +84,9 @@ export default {
       return this.localListValidationError.some(
         (item) => item.error && item.isShow && this.isCanShowAllTooltips
       );
-      //
-      // return Boolean(this.errorsElements.size);
     },
     isShowAccordionItem() {
       return this.currentChildrenItem !== this.currentHiddenItem;
-      // return Boolean(this.visibilityList.size);
     },
     itemIdName() {
       return (

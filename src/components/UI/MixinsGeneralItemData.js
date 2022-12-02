@@ -1,4 +1,6 @@
 import { mapGetters } from "vuex";
+
+
 export const MixinsGeneralItemData = {
   props: {
     /**
@@ -127,11 +129,12 @@ export const MixinsGeneralItemData = {
             : null
         }</div>`;
 
-        const textLocalCost = `<div>Текущая стоимость: ${
-          this.templateName === "UiInput" || this.templateName === "UiRange"
-            ? this.resultSumma
-            : this.localCost
-        }</div>`;
+
+        let textLocalCost = "";
+
+        if ("localCost" in this) {
+          textLocalCost = `<div>Текущая стоимость: ${this?.localCost}</div>`;
+        }
         return `
           <div class="dev-block">
            ${textLabel}
@@ -143,7 +146,7 @@ export const MixinsGeneralItemData = {
            ${textInfoVisibility}
 
            ${textLocalCost}
-          </div>        `;
+          </div>`;
       }
       return false;
     },

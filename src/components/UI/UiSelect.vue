@@ -36,7 +36,7 @@
         </div>
         <div
           class="calc__select-option-wrapper"
-          v-if="isOpen && selectValuesAfterProcessingDependency.length > 1"
+          v-if="isOpen"
         >
           <div
             class="calc__select-option-item"
@@ -84,6 +84,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { mapActions, mapGetters } from "vuex";
+
 
 export default {
   name: "UiSelect",
@@ -195,10 +196,14 @@ export default {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
     open() {
-      this.isOpen = true;
+      if (this.selectValuesAfterProcessingDependency.filter(option => option.isShow).length > 1) {
+        this.isOpen = true;
+      }
     },
     toggleOpenClose() {
-      this.isOpen = !this.isOpen;
+      if (this.selectValuesAfterProcessingDependency.filter(option => option.isShow).length > 1) {
+        this.isOpen = !this.isOpen;
+      }
     },
     close() {
       this.isOpen = false;
@@ -323,7 +328,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapGetters(["devMode", "showInsideElementStatus", "getImageDir"]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
         (item) => item.isShow
@@ -338,7 +343,7 @@ export default {
         : Math.random().toString();
     },
     imageDir() {
-      return window?.imageDir ? window.imageDir : "";
+      return this.getImageDir;
     },
     minWidthWrapper() {
       return this.minWidth ? `min-width:${this.minWidth}px;` : "";
@@ -416,7 +421,9 @@ export default {
           selectItem.isShow = eval(formula);
           return selectItem;
         } catch (e) {
-          // console.error(e.message);
+          if (this.devMode) {
+            console.error(e.message, formula);
+          }
           selectItem.isShow = false;
           return selectItem;
         }

@@ -31,7 +31,8 @@ export const MixinsUtilityServices = {
     getArrayOnFormulaElements(formula) {
       let formulaInOut = formula
         ?.split(
-          /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/g
+          // /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)+)/g
+          /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
         )
         .filter((item) => item?.trim()?.length);
 
@@ -122,6 +123,15 @@ export const MixinsUtilityServices = {
       }, "");
     },
 
+    /**
+     * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
+     * ignore - вместо поля выводит пустоту
+     * zero - выводит ноль
+     * error - выводит null что в расчете формулы приведет к ошибке
+     *
+     * @param dataList
+     * @returns {*[]}
+     */
     processingArrayOnFormulaProcessingLogic(dataList) {
       let resultList = []
       let localDataList = dataList;
@@ -152,6 +162,25 @@ export const MixinsUtilityServices = {
         }
       }
       return resultList;
+    },
+    /**
+     * получить список значений полей в объекте - рекурсивно
+     * @param object
+     * @returns {*[]}
+     */
+    getNameElementsRecursive(object) {
+      let resultArray = [];
+      getPropInObject(this.originData?.templates, "elementName");
+      function getPropInObject(object) {
+        for(let prop in object) {
+          if(typeof(object[prop]) === 'object') {
+            getPropInObject(object[prop]);
+          } else if(prop === "elementName") {
+            resultArray.push(object[prop]?.length ? object[prop] : object['json_id'])
+          }
+        }
+      }
+      return resultArray;
     }
   },
   computed: {

@@ -95,7 +95,9 @@ export const MixinsForProcessingFormula = {
             }
             return resultReduce;
           } catch (e) {
-            // console.log(e.message);
+            if (this.devMode) {
+              console.error(e.message, formula);
+            }
             return resultReduce;
           }
         },
@@ -163,7 +165,7 @@ export const MixinsForProcessingFormula = {
     },
   },
   computed: {
-    ...mapGetters(["globalDependenciesList", "isCanShowAllTooltips"]),
+    ...mapGetters(["globalDependenciesList", "isCanShowAllTooltips", "devMode"]),
     /**
      * Отобразить текущий элемент
      * @returns {boolean|any}
@@ -173,6 +175,9 @@ export const MixinsForProcessingFormula = {
         try {
           return eval(this.parsingFormulaVariables);
         } catch (e) {
+          if (this.devMode) {
+            console.error(e.message, this.parsingFormulaVariables);
+          }
           return false;
         }
       }

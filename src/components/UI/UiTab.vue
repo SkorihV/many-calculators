@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
@@ -75,7 +74,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "UiTab",
-  components: { TemplatesWrapper, UiTooltip, UiPrompt, UiTabItem },
+  components: {  UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {

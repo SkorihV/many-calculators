@@ -255,7 +255,7 @@ export default {
         displayValue: this.resultValue,
         name: this.localElementName,
         type: "range",
-        cost: this.resultSumma,
+        cost: this.localCost,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -292,6 +292,11 @@ export default {
       if (!this.canBeShownTooltip) {
         this.canBeShownTooltip = true;
       }
+    },
+    updatedCostForOut(cost) {
+      return this.checkedValueOnVoid(cost)
+        ? cost * Math.abs(this.resultValue)
+        : null;
     },
   },
   watch: {
@@ -334,11 +339,6 @@ export default {
         ? this.elementName
         : Math.random().toString();
     },
-    resultSumma() {
-      return this.checkedValueOnVoid(this.localCost)
-        ? this.localCost * Math.abs(this.resultValue)
-        : null;
-    },
     returnSteps() {
       let steps = [];
 
@@ -376,16 +376,17 @@ export default {
      */
     localCost() {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.cost;
+        return this.updatedCostForOut(this.cost);
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices
       );
       if (newCost !== null) {
-        return newCost;
+        return this.updatedCostForOut(newCost);
       }
-      return this.cost;
+      return this.updatedCostForOut(this.cost);
+
     },
   },
 };

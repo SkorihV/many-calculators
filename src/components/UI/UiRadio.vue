@@ -4,7 +4,7 @@
       class="calc__radio-wrapper"
       :class="[
         radioType,
-        { column: isColumn, solid: isSolid, wrap: isWrap },
+        { column: isColumn, solid: isSolid, wrap: isWrap, onlyImage: onlyImage },
         classes,
       ]"
     >
@@ -22,11 +22,14 @@
             v-if="radio.isShow"
             @click="selectedCurrentRadio(idx)"
           >
-            <span
+            <div class="calc__radio-text" v-if="!onlyImage">
+              <span
               class="calc__radio-indicator"
               v-if="radioType === 'base'"
-            ></span>
-            <span class="calc__radio-text">{{ radio.radioName }}</span>
+            ></span>{{ radio.radioName }}</div>
+            <div class="calc__radio-wrapper-image" v-if="radio?.image?.filename" :style="[width, height]">
+              <img :src="radio?.image?.filename" :style="[width, height]" :alt="radio.radioName" />
+            </div>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
         </template>
@@ -47,6 +50,7 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { mapActions, mapGetters } from "vuex";
+
 
 export default {
   name: "UiRadio",
@@ -153,6 +157,24 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    /**
+     * в блоке выводить только картинки
+     */
+    onlyImage: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    },
+    maxWidth: {
+      type: [Number, String],
+      default: 250,
+    },
+    maxHeight: {
+      type: [Number, String],
+      default: 250,
+    },
   },
   data() {
     return {
@@ -228,7 +250,9 @@ export default {
             try {
               radio.isShow = eval(formula);
             } catch (e) {
-              // console.error(e.message);
+              if (this.devMode) {
+                console.error(e.message, formula);
+              }
               radio.isShow = false;
             }
           }, 10);
@@ -268,7 +292,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["showInsideElementStatus", "devMode"]),
+    ...mapGetters(["showInsideElementStatus", "devMode", "getImageDir"]),
     changedRadio() {
       return this.currentIndexRadioButton !== null
         ? this.radioValues[this.currentIndexRadioButton]
@@ -302,6 +326,9 @@ export default {
 
     mutationRadioValue() {
       return this.radioValues.map((radioItem, index) => {
+        if (radioItem?.image?.filename ) {
+          radioItem.image.filename = this.imageDir + radioItem.image.filename;
+        }
         radioItem.value = radioItem.value?.toString()?.length
           ? radioItem.value
           : index + 1;
@@ -311,6 +338,15 @@ export default {
 
     radioValuesAfterProcessingDependency() {
       return this.getNewListValuesBeforeCheckedDependency();
+    },
+    imageDir() {
+      return this.getImageDir;
+    },
+    width() {
+      return "max-width:" + this.maxWidth + "px";
+    },
+    height() {
+      return "max-height:" + this.maxHeight + "px";
     },
   },
 };

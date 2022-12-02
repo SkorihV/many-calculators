@@ -1,13 +1,13 @@
 <template>
   <div id="app-base-constructor-calculator">
     <div class="calc calc__wrapper" id="custom-stile">
-      <template v-for="(template, inx) in calculatorTemplates" :key="inx">
+      <template v-for="(template, index) in calculatorTemplates" :key="index">
         <ui-accordion
           v-if="template.template === 'UiAccordion'"
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiAccordion' + inx"
+          :element-name="template?.json_id || 'UiAccordion' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
         />
@@ -16,7 +16,7 @@
           :tab-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiTab' + inx"
+          :element-name="template?.json_id || 'UiTab' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           @changedValue="changeValue"
         />
@@ -26,7 +26,7 @@
           :label="template?.label"
           :width-left-side="template?.widthLeftSide"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiBisection' + inx"
+          :element-name="template?.json_id || 'UiBisection' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           :dependency-formula-display-left-side="
             template?.dependencyFormulaDisplayLeftSide
@@ -42,7 +42,7 @@
           :element-name="
             template?.elementName?.length
               ? template?.elementName
-              : template?.json_id || 'UiRange' + index
+              : template?.json_id || 'UiDuplicator' + index
           "
           :classes="template?.classes"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
@@ -55,7 +55,7 @@
         <templates-wrapper
           v-else
           :template="template"
-          :index="inx"
+          :index="index"
           @changedValue="changeValue"
         />
       </template>
@@ -375,6 +375,9 @@ export default {
       try {
         return eval(this.resultTextForComputed);
       } catch (e) {
+        if (this.devMode) {
+          console.error(e.message, this.resultTextForComputed);
+        }
         return false;
       }
     },
@@ -400,17 +403,20 @@ export default {
             Object.values(item?.insertedTemplates).forEach((duplicator) => {
               if (Object.keys(duplicator?.insertedTemplates)) {
                 if (this.parseResultValueObjectItem(duplicator)?.length) {
+                  result += "<p>------------------------------</p>";
                   result += this.parseResultValueObjectItem(duplicator);
                 }
                 Object.values(duplicator?.insertedTemplates).forEach(
                   (templateInDuplicator) => {
                     if (this.parseResultValueObjectItem(templateInDuplicator)?.length) {
+
                       result +=
                         "<p>" + this.parseResultValueObjectItem(templateInDuplicator) + "</p>";
                     }
                     }
 
                 );
+                result += "<p>------------------------------</p>";
               }
             });
           }
@@ -457,6 +463,7 @@ export default {
         result += "Есть ошибка в расчетах!";
       } else {
         result +=
+          "" +
           "Общая сумма составляет = " +
           this.finalSummaForOutput +
           " " +

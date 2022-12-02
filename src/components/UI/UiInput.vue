@@ -301,7 +301,9 @@ export default {
 
         return this.localInputValue;
       } catch (e) {
-        // console.error(e.message);
+        if (this.devMode) {
+          console.error(e.message);
+        }
       }
     },
     tryChangeValueInput(e) {
@@ -315,7 +317,7 @@ export default {
         displayValue: this.resultValue,
         name: this.localElementName,
         type: "input",
-        cost: this.resultSumma,
+        cost: this.localCost,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -425,9 +427,14 @@ export default {
     resetNumberValue() {
       this.changeValueWitchTimer(this.localMin || 0);
     },
+    updatedCostForOut(cost) {
+      return this.onlyNumber &&this.checkedValueOnVoid(cost)
+        ? cost * this.localInputValue
+        : null;
+    },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapGetters(["devMode", "showInsideElementStatus", "devMode"]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
     },
@@ -441,11 +448,6 @@ export default {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName
         : Math.random().toString();
-    },
-    resultSumma() {
-      return this.onlyNumber && this.checkedValueOnVoid(this.localCost)
-        ? this.localCost * this.localInputValue
-        : null;
     },
     resultValue() {
       if (this.onlyNumber) {
@@ -544,16 +546,16 @@ export default {
      */
     localCost() {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.cost;
+        return this.updatedCostForOut(this.cost);
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices
       );
       if (newCost !== null) {
-        return newCost;
+        return this.updatedCostForOut(newCost);
       }
-      return this.cost;
+      return this.updatedCostForOut(this.cost);
     },
   },
 };

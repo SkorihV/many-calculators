@@ -59,6 +59,8 @@
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
+import {mapGetters} from "vuex";
+
 export default {
   name: "UiBisection",
   components: { TemplatesWrapper },
@@ -119,11 +121,15 @@ export default {
       try {
         return eval(result);
       } catch (e) {
+        if (this.devMode) {
+          console.error(e.message, result);
+        }
         return false;
       }
     },
   },
   computed: {
+    ...mapGetters(["devMode"]),
     isShowLeftSide() {
       if (!this.dependencyFormulaDisplayLeftSide?.length) {
         return true;

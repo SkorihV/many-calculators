@@ -24,13 +24,15 @@
 
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { mapGetters } from "vuex";
+
 
 export default {
   name: "UiImage",
   components: { UiPrompt },
-  mixins: [MixinsForProcessingFormula],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
     /**
      * заголовок
@@ -78,6 +80,9 @@ export default {
     changeValue() {
       return null;
     },
+    changeValid() {
+      return null;
+    }
   },
   computed: {
     ...mapGetters(["devMode", "showInsideElementStatus"]),
@@ -110,6 +115,7 @@ export default {
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 
+
           try {
             if (eval(formula)) {
               dataForOut = {
@@ -123,7 +129,9 @@ export default {
               };
             }
           } catch (e) {
-            // console.log(e.message);
+            if(this.devMode) {
+               console.error(e.message, formula);
+            }
           }
         }
       });

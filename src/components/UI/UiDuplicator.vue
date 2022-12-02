@@ -6,19 +6,19 @@
   >
     <ui-duplicator-wrapper
       v-for="(duplicator, key) in localTemplates"
-      :key="duplicator?.index ? duplicator.index : 0"
-      :index="duplicator?.index ? duplicator.index : 0"
+      :origin-data="originData"
+      :key="duplicator?.index ? duplicator?.index : 0"
+      :index="duplicator?.index ? duplicator?.index : 0"
       :duplicator-data="duplicator"
-      :is-duplicate="duplicator?.index !== undefined"
-      :formula="duplicateTemplate?.formula"
-      :parent-name="duplicator.name"
+      :is-duplicate="duplicator?.isDuplicate ? true : false"
+      :formula="originData?.formula"
+      :parent-name="originData.elementName"
       :parent-is-show="true"
       :origin-variables="originVariablesInDuplicator"
       @duplicate="duplicate"
       @deleteDuplicator="deleteDuplicator"
       @changedValue="changeValue"
-    >
-    </ui-duplicator-wrapper>
+    />
   </div>
   <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
 </template>
@@ -53,22 +53,13 @@ export default {
     },
   },
   mounted() {
-    let mutationDuplicateTemplate = this.duplicateTemplate;
-    if (this.duplicateTemplate?.templates?.length) {
-      mutationDuplicateTemplate.templates =
-        this.duplicateTemplate.templates.map((item, key) => {
-          item.elementName = item?.elementName?.length
-            ? item?.elementName
-            : item?.json_id || "UiDuplicator" + key;
-          return item;
-        });
-    }
-
-    this.localTemplates.push(mutationDuplicateTemplate);
+    this.originData = JSON.parse(JSON.stringify(this.duplicateTemplate));
+    this.localTemplates.push(JSON.parse(JSON.stringify(this.duplicateTemplate)));
     this.changeValue({ eventType: "mounted" });
   },
   data() {
     return {
+      originData: {},
       localResultsElements: {},
       localTemplates: [],
       localCost: 0,
@@ -154,9 +145,8 @@ export default {
   computed: {
     ...mapGetters(["devMode", "showInsideElementStatus"]),
     originVariablesInDuplicator() {
-      return this.duplicateTemplate?.templates?.map((item) => {
-        return item.elementName;
-      });
+      let result = this.getNameElementsRecursive(this.originData?.templates);
+      return result.filter(item => item?.length > 0)
     },
   },
 };

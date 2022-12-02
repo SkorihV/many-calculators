@@ -160,8 +160,6 @@ export default {
         "false",
         "empty",
         "null",
-        "}",
-        "{"
       ],
       isShow: false,
       localShowInsideElementStatus: false,
@@ -182,6 +180,7 @@ export default {
      * @param desiredField
      * @param accumulatorVariable
      * @param nameFieldOnResult
+     * @param label
      * @returns {boolean}
      */
     getNeedleDataInTemplates(

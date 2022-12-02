@@ -8,7 +8,16 @@
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
     >
+      <templates-wrapper-for-duplicator
+        v-if="['UiAccordion','UiTab','UiBisection'].includes(template?.template)"
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="index + '_' + inx"
+        :parent-name="mutationsInputData.elementName"
+        @changedValue="changeValue"
+      />
       <templates-wrapper
+        v-else
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
@@ -40,14 +49,17 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import TemplatesWrapperForDuplicator from "@/components/UI/TemplatesWrapperForDuplicator";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import { MixinsUtilityServices} from "@/components/UI/MixinsUtilityServices";
 import { mapGetters, mapActions } from "vuex";
+
 
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { TemplatesWrapper  },
-  mixins: [MixinsForProcessingFormula],
+  components: { TemplatesWrapper, TemplatesWrapperForDuplicator  },
+  mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
       type: Object,
@@ -55,7 +67,7 @@ export default {
     },
     index: {
       type: [Number, String],
-      default: null,
+      default: 0,
     },
     parentIsShow: {
       type: Boolean,
@@ -77,10 +89,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    originData: {
+      type: Object,
+      default: () => {},
+    }
   },
   mounted() {
     if (this.isDuplicate) {
-      this.mutationsInputData = this.duplicatorData;
+      this.mutationsInputData = this.duplicatorData
     } else {
       this.mutationsInputData = this.updateInputData(this.duplicatorData, 0);
     }
@@ -90,13 +106,14 @@ export default {
       counterDuplicate: 0,
       localResultData: {},
       mutationsInputData: null,
+      regExpStringSplitFormula:  /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
     };
   },
   methods: {
     ...mapActions(["tryDeleteDependencyElementOnName"]),
     changeValue(data) {
-      this.localResultData[data.name] = data;
 
+      this.localResultData[data.name] = data;
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,
         type: "duplicator",
@@ -104,20 +121,20 @@ export default {
         cost: this.localCost,
         value: null,
         displayValue: this.localCost,
-        formOutputMethod: this.mutationsInputData.formOutputMethod,
+        formOutputMethod: this.mutationsInputData?.formOutputMethod,
         eventType: data.eventType,
         unit: "",
         isShow: this.parentIsShow,
         excludeFromCalculations:
-          this.mutationsInputData.excludeFromCalculations,
+        this.mutationsInputData.excludeFromCalculations,
         insertedTemplates: this.localResultData,
-        formulaProcessingLogic: this.formulaProcessingLogic,
+        formulaProcessingLogic: this.originData?.formulaProcessingLogic,
       });
     },
     tryDuplicate() {
       this.counterDuplicate++;
       const returnData = this.updateInputData(
-        this.duplicatorData,
+        this.originData,
         this.counterDuplicate
       );
       this.$emit("duplicate", returnData);
@@ -129,38 +146,60 @@ export default {
       this.$emit("deleteDuplicator", this.duplicatorData.elementName);
     },
     updateInputData(data, index) {
-      const mutationsData = JSON.parse(JSON.stringify(data));
-      mutationsData.parentDuplicator = data.elementName;
-      mutationsData.label =
-        data.label.length && index > 0 ? data.label + " " + index : data.label;
-      mutationsData.elementName = data?.elementName?.length
-        ? data?.elementName + "_" + index
-        : data?.json_id + "_" + index;
-      mutationsData.elementName = data.elementName + "_" + index;
+      let mutationsData = JSON.parse(JSON.stringify(data));
       mutationsData.index = this.index + index;
+
+      mutationsData.parentDuplicator = this.parentName ;
+
       mutationsData.formula = this.mutationFormulaResult;
-      mutationsData.templates = mutationsData.templates.map((template) => {
-        template.elementName = template?.elementName?.length
-          ? template?.elementName + "_" + index
-          : template?.json_id + "_" + index;
-        template.json_id = template.json_id + "_" + index;
-        return template;
-      });
+      mutationsData.isDuplicate = true;
+
+      mutationsData = this.updateIndexElementsInDuple(mutationsData, index)
+
       return mutationsData;
     },
-  },
-  watch: {
-    localResultData: {
-      handler() {
-        // this.attachIndexForFormulaElements.map(item => {
-        //   if ( Object.keys(this.localResultData).includes(item)) {
-        //     return this.localResultData[item]
-        //   } else {
-        //     return item;
-        //   }
-        // })
-      },
-      deep: true,
+    updateIndexElementsInDuple (object, index) {
+      for(let prop in object) {
+        if (typeof (object[prop]) === 'object') {
+          object[prop] = this.updateIndexElementsInDuple(object[prop], index);
+        } else if (prop === 'elementName') {
+          object[prop] = this.updateNameItem(object, index)
+        } else if (prop === 'label') {
+          object[prop] = object[prop]?.length && index > 0 ? object[prop] + " ( " + index + " )" : object[prop];
+        }  else if (prop === 'labelSecond') {
+          object[prop] = object[prop]?.length && index > 0 ? object[prop] + " ( " + index + " )" : object[prop];
+        } else if ((prop === 'dependencyFormulaDisplay' || prop === "dependencyFormulaCost" || prop === "dependencyFormulaItem") && object[prop].length) {
+          object[prop] = this.addIndexIndexInFormulaElements(object[prop], index).join("")
+        }
+      }
+      return object
+    },
+
+    updateNameItem(item, index) {
+        item.elementName = item?.elementName?.length
+          ? item?.elementName + "_" + index
+          : item?.json_id + "_" + index;
+      return item.elementName;
+    },
+
+    /**
+     * в формулу добавляем префиксы для переменных дупликатора
+     * @param formulaString
+     * @param index
+     * @returns {*}
+     */
+    addIndexIndexInFormulaElements(formulaString, index) {
+      return this.getArrayElementsFromFormula(formulaString).map((item) => {
+        const isFind = !Boolean(
+          item.match(
+            this.regExpStringSplitFormula
+          )
+        );
+        if (isFind && this.originVariables.includes(item)) {
+          item = item + "_" + index;
+        }
+        return item;
+      });
     },
   },
   computed: {
@@ -190,7 +229,7 @@ export default {
           !this.originVariables.includes(item) &&
           !Boolean(
             item.match(
-              /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
+              this.regExpStringSplitFormula
             )
           ) &&
           item !== this.getNameReserveVariable
@@ -202,13 +241,12 @@ export default {
      * @returns {*}
      */
     listLocalVariablesUsedInFormula() {
-
       return this.variablesInFormula
         .filter(
           (item) =>
             !Boolean(
               item.match(
-                /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
+                this.regExpStringSplitFormula
               )
             ) && item !== this.getNameReserveVariable
         )
@@ -252,6 +290,7 @@ export default {
      * @returns {unknown}
      */
     resultSummaDataFriVariablesOutsideFormula() {
+
       return this.dataFreeVariablesOutsideFormula?.reduce(
         (reduceSumma, item) => {
           if (item.cost !== null && !item.excludeFromCalculations && item.isShow) {
@@ -271,7 +310,7 @@ export default {
       return this.variablesInFormula.map((item) => {
         const isFind = !Boolean(
           item.match(
-            /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
+            this.regExpStringSplitFormula
           )
         );
         if (isFind && this.originVariables.includes(item)) {
@@ -351,18 +390,14 @@ export default {
       try {
         return eval(this.compileFormulaWitchData);
       } catch (e) {
+        if (this.devMode) {
+          console.error(e.message, this.compileFormulaWitchData);
+        }
         return null;
       }
     },
     devModeData() {
       const textLabel = `<div>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`;
-      if (!this.formula?.length) {
-        return `
-        <hr/>
-        ${textLabel}
-      `;
-      }
-
       const textFormula = `<div>Базовая формула: ${
         this.formula?.length
           ? this.getArrayElementsFromFormula(this.formula).join(" ")

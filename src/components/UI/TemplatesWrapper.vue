@@ -78,6 +78,9 @@
     :selected-item="template?.selectedItem"
     :is-need-choice="template?.isNeedChoice"
     :type-display-class="template?.typeDisplayClass"
+    :only-image="template?.onlyImage"
+    :max-height="template?.maxHeight"
+    :max-width="template?.maxWidth"
     :element-name="
       template?.elementName?.length
         ? template?.elementName
@@ -170,13 +173,13 @@
     :max-width="template?.maxWidth"
     :max-height="template?.maxHeight"
     :prompt="template?.prompt"
-    :element-name="template?.json_id || 'UiImage' + inx"
+    :element-name="template?.json_id || 'UiImage' + index"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
   ></ui-image>
   <ui-system
-    v-if="template.template === 'UiSystem'"
+    v-else-if="template.template === 'UiSystem'"
     :cost="template?.cost"
     :dependency-prices="template?.dependencyPrices"
     :parent-is-show="parentIsShow"

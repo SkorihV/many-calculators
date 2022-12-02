@@ -521,7 +521,6 @@ $border-radius: 4px;
             width: 16px;
             height: 16px;
             border: 1px solid $calc-color-btn-text;
-            border-radius: $border-radius;
             border-radius: 50%;
             margin-right: 4px;
             flex-shrink: 0;
@@ -537,13 +536,20 @@ $border-radius: 4px;
             color: $calc-color-btn-text-hover;
           }
         }
-        .calc__radio-label.checked:hover {
-          box-shadow: 0 0 3px 1px $calc-color-btn-checked;
-          background-color: $calc-color-btn;
+        .calc__radio-label.checked {
           .calc__radio-text {
             color: $calc-color-btn-text;
           }
+          &:hover {
+            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+            background-color: $calc-color-btn-checked;
+            .calc__radio-text {
+              color: $calc-color-btn-checked-text;
+            }
+          }
         }
+
+
       }
 
       &.buttons {
@@ -593,6 +599,12 @@ $border-radius: 4px;
         justify-content: flex-end;
         flex-wrap: wrap;
         flex: 0 1 auto;
+        gap: 5px;
+      }
+      &.onlyImage {
+        .calc__radio-label.checked {
+          background-color: $calc-color-btn-checked;
+        }
       }
     }
     &-title {
@@ -677,6 +689,9 @@ $border-radius: 4px;
         &:hover {
           @include style-button-hover;
         }
+      }
+      &_second {
+        font-weight: bold;
       }
     }
 
@@ -1253,10 +1268,11 @@ $border-radius: 4px;
       align-items: start;
       &-image {
         width: 100%;
-        height: 100%;
+        height: auto;
         overflow: hidden;
         img {
           @include style-img;
+          height: auto;
         }
       }
     }
@@ -1269,7 +1285,6 @@ $border-radius: 4px;
   }
   .resultDataBlock {
     color: $calc-color-text;
-    margin: 0 auto;
   }
   &__duplicator {
     width: 100%;
