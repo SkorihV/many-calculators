@@ -4,7 +4,7 @@
       class="calc__radio-wrapper"
       :class="[
         radioType,
-        { column: isColumn, solid: isSolid, wrap: isWrap, onlyImage: onlyImage },
+        { column: isColumn, onlyImage: onlyImage },
         classes,
       ]"
     >
@@ -123,6 +123,7 @@ export default {
      *  способ отображения - указать текстом
      *  default - base
      *  1) buttons
+     *  2) onlyImage
      */
     typeDisplayClass: {
       type: String,
@@ -135,37 +136,6 @@ export default {
     formOutputMethod: {
       type: String,
       default: "no",
-    },
-    /**
-     * в горизонтальном положении убрать пробелы между кнопками
-     */
-    isSolid: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * включить перенос для заголовка и кнопок
-     */
-    isWrap: {
-      type: [Boolean, Number],
-      default: true,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
-     * в блоке выводить только картинки
-     */
-    onlyImage: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
     },
     maxWidth: {
       type: [Number, String],
@@ -300,6 +270,9 @@ export default {
     },
     radioType() {
       return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
+    },
+    onlyImage() {
+      return this.typeDisplayClass === "onlyImage";
     },
     isErrorEmpty() {
       return this.notEmpty && this.currentIndexRadioButton === null;

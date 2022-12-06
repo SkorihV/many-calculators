@@ -513,6 +513,28 @@ $border-radius: 4px;
       position: relative;
       gap: 5px;
       min-height: 31px;
+      flex-wrap: wrap;
+
+      &-buttons {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        flex: 0 1 auto;
+        gap: 5px;
+      }
+
+      &.column {
+        flex-direction: column;
+        align-items: start;
+        .calc__radio-wrapper-buttons {
+          flex-direction: column;
+        }
+        .calc__radio-label {
+          flex: 1 1 auto;
+          margin: 1px 0;
+        }
+      }
+
       &.base {
         .calc__radio {
           &-indicator {
@@ -529,27 +551,54 @@ $border-radius: 4px;
             }
           }
         }
-        .calc__radio-label:hover {
-          box-shadow: 0 0 3px 1px $calc-color-btn-hover;
-          background-color: $calc-color-btn-hover;
-          .calc__radio-text {
-            color: $calc-color-btn-text-hover;
-          }
-        }
-        .calc__radio-label.checked {
-          .calc__radio-text {
-            color: $calc-color-btn-text;
+        .calc__radio-label {
+          &::after {
+            content: "";
+            display: block;
+            left: 0;
+            width: 100%;
+            position: absolute;
+            background-color: $calc-color-btn-text;
+            height: 1px;
+            bottom: 1px;
           }
           &:hover {
-            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
-            background-color: $calc-color-btn-checked;
+            box-shadow: 0 0 3px 1px $calc-color-btn-hover;
+            background-color: $calc-color-btn-hover;
             .calc__radio-text {
-              color: $calc-color-btn-checked-text;
+              color: $calc-color-btn-text-hover;
+            }
+          }
+          &.checked {
+            .calc__radio-text {
+              color: $calc-color-btn-text;
+            }
+            &:hover {
+              box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+              background-color: $calc-color-btn-checked;
+              .calc__radio-text {
+                color: $calc-color-btn-checked-text;
+              }
+            }
+            .calc__radio-indicator {
+              box-shadow: 0 0 1px 3px $calc-color-more inset;
+              &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                width: 8px;
+                height: 8px;
+                background-color: $calc-color-btn-checked;
+              }
+              + .calc__radio-text {
+                color: $calc-color-btn-text;
+              }
             }
           }
         }
-
-
       }
 
       &.buttons {
@@ -569,38 +618,6 @@ $border-radius: 4px;
           }
         }
       }
-
-      &.column {
-        flex-direction: column;
-        align-items: start;
-        .calc__radio-wrapper-buttons {
-          flex-direction: column;
-        }
-        .calc__radio-label {
-          flex: 1 1 auto;
-          margin: 1px 0;
-        }
-      }
-      &.solid {
-        .calc__radio-wrapper-buttons {
-          gap: 0;
-        }
-        .calc__radio-label {
-          flex: 1 1 auto;
-          border-radius: 0;
-        }
-      }
-      &.wrap {
-        flex-wrap: wrap;
-      }
-
-      &-buttons {
-        display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        flex: 0 1 auto;
-        gap: 5px;
-      }
       &.onlyImage {
         .calc__radio-label.checked {
           background-color: $calc-color-btn-checked;
@@ -619,40 +636,14 @@ $border-radius: 4px;
       border-bottom: 1px solid $calc-color-btn;
       padding: 10px 20px;
       position: relative;
+      gap: 5px;
       &:hover {
         @include style-button-hover;
       }
       &.checked {
-        .calc__radio-indicator {
-          box-shadow: 0 0 1px 3px $calc-color-more inset;
-          &::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            width: 8px;
-            height: 8px;
-            background-color: $calc-color-btn-checked;
-          }
-          + .calc__radio-text {
-            color: $calc-color-btn-text;
-          }
-        }
         .calc__radio-text {
           color: $calc-color-btn-checked-text;
         }
-      }
-      &::after {
-        content: "";
-        display: block;
-        left: 0;
-        width: 100%;
-        position: absolute;
-        background-color: $calc-color-btn-text;
-        height: 1px;
-        bottom: 1px;
       }
     }
     &-text {
@@ -1316,6 +1307,9 @@ $border-radius: 4px;
       top: 0;
       @include style-button;
       padding: 10px;
+      &:hover {
+        @include style-button-hover;
+      }
     }
     &-duplicate {
     }

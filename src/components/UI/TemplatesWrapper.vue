@@ -78,7 +78,6 @@
     :selected-item="template?.selectedItem"
     :is-need-choice="template?.isNeedChoice"
     :type-display-class="template?.typeDisplayClass"
-    :only-image="template?.onlyImage"
     :max-height="template?.maxHeight"
     :max-width="template?.maxWidth"
     :element-name="

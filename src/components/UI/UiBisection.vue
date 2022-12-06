@@ -107,6 +107,8 @@ export default {
   data() {
     return {
       inMobile: false,
+      absoluteMaxWidth: 70,
+      absoluteMinWidth: 30,
     };
   },
   methods: {
@@ -144,11 +146,11 @@ export default {
     },
 
     styleWidthLeftSide() {
-      if (this.widthLeftSide > 70) {
-        this.widthLeftSide = 70;
+      if (this.widthLeftSide > this.absoluteMaxWidth) {
+        this.widthLeftSide = this.absoluteMaxWidth;
       }
-      if (this.widthLeftSide < 30) {
-        this.widthLeftSide = 30;
+      if (this.widthLeftSide < this.absoluteMinWidth) {
+        this.widthLeftSide = this.absoluteMinWidth;
       }
       if (this.inMobile) {
         return "max-width:" + 100 + "%";
@@ -156,11 +158,11 @@ export default {
       return "max-width:" + this.widthLeftSide + "%";
     },
     styleWidthRightSide() {
-      if (this.widthLeftSide > 70) {
-        this.widthLeftSide = 70;
+      if (this.widthLeftSide > this.absoluteMaxWidth) {
+        this.widthLeftSide = this.absoluteMaxWidth;
       }
-      if (this.widthLeftSide < 30) {
-        this.widthLeftSide = 30;
+      if (this.widthLeftSide < this.absoluteMinWidth) {
+        this.widthLeftSide = this.absoluteMinWidth;
       }
       if (this.inMobile) {
         return "max-width:" + 100 + "%";
