@@ -98,6 +98,13 @@
   ></div>
 </template>
 
+<script setup >
+import { useStore } from "@/store/piniaStore";
+
+const piniaStore = useStore();
+</script>
+
+
 <script>
 import UiAccordion from "@/components/UI/UiAccordion";
 import UiTab from "@/components/UI/UiTab";
@@ -107,6 +114,10 @@ import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
 import { mapActions, mapGetters } from "vuex";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+
+
+
+
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -160,6 +171,9 @@ export default {
     this.showResultDataForBlock = this.outOptions.showResultDataForBlock;
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
+  },
+  setup() {
+
   },
   data() {
     return {
