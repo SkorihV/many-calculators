@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="parent"
     class="calc__tab-wrapper"
     :class="[classes]"
     v-show="showBlock && isVisibilityFromDependency"

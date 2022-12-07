@@ -104,8 +104,8 @@ export default createStore({
     /**
      * Модифицировать поле с данными
      * @param state
-     * @param nameElement
-     * @param nameModifiedField
+     * @param elementName
+     * @param modifiedFieldName
      * @param newData
      */
     modifiedElement(state, { elementName, modifiedFieldName, newData }) {

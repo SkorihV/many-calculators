@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="parent"
     class="calc__wrapper-group-data"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >

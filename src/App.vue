@@ -235,7 +235,7 @@ export default {
 
       if (!this.submitResult) {
         this.submitResult = document.querySelector(
-          "#App + .tpl-anketa input[type=submit]"
+          "#App + .tpl-anketa button[type=submit]"
         );
       }
 

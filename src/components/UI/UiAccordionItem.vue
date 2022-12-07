@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="parent"
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"

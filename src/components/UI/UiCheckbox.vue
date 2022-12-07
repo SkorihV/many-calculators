@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency" ref="parent">
     <div class="calc__checkbox-wrapper" :class="classes">
       <label :for="localElementName" class="calc__checkbox-label">
         <input

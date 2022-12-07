@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency">
+  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency" ref="parent">
     <div
       class="calc__radio-wrapper"
       :class="[

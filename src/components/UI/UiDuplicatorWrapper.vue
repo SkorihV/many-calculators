@@ -30,7 +30,7 @@
       class="calc__duplicator-duplicate"
       @click="tryDuplicate"
     >
-      Дублировать
+      {{duplicatorData?.buttonName?.length ? duplicatorData?.buttonName : 'Дублировать'}}
     </button>
     <button
       v-if="isDuplicate"

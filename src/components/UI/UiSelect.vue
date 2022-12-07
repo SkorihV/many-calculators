@@ -1,6 +1,7 @@
 <template>
   <div class="calc__wrapper-group-data">
     <div
+      ref="parent"
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
       :class="[{ 'is-column': isColumn }, classes]"
