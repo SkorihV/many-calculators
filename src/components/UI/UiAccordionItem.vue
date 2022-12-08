@@ -39,8 +39,9 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import { mapGetters } from "vuex";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiAccordionItem",
@@ -80,7 +81,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isCanShowAllTooltips", "getValidationListOnParentName"]),
+    ...mapState(useBaseStore, [
+      "isCanShowAllTooltips",
+      "getValidationListOnParentName",
+    ]),
     isShowError() {
       return this.localListValidationError.some(
         (item) => item.error && item.isShow && this.isCanShowAllTooltips

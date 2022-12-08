@@ -28,7 +28,9 @@ import UiDuplicatorWrapper from "@/components/UI/UiDuplicatorWrapper";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
-import { mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiDuplicator",
@@ -54,7 +56,9 @@ export default {
   },
   mounted() {
     this.originData = JSON.parse(JSON.stringify(this.duplicateTemplate));
-    this.localTemplates.push(JSON.parse(JSON.stringify(this.duplicateTemplate)));
+    this.localTemplates.push(
+      JSON.parse(JSON.stringify(this.duplicateTemplate))
+    );
     this.changeValue({ eventType: "mounted" });
   },
   data() {
@@ -143,10 +147,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
     originVariablesInDuplicator() {
       let result = this.getNameElementsRecursive(this.originData?.templates);
-      return result.filter(item => item?.length > 0)
+      return result.filter((item) => item?.length > 0);
     },
   },
 };

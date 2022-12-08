@@ -1,5 +1,6 @@
-import { mapGetters } from "vuex";
+import { useBaseStore } from "@/store/piniaStore";
 
+import { mapState } from "pinia";
 
 export const MixinsGeneralItemData = {
   props: {
@@ -80,7 +81,7 @@ export const MixinsGeneralItemData = {
   },
 
   computed: {
-    ...mapGetters(["isCanShowAllTooltips", "devMode"]),
+    ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode"]),
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}
@@ -128,7 +129,6 @@ export const MixinsGeneralItemData = {
             ? this.localValue
             : null
         }</div>`;
-
 
         let textLocalCost = "";
 

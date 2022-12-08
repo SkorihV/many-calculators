@@ -1,5 +1,7 @@
-import { mapGetters } from "vuex";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export const MixinsForProcessingFormula = {
   mixins: [MixinsUtilityServices],
@@ -165,7 +167,11 @@ export const MixinsForProcessingFormula = {
     },
   },
   computed: {
-    ...mapGetters(["globalDependenciesList", "isCanShowAllTooltips", "devMode"]),
+    ...mapState(useBaseStore, [
+      "globalDependenciesList",
+      "isCanShowAllTooltips",
+      "devMode",
+    ]),
     /**
      * Отобразить текущий элемент
      * @returns {boolean|any}

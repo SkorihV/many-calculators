@@ -1,12 +1,12 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency" ref="parent">
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency"
+    ref="parent"
+  >
     <div
       class="calc__radio-wrapper"
-      :class="[
-        radioType,
-        { column: isColumn, onlyImage: onlyImage },
-        classes,
-      ]"
+      :class="[radioType, { column: isColumn, onlyImage: onlyImage }, classes]"
     >
       <div class="calc__radio-title" v-if="label">
         {{ label }}
@@ -24,11 +24,21 @@
           >
             <div class="calc__radio-text" v-if="!onlyImage">
               <span
-              class="calc__radio-indicator"
-              v-if="radioType === 'base'"
-            ></span>{{ radio.radioName }}</div>
-            <div class="calc__radio-wrapper-image" v-if="radio?.image?.filename" :style="[width, height]">
-              <img :src="radio?.image?.filename" :style="[width, height]" :alt="radio.radioName" />
+                class="calc__radio-indicator"
+                v-if="radioType === 'base'"
+              ></span
+              >{{ radio.radioName }}
+            </div>
+            <div
+              class="calc__radio-wrapper-image"
+              v-if="radio?.image?.filename"
+              :style="[width, height]"
+            >
+              <img
+                :src="radio?.image?.filename"
+                :style="[width, height]"
+                :alt="radio.radioName"
+              />
             </div>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
@@ -49,8 +59,9 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiRadio",
@@ -156,7 +167,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -262,7 +272,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["showInsideElementStatus", "devMode", "getImageDir"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
+      "showInsideElementStatus",
+      "devMode",
+      "getImageDir",
+    ]),
     changedRadio() {
       return this.currentIndexRadioButton !== null
         ? this.radioValues[this.currentIndexRadioButton]
@@ -299,7 +315,7 @@ export default {
 
     mutationRadioValue() {
       return this.radioValues.map((radioItem, index) => {
-        if (radioItem?.image?.filename ) {
+        if (radioItem?.image?.filename) {
           radioItem.image.filename = this.imageDir + radioItem.image.filename;
         }
         radioItem.value = radioItem.value?.toString()?.length

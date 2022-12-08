@@ -102,7 +102,9 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+
+import { mapState } from "pinia";
+import { useBaseStore } from "@/store/piniaStore";
 
 export default {
   name: "ErrorTemplates",
@@ -128,7 +130,9 @@ export default {
       this.processingAllTemplatesOnData();
       this.checkInShowing();
     }, 2000);
-    console.info("Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов!");
+    console.info(
+      "Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов!"
+    );
   },
   data() {
     return {
@@ -173,7 +177,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryToggleShowInsideElementStatus"]),
     /**
      * рекурсивно обходим все шаблоны и получаем нужный массив данных
      * по указанному полю в указанную переменную
@@ -365,6 +368,8 @@ export default {
     },
   },
   computed: {
+    ...mapState(useBaseStore, ["tryToggleShowInsideElementStatus"]),
+    // ...mapStores(useBaseStore),
     /**
      * не существующие имена в формулах отвечающих за отображение элементов
      * @returns {*[]}

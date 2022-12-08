@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency" ref="parent">
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency"
+    ref="parent"
+  >
     <div class="calc__checkbox-wrapper" :class="classes">
       <label :for="localElementName" class="calc__checkbox-label">
         <input
@@ -40,7 +44,9 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiCheckbox",
@@ -134,7 +140,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     inputLocalValue(value) {
       this.localValue = value;
       this.changeValue("click");
@@ -191,7 +196,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
+      "devMode",
+      "showInsideElementStatus",
+    ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName

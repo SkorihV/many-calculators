@@ -17,8 +17,9 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import { mapGetters } from "vuex";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 export default {
   name: "UiTabItem",
   components: { TemplatesWrapper },
@@ -60,7 +61,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getValidationListOnParentName"]),
+    ...mapState(useBaseStore, ["getValidationListOnParentName"]),
     isShowItem() {
       return this.tabItemId === this.shownIdTab;
     },

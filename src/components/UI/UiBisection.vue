@@ -59,7 +59,8 @@
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
-import {mapGetters} from "vuex";
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiBisection",
@@ -131,7 +132,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode"]),
+    ...mapState(useBaseStore, ["devMode"]),
     isShowLeftSide() {
       if (!this.dependencyFormulaDisplayLeftSide?.length) {
         return true;

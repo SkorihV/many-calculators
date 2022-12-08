@@ -71,7 +71,9 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiRange",
@@ -218,7 +220,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     changeValueStep(step) {
       this.resultValue = this.checkValidValueReturnNumber(step);
       this.changeValue();
@@ -313,7 +314,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "showInsideElementStatus",
       "devMode",
@@ -387,7 +390,6 @@ export default {
         return this.updatedCostForOut(newCost);
       }
       return this.updatedCostForOut(this.cost);
-
     },
   },
 };

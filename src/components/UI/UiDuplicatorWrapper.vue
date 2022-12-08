@@ -9,7 +9,9 @@
       :key="index + '_' + inx"
     >
       <templates-wrapper-for-duplicator
-        v-if="['UiAccordion','UiTab','UiBisection'].includes(template?.template)"
+        v-if="
+          ['UiAccordion', 'UiTab', 'UiBisection'].includes(template?.template)
+        "
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
@@ -30,7 +32,11 @@
       class="calc__duplicator-duplicate"
       @click="tryDuplicate"
     >
-      {{duplicatorData?.buttonName?.length ? duplicatorData?.buttonName : 'Дублировать'}}
+      {{
+        duplicatorData?.buttonName?.length
+          ? duplicatorData?.buttonName
+          : "Дублировать"
+      }}
     </button>
     <button
       v-if="isDuplicate"
@@ -51,14 +57,15 @@
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import TemplatesWrapperForDuplicator from "@/components/UI/TemplatesWrapperForDuplicator";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsUtilityServices} from "@/components/UI/MixinsUtilityServices";
-import { mapGetters, mapActions } from "vuex";
+import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { TemplatesWrapper, TemplatesWrapperForDuplicator  },
+  components: { TemplatesWrapper, TemplatesWrapperForDuplicator },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
@@ -92,11 +99,11 @@ export default {
     originData: {
       type: Object,
       default: () => {},
-    }
+    },
   },
   mounted() {
     if (this.isDuplicate) {
-      this.mutationsInputData = this.duplicatorData
+      this.mutationsInputData = this.duplicatorData;
     } else {
       this.mutationsInputData = this.updateInputData(this.duplicatorData, 0);
     }
@@ -106,13 +113,12 @@ export default {
       counterDuplicate: 0,
       localResultData: {},
       mutationsInputData: null,
-      regExpStringSplitFormula:  /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
+      regExpStringSplitFormula:
+        /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
     };
   },
   methods: {
-    ...mapActions(["tryDeleteDependencyElementOnName"]),
     changeValue(data) {
-
       this.localResultData[data.name] = data;
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,
@@ -126,7 +132,7 @@ export default {
         unit: "",
         isShow: this.parentIsShow,
         excludeFromCalculations:
-        this.mutationsInputData.excludeFromCalculations,
+          this.mutationsInputData.excludeFromCalculations,
         insertedTemplates: this.localResultData,
         formulaProcessingLogic: this.originData?.formulaProcessingLogic,
       });
@@ -149,36 +155,50 @@ export default {
       let mutationsData = JSON.parse(JSON.stringify(data));
       mutationsData.index = this.index + index;
 
-      mutationsData.parentDuplicator = this.parentName ;
+      mutationsData.parentDuplicator = this.parentName;
 
       mutationsData.formula = this.mutationFormulaResult;
       mutationsData.isDuplicate = true;
 
-      mutationsData = this.updateIndexElementsInDuple(mutationsData, index)
+      mutationsData = this.updateIndexElementsInDuple(mutationsData, index);
 
       return mutationsData;
     },
-    updateIndexElementsInDuple (object, index) {
-      for(let prop in object) {
-        if (typeof (object[prop]) === 'object') {
+    updateIndexElementsInDuple(object, index) {
+      for (let prop in object) {
+        if (typeof object[prop] === "object") {
           object[prop] = this.updateIndexElementsInDuple(object[prop], index);
-        } else if (prop === 'elementName') {
-          object[prop] = this.updateNameItem(object, index)
-        } else if (prop === 'label') {
-          object[prop] = object[prop]?.length && index > 0 ? object[prop] + " ( " + index + " )" : object[prop];
-        }  else if (prop === 'labelSecond') {
-          object[prop] = object[prop]?.length && index > 0 ? object[prop] + " ( " + index + " )" : object[prop];
-        } else if ((prop === 'dependencyFormulaDisplay' || prop === "dependencyFormulaCost" || prop === "dependencyFormulaItem") && object[prop].length) {
-          object[prop] = this.addIndexIndexInFormulaElements(object[prop], index).join("")
+        } else if (prop === "elementName") {
+          object[prop] = this.updateNameItem(object, index);
+        } else if (prop === "label") {
+          object[prop] =
+            object[prop]?.length && index > 0
+              ? object[prop] + " ( " + index + " )"
+              : object[prop];
+        } else if (prop === "labelSecond") {
+          object[prop] =
+            object[prop]?.length && index > 0
+              ? object[prop] + " ( " + index + " )"
+              : object[prop];
+        } else if (
+          (prop === "dependencyFormulaDisplay" ||
+            prop === "dependencyFormulaCost" ||
+            prop === "dependencyFormulaItem") &&
+          object[prop].length
+        ) {
+          object[prop] = this.addIndexIndexInFormulaElements(
+            object[prop],
+            index
+          ).join("");
         }
       }
-      return object
+      return object;
     },
 
     updateNameItem(item, index) {
-        item.elementName = item?.elementName?.length
-          ? item?.elementName + "_" + index
-          : item?.json_id + "_" + index;
+      item.elementName = item?.elementName?.length
+        ? item?.elementName + "_" + index
+        : item?.json_id + "_" + index;
       return item.elementName;
     },
 
@@ -190,11 +210,7 @@ export default {
      */
     addIndexIndexInFormulaElements(formulaString, index) {
       return this.getArrayElementsFromFormula(formulaString).map((item) => {
-        const isFind = !Boolean(
-          item.match(
-            this.regExpStringSplitFormula
-          )
-        );
+        const isFind = !Boolean(item.match(this.regExpStringSplitFormula));
         if (isFind && this.originVariables.includes(item)) {
           item = item + "_" + index;
         }
@@ -203,7 +219,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useBaseStore, [
+      "tryDeleteDependencyElementOnName",
       "getAllResultsElements",
       "getNameReserveVariable",
       "getResultElementOnName",
@@ -227,11 +244,7 @@ export default {
       return this.variablesInFormula.filter((item) => {
         return (
           !this.originVariables.includes(item) &&
-          !Boolean(
-            item.match(
-              this.regExpStringSplitFormula
-            )
-          ) &&
+          !Boolean(item.match(this.regExpStringSplitFormula)) &&
           item !== this.getNameReserveVariable
         );
       });
@@ -244,11 +257,8 @@ export default {
       return this.variablesInFormula
         .filter(
           (item) =>
-            !Boolean(
-              item.match(
-                this.regExpStringSplitFormula
-              )
-            ) && item !== this.getNameReserveVariable
+            !Boolean(item.match(this.regExpStringSplitFormula)) &&
+            item !== this.getNameReserveVariable
         )
         .filter((item) => !this.listGlobalsVariables.includes(item));
     },
@@ -290,10 +300,13 @@ export default {
      * @returns {unknown}
      */
     resultSummaDataFriVariablesOutsideFormula() {
-
       return this.dataFreeVariablesOutsideFormula?.reduce(
         (reduceSumma, item) => {
-          if (item.cost !== null && !item.excludeFromCalculations && item.isShow) {
+          if (
+            item.cost !== null &&
+            !item.excludeFromCalculations &&
+            item.isShow
+          ) {
             return reduceSumma + parseFloat(item.cost);
           }
           return reduceSumma + 0;
@@ -308,11 +321,7 @@ export default {
      */
     attachIndexForFormulaElements() {
       return this.variablesInFormula.map((item) => {
-        const isFind = !Boolean(
-          item.match(
-            this.regExpStringSplitFormula
-          )
-        );
+        const isFind = !Boolean(item.match(this.regExpStringSplitFormula));
         if (isFind && this.originVariables.includes(item)) {
           item = item + "_" + this.index;
         }
@@ -357,7 +366,9 @@ export default {
         return this.resultSummaDataFriVariablesOutsideFormula;
       }
 
-      return this.processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
+      return this.processingArrayOnFormulaProcessingLogic(
+        this.dataListVariablesOnFormula
+      )
         .map((item) => {
           if (!item?.name?.length) {
             return item;
@@ -379,11 +390,15 @@ export default {
             return "null";
           }
         })
-        .join(" ")?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, '');
+        .join(" ")
+        ?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, "");
     },
 
     localCost() {
-      if (typeof this.compileFormulaWitchData === 'string' && this.compileFormulaWitchData?.includes('null')) {
+      if (
+        typeof this.compileFormulaWitchData === "string" &&
+        this.compileFormulaWitchData?.includes("null")
+      ) {
         return null;
       }
 
@@ -418,9 +433,7 @@ export default {
           : "Нет"
       }</div>`;
       const resultProcessingFormula = `<div>Результат расчета: ${
-        isCompiledFormula
-          ? this.localCost
-          : "не возможно посчитать!"
+        isCompiledFormula ? this.localCost : "не возможно посчитать!"
       }</div>`;
 
       return `

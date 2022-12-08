@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__wrapper-group-data" v-if="isVisibilityFromDependency" ref="parent">
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency"
+    ref="parent"
+  >
     <div
       class="calc__input-wrapper"
       :class="[{ 'is-stretch': isStretch }, classes]"
@@ -63,7 +67,9 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiInput",
@@ -253,7 +259,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
@@ -428,13 +433,18 @@ export default {
       this.changeValueWitchTimer(this.localMin || 0);
     },
     updatedCostForOut(cost) {
-      return this.onlyNumber &&this.checkedValueOnVoid(cost)
+      return this.onlyNumber && this.checkedValueOnVoid(cost)
         ? cost * this.localInputValue
         : null;
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus", "devMode"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
+      "devMode",
+      "showInsideElementStatus",
+    ]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
     },

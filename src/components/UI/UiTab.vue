@@ -71,11 +71,13 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiTab",
-  components: {  UiTooltip, UiPrompt, UiTabItem },
+  components: { UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -120,7 +122,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useBaseStore, [
       "isCanShowAllTooltips",
       "isValidationShowOnParentName",
       "isValidationErrorOnParentName",
@@ -141,6 +143,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

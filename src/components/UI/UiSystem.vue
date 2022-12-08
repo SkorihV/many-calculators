@@ -5,7 +5,9 @@
 <script>
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
+
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiSystem",
@@ -31,7 +33,6 @@ export default {
     this.changeValue("mounted");
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
         value: parseFloat(this.localCost),
@@ -84,7 +85,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
+      "devMode",
+      "showInsideElementStatus",
+    ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName

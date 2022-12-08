@@ -1,5 +1,5 @@
 <template>
-   <ui-accordion
+  <ui-accordion
     v-if="template.template === 'UiAccordion'"
     :accordion-data="template"
     :label="template?.label"
@@ -41,11 +41,11 @@
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-formula-display-left-side="
-            template?.dependencyFormulaDisplayLeftSide
-          "
+      template?.dependencyFormulaDisplayLeftSide
+    "
     :dependency-formula-display-right-side="
-            template?.dependencyFormulaDisplayRightSide
-          "
+      template?.dependencyFormulaDisplayRightSide
+    "
     @changedValue="changeValue"
   />
 </template>
@@ -79,7 +79,7 @@ export default {
     parentName: {
       type: String,
       default: null,
-    }
+    },
   },
   methods: {
     changeValue(data) {

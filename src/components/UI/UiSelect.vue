@@ -35,10 +35,7 @@
             :prompt-text="currentOption.prompt"
           ></ui-prompt>
         </div>
-        <div
-          class="calc__select-option-wrapper"
-          v-if="isOpen"
-        >
+        <div class="calc__select-option-wrapper" v-if="isOpen">
           <div
             class="calc__select-option-item"
             @click="changeSelect(option, idx)"
@@ -84,8 +81,9 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { mapActions, mapGetters } from "vuex";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiSelect",
@@ -192,17 +190,24 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["tryAddDependencyElement", "checkValidationDataAndToggle"]),
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
     open() {
-      if (this.selectValuesAfterProcessingDependency.filter(option => option.isShow).length > 1) {
+      if (
+        this.selectValuesAfterProcessingDependency.filter(
+          (option) => option.isShow
+        ).length > 1
+      ) {
         this.isOpen = true;
       }
     },
     toggleOpenClose() {
-      if (this.selectValuesAfterProcessingDependency.filter(option => option.isShow).length > 1) {
+      if (
+        this.selectValuesAfterProcessingDependency.filter(
+          (option) => option.isShow
+        ).length > 1
+      ) {
         this.isOpen = !this.isOpen;
       }
     },
@@ -329,7 +334,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus", "getImageDir"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "checkValidationDataAndToggle",
+      "devMode",
+      "showInsideElementStatus",
+      "getImageDir",
+    ]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
         (item) => item.isShow

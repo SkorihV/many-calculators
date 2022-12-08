@@ -15,7 +15,11 @@
         ></ui-prompt>
       </div>
       <div class="calc__image-wrapper-image" :style="[width, height]">
-        <img :src="localDataForDisplay.url" :style="[width, height]" :alt="localDataForDisplay.label" />
+        <img
+          :src="localDataForDisplay.url"
+          :style="[width, height]"
+          :alt="localDataForDisplay.label"
+        />
       </div>
     </div>
   </div>
@@ -26,8 +30,9 @@
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import UiPrompt from "@/components/UI/UiPrompt";
-import { mapGetters } from "vuex";
 
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "UiImage",
@@ -82,10 +87,10 @@ export default {
     },
     changeValid() {
       return null;
-    }
+    },
   },
   computed: {
-    ...mapGetters(["devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
     imageDir() {
       return window?.imageDir ? window.imageDir : "";
     },
@@ -115,7 +120,6 @@ export default {
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 
-
           try {
             if (eval(formula)) {
               dataForOut = {
@@ -129,8 +133,8 @@ export default {
               };
             }
           } catch (e) {
-            if(this.devMode) {
-               console.error(e.message, formula);
+            if (this.devMode) {
+              console.error(e.message, formula);
             }
           }
         }

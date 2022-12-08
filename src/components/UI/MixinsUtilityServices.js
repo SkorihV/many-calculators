@@ -1,4 +1,5 @@
-import { mapGetters } from "vuex";
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export const MixinsUtilityServices = {
   methods: {
@@ -18,7 +19,7 @@ export const MixinsUtilityServices = {
      * @returns {*}
      */
     handleSpecSymbolsInFormula(formula) {
-      this.getSpecSymbols.forEach((specItem) => {
+      this.getSpecSymbols?.forEach((specItem) => {
         formula = formula?.replaceAll(specItem[0], specItem[1]);
       });
       return formula;
@@ -133,32 +134,39 @@ export const MixinsUtilityServices = {
      * @returns {*[]}
      */
     processingArrayOnFormulaProcessingLogic(dataList) {
-      let resultList = []
+      let resultList = [];
       let localDataList = dataList;
-      let singsList = ['+', '-', '*', '/'];
+      let singsList = ["+", "-", "*", "/"];
       for (let i = 0; i < localDataList.length; i++) {
         let currentItemList = localDataList[i];
-        if (typeof currentItemList !== 'object') {
-          resultList.push(currentItemList)
-        } else if  (currentItemList?.formulaProcessingLogic?.length && (currentItemList?.cost === null || currentItemList?.cost === 0 || !currentItemList.isShow)) {
-
-          if (currentItemList.formulaProcessingLogic === 'error') {
-            resultList.push(currentItemList)
-          } else if (currentItemList.formulaProcessingLogic === 'zero') {
+        if (typeof currentItemList !== "object") {
+          resultList.push(currentItemList);
+        } else if (
+          currentItemList?.formulaProcessingLogic?.length &&
+          (currentItemList?.cost === null ||
+            currentItemList?.cost === 0 ||
+            !currentItemList.isShow)
+        ) {
+          if (currentItemList.formulaProcessingLogic === "error") {
+            resultList.push(currentItemList);
+          } else if (currentItemList.formulaProcessingLogic === "zero") {
             resultList.push(0);
-          } else if (currentItemList.formulaProcessingLogic === 'ignored') {
-            if (i === 0 && singsList.includes(currentItemList[i+1])) {
+          } else if (currentItemList.formulaProcessingLogic === "ignored") {
+            if (i === 0 && singsList.includes(currentItemList[i + 1])) {
               i++;
             }
 
-            if (i > 0 && singsList.includes(resultList[resultList.length-1])) {
+            if (
+              i > 0 &&
+              singsList.includes(resultList[resultList.length - 1])
+            ) {
               resultList.pop();
-            } else if(i > 0 && singsList.includes(currentItemList[i+1])) {
+            } else if (i > 0 && singsList.includes(currentItemList[i + 1])) {
               i++;
             }
           }
         } else {
-          resultList.push(currentItemList)
+          resultList.push(currentItemList);
         }
       }
       return resultList;
@@ -172,18 +180,20 @@ export const MixinsUtilityServices = {
       let resultArray = [];
       getPropInObject(this.originData?.templates, "elementName");
       function getPropInObject(object) {
-        for(let prop in object) {
-          if(typeof(object[prop]) === 'object') {
+        for (let prop in object) {
+          if (typeof object[prop] === "object") {
             getPropInObject(object[prop]);
-          } else if(prop === "elementName") {
-            resultArray.push(object[prop]?.length ? object[prop] : object['json_id'])
+          } else if (prop === "elementName") {
+            resultArray.push(
+              object[prop]?.length ? object[prop] : object["json_id"]
+            );
           }
         }
       }
       return resultArray;
-    }
+    },
   },
   computed: {
-    ...mapGetters(["getSpecSymbols"]),
+    ...mapState(useBaseStore, ["getSpecSymbols"]),
   },
 };

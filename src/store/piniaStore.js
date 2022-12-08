@@ -1,7 +1,7 @@
-import { createStore } from "vuex";
+import { defineStore } from "pinia";
 
-export default createStore({
-  state() {
+export const useBaseStore = defineStore("base", {
+  state: () => {
     return {
       dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
@@ -14,133 +14,9 @@ export default createStore({
         "&quot;": '"',
       }),
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
-      devMode: false,
-      showInsideElementStatus: false,
+      devModeData: false,
+      showInsideElementStatusData: false,
     };
-  },
-  actions: {
-    tryAddResultElement({ commit }, dataResultItem) {
-      commit("addResultElement", dataResultItem);
-    },
-    /**
-     * Модифицировать поле из результирующего списка новыми данными
-     * @param commit
-     * @param dataModified
-     */
-    tryModifiedResultElement({ commit }, dataModified) {
-      commit("modifiedElement", dataModified);
-    },
-    /**
-     * Добавить элемент зависимости в общий массив данных
-     * @param commit
-     * @param data
-     */
-    tryAddDependencyElement({ commit }, data) {
-      commit("addDependencyElement", data);
-    },
-    /**
-     * удалить элемент зависимости из общего массива данных по имени
-     * @param commit
-     * @param elementName
-     */
-    tryDeleteDependencyElementOnName({ commit }, elementName) {
-      commit("deleteDependencyElement", elementName);
-    },
-    /**
-     * разрешить отображение подсказок с ошибками
-     * @param commit
-     */
-    showAllTooltipsOn({ commit }) {
-      commit("toggleShowAllTooltips", true);
-    },
-    /**
-     *  добавить/обновить  ошибку в общий список
-     * @param commit
-     * @param data
-     */
-    checkValidationDataAndToggle({ commit }, data) {
-      commit("addError", data);
-    },
-    tryToggleDevMode({ commit }, flag) {
-      commit("toggleDevMode", flag);
-    },
-    tryToggleShowInsideElementStatus({ commit }, flag) {
-      commit("toggleShowInsideElementStatus", flag);
-    },
-  },
-  mutations: {
-    addResultElement(state, data) {
-      const {
-        name,
-        type,
-        label,
-        cost,
-        value,
-        displayValue,
-        formOutputMethod,
-        eventType,
-        unit,
-        isShow,
-        excludeFromCalculations,
-        formulaProcessingLogic,
-      } = data;
-
-      state.globalResultsElements[name] = {
-        name,
-        type,
-        label,
-        cost,
-        formOutputMethod,
-        value,
-        summ: cost,
-        displayValue,
-        unit: unit ? unit : null,
-        isShow,
-        excludeFromCalculations,
-        eventType,
-        formulaProcessingLogic,
-      };
-    },
-    /**
-     * Модифицировать поле с данными
-     * @param state
-     * @param elementName
-     * @param modifiedFieldName
-     * @param newData
-     */
-    modifiedElement(state, { elementName, modifiedFieldName, newData }) {
-      state.globalResultsElements[elementName][modifiedFieldName] = newData;
-    },
-    addDependencyElement(
-      state,
-      { name, value, isShow, displayValue, type, parentName }
-    ) {
-      state.dataListForDependencies[name] = {
-        name,
-        value,
-        isShow,
-        displayValue,
-        type,
-        parentName,
-      };
-    },
-    deleteDependencyElement(state, elementName) {
-      if (state.dataListForDependencies.hasOwnProperty(elementName)) {
-        delete state.dataListForDependencies[elementName];
-      }
-    },
-    toggleShowAllTooltips(state, flag) {
-      state.shownAllTooltips = flag;
-    },
-    addError(state, data) {
-      state.validationsErrorsList[data.name] = data;
-    },
-    toggleDevMode(state, flag) {
-      state.devMode = flag;
-    },
-    toggleShowInsideElementStatus(state, flag) {
-      state.showInsideElementStatus = flag;
-    },
   },
   getters: {
     /**
@@ -231,8 +107,106 @@ export default createStore({
      */
     getNameReserveVariable: (state) => state.reserveVariableForOtherSumma,
     getSpecSymbols: (state) => state.specSymbols,
-    devMode: (state) => state.devMode,
-    showInsideElementStatus: (state) => state.showInsideElementStatus,
+    devMode: (state) => state.devModeData,
+    showInsideElementStatus: (state) => state.showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
+  },
+  actions: {
+    tryAddResultElement(dataResultItem) {
+      const {
+        name,
+        type,
+        label,
+        cost,
+        value,
+        displayValue,
+        formOutputMethod,
+        eventType,
+        unit,
+        isShow,
+        excludeFromCalculations,
+        formulaProcessingLogic,
+      } = dataResultItem;
+
+      this.globalResultsElements[name] = {
+        name,
+        type,
+        label,
+        cost,
+        formOutputMethod,
+        value,
+        summ: cost,
+        displayValue,
+        unit: unit ? unit : null,
+        isShow,
+        excludeFromCalculations,
+        eventType,
+        formulaProcessingLogic,
+      };
+    },
+    /**
+     *
+     * Модифицировать поле из результирующего списка новыми данными
+     * @param elementName
+     * @param modifiedFieldName
+     * @param newData
+     */
+    tryModifiedResultElement({ elementName, modifiedFieldName, newData }) {
+      this.globalResultsElements[elementName][modifiedFieldName] = newData;
+    },
+    /**
+     * Добавить элемент зависимости в общий массив данных
+     * @param name
+     * @param value
+     * @param isShow
+     * @param displayValue
+     * @param type
+     * @param parentName
+     */
+    tryAddDependencyElement({
+      name,
+      value,
+      isShow,
+      displayValue,
+      type,
+      parentName,
+    }) {
+      this.dataListForDependencies[name] = {
+        name,
+        value,
+        isShow,
+        displayValue,
+        type,
+        parentName,
+      };
+    },
+    /**
+     * удалить элемент зависимости из общего массива данных по имени
+     * @param elementName
+     */
+    tryDeleteDependencyElementOnName(elementName) {
+      if (this.dataListForDependencies.hasOwnProperty(elementName)) {
+        delete this.dataListForDependencies[elementName];
+      }
+    },
+    /**
+     * разрешить отображение подсказок с ошибками
+     */
+    showAllTooltipsOn() {
+      this.shownAllTooltips = true;
+    },
+    /**
+     *  добавить/обновить  ошибку в общий список
+     * @param data
+     */
+    checkValidationDataAndToggle(data) {
+      this.validationsErrorsList[data.name] = data;
+    },
+    tryToggleDevMode(flag) {
+      this.devModeData = flag;
+    },
+    tryToggleShowInsideElementStatus(flag) {
+      this.showInsideElementStatusData = flag;
+    },
   },
 });

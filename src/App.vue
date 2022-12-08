@@ -83,8 +83,7 @@
         class="resultDataBlock"
         v-if="showResultDataForBlock && initTeleport"
         v-html="finalTextForOutput"
-      ></pre
-      >
+      ></pre>
       <div id="prompt-text-element"></div>
     </div>
     <teleport v-if="initTeleport && submitResult" to="#teleportelement">
@@ -105,10 +104,11 @@ import UiDuplicator from "@/components/UI/UiDuplicator";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
-import { mapActions, mapGetters } from "vuex";
+// import { mapActions, mapGetters } from "vuex";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
-
+import { useBaseStore } from "@/store/piniaStore";
+import { mapState } from "pinia";
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -181,13 +181,43 @@ export default {
       eventNotShowTooltips: ["delete", "mounted", "timer", "dependency"], // События при которых не должно срабатывать отображение ошибок
     };
   },
+  // setup() {
+  //   const {
+  //     showAllTooltipsOn,
+  //     tryAddResultElement,
+  //     tryModifiedResultElement,
+  //     tryToggleDevMode,
+  //     isCanShowAllTooltips,
+  //     isCheckedGlobalValidation,
+  //     validationList,
+  //     globalDependenciesList,
+  //     getNameReserveVariable,
+  //     getAllResultsElements,
+  //     devMode,
+  //     showInsideElementStatus,
+  //   } = useBaseStore();
+  //   return {
+  //     showAllTooltipsOn,
+  //     tryAddResultElement,
+  //     tryModifiedResultElement,
+  //     tryToggleDevMode,
+  //     isCanShowAllTooltips,
+  //     isCheckedGlobalValidation,
+  //     validationList,
+  //     globalDependenciesList,
+  //     getNameReserveVariable,
+  //     getAllResultsElements,
+  //     devMode,
+  //     showInsideElementStatus,
+  //   };
+  // },
   methods: {
-    ...mapActions([
-      "showAllTooltipsOn",
-      "tryAddResultElement",
-      "tryModifiedResultElement",
-      "tryToggleDevMode",
-    ]),
+    // ...mapActions([
+    //   "showAllTooltipsOn",
+    //   "tryAddResultElement",
+    //   "tryModifiedResultElement",
+    //   "tryToggleDevMode",
+    // ]),
     changeValue(data) {
       if (typeof data !== "object") {
         return null;
@@ -292,7 +322,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useBaseStore, [
+      "showAllTooltipsOn",
+      "tryAddResultElement",
+      "tryModifiedResultElement",
+      "tryToggleDevMode",
       "isCanShowAllTooltips",
       "isCheckedGlobalValidation",
       "validationList",
@@ -302,6 +336,16 @@ export default {
       "devMode",
       "showInsideElementStatus",
     ]),
+    // ...mapGetters([
+    //   "isCanShowAllTooltips",
+    //   "isCheckedGlobalValidation",
+    //   "validationList",
+    //   "globalDependenciesList",
+    //   "getNameReserveVariable",
+    //   "getAllResultsElements",
+    //   "devMode",
+    //   "showInsideElementStatus",
+    // ]),
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
@@ -337,7 +381,6 @@ export default {
      * @returns {*}
      */
     summaFreeVariables() {
-
       return this.getSummaFreeVariablesInFormula(
         this.freeVariablesOutsideFormula
       );
@@ -364,9 +407,15 @@ export default {
      * @returns {*}
      */
     resultTextForComputed() {
-      let resultString = this.parsingDataInFormulaOnSumma(this.processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula));
-      return resultString?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, '');
-
+      let resultString = this.parsingDataInFormulaOnSumma(
+        this.processingArrayOnFormulaProcessingLogic(
+          this.dataListVariablesOnFormula
+        )
+      );
+      return resultString?.replace(
+        /[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g,
+        ""
+      );
     },
 
     /**
@@ -410,13 +459,16 @@ export default {
                 }
                 Object.values(duplicator?.insertedTemplates).forEach(
                   (templateInDuplicator) => {
-                    if (this.parseResultValueObjectItem(templateInDuplicator)?.length) {
-
+                    if (
+                      this.parseResultValueObjectItem(templateInDuplicator)
+                        ?.length
+                    ) {
                       result +=
-                        "<p>" + this.parseResultValueObjectItem(templateInDuplicator) + "</p>";
+                        "<p>" +
+                        this.parseResultValueObjectItem(templateInDuplicator) +
+                        "</p>";
                     }
                   }
-
                 );
                 result += "<p>------------------------------</p>";
               }
@@ -475,7 +527,7 @@ export default {
     },
 
     finalTextForOutputForTeleport() {
-      return this.finalTextForOutput.replace(/<p>|<\/p\>/g, '');
+      return this.finalTextForOutput.replace(/<p>|<\/p\>/g, "");
     },
 
     /**
@@ -531,7 +583,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss">
 //$calc-color-text : var(--calc-color-text);
