@@ -1,7 +1,6 @@
 import { useBaseStore } from "@/store/piniaStore";
 
-export const UtilityServices = {
-  setup() {
+export default function UseUtilityServices(){
     const store = useBaseStore();
 
     /**
@@ -194,5 +193,15 @@ export const UtilityServices = {
       }
       return resultArray;
     }
-  },
+
+
+    return {
+      getArrayElementsFromFormula,
+      getProxyFreeVariables,
+      getListVariablesMissedInFormula,
+      getSummaFreeVariablesInFormula,
+      parsingDataInFormulaOnSumma,
+      processingArrayOnFormulaProcessingLogic,
+      getNameElementsRecursive
+    }
 };

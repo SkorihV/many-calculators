@@ -70,17 +70,19 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
+
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 import {ref, toRef, computed} from "vue";
 import { useBaseStore } from "@/store/piniaStore";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 
 export default {
   name: "UiTab",
   components: { UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula],
   props: {
     tabData: {
       type: Object,
@@ -105,8 +107,14 @@ export default {
   setup(props, {emit}) {
     const store = useBaseStore();
     const isValidationShowOnParentName = toRef(store, 'isValidationShowOnParentName');
-
     const shownIdTab = ref(null);
+
+
+    // const {isVisibilityFromDependency, dependencyFormulaDisplay, parentIsShow} = UseForProcessingFormula(changeValue);
+
+    const classes = UsePropsTemplates(['classes','elementName']);
+    console.log(classes);
+
 
     const openItem = (index) => {
       shownIdTab.value = index;
@@ -140,7 +148,9 @@ export default {
       changeValue,
       checkIsShowError,
       isValidationShowOnParentName,
-      showBlock
+      showBlock,
+
+      // isVisibilityFromDependency
     }
   },
 };
