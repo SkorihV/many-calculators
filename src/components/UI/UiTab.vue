@@ -72,8 +72,9 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
+import {ref, toRef, computed} from "vue";
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
+
 
 export default {
   name: "UiTab",
@@ -101,36 +102,29 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      itemOpenId: null,
-      errorsElements: {},
-      visibilityListTabs: new Map(),
-      shownIdTab: null,
-    };
-  },
-  methods: {
-    openItem(index) {
-      this.shownIdTab = index;
-    },
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-    checkIsShowError(parentName, key) {
-      const isError = this.isValidationErrorOnParentName(parentName);
-      return key !== this.shownIdTab && isError && this.isCanShowAllTooltips;
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "isCanShowAllTooltips",
-      "isValidationShowOnParentName",
-      "isValidationErrorOnParentName",
-    ]),
-    showBlock() {
+  setup(props, {emit}) {
+    const store = useBaseStore();
+    const isValidationShowOnParentName = toRef(store, 'isValidationShowOnParentName');
+
+    const shownIdTab = ref(null);
+
+    const openItem = (index) => {
+      shownIdTab.value = index;
+    }
+
+    const changeValue = (data) => {
+      emit("changedValue", data);
+    }
+
+    const checkIsShowError = (parentName, key) => {
+      const isError = store.isValidationErrorOnParentName(parentName);
+      return key !== shownIdTab.value && isError && store.isCanShowAllTooltips;
+    }
+
+    const showBlock = computed(() => {
       let result = [];
-      if (this.tabData?.items.length) {
-        result = this.tabData?.items.map((item) => {
+      if (props.tabData?.items.length) {
+        result = props.tabData?.items.map((item) => {
           if (item?.templates?.length) {
             return Boolean(item.templates.length);
           }
@@ -138,7 +132,16 @@ export default {
         });
       }
       return result.some((item) => item);
-    },
+    })
+
+    return {
+      shownIdTab,
+      openItem,
+      changeValue,
+      checkIsShowError,
+      isValidationShowOnParentName,
+      showBlock
+    }
   },
 };
 </script>

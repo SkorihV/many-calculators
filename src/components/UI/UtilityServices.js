@@ -1,35 +1,36 @@
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
 
-export const MixinsUtilityServices = {
-  methods: {
+export const UtilityServices = {
+  setup() {
+    const store = useBaseStore();
+
     /**
      * получить из формулы массив элементов
      * @param formula
      * @returns {*}
      */
-    getArrayElementsFromFormula(formula) {
-      formula = this.handleSpecSymbolsInFormula(formula);
-      formula = this.getArrayOnFormulaElements(formula);
+    const getArrayElementsFromFormula = (formula) => {
+      formula = handleSpecSymbolsInFormula(formula);
+      formula = getArrayOnFormulaElements(formula);
       return formula;
-    },
+    }
     /**
      * преобразовывает полученные спецсимволы в обычные
      * @param formula
      * @returns {*}
      */
-    handleSpecSymbolsInFormula(formula) {
-      this.getSpecSymbols?.forEach((specItem) => {
+    const handleSpecSymbolsInFormula = (formula) => {
+      store.getSpecSymbols?.forEach((specItem) => {
         formula = formula?.replaceAll(specItem[0], specItem[1]);
       });
       return formula;
-    },
+    }
     /**
      * преобразовывает формулу в массив
      * @param formula
      * @returns {*}
      */
-    getArrayOnFormulaElements(formula) {
+    const getArrayOnFormulaElements = (formula) => {
       let formulaInOut = formula
         ?.split(
           // /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)+)/g
@@ -49,15 +50,15 @@ export const MixinsUtilityServices = {
         return nextItem;
       });
       return formulaInOut;
-    },
+    }
     /**
      * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
      * @returns {{summ: *, name: string}}
      */
-    getProxyFreeVariables(value, name = null) {
+    const getProxyFreeVariables = (value, name = null) => {
       return new Proxy(
         {
-          name: name === null ? this.getNameReserveVariable : name,
+          name: name === null ? store.getNameReserveVariable : name,
           cost: value,
           isShow: Boolean(value),
         },
@@ -67,14 +68,15 @@ export const MixinsUtilityServices = {
           },
         }
       );
-    },
+    }
+
     /**
      * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных отсутствующих в формуле
      * @param dataList
      * @param variablesList
      * @returns {*}
      */
-    getListVariablesMissedInFormula(dataList, variablesList) {
+    const getListVariablesMissedInFormula = (dataList, variablesList) => {
       return dataList
         ?.filter((dataOnCalcComponent) => {
           const isFormula = variablesList.some(
@@ -85,7 +87,7 @@ export const MixinsUtilityServices = {
         .filter((item) => {
           return item;
         });
-    },
+    }
     /**
      * Получить линейную сумму всех переданных значений
      * Условия:
@@ -95,7 +97,7 @@ export const MixinsUtilityServices = {
      * @param dataList
      * @returns {*}
      */
-    getSummaFreeVariablesInFormula(dataList) {
+    const getSummaFreeVariablesInFormula = (dataList) => {
       return dataList.reduce((sum, item) => {
         if (
           item?.cost !== null &&
@@ -106,13 +108,13 @@ export const MixinsUtilityServices = {
         }
         return sum + 0;
       }, 0);
-    },
+    }
     /**
      * Обрабатываем массив данных и получаем сумму всех значений из item.summ
      * @param dataListVariables
      * @returns {*}
      */
-    parsingDataInFormulaOnSumma(dataListVariables) {
+    const parsingDataInFormulaOnSumma = (dataListVariables) => {
       return dataListVariables?.reduce((resultText, item) => {
         if (typeof item?.cost === "number" && item?.isShow) {
           return (resultText += item.cost);
@@ -122,7 +124,7 @@ export const MixinsUtilityServices = {
         }
         return (resultText += item);
       }, "");
-    },
+    }
 
     /**
      * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
@@ -133,7 +135,7 @@ export const MixinsUtilityServices = {
      * @param dataList
      * @returns {*[]}
      */
-    processingArrayOnFormulaProcessingLogic(dataList) {
+    const processingArrayOnFormulaProcessingLogic = (dataList) => {
       let resultList = [];
       let localDataList = dataList;
       let singsList = ["+", "-", "*", "/"];
@@ -170,13 +172,13 @@ export const MixinsUtilityServices = {
         }
       }
       return resultList;
-    },
+    }
     /**
      * получить список значений полей в объекте - рекурсивно
      * @param object
      * @returns {*[]}
      */
-    getNameElementsRecursive(object) {
+    const getNameElementsRecursive = (object) => {
       let resultArray = [];
       getPropInObject(object, "elementName");
       function getPropInObject(object) {
@@ -191,9 +193,6 @@ export const MixinsUtilityServices = {
         }
       }
       return resultArray;
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, ["getSpecSymbols"]),
+    }
   },
 };
