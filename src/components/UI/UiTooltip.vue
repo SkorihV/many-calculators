@@ -16,20 +16,11 @@
 </template>
 
 <script>
-import {ref, getCurrentInstance, watch, onMounted, computed, toRef} from "vue";
+import {ref, getCurrentInstance, watch, onMounted, computed} from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 
 export default {
   name: "UiTooltip",
-  // mounted() {
-  //   this.checkPosition();
-  //   window.addEventListener("resize", () => {
-  //     clearTimeout(this.resizeTimer);
-  //     this.resizeTimer = setTimeout(() => {
-  //       this.checkPosition();
-  //     }, 500);
-  //   });
-  // },
   props: {
     /**
      * Текст ошибки
