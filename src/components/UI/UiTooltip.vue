@@ -2,7 +2,7 @@
   <transition
     name="tooltip-transition"
     v-cloak
-    v-show="isShow && tooltipText && canBeShown"
+    v-show="canBeShown"
   >
     <div
       class="calc__tooltip calc__tooltip-wrapper"
@@ -16,21 +16,20 @@
 </template>
 
 <script>
-
+import {ref, getCurrentInstance, watch, onMounted, computed, toRef} from "vue";
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
 
 export default {
   name: "UiTooltip",
-  mounted() {
-    this.checkPosition();
-    window.addEventListener("resize", () => {
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        this.checkPosition();
-      }, 500);
-    });
-  },
+  // mounted() {
+  //   this.checkPosition();
+  //   window.addEventListener("resize", () => {
+  //     clearTimeout(this.resizeTimer);
+  //     this.resizeTimer = setTimeout(() => {
+  //       this.checkPosition();
+  //     }, 500);
+  //   });
+  // },
   props: {
     /**
      * Текст ошибки
@@ -56,51 +55,72 @@ export default {
       type: Boolean,
     },
   },
-  data() {
-    return {
-      resizeTimer: null,
-      classPosition: null,
-      width: null,
-    };
-  },
-  methods: {
-    checkPosition() {
+  setup(props) {
+    const store = useBaseStore();
+
+    const resizeTimer   = ref(null);
+    const classPosition = ref(null);
+    const tooltip       = ref(null);
+
+    const instance      = getCurrentInstance();
+
+    const checkPosition = () => {
       setTimeout(() => {
-        if (this.$refs.tooltip) {
-          this.classPosition = null;
-          const parent = this.$parent.$el;
+        if (tooltip) {
+          classPosition.value = null;
+          const parent = instance?.parent?.refs?.parent;
           if (!parent || parent.nodeType === 3) {
             return false;
           }
+
           const parentRightSide = parent?.getBoundingClientRect().right;
           const parentLeftSide = parent?.getBoundingClientRect().left;
           const parentWidth = parent?.offsetWidth;
           const docWidth = document.documentElement.clientWidth;
-          this.classPosition =
+          classPosition.value =
             parentWidth > 400
               ? ""
               : docWidth - parentRightSide < 150
-              ? "isLeft"
-              : parentLeftSide < 150
-              ? "isRight"
-              : "";
+                ? "isLeft"
+                : parentLeftSide < 150
+                  ? "isRight"
+                  : "";
         }
       }, 10);
-    },
-  },
-  watch: {
+    }
+
     /**
      * Обновить позицию подсказки после инициализации отображения
      */
-    isShow() {
-      this.checkPosition();
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, ["isCanShowAllTooltips"]),
-    canBeShown() {
-      return this.isCanShowAllTooltips && this.localCanBeShown;
-    },
+    watch(() => props.isShow, (newValue) => {
+      if (newValue !== undefined) {
+        checkPosition();
+      }
+    });
+
+    /**
+     * Отобразить
+     * @type {ComputedRef<Boolean>}
+     */
+    const canBeShown = computed(() => {
+       return store.isCanShowAllTooltips && props.localCanBeShown && props.isShow && props.tooltipText?.length;
+    })
+
+    onMounted(() => {
+      checkPosition();
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer.value);
+        resizeTimer.value = setTimeout(() => {
+          checkPosition();
+        }, 500);
+      });
+    })
+
+    return {
+      tooltip,
+      classPosition,
+      canBeShown,
+    }
   },
 };
 </script>
