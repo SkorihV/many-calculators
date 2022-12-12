@@ -29,6 +29,9 @@
 </template>
 
 <script>
+
+import { computed, ref } from "vue";
+
 export default {
   name: "UiPrompt",
   props: {
@@ -36,49 +39,57 @@ export default {
       type: String,
     },
   },
-  data() {
-    return {
-      isShow: false,
-      timerName: null,
-      topCalcWrapper: null,
-      topBtnPrompt: null,
-    };
-  },
-  methods: {
-    show() {
-      clearTimeout(this.timerName);
-      this.getTopForCalcWrapper();
-      this.getTopBtnPrompt();
-      this.isShow = true;
-    },
-    hidden() {
-      this.timerName = setTimeout(() => (this.isShow = false), 500);
-    },
-    getTopForCalcWrapper() {
-      this.topCalcWrapper =
+  setup(props) {
+    const isShow            = ref(false);
+    const timerName         = ref(null);
+    const topCalcWrapper    = ref(null);
+    const topBtnPrompt      = ref(null);
+    const promptBtn         = ref(null)
+
+    const show = () => {
+      clearTimeout(timerName.value);
+      getTopForCalcWrapper();
+      getTopBtnPrompt();
+      isShow.value = true;
+    }
+    const hidden = () => {
+      timerName.value = setTimeout(() => (isShow.value = false), 500);
+    }
+    const getTopForCalcWrapper = () => {
+      topCalcWrapper.value =
         document
           .querySelector("#app-base-constructor-calculator")
           .getBoundingClientRect().top + window.pageYOffset;
-    },
-    getTopBtnPrompt() {
-      this.topBtnPrompt = this.$refs.promptBtn.getBoundingClientRect().top;
-    },
-  },
-  computed: {
-    hiddenPromptWrapper() {
-      const text = this.promptText;
+    }
+    const getTopBtnPrompt = () => {
+      topBtnPrompt.value = promptBtn.value.getBoundingClientRect().top;
+    }
+
+    const hiddenPromptWrapper = computed(() => {
+      const text = props.promptText;
       return Boolean(text?.toString()?.trim().length);
-    },
-    topPopupWrapper() {
-      const btn = this.$refs.promptBtn.getBoundingClientRect();
+    })
+
+    const topPopupWrapper = computed(() => {
+      const btn = promptBtn.value.getBoundingClientRect();
       const btnCoordTop =
-        this.topBtnPrompt -
-        this.topCalcWrapper +
+        topBtnPrompt.value -
+        topCalcWrapper.value +
         window.pageYOffset +
         5 +
         btn.height;
       return `top: ${btnCoordTop}px;`;
-    },
+    })
+
+    return {
+      promptBtn,
+      isShow,
+      topPopupWrapper,
+      hiddenPromptWrapper,
+
+      hidden,
+      show
+    }
   },
 };
 </script>

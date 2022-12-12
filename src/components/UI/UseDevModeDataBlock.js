@@ -11,8 +11,8 @@ export default function UseDevModeDataBlock(outerData) {
 
   const devModeData = computed(()=> {
     if (store.showDevModeBlock) {
-      const textLabel = `<div>Заголовок элемента: ${data.label}</div>`;
-      const textElementName = `<div>Имя элемента: ${data.elementName}</div>`;
+      const textLabel = `<div>Заголовок элемента: ${data?.label}</div>`;
+      const textElementName = `<div>Имя элемента: ${data?.elementName}</div>`;
       const textDependencyFormula = data.dependencyFormulaDisplay?.length
         ? `<div> Формула зависимости отображения: ${getArrayElementsFromFormula(
           data.dependencyFormulaDisplay
@@ -42,6 +42,11 @@ export default function UseDevModeDataBlock(outerData) {
       if (data?.localCost) {
         textLocalCost = `<div>Текущая стоимость: ${data.localCost}</div>`;
       }
+      let elementName = '';
+      if (data?.templateName) {
+        elementName = "<div>Шаблон элемента - " + data.templateName + "</div>";
+      }
+
       return `
           <div class="dev-block">
            ${textLabel}
@@ -53,6 +58,8 @@ export default function UseDevModeDataBlock(outerData) {
            ${textInfoVisibility}
 
            ${textLocalCost}
+           
+           ${elementName}
           </div>`;
     }
     return false;

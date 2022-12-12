@@ -11,8 +11,6 @@ export default function UseForProcessingFormula(outerData) {
   const dependencyFormulaDisplay = toRef(data, 'dependencyFormulaDisplay');
   const parentIsShow = toRef(data, 'parentIsShow');
   const dependencyPrices = toRef(data, 'dependencyPrices');
-  const changeValue = data?.changeValue;
-
 
   const localDependencyList = reactive({})
 
@@ -171,15 +169,15 @@ export default function UseForProcessingFormula(outerData) {
   watch(
     () => isVisibilityFromDependency.value,
     (newValue) => {
-      if (newValue && store.isCanShowAllTooltips && changeValue) {
-        changeValue("dependency");
+      if (newValue && store.isCanShowAllTooltips && data?.changeValue) {
+        data.changeValue("dependency");
       }
     },
     {deep: true})
 
   watch(() => store.isCanShowAllTooltips, (newValue) => {
-    if (newValue && isVisibilityFromDependency.value && changeValue) {
-      changeValue("dependency");
+    if (newValue && isVisibilityFromDependency.value && data?.changeValue) {
+      data.changeValue("dependency");
     }
   })
 
@@ -198,8 +196,8 @@ export default function UseForProcessingFormula(outerData) {
           }
         }
       }
-      if (isUpdated && changeValue) {
-        changeValue("changeValueDependenciesElements");
+      if (isUpdated && data?.changeValue) {
+        data.changeValue("changeValueDependenciesElements");
       }
     },
 {deep: true}
@@ -212,8 +210,8 @@ export default function UseForProcessingFormula(outerData) {
    * При глобальном включении возможности отображать подсказки - отправить состояние элемента
    */
   watch(() => store.isCanShowAllTooltips, ()=> {
-    if (parentIsShow.value) {
-      changeValid("global");
+    if (parentIsShow.value && data?.changeValid) {
+      data.changeValid("global");
     }
   })
 
@@ -221,10 +219,12 @@ export default function UseForProcessingFormula(outerData) {
    * При изменении состояния видимости родителя - отправить состояние элемента.
    */
   watch(() => parentIsShow.value, (newValue) => {
-    if (newValue) {
-      data?.changeValue("global");
-    } else {
-      data?.changeValue("delete");
+    if (data?.changeValue) {
+      if (newValue) {
+        data?.changeValue("global");
+      } else {
+        data?.changeValue("delete");
+      }
     }
   })
 
@@ -259,6 +259,7 @@ export default function UseForProcessingFormula(outerData) {
     constructLocalListElementDependencyInFormula,
     processingVariablesOnFormula,
     parsingFormulaVariables,
-    initProcessingDependencyPrice
+    initProcessingDependencyPrice,
+    costAfterProcessingDependencyPrice
   }
 };

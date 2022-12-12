@@ -49,14 +49,14 @@ export default {
       type: Array,
       default: () => [],
     },
-    ...UsePropsTemplates(['classes','elementName', 'maxHeight', 'maxWidth', 'prompt', 'label', 'templateName', 'classes', 'formulaProcessingLogic', 'parentName', 'parentIsShow', 'dependencyFormulaDisplay'])
+    ...UsePropsTemplates(['classes','elementName', 'maxHeight', 'maxWidth', 'prompt', 'label', 'templateName',  'formulaProcessingLogic', 'parentName', 'parentIsShow', 'dependencyFormulaDisplay'])
   },
   setup(props) {
-    const store = useBaseStore();
-    const label = toRef(props, 'label');
-    const parentIsShow = toRef(props, 'parentIsShow');
-    const dependencyFormulaDisplay = toRef(props, 'dependencyFormulaDisplay');
-    const isVisibilityFromDependency = ref(false);
+    const store                       = useBaseStore();
+    const label                       = toRef(props, 'label');
+    const parentIsShow                = toRef(props, 'parentIsShow');
+    const dependencyFormulaDisplay    = toRef(props, 'dependencyFormulaDisplay');
+    const isVisibilityFromDependency  = ref(false);
 
     const { getArrayElementsFromFormula, getImageDir } = UseUtilityServices();
     const { processingVariablesOnFormula, constructLocalListElementDependencyInFormula, isVisibilityFromDependency : isVisibilityFromDependencyLocal, parsingFormulaVariables} = UseForProcessingFormula({ parentIsShow, dependencyFormulaDisplay })

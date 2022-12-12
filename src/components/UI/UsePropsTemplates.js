@@ -128,6 +128,25 @@ export default function(propsName) {
     }
   }
 
+  const cost = () => {
+    return {
+      type: [Number, String],
+      default: null,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
+    }
+  }
+  /**
+   * Список цен с зависимостями / условиями
+   */
+  const dependencyPrices = () => {
+    return {
+      type: Array,
+      default: () => [],
+    }
+  }
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -143,13 +162,17 @@ export default function(propsName) {
     maxWidth: maxWidth(),
     maxHeight: maxHeight(),
     template: template(),
-    index: index()
+    index: index(),
+    cost: cost(),
+    dependencyPrices: dependencyPrices()
   }
 
   if (Array.isArray(propsName)) {
     propsName.map((name) => {
       if (resultsData[name]) {
         propsForReturn[name] = resultsData[name];
+      } else {
+        console.error("Попытка вызвать отсутствующий в базе Props - " + name);
       }
     })
   }
