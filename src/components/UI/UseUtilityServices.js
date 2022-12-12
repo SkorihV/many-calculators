@@ -194,6 +194,10 @@ export default function UseUtilityServices(){
       return resultArray;
     }
 
+  const checkedValueOnVoid = (value) => {
+    return value?.length !== 0 && value !== undefined && value !== null;
+  }
+
 
     return {
       getArrayElementsFromFormula,
@@ -202,6 +206,7 @@ export default function UseUtilityServices(){
       getSummaFreeVariablesInFormula,
       parsingDataInFormulaOnSumma,
       processingArrayOnFormulaProcessingLogic,
-      getNameElementsRecursive
+      getNameElementsRecursive,
+      checkedValueOnVoid
     }
 };

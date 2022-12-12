@@ -1,7 +1,12 @@
 import { defineProps } from "vue";
 
+/**
+ *
+ * @param propsName
+ * @returns {{}}
+ */
 export default function(propsName) {
-  const returnDataArr = [];
+  const propsForReturn = {};
 
   const tabData = () => {
     return {
@@ -27,7 +32,7 @@ export default function(propsName) {
   const classes = () => {
    return  {
       type: String,
-    default: null,
+      default: null,
     }
   }
 
@@ -48,6 +53,32 @@ export default function(propsName) {
     }
   }
 
+  const tabItem = () => {
+    return {
+      type: Object,
+      default: () => {},
+    }
+  }
+
+  const tabName = () => {
+    return {
+      type: String,
+      default: "",
+    }
+  }
+
+  const tabItemId = () => {
+    return {
+      type: Number,
+    }
+  }
+
+  const shownIdTab = () => {
+    return {
+      type: Number,
+      default: null,
+    }
+  }
 
   const resultsData = {
     tabData: tabData(),
@@ -56,13 +87,18 @@ export default function(propsName) {
     classes: classes(),
     dependencyFormulaDisplay: dependencyFormulaDisplay(),
     parentIsShow: parentIsShow(),
+    tabItem: tabItem(),
+    tabName: tabName(),
+    tabItemId: tabItemId(),
+    shownIdTab: shownIdTab()
   }
 
-  propsName.map((name) => {
-    if (resultsData[name]) {
-      returnDataArr.push(resultsData[name])
-    }
-  })
-
-  return returnDataArr;
+  if (Array.isArray(propsName)) {
+    propsName.map((name) => {
+      if (resultsData[name]) {
+        propsForReturn[name] = resultsData[name];
+      }
+    })
+  }
+  return propsForReturn;
 }

@@ -74,7 +74,7 @@ import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
 
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
-import {ref, toRef, computed} from "vue";
+import { ref, toRef, computed, defineComponent, toRefs, watch } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
@@ -84,45 +84,32 @@ export default {
   components: { UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   props: {
-    tabData: {
-      type: Object,
-      default: () => {},
-    },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(['tabData','label','classes','elementName', 'parentIsShow', 'dependencyFormulaDisplay'])
   },
   setup(props, {emit}) {
     const store = useBaseStore();
     const isValidationShowOnParentName = toRef(store, 'isValidationShowOnParentName');
-    const shownIdTab = ref(null);
 
+    const classes                     = toRef(props, 'classes');
+    const elementName                 = toRef(props, 'elementName');
+    const dependencyFormulaDisplay    = toRef(props, 'dependencyFormulaDisplay');
+    const parentIsShow                = toRef(props, 'parentIsShow');
 
-    // const {isVisibilityFromDependency, dependencyFormulaDisplay, parentIsShow} = UseForProcessingFormula(changeValue);
+    const shownIdTab                  = ref(null);
+    const isVisibilityFromDependency  = ref(false);
 
-    const classes = UsePropsTemplates(['classes','elementName']);
-    console.log(classes);
-
+    const changeValue = (data) => {
+      emit("changedValue", data);
+    }
 
     const openItem = (index) => {
       shownIdTab.value = index;
     }
 
-    const changeValue = (data) => {
-      emit("changedValue", data);
-    }
+    const {isVisibilityFromDependency : isVisibilityFromDependencyLocal} = UseForProcessingFormula({dependencyFormulaDisplay, parentIsShow, changeValue});
+    watch(() => isVisibilityFromDependencyLocal.value, ()=> {
+      isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value
+    })
 
     const checkIsShowError = (parentName, key) => {
       const isError = store.isValidationErrorOnParentName(parentName);
@@ -143,14 +130,15 @@ export default {
     })
 
     return {
+      classes,
+      showBlock,
+      elementName,
       shownIdTab,
       openItem,
-      changeValue,
       checkIsShowError,
       isValidationShowOnParentName,
-      showBlock,
-
-      // isVisibilityFromDependency
+      changeValue,
+      isVisibilityFromDependency
     }
   },
 };

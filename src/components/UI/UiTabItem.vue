@@ -20,37 +20,16 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import {computed, toRef} from "vue";
 import { useBaseStore } from "@/store/piniaStore";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+
 
 export default {
   name: "UiTabItem",
   components: { TemplatesWrapper },
   emits: ["changedValue"],
   props: {
-    tabItem: {
-      type: Object,
-      default: () => {},
-    },
-    tabName: {
-      type: String,
-      default: "",
-    },
-    tabItemId: {
-      type: Number,
-    },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    shownIdTab: {
-      type: Number,
-      default: null,
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
+    ...UsePropsTemplates(['tabItem', 'tabName', 'tabItemId', 'elementName', 'shownIdTab', 'parentIsShow'])
   },
-
   setup(props, {emit}) {
     const store = useBaseStore();
     const getValidationListOnParentName = toRef(store, 'getValidationListOnParentName')

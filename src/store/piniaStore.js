@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { createLogger } from "vuex";
 
 export const useBaseStore = defineStore("base", {
   state: () => {
@@ -65,12 +66,13 @@ export const useBaseStore = defineStore("base", {
      * @param state
      * @returns {function(*): boolean}
      */
-    isValidationShowOnParentName: (state) => (parentName) =>
-      Boolean(
+    isValidationShowOnParentName: (state) => (parentName) => {
+      return   Boolean(
         Object.values(state.validationsErrorsList).filter(
           (item) => item.parentName === parentName && item.isShow
         ).length
-      ),
+      )
+    }   ,
     /**
      * Есть ли хоть один элемент-ребенок с ошибкой, у родителя
      * @param state

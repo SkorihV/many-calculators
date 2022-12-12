@@ -1,30 +1,33 @@
 
-import { computed, defineProps, reactive, watch } from "vue";
+import { computed, defineProps, reactive, toRef, watch } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 
 
-export default function UseForProcessingFormula(changeValue = null) {
-  const store = useBaseStore();
+export default function UseForProcessingFormula(outerData) {
   const {getArrayElementsFromFormula} = UseUtilityServices()
-  /**
-   * Формула на результатах вычисления которой будет строиться результат отображения элемента
-   * @type {Readonly<{[key in string]?: string}>}
-   */
-  const dependencyFormulaDisplay = defineProps({
-    type: String,
-    default: "",
-  })
-  const parentIsShow = defineProps({
-    type: Boolean,
-    default: true,
-  })
+  const store = useBaseStore();
+  const data = reactive(outerData);
+  const dependencyFormulaDisplay = toRef(data, 'dependencyFormulaDisplay');
+  const parentIsShow = toRef(data, 'parentIsShow');
+  const changeValue = data?.changeValue;
+
+  // /**
+  //  * Формула на результатах вычисления которой будет строиться результат отображения элемента
+  //  * @type {Readonly<{[key in string]?: string}>}
+  //  */
+  // const dependencyFormulaDisplay = defineProps({
+  //   type: String,
+  //   default: "",
+  // })
+  // const parentIsShow = defineProps({
+  //   type: Boolean,
+  //   default: true,
+  // })
 
   const localDependencyList = reactive({})
 
-  const checkedValueOnVoid = (value) => {
-    return value?.length !== 0 && value !== undefined && value !== null;
-  }
+
 
   /**
    * Собираем локальный список зависимостей из глобального на основе формулы
@@ -129,15 +132,15 @@ export default function UseForProcessingFormula(changeValue = null) {
 
   /**
    * Получить массив значений из формулы
-   * @type {ComputedRef<>}
+   * @type {ComputedRef<unknown>}
    */
   const parsingFormulaVariables = computed(() => {
-    if (!isDependencyElementVisibility) {
+    if (!isDependencyElementVisibility.value) {
       return false;
     }
 
     let formula = getArrayElementsFromFormula(
-      dependencyFormulaDisplay
+      dependencyFormulaDisplay.value
     );
 
     constructLocalListElementDependencyInFormula(formula);
@@ -147,15 +150,16 @@ export default function UseForProcessingFormula(changeValue = null) {
 
   /**
    * Отобразить текущий элемент
-   * @type {ComputedRef<>}
+   * @type {ComputedRef<boolean>}
    */
   const isVisibilityFromDependency = computed(() => {
-    if (isDependencyElementVisibility || !parentIsShow) {
+    console.log(444);
+    if (isDependencyElementVisibility.value || !parentIsShow.value) {
       try {
-        return eval(parsingFormulaVariables);
+        return eval(parsingFormulaVariables.value);
       } catch (e) {
         if (store.devMode) {
-          console.error(e.message, parsingFormulaVariables);
+          console.error(e.message, parsingFormulaVariables.value);
         }
         return false;
       }
@@ -168,7 +172,7 @@ export default function UseForProcessingFormula(changeValue = null) {
    * @returns {boolean}
    */
   const isDependencyElementVisibility = computed(() => {
-    return Boolean(dependencyFormulaDisplay?.length);
+    return Boolean(dependencyFormulaDisplay.value?.length);
   })
 
 
@@ -177,14 +181,17 @@ export default function UseForProcessingFormula(changeValue = null) {
    * @param newValue
    */
 
-  watch(isVisibilityFromDependency, (newValue) => {
-    if (newValue && store.isCanShowAllTooltips) {
-      changeValue("dependency");
-    }
-  })
+  watch(
+    () => isVisibilityFromDependency.value,
+    (newValue) => {
+      if (newValue && store.isCanShowAllTooltips && changeValue) {
+        changeValue("dependency");
+      }
+    },
+    {deep: true})
 
   watch(() => store.isCanShowAllTooltips, (newValue) => {
-    if (newValue && isVisibilityFromDependency) {
+    if (newValue && isVisibilityFromDependency.value && changeValue) {
       changeValue("dependency");
     }
   })
@@ -204,7 +211,7 @@ export default function UseForProcessingFormula(changeValue = null) {
           }
         }
       }
-      if (isUpdated) {
+      if (isUpdated && changeValue) {
         changeValue("changeValueDependenciesElements");
       }
     },
