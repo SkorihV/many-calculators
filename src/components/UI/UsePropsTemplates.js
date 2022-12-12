@@ -47,11 +47,85 @@ export default function(propsName) {
     }
   }
 
+  const prompt = () => {
+    return {
+      type: String,
+      default: null,
+    }
+  }
+
+  const maxWidth = () => {
+    return {
+      type: [Number, String],
+      default: 250,
+    }  }
+
+  const maxHeight = () => {
+    return {
+      type: [Number, String],
+      default: 250,
+    }
+  }
 
 
+  const templateName = () => {
+    return {
+      type: String,
+      default: null,
+    }
+  }
 
-  const accordionData = () => {
+  const template = () => {
+    return {
+      type: Object,
+      default: null,
+    }
+  }
 
+  const formulaProcessingLogic = () => {
+    return {
+      type: String,
+      default: "error",
+    }
+  }
+
+  const parentName = () => {
+    return {
+      type: String,
+      default: null,
+    }
+  }
+
+  /**
+   * Исключить элемент из расчета по формуле
+   */
+  const excludeFromCalculations = () =>{
+    return {
+      type: [Boolean, Number],
+      default: false,
+          validator(value) {
+          return value === false || value === true || value === 0 || value === 1;
+        },
+    }
+  }
+  /**
+   * элемент не может быть пустым и требуется выбор
+   */
+  const notEmpty = () => {
+    return {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    }
+  }
+
+  const index = () => {
+    return {
+      type: [Number, String],
+      default: null,
+    }
   }
 
   const resultsData = {
@@ -60,6 +134,16 @@ export default function(propsName) {
     classes: classes(),
     dependencyFormulaDisplay: dependencyFormulaDisplay(),
     parentIsShow: parentIsShow(),
+    prompt: prompt(),
+    notEmpty: notEmpty(),
+    excludeFromCalculations: excludeFromCalculations(),
+    parentName: parentName(),
+    formulaProcessingLogic: formulaProcessingLogic(),
+    templateName: templateName(),
+    maxWidth: maxWidth(),
+    maxHeight: maxHeight(),
+    template: template(),
+    index: index()
   }
 
   if (Array.isArray(propsName)) {

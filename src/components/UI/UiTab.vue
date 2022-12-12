@@ -72,9 +72,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
 import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
 
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-
-import { ref, toRef, computed, defineComponent, toRefs, watch } from "vue";
+import { ref, toRef, computed, watch } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 

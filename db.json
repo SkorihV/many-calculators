@@ -65,6 +65,38 @@
         "prompt": ""
       },
       {
+        "dependencyImages":[
+          {
+            "title":2,
+            "image":{
+              "image_id":"2639440506",
+              "filename":"https://dummyimage.com/150x100/555/121212",
+              "ver_id":2422030,
+              "image_width":"500",
+              "image_height":"500",
+              "ext":"jpg"
+            },
+            "dependencyFormulaDisplay":"первыйИнпут > 35"
+          }
+        ],
+        "prompt":"",
+        "title":"Зеркала - Цвет профиля",
+        "label":"Цвет профиля",
+        "defaultImage":{
+          "image_id":"2639440106",
+          "filename":"https://dummyimage.com/150x100/a1a1a1/ccc",
+          "ver_id":2422030,
+          "image_width":"500",
+          "image_height":"500",
+          "ext":"jpg"
+        },
+        "maxWidth":"150",
+        "dependencyFormulaDisplay":"первыйИнпут > 31",
+        "classes":"",
+        "template":"UiImage",
+        "json_id" : "184655706"
+      },
+      {
         "json_id": "165719506",
         "title": "Input Зависимости 1 уровень",
         "label": "Input Зависимости 1 уровень",

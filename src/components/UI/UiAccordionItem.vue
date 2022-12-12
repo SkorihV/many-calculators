@@ -41,7 +41,6 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { ref, computed } from "vue";
 
@@ -108,51 +107,7 @@ export default {
       changeValue,
       isOpen
     }
-
   },
-  // data() {
-  //   return {
-  //     isOpen: false,
-  //     errorsElements: new Set(),
-  //     visibilityList: new Set(),
-  //   };
-  // },
-  // methods: {
-  //   changeValue(data) {
-  //     this.$emit("changedValue", data);
-  //   },
-  // },
-  // computed: {
-  //   ...mapState(useBaseStore, [
-  //     "isCanShowAllTooltips",
-  //     "getValidationListOnParentName",
-  //   ]),
-  //   isShowError() {
-  //     return this.localListValidationError.some(
-  //       (item) => item.error && item.isShow && this.isCanShowAllTooltips
-  //     );
-  //   },
-  //   isShowAccordionItem() {
-  //     return this.currentChildrenItem !== this.currentHiddenItem;
-  //   },
-  //   itemIdName() {
-  //     return (
-  //       this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
-  //     );
-  //   },
-  //   localListValidationError() {
-  //     return this.getValidationListOnParentName(this.elementName);
-  //   },
-  //   currentChildrenItem() {
-  //     return this.accordionItem?.templates.length
-  //       ? this.accordionItem?.templates.length
-  //       : 0;
-  //   },
-  //   currentHiddenItem() {
-  //     return this.localListValidationError.filter((item) => !item.isShow)
-  //       .length;
-  //   },
-  // },
 };
 </script>
 

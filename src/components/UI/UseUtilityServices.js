@@ -1,4 +1,5 @@
 import { useBaseStore } from "@/store/piniaStore";
+import { computed } from "vue";
 
 export default function UseUtilityServices(){
     const store = useBaseStore();
@@ -198,15 +199,18 @@ export default function UseUtilityServices(){
     return value?.length !== 0 && value !== undefined && value !== null;
   }
 
+  const getImageDir = () => window?.imageDir ? window.imageDir : "";
 
-    return {
-      getArrayElementsFromFormula,
-      getProxyFreeVariables,
-      getListVariablesMissedInFormula,
-      getSummaFreeVariablesInFormula,
-      parsingDataInFormulaOnSumma,
-      processingArrayOnFormulaProcessingLogic,
-      getNameElementsRecursive,
-      checkedValueOnVoid
-    }
+
+  return {
+    getArrayElementsFromFormula,
+    getProxyFreeVariables,
+    getListVariablesMissedInFormula,
+    getSummaFreeVariablesInFormula,
+    parsingDataInFormulaOnSumma,
+    processingArrayOnFormulaProcessingLogic,
+    getNameElementsRecursive,
+    checkedValueOnVoid,
+    getImageDir
+  }
 };

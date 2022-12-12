@@ -112,6 +112,7 @@ export const useBaseStore = defineStore("base", {
     devMode: (state) => state.devModeData,
     showInsideElementStatus: (state) => state.showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
+    showDevModeBlock: (state) => state.devMode && state.showInsideElementStatus
   },
   actions: {
     tryAddResultElement(dataResultItem) {

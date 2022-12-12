@@ -1,5 +1,5 @@
 
-import { computed, defineProps, reactive, toRef, watch } from "vue";
+import { computed, reactive, toRef, watch } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 
@@ -10,23 +10,11 @@ export default function UseForProcessingFormula(outerData) {
   const data = reactive(outerData);
   const dependencyFormulaDisplay = toRef(data, 'dependencyFormulaDisplay');
   const parentIsShow = toRef(data, 'parentIsShow');
+  const dependencyPrices = toRef(data, 'dependencyPrices');
   const changeValue = data?.changeValue;
 
-  // /**
-  //  * Формула на результатах вычисления которой будет строиться результат отображения элемента
-  //  * @type {Readonly<{[key in string]?: string}>}
-  //  */
-  // const dependencyFormulaDisplay = defineProps({
-  //   type: String,
-  //   default: "",
-  // })
-  // const parentIsShow = defineProps({
-  //   type: Boolean,
-  //   default: true,
-  // })
 
   const localDependencyList = reactive({})
-
 
 
   /**
@@ -217,9 +205,60 @@ export default function UseForProcessingFormula(outerData) {
 {deep: true}
   )
 
+
+
+
+  /**
+   * При глобальном включении возможности отображать подсказки - отправить состояние элемента
+   */
+  watch(() => store.isCanShowAllTooltips, ()=> {
+    if (parentIsShow.value) {
+      changeValid("global");
+    }
+  })
+
+  /**
+   * При изменении состояния видимости родителя - отправить состояние элемента.
+   */
+  watch(() => parentIsShow.value, (newValue) => {
+    if (newValue) {
+      data?.changeValue("global");
+    } else {
+      data?.changeValue("delete");
+    }
+  })
+
+  /**
+   * Существует список цен с зависимостями
+   * @returns {boolean}
+   */
+  const isDependencyPriceExist = computed(() => {
+    return Boolean(
+      dependencyPrices?.value?.filter(
+        (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+      )
+    );
+  })
+
+  /**
+   * Иницаилизировать проверку условий зависимых цен
+   *
+   * @returns {boolean}
+   */
+  const initProcessingDependencyPrice = computed(() => {
+    return isDependencyPriceExist.value;
+  })
+
+
+
+
   return {
     isVisibilityFromDependency,
     dependencyFormulaDisplay,
-    parentIsShow
+    parentIsShow,
+    constructLocalListElementDependencyInFormula,
+    processingVariablesOnFormula,
+    parsingFormulaVariables,
+    initProcessingDependencyPrice
   }
 };

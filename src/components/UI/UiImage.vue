@@ -23,29 +23,24 @@
       </div>
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData?.length" v-html="devModeData"></div>
 </template>
 
 <script>
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import UiPrompt from "@/components/UI/UiPrompt";
 
+import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
+import UseDevModeDataBlock from '@/components/UI/UseDevModeDataBlock'
+
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { computed, toRef, watch, ref } from "vue";
 
 export default {
   name: "UiImage",
   components: { UiPrompt },
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
     defaultImage: {
       type: Object,
       default: () => {},
@@ -54,93 +49,90 @@ export default {
       type: Array,
       default: () => [],
     },
-    prompt: {
-      type: String,
-      default: null,
-    },
-    maxWidth: {
-      type: [Number, String],
-      default: 250,
-    },
-    maxHeight: {
-      type: [Number, String],
-      default: 250,
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: "",
-    },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(['classes','elementName', 'maxHeight', 'maxWidth', 'prompt', 'label', 'templateName', 'classes', 'formulaProcessingLogic', 'parentName', 'parentIsShow', 'dependencyFormulaDisplay'])
   },
-  methods: {
-    changeValue() {
-      return null;
-    },
-    changeValid() {
-      return null;
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
-    imageDir() {
-      return window?.imageDir ? window.imageDir : "";
-    },
-    width() {
-      return "max-width:" + this.maxWidth + "px";
-    },
-    height() {
-      return "max-height:" + this.maxHeight + "px";
-    },
-    localDataForDisplay() {
+  setup(props) {
+    const store = useBaseStore();
+    const label = toRef(props, 'label');
+    const parentIsShow = toRef(props, 'parentIsShow');
+    const dependencyFormulaDisplay = toRef(props, 'dependencyFormulaDisplay');
+    const isVisibilityFromDependency = ref(false);
+
+    const { getArrayElementsFromFormula, getImageDir } = UseUtilityServices();
+    const { processingVariablesOnFormula, constructLocalListElementDependencyInFormula, isVisibilityFromDependency : isVisibilityFromDependencyLocal, parsingFormulaVariables} = UseForProcessingFormula({ parentIsShow, dependencyFormulaDisplay })
+
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value
+      }
+    )
+    const width = computed(() => {
+      return "max-width:" + props.maxWidth + "px";
+    })
+    const height = computed(() => {
+      return "max-height:" + props.maxHeight + "px";
+    })
+
+    const localDataForDisplay = computed(() => {
       let dataForOut = {
-        label: this.label,
-        url: this.imageDir + this.defaultImage.filename,
-        prompt: this.prompt,
-      };
-      if (!this.dependencyImages?.length) {
+        label: label.value,
+        url: getImageDir() + props.defaultImage.filename,
+        prompt: props.prompt,
+      }
+      if (!props.dependencyImages?.length) {
         return dataForOut;
       }
-      this.dependencyImages.forEach((imageItem) => {
+      props.dependencyImages.forEach((imageItem) => {
         if (
           imageItem.dependencyFormulaDisplay?.length &&
           imageItem?.image?.filename.length
         ) {
-          let formula = this.getArrayElementsFromFormula(
+          let formula = getArrayElementsFromFormula(
             imageItem.dependencyFormulaDisplay
           );
-          this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          constructLocalListElementDependencyInFormula(formula);
+          formula = processingVariablesOnFormula(formula);
 
           try {
             if (eval(formula)) {
               dataForOut = {
                 label: imageItem.label?.toString().length
                   ? imageItem.label
-                  : this.label,
-                url: this.imageDir + imageItem.image.filename,
+                  : label.value,
+                url: getImageDir() + imageItem.image.filename,
                 prompt: imageItem?.prompt?.length
                   ? imageItem.prompt
-                  : this.prompt,
+                  : props.prompt,
               };
             }
           } catch (e) {
-            if (this.devMode) {
+            if (store.devMode) {
               console.error(e.message, formula);
             }
           }
         }
       });
       return dataForOut;
-    },
+    })
+
+    const { devModeData } = UseDevModeDataBlock(
+      { label: props.label,
+        elementName:props.elementName,
+        dependencyFormulaDisplay: props.dependencyFormulaDisplay.value,
+        parsingFormulaVariables: parsingFormulaVariables.value,
+        isVisibilityFromDependency: isVisibilityFromDependency.value,
+        templateName: props.templateName
+        }
+    )
+
+    return {
+      height,
+      width,
+      localDataForDisplay,
+      isVisibilityFromDependency,
+      devModeData
+    }
   },
 };
 </script>

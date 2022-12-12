@@ -30,7 +30,7 @@
 import UiAccordionItem from "@/components/UI/UiAccordionItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import { ref, computed, toRef, reactive } from "vue";
+import { ref, computed, reactive } from "vue";
 
 export default {
   name: "UiAccordion",
