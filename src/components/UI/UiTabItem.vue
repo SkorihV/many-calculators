@@ -28,7 +28,22 @@ export default {
   components: { TemplatesWrapper },
   emits: ["changedValue"],
   props: {
-    ...UsePropsTemplates(['tabItem', 'tabName', 'tabItemId', 'elementName', 'shownIdTab', 'parentIsShow'])
+    tabItem: {
+      type: Object,
+      default: () => {},
+    },
+    tabName: {
+      type: String,
+      default: "",
+    },
+    tabItemId: {
+      type: Number,
+    },
+    shownIdTab: {
+      type: Number,
+      default: null,
+    },
+    ...UsePropsTemplates(['elementName','parentIsShow'])
   },
   setup(props, {emit}) {
     const store = useBaseStore();

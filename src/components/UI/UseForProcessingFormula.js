@@ -153,7 +153,6 @@ export default function UseForProcessingFormula(outerData) {
    * @type {ComputedRef<boolean>}
    */
   const isVisibilityFromDependency = computed(() => {
-    console.log(444);
     if (isDependencyElementVisibility.value || !parentIsShow.value) {
       try {
         return eval(parsingFormulaVariables.value);

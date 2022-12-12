@@ -42,6 +42,8 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { ref, computed } from "vue";
 
 export default {
   name: "UiAccordionItem",
@@ -59,58 +61,98 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
+    ...UsePropsTemplates(['elementName', 'parentIsShow'])
   },
-  data() {
-    return {
-      isOpen: false,
-      errorsElements: new Set(),
-      visibilityList: new Set(),
-    };
-  },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "isCanShowAllTooltips",
-      "getValidationListOnParentName",
-    ]),
-    isShowError() {
-      return this.localListValidationError.some(
-        (item) => item.error && item.isShow && this.isCanShowAllTooltips
+  setup(props, {emit}) {
+    const store = useBaseStore();
+    const isOpen = ref(false);
+
+    const changeValue = (data) => {
+      emit("changedValue", data);
+    }
+
+    const localListValidationError = computed(() =>  {
+      return store.getValidationListOnParentName(props.elementName);
+    })
+    const isShowError = computed(() => {
+      return localListValidationError.value.some(
+        (item) => item.error && item.isShow && store.isCanShowAllTooltips
       );
-    },
-    isShowAccordionItem() {
-      return this.currentChildrenItem !== this.currentHiddenItem;
-    },
-    itemIdName() {
-      return (
-        this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
-      );
-    },
-    localListValidationError() {
-      return this.getValidationListOnParentName(this.elementName);
-    },
-    currentChildrenItem() {
-      return this.accordionItem?.templates.length
-        ? this.accordionItem?.templates.length
+    })
+
+    const isShowAccordionItem = computed(() => {
+      return currentChildrenItem.value !== currentHiddenItem.value;
+    })
+
+    const currentChildrenItem = computed(() => {
+      return props.accordionItem?.templates.length
+        ? props.accordionItem?.templates.length
         : 0;
-    },
-    currentHiddenItem() {
-      return this.localListValidationError.filter((item) => !item.isShow)
+    })
+
+    const currentHiddenItem = computed(() => {
+      return localListValidationError.value.filter((item) => !item.isShow)
         .length;
-    },
+    })
+
+    const itemIdName = computed(() => {
+      return (
+        props.accordionName + "_" + props.elementName + "_" + props.accordionItemId
+      );
+    })
+
+    return {
+      isShowAccordionItem,
+      isShowError,
+      itemIdName,
+      changeValue,
+      isOpen
+    }
+
   },
+  // data() {
+  //   return {
+  //     isOpen: false,
+  //     errorsElements: new Set(),
+  //     visibilityList: new Set(),
+  //   };
+  // },
+  // methods: {
+  //   changeValue(data) {
+  //     this.$emit("changedValue", data);
+  //   },
+  // },
+  // computed: {
+  //   ...mapState(useBaseStore, [
+  //     "isCanShowAllTooltips",
+  //     "getValidationListOnParentName",
+  //   ]),
+  //   isShowError() {
+  //     return this.localListValidationError.some(
+  //       (item) => item.error && item.isShow && this.isCanShowAllTooltips
+  //     );
+  //   },
+  //   isShowAccordionItem() {
+  //     return this.currentChildrenItem !== this.currentHiddenItem;
+  //   },
+  //   itemIdName() {
+  //     return (
+  //       this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
+  //     );
+  //   },
+  //   localListValidationError() {
+  //     return this.getValidationListOnParentName(this.elementName);
+  //   },
+  //   currentChildrenItem() {
+  //     return this.accordionItem?.templates.length
+  //       ? this.accordionItem?.templates.length
+  //       : 0;
+  //   },
+  //   currentHiddenItem() {
+  //     return this.localListValidationError.filter((item) => !item.isShow)
+  //       .length;
+  //   },
+  // },
 };
 </script>
 

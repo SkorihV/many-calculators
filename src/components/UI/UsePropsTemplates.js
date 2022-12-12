@@ -8,12 +8,6 @@ import { defineProps } from "vue";
 export default function(propsName) {
   const propsForReturn = {};
 
-  const tabData = () => {
-    return {
-      type: Object,
-      default: () => {},
-    }
-  }
   /**
    * заголовок
    */
@@ -53,44 +47,19 @@ export default function(propsName) {
     }
   }
 
-  const tabItem = () => {
-    return {
-      type: Object,
-      default: () => {},
-    }
-  }
 
-  const tabName = () => {
-    return {
-      type: String,
-      default: "",
-    }
-  }
 
-  const tabItemId = () => {
-    return {
-      type: Number,
-    }
-  }
 
-  const shownIdTab = () => {
-    return {
-      type: Number,
-      default: null,
-    }
+  const accordionData = () => {
+
   }
 
   const resultsData = {
-    tabData: tabData(),
     label: label(),
     elementName: elementName(),
     classes: classes(),
     dependencyFormulaDisplay: dependencyFormulaDisplay(),
     parentIsShow: parentIsShow(),
-    tabItem: tabItem(),
-    tabName: tabName(),
-    tabItemId: tabItemId(),
-    shownIdTab: shownIdTab()
   }
 
   if (Array.isArray(propsName)) {

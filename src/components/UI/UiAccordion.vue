@@ -29,6 +29,8 @@
 <script>
 import UiAccordionItem from "@/components/UI/UiAccordionItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { ref, computed, toRef, reactive } from "vue";
 
 export default {
   name: "UiAccordion",
@@ -40,46 +42,24 @@ export default {
       type: Object,
       default: () => {},
     },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: "",
-    },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(['label', 'elementName', 'classes'])
   },
-  data() {
-    return {
-      itemOpenId: null,
-    };
-  },
-  methods: {
-    openItem(index) {
-      this.itemOpenId = this.itemOpenId !== index ? index : null;
-    },
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
-  computed: {
-    showBlock() {
+  setup(props, {emit}) {
+    const itemOpenId = ref(null);
+    const accordionData = reactive(props.accordionData);
+
+    const openItem = (index) => {
+      itemOpenId.value = itemOpenId.value !== index ? index : null;
+    }
+
+    const changeValue = (data) => {
+      emit("changedValue", data);
+    }
+
+    const showBlock = computed(() => {
       let result = [];
-      if (this.accordionData?.items.length) {
-        result = this.accordionData?.items.map((item) => {
+      if (accordionData?.items.length) {
+        result = accordionData?.items.map((item) => {
           if (item?.templates?.length) {
             return Boolean(item.templates.length);
           }
@@ -87,7 +67,13 @@ export default {
         });
       }
       return result.some((item) => item);
-    },
+    })
+
+    return {
+      showBlock,
+      changeValue,
+      openItem,
+    }
   },
 };
 </script>

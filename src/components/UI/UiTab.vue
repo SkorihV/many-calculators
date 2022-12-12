@@ -84,7 +84,11 @@ export default {
   components: { UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   props: {
-    ...UsePropsTemplates(['tabData','label','classes','elementName', 'parentIsShow', 'dependencyFormulaDisplay'])
+    tabData: {
+      type: Object,
+      default: () => {},
+    },
+    ...UsePropsTemplates(['label','classes','elementName', 'parentIsShow', 'dependencyFormulaDisplay'])
   },
   setup(props, {emit}) {
     const store = useBaseStore();
