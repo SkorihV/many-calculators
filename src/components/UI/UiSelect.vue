@@ -5,7 +5,6 @@
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
       :class="[{ 'is-column': isColumn }, classes]"
-      :style="[minWidthWrapper, maxWidthWrapper]"
     >
       <div class="calc__select-label" v-if="label">
         {{ label }}
@@ -72,70 +71,37 @@
         :local-can-be-shown="isVisibilityFromDependency"
       />
     </div>
-    <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+    <div v-if="devModeData?.length" v-html="devModeData"></div>
   </div>
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
+import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
+import {
+  ref,
+  onMounted,
+  toRef,
+  computed,
+  watch,
+  reactive,
+  getCurrentInstance,
+} from "vue";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip, UiPrompt },
-  mounted() {
-    this.localSelectValues = this.selectValues;
-    if (this.needMockValue) {
-      this.localSelectValues.unshift(this.mockOption);
-    }
-
-    if (!this.notEmpty && !this.isNeedChoice) {
-      let timer = setInterval(() => {
-        if (this.currentIndexOption === null && this.localSelectValues.length) {
-          this.currentIndexOption =
-            this.checkedValueOnVoid(this.selectedItem) &&
-            parseInt(this.selectedItem) < this.localSelectValues.length
-              ? parseInt(this.selectedItem)
-              : this.localSelectValues.length - 1;
-
-          this.changeSelect(
-            this.localSelectValues[this.currentIndexOption],
-            this.currentIndexOption,
-            "mounted"
-          );
-          clearInterval(timer);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
-    } else {
-      this.changeSelect(this.localSelectValues[0], null, "mounted");
-    }
-    window.addEventListener("click", (e) => {
-      if (!this.$el.contains(e.target)) {
-        this.close();
-      }
-    });
-  },
   props: {
     selectValues: {
       type: Array,
       default: () => [],
-    },
-    isColumn: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
     },
 
     /**
@@ -148,272 +114,213 @@ export default {
         return !isNaN(Number(value));
       },
     },
-
-    /**
-     * По умолчанию не выбрано - нужно сделать выбор.
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
-
-    minWidth: {
-      type: [Number, String],
-      default: 200,
-    },
-    maxWidth: {
-      type: [Number, String],
-    },
-  },
-  data() {
-    return {
-      isOpen: true,
-      currentOption: this.mockOption,
-      currentIndexOption: null,
-      textErrorNotEmpty: "Обязательное поле.",
-      mockOption: {
-        selectName: "Не выбрано!",
-        value: "null",
-      },
-      localSelectValues: [],
-    };
-  },
-  methods: {
-    checkedValueOnVoid(value) {
-      return value?.length !== 0 && value !== undefined && value !== null;
-    },
-    open() {
-      if (
-        this.selectValuesAfterProcessingDependency.filter(
-          (option) => option.isShow
-        ).length > 1
-      ) {
-        this.isOpen = true;
-      }
-    },
-    toggleOpenClose() {
-      if (
-        this.selectValuesAfterProcessingDependency.filter(
-          (option) => option.isShow
-        ).length > 1
-      ) {
-        this.isOpen = !this.isOpen;
-      }
-    },
-    close() {
-      this.isOpen = false;
-    },
-    changeSelect(item, inx, eventType = "click") {
-      if (this.notEmpty && inx === 0) {
-        this.currentIndexOption = null;
-      } else {
-        this.currentIndexOption = inx;
-      }
-
-      this.currentOption = item;
-
-      this.changeValue(eventType);
-      this.close();
-    },
-    changeValue(eventType = "click") {
-      this.$emit("changedValue", {
-        value: this.currentOption?.value,
-        displayValue: this.currentOption?.selectName,
-        index: this.currentIndexOption,
-        name: this.localElementName,
-        type: "select",
-        cost: this.checkedValueOnVoid(this.localCost)
-          ? parseFloat(this.localCost)
-          : 0,
-        label: this.label,
-        formOutputMethod:
-          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
-        excludeFromCalculations: this.excludeFromCalculations,
-        isShow: this.isVisibilityFromDependency,
-        eventType,
-        formulaProcessingLogic: this.formulaProcessingLogic,
-      });
-      this.tryPassDependency();
-      this.changeValid(eventType);
-    },
-    changeValid(eventType) {
-      this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
-        name: this.localElementName,
-        type: "select",
-        label: this.label,
-        eventType,
-        isShow: this.isVisibilityFromDependency,
-        parentName: this.parentName,
-      });
-    },
-    tryPassDependency() {
-      this.tryAddDependencyElement({
-        name: this.localElementName,
-        value: this.currentOption?.value,
-        isShow: this.isVisibilityFromDependency,
-        displayValue: this.currentOption?.selectName,
-        type: "select",
-      });
-    },
-    resetSelectedValue() {
-      this.currentIndexOption = 0;
-      this.currentOption = this.selectValuesAfterProcessingDependency[0];
-      this.changeValue("click");
-    },
-  },
-  watch: {
-    selectedItem(newValue) {
-      this.currentIndexOption =
-        this.checkedValueOnVoid(this.newValue) &&
-        parseInt(this.newValue) < this.localSelectValues.length
-          ? parseInt(this.newValue)
-          : this.localSelectValues.length - 1;
-      this.currentOption = this.localSelectValues[this.currentIndexOption];
-      this.changeValue();
-    },
-
-    isOpen(newValue) {
-      if (newValue && !Object.keys(this.localDependencyList)?.length) {
-        this.localSelectValues?.forEach((select) => {
-          if (select?.dependencyFormulaItem?.length) {
-            let formula = this.getArrayElementsFromFormula(
-              select.dependencyFormulaItem
-            );
-            this.constructLocalListElementDependencyInFormula(formula);
-          }
-        });
-      }
-    },
-
-    // selectValuesAfterProcessingDependency: {
-    //   handler(newValue, oldValue) {
-    //     if (newValue?.length !== oldValue?.length) {
-    //       this.resetSelectedValue();
-    //     }
-    //   },
-    //   deep: true
-    // }
-
-    amountVisibleSelects() {
-      let length = this.selectValuesAfterProcessingDependency.length;
-      if (!this.currentOption) {
-        return null;
-      }
-      for (let i = 0; i < length; i++) {
-        if (
-          this.selectValuesAfterProcessingDependency[i].value ===
-            this.currentOption?.value &&
-          this.currentOption.isShow
-        ) {
-          return;
-        }
-      }
-
-      for (let i = 0; i < length; i++) {
-        if (this.selectValuesAfterProcessingDependency[i].isShow) {
-          this.changeSelect(
-            this.selectValuesAfterProcessingDependency[i],
-            i,
-            "changeAmountSelectList"
-          );
-          return;
-        }
-      }
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "tryAddDependencyElement",
-      "checkValidationDataAndToggle",
-      "devMode",
-      "showInsideElementStatus",
-      "getImageDir",
+    ...UsePropsTemplates([
+      "isColumn",
+      "isNeedChoice",
+      "formOutputMethod",
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
     ]),
-    amountVisibleSelects() {
-      return this.selectValuesAfterProcessingDependency.filter(
-        (item) => item.isShow
-      ).length;
-    },
-    needMockValue() {
-      return this.notEmpty || this.isNeedChoice;
-    },
-    localElementName() {
-      return this.checkedValueOnVoid(this.elementName)
-        ? this.elementName
-        : Math.random().toString();
-    },
-    imageDir() {
-      return this.getImageDir;
-    },
-    minWidthWrapper() {
-      return this.minWidth ? `min-width:${this.minWidth}px;` : "";
-    },
-    maxWidthWrapper() {
-      return this.maxWidth ? `max-width:${this.maxWidth}px;` : "";
-    },
-    isErrorEmpty() {
-      return this.notEmpty && this.currentIndexOption === null;
-    },
+  },
+  setup(props, { emit }) {
+    const store = useBaseStore();
+    const isOpen = ref(true);
+    const mockOption = {
+      selectName: "Не выбрано!",
+      value: "null",
+    };
+    const currentOption = reactive(mockOption);
 
-    /**
-     * Возвращает цену подходящую условию, если моле отображается
-     * Если не одна цена не подходит, то возвращается стандартная
-     * @returns {Number|String|*}
-     */
-    localCost() {
-      if (!this.currentOption?.dependencyPrices?.length) {
-        return this.currentOption?.cost ? this.currentOption?.cost : null;
+    const localSelectValues = ref([]);
+
+    const currentIndexOption = ref(null);
+
+    const textErrorNotEmpty = "Обязательное поле.";
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+
+    const instance = getCurrentInstance();
+
+    const { checkedValueOnVoid, getArrayElementsFromFormula } =
+      UseUtilityServices();
+    const {
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      parsingFormulaVariables,
+      constructLocalListElementDependencyInFormula,
+      isElementDependency,
+      processingVariablesOnFormula,
+      localDependencyList,
+      costAfterProcessingDependencyPrice,
+    } = UseForProcessingFormula({
+      parentIsShow,
+      dependencyFormulaDisplay,
+    });
+
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
       }
+    );
 
-      let newCost = this.costAfterProcessingDependencyPrice(
-        this.currentOption?.dependencyPrices
-      );
-      if (newCost !== null) {
-        return newCost;
+    const { devModeData } = UseDevModeDataBlock({
+      label: props.label,
+      elementName: props.elementName,
+      dependencyFormulaDisplay,
+      parsingFormulaVariables,
+      isVisibilityFromDependency,
+      templateName: props.template,
+    });
+
+    const open = () => {
+      if (
+        selectValuesAfterProcessingDependency.value.filter(
+          (option) => option.isShow
+        ).length > 1
+      ) {
+        isOpen.value = true;
       }
-      return this.currentOption?.cost ? this.currentOption?.cost : null;
-    },
+    };
 
-    mutationSelectValue() {
-      return this.localSelectValues.map((selectItem, index) => {
-        const localIndex = this.needMockValue ? index : index + 1;
+    const toggleOpenClose = () => {
+      if (
+        selectValuesAfterProcessingDependency.value.filter(
+          (option) => option.isShow
+        ).length > 1
+      ) {
+        isOpen.value = !isOpen.value;
+      }
+    };
+
+    const close = () => {
+      isOpen.value = false;
+    };
+
+    const changeSelect = (item, inx, eventType = "click") => {
+      if (props.notEmpty && inx === 0) {
+        currentIndexOption.value = null;
+      } else {
+        currentIndexOption.value = inx;
+      }
+      currentOption.selectName = item.selectName;
+      currentOption.value = item.value;
+      changeValue(eventType);
+      close();
+    };
+    const changeValue = (eventType = "click") => {
+      emit("changedValue", {
+        value: currentOption?.value,
+        displayValue: currentOption?.selectName,
+        index: currentIndexOption.value,
+        name: localElementName.value,
+        type: "select",
+        cost: checkedValueOnVoid(localCost.value)
+          ? parseFloat(localCost.value)
+          : 0,
+        label: props.label,
+        formOutputMethod:
+          props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+        excludeFromCalculations: props.excludeFromCalculations,
+        isShow: isVisibilityFromDependency.value,
+        eventType,
+        formulaProcessingLogic: props.formulaProcessingLogic,
+      });
+      tryPassDependency();
+      changeValid(eventType);
+    };
+
+    const changeValid = (eventType) => {
+      store.checkValidationDataAndToggle({
+        error: isErrorEmpty.value,
+        name: localElementName.value,
+        type: "select",
+        label: props.label,
+        eventType,
+        isShow: isVisibilityFromDependency.value,
+        parentName: props.parentName,
+      });
+    };
+
+    const tryPassDependency = () => {
+      store.tryAddDependencyElement({
+        name: localElementName.value,
+        value: currentOption?.value,
+        isShow: isVisibilityFromDependency.value,
+        displayValue: currentOption?.selectName,
+        type: "select",
+      });
+    };
+
+    watch(
+      () => props.selectedItem,
+      (newValue) => {
+        currentIndexOption.value =
+          checkedValueOnVoid(newValue) &&
+          parseInt(newValue) < localSelectValues.value.length
+            ? parseInt(newValue)
+            : localSelectValues.value.length - 1;
+        console.log(534534);
+        // currentOption = localSelectValues.value[currentIndexOption.value];
+        changeValue();
+      }
+    );
+
+    watch(
+      () => isOpen.value,
+      (newValue) => {
+        if (newValue && !Object.keys(localDependencyList)?.length) {
+          localSelectValues.value?.forEach((select) => {
+            if (select?.dependencyFormulaItem?.length) {
+              let formula = getArrayElementsFromFormula(
+                select.dependencyFormulaItem
+              );
+              constructLocalListElementDependencyInFormula(formula);
+            }
+          });
+        }
+      }
+    );
+
+    const mutationSelectValue = computed(() => {
+      return localSelectValues.value.map((selectItem, index) => {
+        const localIndex = needMockValue ? index : index + 1;
         selectItem.value = selectItem.value?.toString()?.length
           ? selectItem.value
           : localIndex;
         return selectItem;
       });
-    },
-
+    });
     /**
      * Получить список селектов после обработки формул на отображение самих селектов
      * @returns {*[]}
      */
-    selectValuesAfterProcessingDependency() {
-      return this.mutationSelectValue.map((selectItem) => {
+    const selectValuesAfterProcessingDependency = computed(() => {
+      return mutationSelectValue.value.map((selectItem) => {
         if (!selectItem?.dependencyFormulaItem?.length) {
           selectItem.isShow = true;
           return selectItem;
         }
 
-        let formula = this.getArrayElementsFromFormula(
+        let formula = getArrayElementsFromFormula(
           selectItem.dependencyFormulaItem
         );
 
         let allDependencyShow = formula.every((item) => {
-          if (this.isElementDependency(item)) {
-            return this.localDependencyList[item]?.isShow;
+          if (isElementDependency(item)) {
+            return localDependencyList[item]?.isShow;
           }
           return true;
         });
@@ -426,21 +333,147 @@ export default {
         formula = formula.map((item) =>
           item.toLowerCase() === "self" ? selectItem.value : item
         );
-        this.constructLocalListElementDependencyInFormula(formula);
+        constructLocalListElementDependencyInFormula(formula);
 
-        formula = this.processingVariablesOnFormula(formula);
+        formula = processingVariablesOnFormula(formula);
         try {
           selectItem.isShow = eval(formula);
           return selectItem;
         } catch (e) {
-          if (this.devMode) {
+          if (store.devMode) {
             console.error(e.message, formula);
           }
           selectItem.isShow = false;
           return selectItem;
         }
       });
-    },
+    });
+
+    const amountVisibleSelects = computed(() => {
+      return selectValuesAfterProcessingDependency.value.filter(
+        (item) => item.isShow
+      ).length;
+    });
+    watch(
+      () => amountVisibleSelects.value,
+      () => {
+        let length = selectValuesAfterProcessingDependency.value.length;
+        if (!currentOption) {
+          return null;
+        }
+        for (let i = 0; i < length; i++) {
+          if (
+            selectValuesAfterProcessingDependency.value[i].value ===
+              currentOption?.value &&
+            currentOption.isShow
+          ) {
+            return;
+          }
+        }
+
+        for (let i = 0; i < length; i++) {
+          if (selectValuesAfterProcessingDependency.value[i].isShow) {
+            changeSelect(
+              selectValuesAfterProcessingDependency.value[i],
+              i,
+              "changeAmountSelectList"
+            );
+            return;
+          }
+        }
+      }
+    );
+    const needMockValue = () =>
+      computed(() => {
+        return props.notEmpty || props.isNeedChoice;
+      });
+    const localElementName = computed(() => {
+      return checkedValueOnVoid(props.elementName)
+        ? props.elementName
+        : Math.random().toString();
+    });
+
+    const imageDir = computed(() => {
+      return store.getImageDir;
+    });
+    const isErrorEmpty = computed(() => {
+      return props.notEmpty && currentIndexOption.value === null;
+    });
+
+    /**
+     * Возвращает цену подходящую условию, если моле отображается
+     * Если не одна цена не подходит, то возвращается стандартная
+     * @returns {Number|String|*}
+     */
+    const localCost = computed(() => {
+      if (!currentOption?.dependencyPrices?.length) {
+        return currentOption?.cost ? currentOption?.cost : null;
+      }
+
+      let newCost = costAfterProcessingDependencyPrice(
+        currentOption?.dependencyPrices
+      );
+      if (newCost !== null) {
+        return newCost;
+      }
+      return currentOption?.cost ? currentOption?.cost : null;
+    });
+
+    onMounted(() => {
+      localSelectValues.value = props.selectValues;
+      if (needMockValue) {
+        localSelectValues.value.unshift(mockOption);
+      }
+      if (!props.notEmpty && !props.isNeedChoice) {
+        let timer = setInterval(() => {
+          if (
+            currentIndexOption.value === null &&
+            localSelectValues.value.length
+          ) {
+            currentIndexOption.value =
+              checkedValueOnVoid(props.selectedItem) &&
+              parseInt(props.selectedItem) < localSelectValues.value.length
+                ? parseInt(props.selectedItem)
+                : localSelectValues.value.length - 1;
+
+            changeSelect(
+              localSelectValues.value[currentIndexOption.value],
+              currentIndexOption.value,
+              "mounted"
+            );
+            clearInterval(timer);
+          }
+        }, 100);
+        setTimeout(() => {
+          clearInterval(timer);
+        }, 10000);
+      } else {
+        changeSelect(localSelectValues.value[0], null, "mounted");
+      }
+      window.addEventListener("click", (e) => {
+        if (!instance.refs?.parent.contains(e.target)) {
+          close();
+        }
+      });
+    });
+
+    return {
+      imageDir,
+      open,
+      currentOption,
+      toggleOpenClose,
+      isOpen,
+      changeSelect,
+      isErrorEmpty,
+      textErrorNotEmpty,
+      selectValuesAfterProcessingDependency,
+      isColumn: props.isColumn,
+      devModeData,
+      isVisibilityFromDependency,
+      label: props.label,
+      classes: props.classes,
+      notEmpty: props.notEmpty,
+    };
   },
 };
 </script>

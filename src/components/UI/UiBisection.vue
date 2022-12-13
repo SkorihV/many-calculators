@@ -200,6 +200,8 @@ export default {
       isShowRightSide,
       isShowLeftSide,
       isVisibilityFromDependency,
+      classes: props.classes,
+      elementName: props.elementName,
     };
   },
 };

@@ -262,5 +262,7 @@ export default function UseForProcessingFormula(outerData) {
     parsingFormulaVariables,
     initProcessingDependencyPrice,
     costAfterProcessingDependencyPrice,
+    isElementDependency,
+    localDependencyList,
   };
 }

@@ -5,7 +5,7 @@
     :class="classes"
   >
     <ui-duplicator-wrapper
-      v-for="(duplicator, key) in localTemplates"
+      v-for="duplicator in localTemplates"
       :origin-data="originData"
       :key="duplicator?.index ? duplicator?.index : 0"
       :index="duplicator?.index ? duplicator?.index : 0"

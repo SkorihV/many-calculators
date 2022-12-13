@@ -68,6 +68,8 @@ export default {
       getValidationListOnParentName,
       isShowItem,
       itemName,
+      parentIsShow: props.parentIsShow,
+      elementName: props.elementName,
     };
   },
 };

@@ -61,6 +61,12 @@ export default function (propsName) {
       default: 250,
     };
   };
+  const minWidth = () => {
+    return {
+      type: [Number, String],
+      default: 250,
+    };
+  };
 
   const maxHeight = () => {
     return {
@@ -148,6 +154,38 @@ export default function (propsName) {
     };
   };
 
+  const isColumn = () => {
+    return {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    };
+  };
+
+  /**
+   * По умолчанию не выбрано - нужно сделать выбор.
+   */
+  const isNeedChoice = () => {
+    return {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    };
+  };
+  /**
+   * метод вывода данных в результирующую форму
+   */
+  const formOutputMethod = () => {
+    return {
+      type: String,
+      default: "no",
+    };
+  };
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -166,6 +204,10 @@ export default function (propsName) {
     index: index(),
     cost: cost(),
     dependencyPrices: dependencyPrices(),
+    isColumn: isColumn(),
+    isNeedChoice: isNeedChoice(),
+    formOutputMethod: formOutputMethod(),
+    minWidth: minWidth(),
   };
 
   if (Array.isArray(propsName)) {

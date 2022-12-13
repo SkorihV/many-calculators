@@ -150,6 +150,7 @@ export default {
       localDataForDisplay,
       isVisibilityFromDependency,
       devModeData,
+      classes: props.classes,
     };
   },
 };
