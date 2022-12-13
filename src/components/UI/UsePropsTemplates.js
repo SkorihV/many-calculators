@@ -186,6 +186,19 @@ export default function (propsName) {
     };
   };
 
+  /**
+   *     Всегда включена. Отключить нельзя
+   */
+  const isChecked = () => {
+    return {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    };
+  };
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -208,6 +221,7 @@ export default function (propsName) {
     isNeedChoice: isNeedChoice(),
     formOutputMethod: formOutputMethod(),
     minWidth: minWidth(),
+    isChecked: isChecked(),
   };
 
   if (Array.isArray(propsName)) {

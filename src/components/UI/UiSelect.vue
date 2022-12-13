@@ -136,6 +136,8 @@ export default {
     const mockOption = {
       selectName: "Не выбрано!",
       value: "null",
+      isShow: true,
+      prompt: "",
     };
     const currentOption = reactive(mockOption);
 
@@ -182,19 +184,9 @@ export default {
       dependencyFormulaDisplay,
       parsingFormulaVariables,
       isVisibilityFromDependency,
-      templateName: props.template,
+      templateName: props.templateName,
+      currentOption,
     });
-
-    const open = () => {
-      if (
-        selectValuesAfterProcessingDependency.value.filter(
-          (option) => option.isShow
-        ).length > 1
-      ) {
-        isOpen.value = true;
-      }
-    };
-
     const toggleOpenClose = () => {
       if (
         selectValuesAfterProcessingDependency.value.filter(
@@ -217,6 +209,8 @@ export default {
       }
       currentOption.selectName = item.selectName;
       currentOption.value = item.value;
+      currentOption.prompt = item.prompt;
+      currentOption.isShow = item.isShow;
       changeValue(eventType);
       close();
     };

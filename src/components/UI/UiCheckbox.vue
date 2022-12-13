@@ -37,7 +37,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData.length" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -47,11 +47,16 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
+import { computed, onMounted, ref, toRef, watch } from "vue";
+import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
 
 export default {
   name: "UiCheckbox",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  // mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
     labelSecond: {
@@ -63,42 +68,6 @@ export default {
      *     Начальное значение
      */
     checkboxValue: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    cost: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-
-    /**
-     * Список цен с зависимостями / условиями
-     */
-    dependencyPrices: {
-      type: Array,
-      default: () => [],
-    },
-
-    /**
-     * По умолчанию не выбрано - нужно сделать выбор.
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
-     *     Всегда включена. Отключить нельзя
-     */
-    isChecked: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
@@ -117,122 +86,282 @@ export default {
       type: String,
       default: "base",
     },
+    ...UsePropsTemplates([
+      "formOutputMethod",
+      "isChecked",
+      "isNeedChoice",
+      "dependencyPrices",
+      "cost",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+    ]),
+  },
+  setup(props, { emit }) {
+    const store = useBaseStore();
+    const localValue = ref(null);
+    const textErrorNotEmpty = "Обязательное поле.";
 
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
-  },
-  mounted() {
-    this.localValue = Boolean(this.checkboxValue);
-    if (this.isChecked) {
-      this.localValue = true;
-    }
-    this.changeValue("mounted");
-  },
-  data() {
-    return {
-      localValue: null,
-      textErrorNotEmpty: "Обязательное поле.",
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    const dependencyPrices = props.dependencyPrices?.length
+      ? toRef(props, "dependencyPrices")
+      : ref([]);
+
+    const { checkedValueOnVoid } = UseUtilityServices();
+
+    const {
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      initProcessingDependencyPrice,
+      costAfterProcessingDependencyPrice,
+      parsingFormulaVariables,
+    } = UseForProcessingFormula({
+      parentIsShow,
+      dependencyFormulaDisplay,
+      dependencyPrices,
+    });
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
+
+    const { devModeData } = UseDevModeDataBlock({
+      label: props.label,
+      elementName: props.elementName,
+      dependencyFormulaDisplay,
+      parsingFormulaVariables,
+      isVisibilityFromDependency,
+      templateName: props.templateName,
+      localValue,
+    });
+
+    const inputLocalValue = (value) => {
+      localValue.value = value;
+      changeValue("click");
     };
-  },
-  methods: {
-    inputLocalValue(value) {
-      this.localValue = value;
-      this.changeValue("click");
-    },
-    checkedValueOnVoid(value) {
-      return value?.length !== 0 && value !== undefined && value !== null;
-    },
-    changeValue(eventType = "click") {
-      this.$emit("changedValue", {
-        value: this.localValue,
-        displayValue: this.localValue ? "Да" : "Нет",
-        name: this.localElementName,
+
+    function changeValue(eventType = "click") {
+      emit("changedValue", {
+        value: localValue.value,
+        displayValue: localValue.value ? "Да" : "Нет",
+        name: localElementName.value,
         type: "checkbox",
-        label: this.label?.length ? this.label : this.labelSecond,
+        label: props.label?.length ? props.label : props.labelSecond,
         cost:
-          this.localValue && this.checkedValueOnVoid(this.localCost)
-            ? this.localCost
+          localValue.value && checkedValueOnVoid(localCost.value)
+            ? localCost.value
             : 0,
         formOutputMethod:
-          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
-        excludeFromCalculations: this.excludeFromCalculations,
-        isShow: this.isVisibilityFromDependency,
+          props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+        excludeFromCalculations: props.excludeFromCalculations,
+        isShow: isVisibilityFromDependency.value,
         eventType,
-        formulaProcessingLogic: this.formulaProcessingLogic,
+        formulaProcessingLogic: props.formulaProcessingLogic,
       });
-      this.tryPassDependency();
-      this.changeValid(eventType);
-    },
-    changeValid(eventType) {
-      this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
-        name: this.localElementName,
+      tryPassDependency();
+      changeValid(eventType);
+    }
+    function changeValid(eventType) {
+      store.checkValidationDataAndToggle({
+        error: isErrorEmpty.value,
+        name: localElementName.value,
         type: "checkbox",
-        label: this.label,
+        label: props.label,
         eventType,
-        isShow: this.isVisibilityFromDependency,
-        parentName: this.parentName,
+        isShow: isVisibilityFromDependency.value,
+        parentName: props.parentName,
       });
-    },
-    tryPassDependency() {
-      this.tryAddDependencyElement({
-        name: this.localElementName,
-        value: this.localValue,
-        isShow: this.isVisibilityFromDependency,
-        displayValue: this.localValue ? "Да" : "Нет",
+    }
+    function tryPassDependency() {
+      store.tryAddDependencyElement({
+        name: localElementName.value,
+        value: localValue.value,
+        isShow: isVisibilityFromDependency.value,
+        displayValue: localValue.value ? "Да" : "Нет",
         type: "checkbox",
       });
-    },
-  },
-  watch: {
-    checkboxValue(newValue) {
-      this.localValue = Boolean(newValue);
-      this.changeValid("checkbox");
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "tryAddDependencyElement",
-      "checkValidationDataAndToggle",
-      "devMode",
-      "showInsideElementStatus",
-    ]),
-    localElementName() {
-      return this.checkedValueOnVoid(this.elementName)
-        ? this.elementName
+    }
+
+    watch(
+      () => props.checkboxValue,
+      (newValue) => {
+        localValue.value = Boolean(newValue);
+        changeValid("checkbox");
+      }
+    );
+
+    const localElementName = computed(() => {
+      return checkedValueOnVoid(props.elementName)
+        ? props.elementName
         : Math.random().toString();
-    },
-    checkboxType() {
-      return this.typeDisplayClass ? this.typeDisplayClass : "base";
-    },
-    isErrorEmpty() {
-      return this.isNeedChoice && !this.localValue;
-    },
+    });
+    const checkboxType = computed(() => {
+      return props.typeDisplayClass ? props.typeDisplayClass : "base";
+    });
+    const isErrorEmpty = computed(() => {
+      return props.isNeedChoice && !localValue.value;
+    });
 
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
-    localCost() {
-      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.cost;
+    const localCost = computed(() => {
+      if (!initProcessingDependencyPrice.value || !dependencyPrices.value) {
+        return props.cost;
       }
 
-      let newCost = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices
-      );
+      let newCost = costAfterProcessingDependencyPrice(dependencyPrices.value);
       if (newCost !== null) {
         return newCost;
       }
-      return this.cost;
-    },
+      return props.cost;
+    });
+
+    onMounted(() => {
+      localValue.value = Boolean(props.checkboxValue);
+      if (props.isChecked) {
+        localValue.value = true;
+      }
+      changeValue("mounted");
+    });
+    return {
+      textErrorNotEmpty,
+      classes: props.classes,
+      localValue,
+      isChecked: props.isChecked,
+      localElementName,
+      label: props.label,
+      inputLocalValue,
+      checkboxType,
+      isErrorEmpty,
+      notEmpty: props.notEmpty,
+      isVisibilityFromDependency,
+      devModeData,
+    };
   },
+
+  // mounted() {
+  //   this.localValue = Boolean(this.checkboxValue);
+  //   if (this.isChecked) {
+  //     this.localValue = true;
+  //   }
+  //   this.changeValue("mounted");
+  // },
+  // data() {
+  //   return {
+  //     localValue: null,
+  //     textErrorNotEmpty: "Обязательное поле.",
+  //   };
+  // },
+  // methods: {
+  //   inputLocalValue(value) {
+  //     this.localValue = value;
+  //     this.changeValue("click");
+  //   },
+  //   checkedValueOnVoid(value) {
+  //     return value?.length !== 0 && value !== undefined && value !== null;
+  //   },
+  //   changeValue(eventType = "click") {
+  //     this.$emit("changedValue", {
+  //       value: this.localValue,
+  //       displayValue: this.localValue ? "Да" : "Нет",
+  //       name: this.localElementName,
+  //       type: "checkbox",
+  //       label: this.label?.length ? this.label : this.labelSecond,
+  //       cost:
+  //         this.localValue && this.checkedValueOnVoid(this.localCost)
+  //           ? this.localCost
+  //           : 0,
+  //       formOutputMethod:
+  //         this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+  //       excludeFromCalculations: this.excludeFromCalculations,
+  //       isShow: this.isVisibilityFromDependency,
+  //       eventType,
+  //       formulaProcessingLogic: this.formulaProcessingLogic,
+  //     });
+  //     this.tryPassDependency();
+  //     this.changeValid(eventType);
+  //   },
+  //   changeValid(eventType) {
+  //     this.checkValidationDataAndToggle({
+  //       error: this.isErrorEmpty,
+  //       name: this.localElementName,
+  //       type: "checkbox",
+  //       label: this.label,
+  //       eventType,
+  //       isShow: this.isVisibilityFromDependency,
+  //       parentName: this.parentName,
+  //     });
+  //   },
+  //   tryPassDependency() {
+  //     this.tryAddDependencyElement({
+  //       name: this.localElementName,
+  //       value: this.localValue,
+  //       isShow: this.isVisibilityFromDependency,
+  //       displayValue: this.localValue ? "Да" : "Нет",
+  //       type: "checkbox",
+  //     });
+  //   },
+  // },
+  // watch: {
+  //   checkboxValue(newValue) {
+  //     this.localValue = Boolean(newValue);
+  //     this.changeValid("checkbox");
+  //   },
+  // },
+  // computed: {
+  //   ...mapState(useBaseStore, [
+  //     "tryAddDependencyElement",
+  //     "checkValidationDataAndToggle",
+  //     "devMode",
+  //     "showInsideElementStatus",
+  //   ]),
+  //   localElementName() {
+  //     return this.checkedValueOnVoid(this.elementName)
+  //       ? this.elementName
+  //       : Math.random().toString();
+  //   },
+  //   checkboxType() {
+  //     return this.typeDisplayClass ? this.typeDisplayClass : "base";
+  //   },
+  //   isErrorEmpty() {
+  //     return this.isNeedChoice && !this.localValue;
+  //   },
+  //
+  //   /**
+  //    * Возвращает цену подходящую условию, если моле отображается
+  //    * Если не одна цена не подходит, то возвращается стандартная
+  //    * @returns {Number|String|*}
+  //    */
+  //   localCost() {
+  //     if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
+  //       return this.cost;
+  //     }
+  //
+  //     let newCost = this.costAfterProcessingDependencyPrice(
+  //       this.dependencyPrices
+  //     );
+  //     if (newCost !== null) {
+  //       return newCost;
+  //     }
+  //     return this.cost;
+  //   },
+  // },
 };
 </script>
 

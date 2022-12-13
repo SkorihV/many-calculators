@@ -54,6 +54,7 @@
 import UiTab from "@/components/UI/UiTab";
 import UiAccordion from "@/components/UI/UiAccordion";
 import UiBisection from "@/components/UI/UiBisection";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "TemplatesWrapperForDuplicator",
@@ -64,22 +65,7 @@ export default {
     UiBisection,
   },
   props: {
-    template: {
-      type: Object,
-      default: null,
-    },
-    index: {
-      type: [Number, String],
-      default: null,
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
-    parentName: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
   },
   methods: {
     changeValue(data) {

@@ -1,4 +1,4 @@
-import { computed, reactive, watch, ref } from "vue";
+import { computed, reactive, watch, ref, toRef } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 
@@ -7,20 +7,15 @@ export default function UseForProcessingFormula(outerData) {
   const store = useBaseStore();
   const data = reactive(outerData);
 
-  const dependencyFormulaDisplay = ref("");
-  if (data?.dependencyFormulaDisplay) {
-    dependencyFormulaDisplay.value = data.dependencyFormulaDisplay;
-  }
-
-  const parentIsShow = ref(true);
-  if (data?.parentIsShow) {
-    parentIsShow.value = data.parentIsShow;
-  }
-
-  const dependencyPrices = ref("");
-  if (data?.dependencyPrices) {
-    dependencyPrices.value = data.dependencyPrices;
-  }
+  const dependencyFormulaDisplay = data?.dependencyFormulaDisplay
+    ? toRef(data, "dependencyFormulaDisplay")
+    : ref("");
+  const parentIsShow = data?.parentIsShow
+    ? toRef(data, "parentIsShow")
+    : ref(true);
+  const dependencyPrices = data?.dependencyPrices
+    ? toRef(data, "dependencyPrices")
+    : ref("");
 
   const localDependencyList = reactive({});
 
@@ -238,7 +233,7 @@ export default function UseForProcessingFormula(outerData) {
    */
   const isDependencyPriceExist = computed(() => {
     return Boolean(
-      dependencyPrices?.value?.filter(
+      dependencyPrices.value?.filter(
         (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
       )
     );

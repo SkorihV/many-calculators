@@ -347,6 +347,7 @@
             "title": "Пункта второй",
             "selectName": "Пункта второй",
             "cost": 99,
+            "prompt": "подсказка пункта",
             "dependencyPrices": [
               {
                 "title": "55",
@@ -369,7 +370,7 @@
             "dependencyFormulaItem": "radio1 !== 3"
           }
         ],
-        "prompt": ""
+        "prompt": "Какая то подсказка"
       },
 
       {
