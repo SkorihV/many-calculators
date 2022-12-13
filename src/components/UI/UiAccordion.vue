@@ -42,19 +42,19 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...UsePropsTemplates(['label', 'elementName', 'classes'])
+    ...UsePropsTemplates(["label", "elementName", "classes"]),
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const itemOpenId = ref(null);
     const accordionData = reactive(props.accordionData);
 
     const openItem = (index) => {
       itemOpenId.value = itemOpenId.value !== index ? index : null;
-    }
+    };
 
     const changeValue = (data) => {
       emit("changedValue", data);
-    }
+    };
 
     const showBlock = computed(() => {
       let result = [];
@@ -67,13 +67,13 @@ export default {
         });
       }
       return result.some((item) => item);
-    })
+    });
 
     return {
       showBlock,
       changeValue,
       openItem,
-    }
+    };
   },
 };
 </script>

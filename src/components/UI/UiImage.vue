@@ -31,7 +31,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
-import UseDevModeDataBlock from '@/components/UI/UseDevModeDataBlock'
+import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
 
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
@@ -49,37 +49,56 @@ export default {
       type: Array,
       default: () => [],
     },
-    ...UsePropsTemplates(['classes','elementName', 'maxHeight', 'maxWidth', 'prompt', 'label', 'templateName',  'formulaProcessingLogic', 'parentName', 'parentIsShow', 'dependencyFormulaDisplay'])
+    ...UsePropsTemplates([
+      "classes",
+      "elementName",
+      "maxHeight",
+      "maxWidth",
+      "prompt",
+      "label",
+      "templateName",
+      "formulaProcessingLogic",
+      "parentName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   setup(props) {
-    const store                       = useBaseStore();
-    const label                       = toRef(props, 'label');
-    const parentIsShow                = toRef(props, 'parentIsShow');
-    const dependencyFormulaDisplay    = toRef(props, 'dependencyFormulaDisplay');
-    const isVisibilityFromDependency  = ref(false);
+    const store = useBaseStore();
+    const label = toRef(props, "label");
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
 
     const { getArrayElementsFromFormula, getImageDir } = UseUtilityServices();
-    const { processingVariablesOnFormula, constructLocalListElementDependencyInFormula, isVisibilityFromDependency : isVisibilityFromDependencyLocal, parsingFormulaVariables} = UseForProcessingFormula({ parentIsShow, dependencyFormulaDisplay })
-
+    const {
+      processingVariablesOnFormula,
+      constructLocalListElementDependencyInFormula,
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      parsingFormulaVariables,
+    } = UseForProcessingFormula({ parentIsShow, dependencyFormulaDisplay });
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
     watch(
       () => isVisibilityFromDependencyLocal.value,
       () => {
-        isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
       }
-    )
+    );
     const width = computed(() => {
       return "max-width:" + props.maxWidth + "px";
-    })
+    });
     const height = computed(() => {
       return "max-height:" + props.maxHeight + "px";
-    })
+    });
 
     const localDataForDisplay = computed(() => {
       let dataForOut = {
         label: label.value,
         url: getImageDir() + props.defaultImage.filename,
         prompt: props.prompt,
-      }
+      };
       if (!props.dependencyImages?.length) {
         return dataForOut;
       }
@@ -114,25 +133,24 @@ export default {
         }
       });
       return dataForOut;
-    })
+    });
 
-    const { devModeData } = UseDevModeDataBlock(
-      { label: props.label,
-        elementName:props.elementName,
-        dependencyFormulaDisplay: props.dependencyFormulaDisplay.value,
-        parsingFormulaVariables: parsingFormulaVariables.value,
-        isVisibilityFromDependency: isVisibilityFromDependency.value,
-        templateName: props.templateName
-        }
-    )
+    const { devModeData } = UseDevModeDataBlock({
+      label: props.label,
+      elementName: props.elementName,
+      dependencyFormulaDisplay: props.dependencyFormulaDisplay.value,
+      parsingFormulaVariables: parsingFormulaVariables.value,
+      isVisibilityFromDependency: isVisibilityFromDependency.value,
+      templateName: props.templateName,
+    });
 
     return {
       height,
       width,
       localDataForDisplay,
       isVisibilityFromDependency,
-      devModeData
-    }
+      devModeData,
+    };
   },
 };
 </script>

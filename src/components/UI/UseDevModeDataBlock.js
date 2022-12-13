@@ -1,24 +1,24 @@
 import { useBaseStore } from "@/store/piniaStore";
 
-import {computed, reactive } from "vue";
+import { computed, reactive } from "vue";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 
 export default function UseDevModeDataBlock(outerData) {
   const store = useBaseStore();
   const { getArrayElementsFromFormula } = UseUtilityServices();
-  const data = reactive(outerData)
+  const data = reactive(outerData);
 
-
-  const devModeData = computed(()=> {
+  const devModeData = computed(() => {
     if (store.showDevModeBlock) {
       const textLabel = `<div>Заголовок элемента: ${data?.label}</div>`;
       const textElementName = `<div>Имя элемента: ${data?.elementName}</div>`;
       const textDependencyFormula = data.dependencyFormulaDisplay?.length
         ? `<div> Формула зависимости отображения: ${getArrayElementsFromFormula(
-          data.dependencyFormulaDisplay
-        ).join(" ")}</div>`
+            data.dependencyFormulaDisplay
+          ).join(" ")}</div>`
         : "";
-      const textDependencyFormulaBeforeProcessing = data.parsingFormulaVariables?.length
+      const textDependencyFormulaBeforeProcessing = data.parsingFormulaVariables
+        ?.length
         ? `<div>Формула зависимости отображения после обработки: ${data.parsingFormulaVariables}</div>`
         : "";
       const textInfoVisibility = `Отображается: ${data.isVisibilityFromDependency}`;
@@ -27,14 +27,14 @@ export default function UseDevModeDataBlock(outerData) {
         data.templateName === "UiInput" || data.templateName === "UiRange"
           ? data.resultValue
           : data.templateName === "UiRadio"
+          ? data.changedRadio?.value
             ? data.changedRadio?.value
-              ? data.changedRadio?.value
-              : null
-            : data.templateName === "UiSelect"
-              ? data.currentOption?.value
-              : data.templateName === "UiCheckbox"
-                ? data.localValue
-                : null
+            : null
+          : data.templateName === "UiSelect"
+          ? data.currentOption?.value
+          : data.templateName === "UiCheckbox"
+          ? data.localValue
+          : null
       }</div>`;
 
       let textLocalCost = "";
@@ -42,7 +42,7 @@ export default function UseDevModeDataBlock(outerData) {
       if (data?.localCost) {
         textLocalCost = `<div>Текущая стоимость: ${data.localCost}</div>`;
       }
-      let elementName = '';
+      let elementName = "";
       if (data?.templateName) {
         elementName = "<div>Шаблон элемента - " + data.templateName + "</div>";
       }
@@ -63,9 +63,9 @@ export default function UseDevModeDataBlock(outerData) {
           </div>`;
     }
     return false;
-  })
+  });
 
   return {
-    devModeData
-  }
-};
+    devModeData,
+  };
+}

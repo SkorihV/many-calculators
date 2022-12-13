@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
 import { computed, ref } from "vue";
 
 export default {
@@ -40,35 +39,35 @@ export default {
     },
   },
   setup(props) {
-    const isShow            = ref(false);
-    const timerName         = ref(null);
-    const topCalcWrapper    = ref(null);
-    const topBtnPrompt      = ref(null);
-    const promptBtn         = ref(null)
+    const isShow = ref(false);
+    const timerName = ref(null);
+    const topCalcWrapper = ref(null);
+    const topBtnPrompt = ref(null);
+    const promptBtn = ref(null);
 
     const show = () => {
       clearTimeout(timerName.value);
       getTopForCalcWrapper();
       getTopBtnPrompt();
       isShow.value = true;
-    }
+    };
     const hidden = () => {
       timerName.value = setTimeout(() => (isShow.value = false), 500);
-    }
+    };
     const getTopForCalcWrapper = () => {
       topCalcWrapper.value =
         document
           .querySelector("#app-base-constructor-calculator")
           .getBoundingClientRect().top + window.pageYOffset;
-    }
+    };
     const getTopBtnPrompt = () => {
       topBtnPrompt.value = promptBtn.value.getBoundingClientRect().top;
-    }
+    };
 
     const hiddenPromptWrapper = computed(() => {
       const text = props.promptText;
       return Boolean(text?.toString()?.trim().length);
-    })
+    });
 
     const topPopupWrapper = computed(() => {
       const btn = promptBtn.value.getBoundingClientRect();
@@ -79,7 +78,7 @@ export default {
         5 +
         btn.height;
       return `top: ${btnCoordTop}px;`;
-    })
+    });
 
     return {
       promptBtn,
@@ -88,8 +87,8 @@ export default {
       hiddenPromptWrapper,
 
       hidden,
-      show
-    }
+      show,
+    };
   },
 };
 </script>

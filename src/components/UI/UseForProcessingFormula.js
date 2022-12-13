@@ -1,19 +1,28 @@
-
-import { computed, reactive, toRef, watch } from "vue";
+import { computed, reactive, watch, ref } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
 
-
 export default function UseForProcessingFormula(outerData) {
-  const {getArrayElementsFromFormula} = UseUtilityServices()
+  const { getArrayElementsFromFormula } = UseUtilityServices();
   const store = useBaseStore();
   const data = reactive(outerData);
-  const dependencyFormulaDisplay = toRef(data, 'dependencyFormulaDisplay');
-  const parentIsShow = toRef(data, 'parentIsShow');
-  const dependencyPrices = toRef(data, 'dependencyPrices');
 
-  const localDependencyList = reactive({})
+  const dependencyFormulaDisplay = ref("");
+  if (data?.dependencyFormulaDisplay) {
+    dependencyFormulaDisplay.value = data.dependencyFormulaDisplay;
+  }
 
+  const parentIsShow = ref(true);
+  if (data?.parentIsShow) {
+    parentIsShow.value = data.parentIsShow;
+  }
+
+  const dependencyPrices = ref("");
+  if (data?.dependencyPrices) {
+    dependencyPrices.value = data.dependencyPrices;
+  }
+
+  const localDependencyList = reactive({});
 
   /**
    * Собираем локальный список зависимостей из глобального на основе формулы
@@ -21,14 +30,11 @@ export default function UseForProcessingFormula(outerData) {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula.forEach((name) => {
-      if (
-        isElementDependency(name) &&
-        !existLocalElementDependency(name)
-      ) {
+      if (isElementDependency(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
     });
-  }
+  };
 
   /**
    * Обработать полученные переменные из формулы
@@ -38,9 +44,7 @@ export default function UseForProcessingFormula(outerData) {
   const processingVariablesOnFormula = (formula) => {
     return formula?.reduce((resultText, item) => {
       let elementDependency =
-        item in localDependencyList
-          ? localDependencyList[item]
-          : null;
+        item in localDependencyList ? localDependencyList[item] : null;
 
       if (elementDependency && elementDependency.isShow) {
         if (!isNaN(parseFloat(elementDependency?.value))) {
@@ -53,7 +57,7 @@ export default function UseForProcessingFormula(outerData) {
       }
       return resultText + item;
     }, "");
-  }
+  };
 
   /**     *
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -67,9 +71,7 @@ export default function UseForProcessingFormula(outerData) {
         if (!item.enabledFormula) {
           return resultReduce;
         }
-        let formula = getArrayElementsFromFormula(
-          item?.dependencyFormulaCost
-        );
+        let formula = getArrayElementsFromFormula(item?.dependencyFormulaCost);
 
         constructLocalListElementDependencyInFormula(formula);
         formula = processingVariablesOnFormula(formula);
@@ -94,7 +96,7 @@ export default function UseForProcessingFormula(outerData) {
       { cost: 0, changed: false }
     );
     return result.changed ? result.cost : null;
-  }
+  };
 
   /**
    * Элемент от которого идет зависимость
@@ -105,16 +107,15 @@ export default function UseForProcessingFormula(outerData) {
       return false;
     }
     return name in store.globalDependenciesList;
-  }
+  };
 
   const existLocalElementDependency = (name) => {
     return name in localDependencyList;
-  }
+  };
 
   const putElementDependencyInLocalList = (name) => {
     localDependencyList[name] = store.globalDependenciesList[name];
-  }
-
+  };
 
   /**
    * Получить массив значений из формулы
@@ -125,14 +126,11 @@ export default function UseForProcessingFormula(outerData) {
       return false;
     }
 
-    let formula = getArrayElementsFromFormula(
-      dependencyFormulaDisplay.value
-    );
+    let formula = getArrayElementsFromFormula(dependencyFormulaDisplay.value);
 
     constructLocalListElementDependencyInFormula(formula);
     return processingVariablesOnFormula(formula);
-  })
-
+  });
 
   /**
    * Отобразить текущий элемент
@@ -150,7 +148,7 @@ export default function UseForProcessingFormula(outerData) {
       }
     }
     return true;
-  })
+  });
 
   /**
    * Отобразить поле
@@ -158,8 +156,7 @@ export default function UseForProcessingFormula(outerData) {
    */
   const isDependencyElementVisibility = computed(() => {
     return Boolean(dependencyFormulaDisplay.value?.length);
-  })
-
+  });
 
   /**
    * Отправить команду на удаление элемента из общих данных при его скрытии
@@ -173,13 +170,17 @@ export default function UseForProcessingFormula(outerData) {
         data.changeValue("dependency");
       }
     },
-    {deep: true})
+    { deep: true }
+  );
 
-  watch(() => store.isCanShowAllTooltips, (newValue) => {
-    if (newValue && isVisibilityFromDependency.value && data?.changeValue) {
-      data.changeValue("dependency");
+  watch(
+    () => store.isCanShowAllTooltips,
+    (newValue) => {
+      if (newValue && isVisibilityFromDependency.value && data?.changeValue) {
+        data.changeValue("dependency");
+      }
     }
-  })
+  );
 
   watch(
     () => store.globalDependenciesList,
@@ -200,33 +201,36 @@ export default function UseForProcessingFormula(outerData) {
         data.changeValue("changeValueDependenciesElements");
       }
     },
-{deep: true}
-  )
-
-
-
+    { deep: true }
+  );
 
   /**
    * При глобальном включении возможности отображать подсказки - отправить состояние элемента
    */
-  watch(() => store.isCanShowAllTooltips, ()=> {
-    if (parentIsShow.value && data?.changeValid) {
-      data.changeValid("global");
+  watch(
+    () => store.isCanShowAllTooltips,
+    () => {
+      if (parentIsShow.value && data?.changeValid) {
+        data.changeValid("global");
+      }
     }
-  })
+  );
 
   /**
    * При изменении состояния видимости родителя - отправить состояние элемента.
    */
-  watch(() => parentIsShow.value, (newValue) => {
-    if (data?.changeValue) {
-      if (newValue) {
-        data?.changeValue("global");
-      } else {
-        data?.changeValue("delete");
+  watch(
+    () => parentIsShow.value,
+    (newValue) => {
+      if (data?.changeValue) {
+        if (newValue) {
+          data?.changeValue("global");
+        } else {
+          data?.changeValue("delete");
+        }
       }
     }
-  })
+  );
 
   /**
    * Существует список цен с зависимостями
@@ -238,7 +242,7 @@ export default function UseForProcessingFormula(outerData) {
         (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
       )
     );
-  })
+  });
 
   /**
    * Иницаилизировать проверку условий зависимых цен
@@ -247,10 +251,7 @@ export default function UseForProcessingFormula(outerData) {
    */
   const initProcessingDependencyPrice = computed(() => {
     return isDependencyPriceExist.value;
-  })
-
-
-
+  });
 
   return {
     isVisibilityFromDependency,
@@ -260,6 +261,6 @@ export default function UseForProcessingFormula(outerData) {
     processingVariablesOnFormula,
     parsingFormulaVariables,
     initProcessingDependencyPrice,
-    costAfterProcessingDependencyPrice
-  }
-};
+    costAfterProcessingDependencyPrice,
+  };
+}

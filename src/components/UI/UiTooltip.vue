@@ -1,9 +1,5 @@
 <template>
-  <transition
-    name="tooltip-transition"
-    v-cloak
-    v-show="canBeShown"
-  >
+  <transition name="tooltip-transition" v-cloak v-show="canBeShown">
     <div
       class="calc__tooltip calc__tooltip-wrapper"
       ref="tooltip"
@@ -16,7 +12,7 @@
 </template>
 
 <script>
-import {ref, getCurrentInstance, watch, onMounted, computed} from "vue";
+import { ref, getCurrentInstance, watch, onMounted, computed } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 
 export default {
@@ -49,11 +45,11 @@ export default {
   setup(props) {
     const store = useBaseStore();
 
-    const resizeTimer   = ref(null);
+    const resizeTimer = ref(null);
     const classPosition = ref(null);
-    const tooltip       = ref(null);
+    const tooltip = ref(null);
 
-    const instance      = getCurrentInstance();
+    const instance = getCurrentInstance();
 
     const checkPosition = () => {
       setTimeout(() => {
@@ -72,30 +68,38 @@ export default {
             parentWidth > 400
               ? ""
               : docWidth - parentRightSide < 150
-                ? "isLeft"
-                : parentLeftSide < 150
-                  ? "isRight"
-                  : "";
+              ? "isLeft"
+              : parentLeftSide < 150
+              ? "isRight"
+              : "";
         }
       }, 10);
-    }
+    };
 
     /**
      * Обновить позицию подсказки после инициализации отображения
      */
-    watch(() => props.isShow, (newValue) => {
-      if (newValue !== undefined) {
-        checkPosition();
+    watch(
+      () => props.isShow,
+      (newValue) => {
+        if (newValue !== undefined) {
+          checkPosition();
+        }
       }
-    });
+    );
 
     /**
      * Отобразить
      * @type {ComputedRef<Boolean>}
      */
     const canBeShown = computed(() => {
-       return store.isCanShowAllTooltips && props.localCanBeShown && props.isShow && props.tooltipText?.length;
-    })
+      return (
+        store.isCanShowAllTooltips &&
+        props.localCanBeShown &&
+        props.isShow &&
+        props.tooltipText?.length
+      );
+    });
 
     onMounted(() => {
       checkPosition();
@@ -105,13 +109,13 @@ export default {
           checkPosition();
         }, 500);
       });
-    })
+    });
 
     return {
       tooltip,
       classPosition,
       canBeShown,
-    }
+    };
   },
 };
 </script>

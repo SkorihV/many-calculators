@@ -19,32 +19,46 @@ export default {
   emits: ["changedValue"],
   // mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
-    ...UsePropsTemplates(['cost', 'elementName','parentName', 'formulaProcessingLogic', 'templateName', 'parentIsShow', 'dependencyPrices'])
+    ...UsePropsTemplates([
+      "cost",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "templateName",
+      "parentIsShow",
+      "dependencyPrices",
+    ]),
   },
-  setup(props, {emit}){
+  setup(props, { emit }) {
     const store = useBaseStore();
-    const {checkedValueOnVoid} = UseUtilityServices();
+    const { checkedValueOnVoid } = UseUtilityServices();
 
-    const parentIsShow = toRef(props, 'parentIsShow')
-    const dependencyPrices = toRef(props, 'dependencyPrices')
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyPrices = toRef(props, "dependencyPrices");
 
-
-    const isVisibilityFromDependency = ref(false);
-    const {initProcessingDependencyPrice, costAfterProcessingDependencyPrice, isVisibilityFromDependency: isVisibilityFromDependencyLocal, parsingFormulaVariables} = UseForProcessingFormula({
+    const {
+      initProcessingDependencyPrice,
+      costAfterProcessingDependencyPrice,
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      parsingFormulaVariables,
+    } = UseForProcessingFormula({
       parentIsShow,
-      dependencyPrices
+      dependencyPrices,
     });
-    watch(() => isVisibilityFromDependencyLocal.value,
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
       () => {
-        isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value
-    })
-
-
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
 
     onMounted(() => {
       changeValue("mounted");
-    })
-
+    });
 
     const changeValue = (eventType = "system") => {
       emit("changedValue", {
@@ -62,7 +76,7 @@ export default {
         formulaProcessingLogic: props.formulaProcessingLogic,
       });
       changeValid(eventType);
-    }
+    };
 
     /**
      * возвращает общее состояние не валидности инпута
@@ -77,7 +91,7 @@ export default {
         isShow: true,
         parentName: props.parentName,
       });
-    }
+    };
 
     const tryPassDependency = () => {
       store.tryAddDependencyElement({
@@ -87,13 +101,13 @@ export default {
         displayValue: null,
         type: "system",
       });
-    }
+    };
 
     const localElementName = computed(() => {
       return checkedValueOnVoid(props.elementName)
         ? props.elementName
         : Math.random().toString();
-    })
+    });
 
     /**
      * Возвращает цену подходящую условию, если моле отображается
@@ -105,37 +119,36 @@ export default {
         return props.cost;
       }
 
-      let newCost = costAfterProcessingDependencyPrice(
-        props.dependencyPrices
-      );
+      let newCost = costAfterProcessingDependencyPrice(props.dependencyPrices);
       if (newCost !== null) {
         return newCost;
       }
       return props.cost;
-    })
+    });
 
-    watch(() => localCost.value,
+    watch(
+      () => localCost.value,
       (newValue, oldValue) => {
         if (newValue !== oldValue) {
           changeValue();
         }
       },
-      {deep: true})
+      { deep: true }
+    );
 
-    const { devModeData } = UseDevModeDataBlock({ elementName: props.elementName,
+    const { devModeData } = UseDevModeDataBlock({
+      elementName: props.elementName,
       templateName: props.templateName,
       localCost: localCost.value,
       isVisibilityFromDependency: isVisibilityFromDependency.value,
       parsingFormulaVariables: parsingFormulaVariables.value,
       changeValid,
-      changeValue
-    } )
+      changeValue,
+    });
 
     return {
-      devModeData
-    }
-
-
+      devModeData,
+    };
   },
   // mounted() {
   //   this.changeValue("mounted");

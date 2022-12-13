@@ -57,35 +57,25 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { computed, onMounted, ref, toRef, watch } from "vue";
+import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
 
 export default {
   name: "UiBisection",
   components: { TemplatesWrapper },
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula],
   props: {
     templateData: {
       type: Object,
       default: () => {},
     },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
     widthLeftSide: {
       type: [Number, String],
       default: 50,
-    },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
     },
     dependencyFormulaDisplayLeftSide: {
       type: String,
@@ -95,81 +85,122 @@ export default {
       type: String,
       default: null,
     },
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates([
+      "label",
+      "elementName",
+      "classes",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
-  mounted() {
-    window.addEventListener("resize", () => {
-      this.inMobile = window.innerWidth <= 768;
-    });
-  },
-  data() {
-    return {
-      inMobile: false,
-      absoluteMaxWidth: 70,
-      absoluteMinWidth: 30,
-    };
-  },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
+  setup(props, { emit }) {
+    const store = useBaseStore();
+    const inMobile = ref(false);
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    /**
+     *
+     * @type {Ref<UnwrapRef<number>>}
+     */
+    const absoluteMaxWidth = ref(70);
+    /**
+     *
+     * @type {Ref<UnwrapRef<number>>}
+     */
+    const absoluteMinWidth = ref(30);
+    const { getArrayElementsFromFormula } = UseUtilityServices();
 
-    processingFormula(formula) {
-      let result = this.getArrayElementsFromFormula(formula);
-      this.constructLocalListElementDependencyInFormula(result);
-      result = this.processingVariablesOnFormula(result);
+    const {
+      constructLocalListElementDependencyInFormula,
+      processingVariablesOnFormula,
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+    } = UseForProcessingFormula({
+      parentIsShow,
+      dependencyFormulaDisplay,
+    });
+
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
+
+    const changeValue = (data) => {
+      emit("changedValue", data);
+    };
+
+    const processingFormula = (formula) => {
+      let result = getArrayElementsFromFormula(formula);
+      constructLocalListElementDependencyInFormula(result);
+      result = processingVariablesOnFormula(result);
       try {
         return eval(result);
       } catch (e) {
-        if (this.devMode) {
+        if (store.devMode) {
           console.error(e.message, result);
         }
         return false;
       }
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, ["devMode"]),
-    isShowLeftSide() {
-      if (!this.dependencyFormulaDisplayLeftSide?.length) {
-        return true;
-      }
-      return this.processingFormula(this.dependencyFormulaDisplayLeftSide);
-    },
-    isShowRightSide() {
-      if (!this.dependencyFormulaDisplayRightSide?.length) {
-        return true;
-      }
-      return this.processingFormula(this.dependencyFormulaDisplayRightSide);
-    },
+    };
 
-    styleWidthLeftSide() {
-      if (this.widthLeftSide > this.absoluteMaxWidth) {
-        this.widthLeftSide = this.absoluteMaxWidth;
+    const isShowLeftSide = computed(() => {
+      if (!props.dependencyFormulaDisplayLeftSide?.length) {
+        return true;
       }
-      if (this.widthLeftSide < this.absoluteMinWidth) {
-        this.widthLeftSide = this.absoluteMinWidth;
+      return processingFormula(props.dependencyFormulaDisplayLeftSide);
+    });
+
+    const isShowRightSide = computed(() => {
+      if (!props.dependencyFormulaDisplayRightSide?.length) {
+        return true;
       }
-      if (this.inMobile) {
+      return processingFormula(props.dependencyFormulaDisplayRightSide);
+    });
+
+    const styleWidthLeftSide = computed(() => {
+      if (props.widthLeftSide > absoluteMaxWidth.value) {
+        props.widthLeftSide = absoluteMaxWidth.value;
+      }
+      if (props.widthLeftSide < absoluteMinWidth.value) {
+        props.widthLeftSide = absoluteMinWidth.value;
+      }
+      if (inMobile) {
         return "max-width:" + 100 + "%";
       }
-      return "max-width:" + this.widthLeftSide + "%";
-    },
-    styleWidthRightSide() {
-      if (this.widthLeftSide > this.absoluteMaxWidth) {
-        this.widthLeftSide = this.absoluteMaxWidth;
+      return "max-width:" + props.widthLeftSide + "%";
+    });
+    const styleWidthRightSide = computed(() => {
+      if (props.widthLeftSide > absoluteMaxWidth.value) {
+        props.widthLeftSide = absoluteMaxWidth.value;
       }
-      if (this.widthLeftSide < this.absoluteMinWidth) {
-        this.widthLeftSide = this.absoluteMinWidth;
+      if (props.widthLeftSide < absoluteMinWidth.value) {
+        props.widthLeftSide = absoluteMinWidth.value;
       }
-      if (this.inMobile) {
+      if (inMobile) {
         return "max-width:" + 100 + "%";
       }
-      return "max-width:" + (100 - this.widthLeftSide) + "%";
-    },
+      return "max-width:" + (100 - props.widthLeftSide) + "%";
+    });
+
+    onMounted(() => {
+      window.addEventListener("resize", () => {
+        inMobile.value = window.innerWidth <= 768;
+      });
+    });
+
+    return {
+      changeValue,
+      styleWidthRightSide,
+      styleWidthLeftSide,
+      isShowRightSide,
+      isShowLeftSide,
+      isVisibilityFromDependency,
+    };
   },
 };
 </script>

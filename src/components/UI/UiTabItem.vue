@@ -18,10 +18,9 @@
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
-import {computed, toRef} from "vue";
+import { computed, toRef } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-
 
 export default {
   name: "UiTabItem",
@@ -43,30 +42,33 @@ export default {
       type: Number,
       default: null,
     },
-    ...UsePropsTemplates(['elementName','parentIsShow'])
+    ...UsePropsTemplates(["elementName", "parentIsShow"]),
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const store = useBaseStore();
-    const getValidationListOnParentName = toRef(store, 'getValidationListOnParentName')
+    const getValidationListOnParentName = toRef(
+      store,
+      "getValidationListOnParentName"
+    );
 
     const changeValue = (data) => {
       emit("changedValue", data);
-    }
+    };
 
     const isShowItem = computed(() => {
       return props.tabItemId === props.shownIdTab;
-    })
+    });
 
     const itemName = computed(() => {
       return props.tabName + "_" + props.elementName;
-    })
+    });
 
     return {
       changeValue,
       getValidationListOnParentName,
       isShowItem,
-      itemName
-    }
+      itemName,
+    };
   },
 };
 </script>

@@ -220,7 +220,7 @@ export default {
     UiSystem,
   },
   props: {
-    ...UsePropsTemplates(['template', 'index', 'parentIsShow', 'parentName'])
+    ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
   },
   methods: {
     changeValue(data) {

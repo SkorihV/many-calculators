@@ -5,7 +5,7 @@ import { defineProps } from "vue";
  * @param propsName
  * @returns {{}}
  */
-export default function(propsName) {
+export default function (propsName) {
   const propsForReturn = {};
 
   /**
@@ -15,20 +15,20 @@ export default function(propsName) {
     return {
       type: String,
       default: "",
-    }
-  }
+    };
+  };
   const elementName = () => {
-    return  {
+    return {
       type: String,
       default: Math.random().toString(),
-    }
-  }
+    };
+  };
   const classes = () => {
-   return  {
+    return {
       type: String,
       default: null,
-    }
-  }
+    };
+  };
 
   /**
    * Формула на результатах вычисления которой будет строиться результат отображения элемента
@@ -36,78 +36,79 @@ export default function(propsName) {
    */
   const dependencyFormulaDisplay = () => {
     return {
-    type: String,
-    default: "",
-  }}
+      type: String,
+      default: "",
+    };
+  };
 
   const parentIsShow = () => {
     return {
       type: Boolean,
       default: true,
-    }
-  }
+    };
+  };
 
   const prompt = () => {
     return {
       type: String,
       default: null,
-    }
-  }
+    };
+  };
 
   const maxWidth = () => {
     return {
       type: [Number, String],
       default: 250,
-    }  }
+    };
+  };
 
   const maxHeight = () => {
     return {
       type: [Number, String],
       default: 250,
-    }
-  }
-
+    };
+  };
 
   const templateName = () => {
     return {
       type: String,
       default: null,
-    }
-  }
+    };
+  };
 
   const template = () => {
     return {
       type: Object,
       default: null,
-    }
-  }
+    };
+  };
 
   const formulaProcessingLogic = () => {
     return {
       type: String,
       default: "error",
-    }
-  }
+    };
+  };
 
   const parentName = () => {
     return {
       type: String,
       default: null,
-    }
-  }
+    };
+  };
 
   /**
    * Исключить элемент из расчета по формуле
    */
-  const excludeFromCalculations = () =>{
+  const excludeFromCalculations = () => {
     return {
       type: [Boolean, Number],
       default: false,
-          validator(value) {
-          return value === false || value === true || value === 0 || value === 1;
-        },
-    }
-  }
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    };
+  };
   /**
    * элемент не может быть пустым и требуется выбор
    */
@@ -118,15 +119,15 @@ export default function(propsName) {
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
-    }
-  }
+    };
+  };
 
   const index = () => {
     return {
       type: [Number, String],
       default: null,
-    }
-  }
+    };
+  };
 
   const cost = () => {
     return {
@@ -135,8 +136,8 @@ export default function(propsName) {
       validator(value) {
         return !isNaN(Number(value));
       },
-    }
-  }
+    };
+  };
   /**
    * Список цен с зависимостями / условиями
    */
@@ -144,8 +145,8 @@ export default function(propsName) {
     return {
       type: Array,
       default: () => [],
-    }
-  }
+    };
+  };
 
   const resultsData = {
     label: label(),
@@ -164,8 +165,8 @@ export default function(propsName) {
     template: template(),
     index: index(),
     cost: cost(),
-    dependencyPrices: dependencyPrices()
-  }
+    dependencyPrices: dependencyPrices(),
+  };
 
   if (Array.isArray(propsName)) {
     propsName.map((name) => {
@@ -174,7 +175,7 @@ export default function(propsName) {
       } else {
         console.error("Попытка вызвать отсутствующий в базе Props - " + name);
       }
-    })
+    });
   }
   return propsForReturn;
 }

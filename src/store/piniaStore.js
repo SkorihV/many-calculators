@@ -67,12 +67,12 @@ export const useBaseStore = defineStore("base", {
      * @returns {function(*): boolean}
      */
     isValidationShowOnParentName: (state) => (parentName) => {
-      return   Boolean(
+      return Boolean(
         Object.values(state.validationsErrorsList).filter(
           (item) => item.parentName === parentName && item.isShow
         ).length
-      )
-    }   ,
+      );
+    },
     /**
      * Есть ли хоть один элемент-ребенок с ошибкой, у родителя
      * @param state
@@ -112,7 +112,7 @@ export const useBaseStore = defineStore("base", {
     devMode: (state) => state.devModeData,
     showInsideElementStatus: (state) => state.showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
-    showDevModeBlock: (state) => state.devMode && state.showInsideElementStatus
+    showDevModeBlock: (state) => state.devMode && state.showInsideElementStatus,
   },
   actions: {
     tryAddResultElement(dataResultItem) {

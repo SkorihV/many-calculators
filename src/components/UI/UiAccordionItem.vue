@@ -60,53 +60,57 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates(['elementName', 'parentIsShow'])
+    ...UsePropsTemplates(["elementName", "parentIsShow"]),
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const store = useBaseStore();
     const isOpen = ref(false);
 
     const changeValue = (data) => {
       emit("changedValue", data);
-    }
+    };
 
-    const localListValidationError = computed(() =>  {
+    const localListValidationError = computed(() => {
       return store.getValidationListOnParentName(props.elementName);
-    })
+    });
     const isShowError = computed(() => {
       return localListValidationError.value.some(
         (item) => item.error && item.isShow && store.isCanShowAllTooltips
       );
-    })
+    });
 
     const isShowAccordionItem = computed(() => {
       return currentChildrenItem.value !== currentHiddenItem.value;
-    })
+    });
 
     const currentChildrenItem = computed(() => {
       return props.accordionItem?.templates.length
         ? props.accordionItem?.templates.length
         : 0;
-    })
+    });
 
     const currentHiddenItem = computed(() => {
       return localListValidationError.value.filter((item) => !item.isShow)
         .length;
-    })
+    });
 
     const itemIdName = computed(() => {
       return (
-        props.accordionName + "_" + props.elementName + "_" + props.accordionItemId
+        props.accordionName +
+        "_" +
+        props.elementName +
+        "_" +
+        props.accordionItemId
       );
-    })
+    });
 
     return {
       isShowAccordionItem,
       isShowError,
       itemIdName,
       changeValue,
-      isOpen
-    }
+      isOpen,
+    };
   },
 };
 </script>

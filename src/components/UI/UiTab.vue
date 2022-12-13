@@ -76,7 +76,6 @@ import { ref, toRef, computed, watch } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
-
 export default {
   name: "UiTab",
   components: { UiTooltip, UiPrompt, UiTabItem },
@@ -86,37 +85,57 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...UsePropsTemplates(['label','classes','elementName', 'parentIsShow', 'dependencyFormulaDisplay'])
+    ...UsePropsTemplates([
+      "label",
+      "classes",
+      "elementName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const store = useBaseStore();
-    const isValidationShowOnParentName = toRef(store, 'isValidationShowOnParentName');
+    const isValidationShowOnParentName = toRef(
+      store,
+      "isValidationShowOnParentName"
+    );
 
-    const classes                     = toRef(props, 'classes');
-    const elementName                 = toRef(props, 'elementName');
-    const dependencyFormulaDisplay    = toRef(props, 'dependencyFormulaDisplay');
-    const parentIsShow                = toRef(props, 'parentIsShow');
+    const classes = toRef(props, "classes");
+    const elementName = toRef(props, "elementName");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    const parentIsShow = toRef(props, "parentIsShow");
 
-    const shownIdTab                  = ref(null);
-    const isVisibilityFromDependency  = ref(false);
+    const shownIdTab = ref(null);
 
     const changeValue = (data) => {
       emit("changedValue", data);
-    }
+    };
 
     const openItem = (index) => {
       shownIdTab.value = index;
-    }
+    };
 
-    const {isVisibilityFromDependency : isVisibilityFromDependencyLocal} = UseForProcessingFormula({dependencyFormulaDisplay, parentIsShow, changeValue});
-    watch(() => isVisibilityFromDependencyLocal.value, ()=> {
-      isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value
-    })
+    const { isVisibilityFromDependency: isVisibilityFromDependencyLocal } =
+      UseForProcessingFormula({
+        dependencyFormulaDisplay,
+        parentIsShow,
+        changeValue,
+      });
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
 
     const checkIsShowError = (parentName, key) => {
       const isError = store.isValidationErrorOnParentName(parentName);
       return key !== shownIdTab.value && isError && store.isCanShowAllTooltips;
-    }
+    };
 
     const showBlock = computed(() => {
       let result = [];
@@ -129,7 +148,7 @@ export default {
         });
       }
       return result.some((item) => item);
-    })
+    });
 
     return {
       classes,
@@ -140,8 +159,8 @@ export default {
       checkIsShowError,
       isValidationShowOnParentName,
       changeValue,
-      isVisibilityFromDependency
-    }
+      isVisibilityFromDependency,
+    };
   },
 };
 </script>
