@@ -199,6 +199,13 @@ export default function (propsName) {
     };
   };
 
+  const formula = () => {
+    return {
+      type: String,
+      default: "",
+    };
+  };
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -222,6 +229,7 @@ export default function (propsName) {
     formOutputMethod: formOutputMethod(),
     minWidth: minWidth(),
     isChecked: isChecked(),
+    formula: formula(),
   };
 
   if (Array.isArray(propsName)) {

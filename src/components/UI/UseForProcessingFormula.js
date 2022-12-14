@@ -10,9 +10,10 @@ export default function UseForProcessingFormula(outerData) {
   const dependencyFormulaDisplay = data?.dependencyFormulaDisplay
     ? toRef(data, "dependencyFormulaDisplay")
     : ref("");
-  const parentIsShow = data?.parentIsShow
-    ? toRef(data, "parentIsShow")
-    : ref(true);
+  const parentIsShow =
+    typeof data?.parentIsShow === "boolean"
+      ? toRef(data, "parentIsShow")
+      : ref(true);
   const dependencyPrices = data?.dependencyPrices
     ? toRef(data, "dependencyPrices")
     : ref("");
@@ -111,6 +112,13 @@ export default function UseForProcessingFormula(outerData) {
   const putElementDependencyInLocalList = (name) => {
     localDependencyList[name] = store.globalDependenciesList[name];
   };
+  /**
+   * Отобразить поле
+   * @returns {boolean}
+   */
+  const isDependencyElementVisibility = computed(() => {
+    return Boolean(dependencyFormulaDisplay.value?.length);
+  });
 
   /**
    * Получить массив значений из формулы
@@ -143,14 +151,6 @@ export default function UseForProcessingFormula(outerData) {
       }
     }
     return true;
-  });
-
-  /**
-   * Отобразить поле
-   * @returns {boolean}
-   */
-  const isDependencyElementVisibility = computed(() => {
-    return Boolean(dependencyFormulaDisplay.value?.length);
   });
 
   /**

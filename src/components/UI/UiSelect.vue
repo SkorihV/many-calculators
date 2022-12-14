@@ -164,6 +164,8 @@ export default {
     } = UseForProcessingFormula({
       parentIsShow,
       dependencyFormulaDisplay,
+      changeValid,
+      changeValue,
     });
 
     const isVisibilityFromDependency = ref(
@@ -214,7 +216,7 @@ export default {
       changeValue(eventType);
       close();
     };
-    const changeValue = (eventType = "click") => {
+    function changeValue(eventType = "click") {
       emit("changedValue", {
         value: currentOption?.value,
         displayValue: currentOption?.selectName,
@@ -234,9 +236,9 @@ export default {
       });
       tryPassDependency();
       changeValid(eventType);
-    };
+    }
 
-    const changeValid = (eventType) => {
+    function changeValid(eventType) {
       store.checkValidationDataAndToggle({
         error: isErrorEmpty.value,
         name: localElementName.value,
@@ -246,9 +248,9 @@ export default {
         isShow: isVisibilityFromDependency.value,
         parentName: props.parentName,
       });
-    };
+    }
 
-    const tryPassDependency = () => {
+    function tryPassDependency() {
       store.tryAddDependencyElement({
         name: localElementName.value,
         value: currentOption?.value,
@@ -256,7 +258,7 @@ export default {
         displayValue: currentOption?.selectName,
         type: "select",
       });
-    };
+    }
 
     watch(
       () => props.selectedItem,
@@ -445,28 +447,28 @@ export default {
         changeSelect(localSelectValues.value[0], null, "mounted");
       }
       window.addEventListener("click", (e) => {
-        if (!instance.refs?.parent.contains(e.target)) {
+        if (!instance?.refs?.parent?.contains(e.target)) {
           close();
         }
       });
     });
 
     return {
-      imageDir,
       open,
-      currentOption,
-      toggleOpenClose,
       isOpen,
+      imageDir,
+      devModeData,
       changeSelect,
       isErrorEmpty,
+      currentOption,
+      toggleOpenClose,
       textErrorNotEmpty,
-      selectValuesAfterProcessingDependency,
-      isColumn: props.isColumn,
-      devModeData,
       isVisibilityFromDependency,
+      selectValuesAfterProcessingDependency,
       label: props.label,
       classes: props.classes,
       notEmpty: props.notEmpty,
+      isColumn: props.isColumn,
     };
   },
 };

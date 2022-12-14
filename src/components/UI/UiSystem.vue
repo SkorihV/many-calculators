@@ -3,11 +3,7 @@
 </template>
 
 <script>
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
@@ -17,7 +13,6 @@ import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
 export default {
   name: "UiSystem",
   emits: ["changedValue"],
-  // mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
     ...UsePropsTemplates([
       "cost",
@@ -56,11 +51,13 @@ export default {
       }
     );
 
-    onMounted(() => {
-      changeValue("mounted");
+    const localElementName = computed(() => {
+      return checkedValueOnVoid(props.elementName)
+        ? props.elementName
+        : Math.random().toString();
     });
 
-    const changeValue = (eventType = "system") => {
+    function changeValue(eventType = "system") {
       emit("changedValue", {
         value: parseFloat(localCost.value),
         displayValue: null,
@@ -76,38 +73,32 @@ export default {
         formulaProcessingLogic: props.formulaProcessingLogic,
       });
       changeValid(eventType);
-    };
+    }
 
     /**
      * возвращает общее состояние не валидности инпута
      */
-    const changeValid = (eventType) => {
+    function changeValid(eventType) {
       store.checkValidationDataAndToggle({
         error: false,
-        name: localElementName,
+        name: localElementName.value,
         type: "system",
         label: "",
         eventType,
         isShow: true,
         parentName: props.parentName,
       });
-    };
+    }
 
-    const tryPassDependency = () => {
+    function tryPassDependency() {
       store.tryAddDependencyElement({
-        name: localElementName,
+        name: localElementName.value,
         value: parseFloat(localCost.value),
         isShow: isVisibilityFromDependency.value,
         displayValue: null,
         type: "system",
       });
-    };
-
-    const localElementName = computed(() => {
-      return checkedValueOnVoid(props.elementName)
-        ? props.elementName
-        : Math.random().toString();
-    });
+    }
 
     /**
      * Возвращает цену подходящую условию, если моле отображается
@@ -146,95 +137,13 @@ export default {
       changeValue,
     });
 
+    onMounted(() => {
+      changeValue("mounted");
+    });
+
     return {
       devModeData,
     };
   },
-  // mounted() {
-  //   this.changeValue("mounted");
-  // },
-  // methods: {
-  //   changeValue(eventType = "system") {
-  //     this.$emit("changedValue", {
-  //       value: parseFloat(this.localCost),
-  //       displayValue: null,
-  //       name: this.localElementName,
-  //       type: "system",
-  //       cost: parseFloat(this.localCost),
-  //       label: "",
-  //       formOutputMethod: null,
-  //       isShow: this.isVisibilityFromDependency,
-  //       excludeFromCalculations: false,
-  //       unit: "",
-  //       eventType,
-  //       formulaProcessingLogic: this.formulaProcessingLogic,
-  //     });
-  //     this.changeValid(eventType);
-  //   },
-  //   /**
-  //    * возвращает общее состояние не валидности инпута
-  //    */
-  //   changeValid(eventType) {
-  //     this.checkValidationDataAndToggle({
-  //       error: false,
-  //       name: this.localElementName,
-  //       type: "system",
-  //       label: "",
-  //       eventType,
-  //       isShow: true,
-  //       parentName: this.parentName,
-  //     });
-  //   },
-  //   tryPassDependency() {
-  //     this.tryAddDependencyElement({
-  //       name: this.localElementName,
-  //       value: parseFloat(this.localCost),
-  //       isShow: this.isVisibilityFromDependency,
-  //       displayValue: null,
-  //       type: "system",
-  //     });
-  //   },
-  // },
-  // watch: {
-  //   localCost: {
-  //     handler(newValue, oldValue) {
-  //       if (newValue !== oldValue) {
-  //         this.changeValue();
-  //       }
-  //     },
-  //     deep: true,
-  //   },
-  // },
-  // computed: {
-  //   ...mapState(useBaseStore, [
-  //     "tryAddDependencyElement",
-  //     "checkValidationDataAndToggle",
-  //     "devMode",
-  //     "showInsideElementStatus",
-  //   ]),
-  //   localElementName() {
-  //     return this.checkedValueOnVoid(this.elementName)
-  //       ? this.elementName
-  //       : Math.random().toString();
-  //   },
-  //   /**
-  //    * Возвращает цену подходящую условию, если моле отображается
-  //    * Если не одна цена не подходит, то возвращается стандартная
-  //    * @returns {Number|String|*}
-  //    */
-  //   localCost() {
-  //     if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-  //       return this.cost;
-  //     }
-  //
-  //     let newCost = this.costAfterProcessingDependencyPrice(
-  //       this.dependencyPrices
-  //     );
-  //     if (newCost !== null) {
-  //       return newCost;
-  //     }
-  //     return this.cost;
-  //   },
-  // },
 };
 </script>

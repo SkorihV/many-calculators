@@ -50,6 +50,7 @@
           :exclude-from-calculations="template?.excludeFromCalculations"
           :duplicate-template="template"
           :formula-processing-logic="template?.formulaProcessingLogic"
+          :template-name="template?.template"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -219,6 +220,7 @@ export default {
     //   "tryToggleDevMode",
     // ]),
     changeValue(data) {
+      // console.log(data);
       if (typeof data !== "object") {
         return null;
       }
