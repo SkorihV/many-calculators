@@ -129,6 +129,8 @@ export const useBaseStore = defineStore("base", {
         isShow,
         excludeFromCalculations,
         formulaProcessingLogic,
+        error,
+        parentName
       } = dataResultItem;
 
       this.globalResultsElements[name] = {
@@ -145,6 +147,8 @@ export const useBaseStore = defineStore("base", {
         excludeFromCalculations,
         eventType,
         formulaProcessingLogic,
+        error,
+        parentName
       };
     },
     /**

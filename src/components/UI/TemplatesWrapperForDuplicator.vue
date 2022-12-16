@@ -4,11 +4,7 @@
     :accordion-data="template"
     :label="template?.label"
     :classes="template?.classes"
-    :element-name="
-      template?.elementName?.length
-        ? template?.elementName
-        : template?.json_id || 'UiAccordion' + index
-    "
+    :element-name="template?.json_id || 'UiAccordion' + index"
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     @changedValue="changeValue"
@@ -18,12 +14,7 @@
     :tab-data="template"
     :label="template?.label"
     :classes="template?.classes"
-    :element-name="
-      template?.elementName?.length
-        ? template?.elementName
-        : template?.json_id || 'UiTab' + index
-    "
-    :parent-is-show="parentIsShow"
+    :element-name="template?.json_id || 'UiTab' + index"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     @changedValue="changeValue"
   />
@@ -33,11 +24,7 @@
     :label="template?.label"
     :width-left-side="template?.widthLeftSide"
     :classes="template?.classes"
-    :element-name="
-      template?.elementName?.length
-        ? template?.elementName
-        : template?.json_id || 'UiBisection' + index
-    "
+    :element-name="template?.json_id || 'UiBisection' + index"
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :dependency-formula-display-left-side="
@@ -67,11 +54,15 @@ export default {
   props: {
     ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
   },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
+  setup(_, {emit}) {
+    function changeValue(data) {
+      emit("changedValue", data);
+    }
+
+    return {
+      changeValue
+    }
+  }
 };
 </script>
 

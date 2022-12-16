@@ -46,17 +46,12 @@
       X
     </button>
   </div>
-    <div
-      class="dev-block"
-      v-if="devModeData.length"
-      v-html="devModeData"
-    ></div>
+  <div class="dev-block" v-if="devModeData.length" v-html="devModeData"></div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import TemplatesWrapperForDuplicator from "@/components/UI/TemplatesWrapperForDuplicator";
-
 
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
@@ -196,8 +191,6 @@ export default {
 
     function tryDuplicate() {
       counterDuplicate.value++;
-      console.log(props.originData);
-
       const returnData = updateInputData(
         props.originData,
         counterDuplicate.value
@@ -413,18 +406,18 @@ export default {
     });
 
     const devModeData = computed(() => {
-      if (!store.devMode && !store.showInsideElementStatus) {
-        return '';
+      if (!store.devMode || !store.showInsideElementStatus) {
+        return "";
       }
       const textLabel = `<div>Название группы элементов в дупликаторе: ${mutationsInputData.value?.label}</div>`;
       const textFormula = `<div>Базовая формула: ${
         props.formula?.length
-          ? this.getArrayElementsFromFormula(props.formula).join(" ")
+          ? getArrayElementsFromFormula(props.formula).join(" ")
           : "Нет"
       }</div>`;
       let isCompiledFormula = false;
       try {
-        if (this.localCost !== null) {
+        if (localCost.value !== null) {
           isCompiledFormula = true;
         }
       } catch (e) {
@@ -447,8 +440,7 @@ export default {
       ${textFormulaOnData}
       ${resultProcessingFormula}
       `;
-    })
-
+    });
 
     onMounted(() => {
       if (props.isDuplicate) {
@@ -465,7 +457,7 @@ export default {
       tryDuplicate,
       deleteDuplicate,
       parentIsShow,
-      devModeData
+      devModeData,
     };
   },
   // mounted() {
@@ -637,7 +629,6 @@ export default {
     //     (item) => item + "_" + this.index
     //   );
     // },
-
     // /**
     //  * Список локальных переменных не используемых в формуле
     //  * @returns {*[]}
@@ -660,7 +651,6 @@ export default {
     //   });
     //   return localData;
     // },
-
     // /**
     //  * Сумма всех элементов не вошедших в формулу
     //  * @returns {unknown}
@@ -680,7 +670,6 @@ export default {
     //     0
     //   );
     // },
-
     // /**
     //  * в формулу добавляем префиксы для переменных дупликатора
     //  * @returns {*}
@@ -715,7 +704,6 @@ export default {
     //     }
     //   });
     // },
-
     // /**
     //  * конечная формула после обработки в виде строки с переменными
     //  * @returns {*}
@@ -759,7 +747,6 @@ export default {
     //     .join(" ")
     //     ?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, "");
     // },
-
     // localCost() {
     //   if (
     //     typeof this.compileFormulaWitchData === "string" &&

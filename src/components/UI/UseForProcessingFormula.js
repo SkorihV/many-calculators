@@ -10,13 +10,16 @@ export default function UseForProcessingFormula(outerData) {
   const dependencyFormulaDisplay = data?.dependencyFormulaDisplay
     ? toRef(data, "dependencyFormulaDisplay")
     : ref("");
-  const parentIsShow =
-    typeof data?.parentIsShow === "boolean"
-      ? toRef(data, "parentIsShow")
-      : ref(true);
-  const dependencyPrices = data?.dependencyPrices
-    ? toRef(data, "dependencyPrices")
-    : ref("");
+
+
+  const parentIsShow = toRef(data, 'parentIsShow' )
+
+  // if ( typeof data?.parentIsShow === 'boolean' ) {
+  //   parentIsShow.value = data.parentIsShow;
+  // }
+
+  const dependencyPrices = ref( data?.dependencyPrices ? data.dependencyPrices : []);
+
 
   const localDependencyList = reactive({});
 
@@ -99,9 +102,6 @@ export default function UseForProcessingFormula(outerData) {
    * @returns {*|null}
    */
   const isElementDependency = (name) => {
-    if (!name?.length && !store.globalDependenciesList) {
-      return false;
-    }
     return name in store.globalDependenciesList;
   };
 
@@ -160,8 +160,8 @@ export default function UseForProcessingFormula(outerData) {
 
   watch(
     () => isVisibilityFromDependency.value,
-    (newValue) => {
-      if (newValue && store.isCanShowAllTooltips && data?.changeValue) {
+    () => {
+      if (data?.changeValue) {
         data.changeValue("dependency");
       }
     },
@@ -171,7 +171,7 @@ export default function UseForProcessingFormula(outerData) {
   watch(
     () => store.isCanShowAllTooltips,
     (newValue) => {
-      if (newValue && isVisibilityFromDependency.value && data?.changeValue) {
+      if (isVisibilityFromDependency.value && data?.changeValue) {
         data.changeValue("dependency");
       }
     }
@@ -198,6 +198,15 @@ export default function UseForProcessingFormula(outerData) {
     },
     { deep: true }
   );
+
+  watch(() => localDependencyList,
+    () => {
+      if (data?.changeValue) {
+        data.changeValue("changeValueDependenciesElements");
+      }
+    },
+    {deep: true}
+  )
 
   /**
    * При глобальном включении возможности отображать подсказки - отправить состояние элемента
@@ -233,7 +242,7 @@ export default function UseForProcessingFormula(outerData) {
    */
   const isDependencyPriceExist = computed(() => {
     return Boolean(
-      dependencyPrices.value?.filter(
+      dependencyPrices?.value?.filter(
         (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
       )
     );

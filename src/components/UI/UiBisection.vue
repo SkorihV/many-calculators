@@ -98,6 +98,10 @@ export default {
     const inMobile = ref(false);
     const parentIsShow = toRef(props, "parentIsShow");
     const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    const classes = props.classes;
+    const elementName = props.elementName;
+
+
     /**
      *
      * @type {Ref<UnwrapRef<number>>}
@@ -117,6 +121,8 @@ export default {
     } = UseForProcessingFormula({
       parentIsShow,
       dependencyFormulaDisplay,
+      changeValue,
+
     });
 
     const isVisibilityFromDependency = ref(
@@ -130,11 +136,11 @@ export default {
       }
     );
 
-    const changeValue = (data) => {
+    function changeValue(data){
       emit("changedValue", data);
-    };
+    }
 
-    const processingFormula = (formula) => {
+    function processingFormula(formula){
       let result = getArrayElementsFromFormula(formula);
       constructLocalListElementDependencyInFormula(result);
       result = processingVariablesOnFormula(result);
@@ -146,7 +152,7 @@ export default {
         }
         return false;
       }
-    };
+    }
 
     const isShowLeftSide = computed(() => {
       if (!props.dependencyFormulaDisplayLeftSide?.length) {
@@ -200,8 +206,8 @@ export default {
       isShowRightSide,
       isShowLeftSide,
       isVisibilityFromDependency,
-      classes: props.classes,
-      elementName: props.elementName,
+      classes,
+      elementName,
     };
   },
 };

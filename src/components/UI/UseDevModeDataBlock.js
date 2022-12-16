@@ -22,7 +22,6 @@ export default function UseDevModeDataBlock(outerData) {
         ? `<div>Формула зависимости отображения после обработки: ${data.parsingFormulaVariables}</div>`
         : "";
       const textInfoVisibility = `Отображается: ${data.isVisibilityFromDependency}`;
-
       const textValue = `<div>Значение элемента: ${
         data.templateName === "UiInput" || data.templateName === "UiRange"
           ? data.resultValue

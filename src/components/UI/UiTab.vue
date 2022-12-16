@@ -95,9 +95,8 @@ export default {
   },
   setup(props, { emit }) {
     const store = useBaseStore();
-    const isValidationShowOnParentName = toRef(
-      store,
-      "isValidationShowOnParentName"
+    const isValidationShowOnParentName = ref(
+      store.isValidationShowOnParentName
     );
 
     const classes = toRef(props, "classes");

@@ -51,7 +51,7 @@
       />
     </div>
   </div>
-<!--  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>-->
+  <div v-if="devModeData.length" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -63,9 +63,10 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import {ref, toRef, onMounted, watch, computed} from "vue";
+import { ref, toRef, onMounted, watch, computed } from "vue";
 import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
 import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
 
 export default {
   name: "UiRadio",
@@ -148,25 +149,50 @@ export default {
       "templateName",
     ]),
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
+    const label = props.label;
+    const templateName = props.templateName;
     const store = useBaseStore();
     const currentIndexRadioButton = ref(null);
-    const textErrorNotEmpty = "Обязательное поле."
+    const textErrorNotEmpty = "Обязательное поле.";
     const localElementName = ref(null);
     const timerName = ref(null);
     const localRadioListInOut = ref([]);
 
-    const dependencyFormulaDisplay = toRef(props, 'dependencyFormulaDisplay');
-    const parentIsShow = toRef(props, 'parentIsShow');
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    const parentIsShow = toRef(props, "parentIsShow");
 
-    const {isVisibilityFromDependency: isVisibilityFromDependencyLocal, constructLocalListElementDependencyInFormula, processingVariablesOnFormula, costAfterProcessingDependencyPrice} = UseForProcessingFormula({parentIsShow, dependencyFormulaDisplay, changeValid, changeValue})
-    const isVisibilityFromDependency = ref(isVisibilityFromDependencyLocal.value)
-    watch(() => isVisibilityFromDependencyLocal.value,
-      ()=> {
-        isVisibilityFromDependency.value = isVisibilityFromDependencyLocal.value;
-      })
+    const {
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      constructLocalListElementDependencyInFormula,
+      processingVariablesOnFormula,
+      parsingFormulaVariables,
+      costAfterProcessingDependencyPrice,
+    } = UseForProcessingFormula({
+      parentIsShow,
+      dependencyFormulaDisplay,
+      changeValid,
+      changeValue,
+    });
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
 
-    const { checkedValueOnVoid, getImageDir, getArrayElementsFromFormula } = UseUtilityServices()
+    const { checkedValueOnVoid, getImageDir, getArrayElementsFromFormula } =
+      UseUtilityServices();
+
+    const changedRadio = computed(() => {
+      return currentIndexRadioButton.value !== null
+        ? props.radioValues[currentIndexRadioButton.value]
+        : null;
+    });
 
     function changeValue(eventType = "click") {
       const radio = changedRadio.value;
@@ -179,14 +205,17 @@ export default {
         cost: checkedValueOnVoid(localCost.value)
           ? parseFloat(localCost.value)
           : 0,
-        label: props.label,
+        label,
         formOutputMethod:
           props.formOutputMethod !== "no" ? props.formOutputMethod : null,
         excludeFromCalculations: props.excludeFromCalculations,
         isShow: isVisibilityFromDependency.value,
         eventType,
         formulaProcessingLogic: props.formulaProcessingLogic,
+        error: isErrorEmpty.value,
+        parentName: props.parentName,
       });
+
       tryPassDependency();
       changeValid(eventType);
     }
@@ -196,7 +225,7 @@ export default {
         error: isErrorEmpty.value,
         name: localElementName.value,
         type: "radio",
-        label: props.label,
+        label,
         eventType,
         isShow: isVisibilityFromDependency.value,
         parentName: props.parentName,
@@ -219,7 +248,7 @@ export default {
 
     const imageDir = computed(() => {
       return getImageDir();
-    })
+    });
 
     const mutationRadioValue = computed(() => {
       return props.radioValues.map((radioItem, index) => {
@@ -231,7 +260,7 @@ export default {
           : index + 1;
         return radioItem;
       });
-    })
+    });
     function getNewListValuesBeforeCheckedDependency() {
       return mutationRadioValue.value.map((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
@@ -259,7 +288,7 @@ export default {
 
     const radioValuesAfterProcessingDependency = computed(() => {
       return getNewListValuesBeforeCheckedDependency();
-    })
+    });
     function updateRadioListInOut() {
       localRadioListInOut.value = [];
       if (timerName.value) {
@@ -270,17 +299,20 @@ export default {
       }, 100);
     }
 
-    watch(() => props.selectedItem,
-      (newValue)=> {
+    watch(
+      () => props.selectedItem,
+      (newValue) => {
         currentIndexRadioButton.value =
           checkedValueOnVoid(newValue) &&
           parseInt(newValue) < props.radioValues.length
             ? parseInt(props.selectedItem)
             : props.radioValues.length - 1;
         changeValue("selected");
-      })
+      }
+    );
 
-    watch(() => radioValuesAfterProcessingDependency.value,
+    watch(
+      () => radioValuesAfterProcessingDependency.value,
       (newValue, oldValue) => {
         if (newValue?.length !== oldValue?.length) {
           currentIndexRadioButton.value = null;
@@ -288,23 +320,18 @@ export default {
         }
         updateRadioListInOut();
       },
-      {deep: true})
+      { deep: true }
+    );
 
-
-    const changedRadio = computed(() => {
-      return currentIndexRadioButton.value !== null
-        ? props.radioValues[currentIndexRadioButton.value]
-        : null;
-    })
     const radioType = computed(() => {
       return props.typeDisplayClass?.length ? props.typeDisplayClass : "base";
-    })
-    const onlyImage = computed(() =>{
+    });
+    const onlyImage = computed(() => {
       return props.typeDisplayClass === "onlyImage";
-    })
+    });
     const isErrorEmpty = computed(() => {
       return props.notEmpty && currentIndexRadioButton.value === null;
-    })
+    });
 
     /**
      * Возвращает цену подходящую условию, если моле отображается
@@ -323,19 +350,14 @@ export default {
         return newCost;
       }
       return changedRadio.value?.cost ? changedRadio.value?.cost : null;
-    })
-
-
-
+    });
 
     const width = computed(() => {
       return "max-width:" + props.maxWidth + "px";
-    })
+    });
     const height = computed(() => {
       return "max-height:" + props.maxHeight + "px";
-    })
-
-
+    });
 
     onMounted(() => {
       localElementName.value = checkedValueOnVoid(props.elementName)
@@ -358,10 +380,20 @@ export default {
           clearInterval(timer);
         }, 10000);
       } else {
-        changeValid("mounted");
+        changeValue("mounted");
       }
-    })
+    });
 
+    const { devModeData } = UseDevModeDataBlock({
+      label,
+      elementName: localElementName,
+      dependencyFormulaDisplay,
+      parsingFormulaVariables,
+      isVisibilityFromDependency,
+      templateName,
+      changedRadio,
+      localCost,
+    });
 
     return {
       isVisibilityFromDependency,
@@ -373,17 +405,17 @@ export default {
       radioType,
       onlyImage,
       isColumn: props.isColumn,
-      label: props.label,
+      label,
       classes: props.classes,
       localRadioListInOut,
       localElementName,
       currentIndexRadioButton,
       selectedCurrentRadio,
       changeValue,
-      notEmpty: props.notEmpty
-
-
-    }
+      notEmpty: props.notEmpty,
+      devModeData,
+      changedRadio,
+    };
   },
 
   // methods: {

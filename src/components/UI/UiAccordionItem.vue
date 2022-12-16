@@ -3,7 +3,6 @@
     ref="parent"
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
-    v-show="isShowAccordionItem"
     :class="{ isOpen: isOpen, isError: isShowError && !isOpen }"
   >
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>
@@ -18,7 +17,6 @@
       tooltip-text="Во вкладке есть не корректно заполненные поля."
     ></ui-tooltip>
   </div>
-
   <div
     class="calc__accordion-item-content"
     v-show="isOpen"
@@ -42,7 +40,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import { useBaseStore } from "@/store/piniaStore";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import { ref, computed } from "vue";
+import { ref, computed, watch, reactive, toRef } from "vue";
 
 export default {
   name: "UiAccordionItem",
@@ -60,18 +58,33 @@ export default {
     accordionItemId: {
       type: Number,
     },
+    showItem: {
+      type: Boolean,
+      default: false
+    },
     ...UsePropsTemplates(["elementName", "parentIsShow"]),
   },
   setup(props, { emit }) {
     const store = useBaseStore();
     const isOpen = ref(false);
+    const accordionItem = reactive(props.accordionItem)
+    const shownItems = reactive({});
+    const elementName = props.elementName;
+    const index = props.accordionItemId
 
-    const changeValue = (data) => {
-      emit("changedValue", data);
-    };
+    const itemIsShow = computed(() => {
+      return Object.values(shownItems).some(item => item)
+    })
+
+    function changeValue(data){
+      shownItems[data.name] = data.isShow;
+      emit("changedValue", { data, itemIsShow, index });
+    }
+
+
 
     const localListValidationError = computed(() => {
-      return store.getValidationListOnParentName(props.elementName);
+      return store.getValidationListOnParentName(elementName);
     });
     const isShowError = computed(() => {
       return localListValidationError.value.some(
@@ -79,37 +92,28 @@ export default {
       );
     });
 
-    const isShowAccordionItem = computed(() => {
-      return currentChildrenItem.value !== currentHiddenItem.value;
-    });
-
-    const currentChildrenItem = computed(() => {
-      return props.accordionItem?.templates.length
-        ? props.accordionItem?.templates.length
-        : 0;
-    });
-
-    const currentHiddenItem = computed(() => {
-      return localListValidationError.value.filter((item) => !item.isShow)
-        .length;
-    });
-
     const itemIdName = computed(() => {
       return (
-        props.accordionName +
-        "_" +
-        props.elementName +
+        elementName +
         "_" +
         props.accordionItemId
       );
     });
 
+    const parentIsShow = toRef(props, 'parentIsShow')
+
+
     return {
-      isShowAccordionItem,
       isShowError,
       itemIdName,
       changeValue,
       isOpen,
+      parentIsShow,
+      elementName,
+      accordionItem,
+      shownItems,
+      showCurrentItem: itemIsShow
+
     };
   },
 };

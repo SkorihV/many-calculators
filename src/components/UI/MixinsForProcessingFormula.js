@@ -140,7 +140,6 @@ export const MixinsForProcessingFormula = {
     },
 
     isCanShowAllTooltips(newValue) {
-      console.log(this.label);
       if (newValue && this.isVisibilityFromDependency) {
         this.changeValue("dependency");
       }

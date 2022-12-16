@@ -103,14 +103,14 @@
         "value": "30",
         "cost": "10",
         "unit": "",
-        "min": "",
+        "min": "0",
         "max": "",
-        "controls": false,
-        "step": "1",
+        "controls": true,
+        "step": "5",
         "isColumn": false,
         "notEmpty": true,
         "onlyNumber": 1,
-        "isCurrency": false,
+        "isCurrency": true,
         "onlyInteger": false,
         "formOutputMethod": "no",
         "elementName": "первыйИнпут",
@@ -120,7 +120,8 @@
         "placeholder": "",
         "discreteStep": false,
         "excludeFromCalculations": 0,
-        "dependencyFormulaDisplay": ""
+        "dependencyFormulaDisplay": "checklvl2 === true",
+        "prompt": "текст подсказки"
       },
       {
         "json_id": "346345",
@@ -137,7 +138,7 @@
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiCheckbox",
-        "dependencyFormulaDisplay": "первыйИнпут === 50 || первыйИнпут !== 'null'",
+        "dependencyFormulaDisplay": "",
         "prompt": "",
         "dependencyPrices": [
           {
@@ -228,7 +229,7 @@
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiRange",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "20 > 10",
         "dependencyPrices": [
           {
             "title": "1000",
@@ -257,7 +258,7 @@
         "formOutputMethod": "valueSumm",
         "elementName": "radio1",
         "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "50 > 5",
         "classes": "",
         "template": "UiRadio",
         "values": [
@@ -485,6 +486,7 @@
         "json_id": "169744706",
         "title": "Зависимости аккордеон",
         "label": "Зависимости аккордеон",
+        "elementName": "аккордеонСЗависимостями",
         "items": [
           {
             "json_id": "157557506",

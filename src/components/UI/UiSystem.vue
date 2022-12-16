@@ -39,6 +39,8 @@ export default {
     } = UseForProcessingFormula({
       parentIsShow,
       dependencyPrices,
+      changeValid,
+      changeValue
     });
     const isVisibilityFromDependency = ref(
       isVisibilityFromDependencyLocal.value
@@ -71,6 +73,8 @@ export default {
         unit: "",
         eventType,
         formulaProcessingLogic: props.formulaProcessingLogic,
+        error: false,
+        parentName: props.parentName,
       });
       changeValid(eventType);
     }

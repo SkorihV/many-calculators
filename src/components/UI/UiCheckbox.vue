@@ -106,9 +106,22 @@ export default {
 
     const parentIsShow = toRef(props, "parentIsShow");
     const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
-    const dependencyPrices = props.dependencyPrices?.length
-      ? toRef(props, "dependencyPrices")
-      : ref([]);
+    const dependencyPrices = props.dependencyPrices;
+    const cost = props.cost;
+    const label = props.label;
+
+    const classes = props.classes;
+    const notEmpty = props.notEmpty;
+    const isChecked = props.isChecked;
+    const parentName = props.parentName;
+    const elementName = props.elementName;
+    const labelSecond = props.labelSecond;
+    const isNeedChoice = props.isNeedChoice;
+    const checkboxValue = props.checkboxValue;
+    const formOutputMethod = props.formOutputMethod;
+    const excludeFromCalculations = props.excludeFromCalculations;
+    const formulaProcessingLogic = props.formulaProcessingLogic;
+
 
     const { checkedValueOnVoid } = UseUtilityServices();
 
@@ -136,8 +149,8 @@ export default {
     );
 
     const { devModeData } = UseDevModeDataBlock({
-      label: props.label,
-      elementName: props.elementName,
+      label,
+      elementName: elementName,
       dependencyFormulaDisplay,
       parsingFormulaVariables,
       isVisibilityFromDependency,
@@ -156,17 +169,19 @@ export default {
         displayValue: localValue.value ? "Да" : "Нет",
         name: localElementName.value,
         type: "checkbox",
-        label: props.label?.length ? props.label : props.labelSecond,
+        label: label?.length ? label : props.labelSecond,
         cost:
           localValue.value && checkedValueOnVoid(localCost.value)
             ? localCost.value
             : 0,
         formOutputMethod:
-          props.formOutputMethod !== "no" ? props.formOutputMethod : null,
-        excludeFromCalculations: props.excludeFromCalculations,
+          formOutputMethod !== "no" ? formOutputMethod : null,
+        excludeFromCalculations,
         isShow: isVisibilityFromDependency.value,
         eventType,
-        formulaProcessingLogic: props.formulaProcessingLogic,
+        formulaProcessingLogic,
+        error: isErrorEmpty.value,
+        parentName,
       });
       tryPassDependency();
       changeValid(eventType);
@@ -176,10 +191,10 @@ export default {
         error: isErrorEmpty.value,
         name: localElementName.value,
         type: "checkbox",
-        label: props.label,
+        label,
         eventType,
         isShow: isVisibilityFromDependency.value,
-        parentName: props.parentName,
+        parentName,
       });
     }
     function tryPassDependency() {
@@ -192,24 +207,16 @@ export default {
       });
     }
 
-    watch(
-      () => props.checkboxValue,
-      (newValue) => {
-        localValue.value = Boolean(newValue);
-        changeValid("checkbox");
-      }
-    );
-
     const localElementName = computed(() => {
-      return checkedValueOnVoid(props.elementName)
-        ? props.elementName
+      return checkedValueOnVoid(elementName)
+        ? elementName
         : Math.random().toString();
     });
     const checkboxType = computed(() => {
       return props.typeDisplayClass ? props.typeDisplayClass : "base";
     });
     const isErrorEmpty = computed(() => {
-      return props.isNeedChoice && !localValue.value;
+      return isNeedChoice && !localValue.value;
     });
 
     /**
@@ -218,20 +225,20 @@ export default {
      * @returns {Number|String|*}
      */
     const localCost = computed(() => {
-      if (!initProcessingDependencyPrice.value || !dependencyPrices.value) {
-        return props.cost;
+      if (!initProcessingDependencyPrice.value || !dependencyPrices) {
+        return cost;
       }
 
-      let newCost = costAfterProcessingDependencyPrice(dependencyPrices.value);
+      let newCost = costAfterProcessingDependencyPrice(dependencyPrices);
       if (newCost !== null) {
         return newCost;
       }
-      return props.cost;
+      return cost;
     });
 
     onMounted(() => {
-      localValue.value = Boolean(props.checkboxValue);
-      if (props.isChecked) {
+      localValue.value = Boolean(checkboxValue);
+      if (isChecked) {
         localValue.value = true;
       }
       changeValue("mounted");
@@ -245,11 +252,11 @@ export default {
       isErrorEmpty,
       isVisibilityFromDependency,
       devModeData,
-      label: props.label,
-      classes: props.classes,
-      notEmpty: props.notEmpty,
-      isChecked: props.isChecked,
-      labelSecond: props.labelSecond,
+      label,
+      classes,
+      notEmpty,
+      isChecked,
+      labelSecond,
     };
   },
 };

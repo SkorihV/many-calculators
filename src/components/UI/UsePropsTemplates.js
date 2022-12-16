@@ -206,6 +206,33 @@ export default function (propsName) {
     };
   };
 
+  const min = () => {
+    return {
+      type: [Number, String],
+      default: 0,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
+    };
+  };
+
+  const max = () => {
+    return {
+      type: [Number, String],
+      default: 10,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
+    };
+  };
+
+  const unit = () => {
+    return {
+      type: String,
+      default: "",
+    };
+  };
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -230,6 +257,9 @@ export default function (propsName) {
     minWidth: minWidth(),
     isChecked: isChecked(),
     formula: formula(),
+    min: min(),
+    max: max(),
+    unit: unit(),
   };
 
   if (Array.isArray(propsName)) {

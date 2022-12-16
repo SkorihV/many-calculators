@@ -50,10 +50,11 @@ export default {
       store,
       "getValidationListOnParentName"
     );
+    const parentIsShow = toRef(props, 'parentIsShow')
 
-    const changeValue = (data) => {
+    function changeValue(data){
       emit("changedValue", data);
-    };
+    }
 
     const isShowItem = computed(() => {
       return props.tabItemId === props.shownIdTab;
@@ -68,7 +69,7 @@ export default {
       getValidationListOnParentName,
       isShowItem,
       itemName,
-      parentIsShow: props.parentIsShow,
+      parentIsShow,
       elementName: props.elementName,
     };
   },

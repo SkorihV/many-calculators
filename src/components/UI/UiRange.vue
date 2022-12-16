@@ -42,9 +42,9 @@
       />
       <div v-if="showSteps" class="calc__range-steps-wrapper">
         <div
+          v-for="(step, inx) in returnSteps"
           class="calc__range-steps-item"
           @click="changeValueStep(step)"
-          v-for="(step, inx) in returnSteps"
           :key="inx"
         >
           <div
@@ -64,7 +64,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData.length" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -74,11 +74,16 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { ref, toRef, onMounted, watch, computed } from "vue";
+import UseUtilityServices from "@/components/UI/UseUtilityServices";
+import UseForProcessingFormula from "@/components/UI/UseForProcessingFormula";
+import UseDevModeDataBlock from "@/components/UI/UseDevModeDataBlock";
 
 export default {
   name: "UiRange",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  // mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
     rangeValue: {
@@ -87,38 +92,6 @@ export default {
       validator(value) {
         return !isNaN(Number(value));
       },
-    },
-    min: {
-      type: [Number, String],
-      default: 0,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    max: {
-      type: [Number, String],
-      default: 10,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    cost: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    /**
-     * Список цен с зависимостями / условиями
-     */
-    dependencyPrices: {
-      type: Array,
-      default: () => [],
-    },
-    unit: {
-      type: String,
-      default: null,
     },
     /**
      * размер шага в ползунке
@@ -153,17 +126,6 @@ export default {
     },
 
     /**
-     * Убран предвыбор
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
      *
      *     Отобразить текущее значение статичное
      */
@@ -186,211 +148,479 @@ export default {
       },
     },
 
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
+    ...UsePropsTemplates([
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "formOutputMethod",
+      "parentName",
+      "isNeedChoice",
+      "formulaProcessingLogic",
+      "templateName",
+      "classes",
+      "unit",
+      "dependencyPrices",
+      "cost",
+      "min",
+      "max",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+    ]),
   },
-  mounted() {
-    if (!this.isNeedChoice) {
-      let timer = setInterval(() => {
-        if (this.checkedValueOnVoid(this.rangeValue)) {
-          this.resultValue = parseFloat(this.rangeValue);
-          this.changeValue("mounted");
-          clearInterval(timer);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
-    } else {
-      this.changeValue("mounted");
-    }
-  },
-  data() {
-    return {
-      resultValue: null,
-      textErrorNotEmpty: "Обязательное поле.",
-      updateValueTimer: null,
-      canBeShownTooltip: false,
-      timerNameForLocalValue: null,
-    };
-  },
-  methods: {
-    changeValueStep(step) {
-      this.resultValue = this.checkValidValueReturnNumber(step);
-      this.changeValue();
-      this.shownTooltip();
-    },
-    tryChangeValue(e) {
-      clearTimeout(this.timerNameForLocalValue);
-      this.resultValue = this.checkValidValueReturnNumber(e.target.value);
-      this.timerNameForLocalValue = setTimeout(() => {
-        this.changeValue();
-        this.shownTooltip();
-      }, 500);
-    },
-    changeDynamicValue(e) {
-      this.resultValue = this.checkValidValueReturnNumber(e.target.value);
-      this.changeValue();
-      this.shownTooltip();
-    },
-    checkValidValueReturnNumber(checkedValue) {
+  setup(props, { emit }) {
+    const store = useBaseStore();
+    const resultValue = ref(null);
+    const textErrorNotEmpty = "Обязательное поле.";
+    const updateValueTimer = ref(null);
+    const canBeShownTooltip = ref(false);
+    const timerNameForLocalValue = ref(null);
+
+    const parentIsShow = toRef(props, "parentIsShow");
+    const dependencyPrices = toRef(props, "dependencyPrices");
+    const dependencyFormulaDisplay = toRef(props, "dependencyFormulaDisplay");
+    const label = toRef(props, "label");
+
+    const { checkedValueOnVoid } = UseUtilityServices();
+    const {
+      isVisibilityFromDependency: isVisibilityFromDependencyLocal,
+      initProcessingDependencyPrice,
+      costAfterProcessingDependencyPrice,
+      parsingFormulaVariables,
+    } = UseForProcessingFormula({
+      parentIsShow,
+      dependencyPrices,
+      dependencyFormulaDisplay,
+      changeValue,
+      changeValid,
+    });
+    const isVisibilityFromDependency = ref(
+      isVisibilityFromDependencyLocal.value
+    );
+    watch(
+      () => isVisibilityFromDependencyLocal.value,
+      () => {
+        isVisibilityFromDependency.value =
+          isVisibilityFromDependencyLocal.value;
+      }
+    );
+
+    const localMin = computed(() => {
+      return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
+    });
+    const localMax = computed(() => {
+      return checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10;
+    });
+    function checkValidValueReturnNumber(checkedValue) {
       let value = !isNaN(parseFloat(checkedValue))
         ? parseFloat(checkedValue)
         : null;
-      if (value > this.localMax) {
-        value = this.localMax;
+      if (value > localMax.value) {
+        value = localMax.value;
       }
-      if (value < this.localMin) {
-        value = this.localMin;
+      if (value < localMin.value) {
+        value = localMin.value;
       }
       return value;
-    },
-    changeValue(eventType = "input") {
-      this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
-      this.$emit("changedValue", {
-        value: this.resultValue,
-        displayValue: this.resultValue,
-        name: this.localElementName,
-        type: "range",
-        cost: this.localCost,
-        label: this.label,
-        formOutputMethod:
-          this.formOutputMethod !== "no" ? this.formOutputMethod : null,
-        excludeFromCalculations: this.excludeFromCalculations,
-        isShow: this.isVisibilityFromDependency,
-        unit: this.unit,
-        eventType,
-        formulaProcessingLogic: this.formulaProcessingLogic,
-      });
-      this.changeValid(eventType);
-    },
-    changeValid(eventType) {
-      this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
-        name: this.localElementName,
-        type: "range",
-        label: this.label,
-        eventType,
-        isShow: this.isVisibilityFromDependency,
-        parentName: this.parentName,
-      });
-      this.tryPassDependency();
-    },
-    tryPassDependency() {
-      this.tryAddDependencyElement({
-        name: this.localElementName,
-        value: this.resultValue,
-        isShow: this.isVisibilityFromDependency,
-        displayValue: this.resultValue,
-        type: "range",
-      });
-    },
-    shownTooltip() {
-      if (!this.canBeShownTooltip) {
-        this.canBeShownTooltip = true;
+    }
+    function shownTooltip() {
+      if (!canBeShownTooltip.value) {
+        canBeShownTooltip.value = true;
       }
-    },
-    updatedCostForOut(cost) {
-      return this.checkedValueOnVoid(cost)
-        ? cost * Math.abs(this.resultValue)
+    }
+    const localElementName = computed(() => {
+      return checkedValueOnVoid(props.elementName)
+        ? props.elementName
+        : Math.random().toString();
+    });
+
+    function tryPassDependency() {
+      store.tryAddDependencyElement({
+        name: localElementName.value,
+        value: resultValue.value,
+        isShow: isVisibilityFromDependency.value,
+        displayValue: resultValue.value,
+        type: "range",
+      });
+    }
+
+    const isErrorEmpty = computed(() => {
+      return props.notEmpty && resultValue.value === null;
+    });
+    function changeValid(eventType) {
+      store.checkValidationDataAndToggle({
+        error: isErrorEmpty.value,
+        name: localElementName.value,
+        type: "range",
+        label: props.label,
+        eventType,
+        isShow: isVisibilityFromDependency.value,
+        parentName: props.parentName,
+      });
+      tryPassDependency();
+    }
+    function tryChangeValue(e) {
+      clearTimeout(timerNameForLocalValue.value);
+      resultValue.value = checkValidValueReturnNumber(e.target.value);
+      timerNameForLocalValue.value = setTimeout(() => {
+        changeValue();
+        shownTooltip();
+      }, 500);
+    }
+
+    function changeValueStep(step) {
+      resultValue.value = checkValidValueReturnNumber(step);
+      changeValue();
+      shownTooltip();
+    }
+
+    function changeDynamicValue(e) {
+      resultValue.value = checkValidValueReturnNumber(e.target.value);
+      changeValue();
+      shownTooltip();
+    }
+
+    function changeValue(eventType = "input") {
+      resultValue.value = checkValidValueReturnNumber(resultValue.value);
+      emit("changedValue", {
+        value: resultValue.value,
+        displayValue: resultValue.value,
+        name: localElementName.value,
+        type: "range",
+        cost: localCost.value,
+        label: props.label,
+        formOutputMethod:
+          props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+        excludeFromCalculations: props.excludeFromCalculations,
+        isShow: isVisibilityFromDependency.value,
+        unit: props.unit,
+        eventType,
+        formulaProcessingLogic: props.formulaProcessingLogic,
+        error: isErrorEmpty.value,
+        parentName: props.parentName,
+      });
+      changeValid(eventType);
+    }
+
+    function updatedCostForOut(cost) {
+      return checkedValueOnVoid(cost)
+        ? cost * Math.abs(resultValue.value)
         : null;
-    },
-  },
-  watch: {
+    }
+
+    const localStepPrompt = computed(() => {
+      return checkedValueOnVoid(props.stepPrompt)
+        ? parseFloat(props.stepPrompt)
+        : 1;
+    });
+
     /**
      * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
      * @param newValue
      */
-    rangeValue(newValue) {
-      clearTimeout(this.updateValueTimer);
-      this.updateValueTimer = setTimeout(() => {
-        this.resultValue = parseFloat(newValue);
-      }, 1500);
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "tryAddDependencyElement",
-      "checkValidationDataAndToggle",
-      "isCanShowAllTooltips",
-      "showInsideElementStatus",
-      "devMode",
-    ]),
-    localMin() {
-      return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
-    },
-    localMax() {
-      return this.checkedValueOnVoid(this.max) ? parseFloat(this.max) : 10;
-    },
+    watch(
+      () => props.rangeValue,
+      (newValue) => {
+        clearTimeout(updateValueTimer.value);
+        updateValueTimer.value = setTimeout(() => {
+          resultValue.value = parseFloat(newValue);
+        }, 1500);
+      }
+    );
+    const localStep = computed(() => {
+      return checkedValueOnVoid(props.step) ? parseFloat(props.step) : 1;
+    });
 
-    localStep() {
-      return this.checkedValueOnVoid(this.step) ? parseFloat(this.step) : 1;
-    },
-
-    localStepPrompt() {
-      return this.checkedValueOnVoid(this.stepPrompt)
-        ? parseFloat(this.stepPrompt)
-        : 1;
-    },
-
-    localElementName() {
-      return this.checkedValueOnVoid(this.elementName)
-        ? this.elementName
-        : Math.random().toString();
-    },
-    returnSteps() {
+    const returnSteps = computed(() => {
       let steps = [];
 
-      if (this.isHidePromptSteps) {
+      if (isHidePromptSteps.value) {
         return steps;
       }
       for (
-        let i = this.localMin;
-        i <= this.localMax;
-        i += this.localStepPrompt
+        let i = localMin.value;
+        i <= localMax.value;
+        i += localStepPrompt.value
       ) {
         steps.push(i);
       }
       return steps;
-    },
-    isErrorEmpty() {
-      return this.notEmpty && this.resultValue === null;
-    },
-    isHidePromptSteps() {
+    });
+
+    const isHidePromptSteps = computed(() => {
       return (
-        !this.showSteps &&
-        !this.localMin &&
-        !this.localMax &&
-        this.localStepPrompt < 1
+        !props.showSteps &&
+        !localMin.value &&
+        !localMax.value &&
+        localStepPrompt.value < 1
       );
-    },
-    localCanBeShownTooltip() {
-      return this.canBeShownTooltip && this.isVisibilityFromDependency;
-    },
+    });
+    const localCanBeShownTooltip = computed(() => {
+      return canBeShownTooltip.value && isVisibilityFromDependency.value;
+    });
 
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */
-    localCost() {
-      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.updatedCostForOut(this.cost);
+    const localCost = computed(() => {
+      if (!initProcessingDependencyPrice.value || !dependencyPrices.value) {
+        return updatedCostForOut(props.cost);
       }
 
-      let newCost = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices
-      );
+      let newCost = costAfterProcessingDependencyPrice(dependencyPrices.value);
       if (newCost !== null) {
-        return this.updatedCostForOut(newCost);
+        return updatedCostForOut(newCost);
       }
-      return this.updatedCostForOut(this.cost);
-    },
+      return updatedCostForOut(props.cost);
+    });
+
+    const { devModeData } = UseDevModeDataBlock({
+      label,
+      elementName: props.elementName,
+      dependencyFormulaDisplay,
+      parsingFormulaVariables,
+      isVisibilityFromDependency,
+      templateName: props.templateName,
+      resultValue,
+    });
+
+    onMounted(() => {
+      if (!props.isNeedChoice) {
+        let timer = setInterval(() => {
+          if (checkedValueOnVoid(props.rangeValue)) {
+            resultValue.value = parseFloat(props.rangeValue);
+            changeValue("mounted");
+            clearInterval(timer);
+          }
+        }, 100);
+        setTimeout(() => {
+          clearInterval(timer);
+        }, 10000);
+      } else {
+        changeValue("mounted");
+      }
+    });
+
+    return {
+      localStep,
+      localCanBeShownTooltip,
+      isVisibilityFromDependency,
+      rangeValue: props.rangeValue,
+      isErrorEmpty,
+      textErrorNotEmpty,
+      isCanShowAllTooltips: store.isCanShowAllTooltips,
+      changeValueStep,
+      classes: props.classes,
+      localMin,
+      localMax,
+      resultValue,
+      tryChangeValue,
+      returnSteps,
+      changeDynamicValue,
+      notEmpty: props.notEmpty,
+      label,
+      unit: props.unit,
+      devModeData,
+      parsingFormulaVariables,
+    };
+  },
+
+  // mounted() {
+  //   if (!this.isNeedChoice) {
+  //     let timer = setInterval(() => {
+  //       if (this.checkedValueOnVoid(this.rangeValue)) {
+  //         this.resultValue = parseFloat(this.rangeValue);
+  //         this.changeValue("mounted");
+  //         clearInterval(timer);
+  //       }
+  //     }, 100);
+  //     setTimeout(() => {
+  //       clearInterval(timer);
+  //     }, 10000);
+  //   } else {
+  //     this.changeValue("mounted");
+  //   }
+  // },
+  // data() {
+  //   return {
+  //     resultValue: null,
+  //     textErrorNotEmpty: "Обязательное поле.",
+  //     updateValueTimer: null,
+  //     canBeShownTooltip: false,
+  //     timerNameForLocalValue: null,
+  //   };
+  // },
+  // methods: {
+  //   changeValueStep(step) {
+  //     this.resultValue = this.checkValidValueReturnNumber(step);
+  //     this.changeValue();
+  //     this.shownTooltip();
+  //   },
+  //   tryChangeValue(e) {
+  //     clearTimeout(this.timerNameForLocalValue);
+  //     this.resultValue = this.checkValidValueReturnNumber(e.target.value);
+  //     this.timerNameForLocalValue = setTimeout(() => {
+  //       this.changeValue();
+  //       this.shownTooltip();
+  //     }, 500);
+  //   },
+  //   changeDynamicValue(e) {
+  //     this.resultValue = this.checkValidValueReturnNumber(e.target.value);
+  //     this.changeValue();
+  //     this.shownTooltip();
+  //   },
+  //   checkValidValueReturnNumber(checkedValue) {
+  //     let value = !isNaN(parseFloat(checkedValue))
+  //       ? parseFloat(checkedValue)
+  //       : null;
+  //     if (value > this.localMax) {
+  //       value = this.localMax;
+  //     }
+  //     if (value < this.localMin) {
+  //       value = this.localMin;
+  //     }
+  //     return value;
+  //   },
+  //   changeValue(eventType = "input") {
+  //     this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
+  //     this.$emit("changedValue", {
+  //       value: this.resultValue,
+  //       displayValue: this.resultValue,
+  //       name: this.localElementName,
+  //       type: "range",
+  //       cost: this.localCost,
+  //       label: this.label,
+  //       formOutputMethod:
+  //         this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+  //       excludeFromCalculations: this.excludeFromCalculations,
+  //       isShow: this.isVisibilityFromDependency,
+  //       unit: this.unit,
+  //       eventType,
+  //       formulaProcessingLogic: this.formulaProcessingLogic,
+  //     });
+  //     this.changeValid(eventType);
+  //   },
+  //   changeValid(eventType) {
+  //     this.checkValidationDataAndToggle({
+  //       error: this.isErrorEmpty,
+  //       name: this.localElementName,
+  //       type: "range",
+  //       label: this.label,
+  //       eventType,
+  //       isShow: this.isVisibilityFromDependency,
+  //       parentName: this.parentName,
+  //     });
+  //     this.tryPassDependency();
+  //   },
+  //   tryPassDependency() {
+  //     this.tryAddDependencyElement({
+  //       name: this.localElementName,
+  //       value: this.resultValue,
+  //       isShow: this.isVisibilityFromDependency,
+  //       displayValue: this.resultValue,
+  //       type: "range",
+  //     });
+  //   },
+  //   shownTooltip() {
+  //     if (!this.canBeShownTooltip) {
+  //       this.canBeShownTooltip = true;
+  //     }
+  //   },
+  //   updatedCostForOut(cost) {
+  //     return this.checkedValueOnVoid(cost)
+  //       ? cost * Math.abs(this.resultValue)
+  //       : null;
+  //   },
+  // },
+  // watch: {
+  //   /**
+  //    * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
+  //    * @param newValue
+  //    */
+  //   rangeValue(newValue) {
+  //     clearTimeout(this.updateValueTimer);
+  //     this.updateValueTimer = setTimeout(() => {
+  //       this.resultValue = parseFloat(newValue);
+  //     }, 1500);
+  //   },
+  // },
+  computed: {
+    // ...mapState(useBaseStore, [
+    //   "tryAddDependencyElement",
+    //   "checkValidationDataAndToggle",
+    //   "isCanShowAllTooltips",
+    //   "showInsideElementStatus",
+    //   "devMode",
+    // ]),
+    // localMin() {
+    //   return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
+    // },
+    // localMax() {
+    //   return this.checkedValueOnVoid(this.max) ? parseFloat(this.max) : 10;
+    // },
+    // localStep() {
+    //   return this.checkedValueOnVoid(this.step) ? parseFloat(this.step) : 1;
+    // },
+    // localStepPrompt() {
+    //   return this.checkedValueOnVoid(this.stepPrompt)
+    //     ? parseFloat(this.stepPrompt)
+    //     : 1;
+    // },
+    // localElementName() {
+    //   return this.checkedValueOnVoid(this.elementName)
+    //     ? this.elementName
+    //     : Math.random().toString();
+    // },
+    // returnSteps() {
+    //   let steps = [];
+    //
+    //   if (this.isHidePromptSteps) {
+    //     return steps;
+    //   }
+    //   for (
+    //     let i = this.localMin;
+    //     i <= this.localMax;
+    //     i += this.localStepPrompt
+    //   ) {
+    //     steps.push(i);
+    //   }
+    //   return steps;
+    // },
+    // isErrorEmpty() {
+    //   return this.notEmpty && this.resultValue === null;
+    // },
+    // isHidePromptSteps() {
+    //   return (
+    //     !this.showSteps &&
+    //     !this.localMin &&
+    //     !this.localMax &&
+    //     this.localStepPrompt < 1
+    //   );
+    // },
+    // localCanBeShownTooltip() {
+    //   return this.canBeShownTooltip && this.isVisibilityFromDependency;
+    // },
+    //
+    // /**
+    //  * Возвращает цену подходящую условию, если моле отображается
+    //  * Если не одна цена не подходит, то возвращается стандартная
+    //  * @returns {Number|String|*}
+    //  */
+    // localCost() {
+    //   if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
+    //     return this.updatedCostForOut(this.cost);
+    //   }
+    //
+    //   let newCost = this.costAfterProcessingDependencyPrice(
+    //     this.dependencyPrices
+    //   );
+    //   if (newCost !== null) {
+    //     return this.updatedCostForOut(newCost);
+    //   }
+    //   return this.updatedCostForOut(this.cost);
+    // },
   },
 };
 </script>

@@ -4,7 +4,6 @@
     v-if="isVisibilityFromDependency"
     :class="classes"
   >
-    1
     <ui-duplicator-wrapper
       v-for="duplicator in localTemplates"
       :origin-data="originData"
@@ -64,7 +63,6 @@ export default {
     ]),
   },
   setup(props, { emit }) {
-    const store = useBaseStore();
 
     const originData = reactive({});
     const localResultsElements = reactive({});
@@ -94,7 +92,6 @@ export default {
       }
       localCost.value = 0;
       Object.values(localResultsElements).forEach((item) => {
-        console.log(item);
         if (item.cost !== null) {
           localCost.value += parseFloat(item.cost);
         }
@@ -146,7 +143,6 @@ export default {
     //   }
     // }
     const duplicate = (duplicateElement) => {
-      console.log(duplicateElement);
       localTemplates.value.push(duplicateElement);
     };
     const deleteDuplicator = (elementName) => {

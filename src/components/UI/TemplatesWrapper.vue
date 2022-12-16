@@ -17,8 +17,6 @@
     :only-number="template?.onlyNumber"
     :classes="template?.classes"
     :only-integer="template?.onlyInteger"
-    :custom-error-text="template?.customErrorText"
-    :custom-error-pattern="template?.customErrorPattern"
     :element-name="
       template?.elementName?.length
         ? template?.elementName
@@ -206,6 +204,7 @@ import UiImage from "@/components/UI/UiImage";
 import UiSystem from "@/components/UI/UiSystem";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
+
 export default {
   name: "TemplatesWrapper",
   emits: ["changedValue"],
@@ -222,11 +221,14 @@ export default {
   props: {
     ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
   },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
+  setup(_, { emit }) {
+    function changeValue(data) {
+      emit("changedValue", data);
+    }
+    return {
+      changeValue
+    }
+  }
 };
 </script>
 

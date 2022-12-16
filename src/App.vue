@@ -220,11 +220,11 @@ export default {
     //   "tryToggleDevMode",
     // ]),
     changeValue(data) {
-      // console.log(data);
       if (typeof data !== "object") {
         return null;
       }
       const { name, type, eventType } = data;
+
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
         this.checkEnabledResultButton();
@@ -754,9 +754,6 @@ $border-radius: 4px;
     &-wrapper {
       @include style-flex-center;
       flex-direction: column;
-      &.is-stretch {
-        flex: 1 1 100%;
-      }
       &-data {
         display: flex;
         align-items: center;
@@ -1548,6 +1545,7 @@ $border-radius: 4px;
       border-radius: $border-radius;
       justify-content: center;
       min-width: 300px;
+      font-weight: normal;
     }
   }
 

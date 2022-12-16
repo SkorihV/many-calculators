@@ -138,8 +138,9 @@ export default {
       value: "null",
       isShow: true,
       prompt: "",
+      cost: 0,
     };
-    const currentOption = reactive(mockOption);
+    const currentOption = reactive(JSON.parse(JSON.stringify(mockOption)));
 
     const localSelectValues = ref([]);
 
@@ -164,6 +165,7 @@ export default {
     } = UseForProcessingFormula({
       parentIsShow,
       dependencyFormulaDisplay,
+      dependencyPrices: currentOption?.dependencyPrices,
       changeValid,
       changeValue,
     });
@@ -213,6 +215,7 @@ export default {
       currentOption.value = item.value;
       currentOption.prompt = item.prompt;
       currentOption.isShow = item.isShow;
+      currentOption.cost = item.cost;
       changeValue(eventType);
       close();
     };
@@ -233,7 +236,10 @@ export default {
         isShow: isVisibilityFromDependency.value,
         eventType,
         formulaProcessingLogic: props.formulaProcessingLogic,
+        error: isErrorEmpty.value,
+        parentName: props.parentName,
       });
+
       tryPassDependency();
       changeValid(eventType);
     }
@@ -268,8 +274,7 @@ export default {
           parseInt(newValue) < localSelectValues.value.length
             ? parseInt(newValue)
             : localSelectValues.value.length - 1;
-        console.log(534534);
-        // currentOption = localSelectValues.value[currentIndexOption.value];
+        currentOption.value = localSelectValues.value[currentIndexOption.value];
         changeValue();
       }
     );
@@ -329,6 +334,7 @@ export default {
         formula = formula.map((item) =>
           item.toLowerCase() === "self" ? selectItem.value : item
         );
+
         constructLocalListElementDependencyInFormula(formula);
 
         formula = processingVariablesOnFormula(formula);
