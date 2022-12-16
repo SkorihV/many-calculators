@@ -7,10 +7,10 @@ export default function UseForProcessingFormula(outerData) {
   const store = useBaseStore();
   const data = reactive(outerData);
 
-  const dependencyFormulaDisplay = data?.dependencyFormulaDisplay
-    ? toRef(data, "dependencyFormulaDisplay")
-    : ref("");
-
+  const dependencyFormulaDisplay = ref('');
+  if (data?.dependencyFormulaDisplay) {
+    dependencyFormulaDisplay.value = data?.dependencyFormulaDisplay
+  }
 
   const parentIsShow = toRef(data, 'parentIsShow' )
 
@@ -161,6 +161,7 @@ export default function UseForProcessingFormula(outerData) {
   watch(
     () => isVisibilityFromDependency.value,
     () => {
+      console.log(outerData.label?.value);
       if (data?.changeValue) {
         data.changeValue("dependency");
       }
@@ -189,6 +190,7 @@ export default function UseForProcessingFormula(outerData) {
           ) {
             localDependencyList[key] = newValue[key];
             isUpdated = true;
+            break
           }
         }
       }
@@ -226,6 +228,7 @@ export default function UseForProcessingFormula(outerData) {
   watch(
     () => parentIsShow.value,
     (newValue) => {
+      console.log(outerData.label);
       if (data?.changeValue) {
         if (newValue) {
           data?.changeValue("global");

@@ -209,6 +209,7 @@ export default {
       dependencyPrices,
       changeValue,
       changeValid,
+      label
     });
     const isVisibilityFromDependency = ref(
       isVisibilityFromDependencyLocal.value
@@ -396,7 +397,7 @@ export default {
      * возвращает общее состояние не валидности инпута
      */
     function changeValid(eventType) {
-      nextTick(() => {
+
         store.checkValidationDataAndToggle({
           error: isInvalid.value,
           name: localElementName.value,
@@ -406,7 +407,7 @@ export default {
           isShow: isVisibilityFromDependency.value,
           parentName: props.parentName,
         });
-      });
+
       shownTooltip();
     }
     function tryPassDependency() {
