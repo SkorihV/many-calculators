@@ -47,6 +47,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiCheckbox",
@@ -58,9 +59,8 @@ export default {
       type: String,
       default: "",
     },
-
     /**
-     *     Начальное значение
+     *  Начальное значение
      */
     checkboxValue: {
       type: [Boolean, Number],
@@ -69,43 +69,6 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    cost: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-
-    /**
-     * Список цен с зависимостями / условиями
-     */
-    dependencyPrices: {
-      type: Array,
-      default: () => [],
-    },
-
-    /**
-     * По умолчанию не выбрано - нужно сделать выбор.
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
-     *     Всегда включена. Отключить нельзя
-     */
-    isChecked: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
     /**
      *  альтернативный способ смены вида чекбокас - текстом
      *  default - base
@@ -117,14 +80,23 @@ export default {
       type: String,
       default: "base",
     },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
+    ...UsePropsTemplates([
+      "formOutputMethod",
+      "isChecked",
+      "isNeedChoice",
+      "dependencyPrices",
+      "cost",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+    ]),
   },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);

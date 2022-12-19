@@ -74,6 +74,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiTab",
@@ -85,21 +86,13 @@ export default {
       type: Object,
       default: () => {},
     },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates([
+      "label",
+      "classes",
+      "elementName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   data() {
     return {

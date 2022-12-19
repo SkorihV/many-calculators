@@ -203,6 +203,7 @@ import UiCheckbox from "@/components/UI/UiCheckbox";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiImage from "@/components/UI/UiImage";
 import UiSystem from "@/components/UI/UiSystem";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "TemplatesWrapper",
@@ -218,22 +219,7 @@ export default {
     UiSystem,
   },
   props: {
-    template: {
-      type: Object,
-      default: null,
-    },
-    index: {
-      type: [Number, String],
-      default: null,
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
-    parentName: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
   },
   methods: {
     changeValue(data) {

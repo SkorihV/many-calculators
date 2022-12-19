@@ -61,6 +61,7 @@ import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiDuplicatorWrapper",
@@ -72,25 +73,9 @@ export default {
       type: Object,
       default: null,
     },
-    index: {
-      type: [Number, String],
-      default: 0,
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
     isDuplicate: {
       type: Boolean,
       default: false,
-    },
-    parentName: {
-      type: String,
-      default: "",
-    },
-    formula: {
-      type: String,
-      default: "",
     },
     originVariables: {
       type: Array,
@@ -100,6 +85,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    ...UsePropsTemplates([
+      "formula",
+      "parentName",
+      "parentIsShow",
+      "index",
+      "dependencyFormulaDisplay",
+      "elementName"
+    ]),
   },
   mounted() {
     if (this.isDuplicate) {

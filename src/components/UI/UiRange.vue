@@ -74,6 +74,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiRange",
@@ -87,38 +88,6 @@ export default {
       validator(value) {
         return !isNaN(Number(value));
       },
-    },
-    min: {
-      type: [Number, String],
-      default: 0,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    max: {
-      type: [Number, String],
-      default: 10,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    cost: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    /**
-     * Список цен с зависимостями / условиями
-     */
-    dependencyPrices: {
-      type: Array,
-      default: () => [],
-    },
-    unit: {
-      type: String,
-      default: null,
     },
     /**
      * размер шага в ползунке
@@ -151,18 +120,6 @@ export default {
         return !isNaN(Number(value));
       },
     },
-
-    /**
-     * Убран предвыбор
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
     /**
      *
      *     Отобразить текущее значение статичное
@@ -185,14 +142,25 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
+    ...UsePropsTemplates([
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "formOutputMethod",
+      "parentName",
+      "isNeedChoice",
+      "formulaProcessingLogic",
+      "templateName",
+      "classes",
+      "unit",
+      "dependencyPrices",
+      "cost",
+      "min",
+      "max",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+    ]),
   },
   mounted() {
     if (!this.isNeedChoice) {

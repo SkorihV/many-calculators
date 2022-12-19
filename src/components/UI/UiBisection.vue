@@ -61,6 +61,7 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiBisection",
@@ -72,20 +73,9 @@ export default {
       type: Object,
       default: () => {},
     },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
     widthLeftSide: {
       type: [Number, String],
       default: 50,
-    },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
     },
     dependencyFormulaDisplayLeftSide: {
       type: String,
@@ -95,10 +85,13 @@ export default {
       type: String,
       default: null,
     },
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates([
+      "label",
+      "elementName",
+      "classes",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   mounted() {
     window.addEventListener("resize", () => {

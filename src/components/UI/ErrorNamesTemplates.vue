@@ -11,9 +11,9 @@
     <br />
     <template v-if="displayAlert">
       <label class="calc__error-checkbox-label">
-        <div class="calc__error-checkbox-text">
+        <span class="calc__error-checkbox-text">
           Отобразить внутреннее состояние элементов:
-        </div>
+        </span>
         <input
           class="calc__error-checkbox-input"
           v-model="localShowInsideElementStatus"

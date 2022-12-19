@@ -62,6 +62,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiRadio",
@@ -107,29 +108,6 @@ export default {
         return !isNaN(Number(value));
       },
     },
-
-    /**
-     *   вертикальное положение кнопок
-     */
-    isColumn: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * По умолчанию не выбрано - нужно сделать выбор.
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
     /**
      *  способ отображения - указать текстом
      *  default - base
@@ -140,22 +118,23 @@ export default {
       type: String,
       default: "base",
     },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
-    maxWidth: {
-      type: [Number, String],
-      default: 250,
-    },
-    maxHeight: {
-      type: [Number, String],
-      default: 250,
-    },
+    ...UsePropsTemplates([
+      "isColumn",
+      "isNeedChoice",
+      "formOutputMethod",
+      "maxWidth",
+      "maxHeight",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+    ]),
   },
   data() {
     return {

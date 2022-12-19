@@ -31,6 +31,7 @@ import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiDuplicator",
@@ -42,17 +43,20 @@ export default {
     MixinsUtilityServices,
   ],
   props: {
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
     duplicateTemplate: {
       type: Object,
       default: () => {},
     },
+    ...UsePropsTemplates([
+      "formOutputMethod",
+      "label",
+      "dependencyFormulaDisplay",
+      "excludeFromCalculations",
+      "elementName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+    ]),
   },
   mounted() {
     this.originData = JSON.parse(JSON.stringify(this.duplicateTemplate));

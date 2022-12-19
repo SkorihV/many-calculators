@@ -5,20 +5,6 @@ import { mapState } from "pinia";
 
 export const MixinsForProcessingFormula = {
   mixins: [MixinsUtilityServices],
-  props: {
-    /**
-     * Формула на результатах вычисления которой будет строиться результат отображения элемента
-     */
-    dependencyFormulaDisplay: {
-      type: String,
-      default: "",
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  mounted() {},
   data() {
     return {
       /**

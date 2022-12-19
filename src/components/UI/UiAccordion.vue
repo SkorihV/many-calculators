@@ -29,6 +29,7 @@
 <script>
 import UiAccordionItem from "@/components/UI/UiAccordionItem";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiAccordion",
@@ -40,27 +41,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: "",
-    },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates(["label", "elementName", "classes"]),
   },
   data() {
     return {

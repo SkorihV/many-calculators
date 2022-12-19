@@ -4,9 +4,7 @@
       ref="parent"
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
-      :class="[{ 'is-column': isColumn }, classes]"
-      :style="[minWidthWrapper, maxWidthWrapper]"
-    >
+      :class="[{ 'is-column': isColumn }, classes]"    >
       <div class="calc__select-label" v-if="label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
@@ -84,6 +82,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiSelect",
@@ -130,14 +129,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    isColumn: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
     /**
      * номер выбранного селекта
      */
@@ -148,33 +139,21 @@ export default {
         return !isNaN(Number(value));
       },
     },
-
-    /**
-     * По умолчанию не выбрано - нужно сделать выбор.
-     */
-    isNeedChoice: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
-
-    minWidth: {
-      type: [Number, String],
-      default: 200,
-    },
-    maxWidth: {
-      type: [Number, String],
-    },
+    ...UsePropsTemplates([
+      "isColumn",
+      "isNeedChoice",
+      "formOutputMethod",
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   data() {
     return {
@@ -356,12 +335,6 @@ export default {
     },
     imageDir() {
       return this.getImageDir;
-    },
-    minWidthWrapper() {
-      return this.minWidth ? `min-width:${this.minWidth}px;` : "";
-    },
-    maxWidthWrapper() {
-      return this.maxWidth ? `max-width:${this.maxWidth}px;` : "";
     },
     isErrorEmpty() {
       return this.notEmpty && this.currentIndexOption === null;

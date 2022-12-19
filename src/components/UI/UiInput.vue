@@ -6,7 +6,7 @@
   >
     <div
       class="calc__input-wrapper"
-      :class="[{ 'is-stretch': isStretch }, classes]"
+      :class="[classes]"
     >
       <label
         :for="localElementName"
@@ -70,6 +70,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiInput",
@@ -195,7 +196,6 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-
     /**
      *     шаблон rex для ручной валидации
      */
@@ -211,22 +211,31 @@ export default {
       type: String,
     },
     /**
-     *     растягивать обертку по ширине
-     */
-    isStretch: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
      * метод вывода данных в результирующую форму
      */
     formOutputMethod: {
       type: String,
       default: "no",
     },
+    ...UsePropsTemplates([
+      "label",
+      "notEmpty",
+      "excludeFromCalculations",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "classes",
+      "templateName",
+      "unit",
+      "cost",
+      "dependencyPrices",
+      "max",
+      "min",
+      "isColumn",
+      "formOutputMethod",
+      "dependencyFormulaDisplay",
+      "parentIsShow",
+    ]),
   },
   mounted() {
     if (!this.valueIsNaN && this.localMin > this.inputValue) {

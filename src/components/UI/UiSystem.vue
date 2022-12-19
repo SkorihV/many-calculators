@@ -8,26 +8,22 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiSystem",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
-    cost: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    /**
-     * Список цен с зависимостями / условиями
-     */
-    dependencyPrices: {
-      type: Array,
-      default: () => [],
-    },
+    ...UsePropsTemplates([
+      "cost",
+      "elementName",
+      "parentName",
+      "formulaProcessingLogic",
+      "templateName",
+      "parentIsShow",
+      "dependencyPrices",
+    ]),
   },
   mounted() {
     this.changeValue("mounted");

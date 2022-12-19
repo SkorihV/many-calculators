@@ -33,19 +33,14 @@ import UiPrompt from "@/components/UI/UiPrompt";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiImage",
   components: { UiPrompt },
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
+
     defaultImage: {
       type: Object,
       default: () => {},
@@ -54,32 +49,19 @@ export default {
       type: Array,
       default: () => [],
     },
-    prompt: {
-      type: String,
-      default: null,
-    },
-    maxWidth: {
-      type: [Number, String],
-      default: 250,
-    },
-    maxHeight: {
-      type: [Number, String],
-      default: 250,
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: "",
-    },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
+    ...UsePropsTemplates([
+      "classes",
+      "elementName",
+      "maxHeight",
+      "maxWidth",
+      "prompt",
+      "label",
+      "templateName",
+      "formulaProcessingLogic",
+      "parentName",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   methods: {
     changeValue() {

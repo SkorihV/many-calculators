@@ -3,62 +3,6 @@ import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
 export const MixinsGeneralItemData = {
-  props: {
-    /**
-     * заголовок
-     */
-    label: {
-      type: String,
-      default: "",
-    },
-    /**
-     * элемент не может быть пустым и требуется выбор
-     */
-    notEmpty: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-
-    /**
-     * Исключить элемент из расчета по формуле
-     */
-    excludeFromCalculations: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
-     * имя необходимое для корректной работы Label
-     */
-    elementName: {
-      type: String,
-      default: "",
-    },
-    parentName: {
-      type: String,
-      default: null,
-    },
-    formulaProcessingLogic: {
-      type: String,
-      default: "error",
-    },
-    /**
-     * Список классов для переопределения стилей на обертке
-     */
-    classes: {
-      type: String,
-      default: null,
-    },
-    templateName: {
-      type: String,
-      default: null,
-    },
-  },
   watch: {
     /**
      * При глобальном включении возможности отображать подсказки - отправить состояние элемента
@@ -79,7 +23,6 @@ export const MixinsGeneralItemData = {
       }
     },
   },
-
   computed: {
     ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode"]),
     /**

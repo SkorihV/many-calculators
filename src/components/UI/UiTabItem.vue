@@ -20,6 +20,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 export default {
   name: "UiTabItem",
   components: { TemplatesWrapper },
@@ -36,18 +37,11 @@ export default {
     tabItemId: {
       type: Number,
     },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
     shownIdTab: {
       type: Number,
       default: null,
     },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
+    ...UsePropsTemplates(["elementName", "parentIsShow"]),
   },
   data() {
     return {

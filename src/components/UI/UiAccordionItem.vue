@@ -42,6 +42,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiAccordionItem",
@@ -59,14 +60,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    elementName: {
-      type: String,
-      default: Math.random().toString(),
-    },
-    parentIsShow: {
-      type: Boolean,
-      default: true,
-    },
+    ...UsePropsTemplates(["elementName", "parentIsShow"]),
   },
   data() {
     return {
