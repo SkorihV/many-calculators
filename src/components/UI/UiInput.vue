@@ -196,6 +196,7 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+
     /**
      *     шаблон rex для ручной валидации
      */
@@ -210,6 +211,7 @@ export default {
     customErrorText: {
       type: String,
     },
+
     /**
      * метод вывода данных в результирующую форму
      */

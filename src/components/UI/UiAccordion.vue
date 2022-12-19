@@ -41,7 +41,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...UsePropsTemplates(["label", "elementName", "classes"]),
+    ...UsePropsTemplates(["label", "elementName", "classes","parentIsShow","dependencyFormulaDisplay"]),
   },
   data() {
     return {

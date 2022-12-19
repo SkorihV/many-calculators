@@ -17,8 +17,6 @@
     :only-number="template?.onlyNumber"
     :classes="template?.classes"
     :only-integer="template?.onlyInteger"
-    :custom-error-text="template?.customErrorText"
-    :custom-error-pattern="template?.customErrorPattern"
     :element-name="
       template?.elementName?.length
         ? template?.elementName

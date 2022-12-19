@@ -23,6 +23,8 @@ export default {
       "templateName",
       "parentIsShow",
       "dependencyPrices",
+      "label",
+      "dependencyFormulaDisplay"
     ]),
   },
   mounted() {
