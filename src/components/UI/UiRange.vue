@@ -4,7 +4,8 @@
     class="calc__wrapper-group-data"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="classes">
+    <div class="calc__range-wrapper" :class="classes"
+    ref="thisElement">
       <div v-if="label" class="calc__range-label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
@@ -13,48 +14,45 @@
           class="calc__range-current-wrapper"
           v-if="showDynamicValue || showStaticValue || unit?.length"
         >
-          <div
-            class="calc__range-current-static"
-            v-if="showStaticValue || unit?.length"
-          >
-            {{ resultValue }}
-          </div>
           <input
             class="calc__range-current-dynamic"
             v-if="showDynamicValue"
             type="text"
             @input="changeDynamicValue"
             :value="resultValue"
+            @keydown.up="plus"
+            @keydown.down="minus"
           />
           <div class="calc__range-unit" v-if="unit">
             {{ unit }}
           </div>
         </div>
       </div>
-      <input
-        class="calc__range-item"
-        type="range"
-        :min="localMin"
-        :max="localMax"
-        :step="localStep"
-        :value="resultValue"
-        @input="tryChangeValue"
-      />
-      <div v-if="showSteps" class="calc__range-steps-wrapper">
+      <div>
+        <input
+          class="calc__range-item"
+          type="range"
+          :min="localMin"
+          :max="localMax"
+          :step="localStep"
+          :value="resultValue"
+          @input="tryChangeValue"
+        />
+        <div v-if="showStaticValue && resultValue" :style="{ left: positionStaticResultValue }" class="calc__range-current-static">{{ resultValue }}</div>
+      </div>
+      <div v-if="showSteps" class="calc__range-steps-wrapper"
+      >
         <div
           class="calc__range-steps-item"
           @click="changeValueStep(step)"
           v-for="(step, inx) in returnSteps"
+          :style="{left: pointsForStepsLine[inx]}"
           :key="inx"
-        >
-          <div
-            class="calc__range-steps-item-content"
-            :class="{
-              'calc__range-steps-item-content_selected': step === resultValue,
+          :class="{
+              'calc__range-steps-item_selected': step === resultValue,
             }"
-          >
-            {{ step }}
-          </div>
+        >
+          {{ step }}
         </div>
       </div>
       <ui-tooltip
@@ -64,7 +62,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -75,6 +73,7 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import { presets } from "../../../babel.config";
 
 export default {
   name: "UiRange",
@@ -177,9 +176,18 @@ export default {
     } else {
       this.changeValue("mounted");
     }
+
+    if (this.$refs.thisElement) {
+      this.elementWidth = this.$refs.thisElement.offsetWidth
+    }
+
+    window.addEventListener("resize", ()=> {
+      this.elementWidth = this.$refs.thisElement.offsetWidth
+    })
   },
   data() {
     return {
+      elementWidth: 0,
       resultValue: null,
       textErrorNotEmpty: "Обязательное поле.",
       updateValueTimer: null,
@@ -210,6 +218,10 @@ export default {
       let value = !isNaN(parseFloat(checkedValue))
         ? parseFloat(checkedValue)
         : null;
+
+      if ( value % this.localStep) {
+        value = value % this.step;
+      }
       if (value > this.localMax) {
         value = this.localMax;
       }
@@ -239,7 +251,7 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
+        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "range",
         label: this.label,
@@ -268,6 +280,16 @@ export default {
         ? cost * Math.abs(this.resultValue)
         : null;
     },
+    plus() {
+      this.resultValue = this.checkValidValueReturnNumber(this.resultValue + this.localStep);
+      this.changeValue("plus");
+      this.shownTooltip();
+    },
+    minus() {
+      this.resultValue = this.checkValidValueReturnNumber(this.resultValue - this.localStep);
+      this.changeValue("minus");
+      this.shownTooltip();
+    },
   },
   watch: {
     /**
@@ -286,8 +308,6 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
-      "showInsideElementStatus",
-      "devMode",
     ]),
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
@@ -359,8 +379,27 @@ export default {
       }
       return this.updatedCostForOut(this.cost);
     },
+    positionStaticResultValue() {
+      const width = this.elementWidth - 30;
+      const percent = (this.resultValue - this.localMin) / (this.localMax - this.localMin);
+      const position = width * percent + 2;
+      return position + "px";
+    },
+    amountSteps() {
+      return (this.localMax - this.localMin) / this.localStepPrompt;
+    },
+    pointsForStepsLine() {
+      const width = this.elementWidth - 30;
+      let points = []
+      points.push(0  + "px");
+      let i = 1;
+      for (i; i <= this.amountSteps; i++ ) {
+        const percent = (this.localStepPrompt * i) / (this.localMax - this.localMin);
+        const position = width * percent;
+        points.push(position + "px")
+      }
+      return points;
+    },
   },
 };
 </script>
-
-<style scoped></style>

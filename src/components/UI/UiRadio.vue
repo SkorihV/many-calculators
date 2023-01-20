@@ -26,8 +26,9 @@
               <span
                 class="calc__radio-indicator"
                 v-if="radioType === 'base'"
-              ></span
-              >{{ radio.radioName }}
+              ></span>
+              {{ radio.radioName }}
+              {{ radio?.subradioName }}
             </div>
             <div
               class="calc__radio-wrapper-image"
@@ -51,7 +52,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -178,7 +179,7 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
+        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "radio",
         label: this.label,
@@ -254,7 +255,6 @@ export default {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
-      "showInsideElementStatus",
       "devMode",
       "getImageDir",
     ]),
@@ -303,7 +303,6 @@ export default {
         return radioItem;
       });
     },
-
     radioValuesAfterProcessingDependency() {
       return this.getNewListValuesBeforeCheckedDependency();
     },
@@ -319,5 +318,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

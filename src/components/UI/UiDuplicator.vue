@@ -1,8 +1,8 @@
 <template>
   <div
     class="calc__duplicator"
-    v-if="isVisibilityFromDependency"
     :class="classes"
+    v-show="isVisibilityFromDependency"
   >
     <ui-duplicator-wrapper
       v-for="(duplicator, key) in localTemplates"
@@ -10,17 +10,17 @@
       :key="duplicator?.index ? duplicator?.index : 0"
       :index="duplicator?.index ? duplicator?.index : 0"
       :duplicator-data="duplicator"
-      :is-duplicate="duplicator?.isDuplicate ? true : false"
+      :is-duplicate="duplicator?.isDuplicate"
       :formula="originData?.formula"
       :parent-name="originData.elementName"
-      :parent-is-show="true"
+      :parent-is-show="isVisibilityFromDependency"
       :origin-variables="originVariablesInDuplicator"
       @duplicate="duplicate"
       @deleteDuplicator="deleteDuplicator"
       @changedValue="changeValue"
     />
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -28,9 +28,6 @@ import UiDuplicatorWrapper from "@/components/UI/UiDuplicatorWrapper";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
-
-import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
@@ -56,6 +53,7 @@ export default {
       "formulaProcessingLogic",
       "classes",
       "templateName",
+      "parentIsShow"
     ]),
   },
   mounted() {
@@ -150,8 +148,27 @@ export default {
       });
     },
   },
+  watch: {
+    isVisibilityFromDependency(newValue) {
+      if (newValue === false) {
+        this.$emit("changedValue", {
+          name: this.duplicateTemplate.elementName,
+          type: "duplicator",
+          label: this.duplicateTemplate.label,
+          cost: this.localCost,
+          value: null,
+          displayValue: null,
+          formOutputMethod: this.duplicateTemplate.formOutputMethod,
+          eventType: "deleteDuplicate",
+          unit: "",
+          isShow: this.isVisibilityFromDependency,
+          excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
+          insertedTemplates: this.localResultsElements,
+        });
+      }
+    }
+  },
   computed: {
-    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
     originVariablesInDuplicator() {
       let result = this.getNameElementsRecursive(this.originData?.templates);
       return result.filter((item) => item?.length > 0);
@@ -159,5 +176,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

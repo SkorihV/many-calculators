@@ -24,7 +24,7 @@ export const MixinsGeneralItemData = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode"]),
+    ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode", "showInsideElementStatus"]),
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}
@@ -32,7 +32,7 @@ export const MixinsGeneralItemData = {
     isDependencyPriceExist() {
       return Boolean(
         this.dependencyPrices?.filter(
-          (item) => item?.enabledFormula && item?.dependencyFormulaCost?.length
+          (item) => !item?.disabledFormula && item?.dependencyFormulaCost?.length
         )
       );
     },
@@ -44,8 +44,12 @@ export const MixinsGeneralItemData = {
     initProcessingDependencyPrice() {
       return this.isDependencyPriceExist;
     },
+    /**
+     *
+     * @returns {boolean|string}
+     */
     devModeData() {
-      if (this.devMode) {
+      if (this.devMode && this.showInsideElementStatus) {
         const textLabel = `<div>Заголовок элемента: ${this.label}</div>`;
         const textElementName = `<div>Имя элемента: ${this.elementName}</div>`;
         const textDependencyFormula = this.dependencyFormulaDisplay?.length

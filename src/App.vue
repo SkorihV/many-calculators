@@ -7,8 +7,10 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
+          :max-width="template?.maxWidth"
           :element-name="template?.json_id || 'UiAccordion' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
+          :template-name="template.template"
           @changedValue="changeValue"
         />
         <ui-tab
@@ -18,6 +20,8 @@
           :classes="template?.classes"
           :element-name="template?.json_id || 'UiTab' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
+          :max-width="template?.maxWidth"
+          :template-name="template.template"
           @changedValue="changeValue"
         />
         <ui-bisection
@@ -34,6 +38,7 @@
           :dependency-formula-display-right-side="
             template?.dependencyFormulaDisplayRightSide
           "
+          :template-name="template.template"
           @changedValue="changeValue"
         />
         <ui-duplicator
@@ -50,6 +55,7 @@
           :exclude-from-calculations="template?.excludeFromCalculations"
           :duplicate-template="template"
           :formula-processing-logic="template?.formulaProcessingLogic"
+          :template-name="template.template"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -71,7 +77,13 @@
         @click="calculateResult"
         v-if="showResultBtn"
       >
-        Рассчитать
+        <div class="calc__show-result-btn-icon" v-if="outOptions?.resultOptions?.icon?.filename.length && outOptions?.resultOptions?.location === 'leftSide'">
+          <img :src="getImageDir + outOptions?.resultOptions?.icon?.filename" alt="">
+        </div>
+        {{ outOptions?.resultOptions?.title?.length ? outOptions?.resultOptions?.titleButton : "Рассчитать" }}
+        <div class="calc__show-result-btn-icon" v-if="outOptions?.resultOptions?.icon?.filename.length && outOptions?.resultOptions?.location === 'rightSide'">
+          <img :src="getImageDir + outOptions?.resultOptions?.icon?.filename" alt="">
+        </div>
       </div>
       <error-names-templates
         v-if="devMode"
@@ -79,14 +91,20 @@
         :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <pre
-        class="resultDataBlock"
+      <div
         v-if="showResultDataForBlock && initTeleport"
-        v-html="finalTextForOutput"
-      ></pre>
+      >
+        <p v-if="outOptions?.resultOptions?.title?.length">{{outOptions.resultOptions.title}}</p>
+        <p v-if="outOptions?.resultOptions?.subtitle?.length">{{outOptions.resultOptions.subtitle}}</p>
+        <pre
+          class="resultDataBlock"
+          v-html="finalTextForOutput"
+        ></pre>
+      </div>
+
       <div id="prompt-text-element"></div>
     </div>
-    <teleport v-if="initTeleport && submitResult" to="#teleportelement">
+    <teleport v-if="initTeleport && submitResult" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
   </div>
@@ -145,10 +163,12 @@ export default {
       : [];
     this.formula = this.outOptions?.formula?.length
       ? this.outOptions?.formula
-      : null;
-    this.isUseFormula = this.outOptions?.useFormula
-      ? this.outOptions?.useFormula
-      : false;
+      : '';
+
+    this.isUseFormula = this.outOptions?.computedMethod === "formula";
+    this.displayResultData = this.outOptions?.computedMethod !== "no";
+
+
     this.mistake = this.outOptions?.methodProcessingMistakes
       ? this.outOptions?.methodProcessingMistakes
       : "no";
@@ -157,8 +177,7 @@ export default {
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.tryToggleDevMode(Boolean(this.outOptions?.devMode));
-    this.displayResultData = this.outOptions?.displayResultData;
-    this.showResultDataForBlock = this.outOptions.showResultDataForBlock;
+    this.showResultDataForBlock = this.outOptions?.resultOptions ? this.outOptions?.resultOptions.showResultDataForBlock : false;
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
@@ -167,15 +186,13 @@ export default {
       outData: {}, // внешние данные с шаблонами элементов калькулятора
       outOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
-      resultsElements: {}, // список элементов которые будут участвовать в расчетах результата
-      formula: null, // формула для кастомного расчета
+      formula: '', // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
-      shownAllTooltips: false, // глобальная переменная дающая разрешение показывать ошибки валидации для всех шаблонов
+      displayResultData: false, // включить работу формул и вывод данных
       mistake: "no",
       currency: "руб",
       submitResult: null,
       initEnabledSendForm: false,
-      displayResultData: false, // включить работу формул и вывод данных
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
       eventNotShowTooltips: ["delete", "mounted", "timer", "dependency"], // События при которых не должно срабатывать отображение ошибок
     };
@@ -221,7 +238,7 @@ export default {
      */
     checkEnabledResultButton() {
       const textAreaTeleportElement =
-        document.querySelector("#teleportelement");
+        document.querySelector("#teleport");
       if (textAreaTeleportElement) {
         textAreaTeleportElement.readOnly = true;
       }
@@ -271,7 +288,7 @@ export default {
           (item.formOutputMethod === "summ" ||
             item.formOutputMethod === "valueSumm")
         ) {
-          let sum = item.cost.toString();
+          let sum = item?.cost?.toString();
           result += " - " + sum + " " + this.currency;
         }
         result += "\n";
@@ -298,6 +315,7 @@ export default {
       "getAllResultsElements",
       "devMode",
       "showInsideElementStatus",
+      "getImageDir",
     ]),
     /**
      * Данные которые подходят для вывода или расчета
@@ -313,7 +331,7 @@ export default {
      * @returns {*[]|*}
      */
     variablesInFormula() {
-      if (this.formula !== null && this.formula?.length) {
+      if (this.formula?.length) {
         return this.getArrayElementsFromFormula(this.formula);
       }
       return [];
@@ -372,7 +390,7 @@ export default {
     },
 
     /**
-     *  рассчитываем формулу  через eval
+     *  рассчитываем формулу через eval
      * @returns {boolean|any}
      */
     combinedFormulaDataTogether() {
@@ -403,7 +421,7 @@ export default {
       let result = "";
       this.dataForOutputText.forEach((item) => {
         if (item.type === "duplicator") {
-          if (Object.keys(item?.insertedTemplates) && item?.cost > 0) {
+          if (Object.keys(item?.insertedTemplates) && item.isShow) {
             Object.values(item?.insertedTemplates).forEach((duplicator) => {
               if (Object.keys(duplicator?.insertedTemplates)) {
                 if (this.parseResultValueObjectItem(duplicator)?.length) {
@@ -471,7 +489,7 @@ export default {
       } else {
         result +=
           "" +
-          "Общая сумма составляет = " +
+          this.outOptions?.resultOptions?.titleSumma +
           this.finalSummaForOutput +
           " " +
           this.currency;
@@ -802,23 +820,25 @@ $border-radius: 4px;
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 25px;
-        height: 25px;
+        width: 26px;
+        height: 26px;
         background: $calc-color-btn;
         cursor: pointer;
         @include style-button;
+        z-index: 15;
         &:hover {
           background-color: $calc-color-btn-hover;
           @include style-button-hover;
         }
       }
       &::-moz-range-thumb {
-        width: 25px;
-        height: 25px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         background: $calc-color-btn;
         cursor: pointer;
         @include style-border;
+        z-index: 15;
         &:hover {
           @include style-border-hover;
         }
@@ -829,29 +849,29 @@ $border-radius: 4px;
       &-wrapper {
         @include style-flex-center;
         justify-content: space-around;
-        margin: 5px 0;
-        max-height: 30px;
+        height: 30px;
+        position: relative;
+        margin: 5px;
       }
       &-item {
-        flex: 1 1 auto;
-        position: relative;
+        position: absolute;
         cursor: pointer;
-        max-height: 30px;
         &:after {
+          position: absolute;
           content: "";
           display: block;
-          padding-bottom: 100%;
+          width: 1px;
+          z-index: 10;
+          background: #464657;
+          top: -50%;
+          left: 50%;
+          transform: translateX(-50%);
+          height: 70%;
         }
-        &-content {
-          @include style-flex-center;
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          font-size: 10px;
-          border-radius: $border-radius;
-          &_selected {
-            background-color: $calc-color-btn;
-            color: $calc-color-btn-text;
+        &_selected {
+          font-weight: bold;
+          &:after {
+            width: 2px;
           }
         }
       }
@@ -866,17 +886,20 @@ $border-radius: 4px;
 
       &-static {
         color: $calc-color-btn-text;
-        padding: 4px 6px;
         @include style-button;
         min-width: 25px;
         min-height: 27px;
+        border-radius: 50%;
+        position: absolute;
+        z-index: 15;
+        margin-top: 2px;
       }
 
       &-dynamic {
         font-size: 15px;
         line-height: 16px;
         padding: 5px;
-        max-width: 40px;
+        max-width: 50px;
         right: 0;
         @include style-border;
         border-bottom: 2px solid $calc-color-btn-hover;
@@ -969,9 +992,8 @@ $border-radius: 4px;
 
     &-image {
       &-wrapper {
-        width: 50px;
-        max-height: 50px;
-        margin-left: 10px;
+        max-width: 50px;
+        position: relative;
       }
       &-item {
         @include style-img;
@@ -991,6 +1013,9 @@ $border-radius: 4px;
         border-left: 1px solid $calc-color-btn-hover;
         border-right: 1px solid $calc-color-btn-hover;
         border-bottom: 1px solid $calc-color-btn-hover;
+        .calc__select-image-wrapper {
+          margin: 5px;
+        }
       }
       &-item {
         background-color: white;
@@ -1551,6 +1576,7 @@ $border-radius: 4px;
         }
         &-wrapper {
           @include style-flex-start;
+          align-items: flex-start;
           flex-direction: column;
           flex: 1 1 auto;
           width: 100%;
@@ -1648,6 +1674,8 @@ $border-radius: 4px;
       &-content {
         @include style-flex-start;
         width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   }

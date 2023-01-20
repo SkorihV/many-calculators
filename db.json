@@ -24,6 +24,7 @@
           {
             "title": "Бюджет",
             "radioName": "Бюджет",
+            "subradioName": "подзаголовок",
             "cost": 1000,
             "image": {
               "image_id": "3373825106",
@@ -110,19 +111,19 @@
         "dependencyPrices": [
           {
             "title": "100",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 100,
             "dependencyFormulaCost": "первыйИнпут &gt; 99"
           },
           {
             "title": "200",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 200,
             "dependencyFormulaCost": "первыйИнпут &gt; 199"
           },
           {
             "title": "300",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 300,
             "dependencyFormulaCost": "первыйИнпут &gt; 299"
           }
@@ -156,19 +157,19 @@
         "dependencyPrices": [
           {
             "title": "200",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 200,
             "dependencyFormulaCost": "первыйИнпут &gt; 10"
           },
           {
             "title": "300",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 300,
             "dependencyFormulaCost": "первыйИнпут &gt; 20"
           },
           {
             "title": "400",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 400,
             "dependencyFormulaCost": "первыйИнпут &gt; 30"
           }
@@ -180,16 +181,16 @@
         "title": "Зависимость цены range от галочки",
         "label": "Зависимость цены от галочки",
         "value": "0",
-        "min": "0",
-        "max": "100",
+        "min": "100",
+        "max": "200",
         "cost": "100",
         "unit": "",
-        "step": "1",
+        "step": "10",
         "showSteps": 1,
         "stepPrompt": "10",
         "isNeedChoice": true,
         "notEmpty": true,
-        "showStaticValue": 1,
+        "showStaticValue": true,
         "showDynamicValue": 1,
         "formOutputMethod": "valueSumm",
         "elementName": "range2",
@@ -200,13 +201,13 @@
         "dependencyPrices": [
           {
             "title": "1000",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 999,
             "dependencyFormulaCost": "checklvl2 === true"
           },
           {
             "title": "1000",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 1,
             "dependencyFormulaCost": "первыйИнпут === inputName1"
           }
@@ -236,13 +237,13 @@
             "dependencyPrices": [
               {
                 "title": "200",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 200,
                 "dependencyFormulaCost": "первыйИнпут &gt; 99"
               },
               {
                 "title": "300",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 300,
                 "dependencyFormulaCost": "первыйИнпут &gt; 199"
               }
@@ -255,13 +256,13 @@
             "dependencyPrices": [
               {
                 "title": "66",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 66,
                 "dependencyFormulaCost": "первыйИнпут &gt; 99"
               },
               {
                 "title": "77",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 77,
                 "dependencyFormulaCost": "первыйИнпут &gt; 199"
               }
@@ -299,13 +300,13 @@
             "dependencyPrices": [
               {
                 "title": "200",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 200,
                 "dependencyFormulaCost": "radio1 === 1"
               },
               {
                 "title": "300",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 300,
                 "dependencyFormulaCost": "radio1 === 2"
               }
@@ -318,17 +319,18 @@
             "dependencyPrices": [
               {
                 "title": "55",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 55,
                 "dependencyFormulaCost": "radio1 === 1"
               },
               {
                 "title": "888",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 888,
                 "dependencyFormulaCost": "radio1 === 2"
               }
-            ]
+            ],
+            "prompt": "342423rrf fd sf sdf sdf"
           },
           {
             "title": "Третий пункт для скрытия",
@@ -368,13 +370,13 @@
             "dependencyPrices": [
               {
                 "title": "300",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 300,
                 "dependencyFormulaCost": "range2 &gt; 35"
               },
               {
                 "title": "400",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 400,
                 "dependencyFormulaCost": "range2 &gt; 40"
               }
@@ -449,12 +451,13 @@
       },
 
       {
-        "json_id": "169744706",
+        "json_id": "169744123706",
         "title": "Зависимости аккордеон",
         "label": "Зависимости аккордеон",
+        "maxWidth" : "50",
         "items": [
           {
-            "json_id": "157557506",
+            "json_id": "1575633457506",
             "title": "Дополнительные опции",
             "templates": [
               {
@@ -478,6 +481,7 @@
               }
             ],
             "label": "Дополнительные опции",
+            "sublabel": "gjlpfujkj опции",
             "prompt": ""
           },
           {
@@ -507,7 +511,7 @@
                     "dependencyPrices": [
                       {
                         "title": "999",
-                        "enabledFormula": 1,
+                        "disabledFormula": 0,
                         "cost": 999,
                         "dependencyFormulaCost": "chek111 === true"
                       }
@@ -784,7 +788,7 @@
                 "dependencyPrices": [
                   {
                     "title": "15",
-                    "enabledFormula": 1,
+                    "disabledFormula": 0,
                     "cost": 15,
                     "dependencyFormulaCost": "imput12 &gt; 17"
                   },
@@ -815,13 +819,13 @@
         "dependencyPrices": [
           {
             "title": "Значение 2",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 2,
             "dependencyFormulaCost": "первыйИнпут &gt; 999"
           },
           {
             "title": "Значение 3",
-            "enabledFormula": 1,
+            "disabledFormula": 0,
             "cost": 3,
             "dependencyFormulaCost": "chek22 === true"
           }
@@ -832,6 +836,191 @@
         "title": "Дупликатор",
         "label": "Дупликатор",
         "templates": [
+          {
+            "json_id": "169567444706",
+            "title": "Зависимости аккордеон",
+            "label": "Зависимости аккордеон",
+            "items": [
+              {
+                "json_id": "15764557506",
+                "title": "Дополнительные опции",
+                "templates": [
+                  {
+                    "json_id": "157435554906",
+                    "title": "checkbox - Ремонт квартир - Вызова дизайнера на дом",
+                    "label": "Вызова дизайнера на дом",
+                    "labelSecond": "",
+                    "value": false,
+                    "cost": "",
+                    "isNeedChoice": true,
+                    "isChecked": false,
+                    "typeDisplayClass": "switcher",
+                    "elementName": "chek12345",
+                    "formulaProcessingLogic": "error",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "formOutputMethod": "value",
+                    "dependencyFormulaDisplay": "",
+                    "excludeFromCalculations": false,
+                    "prompt": ""
+                  }
+                ],
+                "label": "Дополнительные опции",
+                "prompt": ""
+              },
+              {
+                "json_id": "15493587306",
+                "title": "Вкладка с радиокнопками",
+                "templates": [
+                  {
+                    "json_id": "169748506",
+                    "title": "Зависимости радио 1",
+                    "label": "Зависимости радио 1",
+                    "selectedItem": "0",
+                    "isColumn": false,
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "typeDisplayClass": "buttons",
+                    "formOutputMethod": "valueSumm",
+                    "elementName": "radioForDuplicate2",
+                    "formulaProcessingLogic": "ignored",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiRadio",
+                    "values": [
+                      {
+                        "title": "1",
+                        "radioName": 1,
+                        "cost": 1,
+                        "dependencyPrices": [
+                          {
+                            "title": "999",
+                            "disabledFormula": 0,
+                            "cost": 999,
+                            "dependencyFormulaCost": "chek111 === true"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "2",
+                        "radioName": 2,
+                        "cost": 2
+                      },
+                      {
+                        "title": "3",
+                        "radioName": 3,
+                        "cost": 3
+                      }
+                    ],
+                    "prompt": ""
+                  },
+                  {
+                    "json_id": "16974873406",
+                    "title": "Зависимости радио 2",
+                    "label": "Зависимости радио 2",
+                    "selectedItem": "0",
+                    "isColumn": false,
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "typeDisplayClass": "buttons",
+                    "formOutputMethod": "valueSumm",
+                    "elementName": "",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "chek111 === true",
+                    "classes": "",
+                    "template": "UiRadio",
+                    "values": [
+                      {
+                        "title": "11",
+                        "radioName": 11,
+                        "cost": 11
+                      },
+                      {
+                        "title": "22",
+                        "radioName": 22,
+                        "cost": 22
+                      },
+                      {
+                        "title": "33",
+                        "radioName": 33,
+                        "cost": 33
+                      }
+                    ],
+                    "prompt": ""
+                  }
+                ],
+                "label": "Вкладка с радиокнопками",
+                "prompt": ""
+              },
+              {
+                "json_id": "151252498691506",
+                "title": "Вкладка с чекбоксами",
+                "templates": [
+                  {
+                    "json_id": "162349749306",
+                    "title": "зависимости чекбокс 1",
+                    "label": "зависимости чекбокс 1",
+                    "labelSecond": "3D-Дизайн проект",
+                    "value": false,
+                    "cost": "4",
+                    "isNeedChoice": false,
+                    "isChecked": false,
+                    "typeDisplayClass": "",
+                    "formOutputMethod": "valueSumm",
+                    "elementName": "chek1234567q",
+                    "formulaProcessingLogic": "zero",
+                    "excludeFromCalculations": false,
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": ""
+                  }
+                ],
+                "label": "Вкладка с чекбоксами",
+                "prompt": ""
+              },
+              {
+                "json_id": "123454876306",
+                "title": "Вкладка с инпутами",
+                "templates": [
+                  {
+                    "json_id": "169749506",
+                    "title": "Заголовок элемента в списке вида - Input:  4",
+                    "label": "Заголовок элемента в списке вида - Input: 4",
+                    "value": "6",
+                    "cost": "44",
+                    "unit": "",
+                    "min": "1",
+                    "max": "44",
+                    "controls": 1,
+                    "step": "1",
+                    "isColumn": false,
+                    "notEmpty": 1,
+                    "onlyNumber": 1,
+                    "isCurrency": false,
+                    "onlyInteger": false,
+                    "formOutputMethod": "valueSumm",
+                    "elementName": "imput1223",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "chek111 === true",
+                    "customErrorPattern": "",
+                    "customErrorText": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": ""
+                  }
+                ],
+                "label": "Вкладка с инпутами",
+                "prompt": ""
+              }
+            ],
+            "template": "UiAccordion",
+            "classes": "",
+            "dependencyFormulaDisplay": "test123 === 2"
+          },
+
           {
             "json_id": "219632106",
             "title": "Зависимости галочка дупликатор",
@@ -853,7 +1042,7 @@
             "dependencyPrices": [
               {
                 "title": "15",
-                "enabledFormula": 1,
+                "disabledFormula": 0,
                 "cost": 15,
                 "dependencyFormulaCost": "первыйИнпут > 40"
               }
@@ -985,13 +1174,36 @@
         "excludeFromCalculations": false,
         "elementName": "duplicatorName",
         "formulaProcessingLogic": "zero",
-        "formula": "первыйИнпут + (RangeFOrDuplicator * checkboxForDuplicator * radioForDuplicate * ширинаЛевая) + chek111 + system1  + _otherSum_",
+        "formula": "RangeFOrDuplicator + 5 + _otherSum_",
+
         "dependencyFormulaDisplay": "radio1 === 1",
         "classes": "",
         "template": "UiDuplicator",
         "prompt": "Текст подсказки для дупликатора!"
       }
     ]
+  },
+
+
+  "calculator-options": {
+    "formula": "10 + 50 + chek22",
+    "computedMethod": "linear",
+    "methodProcessingMistakes": "useButton",
+    "currency": "руб",
+    "devMode": 1,
+    "displayResultData": true,
+    "form": "",
+    "resultOptions" : {
+      "location" : "leftSide",
+      "showResultDataForBlock": 1,
+      "title": "Заголовок над результатами",
+      "subtitle": "подзаголовок над результатами",
+      "titleButton": "Текст кнопки",
+      "titleSumma" : "Сумма рассчета",
+      "icon" : {
+        "filename" : "https://dummyimage.com/150x100/a1a1a1/ddd"
+      }
+    }
   },
 
   "test-data": {
@@ -1918,10 +2130,12 @@
           {
             "title": "Вкладка с инпутами",
             "label": "Вкладка с инпутами",
+            "sublabel": "подзаголовок",
             "templates": [
               {
                 "title": "input с проверкой на целые числа",
                 "label": "input с проверкой на целые числа",
+                "sublabel": "подзаголовок",
                 "value": "",
                 "cost": "",
                 "unit": "",
@@ -2543,16 +2757,7 @@
     ]
   },
 
-  "calculator-options": {
-    "formula": "_otherSum_ + system1 * duplicatorName",
-    "useFormula": 1,
-    "methodProcessingMistakes": "useButton",
-    "currency": "руб",
-    "devMode": 1,
-    "displayResultData": true,
-    "form": "",
-    "showResultDataForBlock": 1
-  },
+
   "credit-calculator": {
     "type_calculate": "Both",
     "bank_list": {

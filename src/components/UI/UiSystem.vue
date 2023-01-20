@@ -1,5 +1,5 @@
 <template>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -40,7 +40,8 @@ export default {
         cost: parseFloat(this.localCost),
         label: "",
         formOutputMethod: null,
-        isShow: this.isVisibilityFromDependency,
+        // isShow: this.isVisibilityFromDependency,
+        isShow: true,
         excludeFromCalculations: false,
         unit: "",
         eventType,
@@ -86,8 +87,6 @@ export default {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
-      "devMode",
-      "showInsideElementStatus",
     ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)

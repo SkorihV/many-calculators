@@ -1,4 +1,5 @@
 <template>
+  {{maxWidth}}
   <div
     ref="parent"
     class="calc__accordion-item-label"
@@ -9,6 +10,7 @@
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>
     <div class="calc__accordion-item-minus" v-if="isOpen"></div>
     {{ accordionItem.label }}
+    {{ accordionItem?.sublabel }}
     <ui-prompt
       v-if="accordionItem?.prompt?.length"
       :prompt-text="accordionItem.prompt"
@@ -24,6 +26,7 @@
     v-show="isOpen"
     v-for="(template, key_in) in accordionItem?.templates"
     :key="key_in"
+    :style="{maxWidth: maxWidth + '%'}"
   >
     <templates-wrapper
       :parent-is-show="parentIsShow"
@@ -60,7 +63,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates(["elementName", "parentIsShow"]),
+    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidth"]),
   },
   data() {
     return {
@@ -79,29 +82,53 @@ export default {
       "isCanShowAllTooltips",
       "getValidationListOnParentName",
     ]),
+    /**
+     *
+     * @returns {*}
+     */
     isShowError() {
       return this.localListValidationError.some(
         (item) => item.error && item.isShow && this.isCanShowAllTooltips
       );
     },
+    /**
+     *
+     * @returns {boolean}
+     */
     isShowAccordionItem() {
       return this.currentChildrenItem !== this.currentHiddenItem;
     },
+    /**
+     *
+     * @returns {string}
+     */
     itemIdName() {
       return (
         this.accordionName + "_" + this.elementName + "_" + this.accordionItemId
       );
     },
+    /**
+     *
+     * @returns {function(*): *[]}
+     */
     localListValidationError() {
       return this.getValidationListOnParentName(this.elementName);
     },
+    /**
+     *
+     * @returns {*|number}
+     */
     currentChildrenItem() {
       return this.accordionItem?.templates.length
         ? this.accordionItem?.templates.length
         : 0;
     },
+    /**
+     *
+     * @returns {*}
+     */
     currentHiddenItem() {
-      return this.localListValidationError.filter((item) => !item.isShow)
+      return this.localListValidationError?.filter((item) => !item.isShow)
         .length;
     },
   },

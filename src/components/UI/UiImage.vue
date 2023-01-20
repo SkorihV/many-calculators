@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -60,7 +60,7 @@ export default {
       "formulaProcessingLogic",
       "parentName",
       "parentIsShow",
-      "dependencyFormulaDisplay",
+      "dependencyFormulaDisplay"
     ]),
   },
   methods: {
@@ -72,10 +72,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
-    imageDir() {
-      return window?.imageDir ? window.imageDir : "";
-    },
+    ...mapState(useBaseStore, ["devMode", "getImageDir"]),
     width() {
       return "max-width:" + this.maxWidth + "px";
     },
@@ -85,7 +82,7 @@ export default {
     localDataForDisplay() {
       let dataForOut = {
         label: this.label,
-        url: this.imageDir + this.defaultImage.filename,
+        url: this.getImageDir + this.defaultImage.filename,
         prompt: this.prompt,
       };
       if (!this.dependencyImages?.length) {
@@ -126,5 +123,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

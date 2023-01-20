@@ -14,6 +14,11 @@ export const MixinsForProcessingFormula = {
     };
   },
   methods: {
+    /**
+     *
+     * @param value
+     * @returns {boolean}
+     */
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -107,9 +112,16 @@ export const MixinsForProcessingFormula = {
       }
       return name in this.globalDependenciesList;
     },
+    /**
+     * @param name
+     * @returns {boolean}
+     */
     existLocalElementDependency(name) {
       return name in this.localDependencyList;
     },
+    /**
+     * @param name
+     */
     putElementDependencyInLocalList(name) {
       this.localDependencyList[name] = this.globalDependenciesList[name];
     },
@@ -117,20 +129,21 @@ export const MixinsForProcessingFormula = {
   watch: {
     /**
      * Отправить команду на удаление элемента из общих данных при его скрытии
-     * @param newValue
      */
-    isVisibilityFromDependency(newValue) {
-      if (newValue && this.isCanShowAllTooltips) {
+    isVisibilityFromDependency() {
+      if (this.isCanShowAllTooltips) {
         this.changeValue("dependency");
       }
     },
-
+    /**
+     *
+     * @param newValue
+     */
     isCanShowAllTooltips(newValue) {
       if (newValue && this.isVisibilityFromDependency) {
         this.changeValue("dependency");
       }
     },
-
     globalDependenciesList: {
       handler(newValue) {
         let isUpdated = false;
@@ -163,7 +176,7 @@ export const MixinsForProcessingFormula = {
      * @returns {boolean|any}
      */
     isVisibilityFromDependency() {
-      if (this.isDependencyElementVisibility || !this.parentIsShow) {
+      if (this.isDependencyElementVisibility && this.parentIsShow) {
         try {
           return eval(this.parsingFormulaVariables);
         } catch (e) {
@@ -173,7 +186,7 @@ export const MixinsForProcessingFormula = {
           return false;
         }
       }
-      return true;
+      return  this.parentIsShow;
     },
     /**
      * Отобразить поле

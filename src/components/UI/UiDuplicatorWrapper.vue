@@ -48,7 +48,7 @@
   </div>
   <div
     class="dev-block"
-    v-if="devMode && showInsideElementStatus"
+    v-if="devModeData"
     v-html="devModeData"
   ></div>
 </template>
@@ -218,7 +218,7 @@ export default {
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",
-      "showInsideElementStatus",
+      "showInsideElementStatus"
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -405,12 +405,15 @@ export default {
       }
     },
     devModeData() {
-      const textLabel = `<div>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`;
-      const textFormula = `<div>Базовая формула: ${
+      if (!this.devMode || !this.showInsideElementStatus) {
+        return false;
+      }
+      const textLabel = `<span>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</span>`;
+      const textFormula = `<span>Базовая формула: ${
         this.formula?.length
           ? this.getArrayElementsFromFormula(this.formula).join(" ")
           : "Нет"
-      }</div>`;
+      }</span>`;
       let isCompiledFormula = false;
       try {
         if (this.localCost !== null) {
@@ -420,14 +423,14 @@ export default {
         isCompiledFormula = false;
       }
 
-      const textFormulaOnData = `<div>Формула с данными: ${
+      const textFormulaOnData = `<span>Формула с данными: ${
         this.compileFormulaWitchData?.length
           ? this.compileFormulaWitchData
           : "Нет"
-      }</div>`;
-      const resultProcessingFormula = `<div>Результат расчета: ${
+      }</span>`;
+      const resultProcessingFormula = `<span>Результат расчета: ${
         isCompiledFormula ? this.localCost : "не возможно посчитать!"
-      }</div>`;
+      }</span>`;
 
       return `
       <hr/>

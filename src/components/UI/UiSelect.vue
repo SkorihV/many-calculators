@@ -70,7 +70,7 @@
         :local-can-be-shown="isVisibilityFromDependency"
       />
     </div>
-    <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+    <div v-if="devModeData" v-html="devModeData"></div>
   </div>
 </template>
 
@@ -228,7 +228,7 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
+        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "select",
         label: this.label,
@@ -317,7 +317,6 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
-      "showInsideElementStatus",
       "getImageDir",
     ]),
     amountVisibleSelects() {
@@ -417,5 +416,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

@@ -37,7 +37,7 @@
       />
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -142,7 +142,7 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isErrorEmpty,
+        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
@@ -170,18 +170,28 @@ export default {
   computed: {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
-      "checkValidationDataAndToggle",
-      "devMode",
-      "showInsideElementStatus",
+      "checkValidationDataAndToggle"
     ]),
+    /**
+     *
+     * @returns {*|string}
+     */
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName
         : Math.random().toString();
     },
+    /**
+     *
+     * @returns {string|string}
+     */
     checkboxType() {
       return this.typeDisplayClass ? this.typeDisplayClass : "base";
     },
+    /**
+     *
+     * @returns {boolean}
+     */
     isErrorEmpty() {
       return this.isNeedChoice && !this.localValue;
     },
@@ -207,5 +217,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

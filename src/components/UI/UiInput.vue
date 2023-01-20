@@ -60,7 +60,7 @@
       </label>
     </div>
   </div>
-  <div v-if="devMode && showInsideElementStatus" v-html="devModeData"></div>
+  <div v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -362,7 +362,7 @@ export default {
         ].some((item) => item);
 
         this.checkValidationDataAndToggle({
-          error: this.isInvalid,
+          error: this.isVisibilityFromDependency ? this.isInvalid : this.isVisibilityFromDependency,
           name: this.localElementName,
           type: "input",
           label: this.label,
@@ -445,7 +445,7 @@ export default {
     },
     updatedCostForOut(cost) {
       return this.onlyNumber && this.checkedValueOnVoid(cost)
-        ? cost * this.localInputValue
+        ? parseFloat((cost * this.localInputValue).toFixed(2))
         : null;
     },
   },
@@ -454,7 +454,6 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
-      "showInsideElementStatus",
     ]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
@@ -581,5 +580,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

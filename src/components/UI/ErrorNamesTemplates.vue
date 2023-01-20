@@ -209,7 +209,7 @@ export default {
       } else {
         this.isExistField(template, desiredField)
           ? this[accumulatorVariable].push({
-              label: template?.label ? template?.label : label,
+              label: template?.label ? template?.label : label ? label : null,
               [nameFieldOnResult]: template[desiredField],
             })
           : false;
@@ -258,6 +258,11 @@ export default {
         data !== "undefined"
       );
     },
+    /**
+     *
+     * @param data
+     * @returns {*|boolean}
+     */
     isDataArray(data) {
       return (
         Array.isArray(data) &&
@@ -267,6 +272,10 @@ export default {
       );
     },
 
+    /**
+     *
+     * @returns {*[]}
+     */
     processingAllTemplatesOnData() {
       if (!this.templates?.length) {
         return [];
@@ -369,7 +378,6 @@ export default {
   },
   computed: {
     ...mapState(useBaseStore, ["tryToggleShowInsideElementStatus"]),
-    // ...mapStores(useBaseStore),
     /**
      * не существующие имена в формулах отвечающих за отображение элементов
      * @returns {*[]}
@@ -439,5 +447,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss"></style>

@@ -126,19 +126,30 @@ export default {
   },
   computed: {
     ...mapState(useBaseStore, ["devMode"]),
+    /**
+     *
+     * @returns {any|boolean}
+     */
     isShowLeftSide() {
       if (!this.dependencyFormulaDisplayLeftSide?.length) {
         return true;
       }
       return this.processingFormula(this.dependencyFormulaDisplayLeftSide);
     },
+    /**
+     *
+     * @returns {any|boolean}
+     */
     isShowRightSide() {
       if (!this.dependencyFormulaDisplayRightSide?.length) {
         return true;
       }
       return this.processingFormula(this.dependencyFormulaDisplayRightSide);
     },
-
+    /**
+     *
+     * @returns {string}
+     */
     styleWidthLeftSide() {
       if (this.widthLeftSide > this.absoluteMaxWidth) {
         this.widthLeftSide = this.absoluteMaxWidth;
@@ -151,6 +162,10 @@ export default {
       }
       return "max-width:" + this.widthLeftSide + "%";
     },
+    /**
+     *
+     * @returns {string}
+     */
     styleWidthRightSide() {
       if (this.widthLeftSide > this.absoluteMaxWidth) {
         this.widthLeftSide = this.absoluteMaxWidth;
@@ -166,5 +181,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

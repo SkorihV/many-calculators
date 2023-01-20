@@ -196,7 +196,7 @@ export const useBaseStore = defineStore("base", {
       this.shownAllTooltips = true;
     },
     /**
-     *  добавить/обновить  ошибку в общий список
+     *  добавить/обновить ошибку в общий список
      * @param data
      */
     checkValidationDataAndToggle(data) {

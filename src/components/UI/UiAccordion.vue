@@ -19,6 +19,7 @@
           :accordion-name="elementName"
           :accordion-item-id="key"
           :element-name="elementName + item?.json_id + '_' + key"
+          :max-width="maxWidth"
           @changedValue="changeValue"
         />
       </div>
@@ -41,6 +42,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    maxWidth: {
+      type: [String, Number],
+      default: 100
+    },
     ...UsePropsTemplates(["label", "elementName", "classes","parentIsShow","dependencyFormulaDisplay"]),
   },
   data() {
@@ -57,6 +62,10 @@ export default {
     },
   },
   computed: {
+    /**
+     *
+     * @returns {boolean}
+     */
     showBlock() {
       let result = [];
       if (this.accordionData?.items.length) {
