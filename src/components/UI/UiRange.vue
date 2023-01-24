@@ -210,24 +210,25 @@ export default {
       }, 500);
     },
     changeDynamicValue(e) {
-      this.resultValue = this.checkValidValueReturnNumber(e.target.value);
-      this.changeValue();
-      this.shownTooltip();
+      this.$nextTick(() => {
+        this.resultValue = this.checkValidValueReturnNumber(e.target.value);
+        this.changeValue();
+        this.shownTooltip();
+      })
+
     },
     checkValidValueReturnNumber(checkedValue) {
       let value = !isNaN(parseFloat(checkedValue))
         ? parseFloat(checkedValue)
         : null;
-
-      if ( value % this.localStep) {
-        value = value % this.step;
-      }
       if (value > this.localMax) {
         value = this.localMax;
       }
+
       if (value < this.localMin) {
         value = this.localMin;
       }
+
       return value;
     },
     changeValue(eventType = "input") {

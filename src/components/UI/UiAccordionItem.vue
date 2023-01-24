@@ -1,5 +1,4 @@
 <template>
-  {{maxWidth}}
   <div
     ref="parent"
     class="calc__accordion-item-label"

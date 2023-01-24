@@ -71,13 +71,12 @@ export const MixinsForProcessingFormula = {
     costAfterProcessingDependencyPrice(dependencyPrice) {
       let result = dependencyPrice?.reduce(
         (resultReduce, item) => {
-          if (!item.enabledFormula) {
+          if (item.disabledFormula) {
             return resultReduce;
           }
           let formula = this.getArrayElementsFromFormula(
             item?.dependencyFormulaCost
           );
-
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
           try {

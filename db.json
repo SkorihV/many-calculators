@@ -181,11 +181,11 @@
         "title": "Зависимость цены range от галочки",
         "label": "Зависимость цены от галочки",
         "value": "0",
-        "min": "100",
-        "max": "200",
+        "min": "10",
+        "max": "100",
         "cost": "100",
         "unit": "",
-        "step": "10",
+        "step": "5",
         "showSteps": 1,
         "stepPrompt": "10",
         "isNeedChoice": true,
@@ -352,7 +352,7 @@
         "notEmpty": false,
         "typeDisplayClass": "",
         "formOutputMethod": "valueSumm",
-        "elementName": "",
+        "elementName": "radio***************",
         "formulaProcessingLogic": "error",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -372,31 +372,31 @@
                 "title": "300",
                 "disabledFormula": 0,
                 "cost": 300,
-                "dependencyFormulaCost": "range2 &gt; 35"
+                "dependencyFormulaCost": "range2 > 35"
               },
               {
                 "title": "400",
                 "disabledFormula": 0,
                 "cost": 400,
-                "dependencyFormulaCost": "range2 &gt; 40"
+                "dependencyFormulaCost": "range2 > 40"
               }
             ],
             "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 &gt; 30"
+            "dependencyFormulaItem": "range2 > 30"
           },
           {
             "title": "Пункт 3",
             "radioName": "условие между 30 и 50",
             "cost": 300,
             "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 &lt; 30 &amp;&amp; range2 &gt; 50"
+            "dependencyFormulaItem": "range2 < 30 || range2 > 50"
           },
           {
             "title": "пункт 4",
-            "radioName": "условие &gt; 50",
+            "radioName": "условие > 50",
             "cost": 200,
             "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 &gt; 50"
+            "dependencyFormulaItem": "range2 > 50"
           }
         ],
         "prompt": ""
