@@ -143,7 +143,7 @@ export const useBaseStore = defineStore("base", {
         excludeFromCalculations,
         eventType,
         formulaProcessingLogic,
-        mode: mode ? mode : null
+        mode: mode ? mode : null,
       };
     },
     /**

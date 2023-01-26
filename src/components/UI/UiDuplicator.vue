@@ -53,7 +53,7 @@ export default {
       "formulaProcessingLogic",
       "classes",
       "templateName",
-      "parentIsShow"
+      "parentIsShow",
     ]),
   },
   mounted() {
@@ -162,11 +162,12 @@ export default {
           eventType: "deleteDuplicate",
           unit: "",
           isShow: this.isVisibilityFromDependency,
-          excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
+          excludeFromCalculations:
+            this.duplicateTemplate.excludeFromCalculations,
           insertedTemplates: this.localResultsElements,
         });
       }
-    }
+    },
   },
   computed: {
     originVariablesInDuplicator() {

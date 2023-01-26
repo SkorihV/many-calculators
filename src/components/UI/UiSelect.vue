@@ -4,7 +4,8 @@
       ref="parent"
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
-      :class="[{ 'is-column': isColumn }, classes]"    >
+      :class="[{ 'is-column': isColumn }, classes]"
+    >
       <div class="calc__select-label" v-if="label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
@@ -228,7 +229,9 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
+        error: this.isVisibilityFromDependency
+          ? this.isErrorEmpty
+          : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "select",
         label: this.label,

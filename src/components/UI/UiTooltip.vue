@@ -16,7 +16,6 @@
 </template>
 
 <script>
-
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 

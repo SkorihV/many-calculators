@@ -254,6 +254,7 @@
             "title": "Значение 2",
             "radioName": "Значение 2",
             "cost": 55,
+            "value": 1,
             "dependencyPrices": [
               {
                 "title": "66",
@@ -494,7 +495,7 @@
         "json_id": "169744123706",
         "title": "Зависимости аккордеон",
         "label": "Зависимости аккордеон",
-        "maxWidth" : "50",
+        "maxWidth": "50",
         "items": [
           {
             "json_id": "1575633457506",
@@ -1092,7 +1093,7 @@
             "json_id": "219632306",
             "title": "Зависимости диапазон дупликатор",
             "label": "Диапазон234234234",
-            "value": "",
+            "value": "0",
             "min": "0",
             "max": "100",
             "cost": "2",
@@ -1118,7 +1119,7 @@
             "json_id": "546456456",
             "title": "Зависимости диапазон дупликатор 2",
             "label": "Диапазон2",
-            "value": "0",
+            "value": "15",
             "min": "0",
             "max": "100",
             "cost": "2",
@@ -1224,7 +1225,6 @@
     ]
   },
 
-
   "calculator-options": {
     "formula": "10 + 50 + chek22",
     "computedMethod": "linear",
@@ -1233,15 +1233,15 @@
     "devMode": 1,
     "displayResultData": true,
     "form": "",
-    "resultOptions" : {
-      "location" : "leftSide",
+    "resultOptions": {
+      "location": "leftSide",
       "showResultDataForBlock": 1,
       "title": "Заголовок над результатами",
       "subtitle": "подзаголовок над результатами",
       "titleButton": "Текст кнопки",
-      "titleSumma" : "Сумма рассчета",
-      "icon" : {
-        "filename" : "https://dummyimage.com/150x100/a1a1a1/ddd"
+      "titleSumma": "Сумма рассчета",
+      "icon": {
+        "filename": "https://dummyimage.com/150x100/a1a1a1/ddd"
       }
     }
   },
@@ -2796,7 +2796,6 @@
       }
     ]
   },
-
 
   "credit-calculator": {
     "type_calculate": "Both",

@@ -46,11 +46,7 @@
       X
     </button>
   </div>
-  <div
-    class="dev-block"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <div class="dev-block" v-if="devModeData" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -91,7 +87,7 @@ export default {
       "parentIsShow",
       "index",
       "dependencyFormulaDisplay",
-      "elementName"
+      "elementName",
     ]),
   },
   mounted() {
@@ -218,7 +214,7 @@ export default {
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",
-      "showInsideElementStatus"
+      "showInsideElementStatus",
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.

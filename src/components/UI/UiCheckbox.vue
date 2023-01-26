@@ -142,7 +142,9 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
+        error: this.isVisibilityFromDependency
+          ? this.isErrorEmpty
+          : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "checkbox",
         label: this.label,
@@ -170,7 +172,7 @@ export default {
   computed: {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
-      "checkValidationDataAndToggle"
+      "checkValidationDataAndToggle",
     ]),
     /**
      *

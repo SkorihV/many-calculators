@@ -4,10 +4,7 @@
     v-if="isVisibilityFromDependency"
     ref="parent"
   >
-    <div
-      class="calc__input-wrapper"
-      :class="[classes]"
-    >
+    <div class="calc__input-wrapper" :class="[classes]">
       <label
         :for="localElementName"
         class="calc__input-label"
@@ -362,7 +359,9 @@ export default {
         ].some((item) => item);
 
         this.checkValidationDataAndToggle({
-          error: this.isVisibilityFromDependency ? this.isInvalid : this.isVisibilityFromDependency,
+          error: this.isVisibilityFromDependency
+            ? this.isInvalid
+            : this.isVisibilityFromDependency,
           name: this.localElementName,
           type: "input",
           label: this.label,

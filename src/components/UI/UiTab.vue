@@ -48,7 +48,7 @@
       class="calc__tab-item-content-wrapper"
       v-if="tabData?.items?.length"
       v-for="(item, key) in tabData.items"
-      :style="{maxWidth: maxWidth + '%'}"
+      :style="{ maxWidth: maxWidth + '%' }"
       :key="key"
     >
       <ui-tab-item
@@ -89,7 +89,7 @@ export default {
     },
     maxWidth: {
       type: [String, Number],
-      default: 100
+      default: 100,
     },
     ...UsePropsTemplates([
       "label",

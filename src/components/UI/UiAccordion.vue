@@ -44,9 +44,15 @@ export default {
     },
     maxWidth: {
       type: [String, Number],
-      default: 100
+      default: 100,
     },
-    ...UsePropsTemplates(["label", "elementName", "classes","parentIsShow","dependencyFormulaDisplay"]),
+    ...UsePropsTemplates([
+      "label",
+      "elementName",
+      "classes",
+      "parentIsShow",
+      "dependencyFormulaDisplay",
+    ]),
   },
   data() {
     return {

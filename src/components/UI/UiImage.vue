@@ -40,7 +40,6 @@ export default {
   components: { UiPrompt },
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
-
     defaultImage: {
       type: Object,
       default: () => {},
@@ -60,7 +59,7 @@ export default {
       "formulaProcessingLogic",
       "parentName",
       "parentIsShow",
-      "dependencyFormulaDisplay"
+      "dependencyFormulaDisplay",
     ]),
   },
   methods: {

@@ -25,7 +25,7 @@
     v-show="isOpen"
     v-for="(template, key_in) in accordionItem?.templates"
     :key="key_in"
-    :style="{maxWidth: maxWidth + '%'}"
+    :style="{ maxWidth: maxWidth + '%' }"
   >
     <templates-wrapper
       :parent-is-show="parentIsShow"

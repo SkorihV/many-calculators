@@ -77,12 +77,34 @@
         @click="calculateResult"
         v-if="showResultBtn"
       >
-        <div class="calc__show-result-btn-icon" v-if="outOptions?.resultOptions?.icon?.filename.length && outOptions?.resultOptions?.location === 'leftSide'">
-          <img :src="getImageDir + outOptions?.resultOptions?.icon?.filename" alt="">
+        <div
+          class="calc__show-result-btn-icon"
+          v-if="
+            outOptions?.resultOptions?.icon?.filename.length &&
+            outOptions?.resultOptions?.location === 'leftSide'
+          "
+        >
+          <img
+            :src="getImageDir + outOptions?.resultOptions?.icon?.filename"
+            alt=""
+          />
         </div>
-        {{ outOptions?.resultOptions?.title?.length ? outOptions?.resultOptions?.titleButton : "Рассчитать" }}
-        <div class="calc__show-result-btn-icon" v-if="outOptions?.resultOptions?.icon?.filename.length && outOptions?.resultOptions?.location === 'rightSide'">
-          <img :src="getImageDir + outOptions?.resultOptions?.icon?.filename" alt="">
+        {{
+          outOptions?.resultOptions?.title?.length
+            ? outOptions?.resultOptions?.titleButton
+            : "Рассчитать"
+        }}
+        <div
+          class="calc__show-result-btn-icon"
+          v-if="
+            outOptions?.resultOptions?.icon?.filename.length &&
+            outOptions?.resultOptions?.location === 'rightSide'
+          "
+        >
+          <img
+            :src="getImageDir + outOptions?.resultOptions?.icon?.filename"
+            alt=""
+          />
         </div>
       </div>
       <error-names-templates
@@ -91,15 +113,14 @@
         :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <div
-        v-if="showResultDataForBlock && initTeleport"
-      >
-        <p v-if="outOptions?.resultOptions?.title?.length">{{outOptions.resultOptions.title}}</p>
-        <p v-if="outOptions?.resultOptions?.subtitle?.length">{{outOptions.resultOptions.subtitle}}</p>
-        <pre
-          class="resultDataBlock"
-          v-html="finalTextForOutput"
-        ></pre>
+      <div v-if="showResultDataForBlock && initTeleport">
+        <p v-if="outOptions?.resultOptions?.title?.length">
+          {{ outOptions.resultOptions.title }}
+        </p>
+        <p v-if="outOptions?.resultOptions?.subtitle?.length">
+          {{ outOptions.resultOptions.subtitle }}
+        </p>
+        <pre class="resultDataBlock" v-html="finalTextForOutput"></pre>
       </div>
 
       <div id="prompt-text-element"></div>
@@ -163,11 +184,10 @@ export default {
       : [];
     this.formula = this.outOptions?.formula?.length
       ? this.outOptions?.formula
-      : '';
+      : "";
 
     this.isUseFormula = this.outOptions?.computedMethod === "formula";
     this.displayResultData = this.outOptions?.computedMethod !== "no";
-
 
     this.mistake = this.outOptions?.methodProcessingMistakes
       ? this.outOptions?.methodProcessingMistakes
@@ -177,7 +197,9 @@ export default {
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.tryToggleDevMode(Boolean(this.outOptions?.devMode));
-    this.showResultDataForBlock = this.outOptions?.resultOptions ? this.outOptions?.resultOptions.showResultDataForBlock : false;
+    this.showResultDataForBlock = this.outOptions?.resultOptions
+      ? this.outOptions?.resultOptions.showResultDataForBlock
+      : false;
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
@@ -186,7 +208,7 @@ export default {
       outData: {}, // внешние данные с шаблонами элементов калькулятора
       outOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
-      formula: '', // формула для кастомного расчета
+      formula: "", // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       displayResultData: false, // включить работу формул и вывод данных
       mistake: "no",
@@ -237,8 +259,7 @@ export default {
      * Разрешаем отправку формы
      */
     checkEnabledResultButton() {
-      const textAreaTeleportElement =
-        document.querySelector("#teleport");
+      const textAreaTeleportElement = document.querySelector("#teleport");
       if (textAreaTeleportElement) {
         textAreaTeleportElement.readOnly = true;
       }

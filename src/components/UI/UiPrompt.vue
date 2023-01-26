@@ -16,7 +16,12 @@
   </div>
   <teleport to="#prompt-text-element">
     <transition name="prompt">
-      <div class="prompt-wrapper" v-if="isShow" :style="topPopupWrapper" @click.stop>
+      <div
+        class="prompt-wrapper"
+        v-if="isShow"
+        :style="topPopupWrapper"
+        @click.stop
+      >
         <div
           @mouseenter="show"
           @mouseleave="hidden"

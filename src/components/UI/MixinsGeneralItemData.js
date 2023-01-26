@@ -24,7 +24,11 @@ export const MixinsGeneralItemData = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, [
+      "isCanShowAllTooltips",
+      "devMode",
+      "showInsideElementStatus",
+    ]),
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}
@@ -32,7 +36,8 @@ export const MixinsGeneralItemData = {
     isDependencyPriceExist() {
       return Boolean(
         this.dependencyPrices?.filter(
-          (item) => !item?.disabledFormula && item?.dependencyFormulaCost?.length
+          (item) =>
+            !item?.disabledFormula && item?.dependencyFormulaCost?.length
         )
       );
     },

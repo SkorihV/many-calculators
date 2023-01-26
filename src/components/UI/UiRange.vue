@@ -4,15 +4,14 @@
     class="calc__wrapper-group-data"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="classes"
-    ref="thisElement">
+    <div class="calc__range-wrapper" :class="classes" ref="thisElement">
       <div v-if="label" class="calc__range-label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
         <div
           class="calc__range-current-wrapper"
-          v-if="showDynamicValue || showStaticValue || unit?.length"
+          v-if="showDynamicValue || unit?.length"
         >
           <input
             class="calc__range-current-dynamic"
@@ -23,7 +22,7 @@
             @keydown.up="plus"
             @keydown.down="minus"
           />
-          <div class="calc__range-unit" v-if="unit">
+          <div class="calc__range-unit" v-if="unit?.length">
             {{ unit }}
           </div>
         </div>
@@ -38,19 +37,24 @@
           :value="resultValue"
           @input="tryChangeValue"
         />
-        <div v-if="showStaticValue && resultValue" :style="{ left: positionStaticResultValue }" class="calc__range-current-static">{{ resultValue }}</div>
+        <div
+          v-if="isStaticValue"
+          :style="{ left: positionStaticResultValue }"
+          class="calc__range-current-static"
+        >
+          {{ resultValue }}
+        </div>
       </div>
-      <div v-if="showSteps" class="calc__range-steps-wrapper"
-      >
+      <div v-if="showSteps" class="calc__range-steps-wrapper">
         <div
           class="calc__range-steps-item"
           @click="changeValueStep(step)"
           v-for="(step, inx) in returnSteps"
-          :style="{left: pointsForStepsLine[inx]}"
+          :style="{ left: pointsForStepsLine[inx] }"
           :key="inx"
           :class="{
-              'calc__range-steps-item_selected': step === resultValue,
-            }"
+            'calc__range-steps-item_selected': step === resultValue,
+          }"
         >
           {{ step }}
         </div>
@@ -178,12 +182,12 @@ export default {
     }
 
     if (this.$refs.thisElement) {
-      this.elementWidth = this.$refs.thisElement.offsetWidth
+      this.elementWidth = this.$refs.thisElement.offsetWidth;
     }
 
-    window.addEventListener("resize", ()=> {
-      this.elementWidth = this.$refs.thisElement.offsetWidth
-    })
+    window.addEventListener("resize", () => {
+      this.elementWidth = this.$refs.thisElement.offsetWidth;
+    });
   },
   data() {
     return {
@@ -214,8 +218,7 @@ export default {
         this.resultValue = this.checkValidValueReturnNumber(e.target.value);
         this.changeValue();
         this.shownTooltip();
-      })
-
+      });
     },
     checkValidValueReturnNumber(checkedValue) {
       let value = !isNaN(parseFloat(checkedValue))
@@ -252,7 +255,9 @@ export default {
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
-        error: this.isVisibilityFromDependency ? this.isErrorEmpty : this.isVisibilityFromDependency,
+        error: this.isVisibilityFromDependency
+          ? this.isErrorEmpty
+          : this.isVisibilityFromDependency,
         name: this.localElementName,
         type: "range",
         label: this.label,
@@ -282,12 +287,16 @@ export default {
         : null;
     },
     plus() {
-      this.resultValue = this.checkValidValueReturnNumber(this.resultValue + this.localStep);
+      this.resultValue = this.checkValidValueReturnNumber(
+        this.resultValue + this.localStep
+      );
       this.changeValue("plus");
       this.shownTooltip();
     },
     minus() {
-      this.resultValue = this.checkValidValueReturnNumber(this.resultValue - this.localStep);
+      this.resultValue = this.checkValidValueReturnNumber(
+        this.resultValue - this.localStep
+      );
       this.changeValue("minus");
       this.shownTooltip();
     },
@@ -302,6 +311,14 @@ export default {
       this.updateValueTimer = setTimeout(() => {
         this.resultValue = parseFloat(newValue);
       }, 1500);
+    },
+
+    isVisibilityFromDependency(value) {
+      if (value) {
+        setTimeout(() => {
+          this.elementWidth = this.$refs.thisElement.offsetWidth;
+        }, 10);
+      }
     },
   },
   computed: {
@@ -382,7 +399,8 @@ export default {
     },
     positionStaticResultValue() {
       const width = this.elementWidth - 30;
-      const percent = (this.resultValue - this.localMin) / (this.localMax - this.localMin);
+      const percent =
+        (this.resultValue - this.localMin) / (this.localMax - this.localMin);
       const position = width * percent + 2;
       return position + "px";
     },
@@ -391,15 +409,23 @@ export default {
     },
     pointsForStepsLine() {
       const width = this.elementWidth - 30;
-      let points = []
-      points.push(0  + "px");
+      let points = [];
+      points.push(0 + "px");
       let i = 1;
-      for (i; i <= this.amountSteps; i++ ) {
-        const percent = (this.localStepPrompt * i) / (this.localMax - this.localMin);
+      for (i; i <= this.amountSteps; i++) {
+        const percent =
+          (this.localStepPrompt * i) / (this.localMax - this.localMin);
         const position = width * percent;
-        points.push(position + "px")
+        points.push(position + "px");
       }
       return points;
+    },
+    isStaticValue() {
+      return (
+        this.showStaticValue &&
+        typeof this.resultValue === "number" &&
+        isFinite(this.resultValue)
+      );
     },
   },
 };

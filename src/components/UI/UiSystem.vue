@@ -24,7 +24,7 @@ export default {
       "parentIsShow",
       "dependencyPrices",
       "label",
-      "dependencyFormulaDisplay"
+      "dependencyFormulaDisplay",
     ]),
   },
   mounted() {
