@@ -44,25 +44,30 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     processingVariablesOnFormula(formula) {
+
       return formula?.reduce((resultText, item) => {
         let elementDependency =
           item in this.localDependencyList
             ? this.localDependencyList[item]
             : null;
-
         if (elementDependency && elementDependency.isShow) {
-          if (!isNaN(parseFloat(elementDependency?.value))) {
-            return resultText + elementDependency?.value;
+          if (!isNaN(parseFloat(elementDependency?.value)
+            && !Array.isArray(elementDependency?.value)
+            && typeof elementDependency?.value !== "boolean"
+          )) {
+            return resultText + elementDependency?.value + ' ';
           } else if (typeof elementDependency?.value === "boolean") {
-            return resultText + Boolean(elementDependency?.value);
+            return resultText + Boolean(elementDependency?.value) + ' ';
+          } else if(Array.isArray(elementDependency?.value)) {
+            return resultText + elementDependency?.value + ' ';
           } else {
-            return resultText + "'" + elementDependency.value + "'";
+            return resultText + "'" + elementDependency.value + "' ";
           }
         }
-        return resultText + item;
+        return resultText + item + ' ';
       }, "");
     },
-    /**     *
+    /**
      * Обработать список цен на подходящее условие и вернуть итоговую цену или null
      *
      * @param dependencyPrice
@@ -79,6 +84,7 @@ export const MixinsForProcessingFormula = {
           );
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
+
           try {
             if (eval(formula)) {
               resultReduce.changed = true;
@@ -207,9 +213,9 @@ export const MixinsForProcessingFormula = {
       let formula = this.getArrayElementsFromFormula(
         this.dependencyFormulaDisplay
       );
-
       this.constructLocalListElementDependencyInFormula(formula);
       return this.processingVariablesOnFormula(formula);
+
     },
   },
 };

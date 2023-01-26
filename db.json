@@ -234,6 +234,7 @@
             "title": "значение 1",
             "radioName": "значение 1",
             "cost": 100,
+            "value": "test",
             "dependencyPrices": [
               {
                 "title": "200",
@@ -352,7 +353,7 @@
         "notEmpty": false,
         "typeDisplayClass": "",
         "formOutputMethod": "valueSumm",
-        "elementName": "radio***************",
+        "elementName": "radio_1111111",
         "formulaProcessingLogic": "error",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -415,7 +416,27 @@
         "formOutputMethod": "no",
         "elementName": "check_1",
         "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "radio_1111111 === 2",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": ""
+      },
+
+      {
+        "json_id": "2344",
+        "title": "Зависимости - галочка для отображения инпута111111",
+        "label": "Зависимости - галочка для отображения инпута111111",
+        "labelSecond": "",
+        "value": false,
+        "cost": "",
+        "isNeedChoice": false,
+        "isChecked": false,
+        "typeDisplayClass": "button",
+        "formOutputMethod": "no",
+        "elementName": "check_145",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "radio_1111111 === 2",
         "classes": "",
         "template": "UiCheckbox",
         "dependencyPrices": null,
@@ -448,6 +469,25 @@
         "template": "UiInput",
         "dependencyPrices": null,
         "prompt": "<p><b>Текст подсказки</b></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>"
+      },
+      {
+        "json_id": "5532",
+        "title": "Зависимости - галочка для отображения инпута3",
+        "label": "Зависимости - галочка для отображения инпута3",
+        "labelSecond": "",
+        "value": false,
+        "cost": "",
+        "isNeedChoice": false,
+        "isChecked": false,
+        "typeDisplayClass": "button",
+        "formOutputMethod": "no",
+        "elementName": "check_123",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "radio_1111111 === 2",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": ""
       },
 
       {
