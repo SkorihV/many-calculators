@@ -161,7 +161,8 @@ export default {
   },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
-    const localPath = "http://localhost:3000/test-dependency";
+    const localPath = "http://localhost:3000/test-data";
+    // const localPath = "http://localhost:3000/test-dependency";
     if (!isGlobal) {
       await fetch(localPath)
         .then((response) => response.json())
@@ -593,6 +594,54 @@ export default {
 //
 //$calc-color-more : var(--calc-color-more);
 
+
+
+$c-color-text-default: #000000;
+$c-color-text-medium: #5E5E5E;
+$c-color-text-dim: #808080;
+$c-color-text-white-selected: #ffffff;
+$c-color-text-white-hover: #ffffff;
+$c-color-text-orange: #FF6531;
+
+$c-color-text-error: #E80000;
+
+
+
+$c-border-default: #ECECEC;
+$c-border-hover: #FF6531;
+$c-border-selected: #FF6531;
+$c-border-error: #E80000;
+
+
+$c-arrow-default: #808080;
+$c-arrow-selected: #000000;
+$c-arrow-error: #E80000;
+
+
+
+$c-background-default: #D9D9D9;
+$c-background-hover-gray: #808080;
+
+$c-background-hover-orange: #FF6531;
+$c-background-selected: #FF6531;
+
+@mixin border-radius {
+  border-radius: 9px;
+}
+
+
+@mixin style-label-field {
+  font-size: 17px;
+  line-height: 20px;
+  color: $c-color-text-default;
+}
+
+
+
+
+
+
+
 $calc-color-text: #464657;
 $calc-color-btn: #464657;
 $calc-color-btn-text: #ffffff;
@@ -664,35 +713,6 @@ $border-radius: 4px;
   padding: 3px;
 }
 
-.main-menu {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin: 5px;
-  &__item {
-    padding: 10px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include style-border;
-    @include style-button;
-    color: white;
-    background-color: gray;
-    font-weight: 500;
-    &:hover {
-      @include style-border-hover;
-      @include style-button-hover;
-      color: white;
-    }
-    &_active {
-      @include style-border-hover;
-      @include style-button-hover;
-      color: white;
-    }
-  }
-}
 
 .calc__form .tpl-anketa {
   display: flex;
@@ -705,7 +725,7 @@ $border-radius: 4px;
     margin: 0;
     font-size: 15px;
     text-align: center;
-    color: $calc-color-text;
+    color: $c-color-text-default;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
   }
@@ -716,8 +736,7 @@ $border-radius: 4px;
     align-items: flex-start;
     &-group-data {
       margin-bottom: 5px;
-      padding-left: 20px;
-      border-left: 3px solid $calc-color-btn-hover;
+      padding-left: 5px;
       width: 100%;
       position: relative;
     }
@@ -759,10 +778,10 @@ $border-radius: 4px;
       @include style-flex-start;
       width: 100%;
       justify-content: space-between;
-      align-items: flex-start;
-      font-weight: 600;
+      align-items: center;
       &.is-column {
         flex-direction: column;
+        align-items: flex-start;
       }
       @media all and (max-width: 480px) {
         flex-direction: column;
@@ -770,47 +789,63 @@ $border-radius: 4px;
         justify-content: center;
       }
       &-text {
+        @include style-label-field;
         display: flex;
         justify-content: flex-start;
-        margin-right: 10px;
+        margin-right: 30px;
         padding: 5px 0;
         text-align: start;
       }
     }
 
     &-item {
-      font-size: 15px;
-      line-height: 16px;
-      padding: 5px;
-      max-width: 120px;
-      @include style-border;
-      border-bottom: 2px solid $calc-color-btn-hover;
-      &:hover,
-      &:focus-visible {
-        @include style-border-hover;
-        border-bottom: 2px solid $calc-color-btn;
-        outline: none;
+      font-size: 16px;
+      line-height: 20px;
+      padding: 20px 35px;
+      max-width: 304px;
+      background: $c-background-default;
+      border: 1px solid $c-border-default;
+      @include border-radius;
+      &:focus,
+      &:hover {
+        outline-color: $c-border-selected;
+        border-color: $c-border-selected;
+      }
+      &.is-number {
+        font-weight: 700;
       }
     }
-
     &-buttons {
       &-plus,
       &-minus {
-        width: 24px;
-        height: 24px;
-        @include style-button;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $c-color-text-orange;
+        font-size: 28px;
+        line-height: 26px;
         font-weight: 600;
-        -webkit-user-select: none;
         -moz-user-select: none;
-        -ms-user-select: none;
+        -khtml-user-select: none;
         user-select: none;
         &:hover {
-          @include style-button-hover;
+          cursor: pointer;
+        }
+        &.disabled {
+          color: $c-color-text-dim;
+          &:hover {
+            cursor: not-allowed;
+          }
         }
       }
     }
     &-unit {
       margin-left: 5px;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 20px;
     }
   }
   //--------Стили input range-----
@@ -1415,18 +1450,19 @@ $border-radius: 4px;
     }
 
     &-button {
-      background-color: #f2f2f2;
       cursor: pointer;
       width: 20px;
       height: 20px;
       @include style-flex-center;
-      border: 1px solid $calc-color-btn;
+      background-color: $c-background-selected;
+      color: $c-color-text-white-selected;
+      border: 1px solid $c-border-default;
       border-radius: 50%;
       font-weight: 600;
-      line-height: 15px;
+      line-height: 18px;
       &:hover {
-        background-color: $calc-color-btn-hover;
-        color: $calc-color-btn-text-hover;
+        background-color: $c-background-default;
+        color: $c-color-text-orange;
       }
     }
   }
@@ -1462,9 +1498,9 @@ $border-radius: 4px;
       padding: 30px;
       max-width: 80%;
       overflow-y: auto;
-      border: 1px solid $calc-color-btn;
+      border: 1px solid $c-border-selected;
       border-radius: $border-radius;
-      box-shadow: 0 0 9px 0 $calc-color-btn;
+      box-shadow: 0 4px 10px $c-border-selected;
     }
   }
 

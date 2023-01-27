@@ -16,10 +16,9 @@
           <slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
-          <div class="calc__input-buttons-minus" v-if="controls" @click="minus">
+          <div class="calc__input-buttons-minus" :class="{'disabled': isDisabledMin}" v-if="controls" @click="minus">
             -
           </div>
-
           <input
             ref="trueInput"
             :id="localElementName"
@@ -31,6 +30,7 @@
             @keydown.up="plus"
             @keydown.down="minus"
             class="calc__input-item"
+            :class="{'is-number': onlyNumber }"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
@@ -44,7 +44,7 @@
               :placeholder="inputPlaceholder"
             />
           </template>
-          <div class="calc__input-buttons-plus" v-if="controls" @click="plus">
+          <div class="calc__input-buttons-plus" :class="{'disabled': isDisabledMax}" v-if="controls" @click="plus">
             +
           </div>
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
@@ -482,6 +482,14 @@ export default {
     },
     valueIsNaN() {
       return isNaN(parseFloat(this.localInputValue));
+    },
+
+    isDisabledMin() {
+      return this.resultValue === this.localMin;
+    },
+    isDisabledMax() {
+      return this.resultValue === this.localMax;
+
     },
     isErrorNumber() {
       return (
