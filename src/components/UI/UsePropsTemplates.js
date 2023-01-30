@@ -56,20 +56,14 @@ export default function (propsName) {
   const maxWidth = () => {
     return {
       type: [Number, String],
-      default: 250,
-    };
-  };
-  const minWidth = () => {
-    return {
-      type: [Number, String],
-      default: 250,
+      default: 50,
     };
   };
 
   const maxHeight = () => {
     return {
       type: [Number, String],
-      default: 250,
+      default: 50,
     };
   };
 
@@ -252,7 +246,6 @@ export default function (propsName) {
     isColumn: isColumn(),
     isNeedChoice: isNeedChoice(),
     formOutputMethod: formOutputMethod(),
-    minWidth: minWidth(),
     isChecked: isChecked(),
     formula: formula(),
     min: min(),

@@ -16,7 +16,12 @@
           <slot name="prompt" />
         </div>
         <div class="calc__input-wrapper-data">
-          <div class="calc__input-buttons-minus" :class="{'disabled': isDisabledMin}" v-if="controls" @click="minus">
+          <div
+            class="calc__input-buttons-minus"
+            :class="{ disabled: isDisabledMin }"
+            v-if="controls"
+            @click="minus"
+          >
             -
           </div>
           <input
@@ -30,7 +35,7 @@
             @keydown.up="plus"
             @keydown.down="minus"
             class="calc__input-item"
-            :class="{'is-number': onlyNumber }"
+            :class="{ 'is-number': onlyNumber, 'error' : isErrorClass }"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
@@ -40,12 +45,17 @@
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
-              :class="{'is-number': onlyNumber }"
+              :class="{ 'is-number': onlyNumber, 'error' : isErrorClass }"
               autocomplete="off"
               :placeholder="inputPlaceholder"
             />
           </template>
-          <div class="calc__input-buttons-plus" :class="{'disabled': isDisabledMax}" v-if="controls" @click="plus">
+          <div
+            class="calc__input-buttons-plus"
+            :class="{ disabled: isDisabledMax }"
+            v-if="controls"
+            @click="plus"
+          >
             +
           </div>
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
@@ -234,7 +244,7 @@ export default {
       "isColumn",
       "formOutputMethod",
       "dependencyFormulaDisplay",
-      "parentIsShow",
+      "parentIsShow"
     ]),
   },
   mounted() {
@@ -454,6 +464,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
+      "isCanShowAllTooltips"
     ]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
@@ -490,7 +501,6 @@ export default {
     },
     isDisabledMax() {
       return this.resultValue === this.localMax;
-
     },
     isErrorNumber() {
       return (
@@ -544,6 +554,9 @@ export default {
     },
     customErrorTextOut() {
       return this.isErrorCustom ? this.customErrorText : "";
+    },
+    isErrorClass() {
+      return this.tooltipError?.error && this.isCanShowAllTooltips;
     },
     tooltipError() {
       if (this.isErrorNumber) {

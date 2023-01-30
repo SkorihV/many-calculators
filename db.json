@@ -1633,7 +1633,7 @@
         "cost": "300",
         "isColumn": false,
         "isNeedChoice": 1,
-        "isChecked": false,
+        "isChecked": true,
         "typeDisplayClass": "",
         "template": "UiCheckbox",
         "elementName": ""
@@ -1658,15 +1658,28 @@
         "value": false,
         "cost": "",
         "isColumn": false,
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "isChecked": false,
         "typeDisplayClass": "switcher",
         "template": "UiCheckbox",
-        "elementName": ""
+        "elementName": "",
+        "prompt": "242342423423"
       },
       {
         "title": "checkbox - Переключатель вертикальный",
         "label": "checkbox - Переключатель вертикальный",
+        "labelSecond": "",
+        "value": false,
+        "cost": "",
+        "isNeedChoice": true,
+        "isChecked": false,
+        "typeDisplayClass": "switcher-vertical",
+        "template": "UiCheckbox",
+        "elementName": "2"
+      },
+      {
+        "title": "checkbox - 1234567",
+        "label": "checkbox - 1234567",
         "labelSecond": "",
         "value": false,
         "cost": "",
@@ -1682,10 +1695,11 @@
         "labelSecond": "Заголовок дополнительный:",
         "value": false,
         "cost": "",
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "isChecked": false,
         "typeDisplayClass": "button",
         "template": "UiCheckbox",
+        "prompt": "fsd sdf sf sf ",
         "elementName": "1"
       },
       {
@@ -1740,7 +1754,11 @@
           { "title": "Первый пункт", "radioName": "Первый пункт" },
           { "title": "Второй пункт", "radioName": "Второй пункт" },
           { "title": "Выбранный пункт", "radioName": "Выбранный пункт" },
-          { "title": "Четвертый пункт", "radioName": "Четвертый пункт" }
+          { "title": "Четвертый пункт", "radioName": "Четвертый пункт",
+            "image": {
+              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+            }
+          }
         ],
         "prompt": "",
         "label": "radio - с измененным порядковым номером",
@@ -1756,7 +1774,7 @@
         "title": "Radio - в виде колонки",
         "values": [
           { "title": "первый пункт", "radioName": "первый пункт" },
-          { "title": "Второй пункт", "radioName": "Второй пункт" }
+          { "title": "Второй пункт", "radioName": "Второй пункт", "subradioName": "asd  asdas", "prompt": "asd as da sds" }
         ],
         "prompt": "",
         "label": "Radio - в виде колонки",
@@ -1788,10 +1806,13 @@
         "title": "radio - обязательно нужно выбрать",
         "values": [
           { "title": "1", "radioName": 1 },
-          { "title": "2", "radioName": 2 },
-          { "title": "3", "radioName": 3 }
+          { "title": "2", "radioName": 2 ,            "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          }
+          },
+          { "title": "3", "radioName": 3, "prompt": "234234 2342 342342342 34234 " }
         ],
-        "prompt": "",
+        "prompt": "sdf sd fs fsdf s fsf sfds",
         "label": "radio - обязательно нужно выбрать",
         "selectedItem": "0",
         "isColumn": false,
@@ -1799,13 +1820,20 @@
         "notEmpty": 1,
         "typeDisplayClass": "",
         "template": "UiRadio",
-        "elementName": ""
+        "elementName": "",
+        "maxWidth" : 100
       },
       {
         "title": "radio - отображение в виде кнопок",
         "values": [
-          { "title": "1", "radioName": 1 },
-          { "title": "2", "radioName": 2 },
+          { "title": "1 3242342 ", "radioName": 1, "subradioName": "доп имя radio - отображение в виде кнопок" },
+          { "title": "2", "radioName": 2,
+
+            "image": {
+            "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+          },
+            "subradioName": "доп имя"
+          },
           { "title": "три", "radioName": "три" }
         ],
         "prompt": "",
@@ -1816,7 +1844,9 @@
         "notEmpty": false,
         "typeDisplayClass": "buttons",
         "template": "UiRadio",
-        "elementName": ""
+        "elementName": "",
+        "maxWidth": 100,
+        "maxHeight": 150
       },
       {
         "title": "radio - длинный заголовок и много пунктов длинный",
@@ -1850,7 +1880,6 @@
         "typeDisplayClass": "buttons",
         "template": "UiRadio",
         "elementName": ""
-
       },
       {
         "title": "range - с заголовком",
@@ -2066,12 +2095,7 @@
             "title": "пункт первый",
             "selectName": "пункт первый",
             "image": {
-              "image_id": "1903102306",
-              "filename": "s-udio-xi-eleven-t5zd0437be4-unsplash.jpg",
-              "ver_id": 2422030,
-              "image_width": "640",
-              "image_height": "853",
-              "ext": "jpg"
+              "filename": "https://dummyimage.com/150x100/a1a1a1/fcf3f3"
             },
             "prompt": "Текст подсказки какой-то&nbsp;"
           },
@@ -2080,12 +2104,7 @@
             "selectName": "пункт второй",
             "cost": 1000,
             "image": {
-              "image_id": "1903092506",
-              "filename": "1000_f_374662176_q04a7ohhfe2pytylkesyet7lxmev7whn.jpg",
-              "ver_id": 2422030,
-              "image_width": "1000",
-              "image_height": "667",
-              "ext": "jpg"
+              "filename": "https://dummyimage.com/150x100/334455/123456"
             },
             "prompt": "Другой текст подсказки"
           }
@@ -2291,7 +2310,8 @@
                 "isChecked": false,
                 "typeDisplayClass": "",
                 "template": "UiCheckbox",
-                "elementName": ""
+                "elementName": "",
+                "prompt": "234234234234"
               },
               {
                 "title": "checkbox со стоимостью",
@@ -2415,7 +2435,7 @@
                 "title": "Radio - в виде колонки",
                 "values": [
                   { "title": "первый пункт", "radioName": "первый пункт" },
-                  { "title": "Второй пункт", "radioName": "Второй пункт" }
+                  { "title": "Второй пункт", "radioName": "Второй пункт", "subradioName": "2342 342 fds f" }
                 ],
                 "prompt": "",
                 "label": "Radio - в виде колонки",
@@ -2450,7 +2470,7 @@
                   { "title": "2", "radioName": 2 },
                   { "title": "3", "radioName": 3 }
                 ],
-                "prompt": "",
+                "prompt": "435 3 4  43 gd gdfgdfgd",
                 "label": "radio - обязательно нужно выбрать",
                 "selectedItem": "0",
                 "isColumn": false,
@@ -2732,7 +2752,7 @@
                 "title": "Radio - в виде колонки",
                 "values": [
                   { "title": "первый пункт", "radioName": "первый пункт" },
-                  { "title": "Второй пункт", "radioName": "Второй пункт" }
+                  { "title": "Второй пункт", "radioName": "Второй пункт 3333", "subradioName": "2342 342 fds f"  }
                 ],
                 "prompt": "",
                 "label": "Radio - в виде колонки",

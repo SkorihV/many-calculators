@@ -18,28 +18,28 @@
           <div
             class="calc__radio-label"
             :id="localElementName + '_' + idx"
-            :class="{ checked: currentIndexRadioButton === idx }"
+            :class="{ checked: currentIndexRadioButton === idx, 'error' : isErrorClass }"
             v-if="radio.isShow"
             @click="selectedCurrentRadio(idx)"
           >
+            <icon-element
+            v-if="radio?.image"
+            :icons-data="radio?.image"
+            :alt="radio?.name"
+            :max-width="maxWidth"
+            :max-height="maxHeight"
+          ></icon-element>
+            <span
+              class="calc__radio-indicator"
+              v-if="radioType === 'base' && !onlyImage"
+            ></span>
             <div class="calc__radio-text" v-if="!onlyImage">
-              <span
-                class="calc__radio-indicator"
-                v-if="radioType === 'base'"
-              ></span>
-              {{ radio.radioName }}
-              {{ radio?.subradioName }}
-            </div>
-            <div
-              class="calc__radio-wrapper-image"
-              v-if="radio?.image?.filename"
-              :style="[width, height]"
-            >
-              <img
-                :src="radio?.image?.filename"
-                :style="[width, height]"
-                :alt="radio.radioName"
-              />
+              <div class="calc__radio-name">
+                {{ radio.radioName }}
+              </div>
+              <div class="calc__radio-subname">
+                {{ radio?.subradioName }}
+              </div>
             </div>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
@@ -64,12 +64,13 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiPrompt, UiTooltip },
+  components: { IconElement, UiPrompt, UiTooltip },
   mounted() {
     this.localElementName = this.checkedValueOnVoid(this.elementName)
       ? this.elementName
@@ -277,6 +278,7 @@ export default {
       "checkValidationDataAndToggle",
       "devMode",
       "getImageDir",
+      "isCanShowAllTooltips"
     ]),
 
     isChangedRadio() {
@@ -288,6 +290,9 @@ export default {
     },
     onlyImage() {
       return this.typeDisplayClass === "onlyImage";
+    },
+    isErrorClass() {
+      return this.isCanShowAllTooltips && this.isErrorEmpty && this.isVisibilityFromDependency;
     },
     isErrorEmpty() {
       return this.notEmpty && !this.isChangedRadio;
@@ -323,12 +328,6 @@ export default {
 
     imageDir() {
       return this.getImageDir;
-    },
-    width() {
-      return "max-width:" + this.maxWidth + "px";
-    },
-    height() {
-      return "max-height:" + this.maxHeight + "px";
     },
   },
 };

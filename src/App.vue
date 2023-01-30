@@ -594,41 +594,33 @@ export default {
 //
 //$calc-color-more : var(--calc-color-more);
 
-
-
 $c-color-text-default: #000000;
-$c-color-text-medium: #5E5E5E;
+$c-color-text-medium: #5e5e5e;
 $c-color-text-dim: #808080;
 $c-color-text-white-selected: #ffffff;
 $c-color-text-white-hover: #ffffff;
-$c-color-text-orange: #FF6531;
+$c-color-text-orange: #ff6531;
 
-$c-color-text-error: #E80000;
+$c-color-text-error: #e80000;
 
-
-
-$c-border-default: #ECECEC;
-$c-border-hover: #FF6531;
-$c-border-selected: #FF6531;
-$c-border-error: #E80000;
-
+$c-border-default: #808080;
+$c-border-hover: #ff6531;
+$c-border-selected: #ff6531;
+$c-border-error: #e80000;
 
 $c-arrow-default: #808080;
 $c-arrow-selected: #000000;
-$c-arrow-error: #E80000;
+$c-arrow-error: #e80000;
 
-
-
-$c-background-default: #F9F9F9;
+$c-background-default: #f9f9f9;
 $c-background-hover-gray: #808080;
 
-$c-background-hover-orange: #FF6531;
-$c-background-selected: #FF6531;
+$c-background-hover-orange: #ff6531;
+$c-background-selected: #ff6531;
 
 @mixin border-radius {
   border-radius: 9px;
 }
-
 
 @mixin style-label-field {
   font-size: 17px;
@@ -636,25 +628,30 @@ $c-background-selected: #FF6531;
   color: $c-color-text-default;
 }
 
-@mixin input {}
-@mixin radio {}
-@mixin select {}
-@mixin range {}
-@mixin checkbox {}
-@mixin image {}
-@mixin tab {}
-@mixin accordion {}
-@mixin error {}
-@mixin prompt {}
+@mixin transition {
+  transition: all 0.3s ease-in-out;
+}
 
-
-
-
-
-
-
-
-
+@mixin input {
+}
+@mixin radio {
+}
+@mixin select {
+}
+@mixin range {
+}
+@mixin checkbox {
+}
+@mixin image {
+}
+@mixin tab {
+}
+@mixin accordion {
+}
+@mixin error {
+}
+@mixin prompt {
+}
 
 $calc-color-text: #464657;
 $calc-color-btn: #464657;
@@ -723,10 +720,10 @@ $border-radius: 4px;
 .main-wrapper {
   max-width: 980px;
   margin: 0 auto;
-  background-color: #f6f2f2;
+  background-color: #ffffff;
   padding: 3px;
+  border: 1px solid black;
 }
-
 
 .calc__form .tpl-anketa {
   display: flex;
@@ -828,6 +825,11 @@ $border-radius: 4px;
       }
       &.is-number {
         font-weight: 700;
+      }
+
+      &.error {
+        outline-color: $c-border-error;
+        border-color: $c-border-error;
       }
     }
     &-buttons {
@@ -1120,7 +1122,7 @@ $border-radius: 4px;
       flex-wrap: wrap;
       &-buttons {
         display: flex;
-        flex-wrap:wrap;
+        flex-wrap: wrap;
         gap: 7px;
       }
       &.column {
@@ -1169,21 +1171,11 @@ $border-radius: 4px;
       border: 1px solid $c-border-default;
       font-weight: 700;
       cursor: pointer;
+      @include transition;
+      gap: 8px;
       &:hover {
         background-color: $c-background-hover-orange;
-        .calc__radio-text {
-          color: $c-color-text-white-hover;
-        }
-        .calc__radio-indicator {
-          border-color: $c-color-text-white-hover;
-          &:after {
-            background-color: $c-color-text-white-hover;;
-          }
-        }
-      }
-      &.checked {
-        background-color: $c-background-hover-orange;
-        .calc__radio-text {
+        .calc__radio-name, .calc__radio-subname {
           color: $c-color-text-white-hover;
         }
         .calc__radio-indicator {
@@ -1193,11 +1185,45 @@ $border-radius: 4px;
           }
         }
       }
+      &.checked {
+        background-color: $c-background-hover-orange;
+        .calc__radio-name,
+        .calc__radio-subname {
+          color: $c-color-text-white-hover;
+        }
+        .calc__radio-indicator {
+          border-color: $c-color-text-white-hover;
+          &:after {
+            background-color: $c-color-text-white-hover;
+          }
+        }
+      }
+
+      &.error {
+        border-color: $c-border-error;
+       .calc__radio-text {
+          color: $c-color-text-error;
+        }
+        .calc__radio-indicator {
+          border-color: $c-border-error;
+          &:after {
+            background-color: $c-border-error;
+          }
+        }
+      }
     }
     &-text {
       display: flex;
-      align-items: center;
-      gap: 15px;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    &-name {
+      font-size: 16px;
+      line-height: 20px;
+    }
+    &-subname {
+      font-size: 12px;
+      line-height: 14px;
     }
   }
 
@@ -1206,200 +1232,141 @@ $border-radius: 4px;
   &__checkbox {
     @include checkbox;
     &-wrapper {
-      @include style-flex-start;
-      position: relative;
+      display: flex;
+      gap: 8px;
+      cursor: pointer;
+      align-items: center;
     }
     &-label {
-      @include style-flex-center;
-      justify-content: flex-start;
-      flex: 1 1 auto;
-      position: relative;
-      @media all and (max-width: 480px) {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-    &-text {
-      @include style-flex-center;
-      justify-content: flex-start;
-      position: relative;
-
+      @include style-label-field;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      @include transition;
       &.button {
-        @include style-button;
-        padding: 10px 15px;
+        border: 1px solid $c-border-default;
+        background-color: $c-background-default;
+        padding: 20px 35px;
+        font-weight: 700;
+        @include border-radius;
         &:hover {
-          @include style-button-hover;
+          background-color: $c-background-selected;
+          color: $c-color-text-white-selected;
         }
-      }
-      &_second {
-        font-weight: bold;
+        &.checked {
+          background-color: $c-background-selected;
+          color: $c-color-text-white-selected;
+        }
+        &.error {
+          color: $c-color-text-error;
+          border-color: $c-border-error;
+        }
       }
     }
-
+    &-label_second {
+      @include style-label-field;
+    }
     &-element {
+      @include transition;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid $c-border-default;
       position: relative;
-      margin: 5px;
-      height: 30px;
-
-      &.base {
-        width: 30px;
-        &:after {
-          display: none;
-        }
-      }
-
-      &.button {
-        display: none;
-      }
-      &.switcher {
-        width: 70px;
-        &-vertical {
-          width: 25px;
-          height: 65px;
-        }
-      }
-
-      &:after,
-      &:before {
-        box-sizing: border-box;
-        cursor: pointer;
+      &:after {
         content: "";
         position: absolute;
-        @include style-border;
-      }
-
-      &.switcher-vertical:after,
-      &.switcher:after,
-      &:before {
-        transition: all 0.3s ease-in-out;
-        height: 22px;
+        left: 50%;
         top: 50%;
-        transform: translateY(-50%);
-        border-width: 2px;
-        border-color: $calc-color-btn;
-        @include style-flex-center;
-        font-size: 13px;
-        box-sizing: border-box;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
       }
-      &.base:before {
-        width: 22px;
-      }
-      &.switcher-vertical:before,
-      &.switcher:before {
-        transition: all 0.3s ease-in-out;
-        width: 35px;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-        border-color: $calc-color-btn;
-        z-index: 1;
-        right: 0;
-      }
-      &.switcher {
+      &.checked {
+        @include transition;
+        border-color: $c-border-selected;
         &:after {
-          width: 35px;
-          border-right: none;
-          background-color: $calc-color-btn;
-          border-color: $calc-color-btn;
-          border-style: solid;
-          box-shadow: 0 0 0 2px $calc-color-more inset;
-          border-right-width: 2px;
-          border-bottom-right-radius: 0;
-          border-top-right-radius: 0;
-          z-index: 1;
-          left: 0;
-        }
-        &:hover:after {
-          background-color: $calc-color-btn-hover;
-          border-color: $calc-color-btn-hover;
-        }
-        &:hover:before {
-          border-color: $calc-color-btn-hover;
+          @include transition;
+          background-color: $c-border-selected;
         }
       }
-      &.switcher-vertical:after,
-      &.switcher-vertical:before {
-        width: 25px;
-        height: 35px;
-        transform: translateY(0);
-      }
-
-      &.switcher-vertical {
-        &:before {
-          right: auto;
-          top: 0;
-          border-top-left-radius: $border-radius;
-          border-bottom-right-radius: 0;
-          background-color: $calc-color-btn;
-          box-shadow: 0 0 0 2px $calc-color-more inset;
-        }
-        &:hover:before {
-          background-color: $calc-color-btn-hover;
-          border-color: $calc-color-btn-hover;
-        }
-      }
-      &.switcher-vertical {
-        &:after {
-          border-color: $calc-color-btn;
-        }
-        &:hover:after {
-          border-color: $calc-color-btn-hover;
-        }
-      }
-
       &:hover {
-        &.base:before {
-          border-color: $calc-color-btn-hover;
-          background-color: $calc-color-btn-hover;
-          box-shadow: 0 0 0 2px $calc-color-more inset;
+        @include transition;
+        border-color: $c-border-selected;
+        &:after {
+          @include transition;
+          background-color: $c-border-selected;
+        }
+      }
+      &.error {
+        @include transition;
+        border-color: $c-border-error;
+        &:after {
+          @include transition;
+          background-color: $c-border-error;
         }
       }
     }
 
-    &-item {
-      position: absolute;
-      z-index: -1;
-      opacity: 0;
-      display: block;
-      width: 0;
-      height: 0;
-      &:checked {
-        ~ .calc__checkbox-element {
-          &.base {
-            &:before {
-              background-color: $calc-color-btn-checked;
-              box-shadow: 0 0 0 2px $calc-color-more inset;
-            }
-            &:hover:before {
-              background-color: $calc-color-btn-hover;
-            }
-          }
-          &.switcher-vertical:before,
-          &.switcher:after {
-            border-color: $calc-color-btn-checked;
-            background-color: inherit;
-            box-shadow: none;
-          }
-          &.switcher-vertical:hover:before,
-          &.switcher:hover:after {
-            border-color: $calc-color-btn-hover;
-          }
+    &-element_switcher {
+      display: inline-block;
+      @include transition;
+      height: 26px;
+      width: 50px;
+      position: relative;
+      border-radius: 90px;
+      background: $c-background-default;
+      border: 1px solid $c-border-default;
 
-          &.switcher-vertical:after,
-          &.switcher:before {
-            background-color: $calc-color-btn-checked;
-            border-color: $calc-color-btn-checked;
-            box-shadow: 0 0 0 2px $calc-color-more inset;
-          }
+      &:not(.checked):before,
+      &.checked:after {
+        @include transition;
+        content: "";
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        position: absolute;
+      }
 
-          &.switcher-vertical:hover:after,
-          &.switcher:hover:before {
-            background-color: $calc-color-btn-hover;
-            border-color: $calc-color-btn-hover;
-          }
+      &:not(.checked):before {
+        border: 1px solid $c-border-default;
+        background-color: $c-background-default;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.checked:after {
+        border: 1px solid $c-border-default;
+        background-color: $c-background-selected;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.vertical {
+        height: 50px;
+        width: 26px;
+
+        &:not(.checked):before {
+          top: 5px;
+          left: 50%;
+          transform: translate(-50%, 0);
         }
-        ~ .calc__checkbox-text.button {
-          background-color: $calc-color-btn-checked;
-          color: $calc-color-btn-checked-text;
+
+        &.checked:after {
+          right: 0;
+          bottom: 5px;
+          left: 50%;
+          transform: translate(-50%, 0);
+        }
+      }
+      &.error {
+        border-color: $c-border-error;
+        &:not(.checked):before {
+          border-color: $c-border-error;
         }
       }
     }
@@ -1440,6 +1407,7 @@ $border-radius: 4px;
       left: 0;
       right: 0;
       overflow: hidden;
+      padding-bottom: 20px;
       &.prompt-enter-active,
       &.prompt-leave-active {
         transition: all 0.3s ease;
@@ -1459,11 +1427,11 @@ $border-radius: 4px;
 
     &-content {
       background-color: white;
-      padding: 30px;
+      padding: 13px;
       max-width: 80%;
       overflow-y: auto;
       border: 1px solid $c-border-selected;
-      border-radius: $border-radius;
+      @include border-radius;
       box-shadow: 0 4px 10px $c-border-selected;
     }
   }
@@ -1889,10 +1857,23 @@ $border-radius: 4px;
   }
 
   .empty-block {
-    color: $calc-color-danger;
+    color: $c-color-text-error;
     font-weight: bold;
     font-size: 18px;
     text-shadow: 0 0 3px white;
+  }
+
+  &__icon-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
   }
 }
 </style>

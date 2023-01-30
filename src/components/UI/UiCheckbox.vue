@@ -4,32 +4,46 @@
     v-if="isVisibilityFromDependency"
     ref="parent"
   >
-    <div class="calc__checkbox-wrapper" :class="classes">
-      <label :for="localElementName" class="calc__checkbox-label">
-        <input
-          ref="checkbox"
-          class="calc__checkbox-item"
-          type="checkbox"
-          :checked="isChecked || localValue"
-          :disabled="isChecked"
-          @click="inputLocalValue($event.target.checked)"
-          :name="label"
-          :id="localElementName"
-        />
-        <div
-          v-if="label"
-          class="calc__checkbox-text"
-          :class="{ button: checkboxType === 'button' }"
-        >
-          {{ label }}
-          <div class="empty-block" v-if="notEmpty">*</div>
-          <slot name="prompt"></slot>
-        </div>
-        <div class="calc__checkbox-element" :class="checkboxType"></div>
-        <div v-if="labelSecond.length" class="calc__checkbox-text_second">
-          {{ labelSecond }}
-        </div>
-      </label>
+    <div
+      class="calc__checkbox-wrapper"
+      @click="inputLocalValue"
+      :class="classes"
+    >
+      <div
+        v-if="label"
+        class="calc__checkbox-label"
+        :class="{
+          button: isButton,
+          checked: isChecked || localValue,
+          disabled: isChecked,
+          error : isErrorClass
+        }"
+      >
+        {{ label }}
+        <div class="empty-block" v-if="isNeedChoice">*</div>
+        <slot name="prompt"></slot>
+      </div>
+      <div
+        class="calc__checkbox-element"
+        v-if="isBase"
+        :class="[
+          checkboxType,
+          { checked: isChecked || localValue, disabled: isChecked, error : isErrorClass },
+        ]"
+      ></div>
+      <div
+        class="calc__checkbox-element_switcher"
+        v-if="isSwitcher || isSwitcherVertical"
+        :class="{
+          checked: isChecked || localValue,
+          disabled: isChecked,
+          vertical: isSwitcherVertical,
+          error : isErrorClass
+        }"
+      ></div>
+      <div v-if="labelSecond.length" class="calc__checkbox-label_second">
+        {{ labelSecond }}
+      </div>
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
@@ -89,7 +103,6 @@ export default {
       "dependencyFormulaDisplay",
       "parentIsShow",
       "label",
-      "notEmpty",
       "excludeFromCalculations",
       "elementName",
       "parentName",
@@ -107,13 +120,15 @@ export default {
   },
   data() {
     return {
-      localValue: null,
+      localValue: false,
       textErrorNotEmpty: "Обязательное поле.",
     };
   },
   methods: {
-    inputLocalValue(value) {
-      this.localValue = value;
+    inputLocalValue() {
+      if (!this.isChecked) {
+        this.localValue = !this.localValue;
+      }
       this.changeValue("click");
     },
     checkedValueOnVoid(value) {
@@ -173,6 +188,7 @@ export default {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
+      "isCanShowAllTooltips"
     ]),
     /**
      *
@@ -182,6 +198,23 @@ export default {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName
         : Math.random().toString();
+    },
+    /**
+     *
+     * @returns {boolean}
+     */
+    isButton() {
+      return this.checkboxType === "button";
+    },
+
+    isSwitcher() {
+      return this.checkboxType === "switcher";
+    },
+    isBase() {
+      return this.checkboxType === "base";
+    },
+    isSwitcherVertical() {
+      return this.checkboxType === "switcher-vertical";
     },
     /**
      *
@@ -197,7 +230,9 @@ export default {
     isErrorEmpty() {
       return this.isNeedChoice && !this.localValue;
     },
-
+    isErrorClass() {
+      return this.isErrorEmpty && this.isVisibilityFromDependency && this.isCanShowAllTooltips;
+    },
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
