@@ -619,7 +619,7 @@ $c-arrow-error: #E80000;
 
 
 
-$c-background-default: #D9D9D9;
+$c-background-default: #F9F9F9;
 $c-background-hover-gray: #808080;
 
 $c-background-hover-orange: #FF6531;
@@ -635,6 +635,20 @@ $c-background-selected: #FF6531;
   line-height: 20px;
   color: $c-color-text-default;
 }
+
+@mixin input {}
+@mixin radio {}
+@mixin select {}
+@mixin range {}
+@mixin checkbox {}
+@mixin image {}
+@mixin tab {}
+@mixin accordion {}
+@mixin error {}
+@mixin prompt {}
+
+
+
 
 
 
@@ -760,6 +774,7 @@ $border-radius: 4px;
   }
   //--------Стили input text-----
   &__input {
+    @include input;
     &-wrapper {
       @include style-flex-center;
       flex-direction: column;
@@ -851,6 +866,7 @@ $border-radius: 4px;
   //--------Стили input range-----
 
   &__range {
+    @include range;
     &-wrapper {
       display: flex;
       flex-direction: column;
@@ -972,6 +988,7 @@ $border-radius: 4px;
   //---------Стили select-----
 
   &__select {
+    @include select;
     &-wrapper {
       @include style-flex-center;
       gap: 5px;
@@ -1094,155 +1111,100 @@ $border-radius: 4px;
 
   //-----------------Радио кнопки ---------------
   &__radio {
+    @include radio;
     &-wrapper {
-      @include style-flex-start;
+      display: flex;
+      width: 100%;
       justify-content: space-between;
-      align-items: stretch;
-      position: relative;
-      gap: 5px;
-      min-height: 31px;
+      align-items: center;
       flex-wrap: wrap;
-
       &-buttons {
         display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        flex: 0 1 auto;
-        gap: 5px;
+        flex-wrap:wrap;
+        gap: 7px;
       }
-
       &.column {
         flex-direction: column;
-        align-items: start;
+        align-items: flex-start;
         .calc__radio-wrapper-buttons {
           flex-direction: column;
-        }
-        .calc__radio-label {
-          flex: 1 1 auto;
-          margin: 1px 0;
+          gap: 8px;
         }
       }
 
       &.base {
-        .calc__radio {
-          &-indicator {
-            position: relative;
-            display: flex;
-            width: 16px;
-            height: 16px;
-            border: 1px solid $calc-color-btn-text;
-            border-radius: 50%;
-            margin-right: 4px;
-            flex-shrink: 0;
-            &:hover {
-              border: 1px solid $calc-color-btn-text-hover;
-            }
-          }
-        }
-        .calc__radio-label {
-          &::after {
-            content: "";
-            display: block;
-            left: 0;
-            width: 100%;
-            position: absolute;
-            background-color: $calc-color-btn-text;
-            height: 1px;
-            bottom: 1px;
-          }
-          &:hover {
-            box-shadow: 0 0 3px 1px $calc-color-btn-hover;
-            background-color: $calc-color-btn-hover;
-            .calc__radio-text {
-              color: $calc-color-btn-text-hover;
-            }
-          }
-          &.checked {
-            .calc__radio-text {
-              color: $calc-color-btn-text;
-            }
-            &:hover {
-              box-shadow: 0 0 3px 1px $calc-color-btn-checked;
-              background-color: $calc-color-btn-checked;
-              .calc__radio-text {
-                color: $calc-color-btn-checked-text;
-              }
-            }
-            .calc__radio-indicator {
-              box-shadow: 0 0 1px 3px $calc-color-more inset;
-              &::after {
-                content: "";
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                border-radius: 50%;
-                width: 8px;
-                height: 8px;
-                background-color: $calc-color-btn-checked;
-              }
-              + .calc__radio-text {
-                color: $calc-color-btn-text;
-              }
-            }
-          }
-        }
-      }
+        .calc__radio-indicator {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          border: 1px solid $c-border-default;
+          position: relative;
 
-      &.buttons {
-        .calc__radio-label {
-          &:hover {
-            background-color: $calc-color-btn-hover;
-            .calc__radio-text {
-              color: $calc-color-btn-text-hover;
-            }
+          &:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
           }
-          &.checked {
-            background-color: $calc-color-btn-checked;
-            color: $calc-color-btn-checked-text;
-            &:hover {
-              box-shadow: 0 0 3px 1px $calc-color-btn-checked;
-            }
-          }
-        }
-      }
-      &.onlyImage {
-        .calc__radio-label.checked {
-          background-color: $calc-color-btn-checked;
         }
       }
     }
     &-title {
-      @include style-flex-start;
-      font-weight: 600;
-      flex: 0 1 auto;
+      @include style-label-field;
+      display: flex;
+      margin-bottom: 8px;
     }
 
     &-label {
-      @include style-button;
-      @include style-flex-start;
-      border-bottom: 1px solid $calc-color-btn;
-      padding: 10px 20px;
-      position: relative;
-      gap: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 21px 35px;
+      background-color: $c-background-default;
+      @include border-radius;
+      border: 1px solid $c-border-default;
+      font-weight: 700;
+      cursor: pointer;
       &:hover {
-        @include style-button-hover;
+        background-color: $c-background-hover-orange;
+        .calc__radio-text {
+          color: $c-color-text-white-hover;
+        }
+        .calc__radio-indicator {
+          border-color: $c-color-text-white-hover;
+          &:after {
+            background-color: $c-color-text-white-hover;;
+          }
+        }
       }
       &.checked {
+        background-color: $c-background-hover-orange;
         .calc__radio-text {
-          color: $calc-color-btn-checked-text;
+          color: $c-color-text-white-hover;
+        }
+        .calc__radio-indicator {
+          border-color: $c-color-text-white-hover;
+          &:after {
+            background-color: $c-color-text-white-hover;
+          }
         }
       }
     }
     &-text {
       display: flex;
-      color: $calc-color-btn-text;
+      align-items: center;
+      gap: 15px;
     }
   }
 
   //--------Стили чекбокса --------------
 
   &__checkbox {
+    @include checkbox;
     &-wrapper {
       @include style-flex-start;
       position: relative;
@@ -1445,6 +1407,7 @@ $border-radius: 4px;
 
   //-------всплывающая подсказка ------
   &__prompt {
+    @include prompt;
     &-wrapper {
       margin-left: 5px;
     }
@@ -1463,6 +1426,7 @@ $border-radius: 4px;
       &:hover {
         background-color: $c-background-default;
         color: $c-color-text-orange;
+        border-color: $c-border-hover;
       }
     }
   }
@@ -1586,6 +1550,7 @@ $border-radius: 4px;
 
   //---------------аккордеон----------------
   &__accordion {
+    @include accordion;
     &-main-label {
       font-size: 18px;
       font-weight: 600;
@@ -1678,6 +1643,7 @@ $border-radius: 4px;
 
   //---------------------табы-----------------
   &__tab {
+    @include tab;
     &-main-label {
       font-size: 18px;
       font-weight: 600;
@@ -1779,6 +1745,7 @@ $border-radius: 4px;
   }
 
   .calc__error {
+    @include error;
     &-toggle {
       position: absolute;
       right: 0;
@@ -1845,6 +1812,7 @@ $border-radius: 4px;
   }
 
   &__image {
+    @include image;
     &-wrapper {
       display: flex;
       flex-direction: column;

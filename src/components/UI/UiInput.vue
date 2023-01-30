@@ -40,6 +40,7 @@
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
+              :class="{'is-number': onlyNumber }"
               autocomplete="off"
               :placeholder="inputPlaceholder"
             />
