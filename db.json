@@ -1944,7 +1944,7 @@
         "showSteps": false,
         "stepPrompt": "1",
         "isNeedChoice": false,
-        "showStaticValue": false,
+        "showStaticValue": true,
         "showDynamicValue": false,
         "template": "UiRange",
         "elementName": "test4"
@@ -1973,13 +1973,13 @@
         "min": "0",
         "max": "100",
         "cost": "-10",
-        "unit": "",
+        "unit": "ящики",
         "step": "1",
         "showSteps": false,
         "stepPrompt": "1",
         "isNeedChoice": false,
         "showStaticValue": false,
-        "showDynamicValue": false,
+        "showDynamicValue": true,
         "template": "UiRange",
         "elementName": ""
       },
@@ -2190,8 +2190,14 @@
         "items": [
           {
             "title": "Вкладка с инпутами",
-            "label": "Вкладка с инпутами",
+            "label": "Вкладка с инпутами 324234",
             "sublabel": "подзаголовок",
+            "image": {
+              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+            },
+            "maxWidthSide" : 70,
+            "maxWidth" : 100,
+            "maxHeight" : 150,
             "templates": [
               {
                 "title": "input с проверкой на целые числа",
@@ -2511,6 +2517,8 @@
           {
             "title": "Вкладка с инпутами",
             "label": "Вкладка с инпутами",
+            "sublabel": "324234",
+            "prompt": "текст подсказки",
             "templates": [
               {
                 "title": "input с проверкой на целые числа",
@@ -2617,6 +2625,14 @@
           {
             "title": "Вкладка с чекбоксами",
             "label": "Вкладка с чекбоксами",
+            "prompt": "текст подсказки 222",
+            "sublabel": "ssd sdsd4",
+            "image": {
+              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+            },
+            "maxWidthSide" : 70,
+            "maxWidth" : 100,
+            "maxHeight" : 150,
             "templates": [
               {
                 "title": "checkbox - включенная сразу",

@@ -1,7 +1,7 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
       <img
-        :src="iconsData?.filename"
+        :src="imageDir + iconData?.filename"
         :alt="alt"
       />
   </div>
@@ -15,7 +15,7 @@ import { useBaseStore } from "@/store/piniaStore";
 export default {
   name: "Icon-element",
   props: {
-    iconsData: {
+    iconData: {
       type: Object,
       default: () => {},
       require: true

@@ -53,6 +53,13 @@ export default function (propsName) {
     };
   };
 
+  const maxWidthSide = () => {
+    return {
+      type: [Number, String],
+      default: 50,
+    };
+  };
+
   const maxWidth = () => {
     return {
       type: [Number, String],
@@ -237,6 +244,7 @@ export default function (propsName) {
     parentName: parentName(),
     formulaProcessingLogic: formulaProcessingLogic(),
     templateName: templateName(),
+    maxWidthSide: maxWidthSide(),
     maxWidth: maxWidth(),
     maxHeight: maxHeight(),
     template: template(),

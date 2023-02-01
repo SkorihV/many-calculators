@@ -24,7 +24,7 @@
           >
             <icon-element
             v-if="radio?.image"
-            :icons-data="radio?.image"
+            :icon-data="radio?.image"
             :alt="radio?.name"
             :max-width="maxWidth"
             :max-height="maxHeight"
@@ -76,9 +76,8 @@ export default {
       ? this.elementName
       : Math.random().toString();
 
-    this.localRadioListInOut = this.updatedRadioListInImageDir(
-      JSON.parse(JSON.stringify(this.radioValues))
-    );
+    this.localRadioListInOut = JSON.parse(JSON.stringify(this.radioValues));
+
     this.updatedRadioListBeforeCheckedDependency();
     this.updatedRadioListBeforeCheckedCostElements();
 
@@ -193,22 +192,22 @@ export default {
       });
     },
 
-    /**
-     * добавить к картинкам актуальный url
-     * @param radioList
-     * @returns {*}
-     */
-    updatedRadioListInImageDir(radioList) {
-      return radioList.map((radioItem, index) => {
-        if (radioItem?.image?.filename) {
-          radioItem.image.filename = this.imageDir + radioItem.image.filename;
-        }
-        radioItem.value = radioItem.value?.toString()?.length
-          ? radioItem.value
-          : index + 1;
-        return radioItem;
-      });
-    },
+    // /**
+    //  * добавить к картинкам актуальный url
+    //  * @param radioList
+    //  * @returns {*}
+    //  */
+    // updatedRadioListInImageDir(radioList) {
+    //   return radioList.map((radioItem, index) => {
+    //     if (radioItem?.image?.filename) {
+    //       radioItem.image.filename = this.imageDir + radioItem.image.filename;
+    //     }
+    //     radioItem.value = radioItem.value?.toString()?.length
+    //       ? radioItem.value
+    //       : index + 1;
+    //     return radioItem;
+    //   });
+    // },
 
     updatedRadioListBeforeCheckedDependency() {
       this.localRadioListInOut = this.localRadioListInOut?.map((radio) => {
@@ -277,7 +276,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
-      "getImageDir",
+      // "getImageDir",
       "isCanShowAllTooltips"
     ]),
 
@@ -326,9 +325,9 @@ export default {
       return this.localRadioListInOut[this.currentIndexRadioButton];
     },
 
-    imageDir() {
-      return this.getImageDir;
-    },
+    // imageDir() {
+    //   return this.getImageDir;
+    // },
   },
 };
 </script>

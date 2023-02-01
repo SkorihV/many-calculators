@@ -4,11 +4,48 @@
     class="calc__wrapper-group-data"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="classes" ref="thisElement">
+    <div class="calc__range-wrapper" :class="classes" >
       <div v-if="label" class="calc__range-label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
+
+      </div>
+      <div class="calc__range-item-wrapper">
+        <div class="calc__range-item-left-side">
+          <input
+            ref="thisElement"
+            class="calc__range-item"
+            type="range"
+            :min="localMin"
+            :max="localMax"
+            :step="localStep"
+            :value="resultValue"
+            @input="tryChangeValue"
+            :name="localElementName"
+          />
+          <div v-if="showSteps" class="calc__range-steps-wrapper">
+            <div
+              class="calc__range-steps-item"
+              @click="changeValueStep(step)"
+              v-for="(step, inx) in returnSteps"
+              :style="{ left: pointsForStepsLine[inx] + 'px' }"
+              :key="inx"
+              :class="{
+            'calc__range-steps-item_selected': step === resultValue,
+          }"
+            >
+              {{ step }}
+            </div>
+          </div>
+          <div
+            v-if="isStaticValue"
+            :style="{ 'left': positionStaticResultValue}"
+            class="calc__range-current-static"
+          >
+            {{ resultValue }}
+          </div>
+        </div>
         <div
           class="calc__range-current-wrapper"
           v-if="showDynamicValue || unit?.length"
@@ -26,39 +63,9 @@
             {{ unit }}
           </div>
         </div>
+
       </div>
-      <div>
-        <input
-          class="calc__range-item"
-          type="range"
-          :min="localMin"
-          :max="localMax"
-          :step="localStep"
-          :value="resultValue"
-          @input="tryChangeValue"
-        />
-        <div
-          v-if="isStaticValue"
-          :style="{ left: positionStaticResultValue }"
-          class="calc__range-current-static"
-        >
-          {{ resultValue }}
-        </div>
-      </div>
-      <div v-if="showSteps" class="calc__range-steps-wrapper">
-        <div
-          class="calc__range-steps-item"
-          @click="changeValueStep(step)"
-          v-for="(step, inx) in returnSteps"
-          :style="{ left: pointsForStepsLine[inx] }"
-          :key="inx"
-          :class="{
-            'calc__range-steps-item_selected': step === resultValue,
-          }"
-        >
-          {{ step }}
-        </div>
-      </div>
+
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
@@ -181,13 +188,24 @@ export default {
       this.changeValue("mounted");
     }
 
-    if (this.$refs.thisElement) {
+    if (this.$refs?.thisElement?.offsetWidth) {
       this.elementWidth = this.$refs.thisElement.offsetWidth;
     }
 
     window.addEventListener("resize", () => {
-      this.elementWidth = this.$refs.thisElement.offsetWidth;
+        if (this.$refs?.thisElement?.offsetWidth) {
+          this.elementWidth = this.$refs.thisElement.offsetWidth;
+        }
     });
+    if (!this.$refs?.thisElement?.offsetWidth) {
+      let timer = setInterval(() => {
+        if (this.$refs.thisElement.offsetWidth) {
+          this.elementWidth = this.$refs.thisElement.offsetWidth;
+          clearInterval(timer)
+        }
+      }, 1000)
+    }
+
   },
   data() {
     return {
@@ -398,25 +416,33 @@ export default {
       return this.updatedCostForOut(this.cost);
     },
     positionStaticResultValue() {
-      const width = this.elementWidth - 30;
-      const percent =
+      const width = this.elementWidth - 25;
+
+      let newPosition =
         (this.resultValue - this.localMin) / (this.localMax - this.localMin);
-      const position = width * percent + 2;
-      return position + "px";
+
+      if (newPosition < 0) {
+        newPosition = 0;
+      } else if (newPosition > 1) {
+        newPosition = width;
+      } else {
+        newPosition = width * newPosition;
+      }
+      return newPosition.toFixed(4) + 'px';
     },
     amountSteps() {
       return (this.localMax - this.localMin) / this.localStepPrompt;
     },
     pointsForStepsLine() {
-      const width = this.elementWidth - 30;
+      const width = this.elementWidth - 26;
       let points = [];
-      points.push(0 + "px");
+      points.push(12);
       let i = 1;
       for (i; i <= this.amountSteps; i++) {
         const percent =
           (this.localStepPrompt * i) / (this.localMax - this.localMin);
-        const position = width * percent;
-        points.push(position + "px");
+        const position = width * percent + 6;
+        points.push(position.toFixed(4));
       }
       return points;
     },

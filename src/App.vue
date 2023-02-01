@@ -7,7 +7,6 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :max-width="template?.maxWidth"
           :element-name="template?.json_id || 'UiAccordion' + index"
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           :template-name="template.template"
@@ -77,35 +76,17 @@
         @click="calculateResult"
         v-if="showResultBtn"
       >
-        <div
-          class="calc__show-result-btn-icon"
-          v-if="
-            outOptions?.resultOptions?.icon?.filename.length &&
-            outOptions?.resultOptions?.location === 'leftSide'
-          "
-        >
-          <img
-            :src="getImageDir + outOptions?.resultOptions?.icon?.filename"
-            alt=""
-          />
-        </div>
-        {{
-          outOptions?.resultOptions?.title?.length
-            ? outOptions?.resultOptions?.titleButton
-            : "Рассчитать"
-        }}
-        <div
-          class="calc__show-result-btn-icon"
-          v-if="
-            outOptions?.resultOptions?.icon?.filename.length &&
-            outOptions?.resultOptions?.location === 'rightSide'
-          "
-        >
-          <img
-            :src="getImageDir + outOptions?.resultOptions?.icon?.filename"
-            alt=""
-          />
-        </div>
+        <icon-element
+          v-if="outOptions?.resultOptions?.icon?.filename && outOptions?.resultOptions?.location === 'leftSide'"
+          :icon-data="outOptions?.resultOptions?.icon"
+        ></icon-element>
+
+        {{ outOptions?.resultOptions?.title?.length ? outOptions?.resultOptions?.titleButton : "Рассчитать" }}
+        <icon-element
+
+          v-if="outOptions?.resultOptions?.icon?.filename && outOptions?.resultOptions?.location === 'rightSide'"
+          :icon-data="outOptions?.resultOptions?.icon"
+        ></icon-element>
       </div>
       <error-names-templates
         v-if="devMode"
@@ -147,11 +128,13 @@ import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    IconElement,
     TemplatesWrapper,
     UiAccordion,
     UiTab,
@@ -596,35 +579,41 @@ export default {
 
 $c-color-text-default: #000000;
 $c-color-text-medium: #5e5e5e;
-$c-color-text-dim: #808080;
+$c-color-text-dim: #A2A2A2;
 $c-color-text-white-selected: #ffffff;
 $c-color-text-white-hover: #ffffff;
 $c-color-text-orange: #ff6531;
 
 $c-color-text-error: #e80000;
 
-$c-border-default: #808080;
+$c-border-default: #A2A2A2;
 $c-border-hover: #ff6531;
 $c-border-selected: #ff6531;
 $c-border-error: #e80000;
 
-$c-arrow-default: #808080;
-$c-arrow-selected: #000000;
+$c-arrow-default: #A2A2A2;
+$c-arrow-selected: #ff6531;
 $c-arrow-error: #e80000;
 
-$c-background-default: #f9f9f9;
-$c-background-hover-gray: #808080;
+$c-background-default: #F5F5F5;
+$c-background-hover-gray: #A2A2A2;
 
 $c-background-hover-orange: #ff6531;
 $c-background-selected: #ff6531;
 
-@mixin border-radius {
+@mixin style-border-radius {
   border-radius: 9px;
 }
 
-@mixin style-label-field {
+@mixin style-label-main {
   font-size: 17px;
   line-height: 20px;
+  color: $c-color-text-default;
+}
+
+@mixin style-label-sub {
+  font-size: 12px;
+  line-height: 14px;
   color: $c-color-text-default;
 }
 
@@ -746,9 +735,8 @@ $border-radius: 4px;
     flex-direction: column;
     align-items: flex-start;
     &-group-data {
-      margin-bottom: 5px;
-      padding-left: 5px;
-      width: 100%;
+      margin: 0 10px 10px;
+      width: calc(100% - 20px);
       position: relative;
     }
   }
@@ -760,21 +748,29 @@ $border-radius: 4px;
     color: $calc-color-danger-text;
   }
   &__show-result-btn {
-    @include style-button;
-    padding: 20px;
-    margin: 5px 0;
+    padding: 21px 70px;
+    background-color: $c-background-selected;
+    color: $c-color-text-white-selected;
     align-self: center;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 23px;
+    text-transform: uppercase;
+    cursor: pointer;
+    @include style-border-radius;
     &:hover {
-      @include style-button-hover;
-      background-color: $calc-color-btn-hover;
+      background-color: $c-background-hover-gray;
     }
   }
   //--------Стили input text-----
   &__input {
     @include input;
     &-wrapper {
-      @include style-flex-center;
-      flex-direction: column;
+      //@include style-flex-center;
+      //flex-direction: column;
       &.is-stretch {
         flex: 1 1 100%;
       }
@@ -787,8 +783,7 @@ $border-radius: 4px;
     }
 
     &-label {
-      @include style-flex-start;
-      width: 100%;
+      display: flex;
       justify-content: space-between;
       align-items: center;
       &.is-column {
@@ -801,12 +796,11 @@ $border-radius: 4px;
         justify-content: center;
       }
       &-text {
-        @include style-label-field;
+        @include style-label-main;
         display: flex;
-        justify-content: flex-start;
         margin-right: 30px;
         padding: 5px 0;
-        text-align: start;
+        gap: 2px;
       }
     }
 
@@ -817,7 +811,7 @@ $border-radius: 4px;
       max-width: 304px;
       background: $c-background-default;
       border: 1px solid $c-border-default;
-      @include border-radius;
+      @include style-border-radius;
       &:focus,
       &:hover {
         outline-color: $c-border-selected;
@@ -825,6 +819,7 @@ $border-radius: 4px;
       }
       &.is-number {
         font-weight: 700;
+        max-width: 200px;
       }
 
       &.error {
@@ -845,7 +840,7 @@ $border-radius: 4px;
         line-height: 26px;
         font-weight: 600;
         -moz-user-select: none;
-        -khtml-user-select: none;
+        -webkit-user-select: none;
         user-select: none;
         &:hover {
           cursor: pointer;
@@ -874,76 +869,107 @@ $border-radius: 4px;
       flex-direction: column;
       width: 100%;
       position: relative;
+      min-height: 60px;
     }
     &-label {
-      @include style-flex-start;
-      padding: 5px;
-      font-weight: 600;
+      @include style-label-main;
+      display: flex;
+      margin-bottom: 10px;
+
+    }
+    &-item-left-side {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    &-unit {
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 20px;
     }
     &-item {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 15px;
-      max-height: 30px;
-      border-radius: 5px;
-      background: #d3d3d3;
-      outline: none;
+      &-wrapper {
+        display: flex;
+        align-items: baseline;
+        gap: 32px;
+      }
 
-      -webkit-transition: 0.2s;
-      transition: opacity 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      background: $c-background-default;
+      border-radius: 90px;
+      cursor: pointer;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+
+      &::-webkit-slider-runnable-track {
+        background-color: $c-background-default;
+        height: 8px;
+      }
+
+      &::-moz-range-track {
+        background-color: $c-background-default;
+        height: 8px;
+      }
+
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 26px;
-        height: 26px;
-        background: $calc-color-btn;
-        cursor: pointer;
-        @include style-button;
-        z-index: 15;
-        &:hover {
-          background-color: $calc-color-btn-hover;
-          @include style-button-hover;
-        }
-      }
-      &::-moz-range-thumb {
-        width: 26px;
-        height: 26px;
+        height: 24px;
+        width: 24px;
         border-radius: 50%;
-        background: $calc-color-btn;
-        cursor: pointer;
-        @include style-border;
-        z-index: 15;
-        &:hover {
-          @include style-border-hover;
-        }
+        background-color: $c-background-selected;
+        border: 4px solid $c-background-default;
+        box-shadow: 0 7px 11px -4px $c-border-default;
+        margin-top: -10px;
+      }
+
+      &::-moz-range-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background-color: $c-background-selected;
+        border: 5px solid $c-background-default;
+        box-shadow: 0 7px 11px -4px $c-border-default;
+        margin-top: -16px;
       }
     }
 
     &-steps {
       &-wrapper {
-        @include style-flex-center;
-        justify-content: space-around;
+        display: flex;
+        align-items: center;
         height: 30px;
         position: relative;
-        margin: 5px;
+        margin-top: 17px;
       }
       &-item {
         position: absolute;
         cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        color: $c-color-text-dim;
         &:after {
           position: absolute;
           content: "";
           display: block;
           width: 1px;
           z-index: 10;
-          background: #464657;
-          top: -50%;
+          background: $c-color-text-dim;
           left: 50%;
           transform: translateX(-50%);
-          height: 70%;
+          height: 10px;
+          bottom: calc(100% + 7px);
         }
         &_selected {
-          font-weight: bold;
+          color: $c-color-text-default;
           &:after {
             width: 2px;
           }
@@ -959,28 +985,35 @@ $border-radius: 4px;
       }
 
       &-static {
-        color: $calc-color-btn-text;
-        @include style-button;
-        min-width: 25px;
-        min-height: 27px;
+        color: $c-color-text-default;
+        background-color: $c-background-default;
+        border: 1px solid $c-border-default;
+        min-width: 26px;
+        min-height: 26px;
         border-radius: 50%;
         position: absolute;
         z-index: 15;
-        margin-top: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        top: 15px;
       }
 
       &-dynamic {
-        font-size: 15px;
-        line-height: 16px;
-        padding: 5px;
-        max-width: 50px;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 20px;
+        padding: 20px 30px;
+        max-width: 90px;
         right: 0;
-        @include style-border;
-        border-bottom: 2px solid $calc-color-btn-hover;
+        @include style-border-radius;
+        border: 1px solid $c-border-default;
         &:hover,
         &:focus-visible {
-          @include style-border-hover;
-          border-bottom: 2px solid $calc-color-btn;
+          border: 1px solid $c-border-hover;
           outline: none;
         }
       }
@@ -992,120 +1025,136 @@ $border-radius: 4px;
   &__select {
     @include select;
     &-wrapper {
-      @include style-flex-center;
-      gap: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       position: relative;
       width: 100%;
       &.is-column {
         flex-direction: column;
         align-items: flex-start;
       }
+      &.is-open {
+        .calc__select-arrow {
+          border-color: $c-arrow-selected;
+          transform: translateY(-50%) rotate(-135deg);
+          -webkit-transform: translateY(-50%) rotate(-135deg);
+        }
+        .calc__select-change-wrapper {
+          border: 1px solid $c-border-hover;
+          border-bottom: transparent;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+
+        }
+      }
+
       @media all and (max-width: 480px) {
         flex-direction: column;
       }
     }
 
     &-label {
-      @include style-flex-start;
+      display: flex;
       flex: 1 1 100%;
-      font-weight: 600;
+      @include style-label-main;
+      gap: 2px;
     }
 
     &-change {
       &-wrapper {
         cursor: pointer;
-        @include style-border;
         font-size: 15px;
         line-height: 16px;
         position: relative;
         flex: 1 1 100%;
         width: 100%;
-        border-bottom: 2px solid $calc-color-btn-hover;
-        background-color: white;
+        @include style-border-radius;
+        border: 1px solid $c-border-default;
+        background-color: $c-background-default;
         &:hover {
-          @include style-border-hover;
-          border-bottom: 2px solid $calc-color-btn;
+          border: 1px solid $c-border-hover;
+          .calc__select-arrow {
+            border-color: $c-arrow-selected;
+          }
+        }
+        &.error {
+          border-color: $c-border-error;
           .calc__select-change-item {
-            &:before {
-              border: solid $calc-color-btn;
-              border-width: 0 3px 3px 0;
-            }
+            color: $c-color-text-error;
+
+          }
+          .calc__select-arrow {
+            border-color: $c-arrow-error;
           }
         }
       }
 
+
       &-item {
-        padding: 5px 25px 5px 10px;
+        padding: 20px 40px;
         @include style-flex-center;
         justify-content: flex-start;
-        min-height: 36px;
         text-align: start;
         flex: 1 1 auto;
-        gap: 5px;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;;
+        color: $c-color-text-default;
+        gap: 20px;
 
-        &:before {
-          content: "";
-          width: 7px;
-          height: 7px;
-          border: solid $calc-color-btn-hover;
-          border-width: 0 3px 3px 0;
-          display: inline-block;
-          position: absolute;
-          top: 50%;
-          right: 5px;
-          transform: translateY(-50%) rotate(45deg);
-          -webkit-transform: translateY(-50%) rotate(45deg);
-        }
-        &.is-open {
-          &:before {
-            transform: translateY(-50%) rotate(-135deg);
-            -webkit-transform: translateY(-50%) rotate(-135deg);
-          }
+        .calc__select-arrow {
+            width: 10px;
+            height: 10px;
+            border: solid $c-arrow-default;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            margin-left: auto;
+            flex: 0 0 auto;
+            transform: translateY(-50%) rotate(45deg);
+            -webkit-transform: translateY(-50%) rotate(45deg);
         }
       }
     }
-
-    &-image {
-      &-wrapper {
-        max-width: 50px;
-        position: relative;
-      }
-      &-item {
-        @include style-img;
-      }
-    }
-
     &-option {
       &-wrapper {
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: calc(100% + 2px);
-        @include style-border;
+        top: calc(100% - 2px);
+        border-bottom-left-radius: 9px;
+        border-bottom-right-radius: 9px;
         z-index: 10;
         width: 100%;
 
-        border-left: 1px solid $calc-color-btn-hover;
-        border-right: 1px solid $calc-color-btn-hover;
-        border-bottom: 1px solid $calc-color-btn-hover;
+        border-left: 1px solid $c-border-selected;
+        border-right: 1px solid $c-border-selected;
+        border-bottom: 1px solid $c-border-selected;
         .calc__select-image-wrapper {
           margin: 5px;
         }
       }
       &-item {
-        background-color: white;
+        background-color: $c-background-default;
         @include style-flex-start;
+        gap: 20px;
+        text-align: start;
+        padding: 10px 40px;
+
+        &-text {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 20px;
+        }
         &:hover {
-          background-color: $calc-color-btn-hover;
+          background-color: $c-background-hover-orange;
           .calc__select-option-item-text {
-            color: $calc-color-btn-text-hover;
+            color: $c-color-text-white-hover;
           }
         }
-        gap: 5px;
-        text-align: start;
-        &-text {
-          padding: 10px 25px 10px 10px;
-          text-align: start;
+        &:last-child {
+          border-bottom-right-radius: 9px;
+          border-bottom-left-radius: 9px;
         }
       }
     }
@@ -1116,14 +1165,13 @@ $border-radius: 4px;
     @include radio;
     &-wrapper {
       display: flex;
-      width: 100%;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       &-buttons {
         display: flex;
         flex-wrap: wrap;
-        gap: 7px;
+        gap: 8px;
       }
       &.column {
         flex-direction: column;
@@ -1156,9 +1204,10 @@ $border-radius: 4px;
       }
     }
     &-title {
-      @include style-label-field;
+      @include style-label-main;
       display: flex;
       margin-bottom: 8px;
+      gap: 2px;
     }
 
     &-label {
@@ -1167,7 +1216,7 @@ $border-radius: 4px;
       justify-content: center;
       padding: 21px 35px;
       background-color: $c-background-default;
-      @include border-radius;
+      @include style-border-radius;
       border: 1px solid $c-border-default;
       font-weight: 700;
       cursor: pointer;
@@ -1222,8 +1271,7 @@ $border-radius: 4px;
       line-height: 20px;
     }
     &-subname {
-      font-size: 12px;
-      line-height: 14px;
+      @include style-label-sub;
     }
   }
 
@@ -1238,17 +1286,17 @@ $border-radius: 4px;
       align-items: center;
     }
     &-label {
-      @include style-label-field;
+      @include style-label-main;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 2px;
       @include transition;
       &.button {
         border: 1px solid $c-border-default;
         background-color: $c-background-default;
         padding: 20px 35px;
         font-weight: 700;
-        @include border-radius;
+        @include style-border-radius;
         &:hover {
           background-color: $c-background-selected;
           color: $c-color-text-white-selected;
@@ -1264,7 +1312,7 @@ $border-radius: 4px;
       }
     }
     &-label_second {
-      @include style-label-field;
+      @include style-label-main;
     }
     &-element {
       @include transition;
@@ -1431,7 +1479,7 @@ $border-radius: 4px;
       max-width: 80%;
       overflow-y: auto;
       border: 1px solid $c-border-selected;
-      @include border-radius;
+      @include style-border-radius;
       box-shadow: 0 4px 10px $c-border-selected;
     }
   }
@@ -1520,76 +1568,99 @@ $border-radius: 4px;
   &__accordion {
     @include accordion;
     &-main-label {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
+      @include style-label-main;
+      display: flex;
+      margin-bottom: 8px;
     }
     &-wrapper {
-      @include style-flex-start;
-      align-items: start;
+      display: flex;
       flex-direction: column;
-      width: 100%;
+      width: calc(100% - 20px);
+      margin: 0 10px 10px;
     }
     &-item {
       &-label {
-        @include style-button;
-        @include style-flex-start;
-        border-radius: 0;
-        padding: 10px;
-        width: 100%;
-        margin-bottom: 5px;
-        position: relative;
-        gap: 5px;
-        &:hover {
-          @include style-button-hover;
-          .calc__accordion-item-plus:before,
-          .calc__accordion-item-minus:before {
-            border: 1px solid $calc-color-btn-text;
-            color: $calc-color-btn-text;
-          }
-        }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 19px 6px 21px 20px;
+        min-height: 60px;
+        margin-bottom: 11px;
+        background-color: $c-background-default;
+        border: 1px solid $c-border-default;
+        cursor: pointer;
+        @include style-border-radius;
+        @include transition;
         &.isOpen {
-          background-color: $calc-color-btn-checked;
-          color: $calc-color-btn-checked-text;
-          .calc__accordion-item-plus:before,
-          .calc__accordion-item-minus:before {
-            border: 1px solid $calc-color-btn-checked-text;
-            color: $calc-color-btn-checked-text;
+          margin-bottom: 0;
+          .calc__accordion-item-label-sub,
+          .calc__accordion-item-label-main {
+            color: $c-color-text-orange;
           }
-          &:hover {
-            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
+          border-color: $c-border-selected;
+          border-bottom-color: transparent;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &:hover {
+          background-color: $c-background-hover-gray;
+          .calc__accordion-item-label-sub,
+          .calc__accordion-item-label-main {
+            color: $c-color-text-white-hover;
           }
         }
         &.isError {
-          background-color: $calc-color-danger;
-          color: $calc-color-danger-text;
+          border-color: $c-border-error;
+          .calc__accordion-item-label-main {
+            color: $c-color-text-error;
+          }
         }
+
         &-wrapper {
-          @include style-flex-start;
-          align-items: flex-start;
-          flex-direction: column;
-          flex: 1 1 auto;
-          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 20px;
         }
+
+        &-text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        &-main {
+          @include style-label-main;
+          font-weight: 700;
+        }
+
+        &-sub {
+          @include style-label-sub;
+        }
+
       }
       &-content {
+        margin-top: -2px;
         width: 100%;
+        border: 1px solid $c-border-selected;
+        border-bottom-left-radius: 9px;
+        border-bottom-right-radius: 9px;
+        padding: 20px;
+        border-top-color: transparent;
+        margin-bottom: 10px;
       }
       &-plus,
       &-minus {
         position: relative;
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 20px;
+        display: flex;
       }
       &-plus:before,
       &-minus:before {
-        width: 30px;
-        height: 30px;
-        color: #ffffff;
-        font-size: 30px;
+        font-size: 24px;
+        font-weight: 600;
         position: absolute;
-        border: 1px solid $calc-color-btn-text;
-        color: $calc-color-btn-text;
+        color: $c-color-text-default;
         border-radius: 50%;
         left: 50%;
         top: 50%;
@@ -1613,60 +1684,77 @@ $border-radius: 4px;
   &__tab {
     @include tab;
     &-main-label {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      width: 100%;
-      text-align: start;
+      @include style-label-main;
+      display: flex;
+      margin-bottom: 8px;
     }
     &-wrapper {
       @include style-flex-start;
       align-items: start;
       flex-direction: column;
-      width: 100%;
-      margin: 10px 0;
+      flex-wrap: wrap;
+      width: calc(100% - 20px);
+      margin: 10px;
     }
     &-item {
       &-label {
-        @include style-button;
-        @include style-flex-start;
-        border-radius: 0;
-        padding: 10px;
-        margin-bottom: 5px;
-        position: relative;
-        flex: 0 1 auto;
-
+        @include style-border-radius;
+        background-color: $c-background-default;
+        border: 1px solid $c-border-default;
+        display: flex;
+        align-items: center;
+        padding: 19px 54px;
+        cursor: pointer;
+        gap: 20px;
         &:hover {
-          @include style-button-hover;
+          background-color: $c-background-hover-gray;
+          border-color: $c-border-hover;
+          .calc__tab-item-label-main,
+          .calc__tab-item-label-sub {
+            color: $c-color-text-white-hover;
+          }
         }
         &.isOpen {
           background-color: $calc-color-btn-checked;
           color: $calc-color-btn-checked-text;
-          &:hover {
-            box-shadow: 0 0 3px 1px $calc-color-btn-checked;
-          }
         }
         &.isError {
-          background-color: $calc-color-danger;
-          color: $calc-color-danger-text;
+          color: $c-color-text-error;
+          border: $c-border-error;
         }
         &-wrapper {
-          @include style-flex-start;
+          display: flex;
           flex: 1 1 auto;
-          width: 100%;
           flex-wrap: wrap;
+          gap: 10px;
+        }
+        &-text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        &-main {
+          @include style-label-main;
+          font-weight: 700;
+        }
+
+        &-sub {
+          @include style-label-sub;
         }
       }
       &-content-wrapper {
         display: flex;
         flex-direction: column;
         width: 100%;
+        padding: 20px;
+        margin-bottom: 10px;
       }
       &-content {
         @include style-flex-start;
         width: 100%;
         flex-direction: column;
         align-items: flex-start;
+
       }
     }
   }

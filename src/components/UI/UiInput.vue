@@ -35,7 +35,7 @@
             @keydown.up="plus"
             @keydown.down="minus"
             class="calc__input-item"
-            :class="{ 'is-number': onlyNumber, 'error' : isErrorClass }"
+            :class="{ 'is-number': isOnlyNumber, 'error' : isErrorClass }"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
@@ -45,7 +45,7 @@
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
-              :class="{ 'is-number': onlyNumber, 'error' : isErrorClass }"
+              :class="{ 'is-number': isOnlyNumber, 'error' : isErrorClass }"
               autocomplete="off"
               :placeholder="inputPlaceholder"
             />
@@ -256,7 +256,7 @@ export default {
       this.changeValue("mounted");
     }
 
-    if (this.isCurrency && this.onlyNumber) {
+    if (this.isCurrency && this.isOnlyNumber) {
       window.addEventListener("click", (e) => {
         if (
           !this.$el.contains(e.target) &&
@@ -272,7 +272,7 @@ export default {
       localInputValue: null,
       nameTimer: null,
       nameTimerForUpdateInputValue: null,
-      fakeValueHidden: this.isCurrency && this.onlyNumber,
+      fakeValueHidden: this.isCurrency && this.isOnlyNumber,
       isInvalid: false,
       canBeShownTooltip: false,
     };
@@ -289,7 +289,7 @@ export default {
           return this.localInputValue;
         }
 
-        if (this.isErrorNumber || (this.onlyNumber && this.isErrorEmpty)) {
+        if (this.isErrorNumber || (this.isOnlyNumber && this.isErrorEmpty)) {
           this.resetNumberValue();
           return null;
         }
@@ -454,7 +454,7 @@ export default {
       this.changeValueWitchTimer(this.localMin || 0);
     },
     updatedCostForOut(cost) {
-      return this.onlyNumber && this.checkedValueOnVoid(cost)
+      return this.isOnlyNumber && this.checkedValueOnVoid(cost)
         ? parseFloat((cost * this.localInputValue).toFixed(2))
         : null;
     },
@@ -474,6 +474,9 @@ export default {
     },
     localStep() {
       return this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
+    },
+    isOnlyNumber() {
+      return this.onlyNumber || this.controls;
     },
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -504,7 +507,7 @@ export default {
     },
     isErrorNumber() {
       return (
-        (this.onlyNumber || this.localMax !== null || this.localMin !== null) &&
+        (this.isOnlyNumber || this.localMax !== null || this.localMin !== null) &&
         this.valueIsNaN &&
         this.localInputValue?.toString()?.length
       );

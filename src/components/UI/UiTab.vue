@@ -29,7 +29,17 @@
           :key="key"
           @click="openItem(key)"
         >
-          {{ item.label }}
+          <icon-element
+            v-if="item?.image?.filename"
+            :max-height="item?.maxHeight"
+            :max-width="item?.maxWidth"
+            :alt="item.label"
+            :icon-data="item?.image"
+          ></icon-element>
+          <div class="calc__tab-item-label-text">
+            <div class="calc__tab-item-label-main">{{ item.label }}</div>
+            <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
+          </div>
           <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
           <ui-tooltip
             :is-show="
@@ -71,6 +81,7 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
+import IconElement from "@/components/UI/Icon-element.vue";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -79,7 +90,7 @@ import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiTab",
-  components: { UiTooltip, UiPrompt, UiTabItem },
+  components: { IconElement, UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {

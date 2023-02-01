@@ -4,56 +4,53 @@
       ref="parent"
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
-      :class="[{ 'is-column': isColumn }, classes]"
+      :class="[{ 'is-column': isColumn, 'is-open': isOpen }, classes]"
     >
       <div class="calc__select-label" v-if="label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
       </div>
-      <div class="calc__select-change-wrapper">
+      <div class="calc__select-change-wrapper"
+           :class="{'error': isErrorClass}"
+      >
         <div
           v-if="currentOption"
           class="calc__select-change-item"
           @click="toggleOpenClose"
-          :class="{ 'is-open': isOpen }"
         >
-          <div
+          <IconElement
             v-if="currentOption?.image?.filename"
-            class="calc__select-image-wrapper"
-          >
-            <img
-              :alt="currentOption.selectName"
-              class="calc__select-image-item"
-              :src="imageDir + currentOption.image.filename"
-            />
-          </div>
+            :icon-data="currentOption?.image"
+            :alt="currentOption?.selectName"
+            :max-width="maxWidth"
+            :max-height="maxHeight"
+          ></IconElement>
           {{ currentOption.selectName }}
           <ui-prompt
             v-if="currentOption?.prompt?.length"
             :prompt-text="currentOption.prompt"
           ></ui-prompt>
+          <div class="calc__select-arrow"></div>
         </div>
         <div class="calc__select-option-wrapper" v-if="isOpen">
+
+          <template
+            v-for="(option, idx) in selectValuesAfterProcessingDependency"
+            :key="idx">
           <div
             class="calc__select-option-item"
             @click="changeSelect(option, idx)"
-            v-for="(option, idx) in selectValuesAfterProcessingDependency"
-            :key="idx"
+            v-if="currentOption?.value !== option?.value && option.isShow"
           >
-            <template
-              v-if="currentOption?.value !== option?.value && option.isShow"
-            >
-              <div
+
+              <IconElement
                 v-if="option?.image?.filename"
-                class="calc__select-image-wrapper"
-              >
-                <img
-                  :alt="option.selectName"
-                  class="calc__select-image-item"
-                  :src="imageDir + option.image.filename"
-                />
-              </div>
+                :icon-data="option?.image"
+                :alt="option?.selectName"
+                :max-width="maxWidth"
+                :max-height="maxHeight"
+              ></IconElement>
               <div class="calc__select-option-item-text">
                 {{ option.selectName }}
               </div>
@@ -61,8 +58,8 @@
                 v-if="option?.prompt?.length"
                 :prompt-text="option.prompt"
               ></ui-prompt>
-            </template>
-          </div>
+            </div>
+          </template>
         </div>
       </div>
       <ui-tooltip
@@ -84,12 +81,13 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip, UiPrompt },
+  components: { IconElement, UiTooltip, UiPrompt },
   mounted() {
     this.localSelectValues = this.selectValues;
     if (this.needMockValue) {
@@ -154,6 +152,8 @@ export default {
       "templateName",
       "parentIsShow",
       "dependencyFormulaDisplay",
+      "maxWidth",
+      "maxHeight",
     ]),
   },
   data() {
@@ -279,15 +279,6 @@ export default {
       }
     },
 
-    // selectValuesAfterProcessingDependency: {
-    //   handler(newValue, oldValue) {
-    //     if (newValue?.length !== oldValue?.length) {
-    //       this.resetSelectedValue();
-    //     }
-    //   },
-    //   deep: true
-    // }
-
     amountVisibleSelects() {
       let length = this.selectValuesAfterProcessingDependency.length;
       if (!this.currentOption) {
@@ -321,6 +312,7 @@ export default {
       "checkValidationDataAndToggle",
       "devMode",
       "getImageDir",
+      "isCanShowAllTooltips"
     ]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
@@ -340,6 +332,9 @@ export default {
     },
     isErrorEmpty() {
       return this.notEmpty && this.currentIndexOption === null;
+    },
+    isErrorClass() {
+      return this.isErrorEmpty && this.isCanShowAllTooltips && this.isVisibilityFromDependency;
     },
 
     /**

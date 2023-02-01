@@ -8,21 +8,16 @@
       {{ accordionData.label }}
     </div>
     <template v-if="accordionData?.items?.length">
-      <div
-        class="calc__accordion-item-label-wrapper"
+      <ui-accordion-item
         v-for="(item, key) in accordionData.items"
         :key="key"
-      >
-        <ui-accordion-item
-          :parent-is-show="isVisibilityFromDependency"
-          :accordionItem="item"
-          :accordion-name="elementName"
-          :accordion-item-id="key"
-          :element-name="elementName + item?.json_id + '_' + key"
-          :max-width="maxWidth"
-          @changedValue="changeValue"
-        />
-      </div>
+        :parent-is-show="isVisibilityFromDependency"
+        :accordionItem="item"
+        :accordion-name="elementName"
+        :accordion-item-id="key"
+        :element-name="elementName + item?.json_id + '_' + key"
+        @changedValue="changeValue"
+      />
     </template>
   </div>
 </template>
@@ -51,7 +46,7 @@ export default {
       "elementName",
       "classes",
       "parentIsShow",
-      "dependencyFormulaDisplay",
+      "dependencyFormulaDisplay"
     ]),
   },
   data() {

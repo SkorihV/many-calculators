@@ -142,6 +142,8 @@
     :select-values="template?.values"
     :is-need-choice="template?.isNeedChoice"
     :selected-item="template?.selectedItem"
+    :max-height="template?.maxHeight"
+    :max-width="template?.maxWidth"
     :element-name="
       template?.elementName?.length
         ? template?.elementName

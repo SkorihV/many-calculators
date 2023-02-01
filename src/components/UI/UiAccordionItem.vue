@@ -6,14 +6,25 @@
     v-show="isShowAccordionItem"
     :class="{ isOpen: isOpen, isError: isShowError && !isOpen }"
   >
+    <div class="calc__accordion-item-label-wrapper">
+      <icon-element
+        v-if="accordionItem?.image?.filename"
+        :max-height="accordionItem?.maxHeight"
+        :max-width="accordionItem?.maxWidth"
+        :alt="accordionItem.label"
+        :icon-data="accordionItem?.image"
+      ></icon-element>
+      <div class="calc__accordion-item-label-text">
+        <div class="calc__accordion-item-label-main">{{ accordionItem.label }}</div>
+        <div class="calc__accordion-item-label-sub">{{ accordionItem?.sublabel }}</div>
+      </div>
+      <ui-prompt
+        v-if="accordionItem?.prompt?.length"
+        :prompt-text="accordionItem.prompt"
+      />
+    </div>
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>
     <div class="calc__accordion-item-minus" v-if="isOpen"></div>
-    {{ accordionItem.label }}
-    {{ accordionItem?.sublabel }}
-    <ui-prompt
-      v-if="accordionItem?.prompt?.length"
-      :prompt-text="accordionItem.prompt"
-    />
     <ui-tooltip
       :is-show="isShowError"
       tooltip-text="Во вкладке есть не корректно заполненные поля."
@@ -22,18 +33,21 @@
 
   <div
     class="calc__accordion-item-content"
-    v-show="isOpen"
-    v-for="(template, key_in) in accordionItem?.templates"
-    :key="key_in"
-    :style="{ maxWidth: maxWidth + '%' }"
-  >
-    <templates-wrapper
-      :parent-is-show="parentIsShow"
-      :template="template"
-      :index="itemIdName + '_' + key_in"
-      :parent-name="elementName"
-      @changedValue="changeValue"
-    />
+    v-show="isOpen">
+    <div
+      :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
+    >
+      <templates-wrapper
+        v-for="(template, key_in) in accordionItem?.templates"
+        :key="key_in"
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="itemIdName + '_' + key_in"
+        :parent-name="elementName"
+        @changedValue="changeValue"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -45,10 +59,11 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiAccordionItem",
-  components: { UiTooltip, UiPrompt, TemplatesWrapper },
+  components: { IconElement, UiTooltip, UiPrompt, TemplatesWrapper },
   emits: ["changedValue"],
   props: {
     accordionItem: {
@@ -62,7 +77,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidth"]),
+    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidthSide", "maxWidth", "maxHeight"]),
   },
   data() {
     return {
