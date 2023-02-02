@@ -30,16 +30,19 @@
           @click="openItem(key)"
         >
           <icon-element
-            v-if="item?.image?.filename"
-            :max-height="item?.maxHeight"
-            :max-width="item?.maxWidth"
+            v-if="item?.iconSettings?.image?.filename && item?.iconSettings?.location === 'leftSide'"
             :alt="item.label"
-            :icon-data="item?.image"
-          ></icon-element>
+            :icon-settings="item?.iconSettings"
+          />
           <div class="calc__tab-item-label-text">
             <div class="calc__tab-item-label-main">{{ item.label }}</div>
             <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
           </div>
+          <icon-element
+            v-if="item?.iconSettings?.image?.filename && item?.iconSettings?.location === 'rightSide'"
+            :alt="item.label"
+            :icon-settings="item?.iconSettings"
+          />
           <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
           <ui-tooltip
             :is-show="
@@ -50,15 +53,13 @@
               )
             "
             tooltip-text="Во вкладке есть не корректно заполненные поля."
-          ></ui-tooltip>
+          />
         </div>
       </template>
     </div>
-    <div
-      class="calc__tab-item-content-wrapper"
+    <template
       v-if="tabData?.items?.length"
       v-for="(item, key) in tabData.items"
-      :style="{ maxWidth: maxWidth + '%' }"
       :key="key"
     >
       <ui-tab-item
@@ -73,7 +74,7 @@
         :shown-id-tab="shownIdTab"
         @changedValue="changeValue"
       />
-    </div>
+    </template>
   </div>
 </template>
 

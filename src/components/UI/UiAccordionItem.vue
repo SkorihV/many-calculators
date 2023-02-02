@@ -8,16 +8,19 @@
   >
     <div class="calc__accordion-item-label-wrapper">
       <icon-element
-        v-if="accordionItem?.image?.filename"
-        :max-height="accordionItem?.maxHeight"
-        :max-width="accordionItem?.maxWidth"
+        v-if="accordionItem?.iconSettings?.image?.filename && accordionItem?.iconSettings?.location === 'leftSide'"
         :alt="accordionItem.label"
-        :icon-data="accordionItem?.image"
-      ></icon-element>
+        :icon-settings="accordionItem.iconSettings"
+      />
       <div class="calc__accordion-item-label-text">
         <div class="calc__accordion-item-label-main">{{ accordionItem.label }}</div>
         <div class="calc__accordion-item-label-sub">{{ accordionItem?.sublabel }}</div>
       </div>
+      <icon-element
+        v-if="accordionItem?.iconSettings?.image?.filename && accordionItem?.iconSettings?.location === 'rightSide'"
+        :alt="accordionItem.label"
+        :icon-settings="accordionItem.iconSettings"
+      />
       <ui-prompt
         v-if="accordionItem?.prompt?.length"
         :prompt-text="accordionItem.prompt"
@@ -28,13 +31,20 @@
     <ui-tooltip
       :is-show="isShowError"
       tooltip-text="Во вкладке есть не корректно заполненные поля."
-    ></ui-tooltip>
+    />
   </div>
 
   <div
     class="calc__accordion-item-content"
     v-show="isOpen">
-    <div
+    <div class="calc__background-image-wrapper" v-if="accordionItem?.backgroundImageSettings?.image?.finame">
+      <img
+        class="calc__background-image-img"
+        :src="getImageDir + accordionItem?.backgroundImageSettings?.image?.finame"
+        :style="{ maxWidth: accordionItem?.backgroundImageSettings.maxWidth + 'px', maxHeight: accordionItem?.backgroundImageSettings.maxHeight }"
+            >
+    </div>
+    <div class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
     >
       <templates-wrapper
@@ -77,7 +87,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidthSide", "maxWidth", "maxHeight"]),
+    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidth", "maxHeight"]),
   },
   data() {
     return {
@@ -95,6 +105,7 @@ export default {
     ...mapState(useBaseStore, [
       "isCanShowAllTooltips",
       "getValidationListOnParentName",
+      "getImageDir"
     ]),
     /**
      *

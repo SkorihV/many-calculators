@@ -1,17 +1,29 @@
 <template>
-  <div
-    class="calc__tab-item-content"
-    v-show="isShowItem"
-    v-for="(template, key_in) in tabItem?.templates"
-    :key="key_in"
+  <div class="calc__tab-item-content-wrapper"
+       v-show="isShowItem"
+
   >
-    <templates-wrapper
-      :parent-is-show="parentIsShow"
-      :template="template"
-      :index="itemName + key_in"
-      :parent-name="elementName"
-      @changedValue="changeValue"
-    />
+    <div class="calc__background-image-wrapper tab" v-if="tabItem?.backgroundImageSettings?.image?.finame">
+      <img
+        class="calc__background-image-img"
+        :src="getImageDir + tabItem?.backgroundImageSettings?.image?.finame"
+        :style="{ maxWidth: tabItem?.backgroundImageSettings.maxWidth + 'px', maxHeight: tabItem?.backgroundImageSettings.maxHeight }"
+      >
+    </div>
+    <div
+      class="calc__tab-item-content"
+      v-for="(template, key_in) in tabItem?.templates"
+      :style="{ maxWidth: tabItem?.maxWidthSide + '%' }"
+      :key="key_in"
+    >
+      <templates-wrapper
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="itemName + key_in"
+        :parent-name="elementName"
+        @changedValue="changeValue"
+      />
+    </div>
   </div>
 </template>
 
@@ -56,7 +68,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["getValidationListOnParentName"]),
+    ...mapState(useBaseStore, ["getValidationListOnParentName", "getImageDir"]),
     isShowItem() {
       return this.tabItemId === this.shownIdTab;
     },

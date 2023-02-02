@@ -1,7 +1,7 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
       <img
-        :src="imageDir + iconData?.filename"
+        :src="imageDir + iconSettings?.image?.filename"
         :alt="alt"
       />
   </div>
@@ -15,7 +15,7 @@ import { useBaseStore } from "@/store/piniaStore";
 export default {
   name: "Icon-element",
   props: {
-    iconData: {
+    iconSettings: {
       type: Object,
       default: () => {},
       require: true
@@ -23,14 +23,6 @@ export default {
     alt: {
       type: String,
       default: ""
-    },
-    maxWidth: {
-      type: Number,
-      default: 32
-    },
-    maxHeight: {
-      type: Number,
-      default: 32
     }
   },
   computed: {
@@ -41,10 +33,12 @@ export default {
       return this.getImageDir;
     },
     width() {
-      return "max-width:" + this.maxWidth + "px;";
+      let localValue = this.iconSettings?.maxWidth ? this.iconSettings?.maxWidth : 32;
+      return "max-width:" + localValue + "px;";
     },
     height() {
-      return "max-height:" + this.maxHeight + "px;";
+      let localValue = this.iconSettings?.maxWidth ? this.iconSettings?.maxWidth : 32;
+      return "max-height:" + localValue + "px;";
     }
 
   }

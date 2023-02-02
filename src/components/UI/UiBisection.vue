@@ -11,6 +11,14 @@
       {{ templateData?.label }}
     </div>
     <div class="calc__bisection-content-wrapper">
+      <div class="calc__background-image-wrapper tab" v-if="templateData?.backgroundImageSettings?.image?.finame">
+        <img
+          class="calc__background-image-img"
+          :src="getImageDir + templateData?.backgroundImageSettings?.image?.finame"
+          :style="{ maxWidth: templateData?.backgroundImageSettings.maxWidth + 'px', maxHeight: templateData?.backgroundImageSettings.maxHeight }"
+        >
+      </div>
+
       <div
         v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
@@ -90,7 +98,7 @@ export default {
       "elementName",
       "classes",
       "parentIsShow",
-      "dependencyFormulaDisplay",
+      "dependencyFormulaDisplay"
     ]),
   },
   mounted() {
@@ -125,7 +133,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["devMode"]),
+    ...mapState(useBaseStore, ["devMode", "getImageDir"]),
     /**
      *
      * @returns {any|boolean}

@@ -23,12 +23,10 @@
             @click="selectedCurrentRadio(idx)"
           >
             <icon-element
-            v-if="radio?.image"
-            :icon-data="radio?.image"
-            :alt="radio?.name"
-            :max-width="maxWidth"
-            :max-height="maxHeight"
-          ></icon-element>
+              v-if="radio?.iconSettings?.image?.filename && radio?.iconSettings?.location === 'leftSide'"
+              :alt="radio?.name"
+              :icon-settings="radio.iconSettings"
+          />
             <span
               class="calc__radio-indicator"
               v-if="radioType === 'base' && !onlyImage"
@@ -41,6 +39,11 @@
                 {{ radio?.subradioName }}
               </div>
             </div>
+            <icon-element
+              v-if="radio?.iconSettings?.image?.filename && radio?.iconSettings?.location === 'rightSide'"
+              :alt="radio?.name"
+              :icon-settings="radio.iconSettings"
+            />
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
         </template>
@@ -192,23 +195,6 @@ export default {
       });
     },
 
-    // /**
-    //  * добавить к картинкам актуальный url
-    //  * @param radioList
-    //  * @returns {*}
-    //  */
-    // updatedRadioListInImageDir(radioList) {
-    //   return radioList.map((radioItem, index) => {
-    //     if (radioItem?.image?.filename) {
-    //       radioItem.image.filename = this.imageDir + radioItem.image.filename;
-    //     }
-    //     radioItem.value = radioItem.value?.toString()?.length
-    //       ? radioItem.value
-    //       : index + 1;
-    //     return radioItem;
-    //   });
-    // },
-
     updatedRadioListBeforeCheckedDependency() {
       this.localRadioListInOut = this.localRadioListInOut?.map((radio) => {
         if (radio?.dependencyFormulaItem?.length) {
@@ -324,10 +310,6 @@ export default {
       }
       return this.localRadioListInOut[this.currentIndexRadioButton];
     },
-
-    // imageDir() {
-    //   return this.getImageDir;
-    // },
   },
 };
 </script>

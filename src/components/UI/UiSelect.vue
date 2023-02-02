@@ -19,22 +19,24 @@
           class="calc__select-change-item"
           @click="toggleOpenClose"
         >
-          <IconElement
-            v-if="currentOption?.image?.filename"
-            :icon-data="currentOption?.image"
+          <icon-element
+            v-if="currentOption?.iconSettings?.image?.filename && currentOption?.iconSettings?.location === 'leftSide'"
+            :icon-settings="currentOption?.iconSettings"
             :alt="currentOption?.selectName"
-            :max-width="maxWidth"
-            :max-height="maxHeight"
-          ></IconElement>
+          />
           {{ currentOption.selectName }}
+          <icon-element
+            v-if="currentOption?.iconSettings?.image?.filename && currentOption?.iconSettings?.location === 'rightSide'"
+            :icon-settings="currentOption?.iconSettings"
+            :alt="currentOption?.selectName"
+          />
           <ui-prompt
             v-if="currentOption?.prompt?.length"
             :prompt-text="currentOption.prompt"
-          ></ui-prompt>
+          />
           <div class="calc__select-arrow"></div>
         </div>
         <div class="calc__select-option-wrapper" v-if="isOpen">
-
           <template
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
             :key="idx">
@@ -43,21 +45,23 @@
             @click="changeSelect(option, idx)"
             v-if="currentOption?.value !== option?.value && option.isShow"
           >
-
-              <IconElement
-                v-if="option?.image?.filename"
-                :icon-data="option?.image"
-                :alt="option?.selectName"
-                :max-width="maxWidth"
-                :max-height="maxHeight"
-              ></IconElement>
-              <div class="calc__select-option-item-text">
-                {{ option.selectName }}
-              </div>
-              <ui-prompt
+            <icon-element
+              v-if="option?.iconSettings?.image?.filename && option?.iconSettings?.location === 'leftSide'"
+              :icon-settings="option?.iconSettings"
+              :alt="option?.selectName"
+            />
+            <div class="calc__select-option-item-text">
+              {{ option.selectName }}
+            </div>
+            <icon-element
+              v-if="option?.iconSettings?.image?.filename && option?.iconSettings?.location === 'rightSide'"
+              :icon-settings="option?.iconSettings"
+              :alt="option?.selectName"
+            />
+           <ui-prompt
                 v-if="option?.prompt?.length"
                 :prompt-text="option.prompt"
-              ></ui-prompt>
+              />
             </div>
           </template>
         </div>

@@ -5,12 +5,8 @@
     :class="{ isShow: isShow }"
     v-cloak
   >
-    <div class="calc__error-toggle" @click="displayAlert = !displayAlert">
-      X
-    </div>
-    <br />
-    <template v-if="displayAlert">
-      <label class="calc__error-checkbox-label">
+    <div class="calc__error-control-wrapper">
+      <label class="calc__error-checkbox-label" v-if="displayAlert">
         <span class="calc__error-checkbox-text">
           Отобразить внутреннее состояние элементов:
         </span>
@@ -20,80 +16,85 @@
           type="checkbox"
         />
       </label>
-
-      <template v-if="listExistElementNames.length">
-        <div class="calc__error-label">
-          Список всех имен элементов Заголовок / Имя:
-        </div>
-        <div
-          class="calc__error-item"
-          v-for="(data, key) in listExistElementNames"
-          :key="key"
-        >
-          <div class="calc__error-item-name">
-            {{ data.label ? data.label : "Без заголовка - " }} /
-            {{ data.elementName }}
+      <div class="calc__error-toggle" @click="displayAlert = !displayAlert">
+        X
+      </div>
+    </div>
+    <template v-if="displayAlert">
+      <div class="calc__error-content">
+        <template v-if="listExistElementNames.length">
+          <div class="calc__error-label">
+            Список всех имен элементов Заголовок / Имя:
           </div>
-        </div>
-      </template>
-
-      <template v-if="Object.keys(recurringTemplateNames).length">
-        <div class="calc__error-label">Дубли имен:</div>
-        <div
-          class="calc__error-item"
-          v-for="(error, key) in recurringTemplateNames"
-          :key="key"
-        >
-          <div class="calc__error-item-name">
-            Имя элемента '{{ key }}' обнаружено у следующих элементов:
+          <div
+            class="calc__error-item"
+            v-for="(data, key) in listExistElementNames"
+            :key="key"
+          >
+            <div class="calc__error-item-name">
+              {{ data.label ? data.label : "Без заголовка - " }} /
+              {{ data.elementName }}
+            </div>
           </div>
-          <div class="calc__error-item-name" v-for="label in error">
-            {{ label.length ? label : "Отсутствует" }}
-          </div>
-        </div>
-        <p class="calc__error-alert">Имена должны быть уникальными!</p>
-      </template>
+        </template>
 
-      <template v-if="notExistNamesInDisplayFormula.length">
-        <div class="calc__error-label">
-          Не существующие имена в формулах на отображение Заголовок / Имя:
-        </div>
-        <div
-          class="calc__error-item"
-          v-for="(error, key) in notExistNamesInDisplayFormula"
-          :key="key"
-        >
-          <div class="calc__error-item-name">
-            Имя элемента: '{{
-              error?.label?.length ? error?.label : "Отсутствует"
-            }}' Значение: '{{ error.name }}' - не существует.
+        <template v-if="Object.keys(recurringTemplateNames).length">
+          <div class="calc__error-label">Дубли имен:</div>
+          <div
+            class="calc__error-item"
+            v-for="(error, key) in recurringTemplateNames"
+            :key="key"
+          >
+            <div class="calc__error-item-name">
+              Имя элемента '{{ key }}' обнаружено у следующих элементов:
+            </div>
+            <div class="calc__error-item-name" v-for="label in error">
+              {{ label.length ? label : "Отсутствует" }}
+            </div>
           </div>
-        </div>
-        <p class="calc__error-alert">
-          Измените существующие имена или добавьте недостающие.
-        </p>
-      </template>
+          <p class="calc__error-alert">Имена должны быть уникальными!</p>
+        </template>
 
-      <template v-if="notExistNamesInComputedFormula.length">
-        <div class="calc__error-label">
-          Не существующие имена в формулах на расчет Заголовок / Имя:
-        </div>
-        <div
-          class="calc__error-item"
-          v-for="(error, key) in notExistNamesInComputedFormula"
-          :key="key"
-        >
-          <div class="calc__error-item-name">
-            Имя элемента: '{{
-              error?.label?.length ? error?.label : "Отсутствует"
-            }}' Значение: '{{ error.name }}' - не существует.
+        <template v-if="notExistNamesInDisplayFormula.length">
+          <div class="calc__error-label">
+            Не существующие имена в формулах на отображение Заголовок / Имя:
           </div>
-        </div>
-        <p class="calc__error-alert">
-          Измените существующие имена или добавьте недостающие.
-        </p>
-      </template>
+          <div
+            class="calc__error-item"
+            v-for="(error, key) in notExistNamesInDisplayFormula"
+            :key="key"
+          >
+            <div class="calc__error-item-name">
+              Имя элемента: '{{
+                error?.label?.length ? error?.label : "Отсутствует"
+              }}' Значение: '{{ error.name }}' - не существует.
+            </div>
+          </div>
+          <p class="calc__error-alert">
+            Измените существующие имена или добавьте недостающие.
+          </p>
+        </template>
 
+        <template v-if="notExistNamesInComputedFormula.length">
+          <div class="calc__error-label">
+            Не существующие имена в формулах на расчет Заголовок / Имя:
+          </div>
+          <div
+            class="calc__error-item"
+            v-for="(error, key) in notExistNamesInComputedFormula"
+            :key="key"
+          >
+            <div class="calc__error-item-name">
+              Имя элемента: '{{
+                error?.label?.length ? error?.label : "Отсутствует"
+              }}' Значение: '{{ error.name }}' - не существует.
+            </div>
+          </div>
+          <p class="calc__error-alert">
+            Измените существующие имена или добавьте недостающие.
+          </p>
+        </template>
+      </div>
       <p class="calc__error-item">
         В случае наличия ошибок, калькулятор может вести расчет некорректно!
       </p>
