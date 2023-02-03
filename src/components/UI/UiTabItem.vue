@@ -1,14 +1,8 @@
 <template>
   <div class="calc__tab-item-content-wrapper"
        v-show="isShowItem"
-
   >
-    <div class="calc__background-image-wrapper tab" v-if="tabItem?.backgroundImageSettings?.image?.finame">
-      <img
-        class="calc__background-image-img"
-        :src="getImageDir + tabItem?.backgroundImageSettings?.image?.finame"
-        :style="{ maxWidth: tabItem?.backgroundImageSettings.maxWidth + 'px', maxHeight: tabItem?.backgroundImageSettings.maxHeight }"
-      >
+    <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]">
     </div>
     <div
       class="calc__tab-item-content"
@@ -75,6 +69,36 @@ export default {
     itemName() {
       return this.tabName + "_" + this.elementName;
     },
+    isBackgroundImage() {
+      return !!this?.tabItem?.backgroundImageSettings?.image?.filename;
+    },
+    styleBackgroundImageUrl() {
+        return 'background-image : url("' + this.getImageDir + this.tabItem?.backgroundImageSettings?.image?.filename + '");';
+    },
+    styleBackgroundRepeat() {
+      return 'background-repeat:' + this.tabItem?.backgroundImageSettings?.backgroundRepeat + ';';
+    },
+    styleBackgroundPosition() {
+      return 'background-position:' + this.tabItem?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+    },
+    styleBackgroundBehaviorImage() {
+      let size = this.tabItem?.backgroundImageSettings?.fixedSize ?
+        (this.tabItem?.backgroundImageSettings?.maxWidth || 250) + '' + this.tabItem?.backgroundImageSettings?.unitSize + ' ' + (this.tabItem?.backgroundImageSettings?.maxHeight || 250) + '' + this.tabItem?.backgroundImageSettings?.unitSize
+        :
+        this.tabItem?.backgroundImageSettings?.behaviorImage;
+      return 'background-size:' + size + ';';
+    },
+    styleBackground() {
+      if (this.isBackgroundImage) {
+        return [
+          this.styleBackgroundImageUrl,
+          this.styleBackgroundRepeat,
+          this.styleBackgroundPosition,
+          this.styleBackgroundBehaviorImage
+        ]
+      }
+      return [];
+    }
   },
 };
 </script>

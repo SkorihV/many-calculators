@@ -1993,11 +1993,14 @@ $border-radius: 4px;
     &-wrapper {
       position: absolute;
       width: calc(100% - 10px);
-      height: auto;
+      height: 100%;
       display: flex;
       justify-content: flex-end;
       align-items: flex-end;
       overflow: hidden;
+      background-repeat: no-repeat;
+      background-position: right bottom;
+      background-size: contain;
 
       &::after {
         position: absolute;

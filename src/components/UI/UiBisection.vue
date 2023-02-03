@@ -11,14 +11,7 @@
       {{ templateData?.label }}
     </div>
     <div class="calc__bisection-content-wrapper">
-      <div class="calc__background-image-wrapper tab" v-if="templateData?.backgroundImageSettings?.image?.finame">
-        <img
-          class="calc__background-image-img"
-          :src="getImageDir + templateData?.backgroundImageSettings?.image?.finame"
-          :style="{ maxWidth: templateData?.backgroundImageSettings.maxWidth + 'px', maxHeight: templateData?.backgroundImageSettings.maxHeight }"
-        >
-      </div>
-
+      <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]"></div>
       <div
         v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
@@ -186,6 +179,37 @@ export default {
       }
       return "max-width:" + (100 - this.widthLeftSide) + "%";
     },
+    isBackgroundImage() {
+      return !!this?.templateData?.backgroundImageSettings?.image?.filename;
+    },
+    styleBackgroundImageUrl() {
+      return 'background-image : url("' + this.getImageDir + this.templateData?.backgroundImageSettings?.image?.filename + '");';
+    },
+    styleBackgroundRepeat() {
+      return 'background-repeat:' + this.templateData?.backgroundImageSettings?.backgroundRepeat + ';';
+    },
+    styleBackgroundPosition() {
+      return 'background-position:' + this.templateData?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+    },
+    styleBackgroundBehaviorImage() {
+      let size = this.templateData?.backgroundImageSettings?.fixedSize ?
+        (this.templateData?.backgroundImageSettings?.maxWidth || 250) + '' + this.templateData?.backgroundImageSettings?.unitSize + ' ' + (this.templateData?.backgroundImageSettings?.maxHeight || 250) + '' + this.templateData?.backgroundImageSettings?.unitSize
+        :
+        this.templateData?.backgroundImageSettings?.behaviorImage;
+      return 'background-size:' + size + ';';
+    },
+    styleBackground() {
+      if (this.isBackgroundImage) {
+        return [
+          this.styleBackgroundImageUrl,
+          this.styleBackgroundRepeat,
+          this.styleBackgroundPosition,
+          this.styleBackgroundBehaviorImage
+        ]
+      }
+      return [];
+    }
   },
+
 };
 </script>

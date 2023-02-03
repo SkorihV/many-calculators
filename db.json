@@ -2415,7 +2415,18 @@
           },
           {
             "title": "Вкладка с радиокнопками",
-            "label": "Вкладка с радиокнопками",
+            "label": "Вкладка с радиокнопками aaaasd",
+            "backgroundImageSettings": {
+              "image" : {
+                "filename" : "https://cdn.discordapp.com/attachments/1069588923690532936/1070900783865929768/ew3_snthwve_style_nvinkpunk_drunken_beautiful_woman_as_delirium_348e3a7c-63f5-4cc9-ae51-674b0adf6264.png"
+              },
+              "backgroundPosition": "right-bottom",
+              "backgroundRepeat": "no-repeat",
+              "behaviorImage": "cover",
+              "fixedSize" : true,
+              "maxHeight": 450,
+              "unitSize": "px"
+            },
             "templates": [
               {
                 "title": "radio - с ценой у пункте",
@@ -2745,10 +2756,22 @@
           },
           {
             "title": "Вкладка с радиокнопками",
-            "label": "Вкладка с радиокнопками",
-            "maxWidthSide" : 30,
+            "label": "Вкладка с радиокнопками dfd",
+            "maxWidthSide" : 70,
+            "backgroundImageSettings": {
+              "image" : {
+                "filename" : "https://cdn.discordapp.com/attachments/1069588923690532936/1070900783865929768/ew3_snthwve_style_nvinkpunk_drunken_beautiful_woman_as_delirium_348e3a7c-63f5-4cc9-ae51-674b0adf6264.png"
+              },
+              "backgroundPosition": "right-bottom",
+              "backgroundRepeat": "no-repeat",
+              "behaviorImage": "cover",
+              "fixedSize" : true,
+              "maxHeight": 450,
+              "unitSize": "px"
+            },
             "templates": [
               {
+
                 "title": "radio - с ценой у пункте",
                 "values": [
                   {
@@ -3153,6 +3176,17 @@
             "label": "",
             "labelLeft": "Параметры конструкции",
             "labelRight": "",
+            "backgroundImageSettings": {
+              "image" : {
+                "filename" : "https://cdn.discordapp.com/attachments/1069588923690532936/1070900783865929768/ew3_snthwve_style_nvinkpunk_drunken_beautiful_woman_as_delirium_348e3a7c-63f5-4cc9-ae51-674b0adf6264.png"
+              },
+              "backgroundPosition": "right-bottom",
+              "backgroundRepeat": "no-repeat",
+              "behaviorImage": "cover",
+              "fixedSize" : true,
+              "maxHeight": 450,
+              "unitSize": "px"
+            },
             "leftSide": [
               {
                 "json_id": "243617106",

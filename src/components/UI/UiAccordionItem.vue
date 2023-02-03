@@ -37,13 +37,7 @@
   <div
     class="calc__accordion-item-content"
     v-show="isOpen">
-    <div class="calc__background-image-wrapper" v-if="accordionItem?.backgroundImageSettings?.image?.finame">
-      <img
-        class="calc__background-image-img"
-        :src="getImageDir + accordionItem?.backgroundImageSettings?.image?.finame"
-        :style="{ maxWidth: accordionItem?.backgroundImageSettings.maxWidth + 'px', maxHeight: accordionItem?.backgroundImageSettings.maxHeight }"
-            >
-    </div>
+    <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]"></div>
     <div class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
     >
@@ -156,6 +150,37 @@ export default {
       return this.localListValidationError?.filter((item) => !item.isShow)
         .length;
     },
+
+    isBackgroundImage() {
+      return !!this?.accordionItem?.backgroundImageSettings?.image?.filename;
+    },
+    styleBackgroundImageUrl() {
+      return 'background-image : url("' + this.getImageDir + this.accordionItem?.backgroundImageSettings?.image?.filename + '");';
+    },
+    styleBackgroundRepeat() {
+      return 'background-repeat:' + this.accordionItem?.backgroundImageSettings?.backgroundRepeat + ';';
+    },
+    styleBackgroundPosition() {
+      return 'background-position:' + this.accordionItem?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+    },
+    styleBackgroundBehaviorImage() {
+      let size = this.accordionItem?.backgroundImageSettings?.fixedSize ?
+        (this.accordionItem?.backgroundImageSettings?.maxWidth || 250) + '' + this.accordionItem?.backgroundImageSettings?.unitSize + ' ' + (this.accordionItem?.backgroundImageSettings?.maxHeight || 250) + '' + this.accordionItem?.backgroundImageSettings?.unitSize
+        :
+        this.accordionItem?.backgroundImageSettings?.behaviorImage;
+      return 'background-size:' + size + ';';
+    },
+    styleBackground() {
+      if (this.isBackgroundImage) {
+        return [
+          this.styleBackgroundImageUrl,
+          this.styleBackgroundRepeat,
+          this.styleBackgroundPosition,
+          this.styleBackgroundBehaviorImage
+        ]
+      }
+      return [];
+    }
   },
 };
 </script>
