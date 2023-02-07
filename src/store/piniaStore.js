@@ -16,6 +16,7 @@ export const useBaseStore = defineStore("base", {
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
       devModeData: false,
       showInsideElementStatusData: false,
+      elementsIsMounted: {},
     };
   },
   getters: {
@@ -110,6 +111,9 @@ export const useBaseStore = defineStore("base", {
     devMode: (state) => state.devModeData,
     showInsideElementStatus: (state) => state.showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
+    appIsMounted: (state) => {
+      return !Boolean(Object.values(state.elementsIsMounted).filter(value => !value).length);
+    }
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -210,5 +214,8 @@ export const useBaseStore = defineStore("base", {
     tryToggleShowInsideElementStatus(flag) {
       this.showInsideElementStatusData = flag;
     },
+    tryToggleElementIsMounted(name, flag) {
+      this.elementsIsMounted[name] = flag;
+    }
   },
 });

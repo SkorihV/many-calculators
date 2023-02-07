@@ -46,7 +46,7 @@ export default {
       "elementName",
       "classes",
       "parentIsShow",
-      "dependencyFormulaDisplay"
+      "dependencyFormulaDisplay",
     ]),
   },
   data() {

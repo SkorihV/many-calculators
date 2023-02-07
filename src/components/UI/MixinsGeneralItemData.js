@@ -1,5 +1,4 @@
 import { useBaseStore } from "@/store/piniaStore";
-
 import { mapState } from "pinia";
 
 export const MixinsGeneralItemData = {
@@ -72,9 +71,7 @@ export const MixinsGeneralItemData = {
           this.templateName === "UiInput" || this.templateName === "UiRange"
             ? this.resultValue
             : this.templateName === "UiRadio"
-            ? this.changedRadio?.value
-              ? this.changedRadio?.value
-              : null
+            ? this.selectedValueInRadio
             : this.templateName === "UiSelect"
             ? this.currentOption?.value
             : this.templateName === "UiCheckbox"

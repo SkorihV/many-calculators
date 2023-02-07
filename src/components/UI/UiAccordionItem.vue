@@ -8,16 +8,26 @@
   >
     <div class="calc__accordion-item-label-wrapper">
       <icon-element
-        v-if="accordionItem?.iconSettings?.image?.filename && accordionItem?.iconSettings?.location === 'leftSide'"
+        v-if="
+          accordionItem?.iconSettings?.image?.filename &&
+          accordionItem?.iconSettings?.location === 'leftSide'
+        "
         :alt="accordionItem.label"
         :icon-settings="accordionItem.iconSettings"
       />
       <div class="calc__accordion-item-label-text">
-        <div class="calc__accordion-item-label-main">{{ accordionItem.label }}</div>
-        <div class="calc__accordion-item-label-sub">{{ accordionItem?.sublabel }}</div>
+        <div class="calc__accordion-item-label-main">
+          {{ accordionItem.label }}
+        </div>
+        <div class="calc__accordion-item-label-sub">
+          {{ accordionItem?.sublabel }}
+        </div>
       </div>
       <icon-element
-        v-if="accordionItem?.iconSettings?.image?.filename && accordionItem?.iconSettings?.location === 'rightSide'"
+        v-if="
+          accordionItem?.iconSettings?.image?.filename &&
+          accordionItem?.iconSettings?.location === 'rightSide'
+        "
         :alt="accordionItem.label"
         :icon-settings="accordionItem.iconSettings"
       />
@@ -34,11 +44,14 @@
     />
   </div>
 
-  <div
-    class="calc__accordion-item-content"
-    v-show="isOpen">
-    <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]"></div>
-    <div class="calc__accordion-item-content-wrapper"
+  <div class="calc__accordion-item-content" v-show="isOpen">
+    <div
+      class="calc__background-image-wrapper"
+      v-if="isBackgroundImage"
+      :style="[...styleBackground]"
+    ></div>
+    <div
+      class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
     >
       <templates-wrapper
@@ -51,23 +64,24 @@
         @changedValue="changeValue"
       />
     </div>
-
   </div>
 </template>
 
 <script>
+import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import IconElement from "@/components/UI/Icon-element.vue";
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import SpinnerBlock from "@/components/UI/Spinner-element.vue";
 
+
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiAccordionItem",
-  components: { IconElement, UiTooltip, UiPrompt, TemplatesWrapper },
+  components: { IconElement, UiTooltip, UiPrompt, TemplatesWrapper, SpinnerBlock },
   emits: ["changedValue"],
   props: {
     accordionItem: {
@@ -81,7 +95,12 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates(["elementName", "parentIsShow", "maxWidth", "maxHeight"]),
+    ...UsePropsTemplates([
+      "elementName",
+      "parentIsShow",
+      "maxWidth",
+      "maxHeight",
+    ]),
   },
   data() {
     return {
@@ -99,7 +118,7 @@ export default {
     ...mapState(useBaseStore, [
       "isCanShowAllTooltips",
       "getValidationListOnParentName",
-      "getImageDir"
+      "getImageDir",
     ]),
     /**
      *
@@ -155,20 +174,41 @@ export default {
       return !!this?.accordionItem?.backgroundImageSettings?.image?.filename;
     },
     styleBackgroundImageUrl() {
-      return 'background-image : url("' + this.getImageDir + this.accordionItem?.backgroundImageSettings?.image?.filename + '");';
+      return (
+        'background-image : url("' +
+        this.getImageDir +
+        this.accordionItem?.backgroundImageSettings?.image?.filename +
+        '");'
+      );
     },
     styleBackgroundRepeat() {
-      return 'background-repeat:' + this.accordionItem?.backgroundImageSettings?.backgroundRepeat + ';';
+      return (
+        "background-repeat:" +
+        this.accordionItem?.backgroundImageSettings?.backgroundRepeat +
+        ";"
+      );
     },
     styleBackgroundPosition() {
-      return 'background-position:' + this.accordionItem?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+      return (
+        "background-position:" +
+        this.accordionItem?.backgroundImageSettings?.backgroundPosition?.replace(
+          "-",
+          " "
+        ) +
+        ";"
+      );
     },
     styleBackgroundBehaviorImage() {
-      let size = this.accordionItem?.backgroundImageSettings?.fixedSize ?
-        (this.accordionItem?.backgroundImageSettings?.maxWidth || 250) + '' + this.accordionItem?.backgroundImageSettings?.unitSize + ' ' + (this.accordionItem?.backgroundImageSettings?.maxHeight || 250) + '' + this.accordionItem?.backgroundImageSettings?.unitSize
-        :
-        this.accordionItem?.backgroundImageSettings?.behaviorImage;
-      return 'background-size:' + size + ';';
+      let size = this.accordionItem?.backgroundImageSettings?.fixedSize
+        ? (this.accordionItem?.backgroundImageSettings?.maxWidth || 250) +
+          "" +
+          this.accordionItem?.backgroundImageSettings?.unitSize +
+          " " +
+          (this.accordionItem?.backgroundImageSettings?.maxHeight || 250) +
+          "" +
+          this.accordionItem?.backgroundImageSettings?.unitSize
+        : this.accordionItem?.backgroundImageSettings?.behaviorImage;
+      return "background-size:" + size + ";";
     },
     styleBackground() {
       if (this.isBackgroundImage) {
@@ -176,11 +216,11 @@ export default {
           this.styleBackgroundImageUrl,
           this.styleBackgroundRepeat,
           this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage
-        ]
+          this.styleBackgroundBehaviorImage,
+        ];
       }
       return [];
-    }
+    },
   },
 };
 </script>

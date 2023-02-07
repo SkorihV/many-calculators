@@ -20,7 +20,7 @@ export const MixinsUtilityServices = {
      */
     handleSpecSymbolsInFormula(formula) {
       this.getSpecSymbols?.forEach((specItem) => {
-        formula = formula?.replaceAll(specItem[0], specItem[1]);
+        formula = formula?.toString()?.replaceAll(specItem[0], specItem[1]);
       });
       return formula;
     },

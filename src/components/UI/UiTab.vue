@@ -30,7 +30,10 @@
           @click="openItem(key)"
         >
           <icon-element
-            v-if="item?.iconSettings?.image?.filename && item?.iconSettings?.location === 'leftSide'"
+            v-if="
+              item?.iconSettings?.image?.filename &&
+              item?.iconSettings?.location === 'leftSide'
+            "
             :alt="item.label"
             :icon-settings="item?.iconSettings"
           />
@@ -39,7 +42,10 @@
             <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
           </div>
           <icon-element
-            v-if="item?.iconSettings?.image?.filename && item?.iconSettings?.location === 'rightSide'"
+            v-if="
+              item?.iconSettings?.image?.filename &&
+              item?.iconSettings?.location === 'rightSide'
+            "
             :alt="item.label"
             :icon-settings="item?.iconSettings"
           />
@@ -84,6 +90,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
 import IconElement from "@/components/UI/Icon-element.vue";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import SpinnerBlock from "@/components/UI/Spinner-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -91,7 +98,7 @@ import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiTab",
-  components: { IconElement, UiTooltip, UiPrompt, UiTabItem },
+  components: { IconElement, UiTooltip, UiPrompt, UiTabItem, SpinnerBlock },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -117,7 +124,7 @@ export default {
       errorsElements: {},
       visibilityListTabs: new Map(),
       shownIdTab: null,
-    };
+   };
   },
   methods: {
     openItem(index) {

@@ -1,9 +1,10 @@
 <template>
-  <div class="calc__tab-item-content-wrapper"
-       v-show="isShowItem"
-  >
-    <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]">
-    </div>
+  <div class="calc__tab-item-content-wrapper" v-show="isShowItem">
+    <div
+      class="calc__background-image-wrapper"
+      v-if="isBackgroundImage"
+      :style="[...styleBackground]"
+    ></div>
     <div
       class="calc__tab-item-content"
       v-for="(template, key_in) in tabItem?.templates"
@@ -27,6 +28,7 @@ import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+
 
 export default {
   name: "UiTabItem",
@@ -73,20 +75,41 @@ export default {
       return !!this?.tabItem?.backgroundImageSettings?.image?.filename;
     },
     styleBackgroundImageUrl() {
-        return 'background-image : url("' + this.getImageDir + this.tabItem?.backgroundImageSettings?.image?.filename + '");';
+      return (
+        'background-image : url("' +
+        this.getImageDir +
+        this.tabItem?.backgroundImageSettings?.image?.filename +
+        '");'
+      );
     },
     styleBackgroundRepeat() {
-      return 'background-repeat:' + this.tabItem?.backgroundImageSettings?.backgroundRepeat + ';';
+      return (
+        "background-repeat:" +
+        this.tabItem?.backgroundImageSettings?.backgroundRepeat +
+        ";"
+      );
     },
     styleBackgroundPosition() {
-      return 'background-position:' + this.tabItem?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+      return (
+        "background-position:" +
+        this.tabItem?.backgroundImageSettings?.backgroundPosition?.replace(
+          "-",
+          " "
+        ) +
+        ";"
+      );
     },
     styleBackgroundBehaviorImage() {
-      let size = this.tabItem?.backgroundImageSettings?.fixedSize ?
-        (this.tabItem?.backgroundImageSettings?.maxWidth || 250) + '' + this.tabItem?.backgroundImageSettings?.unitSize + ' ' + (this.tabItem?.backgroundImageSettings?.maxHeight || 250) + '' + this.tabItem?.backgroundImageSettings?.unitSize
-        :
-        this.tabItem?.backgroundImageSettings?.behaviorImage;
-      return 'background-size:' + size + ';';
+      let size = this.tabItem?.backgroundImageSettings?.fixedSize
+        ? (this.tabItem?.backgroundImageSettings?.maxWidth || 250) +
+          "" +
+          this.tabItem?.backgroundImageSettings?.unitSize +
+          " " +
+          (this.tabItem?.backgroundImageSettings?.maxHeight || 250) +
+          "" +
+          this.tabItem?.backgroundImageSettings?.unitSize
+        : this.tabItem?.backgroundImageSettings?.behaviorImage;
+      return "background-size:" + size + ";";
     },
     styleBackground() {
       if (this.isBackgroundImage) {
@@ -94,11 +117,11 @@ export default {
           this.styleBackgroundImageUrl,
           this.styleBackgroundRepeat,
           this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage
-        ]
+          this.styleBackgroundBehaviorImage,
+        ];
       }
       return [];
-    }
+    },
   },
 };
 </script>

@@ -13,10 +13,10 @@
         v-if="label"
         class="calc__checkbox-label"
         :class="{
-          button: isButton,
+          'is-button': isButton,
           checked: isChecked || localValue,
           disabled: isChecked,
-          error : isErrorClass
+          error: isErrorClass,
         }"
       >
         {{ label }}
@@ -28,7 +28,11 @@
         v-if="isBase"
         :class="[
           checkboxType,
-          { checked: isChecked || localValue, disabled: isChecked, error : isErrorClass },
+          {
+            checked: isChecked || localValue,
+            disabled: isChecked,
+            error: isErrorClass,
+          },
         ]"
       ></div>
       <div
@@ -38,7 +42,7 @@
           checked: isChecked || localValue,
           disabled: isChecked,
           vertical: isSwitcherVertical,
-          error : isErrorClass
+          error: isErrorClass,
         }"
       ></div>
       <div v-if="labelSecond.length" class="calc__checkbox-label_second">
@@ -47,7 +51,7 @@
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="isVisibilityFromDependency"
+        :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
   </div>
@@ -59,9 +63,9 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiCheckbox",
@@ -111,17 +115,25 @@ export default {
       "templateName",
     ]),
   },
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
+  },
   mounted() {
     this.localValue = Boolean(this.checkboxValue);
     if (this.isChecked) {
       this.localValue = true;
     }
     this.changeValue("mounted");
+
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200)
   },
   data() {
     return {
       localValue: false,
       textErrorNotEmpty: "Обязательное поле.",
+      canBeShownTooltip: false,
     };
   },
   methods: {
@@ -167,6 +179,9 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
+      if (eventType !== 'mounted') {
+        this.canBeShownTooltip = true;
+      }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
@@ -188,7 +203,8 @@ export default {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
-      "isCanShowAllTooltips"
+      "isCanShowAllTooltips",
+      "tryToggleElementIsMounted"
     ]),
     /**
      *
@@ -231,7 +247,11 @@ export default {
       return this.isNeedChoice && !this.localValue;
     },
     isErrorClass() {
-      return this.isErrorEmpty && this.isVisibilityFromDependency && this.isCanShowAllTooltips;
+      return (
+        this.isErrorEmpty &&
+        this.isVisibilityFromDependency &&
+        this.isCanShowAllTooltips
+      );
     },
     /**
      * Возвращает цену подходящую условию, если моле отображается

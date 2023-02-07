@@ -1,5 +1,5 @@
 <template>
-  <div id="app-base-constructor-calculator">
+  <div id="app-base-constructor-calculator" v-show="appIsMounted">
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <ui-accordion
@@ -77,14 +77,20 @@
         v-if="showResultBtn"
       >
         <icon-element
-          v-if="outOptions?.resultOptions?.iconSettings?.image?.filename && outOptions?.resultOptions?.iconSettings?.location === 'leftSide'"
-          :alt="outOptions.resultOptions.titleButton"
+          v-if="
+            outOptions?.resultOptions?.iconSettings?.image?.filename &&
+            outOptions?.resultOptions?.iconSettings?.location === 'leftSide'
+          "
+          :alt="outOptions?.resultOptions?.titleButton"
           :icon-settings="outOptions?.resultOptions?.iconSettings"
         />
-        {{ outOptions.resultOptions.titleButton }}
+        {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
         <icon-element
-          v-if="outOptions?.resultOptions?.iconSettings?.image?.filename && outOptions?.resultOptions?.iconSettings?.location === 'rightSide'"
-          :alt="outOptions.resultOptions.titleButton"
+          v-if="
+            outOptions?.resultOptions?.iconSettings?.image?.filename &&
+            outOptions?.resultOptions?.iconSettings?.location === 'rightSide'
+          "
+          :alt="outOptions?.resultOptions?.titleButton"
           :icon-settings="outOptions?.resultOptions?.iconSettings"
         />
       </div>
@@ -94,27 +100,27 @@
         :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <div v-if="showResultDataForBlock && initTeleport">
-        <p v-if="outOptions?.resultOptions?.title?.length">
+      <div class="calc__result-block-wrapper" v-if="showResultDataForBlock && initTeleport">
+        <div class="calc__result-block-title-main" v-if="outOptions?.resultOptions?.title?.length">
           {{ outOptions.resultOptions.title }}
-        </p>
-        <p v-if="outOptions?.resultOptions?.subtitle?.length">
+        </div>
+        <div class="calc__result-block-title-sub" v-if="outOptions?.resultOptions?.subtitle?.length">
           {{ outOptions.resultOptions.subtitle }}
-        </p>
-        <pre class="resultDataBlock" v-html="finalTextForOutput"></pre>
+        </div>
+        <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
       </div>
-
       <div id="prompt-text-element"></div>
     </div>
     <teleport v-if="initTeleport && submitResult" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
+    <div
+      class="dev-mode"
+      v-if="devMode && showInsideElementStatus"
+      v-html="devModeData"
+    ></div>
   </div>
-  <div
-    class="dev-mode"
-    v-if="devMode && showInsideElementStatus"
-    v-html="devModeData"
-  ></div>
+  <spinner-element v-if="!appIsMounted" />
 </template>
 
 <script>
@@ -124,16 +130,19 @@ import UiDuplicator from "@/components/UI/UiDuplicator";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+import IconElement from "@/components/UI/Icon-element.vue";
+import SpinnerElement from "@/components/UI/Spinner-element.vue";
 
+import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import IconElement from "@/components/UI/Icon-element.vue";
+
 
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    SpinnerElement,
     IconElement,
     TemplatesWrapper,
     UiAccordion,
@@ -184,7 +193,9 @@ export default {
     this.showResultDataForBlock = this.outOptions?.resultOptions
       ? this.outOptions?.resultOptions.showResultDataForBlock
       : false;
-    this.outOptions.resultOptions.titleButton = this.outOptions?.resultOptions?.titleButton?.length ? this.outOptions?.resultOptions?.titleButton : "Рассчитать"
+    this.outOptions.resultOptions.titleButton = this.outOptions?.resultOptions
+      ? this.outOptions?.resultOptions?.titleButton
+      : "Рассчитать";
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
@@ -281,22 +292,23 @@ export default {
     parseResultValueObjectItem(item) {
       let result = "";
       if (item.formOutputMethod && item.displayValue !== null && item.isShow) {
-        result += "\n" + item.label;
+        result += "\n<div class='calc__result-block-field-label'>" + item.label;
 
         if (
           item.formOutputMethod === "value" ||
           item.formOutputMethod === "valueSumm"
         ) {
           const unit = item.unit ? item.unit : "";
-          result += " - " + item.displayValue + " " + unit;
+          result += " " + item.displayValue + " " + unit;
         }
+        result += "</div>";
         if (
           item.cost !== null &&
           (item.formOutputMethod === "summ" ||
             item.formOutputMethod === "valueSumm")
         ) {
           let sum = item?.cost?.toString();
-          result += " - " + sum + " " + this.currency;
+          result += "<div class='calc__result-block-field-cost'> " + sum + " " + this.currency + "</div>";
         }
         result += "\n";
       }
@@ -323,6 +335,7 @@ export default {
       "devMode",
       "showInsideElementStatus",
       "getImageDir",
+      "appIsMounted"
     ]),
     /**
      * Данные которые подходят для вывода или расчета
@@ -432,8 +445,8 @@ export default {
             Object.values(item?.insertedTemplates).forEach((duplicator) => {
               if (Object.keys(duplicator?.insertedTemplates)) {
                 if (this.parseResultValueObjectItem(duplicator)?.length) {
-                  result += "<p>------------------------------</p>";
-                  result += this.parseResultValueObjectItem(duplicator);
+                  result += "<div class='calc__result-block-delimiter'></div>";
+                  result += "<div class='calc__result-block-field-wrapper'>" + this.parseResultValueObjectItem(duplicator) + "</div>";
                 }
                 Object.values(duplicator?.insertedTemplates).forEach(
                   (templateInDuplicator) => {
@@ -442,19 +455,19 @@ export default {
                         ?.length
                     ) {
                       result +=
-                        "<p>" +
+                        "<div class='calc__result-block-field-wrapper'>" +
                         this.parseResultValueObjectItem(templateInDuplicator) +
-                        "</p>";
+                        "</div>";
                     }
                   }
                 );
-                result += "<p>------------------------------</p>";
+                result += "<div class='calc__result-block-delimiter'></div>";
               }
             });
           }
         } else {
           if (this.parseResultValueObjectItem(item)?.length) {
-            result += "<p>" + this.parseResultValueObjectItem(item) + "</p>";
+            result += "<div>" + this.parseResultValueObjectItem(item) + "</div>";
           }
         }
       });
@@ -495,17 +508,19 @@ export default {
         result += "Есть ошибка в расчетах!";
       } else {
         result +=
-          "" +
+          "<div class='calc__result-block-field-summ'>" +
           this.outOptions?.resultOptions?.titleSumma +
+          " : " +
           this.finalSummaForOutput +
           " " +
-          this.currency;
+          this.currency +
+          "</div>";
       }
       return result;
     },
 
     finalTextForOutputForTeleport() {
-      return this.finalTextForOutput.replace(/<p>|<\/p\>/g, "");
+      return this.finalTextForOutput.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
     },
 
     /**
@@ -579,34 +594,30 @@ export default {
 //
 //$calc-color-more : var(--calc-color-more);
 
-$c-color-text-default_dark: #000000;
-$c-color-text-default_light: #ffffff;
+$c_color_text_default_dark: #000000;
+$c_color_text_default_dim: #a2a2a2;
+$c_color_text_default_light: #ffffff;
 
-$c-color-text-medium: #5e5e5e;
-$c-color-text-dim: #A2A2A2;
-$c-color-text-white-selected: #ffffff;
-$c-color-text-white-hover: #ffffff;
-$c-color-text-orange: #ff6531;
+$c_color_text_white_selected: #ffffff;
+$c_color_text_white_hover: #ffffff;
+$c_color_text_color: #ff6531;
 
-$c-color-text-error: #e80000;
 
-$c-border-default: #A2A2A2;
-$c-border-hover: #ff6531;
+$c_border_default: #a2a2a2;
+$c_border_hover: #ff6531;
 $c-border-selected: #ff6531;
-$c-border-error: #e80000;
 
-$c-arrow-default: #A2A2A2;
-$c-arrow-selected: #ff6531;
-$c-arrow-error: #e80000;
+$c_arrow_default: #a2a2a2;
+$c_arrow_selected: #ff6531;
 
-$c-background-default_light: #F5F5F5;
-$c-background-default_dark: #A2A2A2;
-$c-background-hover-gray: #A2A2A2;
+$c_background_default_light: #f5f5f5;
+$c_background_default_dark: #a2a2a2;
 
-$c-background-hover-orange: #ff6531;
-$c-background-selected: #ff6531;
+$c_background_hover_dark: #a2a2a2;
+$c_background_hover_color: #ff6531;
+$c_background_selected: #ff6531;
 
-$c-background-error: #e80000;
+$c_color_error: #e80000;
 
 @mixin style-border-radius {
   border-radius: 9px;
@@ -615,56 +626,20 @@ $c-background-error: #e80000;
 @mixin style-label-main {
   font-size: 17px;
   line-height: 20px;
-  color: $c-color-text-default_dark;
+  color: $c_color_text_default_dark;
 }
 
 @mixin style-label-sub {
   font-size: 12px;
   line-height: 14px;
-  color: $c-color-text-default_dark;
+  color: $c_color_text_default_dark;
 }
 
 @mixin transition {
   transition: all 0.2s ease-in-out;
 }
 
-@mixin input {
-}
-@mixin radio {
-}
-@mixin select {
-}
-@mixin range {
-}
-@mixin checkbox {
-}
-@mixin image {
-}
-@mixin tab {
-}
-@mixin accordion {
-}
-@mixin error {
-}
-@mixin prompt {
-}
 
-$calc-color-text: #464657;
-$calc-color-btn: #464657;
-$calc-color-btn-text: #ffffff;
-
-$calc-color-btn-hover: #6f6fdc;
-$calc-color-btn-text-hover: white;
-
-$calc-color-btn-checked: #ff7044;
-$calc-color-btn-checked-text: #464657;
-
-$calc-color-danger: red;
-$calc-color-danger-text: white;
-
-$calc-color-more: yellow;
-
-$border-radius: 4px;
 
 
 * {
@@ -681,20 +656,18 @@ $border-radius: 4px;
   border: 1px solid black;
 }
 
-.calc__form .tpl-anketa {
-  display: flex;
-  flex-direction: column;
-}
 
 .calc {
   position: relative;
   * {
     margin: 0;
-    font-size: 15px;
-    text-align: center;
-    color: $c-color-text-default_dark;
+    color: $c_color_text_default_dark;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
+  }
+  &__form .tpl-anketa {
+    display: flex;
+    flex-direction: column;
   }
 
   &__wrapper {
@@ -712,14 +685,14 @@ $border-radius: 4px;
     display: flex;
     justify-content: center;
     padding: 20px;
-    background-color: $calc-color-danger;
-    color: $calc-color-danger-text;
+    background-color: $c_color_error;
+    color: $c_color_text_default_light;
     margin: 20px;
   }
   &__show-result-btn {
     padding: 21px 70px;
-    background-color: $c-background-selected;
-    color: $c-color-text-white-selected;
+    background-color: $c_background_selected;
+    color: $c_color_text_white_selected;
     align-self: center;
     display: flex;
     gap: 20px;
@@ -731,12 +704,11 @@ $border-radius: 4px;
     cursor: pointer;
     @include style-border-radius;
     &:hover {
-      background-color: $c-background-hover-gray;
+      background-color: $c_background_hover_dark;
     }
   }
   //--------Стили input text-----
   &__input {
-    @include input;
     &-wrapper {
       &.is-stretch {
         flex: 1 1 100%;
@@ -778,8 +750,9 @@ $border-radius: 4px;
       line-height: 20px;
       padding: 20px 35px;
       max-width: 304px;
-      background: $c-background-default_light;
-      border: 1px solid $c-border-default;
+      background: $c_background_default_light;
+      border: 2px solid $c_border_default;
+      text-align: center;
       @include style-border-radius;
       &:focus,
       &:hover {
@@ -793,8 +766,8 @@ $border-radius: 4px;
       }
 
       &.error {
-        outline-color: $c-border-error;
-        border-color: $c-border-error;
+        outline-color: $c_color_error;
+        border-color: $c_color_error;
       }
     }
     &-buttons {
@@ -805,7 +778,7 @@ $border-radius: 4px;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: $c-color-text-orange;
+        color: $c_color_text_color;
         font-size: 28px;
         line-height: 26px;
         font-weight: 600;
@@ -816,7 +789,7 @@ $border-radius: 4px;
           cursor: pointer;
         }
         &.disabled {
-          color: $c-color-text-dim;
+          color: $c_color_text_default_dim;
           &:hover {
             cursor: not-allowed;
           }
@@ -833,7 +806,6 @@ $border-radius: 4px;
   //--------Стили input range-----
 
   &__range {
-    @include range;
     &-wrapper {
       display: flex;
       flex-direction: column;
@@ -849,10 +821,10 @@ $border-radius: 4px;
       text-align: start;
     }
     &-item-left-side {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
     &-unit {
@@ -869,7 +841,7 @@ $border-radius: 4px;
 
       -webkit-appearance: none;
       appearance: none;
-      background: $c-background-default_light;
+      background: $c_background_default_light;
       border-radius: 90px;
       cursor: pointer;
       width: 100%;
@@ -878,12 +850,12 @@ $border-radius: 4px;
       }
 
       &::-webkit-slider-runnable-track {
-        background-color: $c-background-default_light;
+        background-color: $c_background_default_light;
         height: 8px;
       }
 
       &::-moz-range-track {
-        background-color: $c-background-default_light;
+        background-color: $c_background_default_light;
         height: 8px;
       }
 
@@ -893,9 +865,9 @@ $border-radius: 4px;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c-background-selected;
-        border: 4px solid $c-background-default_light;
-        box-shadow: 0 7px 11px -4px $c-border-default;
+        background-color: $c_background_selected;
+        border: 4px solid $c_background_default_light;
+        box-shadow: 0 7px 11px -4px $c_border_default;
         margin-top: -10px;
       }
 
@@ -905,9 +877,9 @@ $border-radius: 4px;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c-background-selected;
-        border: 5px solid $c-background-default_light;
-        box-shadow: 0 7px 11px -4px $c-border-default;
+        background-color: $c_background_selected;
+        border: 5px solid $c_background_default_light;
+        box-shadow: 0 7px 11px -4px $c_border_default;
         margin-top: -16px;
       }
     }
@@ -926,23 +898,29 @@ $border-radius: 4px;
         font-weight: 700;
         font-size: 14px;
         line-height: 16px;
-        color: $c-color-text-dim;
+        color: $c_color_text_default_dim;
         &:after {
           position: absolute;
           content: "";
           display: block;
           width: 1px;
           z-index: 10;
-          background: $c-color-text-dim;
+          background: $c_color_text_default_dim;
           left: 50%;
           transform: translateX(-50%);
           height: 10px;
           bottom: calc(100% + 7px);
         }
         &_selected {
-          color: $c-color-text-default_dark;
+          color: $c_color_text_default_dark;
           &:after {
             width: 2px;
+          }
+        }
+        &:hover {
+          color: $c-color_text_default_dark;
+          &:after {
+            background-color: $c-color_text_default_dark;
           }
         }
       }
@@ -957,9 +935,9 @@ $border-radius: 4px;
       }
 
       &-static {
-        color: $c-color-text-default_dark;
-        background-color: $c-background-default_light;
-        border: 1px solid $c-border-default;
+        color: $c_color_text_default_dark;
+        background-color: $c_background_default_light;
+        border: 1px solid $c_border_default;
         min-width: 26px;
         min-height: 26px;
         border-radius: 50%;
@@ -981,11 +959,12 @@ $border-radius: 4px;
         padding: 20px 30px;
         max-width: 90px;
         right: 0;
+        border: none;
+        background-color: $c_background_default_light;
+        text-align: center;
         @include style-border-radius;
-        border: 1px solid $c-border-default;
         &:hover,
         &:focus-visible {
-          border: 1px solid $c-border-hover;
           outline: none;
         }
       }
@@ -993,9 +972,7 @@ $border-radius: 4px;
   }
 
   //---------Стили select-----
-
   &__select {
-    @include select;
     &-wrapper {
       display: flex;
       align-items: center;
@@ -1008,25 +985,21 @@ $border-radius: 4px;
       }
       &.is-open {
         .calc__select-arrow {
-          border-color: $c-arrow-selected;
+          border-color: $c_arrow_selected;
           transform: translateY(-50%) rotate(-135deg);
           -webkit-transform: translateY(-50%) rotate(-135deg);
         }
         .calc__select-change-wrapper {
-          border: 1px solid $c-border-hover;
-          border-bottom: transparent;
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-
+            border-color: $c_border_hover;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
         }
       }
-
       @media all and (max-width: 480px) {
         flex-direction: column;
         align-items: flex-start;
       }
     }
-
     &-label {
       display: flex;
       flex: 1 1 100%;
@@ -1034,7 +1007,6 @@ $border-radius: 4px;
       gap: 2px;
       text-align: start;
     }
-
     &-change {
       &-wrapper {
         cursor: pointer;
@@ -1042,28 +1014,28 @@ $border-radius: 4px;
         line-height: 16px;
         position: relative;
         flex: 1 1 100%;
-        @include style-border-radius;
-        border: 1px solid $c-border-default;
-        background-color: $c-background-default_light;
+        border-radius: 9px;
+        border: 2px solid $c-border_default;
+        background-color: $c_background_default_light;
         &:hover {
-          border: 1px solid $c-border-hover;
+          border-color: $c_border_hover;
           .calc__select-arrow {
-            border-color: $c-arrow-selected;
+            border-color: $c_arrow_selected;
           }
         }
         &.error {
-          border-color: $c-border-error;
+          border-color: $c_color_error;
           .calc__select-change-item {
-            color: $c-color-text-error;
-
+            color: $c_color_error;
           }
           .calc__select-arrow {
-            border-color: $c-arrow-error;
+            border-color: $c_color_error;
           }
         }
       }
       &-item {
-        color: $c-color-text-default_dark;
+        @include style-border-radius;
+        color: $c_color_text_default_dark;
         padding: 20px 40px;
         font-weight: 400;
         font-size: 16px;
@@ -1072,17 +1044,18 @@ $border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        text-align: start;
 
         .calc__select-arrow {
-            width: 10px;
-            height: 10px;
-            border: solid $c-arrow-default;
-            border-width: 0 2px 2px 0;
-            display: inline-block;
-            margin-left: auto;
-            flex: 0 0 auto;
-            transform: translateY(-50%) rotate(45deg);
-            -webkit-transform: translateY(-50%) rotate(45deg);
+          width: 10px;
+          height: 10px;
+          border: solid $c_arrow_default;
+          border-width: 0 2px 2px 0;
+          display: inline-block;
+          margin-left: auto;
+          flex: 0 0 auto;
+          transform: translateY(-50%) rotate(45deg);
+          -webkit-transform: translateY(-50%) rotate(45deg);
         }
       }
     }
@@ -1091,41 +1064,39 @@ $border-radius: 4px;
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: calc(100% - 2px);
+        top: calc(100% - 5px);
         border-bottom-left-radius: 9px;
         border-bottom-right-radius: 9px;
         z-index: 10;
-        width: 100%;
-
-        border-left: 1px solid $c-border-selected;
-        border-right: 1px solid $c-border-selected;
-        border-bottom: 1px solid $c-border-selected;
+        width: calc(100% + 5px);
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 2px solid $c-border-selected;
+        border-right: 2px solid $c-border-selected;
+        border-bottom: 2px solid $c-border-selected;
+        overflow: hidden;
         .calc__select-image-wrapper {
           margin: 5px;
         }
       }
       &-item {
-        background-color: $c-background-default_light;
+        background-color: $c_background_default_light;
         display: flex;
         align-items: center;
         gap: 20px;
         text-align: start;
         padding: 10px 40px;
-
         &-text {
           font-weight: 400;
           font-size: 16px;
           line-height: 20px;
+          text-align: start;
         }
         &:hover {
-          background-color: $c-background-hover-orange;
+          background-color: $c_background_hover_color;
           .calc__select-option-item-text {
-            color: $c-color-text-white-hover;
+            color: $c_color_text_white_hover;
           }
-        }
-        &:last-child {
-          border-bottom-right-radius: 9px;
-          border-bottom-left-radius: 9px;
         }
       }
     }
@@ -1133,7 +1104,6 @@ $border-radius: 4px;
 
   //-----------------Радио кнопки ---------------
   &__radio {
-    @include radio;
     &-wrapper {
       display: flex;
       justify-content: space-between;
@@ -1152,13 +1122,12 @@ $border-radius: 4px;
           gap: 8px;
         }
       }
-
       &.base {
         .calc__radio-indicator {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 1px solid $c-border-default;
+          border: 2px solid $c_border_default;
           position: relative;
 
           &:after {
@@ -1182,55 +1151,57 @@ $border-radius: 4px;
       flex-shrink: 1;
       text-align: start;
     }
-
     &-label {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 21px 35px;
-      background-color: $c-background-default_light;
+      background-color: $c_background_default_light;
       @include style-border-radius;
-      border: 1px solid $c-border-default;
+      border: 2px solid $c_border_default;
       font-weight: 700;
       cursor: pointer;
       @include transition;
       gap: 8px;
       text-align: start;
+      &.onlyImage {
+        padding: 10px;
+      }
       &:hover {
-        background-color: $c-background-hover-orange;
-        .calc__radio-name, .calc__radio-subname {
-          color: $c-color-text-white-hover;
+        background-color: $c_background_hover_color;
+        .calc__radio-name,
+        .calc__radio-subname {
+          color: $c_color_text_white_hover;
         }
         .calc__radio-indicator {
-          border-color: $c-color-text-white-hover;
+          border-color: $c_color_text_white_hover;
           &:after {
-            background-color: $c-color-text-white-hover;
+            background-color: $c_color_text_white_hover;
           }
         }
       }
       &.checked {
-        background-color: $c-background-hover-orange;
+        background-color: $c_background_hover_color;
         .calc__radio-name,
         .calc__radio-subname {
-          color: $c-color-text-white-selected;
+          color: $c_color_text_white_selected;
         }
         .calc__radio-indicator {
-          border-color: $c-color-text-white-selected;
+          border-color: $c_color_text_white_selected;
           &:after {
-            background-color: $c-color-text-white-selected;
+            background-color: $c_color_text_white_selected;
           }
         }
       }
-
       &.error {
-        border-color: $c-border-error;
-       .calc__radio-text {
-          color: $c-color-text-error;
+        border-color: $c_color_error;
+        .calc__radio-text {
+          color: $c_color_error;
         }
         .calc__radio-indicator {
-          border-color: $c-border-error;
+          border-color: $c_color_error;
           &:after {
-            background-color: $c-border-error;
+            background-color: $c_color_error;
           }
         }
       }
@@ -1250,9 +1221,7 @@ $border-radius: 4px;
   }
 
   //--------Стили чекбокса --------------
-
   &__checkbox {
-    @include checkbox;
     &-wrapper {
       display: flex;
       gap: 8px;
@@ -1271,23 +1240,23 @@ $border-radius: 4px;
       gap: 2px;
       @include transition;
       text-align: start;
-      &.button {
-        border: 1px solid $c-border-default;
-        background-color: $c-background-default_light;
+      &.is-button {
+        border: 2px solid $c_border_default;
+        background-color: $c_background_default_light;
         padding: 20px 35px;
         font-weight: 700;
         @include style-border-radius;
         &:hover {
-          background-color: $c-background-selected;
-          color: $c-color-text-white-selected;
+          background-color: $c_background_selected;
+          color: $c_color_text_white_hover;
         }
         &.checked {
-          background-color: $c-background-selected;
-          color: $c-color-text-white-selected;
+          background-color: $c_background_selected;
+          color: $c_color_text_white_selected;
         }
         &.error {
-          color: $c-color-text-error;
-          border-color: $c-border-error;
+          color: $c_color_error;
+          border-color: $c_color_error;
         }
       }
     }
@@ -1299,8 +1268,8 @@ $border-radius: 4px;
       @include transition;
       width: 24px;
       height: 24px;
-      border-radius: 50%;
-      border: 1px solid $c-border-default;
+      border-radius: 4px;
+      border: 2px solid $c_border_default;
       position: relative;
       &:after {
         content: "";
@@ -1308,7 +1277,6 @@ $border-radius: 4px;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border-radius: 50%;
         width: 10px;
         height: 10px;
       }
@@ -1330,14 +1298,13 @@ $border-radius: 4px;
       }
       &.error {
         @include transition;
-        border-color: $c-border-error;
+        border-color: $c_color_error;
         &:after {
           @include transition;
-          background-color: $c-border-error;
+          background-color: $c_color_error;
         }
       }
     }
-
     &-element_switcher {
       display: inline-block;
       @include transition;
@@ -1345,46 +1312,49 @@ $border-radius: 4px;
       width: 50px;
       position: relative;
       border-radius: 90px;
-      background: $c-background-default_light;
-      border: 1px solid $c-border-default;
-
+      background: $c_background_default_light;
+      border: 2px solid $c_border_default;
+      &:hover {
+        border-color: $c_border_hover;
+        &:not(.checked):before {
+          border-color: $c_border_hover;
+        }
+      }
       &:not(.checked):before,
       &.checked:after {
         @include transition;
         content: "";
         display: inline-block;
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         position: absolute;
       }
-
       &:not(.checked):before {
-        border: 1px solid $c-border-default;
-        background-color: $c-background-default_light;
+        border: 2px solid $c_border_default;
+        background-color: $c_background_default_light;
         left: 5px;
         top: 50%;
         transform: translateY(-50%);
       }
-
-      &.checked:after {
-        border: 1px solid $c-border-default;
-        background-color: $c-background-selected;
-        right: 5px;
-        top: 50%;
-        transform: translateY(-50%);
+      &.checked {
+        border-color: $c-border-selected;
+        &:after {
+          border: 2px solid $c_border_default;
+          background-color: $c_background_selected;
+          right: 5px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
       }
-
       &.vertical {
         height: 50px;
         width: 26px;
-
         &:not(.checked):before {
           top: 5px;
           left: 50%;
           transform: translate(-50%, 0);
         }
-
         &.checked:after {
           right: 0;
           bottom: 5px;
@@ -1393,9 +1363,9 @@ $border-radius: 4px;
         }
       }
       &.error {
-        border-color: $c-border-error;
+        border-color: $c_color_error;
         &:not(.checked):before {
-          border-color: $c-border-error;
+          border-color: $c_color_error;
         }
       }
     }
@@ -1403,11 +1373,9 @@ $border-radius: 4px;
 
   //-------всплывающая подсказка ------
   &__prompt {
-    @include prompt;
     &-wrapper {
       margin-left: 5px;
     }
-
     &-button {
       cursor: pointer;
       width: 20px;
@@ -1415,16 +1383,17 @@ $border-radius: 4px;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: $c-background-selected;
-      color: $c-color-text-white-selected;
-      border: 1px solid $c-border-default;
+      background-color: $c_background_selected;
+      color: $c_color_text_default_light;
+      border: 2px solid $c_border_default;
       border-radius: 50%;
-      font-weight: 600;
-      line-height: 18px;
+      line-height: 20px;
+      font-size: 20px;
+      text-align: center;
       &:hover {
-        background-color: $c-background-default_light;
-        color: $c-color-text-orange;
-        border-color: $c-border-hover;
+        background-color: $c_background_default_light;
+        color: $c_color_text_color;
+        border-color: $c_border_hover;
       }
     }
   }
@@ -1446,7 +1415,6 @@ $border-radius: 4px;
         max-height: 80vh;
         transform: scale(1);
       }
-
       &.prompt-enter-from,
       &.prompt-leave-to {
         transition: all 0.3s ease;
@@ -1455,7 +1423,6 @@ $border-radius: 4px;
         transform: scale(0.8);
       }
     }
-
     &-content {
       background-color: white;
       padding: 13px;
@@ -1467,19 +1434,20 @@ $border-radius: 4px;
     }
   }
 
-  // tooltip
+  // -------tooltip сообщение об ошибке внутри элемента
   &__tooltip {
     &-wrapper {
       display: flex;
       position: absolute;
-      border-color: $c-border-error;
+      border-color: $c_color_error;
       z-index: 100;
-      padding: 2px;
-      box-shadow: 0 0 3px 0 $c-border-error;
+      @include style-border-radius;
+      box-shadow: 0 0 3px 0 $c_color_error;
       bottom: calc(100% + 10px);
       left: 50%;
       transform: translateX(-50%);
-      background-color: $c-background-default_light;
+      background-color: $c_background_default_light;
+      padding: 21px 35px;
 
       &.isLeft {
         left: auto;
@@ -1526,20 +1494,20 @@ $border-radius: 4px;
       content: "";
       width: 20px;
       height: 20px;
-      background-color: white;
+      background-color: $c_background_default_light;
       position: absolute;
       border-radius: 4px;
       z-index: -1;
       right: calc(50% - 10px);
       top: calc(100% - 12px);
       transform: translateX(-50%) rotate(45deg);
-      border-bottom: 1px solid $c-border-error;
-      border-right: 1px solid $c-border-error;
+      border-bottom: 1px solid $c_color_error;
+      border-right: 1px solid $c_color_error;
       display: block;
     }
     &-text {
       display: flex;
-      color: $c-color-text-error;
+      color: $c_color_error;
       @include style-border-radius;
       justify-content: center;
       min-width: 300px;
@@ -1548,7 +1516,6 @@ $border-radius: 4px;
 
   //---------------аккордеон----------------
   &__accordion {
-    @include accordion;
     &-main-label {
       @include style-label-main;
       display: flex;
@@ -1568,17 +1535,20 @@ $border-radius: 4px;
         padding: 19px 6px 21px 20px;
         min-height: 60px;
         margin-bottom: 11px;
-        background-color: $c-background-default_light;
-        border: 1px solid $c-border-default;
+        background-color: $c_background_default_light;
+        border: 2px solid $c_border_default;
         cursor: pointer;
         @include style-border-radius;
         @include transition;
         text-align: start;
+        position: relative;
         &.isOpen {
           margin-bottom: 0;
           .calc__accordion-item-label-sub,
-          .calc__accordion-item-label-main {
-            color: $c-color-text-orange;
+          .calc__accordion-item-label-main,
+          .calc__accordion-item-plus:before,
+          .calc__accordion-item-minus:before {
+            color: $c_color_text_color;
           }
           border-color: $c-border-selected;
           border-bottom-color: transparent;
@@ -1586,45 +1556,46 @@ $border-radius: 4px;
           border-bottom-right-radius: 0;
         }
         &:hover {
-          background-color: $c-background-hover-gray;
+          background-color: $c_background_hover_dark;
+          border-color: $c-border-selected;
           .calc__accordion-item-label-sub,
-          .calc__accordion-item-label-main {
-            color: $c-color-text-white-hover;
+          .calc__accordion-item-label-main,
+          .calc__accordion-item-plus:before,
+          .calc__accordion-item-minus:before {
+            color: $c_color_text_white_hover;
           }
+        }
+        &.isOpen:hover {
+          border-bottom-color: transparent;
         }
         &.isError {
-          border-color: $c-border-error;
+          border-color: $c_color_error;
           .calc__accordion-item-label-main {
-            color: $c-color-text-error;
+            color: $c_color_error;
           }
         }
-
         &-wrapper {
           display: flex;
           align-items: center;
           gap: 20px;
         }
-
         &-text {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
         }
-
         &-main {
           @include style-label-main;
           font-weight: 700;
         }
-
         &-sub {
           @include style-label-sub;
         }
-
       }
       &-content {
         margin-top: -2px;
         width: 100%;
-        border: 1px solid $c-border-selected;
+        border: 2px solid $c-border-selected;
         border-bottom-left-radius: 9px;
         border-bottom-right-radius: 9px;
         border-top-color: transparent;
@@ -1643,7 +1614,6 @@ $border-radius: 4px;
             }
           }
         }
-
       }
       &-plus,
       &-minus {
@@ -1657,7 +1627,7 @@ $border-radius: 4px;
         font-size: 24px;
         font-weight: 600;
         position: absolute;
-        color: $c-color-text-default_dark;
+        color: $c_color_text_default_dark;
         border-radius: 50%;
         left: 50%;
         top: 50%;
@@ -1666,11 +1636,9 @@ $border-radius: 4px;
         justify-content: center;
         align-items: center;
       }
-
       &-plus:before {
         content: "+";
       }
-
       &-minus:before {
         content: "-";
       }
@@ -1679,7 +1647,6 @@ $border-radius: 4px;
 
   //---------------------табы-----------------
   &__tab {
-    @include tab;
     &-main-label {
       @include style-label-main;
       display: flex;
@@ -1697,34 +1664,34 @@ $border-radius: 4px;
     &-item {
       &-label {
         @include style-border-radius;
-        background-color: $c-background-default_light;
-        border: 1px solid $c-border-default;
+        background-color: $c_background_default_light;
+        border: 2px solid $c_border_default;
         display: flex;
         align-items: center;
         padding: 19px 54px;
         cursor: pointer;
         gap: 20px;
+        position: relative;
         &:hover {
-          background-color: $c-background-hover-gray;
-          border-color: $c-border-hover;
+          background-color: $c_background_hover_dark;
+          border-color: $c_border_hover;
           .calc__tab-item-label-main,
           .calc__tab-item-label-sub {
-            color: $c-color-text-white-hover;
+            color: $c_color_text_white_hover;
           }
         }
         &.isOpen {
-          background-color: $c-background-selected;
+          background-color: $c_background_selected;
           .calc__tab-item-label-main,
           .calc__tab-item-label-sub {
-            color: $c-color-text-white-selected;
-
+            color: $c_color_text_white_selected;
           }
         }
         &.isError {
-          border-color: $c-border-error;
+          border-color: $c_color_error;
           .calc__tab-item-label-main,
           .calc__tab-item-label-sub {
-            color: $c-color-text-error;
+            color: $c_color_error;
           }
         }
         &-wrapper {
@@ -1764,7 +1731,6 @@ $border-radius: 4px;
         width: 100%;
         flex-direction: column;
         align-items: flex-start;
-
       }
     }
   }
@@ -1799,19 +1765,22 @@ $border-radius: 4px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      z-index: 1;
+      @media all and (max-width: 768px) {
+        width: 100%;
+      }
     }
-
     &-left-label,
     &-right-label {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 10px;
-      color: $c-color-text-default_dark;
+      color: $c_color_text_default_dark;
     }
   }
 
+  //----------Системный блок с общим набором ошибок----------------
   .calc__error {
-    @include error;
     &-control-wrapper {
       display: flex;
       justify-content: space-between;
@@ -1825,9 +1794,9 @@ $border-radius: 4px;
       justify-content: center;
       align-items: center;
       @include style-border-radius;
-      background-color: $c-background-default_dark;
-      border: 1px solid $c-background-error;
-      color: $c-color-text-default_light;
+      background-color: $c_background_default_dark;
+      border: 1px solid $c_color_error;
+      color: $c_color_text_default_light;
       cursor: pointer;
     }
     &-checkbox {
@@ -1835,7 +1804,7 @@ $border-radius: 4px;
         display: flex;
       }
       &-text {
-        color: $c-color-text-default_dark;
+        color: $c_color_text_default_dark;
       }
       &-input {
         width: 20px;
@@ -1843,7 +1812,6 @@ $border-radius: 4px;
         margin-left: 10px;
       }
     }
-
     &-wrapper {
       display: none;
       position: fixed;
@@ -1851,9 +1819,9 @@ $border-radius: 4px;
       flex-direction: column;
       bottom: 0;
       margin: 10px;
-      background-color: $c-background-default_light;
+      background-color: $c_background_default_light;
       padding: 10px;
-      border: 1px solid $c-background-error;
+      border: 1px solid $c_color_error;
       @include style-border-radius;
       max-width: 650px;
       max-height: 500px;
@@ -1868,27 +1836,27 @@ $border-radius: 4px;
       flex-direction: column;
     }
     &-label {
-      color: $c-color-text-error;
+      color: $c_color_error;
       margin-top: 35px;
     }
     &-item {
-      color: $c-color-text-default_dark;
+      color: $c_color_text_default_dark;
       display: flex;
       flex-direction: column;
       margin: 5px 0;
       &-name {
-        color: $c-color-text-default_dark;
+        color: $c_color_text_default_dark;
       }
     }
     &-alert {
-      color: $c-color-text-error;
+      color: $c_color_error;
       margin-top: 15px;
       font-size: 18px;
     }
   }
 
+  //----------Элемент image--------------
   &__image {
-    @include image;
     &-wrapper {
       display: flex;
       flex-direction: column;
@@ -1912,9 +1880,68 @@ $border-radius: 4px;
       }
     }
   }
-  .resultDataBlock {
-    color: $c-color-text-default_dark;
+
+  &__result-block {
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 20px 10px;
+      width: 70%;
+
+      @media all and (max-width: 768px) {
+        width: 100%;
+      }
+    }
+    &-title {
+      &-main {
+        @include style-label-main;
+        font-weight: 700;
+        margin-top: 20px;
+      }
+      &-sub {
+        @include style-label-sub;
+        margin-bottom: 10px;
+      }
+    }
+    &-data {
+      color: $c_color_text_default_dark;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      border-bottom: 1px solid $c_color_text_default_dark;
+      border-top: 1px solid $c_color_text_default_dark;
+      padding: 10px 0;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    &-field {
+      &-wrapper {
+        display: flex;
+        width: 100%;
+      }
+      &-label {
+        width: 70%;
+      }
+      &-cost {
+        font-weight: bold;
+      }
+      &-summ {
+        @include style-label-main;
+        font-weight: 700;
+        margin: 20px 0;
+      }
+    }
+    &-delimiter {
+      display: flex;
+      width: 50%;
+      border-bottom: 1px dotted black;
+      margin: 10px 0;
+    }
   }
+
+  //-------------Элемент дупликатора-----------------
   &__duplicator {
     width: 100%;
     display: flex;
@@ -1924,19 +1951,17 @@ $border-radius: 4px;
     &-wrapper {
       position: relative;
       padding: 30px 0 10px;
-      &::before {
-        position: absolute;
-        content: "";
-        bottom: 0;
-        width: 30%;
-        transform: translateX(-50%);
-        border: 1px solid $c-border-default;
+      border-bottom: 2px groove $c-border_default;
+      margin-bottom: 10px;
+      &:hover {
+        border-color: $c-border-selected;
       }
     }
     &-label {
-      color: $c-color-text-default_dark;
+      color: $c_color_text_default_dark;
       @include style-label-main;
       font-weight: 600;
+      text-align: center;
     }
     &-duplicate,
     &-delete {
@@ -1944,18 +1969,18 @@ $border-radius: 4px;
       position: absolute;
       display: flex;
       right: 0;
-      top: 0;
-      background-color: $c-background-default_dark;
-      color: $c-color-text-default_light;
-      border: 1px solid $c-border-default;
+      top: 5px;
+      background-color: $c_background_default_dark;
+      color: $c_color_text_default_light;
+      border: 1px solid $c_border_default;
       padding: 10px;
       @include style-border-radius;
     }
     &-duplicate {
     }
     &-delete {
-      color: $c-color-text-white-selected;
-      background-color: $c-background-error;
+      color: $c_color_text_default_light;
+      background-color: $c_color_error;
     }
   }
   .dev-block {
@@ -1969,12 +1994,13 @@ $border-radius: 4px;
   }
 
   .empty-block {
-    color: $c-color-text-error;
+    color: $c_color_error;
     font-weight: bold;
     font-size: 18px;
     text-shadow: 0 0 3px white;
   }
 
+  //-----------Элемент иконки-----------
   &__icon-wrapper {
     width: 100%;
     height: 100%;
@@ -1988,12 +2014,15 @@ $border-radius: 4px;
       object-fit: contain;
     }
   }
-
+//-----------элемент фоновой картинки------------
   &__background-image {
     &-wrapper {
       position: absolute;
       width: calc(100% - 10px);
-      height: 100%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      height: calc(100% - 10px);
       display: flex;
       justify-content: flex-end;
       align-items: flex-end;
@@ -2001,22 +2030,93 @@ $border-radius: 4px;
       background-repeat: no-repeat;
       background-position: right bottom;
       background-size: contain;
-
+      @include style-border-radius;
       &::after {
         position: absolute;
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
-        content: '';
+        content: "";
         background-color: #fff;
-        opacity: .5
+        opacity: 0.5;
+        @include style-border-radius;
       }
     }
     &-img {
       object-fit: contain;
       width: 100%;
       height: auto;
+    }
+  }
+
+  &__spinner {
+    &-wrapper {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      margin: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-block {
+      position: relative;
+      width: 100px;
+      height: 100px;
+
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-width: 4px;
+        border-style: solid;
+        border-radius: 50%;
+      }
+
+      @keyframes rotate-animation {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes anti-rotate-animation {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+
+      &:before {
+        width: 60px;
+        height: 60px;
+        border-bottom-color: $c-border-selected;
+        border-right-color: $c-border-selected;
+        border-top-color: rgba(orange, 0);
+        border-left-color: rgba(orange, 0);
+        top: 0;
+        left: 0;
+        animation: rotate-animation 1s linear 0s infinite;
+      }
+
+      &:after {
+        width: 50px;
+        height: 50px;
+        border-bottom-color: $c-border-default;
+        border-right-color: $c-border-default;
+        border-top-color: rgba(orange, 0);
+        border-left-color: rgba(orange, 0);
+        top: (100px - 90px) / 2;
+        left: (100px - 90px) / 2;
+        animation: anti-rotate-animation 0.85s linear 0s infinite;
+      }
     }
   }
 }

@@ -4,12 +4,11 @@
     class="calc__wrapper-group-data"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="classes" >
+    <div class="calc__range-wrapper" :class="classes">
       <div v-if="label" class="calc__range-label">
         {{ label }}
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
-
       </div>
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
@@ -32,15 +31,15 @@
               :style="{ left: pointsForStepsLine[inx] + 'px' }"
               :key="inx"
               :class="{
-            'calc__range-steps-item_selected': step === resultValue,
-          }"
+                'calc__range-steps-item_selected': step === resultValue,
+              }"
             >
               {{ step }}
             </div>
           </div>
           <div
             v-if="isStaticValue"
-            :style="{ 'left': positionStaticResultValue}"
+            :style="{ left: positionStaticResultValue }"
             class="calc__range-current-static"
           >
             {{ resultValue }}
@@ -63,7 +62,6 @@
             {{ unit }}
           </div>
         </div>
-
       </div>
 
       <ui-tooltip
@@ -84,7 +82,6 @@ import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import { presets } from "../../../babel.config";
 
 export default {
   name: "UiRange",
@@ -172,6 +169,9 @@ export default {
       "parentIsShow",
     ]),
   },
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
+  },
   mounted() {
     if (!this.isNeedChoice) {
       let timer = setInterval(() => {
@@ -189,23 +189,30 @@ export default {
     }
 
     if (this.$refs?.thisElement?.offsetWidth) {
-      this.elementWidth = this.$refs.thisElement.offsetWidth;
+      this.elementWidth = this.$refs?.thisElement?.offsetWidth;
     }
 
     window.addEventListener("resize", () => {
-        if (this.$refs?.thisElement?.offsetWidth) {
-          this.elementWidth = this.$refs.thisElement.offsetWidth;
-        }
+      if (this.$refs?.thisElement?.offsetWidth) {
+        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+      }
     });
+    document.addEventListener("DOMContentLoaded", () => {
+      if (this.$refs?.thisElement?.offsetWidth) {
+        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+      }
+    })
     if (!this.$refs?.thisElement?.offsetWidth) {
       let timer = setInterval(() => {
-        if (this.$refs.thisElement.offsetWidth) {
-          this.elementWidth = this.$refs.thisElement.offsetWidth;
-          clearInterval(timer)
+        if (this.$refs?.thisElement?.offsetWidth) {
+          this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+          clearInterval(timer);
         }
-      }, 1000)
+      }, 1000);
     }
-
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200)
   },
   data() {
     return {
@@ -344,6 +351,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
+      "tryToggleElementIsMounted"
     ]),
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
@@ -428,7 +436,7 @@ export default {
       } else {
         newPosition = width * newPosition;
       }
-      return newPosition.toFixed(4) + 'px';
+      return newPosition.toFixed(4) + "px";
     },
     amountSteps() {
       return (this.localMax - this.localMin) / this.localStepPrompt;
@@ -436,7 +444,7 @@ export default {
     pointsForStepsLine() {
       const width = this.elementWidth - 26;
       let points = [];
-      points.push(12);
+      points.push(10);
       let i = 1;
       for (i; i <= this.amountSteps; i++) {
         const percent =

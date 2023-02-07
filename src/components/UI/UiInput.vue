@@ -35,7 +35,7 @@
             @keydown.up="plus"
             @keydown.down="minus"
             class="calc__input-item"
-            :class="{ 'is-number': isOnlyNumber, 'error' : isErrorClass }"
+            :class="{ 'is-number': isOnlyNumber, error: isErrorClass }"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
@@ -45,7 +45,7 @@
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
-              :class="{ 'is-number': isOnlyNumber, 'error' : isErrorClass }"
+              :class="{ 'is-number': isOnlyNumber, error: isErrorClass }"
               autocomplete="off"
               :placeholder="inputPlaceholder"
             />
@@ -84,7 +84,7 @@ export default {
   name: "UiInput",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip },
+  components: {  UiTooltip },
   props: {
     /**
      * данные для инпута
@@ -244,8 +244,11 @@ export default {
       "isColumn",
       "formOutputMethod",
       "dependencyFormulaDisplay",
-      "parentIsShow"
+      "parentIsShow",
     ]),
+  },
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
     if (!this.valueIsNaN && this.localMin > this.inputValue) {
@@ -266,6 +269,9 @@ export default {
         }
       });
     }
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200)
   },
   data() {
     return {
@@ -381,7 +387,9 @@ export default {
           parentName: this.parentName,
         });
       });
-      this.shownTooltip();
+      if (eventType !== 'mounted') {
+        this.shownTooltip();
+      }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
@@ -464,7 +472,8 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
-      "isCanShowAllTooltips"
+      "isCanShowAllTooltips",
+      "tryToggleElementIsMounted"
     ]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
@@ -507,7 +516,9 @@ export default {
     },
     isErrorNumber() {
       return (
-        (this.isOnlyNumber || this.localMax !== null || this.localMin !== null) &&
+        (this.isOnlyNumber ||
+          this.localMax !== null ||
+          this.localMin !== null) &&
         this.valueIsNaN &&
         this.localInputValue?.toString()?.length
       );

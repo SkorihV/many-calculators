@@ -98,7 +98,7 @@ export default {
   computed: {
     ...mapState(useBaseStore, ["isCanShowAllTooltips"]),
     canBeShown() {
-      return this.isCanShowAllTooltips && this.localCanBeShown;
+      return this.isCanShowAllTooltips || this.localCanBeShown;
     },
   },
 };

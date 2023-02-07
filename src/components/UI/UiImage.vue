@@ -27,18 +27,26 @@
 </template>
 
 <script>
+import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import UiPrompt from "@/components/UI/UiPrompt";
 
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiImage",
   components: { UiPrompt },
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
+  },
+  mounted() {
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200)
+  },
   props: {
     defaultImage: {
       type: Object,
@@ -71,7 +79,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["devMode", "getImageDir"]),
+    ...mapState(useBaseStore, ["devMode", "getImageDir", "tryToggleElementIsMounted"]),
     width() {
       return "max-width:" + this.maxWidth + "px";
     },
@@ -104,7 +112,7 @@ export default {
                 label: imageItem.label?.toString().length
                   ? imageItem.label
                   : this.label,
-                url: this.imageDir + imageItem.image.filename,
+                url: this.getImageDir + imageItem.image.filename,
                 prompt: imageItem?.prompt?.length
                   ? imageItem.prompt
                   : this.prompt,

@@ -1,4 +1,5 @@
 <template>
+
   <div
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
@@ -18,15 +19,22 @@
           <div
             class="calc__radio-label"
             :id="localElementName + '_' + idx"
-            :class="{ checked: currentIndexRadioButton === idx, 'error' : isErrorClass }"
+            :class="{
+              checked: currentIndexRadioButton === idx,
+              error: isErrorClass,
+              onlyImage: onlyImage
+            }"
             v-if="radio.isShow"
             @click="selectedCurrentRadio(idx)"
           >
             <icon-element
-              v-if="radio?.iconSettings?.image?.filename && radio?.iconSettings?.location === 'leftSide'"
+              v-if="
+                radio?.iconSettings?.image?.filename &&
+                radio?.iconSettings?.location === 'leftSide'
+              "
               :alt="radio?.name"
               :icon-settings="radio.iconSettings"
-          />
+            />
             <span
               class="calc__radio-indicator"
               v-if="radioType === 'base' && !onlyImage"
@@ -40,7 +48,10 @@
               </div>
             </div>
             <icon-element
-              v-if="radio?.iconSettings?.image?.filename && radio?.iconSettings?.location === 'rightSide'"
+              v-if="
+                radio?.iconSettings?.image?.filename &&
+                radio?.iconSettings?.location === 'rightSide'
+              "
               :alt="radio?.name"
               :icon-settings="radio.iconSettings"
             />
@@ -51,7 +62,7 @@
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="isVisibilityFromDependency"
+        :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
   </div>
@@ -63,17 +74,20 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { IconElement, UiPrompt, UiTooltip },
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
+  },
   mounted() {
     this.localElementName = this.checkedValueOnVoid(this.elementName)
       ? this.elementName
@@ -91,6 +105,9 @@ export default {
     setTimeout(() => {
       this.changeValue("mounted");
     }, 100);
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200)
   },
   props: {
     radioValues: {
@@ -142,6 +159,7 @@ export default {
       localElementName: null,
       timerName: null,
       localRadioListInOut: [],
+      canBeShownTooltip: false,
     };
   },
   methods: {
@@ -154,8 +172,8 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.changeValuesInRadio,
-        displayValue: this.changeDisplayValuesInRadio,
+        value: this.selectedValueInRadio,
+        displayValue: this.valueForDisplayRadioElement,
         name: this.localElementName,
         type: "radio",
         cost: this.localCosts,
@@ -184,13 +202,16 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
+      if (eventType !== 'mounted') {
+        this.canBeShownTooltip = true;
+      }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.changeValuesInRadio,
+        value: this.selectedValueInRadio,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.changeDisplayValuesInRadio,
+        displayValue: this.valueForDisplayRadioElement,
         type: "radio",
       });
     },
@@ -262,8 +283,8 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "devMode",
-      // "getImageDir",
-      "isCanShowAllTooltips"
+      "isCanShowAllTooltips",
+      "tryToggleElementIsMounted"
     ]),
 
     isChangedRadio() {
@@ -277,7 +298,11 @@ export default {
       return this.typeDisplayClass === "onlyImage";
     },
     isErrorClass() {
-      return this.isCanShowAllTooltips && this.isErrorEmpty && this.isVisibilityFromDependency;
+      return (
+        this.isCanShowAllTooltips &&
+        this.isErrorEmpty &&
+        this.isVisibilityFromDependency
+      );
     },
     isErrorEmpty() {
       return this.notEmpty && !this.isChangedRadio;
@@ -288,13 +313,13 @@ export default {
       }
       return this.currentSelectedRadioButton?.cost;
     },
-    changeValuesInRadio() {
+    selectedValueInRadio() {
       if (this.currentSelectedRadioButton === null) {
         return null;
       }
-      return this.currentSelectedRadioButton?.value;
+      return this.currentSelectedRadioButton?.value?.toString().length ? this.currentSelectedRadioButton?.value : this.currentIndexRadioButton + 1;
     },
-    changeDisplayValuesInRadio() {
+    valueForDisplayRadioElement() {
       if (this.currentSelectedRadioButton === null) {
         return null;
       }

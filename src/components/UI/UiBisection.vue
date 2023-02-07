@@ -11,7 +11,11 @@
       {{ templateData?.label }}
     </div>
     <div class="calc__bisection-content-wrapper">
-      <div class="calc__background-image-wrapper" v-if="isBackgroundImage" :style="[...styleBackground]"></div>
+      <div
+        class="calc__background-image-wrapper"
+        v-if="isBackgroundImage"
+        :style="[...styleBackground]"
+      ></div>
       <div
         v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
@@ -60,9 +64,9 @@
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 
+import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiBisection",
@@ -91,7 +95,7 @@ export default {
       "elementName",
       "classes",
       "parentIsShow",
-      "dependencyFormulaDisplay"
+      "dependencyFormulaDisplay",
     ]),
   },
   mounted() {
@@ -183,20 +187,41 @@ export default {
       return !!this?.templateData?.backgroundImageSettings?.image?.filename;
     },
     styleBackgroundImageUrl() {
-      return 'background-image : url("' + this.getImageDir + this.templateData?.backgroundImageSettings?.image?.filename + '");';
+      return (
+        'background-image : url("' +
+        this.getImageDir +
+        this.templateData?.backgroundImageSettings?.image?.filename +
+        '");'
+      );
     },
     styleBackgroundRepeat() {
-      return 'background-repeat:' + this.templateData?.backgroundImageSettings?.backgroundRepeat + ';';
+      return (
+        "background-repeat:" +
+        this.templateData?.backgroundImageSettings?.backgroundRepeat +
+        ";"
+      );
     },
     styleBackgroundPosition() {
-      return 'background-position:' + this.templateData?.backgroundImageSettings?.backgroundPosition?.replace('-', ' ') + ';';
+      return (
+        "background-position:" +
+        this.templateData?.backgroundImageSettings?.backgroundPosition?.replace(
+          "-",
+          " "
+        ) +
+        ";"
+      );
     },
     styleBackgroundBehaviorImage() {
-      let size = this.templateData?.backgroundImageSettings?.fixedSize ?
-        (this.templateData?.backgroundImageSettings?.maxWidth || 250) + '' + this.templateData?.backgroundImageSettings?.unitSize + ' ' + (this.templateData?.backgroundImageSettings?.maxHeight || 250) + '' + this.templateData?.backgroundImageSettings?.unitSize
-        :
-        this.templateData?.backgroundImageSettings?.behaviorImage;
-      return 'background-size:' + size + ';';
+      let size = this.templateData?.backgroundImageSettings?.fixedSize
+        ? (this.templateData?.backgroundImageSettings?.maxWidth || 250) +
+          "" +
+          this.templateData?.backgroundImageSettings?.unitSize +
+          " " +
+          (this.templateData?.backgroundImageSettings?.maxHeight || 250) +
+          "" +
+          this.templateData?.backgroundImageSettings?.unitSize
+        : this.templateData?.backgroundImageSettings?.behaviorImage;
+      return "background-size:" + size + ";";
     },
     styleBackground() {
       if (this.isBackgroundImage) {
@@ -204,12 +229,11 @@ export default {
           this.styleBackgroundImageUrl,
           this.styleBackgroundRepeat,
           this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage
-        ]
+          this.styleBackgroundBehaviorImage,
+        ];
       }
       return [];
-    }
+    },
   },
-
 };
 </script>

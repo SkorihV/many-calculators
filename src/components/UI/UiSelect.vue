@@ -11,22 +11,26 @@
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
       </div>
-      <div class="calc__select-change-wrapper"
-           :class="{'error': isErrorClass}"
-      >
+      <div class="calc__select-change-wrapper" :class="{ error: isErrorClass }">
         <div
           v-if="currentOption"
           class="calc__select-change-item"
           @click="toggleOpenClose"
         >
           <icon-element
-            v-if="currentOption?.iconSettings?.image?.filename && currentOption?.iconSettings?.location === 'leftSide'"
+            v-if="
+              currentOption?.iconSettings?.image?.filename &&
+              currentOption?.iconSettings?.location === 'leftSide'
+            "
             :icon-settings="currentOption?.iconSettings"
             :alt="currentOption?.selectName"
           />
           {{ currentOption.selectName }}
           <icon-element
-            v-if="currentOption?.iconSettings?.image?.filename && currentOption?.iconSettings?.location === 'rightSide'"
+            v-if="
+              currentOption?.iconSettings?.image?.filename &&
+              currentOption?.iconSettings?.location === 'rightSide'
+            "
             :icon-settings="currentOption?.iconSettings"
             :alt="currentOption?.selectName"
           />
@@ -39,26 +43,33 @@
         <div class="calc__select-option-wrapper" v-if="isOpen">
           <template
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
-            :key="idx">
-          <div
-            class="calc__select-option-item"
-            @click="changeSelect(option, idx)"
-            v-if="currentOption?.value !== option?.value && option.isShow"
+            :key="idx"
           >
-            <icon-element
-              v-if="option?.iconSettings?.image?.filename && option?.iconSettings?.location === 'leftSide'"
-              :icon-settings="option?.iconSettings"
-              :alt="option?.selectName"
-            />
-            <div class="calc__select-option-item-text">
-              {{ option.selectName }}
-            </div>
-            <icon-element
-              v-if="option?.iconSettings?.image?.filename && option?.iconSettings?.location === 'rightSide'"
-              :icon-settings="option?.iconSettings"
-              :alt="option?.selectName"
-            />
-           <ui-prompt
+            <div
+              class="calc__select-option-item"
+              @click="changeSelect(option, idx)"
+              v-if="currentOption?.value !== option?.value && option.isShow"
+            >
+              <icon-element
+                v-if="
+                  option?.iconSettings?.image?.filename &&
+                  option?.iconSettings?.location === 'leftSide'
+                "
+                :icon-settings="option?.iconSettings"
+                :alt="option?.selectName"
+              />
+              <div class="calc__select-option-item-text">
+                {{ option.selectName }}
+              </div>
+              <icon-element
+                v-if="
+                  option?.iconSettings?.image?.filename &&
+                  option?.iconSettings?.location === 'rightSide'
+                "
+                :icon-settings="option?.iconSettings"
+                :alt="option?.selectName"
+              />
+              <ui-prompt
                 v-if="option?.prompt?.length"
                 :prompt-text="option.prompt"
               />
@@ -69,7 +80,7 @@
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="isVisibilityFromDependency"
+        :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
     <div v-if="devModeData" v-html="devModeData"></div>
@@ -81,17 +92,20 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import IconElement from "@/components/UI/Icon-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import IconElement from "@/components/UI/Icon-element.vue";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { IconElement, UiTooltip, UiPrompt },
+  created() {
+    this.tryToggleElementIsMounted(this.localElementName, false);
+  },
   mounted() {
     this.localSelectValues = this.selectValues;
     if (this.needMockValue) {
@@ -126,6 +140,9 @@ export default {
         this.close();
       }
     });
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.localElementName, true);
+    }, 200)
   },
   props: {
     selectValues: {
@@ -171,6 +188,7 @@ export default {
         value: "null",
       },
       localSelectValues: [],
+      canBeShownTooltip: false,
     };
   },
   methods: {
@@ -243,6 +261,9 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
+      if (eventType !== 'mounted') {
+        this.canBeShownTooltip = true;
+      }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
@@ -316,7 +337,8 @@ export default {
       "checkValidationDataAndToggle",
       "devMode",
       "getImageDir",
-      "isCanShowAllTooltips"
+      "isCanShowAllTooltips",
+      "tryToggleElementIsMounted"
     ]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
@@ -338,7 +360,11 @@ export default {
       return this.notEmpty && this.currentIndexOption === null;
     },
     isErrorClass() {
-      return this.isErrorEmpty && this.isCanShowAllTooltips && this.isVisibilityFromDependency;
+      return (
+        this.isErrorEmpty &&
+        this.isCanShowAllTooltips &&
+        this.isVisibilityFromDependency
+      );
     },
 
     /**
