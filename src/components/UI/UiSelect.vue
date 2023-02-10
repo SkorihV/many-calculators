@@ -159,6 +159,7 @@ export default {
       "dependencyFormulaDisplay",
       "maxWidth",
       "maxHeight",
+      "positionElement"
     ]),
   },
   data() {
@@ -230,6 +231,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
       });
       this.tryPassDependency();
       this.changeValid(eventType);

@@ -91,8 +91,9 @@
         :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <div class="calc__result-block-wrapper" v-if="showResultDataForBlock && initTeleport">
+      <div class="calc__result-block-wrapper" :class="{'isVisualSeparate':outOptions.resultOptions?.visuallySeparateElement}" v-if="showResultDataForBlock && initTeleport">
         <background-image-element
+          class="result"
           v-if="outOptions.resultOptions?.backgroundImageSettings"
           :image-settings-data="outOptions.resultOptions?.backgroundImageSettings"
         />
@@ -171,9 +172,59 @@ export default {
       );
       this.outOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
     }
-    this.calculatorTemplates = this.outData?.calculatorTemplates
-      ? this.outData?.calculatorTemplates
-      : [];
+
+    let calculatorTemplatesWitchPositions = [];
+    if (this.outData?.calculatorTemplates?.length) {
+      let indexElement = 0;
+
+      this.outData?.calculatorTemplates.forEach(item => {
+        let currentItem = item;
+
+        if (currentItem.template === "UiBisection") {
+          if (currentItem.leftSide?.length) {
+            currentItem.leftSide = currentItem?.leftSide?.map(itemLeft => {
+              itemLeft.position = indexElement;
+              indexElement++;
+              return itemLeft;
+            })
+          }
+          if (currentItem.rightSide?.length) {
+            currentItem.rightSide = currentItem?.rightSide?.map(itemRight => {
+              itemRight.position = indexElement;
+              indexElement++;
+              return itemRight;
+            })
+          }
+          calculatorTemplatesWitchPositions.push(currentItem);
+        } else if (currentItem.template === "UiTab" || currentItem.template === "UiAccordion") {
+
+          if (currentItem.items?.length) {
+            const itemsLength = currentItem?.items.length
+            for (let i = 0; i < itemsLength; i++) {
+              let currentTemplates = currentItem?.items[i].templates;
+              let currentTempLength = currentTemplates.length;
+              let newTemplates = [];
+
+              for (let q = 0; q < currentTempLength; q++) {
+                currentTemplates[q].position = indexElement;
+                indexElement++;
+                newTemplates.push(currentTemplates[q]);
+              }
+              currentItem.items[i].templates = newTemplates;
+             }
+          }
+          calculatorTemplatesWitchPositions.push(currentItem);
+        } else {
+          currentItem.position = indexElement;
+          indexElement++;
+          calculatorTemplatesWitchPositions.push(currentItem);
+        }
+      })
+    }
+    this.calculatorTemplates = calculatorTemplatesWitchPositions;
+
+
+
     this.formula = this.outOptions?.formula?.length
       ? this.outOptions?.formula
       : "";
@@ -213,7 +264,7 @@ export default {
       submitResult: null,
       initEnabledSendForm: false,
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
-      eventNotShowTooltips: ["delete", "mounted", "timer", "dependency"], // События при которых не должно срабатывать отображение ошибок
+      eventNotShowTooltips: ["delete", "mounted", "timer", "dependency", "currentSelectedRadioButton"], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
     };
   },
@@ -443,7 +494,7 @@ export default {
     dataForOutputText() {
       return this.baseDataForCalculate.filter(
         (item) => item.formOutputMethod !== "no"
-      );
+      ).sort((itemA, itemB) => itemA.position - itemB.position);
     },
     /**
      * Текст со всеми полями которые должны отображаться в форме
@@ -482,7 +533,7 @@ export default {
             result += "<div class='calc__result-block-field-wrapper'> " + this.parseResultValueObjectItem(item) + "</div>";
           }
         }
-      });
+      })
       return result;
     },
 
@@ -622,6 +673,7 @@ $c_color_text_color: #ff6531;
 $c_border_default: #a2a2a2;
 $c_border_hover: #ff6531;
 $c_border_selected: #ff6531;
+$c_border_prompt_button: #fff;
 
 $c_arrow_default: #a2a2a2;
 $c_arrow_selected: #ff6531;
@@ -690,6 +742,7 @@ $c_color_error: #e80000;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin: 10px;
     &-group-data {
       margin: 0 10px 10px;
       width: calc(100% - 20px);
@@ -1095,7 +1148,7 @@ $c_color_error: #e80000;
         top: calc(100% - 5px);
         border-bottom-left-radius: 9px;
         border-bottom-right-radius: 9px;
-        z-index: 10;
+        z-index: 101;
         width: calc(100% + 5px);
         left: 50%;
         transform: translateX(-50%);
@@ -1423,7 +1476,7 @@ $c_color_error: #e80000;
       align-items: center;
       background-color: $c_background_selected;
       color: $c_color_text_default_light;
-      border: 2px solid $c_border_default;
+      border: 2px solid $c_border_prompt_button;
       border-radius: 50%;
       line-height: 20px;
       font-size: 12px;
@@ -1564,8 +1617,8 @@ $c_color_error: #e80000;
     &-wrapper {
       display: flex;
       flex-direction: column;
-      width: calc(100% - 20px);
-      margin: 0 10px 10px;
+      width: 100%;
+      margin-bottom: 10px;
     }
     &-item {
       &-label {
@@ -1702,8 +1755,8 @@ $c_color_error: #e80000;
       align-items: start;
       flex-direction: column;
       flex-wrap: wrap;
-      width: calc(100% - 20px);
-      margin: 10px;
+      width: 100%;
+      margin-bottom: 10px;
     }
     &-item {
       &-label {
@@ -1793,6 +1846,7 @@ $c_color_error: #e80000;
       &_main {
         @include style-label-main;
         color: $c-color_text_color;
+        font-size: 21px;
       }
       &_sub {
         @include style-label-sub;
@@ -1811,12 +1865,15 @@ $c_color_error: #e80000;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: 15px;
-      width: calc(100% - 20px);
-      margin: 20px 10px;
-      box-shadow: 0 0 25px -10px $c-background_default_dark;
+      margin-bottom: 10px;
+      width: 100%;
       border-radius: 9px;
-      overflow: hidden;
+      &.isVisualSeparate {
+        margin: 20px 10px;
+        box-shadow: 0 0 25px -10px $c-background_default_dark;
+        padding: 15px;
+        width: calc(100% - 20px);
+      }
     }
     &-content-wrapper {
       position: relative;
@@ -1965,10 +2022,16 @@ $c_color_error: #e80000;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      margin: 20px 10px;
+      margin-bottom: 10px;
       width: 100%;
       position: relative;
       overflow: hidden;
+      &.isVisualSeparate {
+        margin: 20px 10px;
+        box-shadow: 0 0 25px -10px $c-background_default_dark;
+        padding: 15px;
+        width: calc(100% - 20px);
+      }
     }
     &-title {
       &-wrapper {
@@ -1983,6 +2046,7 @@ $c_color_error: #e80000;
         @include style-label-main;
         font-weight: 700;
         margin-top: 20px;
+        font-size: 21px;
       }
       &-sub {
         @include style-label-sub;
@@ -1997,13 +2061,13 @@ $c_color_error: #e80000;
       padding: 10px 0;
       margin: 10px 0;
       width: 100%;
-      gap: 8px;
     }
 
     &-field {
       &-wrapper {
         display: flex;
         width: 100%;
+        padding: 4px 0;
         &:hover {
           background-color: $c-background_default_light;
         }
@@ -2094,14 +2158,20 @@ $c_color_error: #e80000;
       background-color: $c_color_error;
     }
   }
-  .dev-block {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-    border: 2px dotted gray;
-    width: 100%;
-    margin-bottom: 10px;
+  &__dev-block {
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
+      border: 2px dotted gray;
+      width: 100%;
+      margin-bottom: 10px;
+      background-color: #fff;
+    }
+    &-element {
+      color: #000;
+    }
   }
 
   .empty-block {
@@ -2142,16 +2212,9 @@ $c_color_error: #e80000;
       background-position: right bottom;
       background-size: contain;
       z-index: -1;
-      //&.bisection {
-      //  left: 50%;
-      //  top: 50%;
-      //  transform: translate(-50%, -50%);
-      //}
-      //&.tab {
-      //  height: calc(100% - 20px);
-      //  left: 50%;
-      //  transform: translateX(-50%);
-      //}
+      &.result {
+        width: 100%;
+      }
       @media all and (max-width: 480px) {
         display: none;
       }

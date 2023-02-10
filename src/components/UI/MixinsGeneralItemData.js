@@ -54,20 +54,20 @@ export const MixinsGeneralItemData = {
      */
     devModeData() {
       if (this.devMode && this.showInsideElementStatus) {
-        const textLabel = `<div>Заголовок элемента: ${this.label}</div>`;
-        const textElementName = `<div>Имя элемента: ${this.elementName}</div>`;
+        const textLabel = `<div class="calc__dev-block-element">Заголовок элемента: ${this.label}</div>`;
+        const textElementName = `<div class="calc__dev-block-element">Имя элемента: ${this.elementName}</div>`;
         const textDependencyFormula = this.dependencyFormulaDisplay?.length
-          ? `<div> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
+          ? `<div class="calc__dev-block-element"> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
               this.dependencyFormulaDisplay
             ).join(" ")}</div>`
           : "";
         const textDependencyFormulaBeforeProcessing = this
           .parsingFormulaVariables?.length
-          ? `<div>Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
+          ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
           : "";
-        const textInfoVisibility = `Отображается: ${this.isVisibilityFromDependency}`;
+        const textInfoVisibility = `<div class="calc__dev-block-element">Отображается: ${this.isVisibilityFromDependency}</div>div>`;
 
-        const textValue = `<div>Значение элемента: ${
+        const textValue = `<div class="calc__dev-block-element">Значение элемента: ${
           this.templateName === "UiInput" || this.templateName === "UiRange"
             ? this.resultValue
             : this.templateName === "UiRadio"
@@ -85,7 +85,7 @@ export const MixinsGeneralItemData = {
           textLocalCost = `<div>Текущая стоимость: ${this?.localCost}</div>`;
         }
         return `
-          <div class="dev-block">
+          <div class="calc__dev-block-wrapper">
            ${textLabel}
            ${textElementName}
            ${textDependencyFormula}

@@ -1,7 +1,7 @@
 <template>
   <div
     class="calc__bisection-wrapper"
-    :class="[classes]"
+    :class="[classes, {'isVisualSeparate' : isVisualSeparate}]"
     v-show="
       (templateData?.rightSide.length || templateData?.leftSide.length) &&
       isVisibilityFromDependency
@@ -193,6 +193,9 @@ export default {
     },
     isShowLabel() {
       return this.templateData?.label?.length || this.templateData?.label?.lengthSub;
+    },
+    isVisualSeparate() {
+      return !!this.templateData?.visuallySeparateElement;
     }
   },
 };

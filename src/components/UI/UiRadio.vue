@@ -141,6 +141,7 @@ export default {
       "formulaProcessingLogic",
       "classes",
       "templateName",
+      "positionElement",
     ]),
   },
   data() {
@@ -178,6 +179,7 @@ export default {
         unit: "",
         formulaProcessingLogic: this.formulaProcessingLogic,
         mode: this.mode,
+        position: this.positionElement,
       });
       this.tryPassDependency();
       this.changeValid(eventType);

@@ -245,6 +245,7 @@ export default {
       "formOutputMethod",
       "dependencyFormulaDisplay",
       "parentIsShow",
+      "positionElement",
     ]),
   },
   created() {
@@ -356,6 +357,7 @@ export default {
         unit: this.unit,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
       });
       this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {

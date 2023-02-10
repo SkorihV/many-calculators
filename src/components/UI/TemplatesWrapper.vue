@@ -30,6 +30,7 @@
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -60,6 +61,7 @@
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -91,6 +93,7 @@
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -127,6 +130,7 @@
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -157,6 +161,7 @@
     :parent-is-show="parentIsShow"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

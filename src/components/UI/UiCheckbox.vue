@@ -113,6 +113,7 @@ export default {
       "formulaProcessingLogic",
       "classes",
       "templateName",
+      "positionElement"
     ]),
   },
   created() {
@@ -160,6 +161,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
       });
       this.tryPassDependency();
       this.changeValid(eventType);

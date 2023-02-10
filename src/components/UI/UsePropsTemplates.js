@@ -232,6 +232,13 @@ export default function (propsName) {
     };
   };
 
+  const positionElement = () => {
+    return {
+      type: Number,
+      default: 0
+    }
+  }
+
   const resultsData = {
     label: label(),
     elementName: elementName(),
@@ -259,6 +266,7 @@ export default function (propsName) {
     min: min(),
     max: max(),
     unit: unit(),
+    positionElement: positionElement(),
   };
 
   if (Array.isArray(propsName)) {

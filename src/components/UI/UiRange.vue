@@ -167,6 +167,7 @@ export default {
       "max",
       "dependencyFormulaDisplay",
       "parentIsShow",
+      "positionElement"
     ]),
   },
   created() {
@@ -205,7 +206,7 @@ export default {
     if (!this.$refs?.thisElement?.offsetWidth) {
       let timer = setInterval(() => {
         if (this.$refs?.thisElement?.offsetWidth) {
-          this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+          this.updateWidthElements()
           clearInterval(timer);
         }
       }, 1000);
@@ -231,6 +232,7 @@ export default {
       this.shownTooltip();
     },
     tryChangeValue(e) {
+      this.updateWidthElements();
       clearTimeout(this.timerNameForLocalValue);
       this.resultValue = this.checkValidValueReturnNumber(e.target.value);
       this.timerNameForLocalValue = setTimeout(() => {
@@ -260,6 +262,7 @@ export default {
       return value;
     },
     changeValue(eventType = "input") {
+      this.updateWidthElements();
       this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
       this.$emit("changedValue", {
         value: this.resultValue,
@@ -275,6 +278,7 @@ export default {
         unit: this.unit,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
       });
       this.changeValid(eventType);
     },
@@ -325,6 +329,11 @@ export default {
       this.changeValue("minus");
       this.shownTooltip();
     },
+    updateWidthElements() {
+      if(this.elementWidth !== this.$refs?.thisElement?.offsetWidth && this.showStaticValue) {
+        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+      }
+    }
   },
   watch: {
     /**

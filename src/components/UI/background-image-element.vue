@@ -1,6 +1,6 @@
 <template>
   <div
-    class="calc__background-image-wrapper bisection"
+    class="calc__background-image-wrapper"
     v-if="isBackgroundImage"
     :style="[...styleBackground]"
   >
