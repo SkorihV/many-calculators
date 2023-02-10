@@ -1,5 +1,4 @@
 <template>
-
   <div
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
@@ -26,35 +25,27 @@
             }"
             v-if="radio.isShow"
             @click="selectedCurrentRadio(idx)"
+            @mouseover="hoverElementIndex = idx"
+            @mouseleave="hoverElementIndex = null"
           >
-            <icon-element
-              v-if="
-                radio?.iconSettings?.image?.filename &&
-                radio?.iconSettings?.location === 'leftSide'
-              "
-              :alt="radio?.name"
-              :icon-settings="radio.iconSettings"
-            />
-            <span
-              class="calc__radio-indicator"
-              v-if="radioType === 'base' && !onlyImage"
-            ></span>
-            <div class="calc__radio-text" v-if="!onlyImage">
-              <div class="calc__radio-name">
-                {{ radio.radioName }}
+            <icon-element-wrapper
+              :alt="radio?.radioName"
+              :icon-settings="radio?.iconSettings"
+              :is-parent-hover="hoverElementIndex === idx || currentIndexRadioButton === idx"
+            >
+              <span
+                class="calc__radio-indicator"
+                v-if="radioType === 'base' && !onlyImage"
+              ></span>
+              <div class="calc__radio-text" v-if="!onlyImage">
+                <div class="calc__radio-name">
+                  {{ radio.radioName }}
+                </div>
+                <div class="calc__radio-subname">
+                  {{ radio?.subradioName }}
+                </div>
               </div>
-              <div class="calc__radio-subname">
-                {{ radio?.subradioName }}
-              </div>
-            </div>
-            <icon-element
-              v-if="
-                radio?.iconSettings?.image?.filename &&
-                radio?.iconSettings?.location === 'rightSide'
-              "
-              :alt="radio?.name"
-              :icon-settings="radio.iconSettings"
-            />
+            </icon-element-wrapper>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
         </template>
@@ -74,7 +65,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import IconElement from "@/components/UI/Icon-element.vue";
+import iconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -84,7 +75,7 @@ export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { IconElement, UiPrompt, UiTooltip },
+  components: { UiPrompt, UiTooltip, iconElementWrapper },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
@@ -160,6 +151,7 @@ export default {
       timerName: null,
       localRadioListInOut: [],
       canBeShownTooltip: false,
+      hoverElementIndex: null
     };
   },
   methods: {
@@ -176,7 +168,7 @@ export default {
         displayValue: this.valueForDisplayRadioElement,
         name: this.localElementName,
         type: "radio",
-        cost: this.localCosts,
+        cost: this.localCost,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -307,7 +299,7 @@ export default {
     isErrorEmpty() {
       return this.notEmpty && !this.isChangedRadio;
     },
-    localCosts() {
+    localCost() {
       if (this.currentSelectedRadioButton === null) {
         return null;
       }

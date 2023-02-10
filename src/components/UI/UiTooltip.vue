@@ -2,7 +2,7 @@
   <transition
     name="tooltip-transition"
     v-cloak
-    v-show="isShow && tooltipText && canBeShown"
+    v-show="isShow && tooltipText && canBeShown && isTooltipOn"
   >
     <div
       class="calc__tooltip calc__tooltip-wrapper"
@@ -96,7 +96,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["isCanShowAllTooltips"]),
+    ...mapState(useBaseStore, ["isCanShowAllTooltips","isTooltipOn"]),
     canBeShown() {
       return this.isCanShowAllTooltips || this.localCanBeShown;
     },

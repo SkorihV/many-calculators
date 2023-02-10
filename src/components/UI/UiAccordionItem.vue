@@ -5,32 +5,24 @@
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"
     :class="{ isOpen: isOpen, isError: isShowError && !isOpen }"
+    @mouseover="hoverElement = true"
+    @mouseleave="hoverElement = false"
   >
     <div class="calc__accordion-item-label-wrapper">
-      <icon-element
-        v-if="
-          accordionItem?.iconSettings?.image?.filename &&
-          accordionItem?.iconSettings?.location === 'leftSide'
-        "
-        :alt="accordionItem.label"
-        :icon-settings="accordionItem.iconSettings"
-      />
-      <div class="calc__accordion-item-label-text">
-        <div class="calc__accordion-item-label-main">
-          {{ accordionItem.label }}
+      <icon-element-wrapper
+      :alt="accordionItem.label"
+      :icon-settings="accordionItem.iconSettings"
+      :is-parent-hover="hoverElement"
+      >
+        <div class="calc__accordion-item-label-text">
+          <div class="calc__accordion-item-label-main">
+            {{ accordionItem.label }}
+          </div>
+          <div class="calc__accordion-item-label-sub">
+            {{ accordionItem?.sublabel }}
+          </div>
         </div>
-        <div class="calc__accordion-item-label-sub">
-          {{ accordionItem?.sublabel }}
-        </div>
-      </div>
-      <icon-element
-        v-if="
-          accordionItem?.iconSettings?.image?.filename &&
-          accordionItem?.iconSettings?.location === 'rightSide'
-        "
-        :alt="accordionItem.label"
-        :icon-settings="accordionItem.iconSettings"
-      />
+      </icon-element-wrapper>
       <ui-prompt
         v-if="accordionItem?.prompt?.length"
         :prompt-text="accordionItem.prompt"
@@ -45,11 +37,10 @@
   </div>
 
   <div class="calc__accordion-item-content" v-show="isOpen">
-    <div
-      class="calc__background-image-wrapper"
-      v-if="isBackgroundImage"
-      :style="[...styleBackground]"
-    ></div>
+    <background-image-element
+      v-if="this.accordionItem?.backgroundImageSettings"
+      :image-settings-data="this.accordionItem?.backgroundImageSettings"
+    />
     <div
       class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
@@ -69,19 +60,18 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import IconElement from "@/components/UI/Icon-element.vue";
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
-import SpinnerBlock from "@/components/UI/Spinner-element.vue";
+import BackgroundImageElement from "@/components/UI/background-image-element";
 
-
+import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
+import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 export default {
   name: "UiAccordionItem",
-  components: { IconElement, UiTooltip, UiPrompt, TemplatesWrapper, SpinnerBlock },
+  components: { IconElementWrapper, BackgroundImageElement, UiTooltip, UiPrompt, TemplatesWrapper },
   emits: ["changedValue"],
   props: {
     accordionItem: {
@@ -107,6 +97,7 @@ export default {
       isOpen: false,
       errorsElements: new Set(),
       visibilityList: new Set(),
+      hoverElement: null
     };
   },
   methods: {
@@ -168,58 +159,6 @@ export default {
     currentHiddenItem() {
       return this.localListValidationError?.filter((item) => !item.isShow)
         .length;
-    },
-
-    isBackgroundImage() {
-      return !!this?.accordionItem?.backgroundImageSettings?.image?.filename;
-    },
-    styleBackgroundImageUrl() {
-      return (
-        'background-image : url("' +
-        this.getImageDir +
-        this.accordionItem?.backgroundImageSettings?.image?.filename +
-        '");'
-      );
-    },
-    styleBackgroundRepeat() {
-      return (
-        "background-repeat:" +
-        this.accordionItem?.backgroundImageSettings?.backgroundRepeat +
-        ";"
-      );
-    },
-    styleBackgroundPosition() {
-      return (
-        "background-position:" +
-        this.accordionItem?.backgroundImageSettings?.backgroundPosition?.replace(
-          "-",
-          " "
-        ) +
-        ";"
-      );
-    },
-    styleBackgroundBehaviorImage() {
-      let size = this.accordionItem?.backgroundImageSettings?.fixedSize
-        ? (this.accordionItem?.backgroundImageSettings?.maxWidth || 250) +
-          "" +
-          this.accordionItem?.backgroundImageSettings?.unitSize +
-          " " +
-          (this.accordionItem?.backgroundImageSettings?.maxHeight || 250) +
-          "" +
-          this.accordionItem?.backgroundImageSettings?.unitSize
-        : this.accordionItem?.backgroundImageSettings?.behaviorImage;
-      return "background-size:" + size + ";";
-    },
-    styleBackground() {
-      if (this.isBackgroundImage) {
-        return [
-          this.styleBackgroundImageUrl,
-          this.styleBackgroundRepeat,
-          this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage,
-        ];
-      }
-      return [];
     },
   },
 };

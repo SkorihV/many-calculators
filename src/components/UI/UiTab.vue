@@ -9,53 +9,45 @@
       {{ tabData.label }}
     </div>
     <div class="calc__tab-item-label-wrapper">
-      <template v-for="(item, key) in tabData?.items">
+      <template v-for="(item, idx) in tabData?.items">
         <div
           class="calc__tab-item-label"
           :class="{
-            isOpen: key === shownIdTab,
+            isOpen: shownIdTab === idx,
             isError: checkIsShowError(
-              elementName + item?.json_id + '_' + key ||
-                elementName + 'tabItem' + '_' + key,
-              key
+              elementName + item?.json_id + '_' + idx ||
+                elementName + 'tabItem' + '_' + idx,
+              idx
             ),
           }"
           v-if="
             isValidationShowOnParentName(
-              elementName + item?.json_id + '_' + key ||
-                elementName + 'tabItem' + '_' + key
+              elementName + item?.json_id + '_' + idx ||
+                elementName + 'tabItem' + '_' + idx
             )
           "
-          :key="key"
-          @click="openItem(key)"
+          :key="idx"
+          @click="openItem(idx)"
+          @mouseover="hoverElementIndex = idx"
+          @mouseleave="hoverElementIndex = null"
         >
-          <icon-element
-            v-if="
-              item?.iconSettings?.image?.filename &&
-              item?.iconSettings?.location === 'leftSide'
-            "
+          <icon-element-wrapper
             :alt="item.label"
             :icon-settings="item?.iconSettings"
-          />
-          <div class="calc__tab-item-label-text">
-            <div class="calc__tab-item-label-main">{{ item.label }}</div>
-            <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
-          </div>
-          <icon-element
-            v-if="
-              item?.iconSettings?.image?.filename &&
-              item?.iconSettings?.location === 'rightSide'
-            "
-            :alt="item.label"
-            :icon-settings="item?.iconSettings"
-          />
+            :is-parent-hover="hoverElementIndex === idx || shownIdTab === idx"
+          >
+            <div class="calc__tab-item-label-text">
+              <div class="calc__tab-item-label-main">{{ item.label }}</div>
+              <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
+            </div>
+          </icon-element-wrapper>
           <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
           <ui-tooltip
             :is-show="
               checkIsShowError(
-                elementName + item?.json_id + '_' + key ||
-                  elementName + 'tabItem' + '_' + key,
-                key
+                elementName + item?.json_id + '_' + idx ||
+                  elementName + 'tabItem' + '_' + idx,
+                idx
               )
             "
             tooltip-text="Во вкладке есть не корректно заполненные поля."
@@ -88,17 +80,16 @@
 import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import UiTabItem from "@/components/UI/UiTabItem";
-import IconElement from "@/components/UI/Icon-element.vue";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import SpinnerBlock from "@/components/UI/Spinner-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 export default {
   name: "UiTab",
-  components: { IconElement, UiTooltip, UiPrompt, UiTabItem, SpinnerBlock },
+  components: { IconElementWrapper, UiTooltip, UiPrompt, UiTabItem },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -124,6 +115,7 @@ export default {
       errorsElements: {},
       visibilityListTabs: new Map(),
       shownIdTab: null,
+      hoverElementIndex: null,
    };
   },
   methods: {

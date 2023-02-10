@@ -449,7 +449,10 @@ export default {
       for (i; i <= this.amountSteps; i++) {
         const percent =
           (this.localStepPrompt * i) / (this.localMax - this.localMin);
-        const position = width * percent + 6;
+        let position = width * percent + 5;
+        if (i.toString().length === 1) {
+          position += 3;
+        }
         points.push(position.toFixed(4));
       }
       return points;

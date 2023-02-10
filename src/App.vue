@@ -75,24 +75,15 @@
         class="calc__show-result-btn"
         @click="calculateResult"
         v-if="showResultBtn"
+        @mouseover="isHoverButtonResult = true"
+        @mouseleave="isHoverButtonResult = false"
       >
-        <icon-element
-          v-if="
-            outOptions?.resultOptions?.iconSettings?.image?.filename &&
-            outOptions?.resultOptions?.iconSettings?.location === 'leftSide'
-          "
-          :alt="outOptions?.resultOptions?.titleButton"
+        <icon-element-wrapper
+          :alt="outOptions?.resultOptions?.titleButton ?? 'Рассчитать'"
           :icon-settings="outOptions?.resultOptions?.iconSettings"
-        />
-        {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
-        <icon-element
-          v-if="
-            outOptions?.resultOptions?.iconSettings?.image?.filename &&
-            outOptions?.resultOptions?.iconSettings?.location === 'rightSide'
-          "
-          :alt="outOptions?.resultOptions?.titleButton"
-          :icon-settings="outOptions?.resultOptions?.iconSettings"
-        />
+        >
+          {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
+        </icon-element-wrapper>
       </div>
       <error-names-templates
         v-if="devMode"
@@ -101,11 +92,17 @@
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
       <div class="calc__result-block-wrapper" v-if="showResultDataForBlock && initTeleport">
-        <div class="calc__result-block-title-main" v-if="outOptions?.resultOptions?.title?.length">
-          {{ outOptions.resultOptions.title }}
-        </div>
-        <div class="calc__result-block-title-sub" v-if="outOptions?.resultOptions?.subtitle?.length">
-          {{ outOptions.resultOptions.subtitle }}
+        <background-image-element
+          v-if="outOptions.resultOptions?.backgroundImageSettings"
+          :image-settings-data="outOptions.resultOptions?.backgroundImageSettings"
+        />
+        <div class="calc__result-block-title-wrapper" v-if="isShowResultBlockTitle || isShowResultBlockSubtitle">
+          <div class="calc__result-block-title-main" v-if="isShowResultBlockTitle">
+            {{ outOptions.resultOptions.title }}
+          </div>
+          <div class="calc__result-block-title-sub" v-if="isShowResultBlockSubtitle">
+            {{ outOptions.resultOptions.subtitle }}
+          </div>
         </div>
         <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
       </div>
@@ -130,20 +127,22 @@ import UiDuplicator from "@/components/UI/UiDuplicator";
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
 import UiBisection from "@/components/UI/UiBisection";
 import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
-import IconElement from "@/components/UI/Icon-element.vue";
 import SpinnerElement from "@/components/UI/Spinner-element.vue";
 
 import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import BackgroundImageElement from "@/components/UI/background-image-element.vue";
+import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    IconElementWrapper,
+    BackgroundImageElement,
     SpinnerElement,
-    IconElement,
     TemplatesWrapper,
     UiAccordion,
     UiTab,
@@ -196,6 +195,7 @@ export default {
     this.outOptions.resultOptions.titleButton = this.outOptions?.resultOptions
       ? this.outOptions?.resultOptions?.titleButton
       : "Рассчитать";
+    this.setTooltipOn(Boolean(this.outOptions?.tooltipOff));
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
@@ -214,6 +214,7 @@ export default {
       initEnabledSendForm: false,
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
       eventNotShowTooltips: ["delete", "mounted", "timer", "dependency"], // События при которых не должно срабатывать отображение ошибок
+      isHoverButtonResult: false,
     };
   },
   methods: {
@@ -292,25 +293,35 @@ export default {
     parseResultValueObjectItem(item) {
       let result = "";
       if (item.formOutputMethod && item.displayValue !== null && item.isShow) {
-        result += "\n<div class='calc__result-block-field-label'>" + item.label;
+        result += "\n<div class='calc__result-block-field-label'>" + item.label + " </div>";
 
+        result += "<div class='calc__result-block-field-right'>";
         if (
           item.formOutputMethod === "value" ||
           item.formOutputMethod === "valueSumm"
         ) {
           const unit = item.unit ? item.unit : "";
-          result += " " + item.displayValue + " " + unit;
+          result += "<div class='calc__result-block-field-value'>" + item.displayValue + " " + unit;
+
+          if (
+            item.cost !== null &&
+            (item.formOutputMethod === "summ" ||
+              item.formOutputMethod === "valueSumm")
+          ) {
+            result += " - ";
+          }
+
+          result += "</div>";
         }
-        result += "</div>";
         if (
           item.cost !== null &&
           (item.formOutputMethod === "summ" ||
             item.formOutputMethod === "valueSumm")
         ) {
           let sum = item?.cost?.toString();
-          result += "<div class='calc__result-block-field-cost'> " + sum + " " + this.currency + "</div>";
+          result += "<div class='calc__result-block-field-cost'>" + sum + " " + this.currency + "</div>";
         }
-        result += "\n";
+        result += "</div>";
       }
       return result;
     },
@@ -335,7 +346,8 @@ export default {
       "devMode",
       "showInsideElementStatus",
       "getImageDir",
-      "appIsMounted"
+      "appIsMounted",
+      "setTooltipOn"
     ]),
     /**
      * Данные которые подходят для вывода или расчета
@@ -467,7 +479,7 @@ export default {
           }
         } else {
           if (this.parseResultValueObjectItem(item)?.length) {
-            result += "<div>" + this.parseResultValueObjectItem(item) + "</div>";
+            result += "<div class='calc__result-block-field-wrapper'> " + this.parseResultValueObjectItem(item) + "</div>";
           }
         }
       });
@@ -509,11 +521,9 @@ export default {
       } else {
         result +=
           "<div class='calc__result-block-field-summ'>" +
-          this.outOptions?.resultOptions?.titleSumma +
-          " : " +
-          this.finalSummaForOutput +
-          " " +
-          this.currency +
+            "<div class='calc__result-block-field-summ-title'>" + this.outOptions?.resultOptions?.titleSumma + "</div>" +
+            "<div class='calc__result-block-field-summ-cost'> " + this.finalSummaForOutput + "</div>" +
+            "<div class='calc__result-block-field-summ-currency'> " + this.currency  + "</div>" +
           "</div>";
       }
       return result;
@@ -573,6 +583,12 @@ export default {
       ${textFormulaVariables}
       `;
     },
+    isShowResultBlockTitle() {
+      return Boolean(this.outOptions?.resultOptions?.title?.length);
+    },
+    isShowResultBlockSubtitle() {
+      return Boolean(this.outOptions?.resultOptions?.subtitle?.length);
+    }
   },
 };
 </script>
@@ -605,7 +621,7 @@ $c_color_text_color: #ff6531;
 
 $c_border_default: #a2a2a2;
 $c_border_hover: #ff6531;
-$c-border-selected: #ff6531;
+$c_border_selected: #ff6531;
 
 $c_arrow_default: #a2a2a2;
 $c_arrow_selected: #ff6531;
@@ -651,7 +667,7 @@ $c_color_error: #e80000;
 .main-wrapper {
   max-width: 980px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #dadada;
   padding: 3px;
   border: 1px solid black;
 }
@@ -754,15 +770,21 @@ $c_color_error: #e80000;
       border: 2px solid $c_border_default;
       text-align: center;
       @include style-border-radius;
+      @media all and (max-width: 480px) {
+        padding: 10px 15px;
+      }
       &:focus,
       &:hover {
-        outline-color: $c-border-selected;
-        border-color: $c-border-selected;
+        outline: none;
+        border-color: $c_border_selected;
       }
       &.is-number {
         font-weight: 700;
         max-width: 150px;
         padding: 20px 15px;
+        @media all and (max-width: 480px) {
+          padding: 10px 15px;
+        }
       }
 
       &.error {
@@ -891,6 +913,9 @@ $c_color_error: #e80000;
         height: 30px;
         position: relative;
         margin-top: 17px;
+        @media all and (max-width: 480px) {
+          display: none;
+        }
       }
       &-item {
         position: absolute;
@@ -918,9 +943,9 @@ $c_color_error: #e80000;
           }
         }
         &:hover {
-          color: $c-color_text_default_dark;
+          color: $c_color_text_default_dark;
           &:after {
-            background-color: $c-color_text_default_dark;
+            background-color: $c_color_text_default_dark;
           }
         }
       }
@@ -963,6 +988,9 @@ $c_color_error: #e80000;
         background-color: $c_background_default_light;
         text-align: center;
         @include style-border-radius;
+        @media all and (max-width: 480px) {
+          padding: 10px 10px;
+        }
         &:hover,
         &:focus-visible {
           outline: none;
@@ -1015,7 +1043,7 @@ $c_color_error: #e80000;
         position: relative;
         flex: 1 1 100%;
         border-radius: 9px;
-        border: 2px solid $c-border_default;
+        border: 2px solid $c_border_default;
         background-color: $c_background_default_light;
         &:hover {
           border-color: $c_border_hover;
@@ -1071,9 +1099,9 @@ $c_color_error: #e80000;
         width: calc(100% + 5px);
         left: 50%;
         transform: translateX(-50%);
-        border-left: 2px solid $c-border-selected;
-        border-right: 2px solid $c-border-selected;
-        border-bottom: 2px solid $c-border-selected;
+        border-left: 2px solid $c_border_selected;
+        border-right: 2px solid $c_border_selected;
+        border-bottom: 2px solid $c_border_selected;
         overflow: hidden;
         .calc__select-image-wrapper {
           margin: 5px;
@@ -1118,7 +1146,6 @@ $c_color_error: #e80000;
         flex-direction: column;
         align-items: flex-start;
         .calc__radio-wrapper-buttons {
-          flex-direction: column;
           gap: 8px;
         }
       }
@@ -1164,11 +1191,15 @@ $c_color_error: #e80000;
       @include transition;
       gap: 8px;
       text-align: start;
+      @media all and (max-width: 480px) {
+        padding: 11px 15px;
+      }
       &.onlyImage {
         padding: 10px;
       }
       &:hover {
         background-color: $c_background_hover_color;
+        border-color: $c_border-hover;
         .calc__radio-name,
         .calc__radio-subname {
           color: $c_color_text_white_hover;
@@ -1182,6 +1213,7 @@ $c_color_error: #e80000;
       }
       &.checked {
         background-color: $c_background_hover_color;
+        border-color: $c_border_selected;
         .calc__radio-name,
         .calc__radio-subname {
           color: $c_color_text_white_selected;
@@ -1245,14 +1277,19 @@ $c_color_error: #e80000;
         background-color: $c_background_default_light;
         padding: 20px 35px;
         font-weight: 700;
+        @media all and (max-width: 480px) {
+          padding: 10px 15px;
+        }
         @include style-border-radius;
         &:hover {
           background-color: $c_background_selected;
           color: $c_color_text_white_hover;
+          border-color: $c_border-hover;
         }
         &.checked {
           background-color: $c_background_selected;
           color: $c_color_text_white_selected;
+          border-color: $c_border_selected;
         }
         &.error {
           color: $c_color_error;
@@ -1282,18 +1319,18 @@ $c_color_error: #e80000;
       }
       &.checked {
         @include transition;
-        border-color: $c-border-selected;
+        border-color: $c_border_selected;
         &:after {
           @include transition;
-          background-color: $c-border-selected;
+          background-color: $c_border_selected;
         }
       }
       &:hover {
         @include transition;
-        border-color: $c-border-selected;
+        border-color: $c_border_selected;
         &:after {
           @include transition;
-          background-color: $c-border-selected;
+          background-color: $c_border_selected;
         }
       }
       &.error {
@@ -1338,9 +1375,9 @@ $c_color_error: #e80000;
         transform: translateY(-50%);
       }
       &.checked {
-        border-color: $c-border-selected;
+        border-color: $c_border_selected;
         &:after {
-          border: 2px solid $c_border_default;
+          border: 2px solid $c_border_selected;
           background-color: $c_background_selected;
           right: 5px;
           top: 50%;
@@ -1360,6 +1397,7 @@ $c_color_error: #e80000;
           bottom: 5px;
           left: 50%;
           transform: translate(-50%, 0);
+          border: 2px solid $c_border_selected;
         }
       }
       &.error {
@@ -1388,7 +1426,7 @@ $c_color_error: #e80000;
       border: 2px solid $c_border_default;
       border-radius: 50%;
       line-height: 20px;
-      font-size: 20px;
+      font-size: 12px;
       text-align: center;
       &:hover {
         background-color: $c_background_default_light;
@@ -1428,9 +1466,9 @@ $c_color_error: #e80000;
       padding: 13px;
       max-width: 80%;
       overflow-y: auto;
-      border: 1px solid $c-border-selected;
+      border: 1px solid $c_border_selected;
       @include style-border-radius;
-      box-shadow: 0 4px 10px $c-border-selected;
+      box-shadow: 0 4px 10px $c_border_selected;
     }
   }
 
@@ -1448,7 +1486,9 @@ $c_color_error: #e80000;
       transform: translateX(-50%);
       background-color: $c_background_default_light;
       padding: 21px 35px;
-
+      @media all and (max-width: 480px) {
+        padding: 11px 15px;
+      }
       &.isLeft {
         left: auto;
         right: 0;
@@ -1542,6 +1582,9 @@ $c_color_error: #e80000;
         @include transition;
         text-align: start;
         position: relative;
+        @media all and (max-width: 480px) {
+          padding: 10px 15px;
+        }
         &.isOpen {
           margin-bottom: 0;
           .calc__accordion-item-label-sub,
@@ -1550,14 +1593,14 @@ $c_color_error: #e80000;
           .calc__accordion-item-minus:before {
             color: $c_color_text_color;
           }
-          border-color: $c-border-selected;
+          border-color: $c_border_selected;
           border-bottom-color: transparent;
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
         }
         &:hover {
           background-color: $c_background_hover_dark;
-          border-color: $c-border-selected;
+          border-color: $c_border_selected;
           .calc__accordion-item-label-sub,
           .calc__accordion-item-label-main,
           .calc__accordion-item-plus:before,
@@ -1595,12 +1638,13 @@ $c_color_error: #e80000;
       &-content {
         margin-top: -2px;
         width: 100%;
-        border: 2px solid $c-border-selected;
+        border: 2px solid $c_border_selected;
         border-bottom-left-radius: 9px;
         border-bottom-right-radius: 9px;
         border-top-color: transparent;
         margin-bottom: 10px;
         position: relative;
+        overflow: hidden;
         &-wrapper {
           .calc__wrapper-group-data {
             padding-left: 20px;
@@ -1672,6 +1716,9 @@ $c_color_error: #e80000;
         cursor: pointer;
         gap: 20px;
         position: relative;
+        @media all and (max-width: 480px) {
+          padding: 10px 15px;
+        }
         &:hover {
           background-color: $c_background_hover_dark;
           border-color: $c_border_hover;
@@ -1682,6 +1729,7 @@ $c_color_error: #e80000;
         }
         &.isOpen {
           background-color: $c_background_selected;
+          border-color: $c_border_selected;
           .calc__tab-item-label-main,
           .calc__tab-item-label-sub {
             color: $c_color_text_white_selected;
@@ -1718,13 +1766,9 @@ $c_color_error: #e80000;
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 20px;
+        padding: 20px 0;
         margin-bottom: 10px;
         position: relative;
-        .calc__background-image-wrapper.tab {
-          width: calc(100% - 40px);
-          height: calc(100% - 40px);
-        }
       }
       &-content {
         display: flex;
@@ -1737,8 +1781,29 @@ $c_color_error: #e80000;
 
   &__bisection {
     &-label {
-      @include style-label-main;
-      margin-bottom: 10px;
+      &-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: 0 10px 10px 10px;
+        gap: 5px;
+        border-bottom: 1px dashed $c-border_default;
+        width: calc(100% - 20px);
+        padding-bottom: 10px;
+      }
+      &_main {
+        @include style-label-main;
+        color: $c-color_text_color;
+      }
+      &_sub {
+        @include style-label-sub;
+      }
+      &-desktop {
+        width: 100%;
+        display: flex;
+        @media all and (max-width: 768px) {
+          display: none;
+        }
+      }
     }
 
     &-wrapper {
@@ -1746,8 +1811,12 @@ $c_color_error: #e80000;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      padding: 15px;
       width: calc(100% - 20px);
-      margin: 10px;
+      margin: 20px 10px;
+      box-shadow: 0 0 25px -10px $c-background_default_dark;
+      border-radius: 9px;
+      overflow: hidden;
     }
     &-content-wrapper {
       position: relative;
@@ -1765,7 +1834,6 @@ $c_color_error: #e80000;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      z-index: 1;
       @media all and (max-width: 768px) {
         width: 100%;
       }
@@ -1774,8 +1842,19 @@ $c_color_error: #e80000;
     &-right-label {
       font-size: 16px;
       font-weight: 600;
-      margin-bottom: 10px;
       color: $c_color_text_default_dark;
+      flex: 1 1 auto;
+      padding: 10px;
+      &.desktop {
+        @media all and (max-width: 768px) {
+          display: none;
+        }
+      }
+      &.mobile {
+        @media all and (min-width: 768px) {
+          display: none;
+        }
+      }
     }
   }
 
@@ -1887,13 +1966,19 @@ $c_color_error: #e80000;
       flex-direction: column;
       align-items: flex-start;
       margin: 20px 10px;
-      width: 70%;
-
-      @media all and (max-width: 768px) {
-        width: 100%;
-      }
+      width: 100%;
+      position: relative;
+      overflow: hidden;
     }
     &-title {
+      &-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 10px;
+        gap: 8px;
+        border-bottom: 1px dashed $c_color_text_default_dark;
+      }
       &-main {
         @include style-label-main;
         font-weight: 700;
@@ -1909,20 +1994,40 @@ $c_color_error: #e80000;
       display: flex;
       flex-direction: column;
       align-items: start;
-      border-bottom: 1px solid $c_color_text_default_dark;
-      border-top: 1px solid $c_color_text_default_dark;
       padding: 10px 0;
       margin: 10px 0;
       width: 100%;
+      gap: 8px;
     }
 
     &-field {
       &-wrapper {
         display: flex;
         width: 100%;
+        &:hover {
+          background-color: $c-background_default_light;
+        }
+        @media all and (max-width: 768px) {
+          flex-direction: column;
+        }
       }
       &-label {
-        width: 70%;
+        width: 50%;
+        white-space: pre-wrap;
+        @media all and (max-width: 768px) {
+          width: 100%;
+        }
+      }
+      &-right {
+        display: flex;
+        width: 50%;
+        white-space: pre-wrap;
+        @media all and (max-width: 768px) {
+          width: 100%;
+        }
+      }
+      &-value {
+        font-weight: bold;
       }
       &-cost {
         font-weight: bold;
@@ -1931,6 +2036,12 @@ $c_color_error: #e80000;
         @include style-label-main;
         font-weight: 700;
         margin: 20px 0;
+        display: flex;
+        white-space: pre-wrap;
+        align-items: baseline;
+        &-cost {
+          font-size: 25px;
+        }
       }
     }
     &-delimiter {
@@ -1951,10 +2062,10 @@ $c_color_error: #e80000;
     &-wrapper {
       position: relative;
       padding: 30px 0 10px;
-      border-bottom: 2px groove $c-border_default;
+      border-bottom: 2px groove $c_border_default;
       margin-bottom: 10px;
       &:hover {
-        border-color: $c-border-selected;
+        border-color: $c_border_selected;
       }
     }
     &-label {
@@ -2018,11 +2129,11 @@ $c_color_error: #e80000;
   &__background-image {
     &-wrapper {
       position: absolute;
-      width: calc(100% - 10px);
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      height: calc(100% - 10px);
       display: flex;
       justify-content: flex-end;
       align-items: flex-end;
@@ -2030,7 +2141,23 @@ $c_color_error: #e80000;
       background-repeat: no-repeat;
       background-position: right bottom;
       background-size: contain;
+      z-index: -1;
+      //&.bisection {
+      //  left: 50%;
+      //  top: 50%;
+      //  transform: translate(-50%, -50%);
+      //}
+      //&.tab {
+      //  height: calc(100% - 20px);
+      //  left: 50%;
+      //  transform: translateX(-50%);
+      //}
+      @media all and (max-width: 480px) {
+        display: none;
+      }
       @include style-border-radius;
+
+
       &::after {
         position: absolute;
         left: 0;
@@ -2039,7 +2166,7 @@ $c_color_error: #e80000;
         bottom: 0;
         content: "";
         background-color: #fff;
-        opacity: 0.5;
+        opacity: 0.4;
         @include style-border-radius;
       }
     }
@@ -2047,6 +2174,10 @@ $c_color_error: #e80000;
       object-fit: contain;
       width: 100%;
       height: auto;
+    }
+    &-substrate {
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -2097,8 +2228,8 @@ $c_color_error: #e80000;
       &:before {
         width: 60px;
         height: 60px;
-        border-bottom-color: $c-border-selected;
-        border-right-color: $c-border-selected;
+        border-bottom-color: $c_border_selected;
+        border-right-color: $c_border_selected;
         border-top-color: rgba(orange, 0);
         border-left-color: rgba(orange, 0);
         top: 0;
@@ -2109,8 +2240,8 @@ $c_color_error: #e80000;
       &:after {
         width: 50px;
         height: 50px;
-        border-bottom-color: $c-border-default;
-        border-right-color: $c-border-default;
+        border-bottom-color: $c_border-default;
+        border-right-color: $c_border-default;
         border-top-color: rgba(orange, 0);
         border-left-color: rgba(orange, 0);
         top: (100px - 90px) / 2;
@@ -2120,4 +2251,89 @@ $c_color_error: #e80000;
     }
   }
 }
+
+.calc__form-for-result {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .title {
+    color: $c-color_text_default_dark;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    .field-title {
+      color: $c-color_text_default_dark;
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    label {
+      color: $c-color_text_default_dark;
+      display: flex;
+      flex-direction: column;
+      align-items: self-start;
+      gap: 8px;
+    }
+    input {
+      @include style-border-radius;
+      outline: none;
+      border: 2px solid $c_border_default;
+      font-size: 16px;
+      line-height: 20px;
+      color: $c-color_text_default_dark;
+      min-height: 60px;
+      padding: 20px 35px;
+      width: 100%;
+      &:focus,
+      &:hover {
+        border-color: $c_border_selected;
+      }
+      &:invalid {
+        border-color: $c_color_error;
+        color: $c-color_error;
+      }
+    }
+    textarea {
+      @include style-border-radius;
+      font-size: 16px;
+      line-height: 20px;
+      color: $c-color_text_default_dark;
+      padding: 20px 35px;
+      outline: none;
+      border: 2px solid $c_border_default;
+      width: 100%;
+      &:focus,
+      &:hover {
+        border-color: $c_border_selected;
+      }
+      &:invalid {
+        border-color: $c_color_error;
+        color: $c-color_error;
+      }
+    }
+    button {
+      @include style-border-radius;
+      background-color: $c-background_hover_color;
+      color: $c-color_text_default_light;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 23px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 21px 25px;
+    }
+  }
+}
+
 </style>

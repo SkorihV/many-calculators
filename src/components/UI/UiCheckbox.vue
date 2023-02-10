@@ -153,10 +153,7 @@ export default {
         name: this.localElementName,
         type: "checkbox",
         label: this.label?.length ? this.label : this.labelSecond,
-        cost:
-          this.localValue && this.checkedValueOnVoid(this.localCost)
-            ? this.localCost
-            : 0,
+        cost: this.localCost,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
         excludeFromCalculations: this.excludeFromCalculations,
@@ -260,7 +257,7 @@ export default {
      */
     localCost() {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.cost;
+        return this.localValue && this.checkedValueOnVoid(this.cost) ? parseFloat(this.cost ): !this.localValue && this.checkedValueOnVoid(this.cost) ? 0 : null;
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
@@ -269,7 +266,7 @@ export default {
       if (newCost !== null) {
         return newCost;
       }
-      return this.cost;
+      return this.localValue && this.checkedValueOnVoid(this.cost) ? parseFloat(this.cost ): !this.localValue && this.checkedValueOnVoid(this.cost) ? 0 : null;
     },
   },
 };

@@ -1,10 +1,9 @@
 <template>
   <div class="calc__tab-item-content-wrapper" v-show="isShowItem">
-    <div
-      class="calc__background-image-wrapper"
-      v-if="isBackgroundImage"
-      :style="[...styleBackground]"
-    ></div>
+    <background-image-element
+      v-if="this.tabItem?.backgroundImageSettings"
+      :image-settings-data="this.tabItem?.backgroundImageSettings"
+    />
     <div
       class="calc__tab-item-content"
       v-for="(template, key_in) in tabItem?.templates"
@@ -24,6 +23,7 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
+import BackgroundImageElement from "@/components/UI/background-image-element";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -32,7 +32,7 @@ import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
 export default {
   name: "UiTabItem",
-  components: { TemplatesWrapper },
+  components: { BackgroundImageElement, TemplatesWrapper },
   emits: ["changedValue"],
   props: {
     tabItem: {
@@ -70,57 +70,6 @@ export default {
     },
     itemName() {
       return this.tabName + "_" + this.elementName;
-    },
-    isBackgroundImage() {
-      return !!this?.tabItem?.backgroundImageSettings?.image?.filename;
-    },
-    styleBackgroundImageUrl() {
-      return (
-        'background-image : url("' +
-        this.getImageDir +
-        this.tabItem?.backgroundImageSettings?.image?.filename +
-        '");'
-      );
-    },
-    styleBackgroundRepeat() {
-      return (
-        "background-repeat:" +
-        this.tabItem?.backgroundImageSettings?.backgroundRepeat +
-        ";"
-      );
-    },
-    styleBackgroundPosition() {
-      return (
-        "background-position:" +
-        this.tabItem?.backgroundImageSettings?.backgroundPosition?.replace(
-          "-",
-          " "
-        ) +
-        ";"
-      );
-    },
-    styleBackgroundBehaviorImage() {
-      let size = this.tabItem?.backgroundImageSettings?.fixedSize
-        ? (this.tabItem?.backgroundImageSettings?.maxWidth || 250) +
-          "" +
-          this.tabItem?.backgroundImageSettings?.unitSize +
-          " " +
-          (this.tabItem?.backgroundImageSettings?.maxHeight || 250) +
-          "" +
-          this.tabItem?.backgroundImageSettings?.unitSize
-        : this.tabItem?.backgroundImageSettings?.behaviorImage;
-      return "background-size:" + size + ";";
-    },
-    styleBackground() {
-      if (this.isBackgroundImage) {
-        return [
-          this.styleBackgroundImageUrl,
-          this.styleBackgroundRepeat,
-          this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage,
-        ];
-      }
-      return [];
     },
   },
 };

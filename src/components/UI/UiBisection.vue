@@ -7,24 +7,34 @@
       isVisibilityFromDependency
     "
   >
-    <div class="calc__bisection-label" v-if="templateData?.label?.length">
-      {{ templateData?.label }}
+    <background-image-element
+      v-if="templateData?.backgroundImageSettings"
+      :image-settings-data="templateData?.backgroundImageSettings"
+    />
+    <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
+      <div class="calc__bisection-label_main" v-if="templateData?.label?.length">
+        {{ templateData?.label }}
+      </div>
+      <div class="calc__bisection-label_sub" v-if="templateData?.labelSub?.length">
+        {{ templateData?.labelSub }}
+      </div>
+    </div>
+    <div class="calc__bisection-label-desktop">
+      <div class="calc__bisection-left-label desktop" :style="styleWidthLeftSide">
+        {{ templateData?.labelLeft }}
+      </div>
+      <div class="calc__bisection-right-label desktop">
+        {{ templateData?.labelRight }}
+      </div>
     </div>
     <div class="calc__bisection-content-wrapper">
-      <div
-        class="calc__background-image-wrapper"
-        v-if="isBackgroundImage"
-        :style="[...styleBackground]"
-      ></div>
+
       <div
         v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
         :style="styleWidthLeftSide"
       >
-        <div
-          class="calc__bisection-left-label"
-          v-if="templateData?.labelLeft.length"
-        >
+        <div class="calc__bisection-left-label mobile">
           {{ templateData?.labelLeft }}
         </div>
         <templates-wrapper
@@ -41,10 +51,7 @@
         class="calc__bisection-right-side-wrapper"
         :style="styleWidthRightSide"
       >
-        <div
-          class="calc__bisection-right-label"
-          v-if="templateData?.labelRight.length"
-        >
+        <div class="calc__bisection-right-label mobile">
           {{ templateData?.labelRight }}
         </div>
         <templates-wrapper
@@ -67,10 +74,11 @@ import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingF
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import BackgroundImageElement from "@/components/UI/background-image-element.vue";
 
 export default {
   name: "UiBisection",
-  components: { TemplatesWrapper },
+  components: { BackgroundImageElement, TemplatesWrapper },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -183,57 +191,9 @@ export default {
       }
       return "max-width:" + (100 - this.widthLeftSide) + "%";
     },
-    isBackgroundImage() {
-      return !!this?.templateData?.backgroundImageSettings?.image?.filename;
-    },
-    styleBackgroundImageUrl() {
-      return (
-        'background-image : url("' +
-        this.getImageDir +
-        this.templateData?.backgroundImageSettings?.image?.filename +
-        '");'
-      );
-    },
-    styleBackgroundRepeat() {
-      return (
-        "background-repeat:" +
-        this.templateData?.backgroundImageSettings?.backgroundRepeat +
-        ";"
-      );
-    },
-    styleBackgroundPosition() {
-      return (
-        "background-position:" +
-        this.templateData?.backgroundImageSettings?.backgroundPosition?.replace(
-          "-",
-          " "
-        ) +
-        ";"
-      );
-    },
-    styleBackgroundBehaviorImage() {
-      let size = this.templateData?.backgroundImageSettings?.fixedSize
-        ? (this.templateData?.backgroundImageSettings?.maxWidth || 250) +
-          "" +
-          this.templateData?.backgroundImageSettings?.unitSize +
-          " " +
-          (this.templateData?.backgroundImageSettings?.maxHeight || 250) +
-          "" +
-          this.templateData?.backgroundImageSettings?.unitSize
-        : this.templateData?.backgroundImageSettings?.behaviorImage;
-      return "background-size:" + size + ";";
-    },
-    styleBackground() {
-      if (this.isBackgroundImage) {
-        return [
-          this.styleBackgroundImageUrl,
-          this.styleBackgroundRepeat,
-          this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage,
-        ];
-      }
-      return [];
-    },
+    isShowLabel() {
+      return this.templateData?.label?.length || this.templateData?.label?.lengthSub;
+    }
   },
 };
 </script>

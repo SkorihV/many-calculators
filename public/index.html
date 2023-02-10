@@ -4,16 +4,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script
-      src="https://code.jquery.com/jquery-3.6.1.min.js"
-      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-      crossorigin="anonymous"
-    ></script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
-    />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>Ипотечный калькулятор</title>
   </head>
@@ -27,42 +17,40 @@
     <div class="main-wrapper">
       <div id="App"></div>
 
-      <form
-        class="calc__form tpl-anketa"
-        style="margin-bottom: 200px"
-        action="!#"
-      >
-        <textarea
-          class="calc__form-textarea"
-          id="teleport"
-          readonly="readonly"
-          required
-        ></textarea>
-        <label class="calc__form-label" for="name"
-          >Имя: <input class="calc__form-input" type="text" id="name" required
-        /></label>
-        <label class="calc__form-label" for="email"
-          >Почта:
-          <input class="calc__form-input" type="email" id="email" required
-        /></label>
-        <label class="calc__form-label" for="phone"
-          >Телефон:
-          <input class="calc__form-input" type="text" id="phone" required
-        /></label>
-        <button
-          class="calc__form-submit"
-          type="submit"
-          id="send-result"
-          disabled
+      <div class="calc__form tpl-anketa calc__form-for-result">
+        <form
+          style="margin-bottom: 200px"
+          action="!#"
         >
-          Отправить
-        </button>
-      </form>
+          <label class="calc__form-label" for="name"
+          >Имя: <input class="calc__form-input" type="text" id="name" required
+          /></label>
+          <label class="calc__form-label" for="email"
+          >Почта:
+            <input class="calc__form-input" type="email" id="email" required
+            /></label>
+          <label class="calc__form-label" for="phone"
+          >Телефон:
+            <input class="calc__form-input" type="text" id="phone" required
+            /></label>
+          <textarea
+            class="calc__form-textarea"
+            id="teleport"
+            readonly="readonly"
+            required
+          ></textarea>
+          <button
+            class="calc__form-submit"
+            type="submit"
+            id="send-result"
+            disabled
+          >
+            Отправить
+          </button>
+        </form>
+      </div>
+
     </div>
-    <script
-      type="text/javascript"
-      src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
-    ></script>
     <!-- built files will be auto injected -->
   </body>
 </html>

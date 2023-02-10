@@ -16,24 +16,16 @@
           v-if="currentOption"
           class="calc__select-change-item"
           @click="toggleOpenClose"
+          @mouseover="hoverElementIndex = 'main'"
+          @mouseleave="hoverElementIndex = null"
         >
-          <icon-element
-            v-if="
-              currentOption?.iconSettings?.image?.filename &&
-              currentOption?.iconSettings?.location === 'leftSide'
-            "
-            :icon-settings="currentOption?.iconSettings"
+          <icon-element-wrapper
             :alt="currentOption?.selectName"
-          />
-          {{ currentOption.selectName }}
-          <icon-element
-            v-if="
-              currentOption?.iconSettings?.image?.filename &&
-              currentOption?.iconSettings?.location === 'rightSide'
-            "
             :icon-settings="currentOption?.iconSettings"
-            :alt="currentOption?.selectName"
-          />
+            :is-parent-hover="hoverElementIndex === 'main'"
+          >
+            {{ currentOption.selectName }}
+          </icon-element-wrapper>
           <ui-prompt
             v-if="currentOption?.prompt?.length"
             :prompt-text="currentOption.prompt"
@@ -49,26 +41,18 @@
               class="calc__select-option-item"
               @click="changeSelect(option, idx)"
               v-if="currentOption?.value !== option?.value && option.isShow"
+              @mouseover="hoverElementIndex = idx"
+              @mouseleave="hoverElementIndex = null"
             >
-              <icon-element
-                v-if="
-                  option?.iconSettings?.image?.filename &&
-                  option?.iconSettings?.location === 'leftSide'
-                "
-                :icon-settings="option?.iconSettings"
+              <icon-element-wrapper
                 :alt="option?.selectName"
-              />
-              <div class="calc__select-option-item-text">
-                {{ option.selectName }}
-              </div>
-              <icon-element
-                v-if="
-                  option?.iconSettings?.image?.filename &&
-                  option?.iconSettings?.location === 'rightSide'
-                "
                 :icon-settings="option?.iconSettings"
-                :alt="option?.selectName"
-              />
+                :is-parent-hover="hoverElementIndex === idx"
+              >
+                <div class="calc__select-option-item-text">
+                  {{ option.selectName }}
+                </div>
+              </icon-element-wrapper>
               <ui-prompt
                 v-if="option?.prompt?.length"
                 :prompt-text="option.prompt"
@@ -92,17 +76,17 @@ import UiTooltip from "@/components/UI/UiTooltip";
 import UiPrompt from "@/components/UI/UiPrompt";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import IconElement from "@/components/UI/Icon-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { IconElement, UiTooltip, UiPrompt },
+  components: { IconElementWrapper, UiTooltip, UiPrompt },
   created() {
     this.tryToggleElementIsMounted(this.localElementName, false);
   },
@@ -189,6 +173,7 @@ export default {
       },
       localSelectValues: [],
       canBeShownTooltip: false,
+      hoverElementIndex: null
     };
   },
   methods: {

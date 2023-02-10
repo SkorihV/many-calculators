@@ -1676,7 +1676,7 @@
         "label": "checkbox - Переключатель горизонтальный",
         "labelSecond": "",
         "value": false,
-        "cost": "",
+        "cost": "33",
         "isColumn": false,
         "isNeedChoice": false,
         "isChecked": false,
@@ -1779,7 +1779,10 @@
             "radioName": "Четвертый пункт",
             "iconSettings": {
               "image": {
-                "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
+                "filename": "https://dummyimage.com/150x100/222ccc/222ccc"
+              },
+              "imageHover": {
+                "filename": "https://dummyimage.com/150x100/555/222ccc"
               },
               "location": "rightSide"
             }
@@ -2041,9 +2044,9 @@
         "max": "20",
         "cost": "",
         "unit": "",
-        "step": "5",
+        "step": 1,
         "showSteps": 1,
-        "stepPrompt": "1",
+        "stepPrompt": 1,
         "prompt": "текст подсказки",
         "isNeedChoice": false,
         "showStaticValue": false,
@@ -2996,7 +2999,7 @@
                             "title": "999",
                             "disabledFormula": 0,
                             "cost": 999,
-                            "dependencyFormulaCost": "chek111 === true"
+                            "dependencyFormulaCost": ""
                           }
                         ]
                       },

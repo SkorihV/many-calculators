@@ -1,6 +1,7 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
-    <img :src="imageDir + iconSettings?.image?.filename" :alt="alt" />
+    <img class="calc__icon_normal" v-show="showIcon" :src="urlIcon" :alt="alt" />
+    <img class="calc__icon_hover" v-show="showHoverIcon"   :src="urlIconHover" :alt="alt" />
   </div>
 </template>
 
@@ -17,9 +18,13 @@ export default {
       require: true,
     },
     alt: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
+    isParentHover: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
@@ -30,14 +35,26 @@ export default {
       let localValue = this.iconSettings?.maxWidth
         ? this.iconSettings?.maxWidth
         : 32;
-      return "max-width:" + localValue + "px;";
+      return "width:" + localValue + "px;";
     },
     height() {
       let localValue = this.iconSettings?.maxWidth
         ? this.iconSettings?.maxWidth
         : 32;
-      return "max-height:" + localValue + "px;";
+      return "height:" + localValue + "px;";
     },
+    showIcon() {
+      return !this.showHoverIcon
+    },
+    showHoverIcon() {
+      return Boolean(this.iconSettings?.imageHover?.filename) && this.isParentHover;
+    },
+    urlIcon() {
+      return this.imageDir + this.iconSettings?.image?.filename;
+    },
+    urlIconHover() {
+      return this.imageDir + this.iconSettings?.imageHover?.filename;
+    }
   },
 };
 </script>

@@ -17,6 +17,7 @@ export const useBaseStore = defineStore("base", {
       devModeData: false,
       showInsideElementStatusData: false,
       elementsIsMounted: {},
+      tooltipOn: true
     };
   },
   getters: {
@@ -111,9 +112,8 @@ export const useBaseStore = defineStore("base", {
     devMode: (state) => state.devModeData,
     showInsideElementStatus: (state) => state.showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
-    appIsMounted: (state) => {
-      return !Boolean(Object.values(state.elementsIsMounted).filter(value => !value).length);
-    }
+    appIsMounted: (state) => !Boolean(Object.values(state.elementsIsMounted).filter(value => !value).length),
+    isTooltipOn: (state) => state.tooltipOn,
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -216,6 +216,9 @@ export const useBaseStore = defineStore("base", {
     },
     tryToggleElementIsMounted(name, flag) {
       this.elementsIsMounted[name] = flag;
+    },
+    setTooltipOn(flag){
+      this.tooltipOn = !flag;
     }
   },
 });
