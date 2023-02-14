@@ -1226,25 +1226,21 @@
   },
 
   "calculator-options": {
-    "formula": "10 + 50 + chek22",
-    "computedMethod": "linear",
+    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна)",
     "methodProcessingMistakes": "useButton",
     "currency": "руб",
+    "form": "7981901",
     "devMode": 1,
-    "displayResultData": true,
-    "form": "",
+    "title": "Калькулятор фундамента ( конструктор )",
+    "computedMethod": "formula",
+    "tooltipOff": false,
+    "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
     "resultOptions": {
-      "showResultDataForBlock": 1,
-      "title": "Заголовок над результатами",
-      "subtitle": "подзаголовок над результатами",
-      "titleButton": "Текст кнопки",
-      "titleSumma": "Сумма рассчета",
-      "iconSettings": {
-        "image": {
-          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-        },
-        "location": "rightSide"
-      }
+      "title": "Результаты расчета:",
+      "subtitle": "Расчет приблизительный, за точным расчетом обратитесь к нашему специалисту!",
+      "titleButton": "Рассчитать",
+      "titleSumma": "ИТОГО:",
+      "showResultDataForBlock": 1
     }
   },
 
@@ -1906,7 +1902,7 @@
           {
             "title": "Первый длинный пункт",
             "radioName": "Первый длинный пункт",
-            "value":  "222"
+            "value": "222"
           },
           {
             "title": "Второй длинный пунктВторой длинный пунктВторой длинный пунктВторой длинный пунктВторой длинный пункт",
@@ -2185,7 +2181,7 @@
           {
             "title": "Первый пункт",
             "selectName": "Первый пункт",
-            "value" : "текстАункта",
+            "value": "текстАункта",
             "cost": 30,
             "image": {
               "image_id": "1903082906",
@@ -3297,6 +3293,330 @@
     ]
   },
 
+  "test-data2": {
+    "calculatorTemplates": [
+      {
+        "title": "фундамент - Тип строения:",
+        "label": "Тип строения:",
+        "selectedItem": "0",
+        "isColumn": false,
+        "isNeedChoice": true,
+        "notEmpty": false,
+        "typeDisplayClass": "buttons",
+        "elementName": "строение",
+        "classes": "",
+        "template": "UiRadio",
+        "formOutputMethod": "value",
+        "excludeFromCalculations": false,
+        "dependencyFormulaDisplay": "",
+        "formulaProcessingLogic": "error",
+        "zeroValueDisplayIgnore": false,
+        "values": [
+          {
+            "title": "Баня",
+            "radioName": "Баня",
+            "subradioName": "Срок возведения от 3х дней",
+            "cost": 2000,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "687811707",
+                "filename": "bathhouse.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "687847707",
+                "filename": "bathhouse1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 50,
+              "maxHeight": 50,
+              "location": "leftSide"
+            },
+            "prompt": "Здесь может быть небольшая подсказка!&nbsp;"
+          },
+          {
+            "title": "Дом",
+            "radioName": "Дом",
+            "subradioName": "Срок возведения от 6 месяцев",
+            "cost": 6000,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "688234707",
+                "filename": "house.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "688236107",
+                "filename": "house1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 50,
+              "maxHeight": 50,
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Забор",
+            "radioName": "Забор",
+            "subradioName": "Справимся за 2 дня",
+            "cost": 500,
+            "extraValueForDependency" : "забор",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689413907",
+                "filename": "fence2_1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689413307",
+                "filename": "fence3_1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 50,
+              "maxHeight": 50,
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Пирс \\/ Причал",
+            "radioName": "Пирс \\/ Причал",
+            "subradioName": "Срок возведения от 10х дней",
+            "cost": 700,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "688558307",
+                "filename": "pier.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "688558107",
+                "filename": "pier1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 50,
+              "maxHeight": 50,
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Пристрой",
+            "radioName": "Пристрой",
+            "cost": 700,
+            "extraValueForDependency": "пристрой",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689007707",
+                "filename": "barn.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689007507",
+                "filename": "barn1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 50,
+              "maxHeight": 50,
+              "location": "leftSide"
+            }
+          }
+        ],
+        "prompt": ""
+      },
+      {
+        "title": "Фундамент - Материал стен:",
+        "label": "Материал стен:",
+        "selectedItem": "0",
+        "isColumn": 1,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "buttons",
+        "elementName": "материал",
+        "classes": "",
+        "template": "UiRadio",
+        "formOutputMethod": "value",
+        "excludeFromCalculations": false,
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "",
+        "values": [
+          {
+            "title": "Sip-панель",
+            "radioName": "Sip-панель",
+            "cost": 10
+          },
+          {
+            "title": "Брус\\/Бревно",
+            "radioName": "Брус\\/Бревно",
+            "cost": 15,
+            "prompt": "Подсказка"
+          },
+          {
+            "title": "Пеноблок",
+            "radioName": "Пеноблок",
+            "cost": 20
+          },
+          {
+            "title": "Кирпич",
+            "radioName": "Кирпич",
+            "cost": 30
+          }
+        ],
+        "prompt": "Небольшая подсказка о сути данного параметра"
+      },
+      {
+        "title": "Фундамент - разделитель",
+        "label": "",
+        "labelLeft": "",
+        "labelRight": "",
+        "leftSide": [
+          {
+            "title": "Фундамент Этажность",
+            "label": "Этажность",
+            "value": "1",
+            "min": "1",
+            "max": "5",
+            "cost": "1",
+            "unit": "",
+            "step": "1",
+            "showSteps": 1,
+            "stepPrompt": "1",
+            "isNeedChoice": false,
+            "showStaticValue": false,
+            "showDynamicValue": 1,
+            "elementName": "этажность",
+            "classes": "",
+            "template": "UiRange",
+            "notEmpty": false,
+            "formOutputMethod": "value",
+            "excludeFromCalculations": false,
+            "dependencyFormulaDisplay": "",
+            "formulaProcessingLogic": "error",
+            "prompt": "",
+            "dependencyPrices": null,
+            "zeroValueDisplayIgnore": true
+          }
+        ],
+        "rightSide": [
+          {
+            "title": "Фундамент - Мансарда",
+            "label": "",
+            "buttonText": "Мансарда",
+            "buttonTextChecked": "",
+            "value": false,
+            "cost": "400",
+            "isColumn": true,
+            "isNeedChoice": false,
+            "isChecked": false,
+            "typeDisplayClass": "base",
+            "elementName": "мансарда",
+            "classes": "",
+            "template": "UiCheckbox",
+            "formOutputMethod": "value",
+            "excludeFromCalculations": false,
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot;",
+            "prompt": "всплывающая подсказка",
+            "dependencyPrices": null,
+            "zeroValueDisplayIgnore": false
+          }
+        ],
+        "widthLeftSide": "35",
+        "classes": "",
+        "template": "UiBisection",
+        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplayLeftSide": "",
+        "dependencyFormulaDisplayRightSide": "",
+        "labelSub": "",
+        "visuallySeparateElement": false,
+        "backgroundImageSettings": null
+      },
+      {
+        "title": "Фундамент - длинна",
+        "label": "Длинна",
+        "value": "1",
+        "min": "1",
+        "max": "15",
+        "cost": "1",
+        "unit": "м",
+        "step": "1",
+        "showSteps": 1,
+        "stepPrompt": "1",
+        "isNeedChoice": false,
+        "showStaticValue": false,
+        "showDynamicValue": 1,
+        "elementName": "длинна",
+        "classes": "",
+        "template": "UiRange",
+        "notEmpty": false,
+        "formOutputMethod": "value",
+        "excludeFromCalculations": false,
+        "dependencyFormulaDisplay": "",
+        "formulaProcessingLogic": "error",
+        "prompt": "Небольшая подсказка.",
+        "dependencyPrices": null
+      },
+      {
+        "title": "Фундамент - ширина",
+        "label": "Ширина",
+        "value": "1",
+        "min": "1",
+        "max": "15",
+        "cost": "1",
+        "unit": "м",
+        "step": "1",
+        "showSteps": 1,
+        "stepPrompt": "1",
+        "isNeedChoice": false,
+        "showStaticValue": false,
+        "showDynamicValue": 1,
+        "elementName": "ширина",
+        "classes": "",
+        "template": "UiRange",
+        "notEmpty": false,
+        "formOutputMethod": "value",
+        "excludeFromCalculations": false,
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "",
+        "prompt": "",
+        "dependencyPrices": null
+      }
+    ]
+  },
+
   "credit-calculator": {
     "type_calculate": "Both",
     "bank_list": {
@@ -3637,7 +3957,8 @@
         },
         {
           "radioName": "Забор",
-          "prompt": "подсказочка"
+          "prompt": "подсказочка",
+          "extraValueForDependency" : "забор"
         },
         {
           "radioName": "Пирс/Причал",
@@ -3645,7 +3966,8 @@
         },
         {
           "radioName": "Пристрой",
-          "prompt": ""
+          "prompt": "",
+          "extraValueForDependency" : "пристрой"
         }
       ]
     },

@@ -29,7 +29,6 @@ import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
 
-
 export default {
   name: "UiTabItem",
   components: { BackgroundImageElement, TemplatesWrapper },

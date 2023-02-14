@@ -126,7 +126,7 @@ export default {
     });
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
-    }, 200)
+    }, 200);
   },
   props: {
     selectValues: {
@@ -159,7 +159,8 @@ export default {
       "dependencyFormulaDisplay",
       "maxWidth",
       "maxHeight",
-      "positionElement"
+      "positionElement",
+      "zeroValueDisplayIgnore",
     ]),
   },
   data() {
@@ -170,11 +171,11 @@ export default {
       textErrorNotEmpty: "Обязательное поле.",
       mockOption: {
         selectName: "Не выбрано!",
-        value: "null",
+        value: null,
       },
       localSelectValues: [],
       canBeShownTooltip: false,
-      hoverElementIndex: null
+      hoverElementIndex: null,
     };
   },
   methods: {
@@ -216,7 +217,7 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.currentOption?.value,
+        value: this.currentOptionValue,
         displayValue: this.currentOption?.selectName,
         index: this.currentIndexOption,
         name: this.localElementName,
@@ -232,6 +233,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -248,14 +250,14 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
-      if (eventType !== 'mounted') {
+      if (eventType !== "mounted") {
         this.canBeShownTooltip = true;
       }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.currentOption?.value,
+        value: this.currentOptionValue,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.currentOption?.selectName,
         type: "select",
@@ -299,7 +301,7 @@ export default {
       for (let i = 0; i < length; i++) {
         if (
           this.selectValuesAfterProcessingDependency[i].value ===
-            this.currentOption?.value &&
+            this.currentOptionValue &&
           this.currentOption.isShow
         ) {
           return;
@@ -325,7 +327,7 @@ export default {
       "devMode",
       "getImageDir",
       "isCanShowAllTooltips",
-      "tryToggleElementIsMounted"
+      "tryToggleElementIsMounted",
     ]),
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
@@ -372,7 +374,11 @@ export default {
       }
       return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
-
+    currentOptionValue() {
+      return this.currentOption?.extraValueForDependency?.length ? this.currentOption?.extraValueForDependency
+        : !isNaN(parseInt(this.currentOption?.value))  ? this.currentOption?.value
+          : null;
+    },
     mutationSelectValue() {
       return this.localSelectValues.map((selectItem, index) => {
         const localIndex = this.needMockValue ? index : index + 1;

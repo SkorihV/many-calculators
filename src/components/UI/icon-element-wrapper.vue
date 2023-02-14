@@ -19,36 +19,34 @@ import IconElement from "@/components/UI/Icon-element.vue";
 export default {
   name: "icon-element-wrapper",
   components: {
-    IconElement
+    IconElement,
   },
   props: {
     iconSettings: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     isParentHover: {
       type: Boolean,
-      default: false
+      default: false,
     },
     alt: {
       type: [String, Number],
-      default: ''
-    }
+      default: "",
+    },
   },
   computed: {
     isImage() {
       return !!this.iconSettings?.image?.filename;
     },
     showLeftIcon() {
-      return this.isImage && this.iconSettings?.location === 'leftSide';
+      return this.isImage && this.iconSettings?.location === "leftSide";
     },
     showRightIcon() {
-      return this.isImage && this.iconSettings?.location === 'rightSide';
+      return this.isImage && this.iconSettings?.location === "rightSide";
     },
-  }
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -21,7 +21,7 @@
             :class="{
               checked: currentIndexRadioButton === idx,
               error: isErrorClass,
-              onlyImage: onlyImage
+              onlyImage: onlyImage,
             }"
             v-if="radio.isShow"
             @click="selectedCurrentRadio(idx)"
@@ -31,7 +31,9 @@
             <icon-element-wrapper
               :alt="radio?.radioName"
               :icon-settings="radio?.iconSettings"
-              :is-parent-hover="hoverElementIndex === idx || currentIndexRadioButton === idx"
+              :is-parent-hover="
+                hoverElementIndex === idx || currentIndexRadioButton === idx
+              "
             >
               <span
                 class="calc__radio-indicator"
@@ -65,7 +67,7 @@ import UiPrompt from "@/components/UI/UiPrompt";
 import UiTooltip from "@/components/UI/UiTooltip";
 import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import iconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -75,7 +77,7 @@ export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiPrompt, UiTooltip, iconElementWrapper },
+  components: { UiPrompt, UiTooltip, IconElementWrapper },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
@@ -98,7 +100,7 @@ export default {
     }, 100);
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200)
+    }, 200);
   },
   props: {
     radioValues: {
@@ -142,6 +144,7 @@ export default {
       "classes",
       "templateName",
       "positionElement",
+      "zeroValueDisplayIgnore",
     ]),
   },
   data() {
@@ -152,7 +155,7 @@ export default {
       timerName: null,
       localRadioListInOut: [],
       canBeShownTooltip: false,
-      hoverElementIndex: null
+      hoverElementIndex: null,
     };
   },
   methods: {
@@ -180,6 +183,7 @@ export default {
         formulaProcessingLogic: this.formulaProcessingLogic,
         mode: this.mode,
         position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -196,7 +200,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
-      if (eventType !== 'mounted') {
+      if (eventType !== "mounted") {
         this.canBeShownTooltip = true;
       }
     },
@@ -278,7 +282,7 @@ export default {
       "checkValidationDataAndToggle",
       "devMode",
       "isCanShowAllTooltips",
-      "tryToggleElementIsMounted"
+      "tryToggleElementIsMounted",
     ]),
 
     isChangedRadio() {
@@ -311,7 +315,9 @@ export default {
       if (this.currentSelectedRadioButton === null) {
         return null;
       }
-      return this.currentSelectedRadioButton?.value?.toString().length ? this.currentSelectedRadioButton?.value : this.currentIndexRadioButton + 1;
+      return this.currentSelectedRadioButton?.extraValueForDependency?.length
+        ? this.currentSelectedRadioButton?.extraValueForDependency
+        : this.currentIndexRadioButton + 1;
     },
     valueForDisplayRadioElement() {
       if (this.currentSelectedRadioButton === null) {

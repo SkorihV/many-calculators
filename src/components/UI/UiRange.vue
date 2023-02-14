@@ -167,7 +167,8 @@ export default {
       "max",
       "dependencyFormulaDisplay",
       "parentIsShow",
-      "positionElement"
+      "positionElement",
+      "zeroValueDisplayIgnore",
     ]),
   },
   created() {
@@ -202,18 +203,18 @@ export default {
       if (this.$refs?.thisElement?.offsetWidth) {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
-    })
+    });
     if (!this.$refs?.thisElement?.offsetWidth) {
       let timer = setInterval(() => {
         if (this.$refs?.thisElement?.offsetWidth) {
-          this.updateWidthElements()
+          this.updateWidthElements();
           clearInterval(timer);
         }
       }, 1000);
     }
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200)
+    }, 200);
   },
   data() {
     return {
@@ -279,6 +280,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore
       });
       this.changeValid(eventType);
     },
@@ -330,10 +332,13 @@ export default {
       this.shownTooltip();
     },
     updateWidthElements() {
-      if(this.elementWidth !== this.$refs?.thisElement?.offsetWidth && this.showStaticValue) {
+      if (
+        this.elementWidth !== this.$refs?.thisElement?.offsetWidth &&
+        this.showStaticValue
+      ) {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
-    }
+    },
   },
   watch: {
     /**
@@ -360,7 +365,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
-      "tryToggleElementIsMounted"
+      "tryToggleElementIsMounted",
     ]),
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;

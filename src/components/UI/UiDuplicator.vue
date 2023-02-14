@@ -5,7 +5,7 @@
     v-show="isVisibilityFromDependency"
   >
     <ui-duplicator-wrapper
-      v-for="(duplicator, key) in localTemplates"
+      v-for="(duplicator, idx) in localTemplates"
       :origin-data="originData"
       :key="duplicator?.index ? duplicator?.index : 0"
       :index="duplicator?.index ? duplicator?.index : 0"
@@ -15,6 +15,7 @@
       :parent-name="originData.elementName"
       :parent-is-show="isVisibilityFromDependency"
       :origin-variables="originVariablesInDuplicator"
+      :position-element="idx"
       @duplicate="duplicate"
       @deleteDuplicator="deleteDuplicator"
       @changedValue="changeValue"
@@ -54,6 +55,8 @@ export default {
       "classes",
       "templateName",
       "parentIsShow",
+      "positionElement",
+      "zeroValueDisplayIgnore",
     ]),
   },
   mounted() {
@@ -86,13 +89,13 @@ export default {
         this.localResultsElements[data.name] = data;
       }
       this.localCost = 0;
-      Object.values(this.localResultsElements).forEach((item) => {
+      this.returnsLocalResultsElements.forEach((item) => {
         if (item.cost !== null) {
           this.localCost += parseFloat(item.cost);
         }
       });
       this.$emit("changedValue", {
-        name: this.duplicateTemplate.elementName,
+        name: this.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
         cost: this.localCost,
@@ -103,8 +106,10 @@ export default {
         unit: "",
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
-        insertedTemplates: this.localResultsElements,
+        insertedTemplates: this.returnsLocalResultsElements,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
     },
     calculateResult() {
@@ -127,13 +132,13 @@ export default {
 
       delete this.localResultsElements[elementName];
       this.localCost = 0;
-      Object.values(this.localResultsElements).forEach((item) => {
+      this.returnsLocalResultsElements.forEach((item) => {
         if (item.cost !== null) {
           this.localCost += parseFloat(item.cost);
         }
       });
       this.$emit("changedValue", {
-        name: this.duplicateTemplate.elementName,
+        name: this.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
         cost: this.localCost,
@@ -144,7 +149,7 @@ export default {
         unit: "",
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
-        insertedTemplates: this.localResultsElements,
+        insertedTemplates: this.returnsLocalResultsElements,
       });
     },
   },
@@ -152,7 +157,7 @@ export default {
     isVisibilityFromDependency(newValue) {
       if (newValue === false) {
         this.$emit("changedValue", {
-          name: this.duplicateTemplate.elementName,
+          name: this.elementName,
           type: "duplicator",
           label: this.duplicateTemplate.label,
           cost: this.localCost,
@@ -164,12 +169,15 @@ export default {
           isShow: this.isVisibilityFromDependency,
           excludeFromCalculations:
             this.duplicateTemplate.excludeFromCalculations,
-          insertedTemplates: this.localResultsElements,
+          insertedTemplates: this.returnsLocalResultsElements,
         });
       }
     },
   },
   computed: {
+    returnsLocalResultsElements() {
+      return Object.values(this.localResultsElements).sort((itemA, itemB) => itemA?.position - itemB?.position);
+    },
     originVariablesInDuplicator() {
       let result = this.getNameElementsRecursive(this.originData?.templates);
       return result.filter((item) => item?.length > 0);

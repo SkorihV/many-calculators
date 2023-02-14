@@ -7,52 +7,62 @@
     <div
       class="calc__checkbox-wrapper"
       @click="inputLocalValue"
-      :class="classes"
+      :class="[classes, { 'is-column': isColumn }]"
     >
-      <div
-        v-if="label"
-        class="calc__checkbox-label"
-        :class="{
-          'is-button': isButton,
-          checked: isChecked || localValue,
-          disabled: isChecked,
-          error: isErrorClass,
-        }"
-      >
+      <div v-if="label?.length" class="calc__checkbox-label">
         {{ label }}
         <div class="empty-block" v-if="isNeedChoice">*</div>
-        <slot name="prompt"></slot>
       </div>
-      <div
-        class="calc__checkbox-element"
-        v-if="isBase"
-        :class="[
-          checkboxType,
-          {
-            checked: isChecked || localValue,
-            disabled: isChecked,
-            error: isErrorClass,
-          },
-        ]"
-      ></div>
-      <div
-        class="calc__checkbox-element_switcher"
-        v-if="isSwitcher || isSwitcherVertical"
-        :class="{
-          checked: isChecked || localValue,
-          disabled: isChecked,
-          vertical: isSwitcherVertical,
-          error: isErrorClass,
-        }"
-      ></div>
-      <div v-if="labelSecond.length" class="calc__checkbox-label_second">
-        {{ labelSecond }}
+      <div class="calc__checkbox-control-wrapper">
+        <div
+          class="calc__checkbox-control-button"
+          v-if="isButton"
+          :class="{
+            'checked': isLocalChecked,
+            'error': isErrorClass,
+          }"
+        >
+            {{ currentLocalValue }}
+            <slot name="prompt"></slot>
+        </div>
+        <div
+          class="calc__checkbox-control-base"
+          v-if="isBase || isSwitcher || isSwitcherVertical"
+          :class="{
+            'switcher' : isSwitcher || isSwitcherVertical,
+            'checked': isLocalChecked,
+            'error': isErrorClass,
+          }"
+        >
+          <div class="calc__checkbox-control-text">
+            <template v-if="isSwitcher || isSwitcherVertical">
+              {{ buttonText }}
+            </template>
+            <template v-if="isBase">
+              {{ currentLocalValue }}
+            </template>
+            <slot name="prompt"></slot>
+          </div>
+          <div
+            class="calc__checkbox-control-element"
+            :class="{
+              'base': isBase,
+              'switcher': isSwitcher || isSwitcherVertical,
+              'switcher-vertical': isSwitcherVertical,
+              'checked': isLocalChecked,
+              'error': isErrorClass,
+            }"
+          ></div>
+          <div class="calc__checkbox-control-text_checked" v-if="(isSwitcher || isSwitcherVertical) && buttonTextChecked?.length">
+            {{ buttonTextChecked }}
+          </div>
+        </div>
+        <ui-tooltip
+          :is-show="isErrorEmpty"
+          :tooltip-text="textErrorNotEmpty"
+          :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
+        />
       </div>
-      <ui-tooltip
-        :is-show="isErrorEmpty"
-        :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
-      />
     </div>
   </div>
   <div v-if="devModeData" v-html="devModeData"></div>
@@ -73,12 +83,8 @@ export default {
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { UiTooltip },
   props: {
-    labelSecond: {
-      type: String,
-      default: "",
-    },
     /**
-     *  Начальное значение
+     * Начальное значение
      */
     checkboxValue: {
       type: [Boolean, Number],
@@ -98,6 +104,14 @@ export default {
       type: String,
       default: "base",
     },
+    buttonText: {
+      type: String,
+      require: true,
+    },
+    buttonTextChecked: {
+      type: String,
+      require: true,
+    },
     ...UsePropsTemplates([
       "formOutputMethod",
       "isChecked",
@@ -113,26 +127,31 @@ export default {
       "formulaProcessingLogic",
       "classes",
       "templateName",
-      "positionElement"
+      "positionElement",
+      "isColumn",
+      "zeroValueDisplayIgnore"
     ]),
   },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
-    this.localValue = Boolean(this.checkboxValue);
-    if (this.isChecked) {
-      this.localValue = true;
+    this.isLocalChecked = this.checkboxValue || this.isChecked;
+    if (this.isLocalChecked) {
+      this.currentLocalValue = this.buttonTextChecked?.length ? this.buttonTextChecked : this.buttonText;
+    } else {
+      this.currentLocalValue = this.buttonText;
     }
     this.changeValue("mounted");
 
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200)
+    }, 200);
   },
   data() {
     return {
-      localValue: false,
+      currentLocalValue: "",
+      isLocalChecked: false,
       textErrorNotEmpty: "Обязательное поле.",
       canBeShownTooltip: false,
     };
@@ -140,8 +159,11 @@ export default {
   methods: {
     inputLocalValue() {
       if (!this.isChecked) {
-        this.localValue = !this.localValue;
+        this.isLocalChecked = !this.isLocalChecked;
       }
+      this.currentLocalValue = this.isLocalChecked && this.buttonTextChecked?.length
+        ? this.buttonTextChecked
+        : this.buttonText;
       this.changeValue("click");
     },
     checkedValueOnVoid(value) {
@@ -149,11 +171,11 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.localValue,
-        displayValue: this.localValue ? "Да" : "Нет",
+        value: this.isLocalChecked,
+        displayValue: this.isLocalChecked ? "Да" : "Нет",
         name: this.localElementName,
         type: "checkbox",
-        label: this.label?.length ? this.label : this.labelSecond,
+        label: this.label || this.buttonText,
         cost: this.localCost,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -162,6 +184,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore
       });
       this.tryPassDependency();
       this.changeValid(eventType);
@@ -178,24 +201,18 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
-      if (eventType !== 'mounted') {
+      if (eventType !== "mounted") {
         this.canBeShownTooltip = true;
       }
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.localValue,
+        value: this.isLocalChecked,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.localValue ? "Да" : "Нет",
+        displayValue: this.currentLocalValue,
         type: "checkbox",
       });
-    },
-  },
-  watch: {
-    checkboxValue(newValue) {
-      this.localValue = Boolean(newValue);
-      this.changeValid("checkbox");
     },
   },
   computed: {
@@ -203,7 +220,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
-      "tryToggleElementIsMounted"
+      "tryToggleElementIsMounted",
     ]),
     /**
      *
@@ -243,7 +260,7 @@ export default {
      * @returns {boolean}
      */
     isErrorEmpty() {
-      return this.isNeedChoice && !this.localValue;
+      return this.isNeedChoice && !this.isLocalChecked;
     },
     isErrorClass() {
       return (
@@ -259,7 +276,11 @@ export default {
      */
     localCost() {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.localValue && this.checkedValueOnVoid(this.cost) ? parseFloat(this.cost ): !this.localValue && this.checkedValueOnVoid(this.cost) ? 0 : null;
+        return this.isLocalChecked && this.checkedValueOnVoid(this.cost)
+          ? parseFloat(this.cost)
+          : !this.isLocalChecked && this.checkedValueOnVoid(this.cost)
+          ? 0
+          : null;
       }
 
       let newCost = this.costAfterProcessingDependencyPrice(
@@ -268,7 +289,11 @@ export default {
       if (newCost !== null) {
         return newCost;
       }
-      return this.localValue && this.checkedValueOnVoid(this.cost) ? parseFloat(this.cost ): !this.localValue && this.checkedValueOnVoid(this.cost) ? 0 : null;
+      return this.isLocalChecked && this.checkedValueOnVoid(this.cost)
+        ? parseFloat(this.cost)
+        : !this.isLocalChecked && this.checkedValueOnVoid(this.cost)
+        ? 0
+        : null;
     },
   },
 };

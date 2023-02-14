@@ -32,7 +32,7 @@
             :key="key"
           >
             <div class="calc__error-item-name">
-              {{ data.label ? data.label : "Без заголовка - " }} /
+              {{ data.label ? data.label : "Без заголовка " }} /
               {{ data.elementName }}
             </div>
           </div>
@@ -137,6 +137,7 @@ export default {
   data() {
     return {
       listExistElementNames: [], // Список всех имен элементов которые могут участвовать в расчетах
+      listExistElementValues: [], // Список всех второстепенных имен селектов и радиокнопок
       listDisplayFormula: [], //список всех формул отвечающих за отображение
       listComputedFormula: [], //Список всех формул отвечающих за расчет
       usedArrayNamesInElements: new Set(), //список используемых имен для создания зависимостей
@@ -180,11 +181,11 @@ export default {
     /**
      * рекурсивно обходим все шаблоны и получаем нужный массив данных
      * по указанному полю в указанную переменную
-     * @param template
-     * @param desiredField
-     * @param accumulatorVariable
-     * @param nameFieldOnResult
-     * @param label
+     * @param template - данные по которым происходит обход
+     * @param desiredField - название / массив полей которые будут искаться в данных
+     * @param accumulatorVariable - переменная из data() в которую будет передаваться полученный массив объектов
+     * @param nameFieldOnResult - название поля в объекте куда будет передаваться полученные результаты по отдельному полю
+     * @param label  - заголовок для переменной
      * @returns {boolean}
      */
     getNeedleDataInTemplates(
@@ -305,6 +306,13 @@ export default {
         "listComputedFormula",
         "formula"
       );
+
+      this.getNeedleDataInTemplates(
+        this.templates,
+        "extraValueForDependency",
+        "listExistElementValues",
+        "extraValue",
+      );
       if (this.formula?.length) {
         this.listComputedFormula.push({
           label: "Основная формула",
@@ -339,7 +347,7 @@ export default {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /([A-Za-zА-Яа-яЁё0-9-_]*)(\)|\(|>=|<=|<|>|\}|\{|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|\}|\{|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         ?.map((item) => {
           //удаляем пробелы по краям
@@ -388,7 +396,8 @@ export default {
         item.displayFormula.forEach((name) => {
           if (
             !this.usedArrayNamesInElements.has(name) &&
-            !this.exceptionVariablesFormula.includes(name)
+            !this.exceptionVariablesFormula.includes(name) &&
+            !this.listExistElementValues.some(item => item.extraValue === name)
           ) {
             usedNamesDependencyListOut.push({
               label: item.label,

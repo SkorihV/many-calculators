@@ -4,7 +4,11 @@
     v-if="isBackgroundImage"
     :style="[...styleBackground]"
   >
-    <div v-if="isSubstrate" :style="[colorSubstrate, opacitySubstrate]" class="calc__background-image-substrate"></div>
+    <div
+      v-if="isSubstrate"
+      :style="[colorSubstrate, opacitySubstrate]"
+      class="calc__background-image-substrate"
+    ></div>
   </div>
 </template>
 
@@ -14,14 +18,14 @@ import { useBaseStore } from "@/store/piniaStore";
 
 export default {
   name: "background-image-element",
-  props:{
+  props: {
     imageSettingsData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   computed: {
-  ...mapState(useBaseStore, ["getImageDir"]),
+    ...mapState(useBaseStore, ["getImageDir"]),
     isBackgroundImage() {
       return !!this.imageSettingsData?.image?.filename;
     },
@@ -29,10 +33,16 @@ export default {
       return !!this.imageSettingsData?.isSubstrate;
     },
     colorSubstrate() {
-      return this?.imageSettingsData?.colorSubstrate ? "background-color:" + this?.imageSettingsData?.colorSubstrate + ";" : '';
+      return this?.imageSettingsData?.colorSubstrate
+        ? "background-color:" + this?.imageSettingsData?.colorSubstrate + ";"
+        : "";
     },
     opacitySubstrate() {
-      return "opacity:" + Number(this?.imageSettingsData?.opacitySubstrate) / 100 + ";";
+      return (
+        "opacity:" +
+        Number(this?.imageSettingsData?.opacitySubstrate) / 100 +
+        ";"
+      );
     },
     styleBackgroundImageUrl() {
       return (
@@ -44,27 +54,25 @@ export default {
     },
     styleBackgroundRepeat() {
       return (
-        "background-repeat:" +
-        this.imageSettingsData?.backgroundRepeat +
-        ";"
+        "background-repeat:" + this.imageSettingsData?.backgroundRepeat + ";"
       );
     },
     styleBackgroundPosition() {
       return (
         "background-position:" +
         this.imageSettingsData?.backgroundHorizontalPosition +
-          " " +
-          this.imageSettingsData?.backgroundVerticalPosition +
+        " " +
+        this.imageSettingsData?.backgroundVerticalPosition +
         ";"
       );
     },
     styleBackgroundBehaviorImage() {
       let size = this.imageSettingsData?.fixedSize
         ? (this.imageSettingsData?.maxWidth || 250) +
-        this.imageSettingsData?.unitSize +
-        " " +
-        (this.imageSettingsData?.maxHeight || 250) +
-        this.imageSettingsData?.unitSize
+          this.imageSettingsData?.unitSize +
+          " " +
+          (this.imageSettingsData?.maxHeight || 250) +
+          this.imageSettingsData?.unitSize
         : this.imageSettingsData?.behaviorImage;
 
       return "background-size:" + size + ";";
@@ -84,6 +92,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

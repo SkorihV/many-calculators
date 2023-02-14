@@ -116,7 +116,7 @@ export default {
       visibilityListTabs: new Map(),
       shownIdTab: null,
       hoverElementIndex: null,
-   };
+    };
   },
   methods: {
     openItem(index) {

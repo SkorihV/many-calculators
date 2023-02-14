@@ -88,6 +88,7 @@ export default {
       "index",
       "dependencyFormulaDisplay",
       "elementName",
+      "positionElement"
     ]),
   },
   mounted() {
@@ -122,7 +123,8 @@ export default {
         isShow: this.parentIsShow,
         excludeFromCalculations:
           this.mutationsInputData.excludeFromCalculations,
-        insertedTemplates: this.localResultData,
+        insertedTemplates: this.returnsLocalResultData,
+        position: this.positionElement,
         formulaProcessingLogic: this.originData?.formulaProcessingLogic,
       });
     },
@@ -400,16 +402,19 @@ export default {
         return null;
       }
     },
+    returnsLocalResultData() {
+      return Object.values(this.localResultData).sort((itemA, itemB) => itemA.position - itemB.position);
+    },
     devModeData() {
       if (!this.devMode || !this.showInsideElementStatus) {
         return false;
       }
-      const textLabel = `<span>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</span>`;
+      const textLabel = `<span>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</span></br>`;
       const textFormula = `<span>Базовая формула: ${
         this.formula?.length
           ? this.getArrayElementsFromFormula(this.formula).join(" ")
           : "Нет"
-      }</span>`;
+      }</span></br>`;
       let isCompiledFormula = false;
       try {
         if (this.localCost !== null) {
@@ -423,10 +428,10 @@ export default {
         this.compileFormulaWitchData?.length
           ? this.compileFormulaWitchData
           : "Нет"
-      }</span>`;
+      }</span></br>`;
       const resultProcessingFormula = `<span>Результат расчета: ${
         isCompiledFormula ? this.localCost : "не возможно посчитать!"
-      }</span>`;
+      }</span></br>`;
 
       return `
       <hr/>

@@ -45,7 +45,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200)
+    }, 200);
   },
   props: {
     defaultImage: {
@@ -79,7 +79,11 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["devMode", "getImageDir", "tryToggleElementIsMounted"]),
+    ...mapState(useBaseStore, [
+      "devMode",
+      "getImageDir",
+      "tryToggleElementIsMounted",
+    ]),
     width() {
       return "max-width:" + this.maxWidth + "px";
     },

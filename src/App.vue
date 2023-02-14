@@ -55,6 +55,8 @@
           :duplicate-template="template"
           :formula-processing-logic="template?.formulaProcessingLogic"
           :template-name="template.template"
+          :position-element="template?.position"
+          :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -85,30 +87,47 @@
           {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
         </icon-element-wrapper>
       </div>
+      <div
+        class="calc__result-block-wrapper"
+        :class="{
+          isVisualSeparate: outOptions.resultOptions?.visuallySeparateElement,
+        }"
+        v-if="showResultDataForBlock && initTeleport"
+      >
+        <background-image-element
+          class="result"
+          v-if="outOptions.resultOptions?.backgroundImageSettings"
+          :image-settings-data="
+            outOptions.resultOptions?.backgroundImageSettings
+          "
+        />
+        <div
+          class="calc__result-block-title-wrapper"
+          v-if="isShowResultBlockTitle || isShowResultBlockSubtitle"
+        >
+          <div
+            class="calc__result-block-title-main"
+            v-if="isShowResultBlockTitle"
+          >
+            {{ outOptions.resultOptions.title }}
+          </div>
+          <div
+            class="calc__result-block-title-sub"
+            v-if="isShowResultBlockSubtitle"
+            v-html="outOptions.resultOptions.subtitle"
+          />
+        </div>
+        <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
+      </div>
       <error-names-templates
         v-if="devMode"
         :templates="calculatorTemplates"
         :init-template="devMode"
         :formula="formula?.length && isUseFormula ? formula : ''"
       />
-      <div class="calc__result-block-wrapper" :class="{'isVisualSeparate':outOptions.resultOptions?.visuallySeparateElement}" v-if="showResultDataForBlock && initTeleport">
-        <background-image-element
-          class="result"
-          v-if="outOptions.resultOptions?.backgroundImageSettings"
-          :image-settings-data="outOptions.resultOptions?.backgroundImageSettings"
-        />
-        <div class="calc__result-block-title-wrapper" v-if="isShowResultBlockTitle || isShowResultBlockSubtitle">
-          <div class="calc__result-block-title-main" v-if="isShowResultBlockTitle">
-            {{ outOptions.resultOptions.title }}
-          </div>
-          <div class="calc__result-block-title-sub" v-if="isShowResultBlockSubtitle">
-            {{ outOptions.resultOptions.subtitle }}
-          </div>
-        </div>
-        <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
-      </div>
       <div id="prompt-text-element"></div>
     </div>
+    <div v-if="outOptions?.textAfter?.length" v-html="outOptions.textAfter"></div>
     <teleport v-if="initTeleport && submitResult" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
@@ -136,7 +155,6 @@ import { mapState } from "pinia";
 import BackgroundImageElement from "@/components/UI/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
-
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
@@ -153,8 +171,8 @@ export default {
   },
   async mounted() {
     const isGlobal = window.location.hostname !== "localhost";
-    const localPath = "http://localhost:3000/test-data";
-    // const localPath = "http://localhost:3000/test-dependency";
+    const localPath = "http://localhost:3000/test-data2";
+
     if (!isGlobal) {
       await fetch(localPath)
         .then((response) => response.json())
@@ -173,57 +191,74 @@ export default {
       this.outOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
     }
 
+    /**
+     * у всех элементов калькулятора добавляем порядковый номер.
+     * @type {*[]}
+     */
     let calculatorTemplatesWitchPositions = [];
     if (this.outData?.calculatorTemplates?.length) {
-      let indexElement = 0;
+      let templatesPositionIndex = 0;
 
-      this.outData?.calculatorTemplates.forEach(item => {
+      this.outData?.calculatorTemplates.forEach((item) => {
         let currentItem = item;
 
         if (currentItem.template === "UiBisection") {
-          if (currentItem.leftSide?.length) {
-            currentItem.leftSide = currentItem?.leftSide?.map(itemLeft => {
-              itemLeft.position = indexElement;
-              indexElement++;
-              return itemLeft;
-            })
-          }
-          if (currentItem.rightSide?.length) {
-            currentItem.rightSide = currentItem?.rightSide?.map(itemRight => {
-              itemRight.position = indexElement;
-              indexElement++;
-              return itemRight;
-            })
-          }
-          calculatorTemplatesWitchPositions.push(currentItem);
-        } else if (currentItem.template === "UiTab" || currentItem.template === "UiAccordion") {
-
+         let {newItem, shiftIndex} = this.updatePositionElementsInBiSection(currentItem, templatesPositionIndex);
+          templatesPositionIndex = shiftIndex;
+          calculatorTemplatesWitchPositions.push(newItem);
+        } else if (
+          currentItem.template === "UiTab" ||
+          currentItem.template === "UiAccordion"
+        ) {
           if (currentItem.items?.length) {
-            const itemsLength = currentItem?.items.length
+            const itemsLength = currentItem?.items.length;
             for (let i = 0; i < itemsLength; i++) {
               let currentTemplates = currentItem?.items[i].templates;
               let currentTempLength = currentTemplates.length;
               let newTemplates = [];
 
               for (let q = 0; q < currentTempLength; q++) {
-                currentTemplates[q].position = indexElement;
-                indexElement++;
+                currentTemplates[q].position = templatesPositionIndex;
+                templatesPositionIndex++;
                 newTemplates.push(currentTemplates[q]);
               }
               currentItem.items[i].templates = newTemplates;
-             }
+            }
           }
           calculatorTemplatesWitchPositions.push(currentItem);
+        } else if (currentItem.template === "UiDuplicator") {
+
+          let currentDuplicatorItem = currentItem;
+          if (currentDuplicatorItem?.templates?.length) {
+            let currentPositionDuplicatorIndex = 0;
+            let newDuplicatorTemplates = [];
+
+            for (let r = 0; r < currentDuplicatorItem.templates.length; r++) {
+
+              if (currentDuplicatorItem.templates[r].template === 'UiBisection') {
+                let {newItem, shiftIndex} = this.updatePositionElementsInBiSection(currentDuplicatorItem.templates[r], currentPositionDuplicatorIndex);
+                currentPositionDuplicatorIndex = shiftIndex;
+                newDuplicatorTemplates.push(newItem)
+              } else {
+                currentDuplicatorItem.templates[r].position = currentPositionDuplicatorIndex;
+                currentPositionDuplicatorIndex++;
+                newDuplicatorTemplates.push(currentDuplicatorItem.templates[r])
+              }
+            }
+
+            currentDuplicatorItem.templates = newDuplicatorTemplates;
+            currentItem.position = templatesPositionIndex;
+            templatesPositionIndex++;
+            calculatorTemplatesWitchPositions.push(currentDuplicatorItem);
+          }
         } else {
-          currentItem.position = indexElement;
-          indexElement++;
+          currentItem.position = templatesPositionIndex;
+          templatesPositionIndex++;
           calculatorTemplatesWitchPositions.push(currentItem);
         }
-      })
+      });
     }
     this.calculatorTemplates = calculatorTemplatesWitchPositions;
-
-
 
     this.formula = this.outOptions?.formula?.length
       ? this.outOptions?.formula
@@ -264,7 +299,13 @@ export default {
       submitResult: null,
       initEnabledSendForm: false,
       showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
-      eventNotShowTooltips: ["delete", "mounted", "timer", "dependency", "currentSelectedRadioButton"], // События при которых не должно срабатывать отображение ошибок
+      eventNotShowTooltips: [
+        "delete",
+        "mounted",
+        "timer",
+        "dependency",
+        "currentSelectedRadioButton",
+      ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
     };
   },
@@ -343,8 +384,14 @@ export default {
     },
     parseResultValueObjectItem(item) {
       let result = "";
-      if (item.formOutputMethod && item.displayValue !== null && item.isShow) {
-        result += "\n<div class='calc__result-block-field-label'>" + item.label + " </div>";
+      let currentValue = (!isNaN(parseFloat(item.value)) && isFinite(item.value)) ? Math.abs(item.value) : item.value;
+      let isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
+
+      if ((item.formOutputMethod && item.displayValue !== null && item.isShow) && isAllowZeroValue) {
+        result +=
+          "\n<div class='calc__result-block-field-label'>" +
+          item.label +
+          " </div>";
 
         result += "<div class='calc__result-block-field-right'>";
         if (
@@ -352,7 +399,11 @@ export default {
           item.formOutputMethod === "valueSumm"
         ) {
           const unit = item.unit ? item.unit : "";
-          result += "<div class='calc__result-block-field-value'>" + item.displayValue + " " + unit;
+          result +=
+            "<div class='calc__result-block-field-value'>" +
+            item.displayValue +
+            " " +
+            unit;
 
           if (
             item.cost !== null &&
@@ -370,12 +421,42 @@ export default {
             item.formOutputMethod === "valueSumm")
         ) {
           let sum = item?.cost?.toString();
-          result += "<div class='calc__result-block-field-cost'>" + sum + " " + this.currency + "</div>";
+          result +=
+            "<div class='calc__result-block-field-cost'>" +
+            sum +
+            " " +
+            this.currency +
+            "</div>";
         }
         result += "</div>";
       }
       return result;
     },
+    /**
+     *
+     * @param item
+     * @param index
+     * @returns {{newItem: Object, shiftIndex: Number}}
+     */
+    updatePositionElementsInBiSection(item, index) {
+      let newItem = item;
+      let shiftIndex = index;
+      if (newItem.leftSide?.length) {
+        newItem.leftSide = newItem?.leftSide?.map((itemLeft) => {
+          itemLeft.position = shiftIndex;
+          shiftIndex++;
+          return itemLeft;
+        });
+      }
+      if (newItem.rightSide?.length) {
+        newItem.rightSide = newItem?.rightSide?.map((itemRight) => {
+          itemRight.position = shiftIndex;
+          shiftIndex++;
+          return itemRight;
+        });
+      }
+      return {newItem, shiftIndex}
+    }
   },
   watch: {
     isCheckedGlobalValidation() {
@@ -398,7 +479,7 @@ export default {
       "showInsideElementStatus",
       "getImageDir",
       "appIsMounted",
-      "setTooltipOn"
+      "setTooltipOn",
     ]),
     /**
      * Данные которые подходят для вывода или расчета
@@ -492,9 +573,9 @@ export default {
      * @returns {*[]}
      */
     dataForOutputText() {
-      return this.baseDataForCalculate.filter(
-        (item) => item.formOutputMethod !== "no"
-      ).sort((itemA, itemB) => itemA.position - itemB.position);
+      return this.baseDataForCalculate
+        .filter((item) => item.formOutputMethod !== "no")
+        .sort((itemA, itemB) => itemA.position - itemB.position);
     },
     /**
      * Текст со всеми полями которые должны отображаться в форме
@@ -504,14 +585,17 @@ export default {
       let result = "";
       this.dataForOutputText.forEach((item) => {
         if (item.type === "duplicator") {
-          if (Object.keys(item?.insertedTemplates) && item.isShow) {
-            Object.values(item?.insertedTemplates).forEach((duplicator) => {
-              if (Object.keys(duplicator?.insertedTemplates)) {
+          if (item?.insertedTemplates?.length && item.isShow) {
+            item?.insertedTemplates.forEach((duplicator) => {
+              if (duplicator?.insertedTemplates?.length) {
                 if (this.parseResultValueObjectItem(duplicator)?.length) {
                   result += "<div class='calc__result-block-delimiter'></div>";
-                  result += "<div class='calc__result-block-field-wrapper'>" + this.parseResultValueObjectItem(duplicator) + "</div>";
+                  result +=
+                    "<div class='calc__result-block-field-wrapper'>" +
+                    this.parseResultValueObjectItem(duplicator) +
+                    "</div>";
                 }
-                Object.values(duplicator?.insertedTemplates).forEach(
+                duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
                     if (
                       this.parseResultValueObjectItem(templateInDuplicator)
@@ -530,10 +614,13 @@ export default {
           }
         } else {
           if (this.parseResultValueObjectItem(item)?.length) {
-            result += "<div class='calc__result-block-field-wrapper'> " + this.parseResultValueObjectItem(item) + "</div>";
+            result +=
+              "<div class='calc__result-block-field-wrapper'> " +
+              this.parseResultValueObjectItem(item) +
+              "</div>";
           }
         }
-      })
+      });
       return result;
     },
 
@@ -572,9 +659,15 @@ export default {
       } else {
         result +=
           "<div class='calc__result-block-field-summ'>" +
-            "<div class='calc__result-block-field-summ-title'>" + this.outOptions?.resultOptions?.titleSumma + "</div>" +
-            "<div class='calc__result-block-field-summ-cost'> " + this.finalSummaForOutput + "</div>" +
-            "<div class='calc__result-block-field-summ-currency'> " + this.currency  + "</div>" +
+          "<div class='calc__result-block-field-summ-title'>" +
+          this.outOptions?.resultOptions?.titleSumma +
+          "</div>" +
+          "<div class='calc__result-block-field-summ-cost'> " +
+          this.finalSummaForOutput +
+          "</div>" +
+          "<div class='calc__result-block-field-summ-currency'> " +
+          this.currency +
+          "</div>" +
           "</div>";
       }
       return result;
@@ -639,7 +732,7 @@ export default {
     },
     isShowResultBlockSubtitle() {
       return Boolean(this.outOptions?.resultOptions?.subtitle?.length);
-    }
+    },
   },
 };
 </script>
@@ -668,7 +761,6 @@ $c_color_text_default_light: #ffffff;
 $c_color_text_white_selected: #ffffff;
 $c_color_text_white_hover: #ffffff;
 $c_color_text_color: #ff6531;
-
 
 $c_border_default: #a2a2a2;
 $c_border_hover: #ff6531;
@@ -707,9 +799,6 @@ $c_color_error: #e80000;
   transition: all 0.2s ease-in-out;
 }
 
-
-
-
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -723,7 +812,6 @@ $c_color_error: #e80000;
   padding: 3px;
   border: 1px solid black;
 }
-
 
 .calc {
   position: relative;
@@ -1071,9 +1159,9 @@ $c_color_error: #e80000;
           -webkit-transform: translateY(-50%) rotate(-135deg);
         }
         .calc__select-change-wrapper {
-            border-color: $c_border_hover;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
+          border-color: $c_border_hover;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
         }
       }
       @media all and (max-width: 480px) {
@@ -1309,11 +1397,15 @@ $c_color_error: #e80000;
   &__checkbox {
     &-wrapper {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
       align-items: center;
       flex-wrap: wrap;
       @media all and (max-width: 480px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      &.is-column {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -1325,11 +1417,45 @@ $c_color_error: #e80000;
       gap: 2px;
       @include transition;
       text-align: start;
-      &.is-button {
+    }
+
+    &-control {
+      &-wrapper {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        position: relative;
+        align-items: center;
+        display: flex;
+      }
+      &-text, &-text_checked {
+        display: flex;
+        align-items: center;
+        @include style-label-main;
+      }
+
+      &-base {
+        @include transition;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        font-size: 16px;
+        line-height: 20px;
+        align-items: center;
+        &.switcher {
+          @media all and (max-width: 480px) {
+            flex-direction: column;
+          }
+        }
+      }
+      &-button {
         border: 2px solid $c_border_default;
         background-color: $c_background_default_light;
         padding: 20px 35px;
         font-weight: 700;
+        display: flex;
+        align-items: center;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
@@ -1349,114 +1475,115 @@ $c_color_error: #e80000;
           border-color: $c_color_error;
         }
       }
-    }
-    &-label_second {
-      @include style-label-main;
-      text-align: start;
-    }
-    &-element {
-      @include transition;
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      border: 2px solid $c_border_default;
-      position: relative;
-      &:after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 10px;
-        height: 10px;
-      }
-      &.checked {
-        @include transition;
-        border-color: $c_border_selected;
-        &:after {
+      &-element {
+        margin: 0 8px;
+        display: flex;
+        flex: 1 0 auto;
+        &.base {
           @include transition;
-          background-color: $c_border_selected;
+          width: 24px;
+          height: 24px;
+          border-radius: 4px;
+          border: 2px solid $c_border_default;
+          position: relative;
+          &:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+          }
+          &.checked {
+            @include transition;
+            border-color: $c_border_selected;
+            &:after {
+              @include transition;
+              background-color: $c_border_selected;
+            }
+          }
+          &:hover {
+            @include transition;
+            border-color: $c_border_selected;
+            &:after {
+              @include transition;
+              background-color: $c_border_selected;
+            }
+          }
+          &.error {
+            @include transition;
+            border-color: $c_color_error;
+            &:after {
+              @include transition;
+              background-color: $c_color_error;
+            }
+          }
         }
-      }
-      &:hover {
-        @include transition;
-        border-color: $c_border_selected;
-        &:after {
+        &.switcher {
+          display: inline-block;
           @include transition;
-          background-color: $c_border_selected;
+          height: 26px;
+          width: 50px;
+          position: relative;
+          border-radius: 90px;
+          background: $c_background_default_light;
+          border: 2px solid $c_border_default;
+          &:hover {
+            border-color: $c_border_hover;
+            &:not(.checked):before {
+              border-color: $c_border_hover;
+            }
+          }
+          &:not(.checked):before,
+          &.checked:after {
+            @include transition;
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+          }
+          &:not(.checked):before {
+            border: 2px solid $c_border_default;
+            background-color: $c_background_default_light;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+          &.checked {
+            border-color: $c_border_selected;
+            &:after {
+              border: 2px solid $c_border_selected;
+              background-color: $c_background_selected;
+              right: 5px;
+              top: 50%;
+              transform: translateY(-50%);
+            }
+          }
+          &.error {
+            border-color: $c_color_error;
+            &:not(.checked):before {
+              border-color: $c_color_error;
+            }
+          }
         }
-      }
-      &.error {
-        @include transition;
-        border-color: $c_color_error;
-        &:after {
-          @include transition;
-          background-color: $c_color_error;
-        }
-      }
-    }
-    &-element_switcher {
-      display: inline-block;
-      @include transition;
-      height: 26px;
-      width: 50px;
-      position: relative;
-      border-radius: 90px;
-      background: $c_background_default_light;
-      border: 2px solid $c_border_default;
-      &:hover {
-        border-color: $c_border_hover;
-        &:not(.checked):before {
-          border-color: $c_border_hover;
-        }
-      }
-      &:not(.checked):before,
-      &.checked:after {
-        @include transition;
-        content: "";
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        position: absolute;
-      }
-      &:not(.checked):before {
-        border: 2px solid $c_border_default;
-        background-color: $c_background_default_light;
-        left: 5px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      &.checked {
-        border-color: $c_border_selected;
-        &:after {
-          border: 2px solid $c_border_selected;
-          background-color: $c_background_selected;
-          right: 5px;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-      &.vertical {
-        height: 50px;
-        width: 26px;
-        &:not(.checked):before {
-          top: 5px;
-          left: 50%;
-          transform: translate(-50%, 0);
-        }
-        &.checked:after {
-          right: 0;
-          bottom: 5px;
-          left: 50%;
-          transform: translate(-50%, 0);
-          border: 2px solid $c_border_selected;
-        }
-      }
-      &.error {
-        border-color: $c_color_error;
-        &:not(.checked):before {
-          border-color: $c_color_error;
+        &.switcher-vertical {
+          height: 50px;
+          width: 26px;
+          &:not(.checked):before {
+            right: 0;
+            bottom: 5px;
+            left: 50%;
+            transform: translate(-50%, 0);
+          }
+          &.checked:after {
+            top: 5px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border: 2px solid $c_border_selected;
+          }
         }
       }
     }
@@ -1900,7 +2027,7 @@ $c_color_error: #e80000;
       font-size: 16px;
       font-weight: 600;
       color: $c_color_text_default_dark;
-      flex: 1 1 auto;
+      width: 100%;
       padding: 10px;
       &.desktop {
         @media all and (max-width: 768px) {
@@ -2195,7 +2322,7 @@ $c_color_error: #e80000;
       object-fit: contain;
     }
   }
-//-----------элемент фоновой картинки------------
+  //-----------элемент фоновой картинки------------
   &__background-image {
     &-wrapper {
       position: absolute;
@@ -2219,19 +2346,6 @@ $c_color_error: #e80000;
         display: none;
       }
       @include style-border-radius;
-
-
-      &::after {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        content: "";
-        background-color: #fff;
-        opacity: 0.4;
-        @include style-border-radius;
-      }
     }
     &-img {
       object-fit: contain;
@@ -2398,5 +2512,4 @@ $c_color_error: #e80000;
     }
   }
 }
-
 </style>

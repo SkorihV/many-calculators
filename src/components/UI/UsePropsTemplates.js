@@ -235,7 +235,21 @@ export default function (propsName) {
   const positionElement = () => {
     return {
       type: Number,
-      default: 0
+      default: 0,
+    };
+  };
+
+  /**
+   * Игнорировать пустое значение при выводе в результат
+   * @returns {{default: boolean, validator(*): *, type: (BooleanConstructor|NumberConstructor)[]}|boolean}
+   */
+  const zeroValueDisplayIgnore = () => {
+    return {
+      type: [Boolean, Number],
+      default: true,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
     }
   }
 
@@ -267,6 +281,7 @@ export default function (propsName) {
     max: max(),
     unit: unit(),
     positionElement: positionElement(),
+    zeroValueDisplayIgnore: zeroValueDisplayIgnore(),
   };
 
   if (Array.isArray(propsName)) {

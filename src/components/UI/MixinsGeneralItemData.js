@@ -65,7 +65,7 @@ export const MixinsGeneralItemData = {
           .parsingFormulaVariables?.length
           ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
           : "";
-        const textInfoVisibility = `<div class="calc__dev-block-element">Отображается: ${this.isVisibilityFromDependency}</div>div>`;
+        const textInfoVisibility = `<div class="calc__dev-block-element">Отображается: ${this.isVisibilityFromDependency}</div>`;
 
         const textValue = `<div class="calc__dev-block-element">Значение элемента: ${
           this.templateName === "UiInput" || this.templateName === "UiRange"

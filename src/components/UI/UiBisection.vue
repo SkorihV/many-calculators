@@ -1,7 +1,7 @@
 <template>
   <div
     class="calc__bisection-wrapper"
-    :class="[classes, {'isVisualSeparate' : isVisualSeparate}]"
+    :class="[classes, { isVisualSeparate: isVisualSeparate }]"
     v-show="
       (templateData?.rightSide.length || templateData?.leftSide.length) &&
       isVisibilityFromDependency
@@ -12,15 +12,24 @@
       :image-settings-data="templateData?.backgroundImageSettings"
     />
     <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
-      <div class="calc__bisection-label_main" v-if="templateData?.label?.length">
+      <div
+        class="calc__bisection-label_main"
+        v-if="templateData?.label?.length"
+      >
         {{ templateData?.label }}
       </div>
-      <div class="calc__bisection-label_sub" v-if="templateData?.labelSub?.length">
+      <div
+        class="calc__bisection-label_sub"
+        v-if="templateData?.labelSub?.length"
+      >
         {{ templateData?.labelSub }}
       </div>
     </div>
     <div class="calc__bisection-label-desktop">
-      <div class="calc__bisection-left-label desktop" :style="styleWidthLeftSide">
+      <div
+        class="calc__bisection-left-label desktop"
+        :style="styleWidthLeftSide"
+      >
         {{ templateData?.labelLeft }}
       </div>
       <div class="calc__bisection-right-label desktop">
@@ -28,7 +37,6 @@
       </div>
     </div>
     <div class="calc__bisection-content-wrapper">
-
       <div
         v-show="isShowLeftSide"
         class="calc__bisection-left-side-wrapper"
@@ -192,11 +200,13 @@ export default {
       return "max-width:" + (100 - this.widthLeftSide) + "%";
     },
     isShowLabel() {
-      return this.templateData?.label?.length || this.templateData?.label?.lengthSub;
+      return (
+        this.templateData?.label?.length || this.templateData?.label?.lengthSub
+      );
     },
     isVisualSeparate() {
       return !!this.templateData?.visuallySeparateElement;
-    }
+    },
   },
 };
 </script>

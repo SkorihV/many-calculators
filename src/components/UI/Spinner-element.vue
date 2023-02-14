@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: "spinner-element"
+  name: "spinner-element",
 };
 </script>

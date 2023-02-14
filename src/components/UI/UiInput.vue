@@ -84,7 +84,7 @@ export default {
   name: "UiInput",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: {  UiTooltip },
+  components: { UiTooltip },
   props: {
     /**
      * данные для инпута
@@ -246,6 +246,7 @@ export default {
       "dependencyFormulaDisplay",
       "parentIsShow",
       "positionElement",
+      "zeroValueDisplayIgnore",
     ]),
   },
   created() {
@@ -272,7 +273,7 @@ export default {
     }
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200)
+    }, 200);
   },
   data() {
     return {
@@ -358,6 +359,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
       this.tryPassDependency();
       if (eventType !== "delete" || eventType !== "mounted") {
@@ -389,7 +391,7 @@ export default {
           parentName: this.parentName,
         });
       });
-      if (eventType !== 'mounted') {
+      if (eventType !== "mounted") {
         this.shownTooltip();
       }
     },
@@ -475,7 +477,7 @@ export default {
       "checkValidationDataAndToggle",
       "devMode",
       "isCanShowAllTooltips",
-      "tryToggleElementIsMounted"
+      "tryToggleElementIsMounted",
     ]),
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;

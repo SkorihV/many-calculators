@@ -10,9 +10,9 @@
   >
     <div class="calc__accordion-item-label-wrapper">
       <icon-element-wrapper
-      :alt="accordionItem.label"
-      :icon-settings="accordionItem.iconSettings"
-      :is-parent-hover="hoverElement"
+        :alt="accordionItem.label"
+        :icon-settings="accordionItem.iconSettings"
+        :is-parent-hover="hoverElement"
       >
         <div class="calc__accordion-item-label-text">
           <div class="calc__accordion-item-label-main">
@@ -71,7 +71,13 @@ import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
 
 export default {
   name: "UiAccordionItem",
-  components: { IconElementWrapper, BackgroundImageElement, UiTooltip, UiPrompt, TemplatesWrapper },
+  components: {
+    IconElementWrapper,
+    BackgroundImageElement,
+    UiTooltip,
+    UiPrompt,
+    TemplatesWrapper,
+  },
   emits: ["changedValue"],
   props: {
     accordionItem: {
@@ -97,7 +103,7 @@ export default {
       isOpen: false,
       errorsElements: new Set(),
       visibilityList: new Set(),
-      hoverElement: null
+      hoverElement: null,
     };
   },
   methods: {

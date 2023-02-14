@@ -31,6 +31,7 @@
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -44,7 +45,9 @@
     :label="template?.label"
     :checkbox-value="template?.value"
     :is-checked="template?.isChecked"
-    :label-second="template?.labelSecond"
+    :is-column="template?.isColumn"
+    :button-text-checked="template?.buttonTextChecked"
+    :button-text="template?.buttonText"
     :is-need-choice="template?.isNeedChoice"
     :type-display-class="template?.typeDisplayClass"
     :element-name="
@@ -62,6 +65,7 @@
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -94,6 +98,7 @@
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -131,6 +136,7 @@
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -162,6 +168,7 @@
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
