@@ -353,8 +353,9 @@ export default {
           return item;
         })
         .filter(
-          (item) => item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
-         );
+          (item) =>
+            item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
+        );
       return formula;
     },
 

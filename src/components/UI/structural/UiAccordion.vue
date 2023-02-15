@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import UiAccordionItem from "@/components/UI/UiAccordionItem";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiAccordion",

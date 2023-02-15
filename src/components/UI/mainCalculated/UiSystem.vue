@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiSystem",

@@ -127,7 +127,10 @@
       />
       <div id="prompt-text-element"></div>
     </div>
-    <div v-if="outOptions?.textAfter?.length" v-html="outOptions.textAfter"></div>
+    <div
+      v-if="outOptions?.textAfter?.length"
+      v-html="outOptions.textAfter"
+    ></div>
     <teleport v-if="initTeleport && submitResult" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
@@ -141,20 +144,21 @@
 </template>
 
 <script>
-import UiAccordion from "@/components/UI/UiAccordion";
-import UiTab from "@/components/UI/UiTab";
-import UiDuplicator from "@/components/UI/UiDuplicator";
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import UiBisection from "@/components/UI/UiBisection";
-import ErrorNamesTemplates from "@/components/UI/ErrorNamesTemplates";
-import SpinnerElement from "@/components/UI/Spinner-element.vue";
+import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
+import UiTab from "@/components/UI/structural/UiTab.vue";
+import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import UiBisection from "@/components/UI/structural/UiBisection.vue";
+import ErrorNamesTemplates from "@/components/UI/other/ErrorNamesTemplates.vue";
+import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import BackgroundImageElement from "@/components/UI/background-image-element.vue";
-import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
+import localData from "@/servises/localData";
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
@@ -170,16 +174,21 @@ export default {
     ErrorNamesTemplates,
   },
   async mounted() {
-    const isGlobal = window.location.hostname !== "localhost";
-    const localPath = "http://localhost:3000/test-data2";
+    let isLocal = false;
+    if (typeof localData !== "undefined") {
+      isLocal = localData?.isLocal ? localData?.isLocal : false;
 
-    if (!isGlobal) {
-      await fetch(localPath)
+    }
+
+    if (isLocal) {
+      const localPathData = localData?.localPathData;
+      const localPathOptions = localData?.localPathOptions;
+      await fetch(localPathData)
         .then((response) => response.json())
         .then((data) => {
           this.outData = data;
         });
-      await fetch("http://localhost:3000/calculator-options")
+      await fetch(localPathOptions)
         .then((response) => response.json())
         .then((data) => {
           this.outOptions = data;
@@ -203,7 +212,10 @@ export default {
         let currentItem = item;
 
         if (currentItem.template === "UiBisection") {
-         let {newItem, shiftIndex} = this.updatePositionElementsInBiSection(currentItem, templatesPositionIndex);
+          let { newItem, shiftIndex } = this.updatePositionElementsInBiSection(
+            currentItem,
+            templatesPositionIndex
+          );
           templatesPositionIndex = shiftIndex;
           calculatorTemplatesWitchPositions.push(newItem);
         } else if (
@@ -227,22 +239,27 @@ export default {
           }
           calculatorTemplatesWitchPositions.push(currentItem);
         } else if (currentItem.template === "UiDuplicator") {
-
           let currentDuplicatorItem = currentItem;
           if (currentDuplicatorItem?.templates?.length) {
             let currentPositionDuplicatorIndex = 0;
             let newDuplicatorTemplates = [];
 
             for (let r = 0; r < currentDuplicatorItem.templates.length; r++) {
-
-              if (currentDuplicatorItem.templates[r].template === 'UiBisection') {
-                let {newItem, shiftIndex} = this.updatePositionElementsInBiSection(currentDuplicatorItem.templates[r], currentPositionDuplicatorIndex);
+              if (
+                currentDuplicatorItem.templates[r].template === "UiBisection"
+              ) {
+                let { newItem, shiftIndex } =
+                  this.updatePositionElementsInBiSection(
+                    currentDuplicatorItem.templates[r],
+                    currentPositionDuplicatorIndex
+                  );
                 currentPositionDuplicatorIndex = shiftIndex;
-                newDuplicatorTemplates.push(newItem)
+                newDuplicatorTemplates.push(newItem);
               } else {
-                currentDuplicatorItem.templates[r].position = currentPositionDuplicatorIndex;
+                currentDuplicatorItem.templates[r].position =
+                  currentPositionDuplicatorIndex;
                 currentPositionDuplicatorIndex++;
-                newDuplicatorTemplates.push(currentDuplicatorItem.templates[r])
+                newDuplicatorTemplates.push(currentDuplicatorItem.templates[r]);
               }
             }
 
@@ -384,10 +401,18 @@ export default {
     },
     parseResultValueObjectItem(item) {
       let result = "";
-      let currentValue = (!isNaN(parseFloat(item.value)) && isFinite(item.value)) ? Math.abs(item.value) : item.value;
+      let currentValue =
+        !isNaN(parseFloat(item.value)) && isFinite(item.value)
+          ? Math.abs(item.value)
+          : item.value;
       let isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
 
-      if ((item.formOutputMethod && item.displayValue !== null && item.isShow) && isAllowZeroValue) {
+      if (
+        item.formOutputMethod &&
+        item.displayValue !== null &&
+        item.isShow &&
+        isAllowZeroValue
+      ) {
         result +=
           "\n<div class='calc__result-block-field-label'>" +
           item.label +
@@ -455,8 +480,8 @@ export default {
           return itemRight;
         });
       }
-      return {newItem, shiftIndex}
-    }
+      return { newItem, shiftIndex };
+    },
   },
   watch: {
     isCheckedGlobalValidation() {
@@ -1428,7 +1453,8 @@ $c_color_error: #e80000;
         align-items: center;
         display: flex;
       }
-      &-text, &-text_checked {
+      &-text,
+      &-text_checked {
         display: flex;
         align-items: center;
         @include style-label-main;

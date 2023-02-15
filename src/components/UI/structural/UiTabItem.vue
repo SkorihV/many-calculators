@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import BackgroundImageElement from "@/components/UI/background-image-element";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiTabItem",

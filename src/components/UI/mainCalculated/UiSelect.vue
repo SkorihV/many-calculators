@@ -72,15 +72,15 @@
 </template>
 
 <script>
-import UiTooltip from "@/components/UI/UiTooltip";
-import UiPrompt from "@/components/UI/UiPrompt";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
   name: "UiSelect",
@@ -375,9 +375,11 @@ export default {
       return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
     currentOptionValue() {
-      return this.currentOption?.extraValueForDependency?.length ? this.currentOption?.extraValueForDependency
-        : !isNaN(parseInt(this.currentOption?.value))  ? this.currentOption?.value
-          : null;
+      return this.currentOption?.extraValueForDependency?.length
+        ? this.currentOption?.extraValueForDependency
+        : !isNaN(parseInt(this.currentOption?.value))
+        ? this.currentOption?.value
+        : null;
     },
     mutationSelectValue() {
       return this.localSelectValues.map((selectItem, index) => {

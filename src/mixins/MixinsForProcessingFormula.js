@@ -1,4 +1,4 @@
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";

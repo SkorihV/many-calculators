@@ -207,15 +207,15 @@
 </template>
 
 <script>
-import UiRange from "@/components/UI/UiRange";
-import UiInput from "@/components/UI/UiInput";
-import UiSelect from "@/components/UI/UiSelect";
-import UiRadio from "@/components/UI/UiRadio";
-import UiCheckbox from "@/components/UI/UiCheckbox";
-import UiPrompt from "@/components/UI/UiPrompt";
-import UiImage from "@/components/UI/UiImage";
-import UiSystem from "@/components/UI/UiSystem";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
+import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
+import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";
+import UiRadio from "@/components/UI/mainCalculated/UiRadio.vue";
+import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox.vue";
+import UiImage from "@/components/UI/mainCalculated/UiImage.vue";
+import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "TemplatesWrapper",

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import IconElement from "@/components/UI/Icon-element.vue";
+import IconElement from "@/components/UI/supporting/Icon-element.vue";
 export default {
   name: "icon-element-wrapper",
   components: {

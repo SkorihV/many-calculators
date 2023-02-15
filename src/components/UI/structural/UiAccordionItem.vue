@@ -59,15 +59,15 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import UiTooltip from "@/components/UI/UiTooltip";
-import UiPrompt from "@/components/UI/UiPrompt";
-import BackgroundImageElement from "@/components/UI/background-image-element";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
-import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
   name: "UiAccordionItem",

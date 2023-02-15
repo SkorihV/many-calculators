@@ -18,20 +18,20 @@
           class="calc__checkbox-control-button"
           v-if="isButton"
           :class="{
-            'checked': isLocalChecked,
-            'error': isErrorClass,
+            checked: isLocalChecked,
+            error: isErrorClass,
           }"
         >
-            {{ currentLocalValue }}
-            <slot name="prompt"></slot>
+          {{ currentLocalValue }}
+          <slot name="prompt"></slot>
         </div>
         <div
           class="calc__checkbox-control-base"
           v-if="isBase || isSwitcher || isSwitcherVertical"
           :class="{
-            'switcher' : isSwitcher || isSwitcherVertical,
-            'checked': isLocalChecked,
-            'error': isErrorClass,
+            switcher: isSwitcher || isSwitcherVertical,
+            checked: isLocalChecked,
+            error: isErrorClass,
           }"
         >
           <div class="calc__checkbox-control-text">
@@ -46,14 +46,19 @@
           <div
             class="calc__checkbox-control-element"
             :class="{
-              'base': isBase,
-              'switcher': isSwitcher || isSwitcherVertical,
+              base: isBase,
+              switcher: isSwitcher || isSwitcherVertical,
               'switcher-vertical': isSwitcherVertical,
-              'checked': isLocalChecked,
-              'error': isErrorClass,
+              checked: isLocalChecked,
+              error: isErrorClass,
             }"
           ></div>
-          <div class="calc__checkbox-control-text_checked" v-if="(isSwitcher || isSwitcherVertical) && buttonTextChecked?.length">
+          <div
+            class="calc__checkbox-control-text_checked"
+            v-if="
+              (isSwitcher || isSwitcherVertical) && buttonTextChecked?.length
+            "
+          >
             {{ buttonTextChecked }}
           </div>
         </div>
@@ -69,11 +74,11 @@
 </template>
 
 <script>
-import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
@@ -129,7 +134,7 @@ export default {
       "templateName",
       "positionElement",
       "isColumn",
-      "zeroValueDisplayIgnore"
+      "zeroValueDisplayIgnore",
     ]),
   },
   created() {
@@ -138,7 +143,9 @@ export default {
   mounted() {
     this.isLocalChecked = this.checkboxValue || this.isChecked;
     if (this.isLocalChecked) {
-      this.currentLocalValue = this.buttonTextChecked?.length ? this.buttonTextChecked : this.buttonText;
+      this.currentLocalValue = this.buttonTextChecked?.length
+        ? this.buttonTextChecked
+        : this.buttonText;
     } else {
       this.currentLocalValue = this.buttonText;
     }
@@ -161,9 +168,10 @@ export default {
       if (!this.isChecked) {
         this.isLocalChecked = !this.isLocalChecked;
       }
-      this.currentLocalValue = this.isLocalChecked && this.buttonTextChecked?.length
-        ? this.buttonTextChecked
-        : this.buttonText;
+      this.currentLocalValue =
+        this.isLocalChecked && this.buttonTextChecked?.length
+          ? this.buttonTextChecked
+          : this.buttonText;
       this.changeValue("click");
     },
     checkedValueOnVoid(value) {
@@ -184,7 +192,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
-        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
       this.tryPassDependency();
       this.changeValid(eventType);

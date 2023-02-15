@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import UiTab from "@/components/UI/UiTab";
-import UiAccordion from "@/components/UI/UiAccordion";
-import UiBisection from "@/components/UI/UiBisection";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UiTab from "@/components/UI/structural/UiTab.vue";
+import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
+import UiBisection from "@/components/UI/structural/UiBisection.vue";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "TemplatesWrapperForDuplicator",

@@ -76,13 +76,13 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import BackgroundImageElement from "@/components/UI/background-image-element.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 export default {
   name: "UiBisection",

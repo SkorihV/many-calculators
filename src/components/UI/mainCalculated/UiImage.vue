@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import UiPrompt from "@/components/UI/UiPrompt";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 

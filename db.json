@@ -3374,7 +3374,7 @@
             "radioName": "Забор",
             "subradioName": "Справимся за 2 дня",
             "cost": 500,
-            "extraValueForDependency" : "забор",
+            "extraValueForDependency": "забор",
             "iconSettings": {
               "title": "",
               "image": {
@@ -3958,7 +3958,7 @@
         {
           "radioName": "Забор",
           "prompt": "подсказочка",
-          "extraValueForDependency" : "забор"
+          "extraValueForDependency": "забор"
         },
         {
           "radioName": "Пирс/Причал",
@@ -3967,7 +3967,7 @@
         {
           "radioName": "Пристрой",
           "prompt": "",
-          "extraValueForDependency" : "пристрой"
+          "extraValueForDependency": "пристрой"
         }
       ]
     },

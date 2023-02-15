@@ -50,14 +50,14 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/TemplatesWrapper";
-import TemplatesWrapperForDuplicator from "@/components/UI/TemplatesWrapperForDuplicator";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperForDuplicator from "@/components/UI/supporting/TemplatesWrapperForDuplicator.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiDuplicatorWrapper",
@@ -88,7 +88,7 @@ export default {
       "index",
       "dependencyFormulaDisplay",
       "elementName",
-      "positionElement"
+      "positionElement",
     ]),
   },
   mounted() {
@@ -403,7 +403,9 @@ export default {
       }
     },
     returnsLocalResultData() {
-      return Object.values(this.localResultData).sort((itemA, itemB) => itemA.position - itemB.position);
+      return Object.values(this.localResultData).sort(
+        (itemA, itemB) => itemA.position - itemB.position
+      );
     },
     devModeData() {
       if (!this.devMode || !this.showInsideElementStatus) {

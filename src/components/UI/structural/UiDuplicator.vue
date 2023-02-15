@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import UiDuplicatorWrapper from "@/components/UI/UiDuplicatorWrapper";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsUtilityServices } from "@/components/UI/MixinsUtilityServices";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.vue";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiDuplicator",
@@ -176,7 +176,9 @@ export default {
   },
   computed: {
     returnsLocalResultsElements() {
-      return Object.values(this.localResultsElements).sort((itemA, itemB) => itemA?.position - itemB?.position);
+      return Object.values(this.localResultsElements).sort(
+        (itemA, itemB) => itemA?.position - itemB?.position
+      );
     },
     originVariablesInDuplicator() {
       let result = this.getNameElementsRecursive(this.originData?.templates);

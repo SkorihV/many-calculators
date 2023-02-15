@@ -77,15 +77,15 @@
 </template>
 
 <script>
-import UiTooltip from "@/components/UI/UiTooltip";
-import UiPrompt from "@/components/UI/UiPrompt";
-import UiTabItem from "@/components/UI/UiTabItem";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiTabItem from "@/components/UI/structural/UiTabItem.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
-import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
   name: "UiTab",

@@ -249,9 +249,9 @@ export default function (propsName) {
       default: true,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
-    }
-  }
+      },
+    };
+  };
 
   const resultsData = {
     label: label(),

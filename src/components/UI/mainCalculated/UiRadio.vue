@@ -63,15 +63,15 @@
 </template>
 
 <script>
-import UiPrompt from "@/components/UI/UiPrompt";
-import UiTooltip from "@/components/UI/UiTooltip";
-import { MixinsForProcessingFormula } from "@/components/UI/MixinsForProcessingFormula";
-import { MixinsGeneralItemData } from "@/components/UI/MixinsGeneralItemData";
-import IconElementWrapper from "@/components/UI/icon-element-wrapper.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/components/UI/UsePropsTemplates";
+import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
 export default {
   name: "UiRadio",
@@ -183,7 +183,7 @@ export default {
         formulaProcessingLogic: this.formulaProcessingLogic,
         mode: this.mode,
         position: this.positionElement,
-        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
       this.tryPassDependency();
       this.changeValid(eventType);
