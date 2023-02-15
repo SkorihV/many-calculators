@@ -3548,7 +3548,7 @@
             "formOutputMethod": "value",
             "excludeFromCalculations": false,
             "formulaProcessingLogic": "error",
-            "dependencyFormulaDisplay": "строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot;",
+            "dependencyFormulaDisplay": "танк !== 10 || (строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot;)",
             "prompt": "всплывающая подсказка",
             "dependencyPrices": null,
             "zeroValueDisplayIgnore": false
