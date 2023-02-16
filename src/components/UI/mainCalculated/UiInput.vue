@@ -605,7 +605,6 @@ export default {
     localCanBeShownTooltip() {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
     },
-
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
