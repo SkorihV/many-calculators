@@ -471,6 +471,11 @@ export default {
         : null;
     },
   },
+  watch: {
+    isVisibilityFromDependency() {
+        this.changeValue('dependency');
+    }
+  },
   computed: {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
@@ -497,6 +502,9 @@ export default {
         : Math.random().toString();
     },
     resultValue() {
+      if (!this.isVisibilityFromDependency) {
+        return null;
+      }
       if (this.onlyNumber) {
         return this.resultWitchNumberValid();
       } else {
@@ -604,6 +612,9 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
+      if (!this.isVisibilityFromDependency) {
+        return null;
+      }
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.updatedCostForOut(this.cost);
       }

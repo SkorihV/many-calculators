@@ -73,9 +73,9 @@ export const MixinsGeneralItemData = {
             : this.templateName === "UiRadio"
             ? this.selectedValueInRadio
             : this.templateName === "UiSelect"
-            ? this.currentOption?.value
+            ? this.currentOptionValue
             : this.templateName === "UiCheckbox"
-            ? this.localValue
+            ? this.isLocalChecked
             : null
         }</div>`;
 

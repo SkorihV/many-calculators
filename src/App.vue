@@ -1,5 +1,9 @@
 <template>
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
+    <div
+      v-if="outOptions?.textAbove?.length"
+      v-html="outOptions.textAbove"
+    ></div>
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <ui-accordion
@@ -67,11 +71,10 @@
         />
       </template>
       <div v-if="showErrorTextBlock" class="calc__error-block">
-        Возможно, некоторые поля не заполнены или заполнены не корректно!
+        Заполните, пожалуйста, все обязательные поля корректно.
       </div>
       <div v-if="showErrorSummaBlock" class="calc__error-block">
-        Есть ошибка в расчетах конечной суммы. Некоторые значения данных формулы
-        не выбраны.
+        Не все поля участвующие в расчете были заполнены.
       </div>
       <div
         class="calc__show-result-btn"
@@ -322,6 +325,7 @@ export default {
         "timer",
         "dependency",
         "currentSelectedRadioButton",
+        "changeAmountSelectList"
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
     };
@@ -331,12 +335,14 @@ export default {
       if (typeof data !== "object") {
         return null;
       }
+
       const { name, type, eventType } = data;
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
         this.checkEnabledResultButton();
         return false;
       }
+
 
       this.tryAddResultElement(data);
 
@@ -406,7 +412,6 @@ export default {
           ? Math.abs(item.value)
           : item.value;
       let isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
-
       if (
         item.formOutputMethod &&
         item.displayValue !== null &&

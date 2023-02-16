@@ -266,8 +266,8 @@ export default {
       this.updateWidthElements();
       this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
       this.$emit("changedValue", {
-        value: this.resultValue,
-        displayValue: this.resultValue,
+        value: this.isVisibilityFromDependency ? this.resultValue : null,
+        displayValue: this.isVisibilityFromDependency ? this.resultValue : null,
         name: this.localElementName,
         type: "range",
         cost: this.localCost,
@@ -282,6 +282,7 @@ export default {
         position: this.positionElement,
         zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
+      this.tryPassDependency();
       this.changeValid(eventType);
     },
     changeValid(eventType) {
@@ -296,12 +297,11 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
-      this.tryPassDependency();
     },
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.resultValue,
+        value: this.isVisibilityFromDependency ? this.resultValue : null,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.resultValue,
         type: "range",
@@ -358,6 +358,8 @@ export default {
           this.elementWidth = this.$refs.thisElement.offsetWidth;
         }, 10);
       }
+      this.changeValue('dependency');
+
     },
   },
   computed: {
@@ -425,6 +427,10 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
+      if (!this.isVisibilityFromDependency) {
+        return null;
+      }
+
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.updatedCostForOut(this.cost);
       }

@@ -204,7 +204,7 @@ export default {
       this.isOpen = false;
     },
     changeSelect(item, inx, eventType = "click") {
-      if (this.notEmpty && inx === 0) {
+      if (this.needMockValue && inx === 0) {
         this.currentIndexOption = null;
       } else {
         this.currentIndexOption = inx;
@@ -222,9 +222,7 @@ export default {
         index: this.currentIndexOption,
         name: this.localElementName,
         type: "select",
-        cost: this.checkedValueOnVoid(this.localCost)
-          ? parseFloat(this.localCost)
-          : 0,
+        cost: this.localCost,
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
@@ -250,7 +248,7 @@ export default {
         isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
-      if (eventType !== "mounted") {
+      if (eventType === "click") {
         this.canBeShownTooltip = true;
       }
     },
@@ -319,6 +317,9 @@ export default {
         }
       }
     },
+    isVisibilityFromDependency() {
+      this.changeValue('dependency');
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -362,6 +363,10 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
+      if (this.currentIndexOption === null || !this.isVisibilityFromDependency) {
+        return null;
+      }
+
       if (!this.currentOption?.dependencyPrices?.length) {
         return this.currentOption?.cost ? this.currentOption?.cost : null;
       }
@@ -375,6 +380,10 @@ export default {
       return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
     currentOptionValue() {
+      if ((this.needMockValue && this.currentIndexOption === null) || !this.isVisibilityFromDependency) {
+        return null;
+      }
+
       return this.currentOption?.extraValueForDependency?.length
         ? this.currentOption?.extraValueForDependency
         : !isNaN(parseInt(this.currentOption?.value))

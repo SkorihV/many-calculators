@@ -223,6 +223,14 @@ export default {
       });
     },
   },
+  watch: {
+    isVisibilityFromDependency(value) {
+      if (!value) {
+        this.isLocalChecked = false;
+      }
+      this.changeValue('dependency');
+    }
+  },
   computed: {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
@@ -283,6 +291,9 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
+      if (!this.isVisibilityFromDependency) {
+        return null;
+      }
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.isLocalChecked && this.checkedValueOnVoid(this.cost)
           ? parseFloat(this.cost)

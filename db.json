@@ -1226,7 +1226,7 @@
   },
 
   "calculator-options": {
-    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна)",
+    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна) + test123 + 22 + первыйИнп3ут",
     "methodProcessingMistakes": "useButton",
     "currency": "руб",
     "form": "7981901",
@@ -3302,6 +3302,84 @@
         "value": "30",
         "cost": "10",
         "unit": "",
+        "min": "",
+        "max": "",
+        "controls": false,
+        "step": "1",
+        "isColumn": false,
+        "notEmpty": false,
+        "onlyNumber": 1,
+        "isCurrency": false,
+        "onlyInteger": false,
+        "formOutputMethod": "no",
+        "elementName": "первыйИнп3ут",
+        "formulaProcessingLogic": "error",
+        "classes": "",
+        "template": "UiInput",
+        "placeholder": "",
+        "discreteStep": false,
+        "excludeFromCalculations": 0,
+        "dependencyFormulaDisplay": "строение !== 'забор'"
+      },
+      {
+        "json_id": "675635",
+        "title": "Зависимости select",
+        "label": "Зависимость от выбранного радио пункта",
+        "isColumn": false,
+        "selectedItem": "0",
+        "isNeedChoice": true,
+        "notEmpty": false,
+        "formOutputMethod": "valueSumm",
+        "elementName": "test123",
+        "formulaProcessingLogic": "ignore",
+        "dependencyFormulaDisplay": "строение !== 'забор'",
+        "classes": "",
+        "template": "UiSelect",
+        "excludeFromCalculations": false,
+        "values": [
+          {
+            "title": "Пункт первый",
+            "selectName": "Пункт первый",
+            "cost": 100,
+            "dependencyPrices": [
+              {
+                "title": "200",
+                "disabledFormula": 0,
+                "cost": 200,
+                "dependencyFormulaCost": ""
+              }
+            ]
+          },
+          {
+            "title": "Пункта второй",
+            "selectName": "Пункта второй",
+            "cost": 99,
+            "dependencyPrices": [
+              {
+                "title": "55",
+                "disabledFormula": 0,
+                "cost": 55,
+                "dependencyFormulaCost": ""
+              }
+            ],
+            "prompt": "342423rrf fd sf sdf sdf"
+          },
+          {
+            "title": "Третий пункт для скрытия",
+            "selectName": "Третий пункт для скрытия",
+            "cost": 155,
+            "dependencyFormulaItem": ""
+          }
+        ],
+        "prompt": ""
+      },
+      {
+        "json_id": "165719506",
+        "title": "Input Зависимости 1 уровень",
+        "label": "Input Зависимости 1 уровень",
+        "value": "30",
+        "cost": "10",
+        "unit": "",
         "min": 1,
         "max": 100,
         "controls": false,
@@ -3324,9 +3402,9 @@
       {
         "title": "фундамент - Тип строения:",
         "label": "Тип строения:",
-        "selectedItem": "0",
+        "selectedItem": 2,
         "isColumn": false,
-        "isNeedChoice": true,
+        "isNeedChoice": false,
         "notEmpty": false,
         "typeDisplayClass": "buttons",
         "elementName": "строение",
@@ -3496,8 +3574,8 @@
         "template": "UiRadio",
         "formOutputMethod": "value",
         "excludeFromCalculations": false,
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "строение !== 'забор'",
         "values": [
           {
             "title": "Sip-панель",
@@ -3573,11 +3651,11 @@
             "template": "UiCheckbox",
             "formOutputMethod": "value",
             "excludeFromCalculations": false,
-            "formulaProcessingLogic": "error",
-            "dependencyFormulaDisplay": "танк !== 10 || (строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot;)",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot; && строение !== 'null'",
             "prompt": "всплывающая подсказка",
             "dependencyPrices": null,
-            "zeroValueDisplayIgnore": false
+            "zeroValueDisplayIgnore": true
           }
         ],
         "widthLeftSide": "35",
@@ -3610,8 +3688,8 @@
         "notEmpty": false,
         "formOutputMethod": "value",
         "excludeFromCalculations": false,
-        "dependencyFormulaDisplay": "",
-        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "строение !== 'забор'",
+        "formulaProcessingLogic": "zero",
         "prompt": "Небольшая подсказка.",
         "dependencyPrices": null
       },
@@ -3639,473 +3717,6 @@
         "dependencyFormulaDisplay": "",
         "prompt": "",
         "dependencyPrices": null
-      }
-    ]
-  },
-
-  "credit-calculator": {
-    "type_calculate": "Both",
-    "bank_list": {
-      "banks": [
-        {
-          "title": "test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234 test 324234",
-          "interestRate": 12,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-            },
-            "location": "leftSide"
-          }
-        },
-        {
-          "title": "test2",
-          "interestRate": 14,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-            },
-            "location": "leftSide"
-          }
-        },
-        {
-          "title": "test3",
-          "interestRate": 6,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-            },
-            "location": "leftSide"
-          }
-        },
-        {
-          "title": "test 4",
-          "interestRate": 4,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/c3a4a1/111"
-            },
-            "location": "leftSide"
-          }
-        },
-        {
-          "title": "test 5",
-          "interestRate": 5,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/543342/545454"
-            },
-            "location": "leftSide"
-          }
-        },
-        {
-          "title": "test 6",
-          "interestRate": 6,
-          "iconSettings": {
-            "image": {
-              "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-            },
-            "location": "leftSide"
-          }
-        }
-      ]
-    },
-    "credit_term": {
-      "count_time_year": 1,
-      "max_year": 15,
-      "min_year": 1,
-      "count_time_month": 6,
-      "max_month": 180,
-      "min_month": 6
-    },
-    "interest_rate": {
-      "is_rate": true,
-      "max": 50,
-      "min": 1,
-      "rate": 5
-    },
-    "payment_currency": {
-      "cost": 200000,
-      "max": 10000000000,
-      "min": 10000,
-      "unit": "руб"
-    },
-    "payment_percentage": {
-      "max": 80,
-      "min": 20,
-      "rate": 20,
-      "steps": 5,
-      "unit": "%"
-    },
-    "property_price": {
-      "cost": 1000000,
-      "max": 10000000,
-      "min": 100000,
-      "steps": 50000,
-      "unit": "руб"
-    }
-  },
-
-  "stretch-ceiling-calculator": {
-    "type_material": [
-      {
-        "selectName": "Ткань",
-        "value": 1,
-        "cost": 500,
-        "materialImage": {
-          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-        }
-      },
-      {
-        "selectName": "Пленка РФ",
-        "value": 2,
-        "cost": 700,
-        "materialImage": {
-          "filename": "https://dummyimage.com/500x300/a1a1a1/fff"
-        },
-        "prompt": "вот она подсказка"
-      },
-      {
-        "selectName": "Пленка Китай Эконом",
-        "value": 3,
-        "cost": 300,
-        "materialImage": {
-          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-        }
-      },
-      {
-        "selectName": "Пленка Китай Премиум",
-        "value": 4,
-        "cost": 1000,
-        "materialImage": {
-          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-        }
-      },
-      {
-        "selectName": "Пленка Германия",
-        "value": 5,
-        "cost": 1500,
-        "materialImage": {
-          "filename": "https://dummyimage.com/150x100/a1a1a1/fff"
-        }
-      }
-    ],
-    "base_options": [
-      {
-        "label": "Количество углов",
-        "base_value": 4,
-        "min_value": 0,
-        "max_value": "",
-        "cost": 150,
-        "unit": "шт",
-        "prompt": "тут подсказака"
-      },
-      {
-        "label": "Количество углов",
-        "base_value": 0,
-        "min_value": 0,
-        "max_value": 10,
-        "cost": 150,
-        "prompt": "тут подсказака"
-      }
-    ],
-    "extra_options": [
-      {
-        "label": "Количество люстр",
-        "base_value": 0,
-        "min_value": 0,
-        "max_value": 10,
-        "unit": "",
-        "cost": 500
-      },
-      {
-        "label": "Количество светильников",
-        "base_value": 0,
-        "min_value": 0,
-        "max_value": 10,
-        "cost": 350,
-        "unit": "",
-        "prompt": "тут подсказака"
-      },
-      {
-        "label": "Количество труб",
-        "base_value": 0,
-        "min_value": 0,
-        "max_value": 10,
-        "unit": "",
-        "cost": 150,
-        "prompt": "тут подсказака"
-      }
-    ]
-  },
-
-  "cleaning-calculator": {
-    "currency": "руб.",
-    "object_works": [
-      {
-        "label": "Квартира",
-        "prompt": "Какая-то подсказка с описанием",
-        "types_works": [
-          {
-            "label": "Послестроительная уборка",
-            "cost": 150,
-            "base_value": 0,
-            "unit": "м2",
-            "prompt": "Каая-то подсказка"
-          },
-          {
-            "label": "Генеральная уборка",
-            "cost": 100,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Жилая уборка",
-            "cost": 60,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Экспресс уборка",
-            "cost": 30,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Мойка холодильника",
-            "cost": 500,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Мойка духового шкафа (шт.)",
-            "cost": 500,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Мойка варочной панели (шт.)",
-            "cost": 350,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Мытье окон и фасадов",
-            "cost": 100,
-            "base_value": 0,
-            "unit": ""
-          }
-        ]
-      },
-      {
-        "label": "Офис, магазин, склад",
-        "types_works": [
-          {
-            "label": "Мойка витражей",
-            "cost": 80,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Ежедневная уборка (базовая)",
-            "cost": 25,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Послестроительная уборка",
-            "cost": 170,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Уборка офис Премиум",
-            "cost": 40,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Влажная уборка пола",
-            "cost": 35,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Уборка пола , полировка/шлифовка",
-            "cost": 65,
-            "base_value": 0,
-            "unit": ""
-          }
-        ]
-      },
-      {
-        "label": "Химчистка. Прачка.",
-        "types_works": [
-          {
-            "label": "Химчистка дивана\\кресла (за место)",
-            "cost": 80,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Химчистка стул\\пуф (за место)",
-            "cost": 25,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Химчистка ковровых покрытий",
-            "cost": 170,
-            "base_value": 0,
-            "unit": ""
-          },
-          {
-            "label": "Стирка. Сушка. Глажка. ( кг.)",
-            "cost": 40,
-            "base_value": 0,
-            "unit": ""
-          }
-        ]
-      }
-    ]
-  },
-
-  "base-calculator": {
-    "building_data": {
-      "label": "Тип строения:",
-      "buildingTypes": [
-        {
-          "radioName": "Баня",
-          "prompt": "Небольшая подсказка по поводу типа строения - Баня"
-        },
-        {
-          "radioName": "Дом",
-          "prompt": "И здесь будет подсказка"
-        },
-        {
-          "radioName": "Забор",
-          "prompt": "подсказочка",
-          "extraValueForDependency": "забор"
-        },
-        {
-          "radioName": "Пирс/Причал",
-          "prompt": " "
-        },
-        {
-          "radioName": "Пристрой",
-          "prompt": "",
-          "extraValueForDependency": "пристрой"
-        }
-      ]
-    },
-    "long_data": {
-      "label": "Длинна:",
-      "base_value": 5,
-      "min": 2,
-      "max": 15,
-      "step": 1,
-      "prompt": "Небольшая подсказка о сути параметра"
-    },
-    "width_data": {
-      "label": "Ширина:",
-      "base_value": 5,
-      "min": 1,
-      "max": 15,
-      "step": 0.5,
-      "prompt": "Небольшая подсказка о сути параметра"
-    },
-    "materials_side": {
-      "label": "Материал стен:",
-      "materials": [
-        {
-          "radioName": "Sip-панель",
-          "prompt": "подсказка"
-        },
-        {
-          "radioName": "Брус/Бревно"
-        },
-        {
-          "radioName": "Пеноблок"
-        },
-        {
-          "radioName": "Кирпич"
-        }
-      ],
-      "prompt": "Небольшая подсказка о сути данного параметра"
-    },
-    "floors": {
-      "label": "Этажность:",
-      "base_value": 1,
-      "min": 1,
-      "max": 5,
-      "prompt": "подсказка"
-    },
-    "attic": {
-      "label": "Мансарда:",
-      "on": true,
-      "prompt": "Подсказка"
-    }
-  },
-
-  "apartment-renovation-calculator": {
-    "dataCalculatorSquare": {
-      "cost": 500,
-      "label": "Площадь",
-      "max": "100",
-      "min": 0,
-      "prompt": "Здесь будет небольшая подсказка",
-      "step": 1,
-      "stepPrompt": 1,
-      "template": "UiRange",
-      "unit": "м2",
-      "value": 0,
-      "showDynamicValue": 1
-    },
-    "dataCalculatorExtra": [
-      {
-        "label": "Тип квартиры",
-        "prompt": "Подсказка",
-        "template": "UiRadio",
-        "typeDisplayClass": "buttons",
-        "values": [
-          {
-            "cost": 500,
-            "prompt": "Подсказка",
-            "radioName": "Новостройка"
-          },
-          {
-            "cost": 1000,
-            "prompt": "Подсказка 2",
-            "radioName": "Вторичка"
-          }
-        ]
-      },
-      {
-        "label": "Тип ремонта",
-        "prompt": "",
-        "template": "UiRadio",
-        "typeDisplayClass": "buttons",
-        "values": [
-          {
-            "cost": 500,
-            "prompt": "Подсказка",
-            "radioName": "Капитальный"
-          },
-          {
-            "cost": 1000,
-            "prompt": "Подсказка 2",
-            "radioName": "Дизайнерский"
-          }
-        ]
-      },
-      {
-        "checkboxValue": 1,
-        "checked": false,
-        "cost": 500,
-        "label": "Дизайн интерьера",
-        "prompt": "",
-        "template": "UiCheckbox",
-        "typeDisplayClass": "button",
-        "labelSecond": "3D-Дизайн проект"
       }
     ]
   }
