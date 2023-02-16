@@ -3296,6 +3296,32 @@
   "test-data2": {
     "calculatorTemplates": [
       {
+        "json_id": "165719506",
+        "title": "Input Зависимости 1 уровень",
+        "label": "Input Зависимости 1 уровень",
+        "value": "30",
+        "cost": "10",
+        "unit": "",
+        "min": 1,
+        "max": 100,
+        "controls": false,
+        "step": "1",
+        "isColumn": false,
+        "notEmpty": false,
+        "onlyNumber": 1,
+        "isCurrency": false,
+        "onlyInteger": false,
+        "formOutputMethod": "no",
+        "elementName": "первыйИнпут",
+        "formulaProcessingLogic": "error",
+        "classes": "",
+        "template": "UiInput",
+        "placeholder": "",
+        "discreteStep": false,
+        "excludeFromCalculations": 0,
+        "dependencyFormulaDisplay": ""
+      },
+      {
         "title": "фундамент - Тип строения:",
         "label": "Тип строения:",
         "selectedItem": "0",

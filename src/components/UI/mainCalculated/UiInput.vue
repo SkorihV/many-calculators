@@ -409,7 +409,7 @@ export default {
         this.localInputValue = value;
         this.changeValue("timer");
         this.shownTooltip();
-      }, 1000);
+      }, 2000);
     },
     clearTimer(name) {
       if (name) clearTimeout(name);

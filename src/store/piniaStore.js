@@ -174,7 +174,6 @@ export const useBaseStore = defineStore("base", {
      * @param isShow
      * @param displayValue
      * @param type
-     * @param parentName
      */
     tryAddDependencyElement({
       name,
@@ -182,7 +181,6 @@ export const useBaseStore = defineStore("base", {
       isShow,
       displayValue,
       type,
-      parentName,
     }) {
       this.dataListForDependencies[name] = {
         name,
@@ -190,7 +188,6 @@ export const useBaseStore = defineStore("base", {
         isShow,
         displayValue,
         type,
-        parentName,
       };
     },
     /**
