@@ -1,9 +1,5 @@
 <template>
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
-    <div
-      v-if="outOptions?.textAbove?.length"
-      v-html="outOptions.textAbove"
-    ></div>
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <ui-accordion
@@ -76,7 +72,7 @@
       <div v-if="showErrorSummaBlock" class="calc__error-block">
         Не все поля участвующие в расчете были заполнены.
       </div>
-      <div
+      <button
         class="calc__show-result-btn"
         @click="calculateResult"
         v-if="showResultBtn"
@@ -89,7 +85,7 @@
         >
           {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
         </icon-element-wrapper>
-      </div>
+      </button>
       <div
         class="calc__result-block-wrapper"
         :class="{
@@ -130,10 +126,6 @@
       />
       <div id="prompt-text-element"></div>
     </div>
-    <div
-      v-if="outOptions?.textAfter?.length"
-      v-html="outOptions.textAfter"
-    ></div>
     <teleport v-if="initTeleport && submitResult" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
@@ -180,7 +172,6 @@ export default {
     let isLocal = false;
     if (typeof localData !== "undefined") {
       isLocal = localData?.isLocal ? localData?.isLocal : false;
-
     }
 
     if (isLocal) {
@@ -325,7 +316,7 @@ export default {
         "timer",
         "dependency",
         "currentSelectedRadioButton",
-        "changeAmountSelectList"
+        "changeAmountSelectList",
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
     };
@@ -342,7 +333,6 @@ export default {
         this.checkEnabledResultButton();
         return false;
       }
-
 
       this.tryAddResultElement(data);
 
@@ -379,7 +369,7 @@ export default {
 
       if (!this.submitResult) {
         this.submitResult = document.querySelector(
-          "#App + .tpl-anketa button[type=submit]"
+          "#App ~ .tpl-anketa button[type=submit]"
         );
       }
 
@@ -889,9 +879,13 @@ $c_color_error: #e80000;
     line-height: 23px;
     text-transform: uppercase;
     cursor: pointer;
+    border: none;
     @include style-border-radius;
     &:hover {
       background-color: $c_background_hover_dark;
+    }
+    @media all and (max-width: 480px) {
+      padding: 11px 50px;
     }
   }
   //--------Стили input text-----
@@ -1083,7 +1077,7 @@ $c_color_error: #e80000;
         align-items: center;
         height: 30px;
         position: relative;
-        margin-top: 17px;
+        margin-top: 14px;
         @media all and (max-width: 480px) {
           display: none;
         }
@@ -1091,10 +1085,16 @@ $c_color_error: #e80000;
       &-item {
         position: absolute;
         cursor: pointer;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 16px;
-        color: $c_color_text_default_dim;
+
+        &-value {
+          font-size: 14px;
+          line-height: 1px;
+          color: $c_color_text_default_dim;
+          position: absolute;
+          z-index: 10;
+          left: 50%;
+          transform: translateX(-50%);
+        }
         &:after {
           position: absolute;
           content: "";
@@ -1108,13 +1108,20 @@ $c_color_error: #e80000;
           bottom: calc(100% + 7px);
         }
         &_selected {
-          color: $c_color_text_default_dark;
+          .calc__range-steps-item-value {
+            color: $c_color_text_default_dark;
+            font-weight: 700;
+          }
           &:after {
+            background-color: $c_color_text_default_dark;
             width: 2px;
           }
         }
         &:hover {
-          color: $c_color_text_default_dark;
+          .calc__range-steps-item-value {
+            color: $c_color_text_default_dark;
+            font-weight: 700;
+          }
           &:after {
             background-color: $c_color_text_default_dark;
           }
@@ -1152,7 +1159,7 @@ $c_color_error: #e80000;
         font-weight: 700;
         font-size: 16px;
         line-height: 20px;
-        padding: 20px 30px;
+        padding: 20px 20px;
         max-width: 90px;
         right: 0;
         border: none;
@@ -2045,13 +2052,11 @@ $c_color_error: #e80000;
     }
     &-left-side-wrapper,
     &-right-side-wrapper {
-      flex: 1 1 auto;
+      flex: 1 0 auto;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      @media all and (max-width: 768px) {
-        width: 100%;
-      }
+      width: 100%;
     }
     &-left-label,
     &-right-label {

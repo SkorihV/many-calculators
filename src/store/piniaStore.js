@@ -23,34 +23,34 @@ export const useBaseStore = defineStore("base", {
   getters: {
     /**
      * Получить весь список элементов результата
-     * @param state
-     * @returns {{}}
+     * @param globalResultsElements
+     * @returns {undefined}
      */
-    getAllResultsElements: (state) => state.globalResultsElements,
+    getAllResultsElements: ({ globalResultsElements }) => globalResultsElements,
     /**
      * Получить элемент из списка по его имени
-     * @param state
+     * @param globalResultsElements
      * @returns {function(*): *|null}
      */
-    getResultElementOnName: (state) => (name) =>
-      state?.globalResultsElements[name]
-        ? state.globalResultsElements[name]
-        : null,
+    getResultElementOnName:
+      ({ globalResultsElements }) =>
+      (name) =>
+        globalResultsElements[name] ? globalResultsElements[name] : null,
     /**
      * Массив со всеми зависимостями и значениями
      * @param state
      * @returns {{}}
      */
-    globalDependenciesList: (state) => {
-      return state.dataListForDependencies;
+    globalDependenciesList: ({ dataListForDependencies }) => {
+      return dataListForDependencies;
     },
     /**
      * Активирует возможность показывать всплывающие подсказки с ошибками
      * @param state
      * @returns {boolean}
      */
-    isCanShowAllTooltips: (state) => {
-      return state.shownAllTooltips;
+    isCanShowAllTooltips: ({ shownAllTooltips }) => {
+      return shownAllTooltips;
     },
     /**
      * Показать все данные с ошибками по заданному родителю
@@ -58,41 +58,47 @@ export const useBaseStore = defineStore("base", {
      * @param state
      * @returns {function(*): unknown[]}
      */
-    getValidationListOnParentName: (state) => (parentName) =>
-      Object.values(state.validationsErrorsList).filter(
-        (item) => item.parentName === parentName
-      ),
+    getValidationListOnParentName:
+      ({ validationsErrorsList }) =>
+      (parentName) =>
+        Object.values(validationsErrorsList).filter(
+          (item) => item.parentName === parentName
+        ),
     /**
      * Есть ли хоть один видимый элемент-ребенок у родителя
      * @param state
      * @returns {function(*): boolean}
      */
-    isValidationShowOnParentName: (state) => (parentName) =>
-      Boolean(
-        Object.values(state.validationsErrorsList).filter(
-          (item) => item.parentName === parentName && item.isShow
-        ).length
-      ),
+    isValidationShowOnParentName:
+      ({ validationsErrorsList }) =>
+      (parentName) =>
+        Boolean(
+          Object.values(validationsErrorsList).filter(
+            (item) => item.parentName === parentName && item.isShow
+          ).length
+        ),
     /**
      * Есть ли хоть один элемент-ребенок с ошибкой, у родителя
      * @param state
      * @returns {function(*): boolean}
      */
-    isValidationErrorOnParentName: (state) => (parentName) => {
-      return Boolean(
-        Object.values(state.validationsErrorsList).filter(
-          (item) => item.parentName === parentName && item.error
-        ).length
-      );
-    },
+    isValidationErrorOnParentName:
+      ({ validationsErrorsList }) =>
+      (parentName) => {
+        return Boolean(
+          Object.values(validationsErrorsList).filter(
+            (item) => item.parentName === parentName && item.error
+          ).length
+        );
+      },
     /**
      * Есть ли во всем калькуляторе элементы с ошибками валидации
      * @param state
      * @returns {boolean}
      */
-    isCheckedGlobalValidation: (state) =>
+    isCheckedGlobalValidation: ({ validationsErrorsList }) =>
       Boolean(
-        Object.values(state.validationsErrorsList).filter(
+        Object.values(validationsErrorsList).filter(
           (item) => item.error && item.isShow
         ).length
       ),
@@ -101,22 +107,24 @@ export const useBaseStore = defineStore("base", {
      * @param state
      * @returns {{}}
      */
-    validationList: (state) => state.validationsErrorsList,
+    validationList: ({ validationsErrorsList }) => validationsErrorsList,
     /**
      * название спецпеременной служащей для суммирования в себе всех значений
      * @param state
      * @returns {string}
      */
-    getNameReserveVariable: (state) => state.reserveVariableForOtherSumma,
-    getSpecSymbols: (state) => state.specSymbols,
-    devMode: (state) => state.devModeData,
-    showInsideElementStatus: (state) => state.showInsideElementStatusData,
+    getNameReserveVariable: ({ reserveVariableForOtherSumma }) =>
+      reserveVariableForOtherSumma,
+    getSpecSymbols: ({ specSymbols }) => specSymbols,
+    devMode: ({ devModeData }) => devModeData,
+    showInsideElementStatus: ({ showInsideElementStatusData }) =>
+      showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
-    appIsMounted: (state) =>
+    appIsMounted: ({ elementsIsMounted }) =>
       !Boolean(
-        Object.values(state.elementsIsMounted).filter((value) => !value).length
+        Object.values(elementsIsMounted).filter((value) => !value).length
       ),
-    isTooltipOn: (state) => state.tooltipOn,
+    isTooltipOn: ({ tooltipOn }) => tooltipOn,
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -133,7 +141,6 @@ export const useBaseStore = defineStore("base", {
         isShow,
         excludeFromCalculations,
         formulaProcessingLogic,
-        mode,
         position,
         zeroValueDisplayIgnore,
       } = dataResultItem;
@@ -152,7 +159,6 @@ export const useBaseStore = defineStore("base", {
         excludeFromCalculations,
         eventType,
         formulaProcessingLogic,
-        mode: mode ? mode : null,
         position,
         zeroValueDisplayIgnore,
       };
@@ -175,13 +181,7 @@ export const useBaseStore = defineStore("base", {
      * @param displayValue
      * @param type
      */
-    tryAddDependencyElement({
-      name,
-      value,
-      isShow,
-      displayValue,
-      type,
-    }) {
+    tryAddDependencyElement({ name, value, isShow, displayValue, type }) {
       this.dataListForDependencies[name] = {
         name,
         value,

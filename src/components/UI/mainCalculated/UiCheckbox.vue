@@ -228,8 +228,8 @@ export default {
       if (!value) {
         this.isLocalChecked = false;
       }
-      this.changeValue('dependency');
-    }
+      this.changeValue("dependency");
+    },
   },
   computed: {
     ...mapState(useBaseStore, [

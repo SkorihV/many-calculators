@@ -276,8 +276,8 @@ export default {
       deep: true,
     },
     isVisibilityFromDependency() {
-        this.changeValue('dependency');
-    }
+      this.changeValue("dependency");
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -309,13 +309,19 @@ export default {
       return this.notEmpty && !this.isChangedRadio;
     },
     localCost() {
-      if (this.currentSelectedRadioButton === null || !this.isVisibilityFromDependency) {
+      if (
+        this.currentSelectedRadioButton === null ||
+        !this.isVisibilityFromDependency
+      ) {
         return null;
       }
       return this.currentSelectedRadioButton?.cost;
     },
     selectedValueInRadio() {
-      if (this.currentSelectedRadioButton === null || !this.isVisibilityFromDependency) {
+      if (
+        this.currentSelectedRadioButton === null ||
+        !this.isVisibilityFromDependency
+      ) {
         return null;
       }
       return this.currentSelectedRadioButton?.extraValueForDependency?.length

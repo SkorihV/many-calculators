@@ -473,8 +473,8 @@ export default {
   },
   watch: {
     isVisibilityFromDependency() {
-        this.changeValue('dependency');
-    }
+      this.changeValue("dependency");
+    },
   },
   computed: {
     ...mapState(useBaseStore, [

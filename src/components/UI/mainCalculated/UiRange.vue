@@ -34,7 +34,7 @@
                 'calc__range-steps-item_selected': step === resultValue,
               }"
             >
-              {{ step }}
+              <div class="calc__range-steps-item-value">{{ step }}</div>
             </div>
           </div>
           <div
@@ -204,7 +204,7 @@ export default {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
     });
-    if (!this.$refs?.thisElement?.offsetWidth) {
+    if (!this.$refs?.thisElement?.offsetWidth || !this.elementWidth) {
       let timer = setInterval(() => {
         if (this.$refs?.thisElement?.offsetWidth) {
           this.updateWidthElements();
@@ -358,8 +358,7 @@ export default {
           this.elementWidth = this.$refs.thisElement.offsetWidth;
         }, 10);
       }
-      this.changeValue('dependency');
-
+      this.changeValue("dependency");
     },
   },
   computed: {
@@ -462,17 +461,23 @@ export default {
       return (this.localMax - this.localMin) / this.localStepPrompt;
     },
     pointsForStepsLine() {
-      const width = this.elementWidth - 26;
+      let rightShiftElementWidth = 21;
+      let firstPointPosition = 12;
       let points = [];
-      points.push(10);
+      const width = this.elementWidth - rightShiftElementWidth;
+
+      points.push(firstPointPosition);
       let i = 1;
       for (i; i <= this.amountSteps; i++) {
         const percent =
           (this.localStepPrompt * i) / (this.localMax - this.localMin);
-        let position = width * percent + 5;
-        if (i.toString().length === 1) {
-          position += 3;
+        let position = 0;
+        if (this.returnSteps[i].toString().length === 1) {
+          position = width * percent + 11;
+        } else {
+          position = width * percent + 10;
         }
+
         points.push(position.toFixed(4));
       }
       return points;

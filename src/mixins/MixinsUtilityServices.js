@@ -114,19 +114,18 @@ export const MixinsUtilityServices = {
      */
     parsingDataInFormulaOnSumma(dataListVariables) {
       return dataListVariables?.reduce((resultText, item) => {
-        if (typeof item?.cost === "number" && item?.isShow) {
-          return (resultText += item.cost);
+        const isExistCost = item?.cost && typeof item?.cost === "number";
+        if (isExistCost) {
+          resultText += item.cost.toString();
+          return resultText;
         }
-        if (typeof item?.cost === "number" && !item?.isShow) {
-          return (resultText += "0");
-        }
-        return (resultText += item);
+        resultText += item;
+        return resultText;
       }, "");
     },
 
     /**
      * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
-     * ignore - вместо поля выводит пустоту
      * zero - выводит ноль
      * error - выводит null что в расчете формулы приведет к ошибке
      *
@@ -136,35 +135,23 @@ export const MixinsUtilityServices = {
     processingArrayOnFormulaProcessingLogic(dataList) {
       let resultList = [];
       let localDataList = dataList;
-      let singsList = ["+", "-", "*", "/"];
       for (let i = 0; i < localDataList.length; i++) {
-        let currentItemList = localDataList[i];
-        if (typeof currentItemList !== "object") {
+        const currentItemList = localDataList[i];
+        const isProcessingLogic = currentItemList?.formulaProcessingLogic?.length && currentItemList?.cost === null;
+        const isItemObject = typeof currentItemList === "object";
+        const isExistCost = typeof currentItemList?.cost === "number";
+        const error = "Ошибка заполнения";
+
+        if (!isItemObject) {
           resultList.push(currentItemList);
-        } else if (
-          currentItemList?.formulaProcessingLogic?.length &&
-          (currentItemList?.cost === null ||
-            currentItemList?.cost === 0 ||
-            !currentItemList.isShow)
-        ) {
+        } else if (isItemObject && isProcessingLogic) {
           if (currentItemList.formulaProcessingLogic === "error") {
-            resultList.push(currentItemList);
+            resultList.push(error);
           } else if (currentItemList.formulaProcessingLogic === "zero") {
             resultList.push(0);
-          } else if (currentItemList.formulaProcessingLogic === "ignored") {
-            if (i === 0 && singsList.includes(currentItemList[i + 1])) {
-              i++;
-            }
-
-            if (
-              i > 0 &&
-              singsList.includes(resultList[resultList.length - 1])
-            ) {
-              resultList.pop();
-            } else if (i > 0 && singsList.includes(currentItemList[i + 1])) {
-              i++;
-            }
           }
+        } else if (isItemObject && isExistCost) {
+          resultList.push(currentItemList.cost);
         } else {
           resultList.push(currentItemList);
         }

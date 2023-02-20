@@ -318,8 +318,8 @@ export default {
       }
     },
     isVisibilityFromDependency() {
-      this.changeValue('dependency');
-    }
+      this.changeValue("dependency");
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -363,7 +363,10 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-      if (this.currentIndexOption === null || !this.isVisibilityFromDependency) {
+      if (
+        this.currentIndexOption === null ||
+        !this.isVisibilityFromDependency
+      ) {
         return null;
       }
 
@@ -380,7 +383,10 @@ export default {
       return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
     currentOptionValue() {
-      if ((this.needMockValue && this.currentIndexOption === null) || !this.isVisibilityFromDependency) {
+      if (
+        (this.needMockValue && this.currentIndexOption === null) ||
+        !this.isVisibilityFromDependency
+      ) {
         return null;
       }
 
