@@ -91,7 +91,7 @@
         :class="{
           isVisualSeparate: outOptions.resultOptions?.visuallySeparateElement,
         }"
-        v-if="showResultDataForBlock && initTeleport"
+        v-if="showResultDataForBlock && initTeleportIsReady"
       >
         <background-image-element
           class="result"
@@ -122,16 +122,16 @@
         v-if="devMode"
         :templates="calculatorTemplates"
         :init-template="devMode"
-        :formula="formula?.length && isUseFormula ? formula : ''"
+        :formula="mainFormulaIsExist && isUseFormula ? formula : ''"
       />
       <div id="prompt-text-element"></div>
     </div>
-    <teleport v-if="initTeleport && submitResult" to="#teleport">
+    <teleport v-if="allowTeleport" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
     <div
-      class="dev-mode"
-      v-if="devMode && showInsideElementStatus"
+      class="calc__dev-block-wrapper"
+      v-if="showDevBlock"
       v-html="devModeData"
     ></div>
   </div>
@@ -401,15 +401,12 @@ export default {
         !isNaN(parseFloat(item.value)) && isFinite(item.value)
           ? Math.abs(item.value)
           : item.value;
-      /**
-       * Выводить поле с нулевым значением
-       * @type {boolean}
-       */
+
       const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
       const isAllowDataOutput = item.formOutputMethod && item.displayValue !== null && item.isShow && isAllowZeroValue;
       const isAllowValueOutput = item.formOutputMethod === "value" ||  item.formOutputMethod === "valueSumm";
       const isAllowCostOutput = item.cost !== null && (item.formOutputMethod === "summ" || item.formOutputMethod === "valueSumm");
-      const unit = item.unit ? item.unit : "";
+      const unit = item?.unit ? item.unit : "";
 
       if (isAllowDataOutput) {
         result +=
@@ -493,6 +490,9 @@ export default {
       "appIsMounted",
       "setTooltipOn",
     ]),
+    mainFormulaIsExist() {
+      return Boolean(this.formula?.length);
+    },
     /**
      * Данные которые подходят для вывода или расчета
      * @returns {{length}|unknown[]|*[]}
@@ -507,7 +507,7 @@ export default {
      * @returns {*[]|*}
      */
     variablesInFormula() {
-      if (this.formula?.length) {
+      if (this.mainFormulaIsExist) {
         return this.getArrayElementsFromFormula(this.formula);
       }
       return [];
@@ -645,7 +645,7 @@ export default {
         return null;
       }
 
-      if (this.isUseFormula && this.formula?.length) {
+      if (this.isUseFormula && this.mainFormulaIsExist) {
         return this.combinedFormulaDataTogether;
       } else {
         return this.baseDataForCalculate.reduce((sum, item) => {
@@ -702,7 +702,7 @@ export default {
      * Добавить данные в форму если нет ошибок валидации
      * @returns {boolean}
      */
-    initTeleport() {
+    initTeleportIsReady() {
       return (
         !this.isCheckedGlobalValidation &&
         this.initEnabledSendForm &&
@@ -717,6 +717,9 @@ export default {
         !this.isCheckedGlobalValidation
       );
     },
+    allowTeleport() {
+      return this.initTeleportIsReady && this.submitResult;
+    },
     showResultBtn() {
       return this.mistake === "useButton";
     },
@@ -729,22 +732,29 @@ export default {
       );
     },
     devModeData() {
-      const textFormula = this.variablesInFormula?.length
-        ? `<div>Формула расчета: ${this.variablesInFormula.join(" ")}</div>`
-        : "";
-      const textFormulaVariables = this.formula?.length
-        ? `<div>Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
-        : "";
       return `
-      ${textFormula}
-      ${textFormulaVariables}
+      ${this.formulaHtml}
+      ${this.formulaVariablesHtml}
       `;
+    },
+    formulaHtml() {
+      return this.variablesInFormula?.length
+        ? `<div class="calc__dev-block-element">Формула расчета: ${this.variablesInFormula.join(" ")}</div>`
+        : "";
+    },
+    formulaVariablesHtml() {
+      return this.mainFormulaIsExist
+        ? `<div class="calc__dev-block-element">Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
+        : "";
     },
     isShowResultBlockTitle() {
       return Boolean(this.outOptions?.resultOptions?.title?.length);
     },
     isShowResultBlockSubtitle() {
       return Boolean(this.outOptions?.resultOptions?.subtitle?.length);
+    },
+    showDevBlock() {
+      return this.devMode && this.showInsideElementStatus;
     },
   },
 };
@@ -2321,7 +2331,7 @@ $c_color_error: #e80000;
       align-items: flex-start;
       padding: 10px;
       border: 2px dotted gray;
-      width: 100%;
+      width: calc(100% - 30px);
       margin-bottom: 10px;
       background-color: #fff;
     }
