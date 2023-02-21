@@ -285,7 +285,7 @@ export default {
       this?.outOptions !== null ? this?.outOptions?.currency : "руб";
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
-    this.tryToggleDevMode(Boolean(this.outOptions?.devMode));
+    this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
     this.showResultDataForBlock = this.outOptions?.resultOptions
       ? this.outOptions?.resultOptions.showResultDataForBlock
       : false;

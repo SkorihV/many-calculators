@@ -14,7 +14,7 @@ export const useBaseStore = defineStore("base", {
         "&quot;": '"',
       }),
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
-      devModeData: false,
+      devModeEnabled: false,
       showInsideElementStatusData: false,
       elementsIsMounted: {},
       tooltipOn: true,
@@ -116,7 +116,7 @@ export const useBaseStore = defineStore("base", {
     getNameReserveVariable: ({ reserveVariableForOtherSumma }) =>
       reserveVariableForOtherSumma,
     getSpecSymbols: ({ specSymbols }) => specSymbols,
-    devMode: ({ devModeData }) => devModeData,
+    devMode: ({ devModeEnabled }) => devModeEnabled,
     showInsideElementStatus: ({ showInsideElementStatusData }) =>
       showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
@@ -213,7 +213,7 @@ export const useBaseStore = defineStore("base", {
       this.validationsErrorsList[data.name] = data;
     },
     tryToggleDevMode(flag) {
-      this.devModeData = flag;
+      this.devModeEnabled = flag;
     },
     tryToggleShowInsideElementStatus(flag) {
       this.showInsideElementStatusData = flag;
