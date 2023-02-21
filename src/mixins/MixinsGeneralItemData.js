@@ -55,15 +55,13 @@ export const MixinsGeneralItemData = {
     devModeData() {
       if (this.devMode && this.showInsideElementStatus) {
         return `
-          <div class="calc__dev-block-wrapper">
            ${this.labelHtml}
            ${this.elementNameHtml}
            ${this.dependencyFormulaHtml}
            ${this.dependencyFormulaBeforeProcessingHtml}
            ${this.valueHtml}
            ${this.infoVisibilityHtml}
-           ${this.localCostHtml}
-          </div>`;
+           ${this.localCostHtml}`;
       }
       return false;
     },

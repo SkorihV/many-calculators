@@ -67,7 +67,7 @@
         :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
-    <div v-if="devModeData" v-html="devModeData"></div>
+    <div class="calc__dev-block-wrapper" v-if="devModeData" v-html="devModeData"></div>
   </div>
 </template>
 

@@ -44,7 +44,7 @@
       X
     </button>
   </div>
-  <div class="dev-block" v-if="devModeData" v-html="devModeData"></div>
+  <div class="calc__dev-block-wrapper" v-if="showDevBlock" v-html="devModeData"></div>
 </template>
 
 <script>
@@ -394,41 +394,39 @@ export default {
         (itemA, itemB) => itemA.position - itemB.position
       );
     },
+    showDevBlock() {
+      return this.devMode && this.showInsideElementStatus;
+    },
     devModeData() {
-      if (!this.devMode || !this.showInsideElementStatus) {
-        return false;
-      }
-      const textLabel = `<span>Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</span></br>`;
-      const textFormula = `<span>Базовая формула: ${
+      return `
+      <hr/>
+      ${this.labelHtml}
+      ${this.formulaHtml}
+      ${this.formulaOnDataHtml}
+      ${this.summElementInFormulaHtml}
+      `;
+    },
+    labelHtml() {
+      return `<div class="calc__dev-block-element">Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`;
+    },
+    formulaHtml() {
+      return `<div class="calc__dev-block-element">Базовая формула: ${
         this.formula?.length
           ? this.getArrayElementsFromFormula(this.formula).join(" ")
           : "Нет"
-      }</span></br>`;
-      let isCompiledFormula = false;
-      try {
-        if (this.localCost !== null) {
-          isCompiledFormula = true;
-        }
-      } catch (e) {
-        isCompiledFormula = false;
-      }
-
-      const textFormulaOnData = `<span>Формула с данными: ${
+      }</div>`;
+    },
+    formulaOnDataHtml() {
+      return `<div class="calc__dev-block-element">Формула с данными: ${
         this.compileFormulaWitchData?.length
           ? this.compileFormulaWitchData
           : "Нет"
-      }</span></br>`;
-      const resultProcessingFormula = `<span>Результат расчета: ${
-        isCompiledFormula ? this.localCost : "не возможно посчитать!"
-      }</span></br>`;
-
-      return `
-      <hr/>
-      ${textLabel}
-      ${textFormula}
-      ${textFormulaOnData}
-      ${resultProcessingFormula}
-      `;
+      }</div>`;
+    },
+    summElementInFormulaHtml() {
+      return `<div class="calc__dev-block-element">Результат расчета: ${
+        this.localCost !== null ? this.localCost : " не возможно посчитать!"
+      }</div>`;
     },
   },
 };
