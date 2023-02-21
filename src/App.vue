@@ -69,7 +69,7 @@
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Заполните, пожалуйста, все обязательные поля корректно.
       </div>
-      <div v-if="showErrorSummaBlock" class="calc__error-block">
+      <div v-if="!showErrorTextBlock && showErrorSummaBlock" class="calc__error-block">
         Не все поля участвующие в расчете были заполнены.
       </div>
       <button
@@ -401,45 +401,37 @@ export default {
         !isNaN(parseFloat(item.value)) && isFinite(item.value)
           ? Math.abs(item.value)
           : item.value;
-      let isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
-      if (
-        item.formOutputMethod &&
-        item.displayValue !== null &&
-        item.isShow &&
-        isAllowZeroValue
-      ) {
+      /**
+       * Выводить поле с нулевым значением
+       * @type {boolean}
+       */
+      const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
+      const isAllowDataOutput = item.formOutputMethod && item.displayValue !== null && item.isShow && isAllowZeroValue;
+      const isAllowValueOutput = item.formOutputMethod === "value" ||  item.formOutputMethod === "valueSumm";
+      const isAllowCostOutput = item.cost !== null && (item.formOutputMethod === "summ" || item.formOutputMethod === "valueSumm");
+      const unit = item.unit ? item.unit : "";
+
+      if (isAllowDataOutput) {
         result +=
           "\n<div class='calc__result-block-field-label'>" +
           item.label +
           " </div>";
 
         result += "<div class='calc__result-block-field-right'>";
-        if (
-          item.formOutputMethod === "value" ||
-          item.formOutputMethod === "valueSumm"
-        ) {
-          const unit = item.unit ? item.unit : "";
+        if (isAllowValueOutput) {
           result +=
             "<div class='calc__result-block-field-value'>" +
             item.displayValue +
             " " +
             unit;
 
-          if (
-            item.cost !== null &&
-            (item.formOutputMethod === "summ" ||
-              item.formOutputMethod === "valueSumm")
-          ) {
+          if (isAllowCostOutput) {
             result += " - ";
           }
 
           result += "</div>";
         }
-        if (
-          item.cost !== null &&
-          (item.formOutputMethod === "summ" ||
-            item.formOutputMethod === "valueSumm")
-        ) {
+        if (isAllowCostOutput) {
           let sum = item?.cost?.toString();
           result +=
             "<div class='calc__result-block-field-cost'>" +
@@ -582,7 +574,7 @@ export default {
         return eval(this.resultTextForComputed);
       } catch (e) {
         if (this.devMode) {
-          console.error(e.message, this.resultTextForComputed);
+          console.error("Ошибка в расчете формулы: ", this.resultTextForComputed);
         }
         return false;
       }
@@ -678,6 +670,7 @@ export default {
         result += "Есть ошибка в расчетах!";
       } else {
         result +=
+          "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
           this.outOptions?.resultOptions?.titleSumma +

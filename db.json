@@ -67,8 +67,8 @@
       },
       {
         "json_id": "165719506",
-        "title": "Input Зависимости 1 уровень",
-        "label": "Input Зависимости 1 уровень",
+        "title": "Input Зависимости 1 уровень 53534",
+        "label": "Input Зависимости 1 уровень 53534",
         "value": "30",
         "cost": "10",
         "unit": "",
@@ -282,7 +282,7 @@
       {
         "json_id": "675635",
         "title": "Зависимости select",
-        "label": "Зависимость от выбранного радио пункта",
+        "label": "Зависимость от выбранного радио пункта 45354",
         "isColumn": false,
         "selectedItem": "0",
         "isNeedChoice": false,
@@ -299,18 +299,19 @@
             "title": "Пункт первый",
             "selectName": "Пункт первый",
             "cost": 100,
+            "extraValueForDependency": "первыйПункт",
             "dependencyPrices": [
               {
                 "title": "200",
                 "disabledFormula": 0,
                 "cost": 200,
-                "dependencyFormulaCost": "radio1 === 1"
+                "dependencyFormulaCost": "строение === 1"
               },
               {
                 "title": "300",
                 "disabledFormula": 0,
                 "cost": 300,
-                "dependencyFormulaCost": "radio1 === 2"
+                "dependencyFormulaCost": "строение === 2"
               }
             ]
           },
@@ -1226,7 +1227,7 @@
   },
 
   "calculator-options": {
-    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна) + test123 + 22 + первыйИнп3ут",
+    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна) + test123 + 22 + null + _otherSum_",
     "methodProcessingMistakes": "useButton",
     "currency": "руб",
     "form": "7981901",
@@ -3297,8 +3298,8 @@
     "calculatorTemplates": [
       {
         "json_id": "165719506",
-        "title": "Input Зависимости 1 уровень",
-        "label": "Input Зависимости 1 уровень",
+        "title": "Input Зависимости 1 уровень 435",
+        "label": "Input Зависимости 1 уровень 435",
         "value": "30",
         "cost": "10",
         "unit": "",
@@ -3312,7 +3313,7 @@
         "isCurrency": false,
         "onlyInteger": false,
         "formOutputMethod": "no",
-        "elementName": "первыйИнп3ут",
+        "elementName": "test",
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiInput",
@@ -3341,12 +3342,19 @@
             "title": "Пункт первый",
             "selectName": "Пункт первый",
             "cost": 100,
+            "extraValueForDependency": "первыйПункт",
             "dependencyPrices": [
               {
                 "title": "200",
                 "disabledFormula": 0,
                 "cost": 200,
-                "dependencyFormulaCost": ""
+                "dependencyFormulaCost": "строение === 1"
+              },
+              {
+                "title": "300",
+                "disabledFormula": 0,
+                "cost": 300,
+                "dependencyFormulaCost": "строение === 2"
               }
             ]
           },
@@ -3375,8 +3383,8 @@
       },
       {
         "json_id": "165719506",
-        "title": "Input Зависимости 1 уровень",
-        "label": "Input Зависимости 1 уровень",
+        "title": "Input Зависимости 1 уровень 12312",
+        "label": "Input Зависимости 1 уровень 12312",
         "value": "30",
         "cost": "10",
         "unit": "",
@@ -3390,21 +3398,27 @@
         "isCurrency": false,
         "onlyInteger": false,
         "formOutputMethod": "no",
-        "elementName": "первыйИнпут",
+        "elementName": "null3",
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiInput",
         "placeholder": "",
         "discreteStep": false,
         "excludeFromCalculations": 0,
-        "dependencyFormulaDisplay": ""
+        "dependencyFormulaDisplay": "",
+        "dependencyPrices": [
+          {
+          "cost": 300,
+            "dependencyFormulaCost": "строение === 2"
+          }
+        ]
       },
       {
         "title": "фундамент - Тип строения:",
         "label": "Тип строения:",
         "selectedItem": 2,
         "isColumn": false,
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "notEmpty": false,
         "typeDisplayClass": "buttons",
         "elementName": "строение",

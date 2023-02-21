@@ -397,7 +397,7 @@ export default {
         return eval(this.compileFormulaWitchData);
       } catch (e) {
         if (this.devMode) {
-          console.error(e.message, this.compileFormulaWitchData);
+          console.error("Ошибка в расчете формулы: ", this.compileFormulaWitchData);
         }
         return null;
       }

@@ -94,6 +94,31 @@
             Измените существующие имена или добавьте недостающие.
           </p>
         </template>
+
+        <template v-if="listExistElementNames.filter(item => listBannedElementsName.includes(item.elementName)).length">
+          <div class="calc__error-label">
+            <p>
+              Недоступные имена элементов
+            </p>
+            <p>
+              Список всех имен элементов Заголовок / Имя:
+            </p>
+          </div>
+          <div
+            class="calc__error-item"
+            v-for="(data, key) in listExistElementNames.filter(item => listBannedElementsName.includes(item.elementName))"
+            :key="key"
+          >
+            <div class="calc__error-item-name">
+              {{ data.label ? data.label : "Без заголовка " }} /
+              {{ data.elementName }}
+            </div>
+          </div>
+          <p>
+            Переименуйте указанные элементы иначе расчет может быть не корректен.
+          </p>
+        </template>
+
       </div>
       <p class="calc__error-item">
         В случае наличия ошибок, калькулятор может вести расчет некорректно!
@@ -139,6 +164,14 @@ export default {
       listExistElementNames: [], // Список всех имен элементов которые могут участвовать в расчетах
       listDisplayFormula: [], //список всех формул отвечающих за отображение
       listComputedFormula: [], //Список всех формул отвечающих за расчет
+      listBannedElementsName:[
+        "_otherSum_",
+        "self",
+        "true",
+        "false",
+        "empty",
+        "null",
+      ],
       usedArrayNamesInElements: new Set(), //список используемых имен для создания зависимостей
       displayAlert: false,
       exceptionVariablesFormula: [

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "json-server --watch db.json & vue-cli-service serve",
+    "serve": "json-server --port 5000 --no-cors --no-cors --watch db.json & vue-cli-service serve",
     "build": "vue-cli-service build",
     "json": "json-server --watch db.json",
     "format": "prettier .  --write"

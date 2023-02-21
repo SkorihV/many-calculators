@@ -356,7 +356,7 @@ export default {
       if (value) {
         setTimeout(() => {
           this.elementWidth = this.$refs.thisElement.offsetWidth;
-        }, 10);
+        }, 500);
       }
       this.changeValue("dependency");
     },

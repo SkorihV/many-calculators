@@ -140,7 +140,7 @@ export const MixinsUtilityServices = {
         const isProcessingLogic = currentItemList?.formulaProcessingLogic?.length && currentItemList?.cost === null;
         const isItemObject = typeof currentItemList === "object";
         const isExistCost = typeof currentItemList?.cost === "number";
-        const error = "Ошибка заполнения";
+        const error = "ОшибкаЗаполнения";
 
         if (!isItemObject) {
           resultList.push(currentItemList);
