@@ -9,9 +9,8 @@ export const MixinsUtilityServices = {
      * @returns {*}
      */
     getArrayElementsFromFormula(formula) {
-      formula = this.handleSpecSymbolsInFormula(formula);
-      formula = this.getArrayOnFormulaElements(formula);
-      return formula;
+      let localFormula = this.handleSpecSymbolsInFormula(formula);
+      return this.getArrayOnFormulaElements(localFormula);
     },
     /**
      * преобразовывает полученные спецсимволы в обычные
@@ -19,10 +18,11 @@ export const MixinsUtilityServices = {
      * @returns {*}
      */
     handleSpecSymbolsInFormula(formula) {
+      let localFormula = formula;
       this.getSpecSymbols?.forEach((specItem) => {
-        formula = formula?.toString()?.replaceAll(specItem[0], specItem[1]);
+        localFormula = localFormula?.toString()?.replaceAll(specItem[0], specItem[1]);
       });
-      return formula;
+      return localFormula;
     },
     /**
      * преобразовывает формулу в массив
@@ -97,14 +97,13 @@ export const MixinsUtilityServices = {
      */
     getSummaFreeVariablesInFormula(dataList) {
       return dataList.reduce((sum, item) => {
-        if (
-          item?.cost !== null &&
-          !item.excludeFromCalculations &&
-          item.isShow
-        ) {
-          return sum + parseFloat(item.cost);
+        const isAllowSummingCost = item?.cost !== null && !item.excludeFromCalculations && item.isShow;
+
+        if (isAllowSummingCost) {
+          sum += parseFloat(item.cost);
+          return sum;
         }
-        return sum + 0;
+        return sum;
       }, 0);
     },
     /**
@@ -115,6 +114,7 @@ export const MixinsUtilityServices = {
     parsingDataInFormulaOnSumma(dataListVariables) {
       return dataListVariables?.reduce((resultText, item) => {
         const isExistCost = item?.cost && typeof item?.cost === "number";
+
         if (isExistCost) {
           resultText += item.cost.toString();
           return resultText;

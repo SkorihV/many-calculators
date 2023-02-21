@@ -3313,7 +3313,7 @@
         "isCurrency": false,
         "onlyInteger": false,
         "formOutputMethod": "no",
-        "elementName": "test",
+        "elementName": "null",
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiInput",
