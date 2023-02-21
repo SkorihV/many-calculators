@@ -9,9 +9,7 @@
       :key="index + '_' + inx"
     >
       <templates-wrapper-for-duplicator
-        v-if="
-          ['UiAccordion', 'UiTab', 'UiBisection'].includes(template?.template)
-        "
+        v-if="isStructureTemplate(template?.template)"
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
@@ -105,6 +103,7 @@ export default {
       mutationsInputData: null,
       regExpStringSplitFormula:
         /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
+      nameTemplatesForStructure: ['UiAccordion', 'UiTab', 'UiBisection'],
     };
   },
   methods: {
@@ -144,39 +143,38 @@ export default {
     },
     updateInputData(data, index) {
       let mutationsData = JSON.parse(JSON.stringify(data));
-      mutationsData.index = this.index + index;
 
-      mutationsData.parentDuplicator = this.parentName;
-
-      mutationsData.formula = this.mutationFormulaResult;
-      mutationsData.isDuplicate = true;
-
-      mutationsData = this.updateIndexElementsInDuple(mutationsData, index);
+      mutationsData.parentDuplicator  = this.parentName;
+      mutationsData.isDuplicate       = true;
+      mutationsData.formula           = this.mutationFormulaResult;
+      mutationsData.index             = this.index + index;
+      mutationsData                   = this.updateIndexElementsInDuple(mutationsData, index);
 
       return mutationsData;
     },
     updateIndexElementsInDuple(object, index) {
       for (let prop in object) {
-        if (typeof object[prop] === "object") {
+        const propIsElementNameField  = prop === "elementName";
+        const propIsDependencyField   = (prop === "dependencyFormulaDisplay" || prop === "dependencyFormulaCost" || prop === "dependencyFormulaItem") && object[prop].length;
+        const propIsSecondField       = prop === "labelSecond";
+        const propIsLabelField        = prop === "label";
+        const propIsObject            = typeof object[prop] === "object";
+
+        if (propIsObject) {
           object[prop] = this.updateIndexElementsInDuple(object[prop], index);
-        } else if (prop === "elementName") {
+        } else if (propIsElementNameField) {
           object[prop] = this.updateNameItem(object, index);
-        } else if (prop === "label") {
+        } else if (propIsLabelField) {
           object[prop] =
             object[prop]?.length && index > 0
               ? object[prop] + " ( " + index + " )"
               : object[prop];
-        } else if (prop === "labelSecond") {
+        } else if (propIsSecondField) {
           object[prop] =
             object[prop]?.length && index > 0
               ? object[prop] + " ( " + index + " )"
               : object[prop];
-        } else if (
-          (prop === "dependencyFormulaDisplay" ||
-            prop === "dependencyFormulaCost" ||
-            prop === "dependencyFormulaItem") &&
-          object[prop].length
-        ) {
+        } else if (propIsDependencyField) {
           object[prop] = this.addIndexIndexInFormulaElements(
             object[prop],
             index
@@ -201,13 +199,20 @@ export default {
      */
     addIndexIndexInFormulaElements(formulaString, index) {
       return this.getArrayElementsFromFormula(formulaString).map((item) => {
-        const isFind = !Boolean(item.match(this.regExpStringSplitFormula));
-        if (isFind && this.originVariables.includes(item)) {
+        if (this.isAllowedAddIndex(item)) {
           item = item + "_" + index;
         }
         return item;
       });
     },
+    isAllowedAddIndex(item) {
+      const isFound = !Boolean(item.match(this.regExpStringSplitFormula));
+      const isFoundVariableInOriginVariables = this.originVariables.includes(item);
+      return isFound && isFoundVariableInOriginVariables;
+    },
+    isStructureTemplate(templateName) {
+      return this.nameTemplatesForStructure.includes(templateName)
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -232,26 +237,14 @@ export default {
      * @returns {*}
      */
     listGlobalsVariables() {
-      return this.variablesInFormula.filter((item) => {
-        return (
-          !this.originVariables.includes(item) &&
-          !Boolean(item.match(this.regExpStringSplitFormula)) &&
-          item !== this.getNameReserveVariable
-        );
-      });
+      return this.variablesInFormula.filter((item) => !this.originVariables.includes(item) && !Boolean(item.match(this.regExpStringSplitFormula)) && item !== this.getNameReserveVariable);
     },
     /**
      * Список локальных переменных используемых в формуле
      * @returns {*}
      */
     listLocalVariablesUsedInFormula() {
-      return this.variablesInFormula
-        .filter(
-          (item) =>
-            !Boolean(item.match(this.regExpStringSplitFormula)) &&
-            item !== this.getNameReserveVariable
-        )
-        .filter((item) => !this.listGlobalsVariables.includes(item));
+      return this.variablesInFormula.filter((item) => !Boolean(item.match(this.regExpStringSplitFormula)) && item !== this.getNameReserveVariable && !this.listGlobalsVariables.includes(item))
     },
     /**
      * Список локальных переменных используемых в формуле c префиксом
@@ -262,7 +255,6 @@ export default {
         (item) => item + "_" + this.index
       );
     },
-
     /**
      * Список локальных переменных не используемых в формуле
      * @returns {*[]}
@@ -285,7 +277,6 @@ export default {
       });
       return localData;
     },
-
     /**
      * Сумма всех элементов не вошедших в формулу
      * @returns {unknown}
@@ -293,11 +284,9 @@ export default {
     resultSummaDataFriVariablesOutsideFormula() {
       return this.dataFreeVariablesOutsideFormula?.reduce(
         (reduceSumma, item) => {
-          if (
-            item.cost !== null &&
-            !item.excludeFromCalculations &&
-            item.isShow
-          ) {
+          const isAllowedSummation = item.cost !== null && !item.excludeFromCalculations && item.isShow;
+
+          if (isAllowedSummation) {
             return reduceSumma + parseFloat(item.cost);
           }
           return reduceSumma + 0;
@@ -312,8 +301,7 @@ export default {
      */
     attachIndexForFormulaElements() {
       return this.variablesInFormula.map((item) => {
-        const isFind = !Boolean(item.match(this.regExpStringSplitFormula));
-        if (isFind && this.originVariables.includes(item)) {
+        if (this.isAllowedAddIndex(item)) {
           item = item + "_" + this.index;
         }
         return item;
@@ -326,11 +314,14 @@ export default {
      */
     dataListVariablesOnFormula() {
       return this.attachIndexForFormulaElements?.map((item) => {
-        if (item === this.getNameReserveVariable) {
+        const isReserveVariable = item === this.getNameReserveVariable;
+        const isGlobalVariable = this.listGlobalsVariables.includes(item);
+
+        if (isReserveVariable) {
           return this.getProxyFreeVariables(
             this.resultSummaDataFriVariablesOutsideFormula
           );
-        } else if (this.listGlobalsVariables.includes(item)) {
+        } else if (isGlobalVariable) {
           return this.getResultElementOnName(item);
         } else {
           const data = Object.values(this.localResultData).filter(
@@ -361,21 +352,18 @@ export default {
         this.dataListVariablesOnFormula
       )
         .map((item) => {
-          if (!item?.name?.length) {
+          const nameIsNotExist = !item?.name?.length;
+          const isReserveVariable = item?.name === this.getNameReserveVariable;
+          const isAllowReturnLocalCost = this.listLocalVariablesUsedInFormulaForPrefix.includes(item.name) && this.localResultData[item.name]?.isShow && !item.excludeFromCalculations;
+          const isAllowReturnGlobalCost = this.listGlobalsVariables.includes(item.name) && this.getResultElementOnName(item.name)?.isShow && !item.excludeFromCalculations;
+
+          if (nameIsNotExist) {
             return item;
-          } else if (item.name === this.getNameReserveVariable) {
+          } else if (isReserveVariable) {
             return item.cost;
-          } else if (
-            this.listLocalVariablesUsedInFormulaForPrefix.includes(item.name) &&
-            this.localResultData[item.name]?.isShow &&
-            !item.excludeFromCalculations
-          ) {
+          } else if (isAllowReturnLocalCost) {
             return this.localResultData[item.name].cost;
-          } else if (
-            this.listGlobalsVariables.includes(item.name) &&
-            this.getResultElementOnName(item.name)?.isShow &&
-            !item.excludeFromCalculations
-          ) {
+          } else if (isAllowReturnGlobalCost) {
             return this.getResultElementOnName(item.name)?.cost;
           } else {
             return "null";
@@ -386,10 +374,9 @@ export default {
     },
 
     localCost() {
-      if (
-        typeof this.compileFormulaWitchData === "string" &&
-        this.compileFormulaWitchData?.includes("null")
-      ) {
+      const localCostIsNull = typeof this.compileFormulaWitchData === "string" && this.compileFormulaWitchData?.includes("null");
+
+      if (localCostIsNull) {
         return null;
       }
 
