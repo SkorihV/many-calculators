@@ -41,7 +41,7 @@ export const MixinsGeneralItemData = {
       );
     },
     /**
-     * Иницаилизировать проверку условий зависимых цен
+     * Инициализировать проверку условий зависимых цен
      *
      * @returns {boolean}
      */
@@ -54,50 +54,59 @@ export const MixinsGeneralItemData = {
      */
     devModeData() {
       if (this.devMode && this.showInsideElementStatus) {
-        const textLabel = `<div class="calc__dev-block-element">Заголовок элемента: ${this.label}</div>`;
-        const textElementName = `<div class="calc__dev-block-element">Имя элемента: ${this.elementName}</div>`;
-        const textDependencyFormula = this.dependencyFormulaDisplay?.length
-          ? `<div class="calc__dev-block-element"> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
-              this.dependencyFormulaDisplay
-            ).join(" ")}</div>`
-          : "";
-        const textDependencyFormulaBeforeProcessing = this
-          .parsingFormulaVariables?.length
-          ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
-          : "";
-        const textInfoVisibility = `<div class="calc__dev-block-element">Отображается: ${this.isVisibilityFromDependency}</div>`;
-
-        const textValue = `<div class="calc__dev-block-element">Значение элемента: ${
-          this.templateName === "UiInput" || this.templateName === "UiRange"
-            ? this.resultValue
-            : this.templateName === "UiRadio"
-            ? this.selectedValueInRadio
-            : this.templateName === "UiSelect"
-            ? this.currentOptionValue
-            : this.templateName === "UiCheckbox"
-            ? this.isLocalChecked
-            : null
-        }</div>`;
-
-        let textLocalCost = "";
-
-        if ("localCost" in this) {
-          textLocalCost = `<div>Текущая стоимость: ${this?.localCost}</div>`;
-        }
         return `
           <div class="calc__dev-block-wrapper">
-           ${textLabel}
-           ${textElementName}
-           ${textDependencyFormula}
-           ${textDependencyFormulaBeforeProcessing}
-            
-           ${textValue}
-           ${textInfoVisibility}
-
-           ${textLocalCost}
+           ${this.labelHtml}
+           ${this.elementNameHtml}
+           ${this.dependencyFormulaHtml}
+           ${this.dependencyFormulaBeforeProcessingHtml}
+           ${this.valueHtml}
+           ${this.infoVisibilityHtml}
+           ${this.localCostHtml}
           </div>`;
       }
       return false;
     },
+    elementValue() {
+     return this.templateName === "UiInput" || this.templateName === "UiRange"
+        ? this.resultValue
+        : this.templateName === "UiRadio"
+          ? this.selectedValueInRadio
+          : this.templateName === "UiSelect"
+            ? this.currentOptionValue
+            : this.templateName === "UiCheckbox"
+              ? this.isLocalChecked
+              : null;
+    },
+    labelHtml() {
+      return `<div class="calc__dev-block-element">Заголовок элемента: ${this.label}</div>`;
+    },
+    elementNameHtml() {
+      return `<div class="calc__dev-block-element">Имя элемента: ${this.elementName}</div>`;
+    },
+    dependencyFormulaHtml() {
+      return this.dependencyFormulaDisplay?.length
+        ? `<div class="calc__dev-block-element"> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
+          this.dependencyFormulaDisplay
+        ).join(" ")}</div>`
+        : "";
+    },
+    dependencyFormulaBeforeProcessingHtml() {
+      return this.parsingFormulaVariables?.length
+        ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
+        : "";
+    },
+    valueHtml() {
+      return `<div class="calc__dev-block-element">Значение элемента: ${this.elementValue}</div>`;
+    },
+    infoVisibilityHtml() {
+      return `<div class="calc__dev-block-element">Отображается: ${this.isVisibilityFromDependency}</div>`;
+    },
+    localCostHtml() {
+      if ("localCost" in this) {
+       return `<div>Текущая стоимость: ${this?.localCost}</div>`;
+      }
+      return "";
+    }
   },
 };
