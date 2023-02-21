@@ -24,6 +24,12 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      maxWidth: this.imageSettingsData?.maxWidth || 250,
+      maxHeight: this.imageSettingsData?.maxHeight || 250,
+    }
+  },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
     isBackgroundImage() {
@@ -68,11 +74,7 @@ export default {
     },
     styleBackgroundBehaviorImage() {
       let size = this.imageSettingsData?.fixedSize
-        ? (this.imageSettingsData?.maxWidth || 250) +
-          this.imageSettingsData?.unitSize +
-          " " +
-          (this.imageSettingsData?.maxHeight || 250) +
-          this.imageSettingsData?.unitSize
+        ? this.maxWidth + this.imageSettingsData?.unitSize + " " + this.maxHeight + this.imageSettingsData?.unitSize
         : this.imageSettingsData?.behaviorImage;
 
       return "background-size:" + size + ";";

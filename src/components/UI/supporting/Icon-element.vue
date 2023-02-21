@@ -36,21 +36,26 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      baseSizeIcon: 32,
+    }
+  },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
     imageDir() {
       return this.getImageDir;
     },
     width() {
-      let localValue = this.iconSettings?.maxWidth
+      const localValue = this.iconSettings?.maxWidth
         ? this.iconSettings?.maxWidth
-        : 32;
+        : this.baseSizeIcon;
       return "width:" + localValue + "px;";
     },
     height() {
-      let localValue = this.iconSettings?.maxWidth
-        ? this.iconSettings?.maxWidth
-        : 32;
+      const localValue = this.iconSettings?.maxHeight
+        ? this.iconSettings?.maxHeight
+        : this.baseSizeIcon;
       return "height:" + localValue + "px;";
     },
     showIcon() {

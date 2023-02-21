@@ -50,7 +50,7 @@ export const MixinsForProcessingFormula = {
             ? this.localDependencyList[item]
             : null;
 
-        const elementIsShow = elementDependency && elementDependency.isShow;
+        const elementIsShow = elementDependency && elementDependency?.isShow;
         const valueIsExist = !isNaN(
           parseFloat(elementDependency?.value) &&
             !Array.isArray(elementDependency?.value) &&
@@ -114,11 +114,12 @@ export const MixinsForProcessingFormula = {
       return result.changed ? result.cost : null;
     },
     /**
-     * Элемент от которого идет зависимость
+     * Существует ли элемент от которого идет зависимость
      * @returns {*|null}
      */
     isElementDependency(name) {
-      if (!name?.length && !this.globalDependenciesList) {
+      const elementIsNotExist = !name?.length && !this.globalDependenciesList;
+      if (elementIsNotExist) {
         return false;
       }
       return name in this.globalDependenciesList;
@@ -163,6 +164,7 @@ export const MixinsForProcessingFormula = {
             this.existLocalElementDependency(key) &&
             (newValue[key].value !== this.localDependencyList[key].value ||
               newValue[key].isShow !== this.localDependencyList[key].isShow);
+
           if (isUpdatedDependencyList) {
             this.localDependencyList[key] = newValue[key];
             isUpdated = true;
