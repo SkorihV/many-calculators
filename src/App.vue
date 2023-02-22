@@ -878,7 +878,7 @@ $c_color_error: #e80000;
     gap: 20px;
     align-items: center;
     font-weight: 900;
-    font-size: 20px;
+    font-size: 17px;
     line-height: 23px;
     text-transform: uppercase;
     cursor: pointer;
@@ -936,7 +936,7 @@ $c_color_error: #e80000;
       padding: 20px 35px;
       max-width: 304px;
       background: $c_background_default_light;
-      border: 2px solid $c_border_default;
+      border: 1px solid $c_border_default;
       text-align: center;
       @include style-border-radius;
       @media all and (max-width: 480px) {
@@ -1228,7 +1228,7 @@ $c_color_error: #e80000;
         position: relative;
         flex: 1 1 100%;
         border-radius: 9px;
-        border: 2px solid $c_border_default;
+        border: 1px solid $c_border_default;
         background-color: $c_background_default_light;
         &:hover {
           border-color: $c_border_hover;
@@ -1339,7 +1339,7 @@ $c_color_error: #e80000;
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 2px solid $c_border_default;
+          border: 1px solid $c_border_default;
           position: relative;
 
           &:after {
@@ -1370,7 +1370,7 @@ $c_color_error: #e80000;
       padding: 21px 35px;
       background-color: $c_background_default_light;
       @include style-border-radius;
-      border: 2px solid $c_border_default;
+      border: 1px solid $c_border_default;
       font-weight: 700;
       cursor: pointer;
       @include transition;
@@ -1495,7 +1495,7 @@ $c_color_error: #e80000;
         }
       }
       &-button {
-        border: 2px solid $c_border_default;
+        border: 1px solid $c_border_default;
         background-color: $c_background_default_light;
         padding: 20px 35px;
         font-weight: 700;
@@ -1529,7 +1529,7 @@ $c_color_error: #e80000;
           width: 24px;
           height: 24px;
           border-radius: 4px;
-          border: 2px solid $c_border_default;
+          border: 1px solid $c_border_default;
           position: relative;
           &:after {
             content: "";
@@ -1573,7 +1573,7 @@ $c_color_error: #e80000;
           position: relative;
           border-radius: 90px;
           background: $c_background_default_light;
-          border: 2px solid $c_border_default;
+          border: 1px solid $c_border_default;
           &:hover {
             border-color: $c_border_hover;
             &:not(.checked):before {
@@ -1591,7 +1591,7 @@ $c_color_error: #e80000;
             position: absolute;
           }
           &:not(.checked):before {
-            border: 2px solid $c_border_default;
+            border: 1px solid $c_border_default;
             background-color: $c_background_default_light;
             left: 5px;
             top: 50%;
@@ -1600,7 +1600,7 @@ $c_color_error: #e80000;
           &.checked {
             border-color: $c_border_selected;
             &:after {
-              border: 2px solid $c_border_selected;
+              border: 1px solid $c_border_selected;
               background-color: $c_background_selected;
               right: 5px;
               top: 50%;
@@ -1627,7 +1627,7 @@ $c_color_error: #e80000;
             top: 5px;
             left: 50%;
             transform: translate(-50%, 0);
-            border: 2px solid $c_border_selected;
+            border: 1px solid $c_border_selected;
           }
         }
       }
@@ -1648,7 +1648,7 @@ $c_color_error: #e80000;
       align-items: center;
       background-color: $c_background_selected;
       color: $c_color_text_default_light;
-      border: 2px solid $c_border_prompt_button;
+      border: 1px solid $c_border_prompt_button;
       border-radius: 50%;
       line-height: 20px;
       font-size: 12px;
@@ -1801,7 +1801,7 @@ $c_color_error: #e80000;
         min-height: 60px;
         margin-bottom: 11px;
         background-color: $c_background_default_light;
-        border: 2px solid $c_border_default;
+        border: 1px solid $c_border_default;
         cursor: pointer;
         @include style-border-radius;
         @include transition;
@@ -1863,7 +1863,7 @@ $c_color_error: #e80000;
       &-content {
         margin-top: -2px;
         width: 100%;
-        border: 2px solid $c_border_selected;
+        border: 1px solid $c_border_selected;
         border-bottom-left-radius: 9px;
         border-bottom-right-radius: 9px;
         border-top-color: transparent;
@@ -1934,7 +1934,7 @@ $c_color_error: #e80000;
       &-label {
         @include style-border-radius;
         background-color: $c_background_default_light;
-        border: 2px solid $c_border_default;
+        border: 1px solid $c_border_default;
         display: flex;
         align-items: center;
         padding: 19px 54px;
@@ -2334,7 +2334,7 @@ $c_color_error: #e80000;
       flex-direction: column;
       align-items: flex-start;
       padding: 10px;
-      border: 2px dotted gray;
+      border: 1px dotted gray;
       width: calc(100% - 30px);
       margin-bottom: 10px;
       background-color: #fff;
@@ -2505,7 +2505,8 @@ $c_color_error: #e80000;
     input {
       @include style-border-radius;
       outline: none;
-      border: 2px solid $c_border_default;
+      border-width: 2px;
+      border-style: solid;
       font-size: 16px;
       line-height: 20px;
       color: $c-color_text_default_dark;
@@ -2528,8 +2529,8 @@ $c_color_error: #e80000;
       color: $c-color_text_default_dark;
       padding: 20px 35px;
       outline: none;
-      border: 2px solid $c_border_default;
-      width: 100%;
+      border-width: 2px;
+      border-style: solid;
       &:focus,
       &:hover {
         border-color: $c_border_selected;
@@ -2544,13 +2545,14 @@ $c_color_error: #e80000;
       background-color: $c-background_hover_color;
       color: $c-color_text_default_light;
       font-weight: 900;
-      font-size: 20px;
+      font-size: 17px;
       line-height: 23px;
       display: flex;
       align-items: center;
       text-align: center;
       text-transform: uppercase;
       padding: 21px 25px;
+      border: none;
     }
   }
 }
