@@ -2411,7 +2411,6 @@ $c_color_error: #e80000;
       position: relative;
       width: 100px;
       height: 100px;
-
       &:before,
       &:after {
         content: "";
