@@ -108,6 +108,9 @@ export default {
   },
   methods: {
     changeValue(data) {
+      if (!data?.name) {
+        return null;
+      }
       this.localResultData[data.name] = data;
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,

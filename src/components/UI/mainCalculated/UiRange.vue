@@ -203,14 +203,14 @@ export default {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
     });
-    if (!this.$refs?.thisElement?.offsetWidth || !this.elementWidth) {
-      let timer = setInterval(() => {
-        if (this.$refs?.thisElement?.offsetWidth) {
-          this.updateWidthElements();
-          clearInterval(timer);
-        }
-      }, 1000);
-    }
+
+    let timer = setInterval(() => {
+      if (this.$refs?.thisElement?.offsetWidth || this.elementWidth) {
+        this.updateWidthElements();
+        clearInterval(timer);
+      }
+    }, 500);
+
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.elementName, true);
     }, 200);

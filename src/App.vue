@@ -1081,6 +1081,9 @@ $c_color_error: #e80000;
         height: 30px;
         position: relative;
         margin-top: 14px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
         @media all and (max-width: 480px) {
           display: none;
         }
