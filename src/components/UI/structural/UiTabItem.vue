@@ -7,7 +7,7 @@
     <div
       class="calc__tab-item-content"
       v-for="(template, key_in) in tabItem?.templates"
-      :style="{ maxWidth: tabItem?.maxWidthSide + '%' }"
+      :style="{ maxWidth: divideWidthElement }"
       :key="key_in"
     >
       <templates-wrapper
@@ -33,6 +33,12 @@ export default {
   name: "UiTabItem",
   components: { BackgroundImageElement, TemplatesWrapper },
   emits: ["changedValue"],
+  mounted() {
+    this.currentWidthContent = document.body.clientWidth;
+    window.addEventListener("resize", () => {
+      this.currentWidthContent = document.body.clientWidth;
+    })
+  },
   props: {
     tabItem: {
       type: Object,
@@ -55,6 +61,7 @@ export default {
     return {
       errorsElements: new Set(),
       visibilityList: new Set(),
+      currentWidthContent: 1920
     };
   },
   methods: {
@@ -69,6 +76,9 @@ export default {
     },
     itemName() {
       return this.tabName + "_" + this.elementName;
+    },
+    divideWidthElement() {
+      return this.currentWidthContent > 1024 ? this.tabItem?.maxWidthSide + '%' : "100%";
     },
   },
 };

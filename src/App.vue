@@ -909,6 +909,7 @@ $c_color_error: #e80000;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
 
       &.is-column {
         flex-direction: column;

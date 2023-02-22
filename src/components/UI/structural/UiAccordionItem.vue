@@ -43,7 +43,7 @@
     />
     <div
       class="calc__accordion-item-content-wrapper"
-      :style="{ maxWidth: accordionItem?.maxWidthSide + '%' }"
+      :style="{ maxWidth: divideWidthElement}"
     >
       <templates-wrapper
         v-for="(template, key_in) in accordionItem?.templates"
@@ -79,6 +79,12 @@ export default {
     TemplatesWrapper,
   },
   emits: ["changedValue"],
+  mounted() {
+    this.currentWidthContent = document.body.clientWidth;
+    window.addEventListener("resize", () => {
+      this.currentWidthContent = document.body.clientWidth;
+    })
+  },
   props: {
     accordionItem: {
       type: Object,
@@ -104,6 +110,7 @@ export default {
       errorsElements: new Set(),
       visibilityList: new Set(),
       hoverElement: null,
+      currentWidthContent: 1920,
     };
   },
   methods: {
@@ -166,6 +173,9 @@ export default {
       return this.localListValidationError?.filter((item) => !item.isShow)
         .length;
     },
+    divideWidthElement() {
+      return this.currentWidthContent > 1024 ? this.accordionItem?.maxWidthSide + '%' : "100%";
+    }
   },
 };
 </script>
