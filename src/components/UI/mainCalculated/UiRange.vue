@@ -53,8 +53,7 @@
             class="calc__range-current-dynamic"
             v-if="showDynamicValue"
             type="text"
-            @input="changeDynamicValue"
-            :value="resultValue"
+            v-model="dynamicValue"
             @keydown.up="plus"
             @keydown.down="minus"
           />
@@ -63,7 +62,6 @@
           </div>
         </div>
       </div>
-
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
@@ -179,6 +177,7 @@ export default {
       let timer = setInterval(() => {
         if (this.checkedValueOnVoid(this.rangeValue)) {
           this.resultValue = parseFloat(this.rangeValue);
+          this.dynamicValue = parseFloat(this.rangeValue);
           this.changeValue("mounted");
           clearInterval(timer);
         }
@@ -220,6 +219,7 @@ export default {
     return {
       elementWidth: 0,
       resultValue: null,
+      dynamicValue: null,
       textErrorNotEmpty: "Обязательное поле.",
       updateValueTimer: null,
       canBeShownTooltip: false,
@@ -229,29 +229,28 @@ export default {
   methods: {
     changeValueStep(step) {
       this.resultValue = this.checkValidValueReturnNumber(step);
-      this.changeValue();
-      this.shownTooltip();
+      this.changeValue("changeValueStep");
     },
     tryChangeValue(e) {
-      this.updateWidthElements();
       clearTimeout(this.timerNameForLocalValue);
       this.resultValue = this.checkValidValueReturnNumber(e.target.value);
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue();
-        this.shownTooltip();
       }, 500);
     },
-    changeDynamicValue(e) {
-      this.$nextTick(() => {
-        this.resultValue = this.checkValidValueReturnNumber(e.target.value);
-        this.changeValue();
-        this.shownTooltip();
-      });
+    changeDynamicValue() {
+      this.resultValue = this.dynamicValue;
+      clearTimeout(this.timerNameForLocalValue);
+      this.timerNameForLocalValue = setTimeout(() => {
+        this.changeValue("changeDynamicValue");
+      }, 500);
+
     },
     checkValidValueReturnNumber(checkedValue) {
       let value = !isNaN(parseFloat(checkedValue))
         ? parseFloat(checkedValue)
         : null;
+
       if (value > this.localMax) {
         value = this.localMax;
       }
@@ -259,12 +258,10 @@ export default {
       if (value < this.localMin) {
         value = this.localMin;
       }
-
       return value;
     },
     changeValue(eventType = "input") {
       this.updateWidthElements();
-      this.resultValue = this.checkValidValueReturnNumber(this.resultValue);
       this.$emit("changedValue", {
         value: this.isVisibilityFromDependency ? this.resultValue : null,
         displayValue: this.isVisibilityFromDependency ? this.resultValue : null,
@@ -284,6 +281,7 @@ export default {
       });
       this.tryPassDependency();
       this.changeValid(eventType);
+      this.shownTooltip();
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
@@ -318,18 +316,14 @@ export default {
         : null;
     },
     plus() {
-      this.resultValue = this.checkValidValueReturnNumber(
-        this.resultValue + this.localStep
+      this.dynamicValue = this.checkValidValueReturnNumber(
+        this.dynamicValue + this.localStep
       );
-      this.changeValue("plus");
-      this.shownTooltip();
     },
     minus() {
-      this.resultValue = this.checkValidValueReturnNumber(
-        this.resultValue - this.localStep
+      this.dynamicValue = this.checkValidValueReturnNumber(
+        this.dynamicValue - this.localStep
       );
-      this.changeValue("minus");
-      this.shownTooltip();
     },
     updateWidthElements() {
       if (
@@ -360,6 +354,17 @@ export default {
       }
       this.changeValue("dependency");
     },
+    dynamicValue(newValue) {
+      this.dynamicValue = this.checkValidValueReturnNumber(newValue);
+      if (this.resultValue !== this.dynamicValue) {
+        this.changeDynamicValue();
+      }
+    },
+    resultValue(newValue) {
+      if(newValue !== this.dynamicValue) {
+        this.dynamicValue = newValue;
+      }
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -461,8 +466,8 @@ export default {
       return (this.localMax - this.localMin) / this.localStepPrompt;
     },
     pointsForStepsLine() {
-      let rightShiftElementWidth = 21;
-      let firstPointPosition = 12;
+      const rightShiftElementWidth = 21;
+      const firstPointPosition = 12;
       let points = [];
       const width = this.elementWidth - rightShiftElementWidth;
 

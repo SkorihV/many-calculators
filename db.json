@@ -1231,7 +1231,7 @@
     "methodProcessingMistakes": "useButton",
     "currency": "руб",
     "form": "7981901",
-    "devMode": 1,
+    "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
     "computedMethod": "formula",
     "tooltipOff": false,
