@@ -131,8 +131,6 @@ export default {
       "isColumn",
       "isNeedChoice",
       "formOutputMethod",
-      "maxWidth",
-      "maxHeight",
       "dependencyFormulaDisplay",
       "parentIsShow",
       "label",

@@ -11,7 +11,7 @@
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
       </div>
-      <div class="calc__select-change-wrapper" :class="{ error: isErrorClass }">
+      <div class="calc__select-change-wrapper" ref="changeElement" :style="[maxWidthSettings]" :class="{ error: isErrorClass }">
         <div
           v-if="currentOption"
           class="calc__select-change-item"
@@ -32,7 +32,7 @@
           />
           <div class="calc__select-arrow"></div>
         </div>
-        <div class="calc__select-option-wrapper" v-if="isOpen">
+        <div class="calc__select-option-wrapper" :style="[maxWidthSettings]" ref="optionList" v-show="isOpen">
           <template
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
             :key="idx"
@@ -157,8 +157,6 @@ export default {
       "templateName",
       "parentIsShow",
       "dependencyFormulaDisplay",
-      "maxWidth",
-      "maxHeight",
       "positionElement",
       "zeroValueDisplayIgnore",
     ]),
@@ -176,6 +174,7 @@ export default {
       localSelectValues: [],
       canBeShownTooltip: false,
       hoverElementIndex: null,
+      maxWidthSelectList: null,
     };
   },
   methods: {
@@ -268,7 +267,7 @@ export default {
     },
   },
   watch: {
-    selectedItem(newValue) {
+    selectedItem() {
       this.currentIndexOption =
         this.checkedValueOnVoid(this.newValue) &&
         parseInt(this.newValue) < this.localSelectValues.length
@@ -289,34 +288,43 @@ export default {
           }
         });
       }
-    },
-
-    amountVisibleSelects() {
-      let length = this.selectValuesAfterProcessingDependency.length;
-      if (!this.currentOption) {
-        return null;
-      }
-      for (let i = 0; i < length; i++) {
-        if (
-          this.selectValuesAfterProcessingDependency[i].value ===
-            this.currentOptionValue &&
-          this.currentOption.isShow
-        ) {
-          return;
-        }
-      }
-
-      for (let i = 0; i < length; i++) {
-        if (this.selectValuesAfterProcessingDependency[i].isShow) {
-          this.changeSelect(
-            this.selectValuesAfterProcessingDependency[i],
-            i,
-            "changeAmountSelectList"
-          );
-          return;
-        }
+      if (newValue) {
+        this.$nextTick(() => {
+          if ( this.$refs.optionList.offsetWidth > this.$refs.changeElement.offsetWidth) {
+            this.maxWidthSelectList = this.$refs.optionList.offsetWidth;
+          } else {
+            this.maxWidthSelectList = this.$refs.changeElement.offsetWidth;
+          }
+        })
       }
     },
+
+    // amountVisibleSelects() {
+    //   let length = this.selectValuesAfterProcessingDependency.length;
+    //   if (!this.currentOption) {
+    //     return null;
+    //   }
+    //   for (let i = 0; i < length; i++) {
+    //     if (
+    //       this.selectValuesAfterProcessingDependency[i].value ===
+    //         this.currentOptionValue &&
+    //       this.currentOption.isShow
+    //     ) {
+    //       return;
+    //     }
+    //   }
+    //
+    //   for (let i = 0; i < length; i++) {
+    //     if (this.selectValuesAfterProcessingDependency[i].isShow) {
+    //       this.changeSelect(
+    //         this.selectValuesAfterProcessingDependency[i],
+    //         i,
+    //         "changeAmountSelectList"
+    //       );
+    //       return;
+    //     }
+    //   }
+    // },
     isVisibilityFromDependency() {
       this.changeValue("dependency");
     },
@@ -330,11 +338,12 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-    amountVisibleSelects() {
-      return this.selectValuesAfterProcessingDependency.filter(
-        (item) => item.isShow
-      ).length;
-    },
+
+    // amountVisibleSelects() {
+    //   return this.selectValuesAfterProcessingDependency.filter(
+    //     (item) => item.isShow
+    //   ).length;
+    // },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
     },
@@ -451,6 +460,9 @@ export default {
         }
       });
     },
+    maxWidthSettings() {
+      return this.maxWidthSelectList ? "max-width:" + this.maxWidthSelectList + "px;" + "width : 100%;" : null;
+    }
   },
 };
 </script>

@@ -796,12 +796,12 @@ $c_decor_text_default: #000000;
 $c_decor_text_hover: #ff5e00;
 $c_decor_text_selected: #ffffff;
 
-$c_decor_bg_color: #f5f5f5;
-$c_decor_bg_color_hover: #fabeab;
+$c_decor_bg_color: #f9f9f9;
+$c_decor_bg_color_hover: #ffffff;
 $c_decor_bg_color_selected: #ff6531;
 
 $c_decor_border_color:  #ff6531;
-$c_decor_border_color_hover: #c2c2c2;
+$c_decor_border_color_hover: #ff6531;
 $c_decor_border_color_selected: #ff6531;
 $c_decor_border_radius: 9px;
 $c_decor_border_width: 2px;
@@ -823,12 +823,12 @@ $c_element_text_default: #000000;
 $c_element_text_hover: #ff5e00;
 $c_element_text_selected: #fff;
 
-$c_element_bg_color: #f5f5f5;
-$c_element_bg_color_hover: #fabeab;
+$c_element_bg_color: #f9f9f9;
+$c_element_bg_color_hover: #f9f9f9;
 $c_element_bg_color_selected: #ff6531;
 
-$c_element_border_color: #ff6531;
-$c_element_border_color_hover: #6e6e6e;
+$c_element_border_color: #e8e8e8;
+$c_element_border_color_hover: #ff6531;
 $c_element_border_color_selected: #ff6531;
 $c_element_border_radius: 9px;
 $c_element_border_width: 1px;
@@ -1157,9 +1157,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-wrapper {
         display: flex;
         align-items: center;
-        height: 30px;
+        height: 22px;
         position: relative;
-        margin-top: 14px;
+        margin-top: 11px;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
@@ -1173,7 +1173,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
         &-value {
           font-size: 14px;
-          line-height: 1px;
+          line-height: 14px;
           color: $c_element_text_default;
           position: absolute;
           z-index: 10;
@@ -1190,7 +1190,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           left: 50%;
           transform: translateX(-50%);
           height: 10px;
-          bottom: calc(100% + 7px);
+          bottom: calc(100% + 2px);
         }
         &_selected {
           .calc__range-steps-item-value {
@@ -1319,6 +1319,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         line-height: 16px;
         position: relative;
         flex: 1 1 100%;
+        min-width: 30%;
         &.error {
           .calc__select-change-item {
             border-color: $c_base_error_color;
@@ -1378,13 +1379,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         border-bottom-left-radius: $c_element_border-radius;
         border-bottom-right-radius: $c_element_border-radius;
         z-index: 99;
-        width: 100%;
         left: 50%;
+        overflow: hidden;
         transform: translateX(-50%);
         border-left: $c_element_border_width solid $c_element_border_color_selected;
         border-right: $c_element_border_width solid $c_element_border_color_selected;
         border-bottom: $c_element_border_width solid $c_element_border_color_selected;
-        overflow: hidden;
         .calc__select-image-wrapper {
           margin: 5px;
         }
@@ -1400,6 +1400,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         text-align: start;
         padding: 10px 40px;
         cursor: pointer;
+        width: 100%;
         &-text {
           font-weight: 400;
           font-size: 16px;
