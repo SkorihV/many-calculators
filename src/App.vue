@@ -769,6 +769,12 @@ export default {
 //$c_base_error_border            : var(--c_base_error_border);
 //$c_base_error_border_radius     : var(--c_base_error_border_radius);
 //$c_base_error_border_width      : var(--c_base_error_border_width);
+//
+//$c_base_button_text_color        : var(--c_base_button_text_color);
+//$c_base_button_bg                : var(--c_base_button_bg);
+//$c_base_button_border            : var(--c_base_button_border);
+//$c_base_button_border_radius     : var(--c_base_button_border_radius);
+//$c_base_button_border_width      : var(--c_base_button_border_width);
 
 
 $c_base_title: #000000;
@@ -777,6 +783,12 @@ $c_base_error_bg: #f5f5f5;
 $c_base_error_border: #e80000;
 $c_base_error_border_radius: 9px;
 $c_base_error_border_width: 2px;
+
+$c_base_button_text_color: #000000;
+$c_base_button_bg: #f9f9f9;
+$c_base_button_border: #ff6531;
+$c_base_button_border_radius: 9px;
+$c_base_button_border_width: 2px;
 
 
 //$c_decor_text_default           : var(--c_decor_text_default);
@@ -818,6 +830,8 @@ $c_decor_border_width: 2px;
 //$c_element_border_color_selected   : var(--c_element_border_color_selected);
 //$c_element_border_radius           : var(--c_element_border_radius);
 //$c_element_border_width            : var(--c_element_border_width);
+//$c_element_input_color             : var(--c_element_input_color);
+//$c_element_range_color             : var(--c_element_range_color);
 
 $c_element_text_default: #000000;
 $c_element_text_hover: #ff5e00;
@@ -832,6 +846,9 @@ $c_element_border_color_hover: #ff6531;
 $c_element_border_color_selected: #ff6531;
 $c_element_border_radius: 9px;
 $c_element_border_width: 1px;
+
+$c_element_input_color: #bebebe;
+$c_element_range_color: #bebebe;
 
 //$c_prompt_popup_text                : var(--c_prompt_popup_text);
 //$c_prompt_popup_border              : var(--c_prompt_popup_border);
@@ -930,8 +947,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   }
   &__show-result-btn {
     padding: 21px 70px;
-    background-color: $c_decor_bg_color_selected;
-    color: $c_decor_text_selected;
+    background-color: $c_base_button_bg;
+    color: $c_base_button_text_color;
+    border: $c_base_button_border_width solid $c_base_button_border;
     align-self: center;
     display: flex;
     gap: 20px;
@@ -941,11 +959,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     line-height: 23px;
     text-transform: uppercase;
     cursor: pointer;
-    border: none;
     @include style-decor-border-radius ;
     &:hover {
-      background-color: $c_decor_bg_color_hover;
-      color: $c_decor_text_hover;
+      background-color: $c_decor_bg_color_selected;
+      color: $c_decor_text_selected;
+      border-color: $c_decor_border_color_selected;
     }
     @media all and (max-width: 480px) {
       padding: 11px 50px;
@@ -995,7 +1013,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       line-height: 20px;
       padding: 20px 35px;
       max-width: 304px;
-      background: $c_element_bg_color;
+      background: $c_element_input_color;
       color: $c_element_text_default;
       border: $c_element_border-width solid $c_element_border_color;
       text-align: center;
@@ -1106,13 +1124,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
 
       &::-webkit-slider-runnable-track {
-        background-color: $c_element_bg_color;
+        background-color: $c_element_range_color;
         height: 8px;
         border-radius: 90px;
       }
 
       &::-moz-range-track {
-        background-color: $c_element_bg_color;
+        background-color: $c_element_range_color;
         height: 8px;
         border-radius: 90px;
       }
@@ -1123,7 +1141,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c_element_bg_color;
+        background-color: $c_element_range_color;
         border: 4px solid $c_element_border_color;
         box-shadow: 0 7px 11px -4px $c_element_border_color;
         margin-top: -10px;
@@ -1141,7 +1159,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c_element_bg_color;
+        background-color: $c_element_range_color;
         border: 4px solid $c_element_border_color;
         box-shadow: 0 7px 11px -4px $c_element_border_color;
         margin-top: -16px;
@@ -1255,7 +1273,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         right: 0;
         border: none;
         color: $c_element_text_default;
-        background-color: $c_element_bg_color;
+        background-color: $c_element_range_color;
         text-align: center;
         border-radius: $c_element_border_radius;
         &:hover {
