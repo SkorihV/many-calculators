@@ -26,6 +26,7 @@
       <ui-prompt
         v-if="accordionItem?.prompt?.length"
         :prompt-text="accordionItem.prompt"
+        classes="decor"
       />
     </div>
     <div class="calc__accordion-item-plus" v-if="!isOpen"></div>

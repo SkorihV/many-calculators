@@ -41,7 +41,7 @@
               <div class="calc__tab-item-label-sub">{{ item?.sublabel }}</div>
             </div>
           </icon-element-wrapper>
-          <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" />
+          <ui-prompt v-if="item?.prompt?.length" :prompt-text="item.prompt" classes="decor"/>
           <ui-tooltip
             :is-show="
               checkIsShowError(

@@ -7,6 +7,7 @@
   >
     <div
       class="calc__prompt-button"
+      :class="classes"
       @mouseenter="show"
       @click="show"
       ref="promptBtn"
@@ -40,6 +41,9 @@ export default {
     promptText: {
       type: String,
     },
+    classes: {
+      type: String
+    }
   },
   data() {
     return {

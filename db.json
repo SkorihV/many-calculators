@@ -3733,5 +3733,722 @@
         "dependencyPrices": null
       }
     ]
+  },
+
+
+  "test-color-options": {
+    "formula": "",
+    "methodProcessingMistakes": "useButton",
+    "currency": "руб",
+    "form": "7981901",
+    "devModeEnabled": 1,
+    "title": "Калькулятор фундамента ( конструктор )",
+    "computedMethod": "linear",
+    "tooltipOff": false,
+    "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
+    "resultOptions": {
+      "title": "Результаты расчета:",
+      "subtitle": "Расчет приблизительный, за точным расчетом обратитесь к нашему специалисту!",
+      "titleButton": "Рассчитать",
+      "titleSumma": "ИТОГО:",
+      "showResultDataForBlock": 1
+    }
+  },
+
+  "test-color": {
+    "calculatorTemplates": [
+      {
+        "json_id": "65498107",
+        "meta_id": "49173306",
+        "ver_id": "2422030",
+        "title": "Input - для цветовых настроек",
+        "label": "Заголовок блока",
+        "value": "10",
+        "placeholder": "",
+        "cost": "",
+        "unit": "м2",
+        "min": "10",
+        "max": "100",
+        "controls": 1,
+        "step": "1",
+        "discreteStep": 1,
+        "notEmpty": 1,
+        "onlyNumber": 1,
+        "isCurrency": false,
+        "onlyInteger": 1,
+        "isColumn": false,
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": null,
+        "prompt": "подсказка"
+      },
+      {
+        "json_id": "65498907",
+        "meta_id": "49242506",
+        "ver_id": "2422030",
+        "title": "Checkbox - для цветовых настроек 1",
+        "type_group_id": "2",
+        "label": "Заголовок блока",
+        "buttonText": "Кнопка",
+        "buttonTextChecked": "Кнопка активная",
+        "cost": "100",
+        "value": false,
+        "isNeedChoice": 1,
+        "isChecked": false,
+        "isColumn": 1,
+        "typeDisplayClass": "base",
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": ""
+      },
+      {
+        "json_id": "65501107",
+        "meta_id": "49242506",
+        "ver_id": "2422030",
+        "title": "Checkbox  - для цветовых настроек 2",
+        "label": "Заголовок",
+        "buttonText": "кнопка",
+        "buttonTextChecked": "Кнопка активная",
+        "cost": "122",
+        "value": false,
+        "isNeedChoice": false,
+        "isChecked": false,
+        "isColumn": 1,
+        "typeDisplayClass": "switcher",
+        "formOutputMethod": "no",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "подсказка"
+      },
+      {
+        "json_id": "65501507",
+        "meta_id": "49242506",
+        "ver_id": "2422030",
+        "title": "Checkbox  - для цветовых настроек 3",
+        "label": "Заголовок",
+        "buttonText": "Текст кнопки",
+        "buttonTextChecked": "Активная кнопка",
+        "cost": "34",
+        "value": false,
+        "isNeedChoice": false,
+        "isChecked": false,
+        "isColumn": 1,
+        "typeDisplayClass": "switcher-vertical",
+        "formOutputMethod": "summ",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "фыв"
+      },
+      {
+        "json_id": "65501707",
+        "meta_id": "49242506",
+        "ver_id": "2422030",
+        "title": "Checkbox - для цветовых настроек 4",
+        "label": "Заголовок блока",
+        "buttonText": "Мансарда",
+        "buttonTextChecked": "Мансарда 33",
+        "cost": "100",
+        "value": false,
+        "isNeedChoice": false,
+        "isChecked": false,
+        "isColumn": 1,
+        "typeDisplayClass": "button",
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "фыв фыв&nbsp;",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65503907",
+        "meta_id": "49253706",
+        "ver_id": "2422030",
+        "title": "Radio - для цветовых настроек",
+        "label": "Заголовок блока",
+        "selectedItem": "0",
+        "isColumn": 1,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "base",
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "Пункт 1",
+            "radioName": "пункт 1",
+            "subradioName": "подзаголовок кнопки",
+            "cost": 12,
+            "prompt": "фв фыв&nbsp;"
+          },
+          {
+            "title": "пункт 2",
+            "radioName": "пункт 1",
+            "subradioName": "подзаголовок кнопки",
+            "cost": 4
+          }
+        ],
+        "prompt": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65505707",
+        "meta_id": "49258306",
+        "ver_id": "2422030",
+        "title": "Range - для цветовых настроек",
+        "type_group_id": "4",
+        "label": "Заголовок",
+        "value": "5",
+        "min": "3",
+        "max": "100",
+        "cost": "34",
+        "unit": "м2",
+        "step": "1",
+        "showSteps": 1,
+        "stepPrompt": "15",
+        "isNeedChoice": 1,
+        "notEmpty": false,
+        "showStaticValue": 1,
+        "showDynamicValue": 1,
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRange",
+        "dependencyPrices": null,
+        "prompt": "54353е",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65506107",
+        "meta_id": "49558906",
+        "ver_id": "2422030",
+        "title": "Select - для цветовых настроек",
+        "label": "Длинна",
+        "isColumn": 1,
+        "selectedItem": "0",
+        "isNeedChoice": true,
+        "notEmpty": true,
+        "formOutputMethod": "summ",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Название пункта:",
+            "selectName": "Название пункта: 1",
+            "cost": 32,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689413907",
+                "filename": "fence2_1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689007507",
+                "filename": "barn1.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 45,
+              "maxHeight": 65,
+              "location": "leftSide"
+            },
+            "prompt": "gdfgdfg"
+          },
+          {
+            "title": "Название",
+            "selectName": "Название 43",
+            "cost": 43,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689303707",
+                "filename": "fence2.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689303507",
+                "filename": "fence3.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Название пункта 453:",
+            "selectName": "Назв3434 ",
+            "cost": 32,
+            "prompt": "gdfgdfg"
+          },
+          {
+            "title": "Назв4343ание пунк345та 453:",
+            "selectName": "Назв3434 ",
+            "cost": 32,
+            "prompt": "gdfgdfg"
+          }
+        ],
+        "prompt": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65506707",
+        "meta_id": "52409506",
+        "ver_id": "2422030",
+        "title": "Аккордеон - для цветовых настроек",
+        "label": "Заголовок над блоком аккордеона:",
+        "items": [
+          {
+            "json_id": "65506507",
+            "meta_id": "52495306",
+            "ver_id": "2422030",
+            "title": "Вкладка - Заголовок вкладки 1:",
+            "label": "Заголовок вкладки 1:",
+            "sublabel": "Подзаголовок вкладки:",
+            "templates": [
+              {
+                "json_id": "243632706",
+                "meta_id": "59413906",
+                "ver_id": "2422030",
+                "title": "Окна Цвет",
+                "label": "Цвет",
+                "isColumn": false,
+                "selectedItem": "0",
+                "isNeedChoice": false,
+                "notEmpty": false,
+                "formOutputMethod": "value",
+                "excludeFromCalculations": false,
+                "elementName": "цвет",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiSelect",
+                "values": [
+                  {
+                    "title": "Белый",
+                    "selectName": "Белый",
+                    "cost": 263
+                  },
+                  {
+                    "title": "Цветной",
+                    "selectName": "Цветной",
+                    "cost": 653
+                  },
+                  {
+                    "title": "Цветной 2",
+                    "selectName": "Цветной 2",
+                    "cost": 653
+                  }
+                ],
+                "prompt": "",
+                "parent": "0;52409506;52495306;"
+              }
+            ],
+            "maxWidthSide": "100",
+            "prompt": "23423",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689303707",
+                "filename": "fence2.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689303507",
+                "filename": "fence3.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "location": "rightSide"
+            },
+            "backgroundImageSettings": {
+              "title": "",
+              "image": {
+                "image_id": "615170707",
+                "filename": "qwqe2_icon_wooden_pier_view_from_afar_sketchy_few_details_black_3ff45d35-c304-4a0c-9489-21cd510b20cf.png",
+                "ver_id": 2422030,
+                "image_width": "1024",
+                "image_height": "1024",
+                "ext": "png"
+              },
+              "backgroundHorizontalPosition": "right",
+              "backgroundVerticalPosition": "bottom",
+              "backgroundRepeat": "no-repeat",
+              "behaviorImage": "contain",
+              "unitSize": "px",
+              "opacitySubstrate": 5
+            },
+            "parent": "0;52409506;"
+          }
+        ],
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiAccordion",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65513507",
+        "meta_id": "52593306",
+        "ver_id": "2422030",
+        "title": "Таб -  для цветовых настроек",
+        "label": "Заголовок над блоком со вкладками:",
+        "items": [
+          {
+            "json_id": "65513107",
+            "meta_id": "52593506",
+            "ver_id": "2422030",
+            "title": "Вкладка",
+            "label": "Блок с вкладкой первый",
+            "sublabel": "Подзаголовок таба:",
+            "templates": [
+              {
+                "json_id": "180662506",
+                "meta_id": "49173306",
+                "ver_id": "2422030",
+                "title": "",
+                "label": "111111111111111111",
+                "value": "",
+                "placeholder": "",
+                "cost": "",
+                "unit": "",
+                "min": "",
+                "max": "",
+                "controls": false,
+                "step": "1",
+                "isColumn": false,
+                "notEmpty": false,
+                "onlyNumber": false,
+                "isCurrency": false,
+                "onlyInteger": false,
+                "formOutputMethod": "no",
+                "excludeFromCalculations": false,
+                "elementName": "первыйИнпут12345",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiInput",
+                "discreteStep": false,
+                "formulaProcessingLogic": "zero",
+                "dependencyPrices": null,
+                "prompt": "",
+                "parent": "0;52593306;52593506;"
+              }
+            ],
+            "prompt": "ыфвф&nbsp;",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689303707",
+                "filename": "fence2.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageHover": {
+                "image_id": "689303507",
+                "filename": "fence3.svg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "location": "leftSide"
+            },
+            "backgroundImageSettings": {
+              "title": "",
+              "image": {
+                "image_id": "684059307",
+                "filename": "barn.png",
+                "ver_id": 2422030,
+                "image_width": "96",
+                "image_height": "96",
+                "ext": "png"
+              },
+              "backgroundHorizontalPosition": "right",
+              "backgroundVerticalPosition": "bottom",
+              "backgroundRepeat": "no-repeat",
+              "behaviorImage": "contain",
+              "unitSize": "px",
+              "opacitySubstrate": 5
+            },
+            "parent": "0;52593306;"
+          },
+          {
+            "json_id": "65513307",
+            "meta_id": "52593506",
+            "ver_id": "2422030",
+            "title": "Вкладка 2",
+            "sublabel": "Название таба: 32232",
+            "templates": [
+              {
+                "json_id": "151614906",
+                "meta_id": "49173306",
+                "ver_id": "2422030",
+                "title": "input с начальным значением",
+                "label": "input с начальным значением",
+                "value": "55",
+                "cost": "",
+                "unit": "",
+                "min": "",
+                "max": "",
+                "controls": false,
+                "step": "1",
+                "isColumn": false,
+                "notEmpty": false,
+                "onlyNumber": false,
+                "isCurrency": false,
+                "onlyInteger": false,
+                "template": "UiInput",
+                "elementName": "",
+                "customErrorPattern": "",
+                "customErrorText": "",
+                "notOnlyForCalculations": 1,
+                "prompt": "",
+                "parent": "0;52593306;52593506;"
+              }
+            ],
+            "prompt": "&nbsp;вы аы&nbsp;",
+            "iconSettings": null,
+            "backgroundImageSettings": null,
+            "parent": "0;52593306;"
+          }
+        ],
+        "maxWidthSide": "100",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiTab",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65527907",
+        "meta_id": "54008706",
+        "ver_id": "2422030",
+        "title": "Колонки - для цветовых настроек",
+        "label": "Блок с колонками",
+        "labelSub": "Подзаголовок блока:",
+        "labelLeft": "Заголовок левой колонки:",
+        "labelRight": "Заголовок правкой колонки блока:",
+        "leftSide": [
+          {
+            "json_id": "151614506",
+            "meta_id": "49173306",
+            "ver_id": "2422030",
+            "title": "Input c С заголовком",
+            "label": "Input c С заголовком",
+            "value": "",
+            "cost": "",
+            "unit": "",
+            "min": "",
+            "max": "",
+            "controls": false,
+            "step": "1",
+            "isColumn": false,
+            "notEmpty": false,
+            "onlyNumber": false,
+            "isCurrency": false,
+            "onlyInteger": false,
+            "template": "UiInput",
+            "elementName": "",
+            "customErrorPattern": "",
+            "customErrorText": "",
+            "notOnlyForCalculations": 1,
+            "prompt": "",
+            "parent": "0;54008706;"
+          }
+        ],
+        "rightSide": [
+          {
+            "json_id": "151610706",
+            "meta_id": "49558906",
+            "ver_id": "2422030",
+            "title": "Input - полностью пустой (default)",
+            "label": "",
+            "isColumn": false,
+            "selectedItem": "0",
+            "isNeedChoice": false,
+            "notEmpty": false,
+            "template": "UiSelect",
+            "elementName": "",
+            "notOnlyForCalculations": 1,
+            "values": [
+              {
+                "title": "Первый пункт",
+                "selectName": "Первый пункт",
+                "prompt": "43345354"
+              },
+              {
+                "title": "Первый пункт 2",
+                "selectName": "Первый пункт 2",
+                "prompt": "43345354"
+              }
+            ],
+            "prompt": "gfdgd",
+            "parent": "0;54008706;"
+          }
+        ],
+        "widthLeftSide": "50",
+        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplayLeftSide": "",
+        "dependencyFormulaDisplayRightSide": "",
+        "visuallySeparateElement": false,
+        "classes": "",
+        "template": "UiBisection",
+        "backgroundImageSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1072882703",
+            "filename": "42088882_3.jpg",
+            "ver_id": 2422030,
+            "image_width": "800",
+            "image_height": "600",
+            "ext": "jpg"
+          },
+          "backgroundHorizontalPosition": "right",
+          "backgroundVerticalPosition": "bottom",
+          "backgroundRepeat": "no-repeat",
+          "behaviorImage": "contain",
+          "unitSize": "px",
+          "opacitySubstrate": 5
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "65528307",
+        "meta_id": "59783106",
+        "ver_id": "2422030",
+        "title": "Картинка - Image:",
+        "type_group_id": "16",
+        "label": "Блок с картинкой",
+        "defaultImage": {
+          "image_id": "1072882903",
+          "filename": "54837701_2.jpg",
+          "ver_id": 2422030,
+          "image_width": "1920",
+          "image_height": "1280",
+          "ext": "jpg"
+        },
+        "maxWidth": "150",
+        "maxHeight": "150",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiImage",
+        "dependencyImages": null,
+        "prompt": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "65537707",
+        "meta_id": "74117906",
+        "ver_id": "2422030",
+        "title": "",
+        "label": "Заголовок блока:",
+        "templates": [
+          {
+            "json_id": "65406307",
+            "meta_id": "49173306",
+            "ver_id": "2422030",
+            "title": "Input - заголовок",
+            "type_group_id": "1",
+            "label": "заголовок",
+            "value": "",
+            "placeholder": "",
+            "cost": "",
+            "unit": "",
+            "min": "",
+            "max": "",
+            "controls": false,
+            "step": "1",
+            "discreteStep": false,
+            "notEmpty": false,
+            "onlyNumber": false,
+            "isCurrency": false,
+            "onlyInteger": false,
+            "isColumn": false,
+            "formOutputMethod": "no",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiInput",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;74117906;"
+          }
+        ],
+        "buttonName": "Дублировать",
+        "formOutputMethod": "valueSumm",
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "formula": "",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiDuplicator",
+        "prompt": "ываы аы",
+        "parent": "0;"
+      }
+    ]
   }
 }

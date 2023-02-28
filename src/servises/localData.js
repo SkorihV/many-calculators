@@ -1,5 +1,5 @@
 export default {
   isLocal: window.location.hostname === "localhost",
-  localPathData: "http://localhost:5000/test-data2",
-  localPathOptions: "http://localhost:5000/calculator-options",
+  localPathData: "http://localhost:5000/test-color",
+  localPathOptions: "http://localhost:5000/test-color-options",
 };
