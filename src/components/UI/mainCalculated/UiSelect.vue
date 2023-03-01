@@ -131,7 +131,6 @@ export default {
       this.resetMaxWidthSelectList();
     })
   },
-
   props: {
     selectValues: {
       type: Array,

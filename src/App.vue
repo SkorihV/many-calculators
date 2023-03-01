@@ -847,8 +847,8 @@ $c_element_border_color_selected: #ff6531;
 $c_element_border_radius: 9px;
 $c_element_border_width: 1px;
 
-$c_element_input_color: #bebebe;
-$c_element_range_color: #bebebe;
+$c_element_input_color: #e8e8e8;
+$c_element_range_color: #e8e8e8;
 
 //$c_prompt_popup_text                : var(--c_prompt_popup_text);
 //$c_prompt_popup_border              : var(--c_prompt_popup_border);
@@ -1190,9 +1190,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         cursor: pointer;
 
         &-value {
-          font-size: 14px;
-          line-height: 14px;
-          color: $c_element_text_default;
+          font-size: 12px;
+          line-height: 12px;
+          color: $c_base_title;
           position: absolute;
           z-index: 10;
           left: 50%;
@@ -1204,7 +1204,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           display: block;
           width: 1px;
           z-index: 10;
-          background-color: $c_element_text_default;
+          background-color: $c_base_title;
           left: 50%;
           transform: translateX(-50%);
           height: 10px;
@@ -1212,11 +1212,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         &_selected {
           .calc__range-steps-item-value {
-            color: $c_element_text_selected;
+            font-size: 15px;
+            line-height: 15px;
             font-weight: 700;
           }
           &:after {
-            background-color: $c_element_text_selected;
             width: 2px;
           }
         }
