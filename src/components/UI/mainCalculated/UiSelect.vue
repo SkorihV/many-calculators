@@ -127,7 +127,11 @@ export default {
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
     }, 200);
+    window.addEventListener('resize', () => {
+      this.resetMaxWidthSelectList();
+    })
   },
+
   props: {
     selectValues: {
       type: Array,
@@ -265,6 +269,9 @@ export default {
       this.currentOption = this.selectValuesAfterProcessingDependency[0];
       this.changeValue("click");
     },
+    resetMaxWidthSelectList() {
+      this.maxWidthSelectList = null;
+    }
   },
   watch: {
     selectedItem() {
@@ -290,6 +297,7 @@ export default {
       }
       if (newValue) {
         this.$nextTick(() => {
+          this.resetMaxWidthSelectList();
           if ( this.$refs.optionList.offsetWidth > this.$refs.changeElement.offsetWidth) {
             this.maxWidthSelectList = this.$refs.optionList.offsetWidth;
           } else {
@@ -462,7 +470,7 @@ export default {
     },
     maxWidthSettings() {
       return this.maxWidthSelectList ? "max-width:" + this.maxWidthSelectList + "px;" + "width : 100%;" : null;
-    }
+    },
   },
 };
 </script>
