@@ -102,7 +102,7 @@ export const MixinsGeneralItemData = {
     },
     localCostHtml() {
       if ("localCost" in this) {
-       return `<div>Текущая стоимость: ${this?.localCost}</div>`;
+       return `<div class="calc__dev-block-element">Текущая стоимость: ${this?.localCost}</div>`;
       }
       return "";
     }

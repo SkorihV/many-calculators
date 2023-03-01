@@ -13,6 +13,7 @@
         :alt="accordionItem.label"
         :icon-settings="accordionItem.iconSettings"
         :is-parent-hover="hoverElement"
+        :is-parent-selected="isOpen"
       >
         <div class="calc__accordion-item-label-text">
           <div class="calc__accordion-item-label-main">

@@ -4,6 +4,7 @@
     :alt="alt"
     :icon-settings="iconSettings"
     :is-parent-hover="isParentHover"
+    :is-parent-selected="isParentSelected"
   />
   <slot />
   <icon-element
@@ -11,6 +12,7 @@
     :alt="alt"
     :icon-settings="iconSettings"
     :is-parent-hover="isParentHover"
+    :is-parent-selected="isParentSelected"
   />
 </template>
 
@@ -27,6 +29,10 @@ export default {
       default: () => {},
     },
     isParentHover: {
+      type: Boolean,
+      default: false,
+    },
+    isParentSelected: {
       type: Boolean,
       default: false,
     },

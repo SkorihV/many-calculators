@@ -2,14 +2,20 @@
   <div class="calc__icon-wrapper" :style="[width, height]">
     <img
       class="calc__icon_normal"
-      v-show="showIcon"
+      v-if="showIcon"
       :src="urlIcon"
       :alt="alt"
     />
     <img
       class="calc__icon_hover"
-      v-show="showHoverIcon"
+      v-if="showHoverIcon"
       :src="urlIconHover"
+      :alt="alt"
+    />
+    <img
+      class="calc__icon_selected"
+      v-if="showSelectedIcon"
+      :src="urlIconSelected"
       :alt="alt"
     />
   </div>
@@ -35,6 +41,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isParentSelected: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -59,11 +69,16 @@ export default {
       return "height:" + localValue + "px;";
     },
     showIcon() {
-      return !this.showHoverIcon;
+      return !this.showHoverIcon && !this.showSelectedIcon;
     },
     showHoverIcon() {
       return (
-        Boolean(this.iconSettings?.imageHover?.filename) && this.isParentHover
+        Boolean(this.iconSettings?.imageHover?.filename) && this.isParentHover && !this.isParentSelected
+      );
+    },
+    showSelectedIcon() {
+      return (
+        Boolean(this.iconSettings?.imageSelected?.filename) && this.isParentSelected
       );
     },
     urlIcon() {
@@ -72,6 +87,9 @@ export default {
     urlIconHover() {
       return this.imageDir + this.iconSettings?.imageHover?.filename;
     },
+    urlIconSelected() {
+      return this.imageDir + this.iconSettings?.imageSelected?.filename;
+    }
   },
 };
 </script>

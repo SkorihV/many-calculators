@@ -31,9 +31,8 @@
             <icon-element-wrapper
               :alt="radio?.radioName"
               :icon-settings="radio?.iconSettings"
-              :is-parent-hover="
-                hoverElementIndex === idx || currentIndexRadioButton === idx
-              "
+              :is-parent-hover="hoverElementIndex === idx"
+              :is-parent-selected="currentIndexRadioButton === idx"
             >
               <span
                 class="calc__radio-indicator"

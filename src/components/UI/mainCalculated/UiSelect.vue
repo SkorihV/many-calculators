@@ -306,32 +306,32 @@ export default {
       }
     },
 
-    // amountVisibleSelects() {
-    //   let length = this.selectValuesAfterProcessingDependency.length;
-    //   if (!this.currentOption) {
-    //     return null;
-    //   }
-    //   for (let i = 0; i < length; i++) {
-    //     if (
-    //       this.selectValuesAfterProcessingDependency[i].value ===
-    //         this.currentOptionValue &&
-    //       this.currentOption.isShow
-    //     ) {
-    //       return;
-    //     }
-    //   }
-    //
-    //   for (let i = 0; i < length; i++) {
-    //     if (this.selectValuesAfterProcessingDependency[i].isShow) {
-    //       this.changeSelect(
-    //         this.selectValuesAfterProcessingDependency[i],
-    //         i,
-    //         "changeAmountSelectList"
-    //       );
-    //       return;
-    //     }
-    //   }
-    // },
+    amountVisibleSelects() {
+      let length = this.selectValuesAfterProcessingDependency.length;
+      if (!this.currentOption) {
+        return null;
+      }
+      for (let i = 0; i < length; i++) {
+        if (
+          this.selectValuesAfterProcessingDependency[i].value ===
+            this.currentOptionValue &&
+          this.currentOption.isShow
+        ) {
+          return;
+        }
+      }
+
+      for (let i = 0; i < length; i++) {
+        if (this.selectValuesAfterProcessingDependency[i].isShow) {
+          this.changeSelect(
+            this.selectValuesAfterProcessingDependency[i],
+            i,
+            "changeAmountSelectList"
+          );
+          return;
+        }
+      }
+    },
     isVisibilityFromDependency() {
       this.changeValue("dependency");
     },
@@ -346,11 +346,11 @@ export default {
       "tryToggleElementIsMounted",
     ]),
 
-    // amountVisibleSelects() {
-    //   return this.selectValuesAfterProcessingDependency.filter(
-    //     (item) => item.isShow
-    //   ).length;
-    // },
+    amountVisibleSelects() {
+      return this.selectValuesAfterProcessingDependency.filter(
+        (item) => item.isShow
+      ).length;
+    },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
     },

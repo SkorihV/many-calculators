@@ -34,7 +34,8 @@
           <icon-element-wrapper
             :alt="item.label"
             :icon-settings="item?.iconSettings"
-            :is-parent-hover="hoverElementIndex === idx || shownIdTab === idx"
+            :is-parent-hover="hoverElementIndex === idx"
+            :is-parent-selected="shownIdTab === idx"
           >
             <div class="calc__tab-item-label-text">
               <div class="calc__tab-item-label-main">{{ item.label }}</div>
