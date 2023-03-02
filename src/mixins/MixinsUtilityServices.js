@@ -20,7 +20,9 @@ export const MixinsUtilityServices = {
     handleSpecSymbolsInFormula(formula) {
       let localFormula = formula;
       this.getSpecSymbols?.forEach((specItem) => {
-        localFormula = localFormula?.toString()?.replaceAll(specItem[0], specItem[1]);
+        localFormula = localFormula
+          ?.toString()
+          ?.replaceAll(specItem[0], specItem[1]);
       });
       return localFormula;
     },
@@ -97,7 +99,8 @@ export const MixinsUtilityServices = {
      */
     getSummaFreeVariablesInFormula(dataList) {
       return dataList.reduce((sum, item) => {
-        const isAllowSummingCost = item?.cost !== null && !item.excludeFromCalculations && item.isShow;
+        const isAllowSummingCost =
+          item?.cost !== null && !item.excludeFromCalculations && item.isShow;
 
         if (isAllowSummingCost) {
           sum += parseFloat(item.cost);
@@ -137,7 +140,9 @@ export const MixinsUtilityServices = {
       let localDataList = dataList;
       for (let i = 0; i < localDataList.length; i++) {
         const currentItemList = localDataList[i];
-        const isProcessingLogic = currentItemList?.formulaProcessingLogic?.length && currentItemList?.cost === null;
+        const isProcessingLogic =
+          currentItemList?.formulaProcessingLogic?.length &&
+          currentItemList?.cost === null;
         const isItemObject = typeof currentItemList === "object";
         const isExistCost = typeof currentItemList?.cost === "number";
         const error = "ОшибкаЗаполнения";

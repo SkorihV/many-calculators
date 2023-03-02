@@ -69,7 +69,10 @@
       <div v-if="showErrorTextBlock" class="calc__error-block">
         Заполните, пожалуйста, все обязательные поля корректно.
       </div>
-      <div v-if="!showErrorTextBlock && showErrorSummaBlock" class="calc__error-block">
+      <div
+        v-if="!showErrorTextBlock && showErrorSummaBlock"
+        class="calc__error-block"
+      >
         Не все поля участвующие в расчете были заполнены.
       </div>
       <button
@@ -403,9 +406,18 @@ export default {
           : item.value;
 
       const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
-      const isAllowDataOutput = item.formOutputMethod && item.displayValue !== null && item.isShow && isAllowZeroValue;
-      const isAllowValueOutput = item.formOutputMethod === "value" ||  item.formOutputMethod === "valueSumm";
-      const isAllowCostOutput = item.cost !== null && (item.formOutputMethod === "summ" || item.formOutputMethod === "valueSumm");
+      const isAllowDataOutput =
+        item.formOutputMethod &&
+        item.displayValue !== null &&
+        item.isShow &&
+        isAllowZeroValue;
+      const isAllowValueOutput =
+        item.formOutputMethod === "value" ||
+        item.formOutputMethod === "valueSumm";
+      const isAllowCostOutput =
+        item.cost !== null &&
+        (item.formOutputMethod === "summ" ||
+          item.formOutputMethod === "valueSumm");
       const unit = item?.unit ? item.unit : "";
 
       if (isAllowDataOutput) {
@@ -574,7 +586,10 @@ export default {
         return eval(this.resultTextForComputed);
       } catch (e) {
         if (this.devMode) {
-          console.error("Ошибка в расчете формулы: ", this.resultTextForComputed);
+          console.error(
+            "Ошибка в расчете формулы: ",
+            this.resultTextForComputed
+          );
         }
         return false;
       }
@@ -739,7 +754,9 @@ export default {
     },
     formulaHtml() {
       return this.variablesInFormula?.length
-        ? `<div class="calc__dev-block-element">Формула расчета: ${this.variablesInFormula.join(" ")}</div>`
+        ? `<div class="calc__dev-block-element">Формула расчета: ${this.variablesInFormula.join(
+            " "
+          )}</div>`
         : "";
     },
     formulaVariablesHtml() {
@@ -761,8 +778,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 //$c_base_title                   : var(--c_base_title);
 //$c_base_error_color             : var(--c_base_error_color);
 //$c_base_error_bg                : var(--c_base_error_bg);
@@ -775,7 +790,6 @@ export default {
 //$c_base_button_border            : var(--c_base_button_border);
 //$c_base_button_border_radius     : var(--c_base_button_border_radius);
 //$c_base_button_border_width      : var(--c_base_button_border_width);
-
 
 $c_base_title: #000000;
 $c_base_error_color: #e80000;
@@ -790,7 +804,6 @@ $c_base_button_border: #ff6531;
 $c_base_button_border_radius: 9px;
 $c_base_button_border_width: 2px;
 
-
 //$c_decor_text_default           : var(--c_decor_text_default);
 //$c_decor_text_hover             : var(--c_decor_text_hover);
 //$c_decor_text_selected          : var(--c_decor_text_selected);
@@ -803,7 +816,6 @@ $c_base_button_border_width: 2px;
 //$c_decor_border_radius          : var(--c_decor_border_radius);
 //$c_decor_border_width           : var(--c_decor_border_width);
 
-
 $c_decor_text_default: #000000;
 $c_decor_text_hover: #ff5e00;
 $c_decor_text_selected: #ffffff;
@@ -812,12 +824,11 @@ $c_decor_bg_color: #f9f9f9;
 $c_decor_bg_color_hover: #ffffff;
 $c_decor_bg_color_selected: #ff6531;
 
-$c_decor_border_color:  #ff6531;
+$c_decor_border_color: #ff6531;
 $c_decor_border_color_hover: #ff6531;
 $c_decor_border_color_selected: #ff6531;
 $c_decor_border_radius: 9px;
 $c_decor_border_width: 2px;
-
 
 //$c_element_text_default            : var(--c_element_text_default);
 //$c_element_text_hover              : var(--c_element_text_hover);
@@ -873,22 +884,18 @@ $c_prompt_decor_sing_bg_hover: #ff6531;
 
 $c_prompt_element_sign_color: #ff6531;
 $c_prompt_element_sign_color_hover: #ffffff;
-$c_prompt_element_sing_bg:  #ffffff;
+$c_prompt_element_sing_bg: #ffffff;
 $c_prompt_element_sing_bg_hover: #ff6531;
 
-
-
-@mixin style-decor-border-radius  {
+@mixin style-decor-border-radius {
   border-radius: $c_decor_border_radius;
 }
-
 
 @mixin style-title-main {
   font-size: 17px;
   line-height: 20px;
   color: $c_base_title;
 }
-
 
 @mixin style-label-sub {
   font-size: 12px;
@@ -959,7 +966,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     line-height: 23px;
     text-transform: uppercase;
     cursor: pointer;
-    @include style-decor-border-radius ;
+    @include style-decor-border-radius;
     &:hover {
       background-color: $c_decor_bg_color_selected;
       color: $c_decor_text_selected;
@@ -1050,7 +1057,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: $c_element_text_default;
+        color: $c_base_title;
         font-size: 28px;
         line-height: 26px;
         font-weight: 600;
@@ -1061,7 +1068,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           cursor: pointer;
         }
         &.disabled {
-          color: $c_element_text_default;
           opacity: 0.6;
           &:hover {
             cursor: not-allowed;
@@ -1400,14 +1406,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         left: 50%;
         overflow: hidden;
         transform: translateX(-50%);
-        border-left: $c_element_border_width solid $c_element_border_color_selected;
-        border-right: $c_element_border_width solid $c_element_border_color_selected;
-        border-bottom: $c_element_border_width solid $c_element_border_color_selected;
+        border-left: $c_element_border_width solid
+          $c_element_border_color_selected;
+        border-right: $c_element_border_width solid
+          $c_element_border_color_selected;
+        border-bottom: $c_element_border_width solid
+          $c_element_border_color_selected;
         .calc__select-image-wrapper {
           margin: 5px;
         }
         &:hover {
-
         }
       }
       &-item {
@@ -1552,11 +1560,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-name {
       font-size: 16px;
       line-height: 20px;
-      color:$c_element_text_default;
+      color: $c_element_text_default;
     }
     &-subname {
       @include style-label-sub;
-      color:$c_element_text_default;
+      color: $c_element_text_default;
     }
   }
 
@@ -1629,7 +1637,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
-        @include style-decor-border-radius ;
+        @include style-decor-border-radius;
         &:hover {
           background-color: $c_element_bg_color_hover;
           color: $c_element_text_hover;
@@ -1829,7 +1837,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       max-width: 80%;
       overflow-y: auto;
       border: 1px solid $c_prompt_popup_border;
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       box-shadow: 0 4px 10px $c_prompt_popup_border;
     }
   }
@@ -1911,7 +1919,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-text {
       display: flex;
       color: $c_base_error_color;
-      border-radius: $c_base_error_border_radius ;
+      border-radius: $c_base_error_border_radius;
       justify-content: center;
       min-width: 300px;
     }
@@ -1944,7 +1952,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           background-color: $c_decor_bg_color_selected;
         }
       }
-
     }
     &-item {
       &-label {
@@ -1957,7 +1964,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         background-color: $c_decor_bg_color;
         border: $c_decor_border_width solid $c_decor_border_color;
         cursor: pointer;
-        @include style-decor-border-radius ;
+        @include style-decor-border-radius;
         @include transition;
         text-align: start;
         position: relative;
@@ -2017,7 +2024,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
       &-content {
-        margin-top: - $c_decor_border_width;
+        margin-top: -$c_decor_border_width;
         width: 100%;
         border: $c_decor_border_width solid $c_decor_border_color_selected;
         border-bottom-left-radius: $c_decor_border_radius;
@@ -2090,7 +2097,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
     &-item {
       &-label {
-        @include style-decor-border-radius ;
+        @include style-decor-border-radius;
         background-color: $c_decor_bg_color;
         border: $c_decor_border_width solid $c_decor_border_color;
         display: flex;
@@ -2198,7 +2205,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       align-items: flex-start;
       margin-bottom: 10px;
       width: 100%;
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       &.isVisualSeparate {
         margin: 20px 10px;
         box-shadow: 0 0 25px -10px $c_decor_text_default;
@@ -2258,7 +2265,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       justify-content: center;
       align-items: center;
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       background-color: $c_decor_bg_color;
       border: $c_decor_border_width solid $c_decor_border_color;
       color: $c_decor_text_default;
@@ -2286,8 +2293,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       margin: 10px;
       background-color: $c_decor_bg_color;
       padding: 10px;
-      border: $c_decor_border_width  solid $c_decor_border_color;
-      @include style-decor-border-radius ;
+      border: $c_decor_border_width solid $c_decor_border_color;
+      @include style-decor-border-radius;
       max-width: 650px;
       max-height: 500px;
       z-index: 10000;
@@ -2476,7 +2483,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       color: $c_decor_text_default;
       border: $c_decor_border_width solid $c_decor_border_color;
       padding: 10px;
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
     }
     &-duplicate {
       &:hover {
@@ -2550,7 +2557,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @media all and (max-width: 480px) {
         display: none;
       }
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
     }
     &-img {
       object-fit: contain;
@@ -2665,7 +2672,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       gap: 8px;
     }
     input {
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       outline: none;
       border-width: 2px;
       border-style: solid;
@@ -2685,7 +2692,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     textarea {
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       font-size: 16px;
       line-height: 20px;
       color: $c_decor_text_default;
@@ -2704,7 +2711,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     button {
-      @include style-decor-border-radius ;
+      @include style-decor-border-radius;
       background-color: $c_decor_bg_color_selected;
       color: $c_decor_text_selected;
       font-weight: 900;

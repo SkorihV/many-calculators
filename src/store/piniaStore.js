@@ -17,7 +17,7 @@ export const useBaseStore = defineStore("base", {
       devModeEnabled: false,
       showInsideElementStatusData: false,
       elementsIsMounted: {},
-      tooltipOn: true
+      tooltipOn: true,
     };
   },
   getters: {
@@ -125,7 +125,7 @@ export const useBaseStore = defineStore("base", {
         Object.values(elementsIsMounted).filter((value) => !value).length
       ),
     isTooltipOn: ({ tooltipOn }) => tooltipOn,
-   },
+  },
   actions: {
     tryAddResultElement(dataResultItem) {
       const {

@@ -44,7 +44,11 @@
       X
     </button>
   </div>
-  <div class="calc__dev-block-wrapper" v-if="showDevBlock" v-html="devModeData"></div>
+  <div
+    class="calc__dev-block-wrapper"
+    v-if="showDevBlock"
+    v-html="devModeData"
+  ></div>
 </template>
 
 <script>
@@ -103,7 +107,7 @@ export default {
       mutationsInputData: null,
       regExpStringSplitFormula:
         /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
-      nameTemplatesForStructure: ['UiAccordion', 'UiTab', 'UiBisection'],
+      nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBisection"],
     };
   },
   methods: {
@@ -147,21 +151,25 @@ export default {
     updateInputData(data, index) {
       let mutationsData = JSON.parse(JSON.stringify(data));
 
-      mutationsData.parentDuplicator  = this.parentName;
-      mutationsData.isDuplicate       = true;
-      mutationsData.formula           = this.mutationFormulaResult;
-      mutationsData.index             = this.index + index;
-      mutationsData                   = this.updateIndexElementsInDuple(mutationsData, index);
+      mutationsData.parentDuplicator = this.parentName;
+      mutationsData.isDuplicate = true;
+      mutationsData.formula = this.mutationFormulaResult;
+      mutationsData.index = this.index + index;
+      mutationsData = this.updateIndexElementsInDuple(mutationsData, index);
 
       return mutationsData;
     },
     updateIndexElementsInDuple(object, index) {
       for (let prop in object) {
-        const propIsElementNameField  = prop === "elementName";
-        const propIsDependencyField   = (prop === "dependencyFormulaDisplay" || prop === "dependencyFormulaCost" || prop === "dependencyFormulaItem") && object[prop].length;
-        const propIsSecondField       = prop === "labelSecond";
-        const propIsLabelField        = prop === "label";
-        const propIsObject            = typeof object[prop] === "object";
+        const propIsElementNameField = prop === "elementName";
+        const propIsDependencyField =
+          (prop === "dependencyFormulaDisplay" ||
+            prop === "dependencyFormulaCost" ||
+            prop === "dependencyFormulaItem") &&
+          object[prop].length;
+        const propIsSecondField = prop === "labelSecond";
+        const propIsLabelField = prop === "label";
+        const propIsObject = typeof object[prop] === "object";
 
         if (propIsObject) {
           object[prop] = this.updateIndexElementsInDuple(object[prop], index);
@@ -210,12 +218,13 @@ export default {
     },
     isAllowedAddIndex(item) {
       const isFound = !Boolean(item.match(this.regExpStringSplitFormula));
-      const isFoundVariableInOriginVariables = this.originVariables.includes(item);
+      const isFoundVariableInOriginVariables =
+        this.originVariables.includes(item);
       return isFound && isFoundVariableInOriginVariables;
     },
     isStructureTemplate(templateName) {
-      return this.nameTemplatesForStructure.includes(templateName)
-    }
+      return this.nameTemplatesForStructure.includes(templateName);
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -240,14 +249,24 @@ export default {
      * @returns {*}
      */
     listGlobalsVariables() {
-      return this.variablesInFormula.filter((item) => !this.originVariables.includes(item) && !Boolean(item.match(this.regExpStringSplitFormula)) && item !== this.getNameReserveVariable);
+      return this.variablesInFormula.filter(
+        (item) =>
+          !this.originVariables.includes(item) &&
+          !Boolean(item.match(this.regExpStringSplitFormula)) &&
+          item !== this.getNameReserveVariable
+      );
     },
     /**
      * Список локальных переменных используемых в формуле
      * @returns {*}
      */
     listLocalVariablesUsedInFormula() {
-      return this.variablesInFormula.filter((item) => !Boolean(item.match(this.regExpStringSplitFormula)) && item !== this.getNameReserveVariable && !this.listGlobalsVariables.includes(item))
+      return this.variablesInFormula.filter(
+        (item) =>
+          !Boolean(item.match(this.regExpStringSplitFormula)) &&
+          item !== this.getNameReserveVariable &&
+          !this.listGlobalsVariables.includes(item)
+      );
     },
     /**
      * Список локальных переменных используемых в формуле c префиксом
@@ -287,7 +306,8 @@ export default {
     resultSummaDataFriVariablesOutsideFormula() {
       return this.dataFreeVariablesOutsideFormula?.reduce(
         (reduceSumma, item) => {
-          const isAllowedSummation = item.cost !== null && !item.excludeFromCalculations && item.isShow;
+          const isAllowedSummation =
+            item.cost !== null && !item.excludeFromCalculations && item.isShow;
 
           if (isAllowedSummation) {
             return reduceSumma + parseFloat(item.cost);
@@ -357,8 +377,14 @@ export default {
         .map((item) => {
           const nameIsNotExist = !item?.name?.length;
           const isReserveVariable = item?.name === this.getNameReserveVariable;
-          const isAllowReturnLocalCost = this.listLocalVariablesUsedInFormulaForPrefix.includes(item.name) && this.localResultData[item.name]?.isShow && !item.excludeFromCalculations;
-          const isAllowReturnGlobalCost = this.listGlobalsVariables.includes(item.name) && this.getResultElementOnName(item.name)?.isShow && !item.excludeFromCalculations;
+          const isAllowReturnLocalCost =
+            this.listLocalVariablesUsedInFormulaForPrefix.includes(item.name) &&
+            this.localResultData[item.name]?.isShow &&
+            !item.excludeFromCalculations;
+          const isAllowReturnGlobalCost =
+            this.listGlobalsVariables.includes(item.name) &&
+            this.getResultElementOnName(item.name)?.isShow &&
+            !item.excludeFromCalculations;
 
           if (nameIsNotExist) {
             return item;
@@ -377,7 +403,9 @@ export default {
     },
 
     localCost() {
-      const localCostIsNull = typeof this.compileFormulaWitchData === "string" && this.compileFormulaWitchData?.includes("null");
+      const localCostIsNull =
+        typeof this.compileFormulaWitchData === "string" &&
+        this.compileFormulaWitchData?.includes("null");
 
       if (localCostIsNull) {
         return null;
@@ -387,7 +415,10 @@ export default {
         return eval(this.compileFormulaWitchData);
       } catch (e) {
         if (this.devMode) {
-          console.error("Ошибка в расчете формулы: ", this.compileFormulaWitchData);
+          console.error(
+            "Ошибка в расчете формулы: ",
+            this.compileFormulaWitchData
+          );
         }
         return null;
       }

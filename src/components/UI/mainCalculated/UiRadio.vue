@@ -14,25 +14,24 @@
         <slot name="prompt" />
       </div>
       <div class="calc__radio-wrapper-buttons">
-        <template v-for="(radio, idx) in localRadioListInOut" :key="idx">
+        <template v-for="radio in radioListOnOut" :key="radio.index">
           <div
             class="calc__radio-label"
-            :id="localElementName + '_' + idx"
+            :id="localElementName + '_' + radio.index"
             :class="{
-              checked: currentIndexRadioButton === idx,
+              checked: currentIndexRadioButton === radio.index,
               error: isErrorClass,
               onlyImage: onlyImage,
             }"
-            v-if="radio.isShow"
-            @click="selectedCurrentRadio(idx)"
-            @mouseover="hoverElementIndex = idx"
+            @click="selectedCurrentRadio(radio.index)"
+            @mouseover="hoverElementIndex = radio.index"
             @mouseleave="hoverElementIndex = null"
           >
             <icon-element-wrapper
               :alt="radio?.radioName"
               :icon-settings="radio?.iconSettings"
-              :is-parent-hover="hoverElementIndex === idx"
-              :is-parent-selected="currentIndexRadioButton === idx"
+              :is-parent-hover="hoverElementIndex === radio.index"
+              :is-parent-selected="currentIndexRadioButton === radio.index"
             >
               <span
                 class="calc__radio-indicator"
@@ -58,7 +57,11 @@
       />
     </div>
   </div>
-  <div class="calc__dev-block-wrapper" v-if="devModeData" v-html="devModeData"></div>
+  <div
+    class="calc__dev-block-wrapper"
+    v-if="devModeData"
+    v-html="devModeData"
+  ></div>
 </template>
 
 <script>
@@ -85,10 +88,12 @@ export default {
       ? this.elementName
       : Math.random().toString();
 
-    this.localRadioListInOut = JSON.parse(JSON.stringify(this.radioValues));
-
-    this.updatedRadioListBeforeCheckedDependency();
-    this.updatedRadioListBeforeCheckedCostElements();
+    this.originRadioList = JSON.parse(JSON.stringify(this.radioValues)).map(
+      (item, index) => {
+        item.index = index + 1;
+        return item;
+      }
+    );
 
     if (!this.isErrorEmpty && !this.isNeedChoice) {
       this.currentIndexRadioButton = parseInt(this.selectedItem);
@@ -111,7 +116,7 @@ export default {
      */
     selectedItem: {
       type: [Number, String],
-      default: 0,
+      default: 1,
       validator(value) {
         return !isNaN(Number(value));
       },
@@ -150,12 +155,26 @@ export default {
       textErrorNotEmpty: "Обязательное поле.",
       localElementName: null,
       timerName: null,
-      localRadioListInOut: [],
+      bufferRadioListOnOut: [],
+      originRadioList: [],
       canBeShownTooltip: false,
       hoverElementIndex: null,
     };
   },
   methods: {
+    getRadioItemForIndex(index) {
+      if (this.isShowRadioItemOnIndex(index)) {
+        return this.radioListOnOut?.filter(
+          (item) => item.isShow && item.index === index
+        )[0];
+      }
+      return null;
+    },
+    isShowRadioItemOnIndex(index) {
+      return !!this.radioListOnOut?.filter(
+        (item) => item.isShow && item.index === index
+      )?.length;
+    },
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
@@ -210,70 +229,47 @@ export default {
         type: "radio",
       });
     },
-
-    updatedRadioListBeforeCheckedDependency() {
-      this.localRadioListInOut = this.localRadioListInOut?.map((radio) => {
-        if (radio?.dependencyFormulaItem?.length) {
-          let formula = this.getArrayElementsFromFormula(
-            radio.dependencyFormulaItem
-          );
-          this.constructLocalListElementDependencyInFormula(formula);
-          setTimeout(() => {
-            formula = this.processingVariablesOnFormula(formula);
-
-            try {
-              radio.isShow = eval(formula);
-            } catch (e) {
-              if (this.devMode) {
-                console.error(e.message, formula);
-              }
-              radio.isShow = false;
-            }
-          }, 10);
-        }
-        radio.isShow = true;
-        return radio;
-      });
-    },
-
-    updatedRadioListBeforeCheckedCostElements() {
-      this.localRadioListInOut = this.localRadioListInOut?.map(
-        (item, index) => {
-          if (item?.dependencyPrices?.length) {
-            let newCost = this.costAfterProcessingDependencyPrice(
-              item?.dependencyPrices
-            );
-            if (newCost !== null) {
-              item.cost = newCost;
-            } else {
-              item.cost = this.radioValues[index].cost;
-            }
-          }
-          item.cost = item?.cost ? item?.cost : null;
-          return item;
-        }
-      );
-    },
   },
   watch: {
-    localDependencyList: {
-      handler() {
-        this.updatedRadioListBeforeCheckedDependency();
-        this.updatedRadioListBeforeCheckedCostElements();
-      },
-      deep: true,
-    },
-
     currentSelectedRadioButton: {
-      handler() {
-        setTimeout(() => {
-          this.changeValue("currentSelectedRadioButton");
-        }, 10);
+      handler(newValue, oldValue) {
+        if (newValue?.index !== oldValue?.index) {
+          setTimeout(() => {
+            this.changeValue("currentSelectedRadioButton");
+          }, 10);
+        }
       },
       deep: true,
     },
-    isVisibilityFromDependency() {
-      this.changeValue("dependency");
+    isVisibilityFromDependency: {
+      handler(newValue) {
+        if (newValue) {
+          if (!this.isErrorEmpty && !this.isNeedChoice) {
+            this.currentIndexRadioButton = parseInt(this.selectedItem);
+          }
+        } else {
+          this.currentIndexRadioButton = null;
+        }
+        this.changeValue("dependency");
+      },
+      deep: true,
+    },
+    isAmountVisibleItemsRadioListChanged: {
+      handler(newValue) {
+        if (this.isVisibilityFromDependency && newValue) {
+          if (
+            this.currentIndexRadioButton !== null &&
+            !this.isShowRadioItemOnIndex(this.currentIndexRadioButton)
+          ) {
+            if (!this.isErrorEmpty && !this.isNeedChoice) {
+              this.currentIndexRadioButton = parseInt(this.selectedItem);
+            } else {
+              this.currentIndexRadioButton = null;
+            }
+          }
+        }
+      },
+      deep: true,
     },
   },
   computed: {
@@ -285,7 +281,7 @@ export default {
       "tryToggleElementIsMounted",
     ]),
 
-    isChangedRadio() {
+    isRadioItemSelected() {
       return this.currentSelectedRadioButton !== null;
     },
 
@@ -303,43 +299,90 @@ export default {
       );
     },
     isErrorEmpty() {
-      return this.notEmpty && !this.isChangedRadio;
+      return this.notEmpty && !this.isRadioItemSelected;
     },
     localCost() {
-      if (
-        this.currentSelectedRadioButton === null ||
-        !this.isVisibilityFromDependency
-      ) {
-        return null;
-      }
-      return this.currentSelectedRadioButton?.cost;
+      return this.isRadioItemSelected
+        ? this.currentSelectedRadioButton?.cost
+        : null;
     },
     selectedValueInRadio() {
-      if (
-        this.currentSelectedRadioButton === null ||
-        !this.isVisibilityFromDependency
-      ) {
+      if (this.isRadioItemSelected) {
         return null;
       }
       return this.currentSelectedRadioButton?.extraValueForDependency?.length
         ? this.currentSelectedRadioButton?.extraValueForDependency
-        : this.currentIndexRadioButton + 1;
+        : this.currentIndexRadioButton;
     },
     valueForDisplayRadioElement() {
-      if (this.currentSelectedRadioButton === null) {
-        return null;
-      }
-      return this.currentSelectedRadioButton?.radioName;
+      return this.isRadioItemSelected
+        ? this.currentSelectedRadioButton?.radioName
+        : null;
     },
 
     currentSelectedRadioButton() {
-      if (
-        this.currentIndexRadioButton === null ||
-        !this.localRadioListInOut[this.currentIndexRadioButton]?.isShow
-      ) {
-        return null;
+      return this.currentIndexRadioButton === null
+        ? null
+        : this.getRadioItemForIndex(this.currentIndexRadioButton);
+    },
+    radioListAfterCheckDependency() {
+      return this.originRadioList?.map((radio) => {
+        if (radio?.dependencyFormulaItem?.length) {
+          let formula = this.getArrayElementsFromFormula(
+            radio.dependencyFormulaItem
+          );
+          this.constructLocalListElementDependencyInFormula(formula);
+          formula = this.processingVariablesOnFormula(formula);
+          try {
+            radio.isShow = eval(formula);
+          } catch (e) {
+            if (this.devMode) {
+              console.error(e.message, formula);
+            }
+            radio.isShow = false;
+          }
+        } else {
+          radio.isShow = true;
+        }
+        return radio;
+      });
+    },
+    amountVisibleItemsCurrentRadioList() {
+      return this.bufferRadioListOnOut?.filter((item) => item?.isShow);
+    },
+    amountVisibleItemsRadioListAfterCheckDependency() {
+      return this.radioListAfterCheckDependency?.filter((item) => item.isShow);
+    },
+    isAmountVisibleItemsRadioListChanged() {
+      return (
+        this.amountVisibleItemsCurrentRadioList !==
+        this.amountVisibleItemsRadioListAfterCheckDependency
+      );
+    },
+    radioListAfterCheckVisibility() {
+      if (this.isAmountVisibleItemsRadioListChanged) {
+        this.bufferRadioListOnOut = this.radioListAfterCheckDependency;
       }
-      return this.localRadioListInOut[this.currentIndexRadioButton];
+      return this.bufferRadioListOnOut.filter((item) => item.isShow);
+    },
+    radioListAfterCheckedCostElements() {
+      return this.radioListAfterCheckVisibility?.map((item, index) => {
+        if (item?.dependencyPrices?.length) {
+          let newCost = this.costAfterProcessingDependencyPrice(
+            item?.dependencyPrices
+          );
+          if (newCost !== null) {
+            item.cost = newCost;
+          } else {
+            item.cost = this.radioValues[index].cost;
+          }
+        }
+        item.cost = item?.cost ? item?.cost : null;
+        return item;
+      });
+    },
+    radioListOnOut() {
+      return this.radioListAfterCheckedCostElements;
     },
   },
 };

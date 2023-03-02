@@ -42,8 +42,8 @@ export default {
       type: String,
     },
     classes: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {

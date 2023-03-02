@@ -69,7 +69,11 @@
       />
     </div>
   </div>
-  <div class="calc__dev-block-wrapper" v-if="devModeData" v-html="devModeData"></div>
+  <div
+    class="calc__dev-block-wrapper"
+    v-if="devModeData"
+    v-html="devModeData"
+  ></div>
 </template>
 
 <script>
@@ -244,7 +248,6 @@ export default {
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue("changeDynamicValue");
       }, 500);
-
     },
     checkValidValueReturnNumber(checkedValue) {
       let value = !isNaN(parseFloat(checkedValue))
@@ -361,10 +364,10 @@ export default {
       }
     },
     resultValue(newValue) {
-      if(newValue !== this.dynamicValue) {
+      if (newValue !== this.dynamicValue) {
         this.dynamicValue = newValue;
       }
-    }
+    },
   },
   computed: {
     ...mapState(useBaseStore, [

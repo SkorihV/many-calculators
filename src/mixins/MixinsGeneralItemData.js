@@ -66,15 +66,15 @@ export const MixinsGeneralItemData = {
       return false;
     },
     elementValue() {
-     return this.templateName === "UiInput" || this.templateName === "UiRange"
+      return this.templateName === "UiInput" || this.templateName === "UiRange"
         ? this.resultValue
         : this.templateName === "UiRadio"
-          ? this.selectedValueInRadio
-          : this.templateName === "UiSelect"
-            ? this.currentOptionValue
-            : this.templateName === "UiCheckbox"
-              ? this.isLocalChecked
-              : null;
+        ? this.selectedValueInRadio
+        : this.templateName === "UiSelect"
+        ? this.currentOptionValue
+        : this.templateName === "UiCheckbox"
+        ? this.isLocalChecked
+        : null;
     },
     labelHtml() {
       return `<div class="calc__dev-block-element">Заголовок элемента: ${this.label}</div>`;
@@ -85,8 +85,8 @@ export const MixinsGeneralItemData = {
     dependencyFormulaHtml() {
       return this.dependencyFormulaDisplay?.length
         ? `<div class="calc__dev-block-element"> Формула зависимости отображения: ${this.getArrayElementsFromFormula(
-          this.dependencyFormulaDisplay
-        ).join(" ")}</div>`
+            this.dependencyFormulaDisplay
+          ).join(" ")}</div>`
         : "";
     },
     dependencyFormulaBeforeProcessingHtml() {
@@ -102,9 +102,9 @@ export const MixinsGeneralItemData = {
     },
     localCostHtml() {
       if ("localCost" in this) {
-       return `<div class="calc__dev-block-element">Текущая стоимость: ${this?.localCost}</div>`;
+        return `<div class="calc__dev-block-element">Текущая стоимость: ${this?.localCost}</div>`;
       }
       return "";
-    }
+    },
   },
 };

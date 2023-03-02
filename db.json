@@ -3408,7 +3408,7 @@
         "dependencyFormulaDisplay": "",
         "dependencyPrices": [
           {
-          "cost": 300,
+            "cost": 300,
             "dependencyFormulaCost": "строение === 2"
           }
         ]
@@ -3734,7 +3734,6 @@
       }
     ]
   },
-
 
   "test-color-options": {
     "formula": "",
@@ -4238,6 +4237,7 @@
             "meta_id": "52593506",
             "ver_id": "2422030",
             "title": "Вкладка 2",
+            "label": "Название таба 324242342432",
             "sublabel": "Название таба: 32232",
             "templates": [
               {
@@ -4263,12 +4263,77 @@
                 "customErrorPattern": "",
                 "customErrorText": "",
                 "notOnlyForCalculations": 1,
+                "dependencyFormulaDisplay": "цвет === 2",
                 "prompt": "",
                 "parent": "0;52593306;52593506;"
+              },
+              {
+                "json_id": "243498106",
+                "title": "Окна - Профильная система",
+                "label": "Radio - с условиями скрытия пунктов",
+                "selectedItem": "2",
+                "isColumn": false,
+                "isNeedChoice": false,
+                "notEmpty": false,
+                "typeDisplayClass": "",
+                "formOutputMethod": "value",
+                "excludeFromCalculations": false,
+                "elementName": "профильнаяСистема________",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "цвет === 2",
+                "classes": "",
+                "template": "UiRadio",
+                "onlyImage": false,
+                "maxWidth": "150",
+                "maxHeight": "150",
+                "values": [
+                  {
+                    "title": "Бюджет",
+                    "radioName": "Бюджет",
+                    "subradioName": "подзаголовок",
+                    "cost": 1000,
+                    "image": {
+                      "image_id": "3373825106",
+                      "filename": "https://dummyimage.com/150x100/a1a1a1/ccc",
+                      "ver_id": 2422030,
+                      "image_width": "264",
+                      "image_height": "384",
+                      "ext": "png"
+                    },
+                    "prompt": "текст подсказки",
+                    "dependencyFormulaItem": "input12 > 57"
+                  },
+                  {
+                    "title": "1",
+                    "radioName": "1",
+                    "cost": 3000,
+                    "dependencyFormulaItem": "input12 > 57"
+                  },
+                  {
+                    "title": "2",
+                    "radioName": "2",
+                    "cost": 3500,
+                    "dependencyFormulaItem": "input12 > 57"
+                  },
+                  {
+                    "title": "3",
+                    "radioName": "3",
+                    "cost": 3500,
+                    "dependencyFormulaItem": "input12 > 56"
+                  },
+                  {
+                    "title": "4",
+                    "radioName": "4",
+                    "cost": 3500,
+                    "dependencyFormulaItem": "input12 > 57"
+                  }
+                ],
+                "prompt": ""
               }
             ],
             "prompt": "&nbsp;вы аы&nbsp;",
             "iconSettings": null,
+            "dependencyFormulaDisplay": "цвет === 2",
             "backgroundImageSettings": null,
             "parent": "0;52593306;"
           }

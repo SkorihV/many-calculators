@@ -1,11 +1,6 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
-    <img
-      class="calc__icon_normal"
-      v-if="showIcon"
-      :src="urlIcon"
-      :alt="alt"
-    />
+    <img class="calc__icon_normal" v-if="showIcon" :src="urlIcon" :alt="alt" />
     <img
       class="calc__icon_hover"
       v-if="showHoverIcon"
@@ -43,13 +38,13 @@ export default {
     },
     isParentSelected: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       baseSizeIcon: 32,
-    }
+    };
   },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
@@ -73,12 +68,15 @@ export default {
     },
     showHoverIcon() {
       return (
-        Boolean(this.iconSettings?.imageHover?.filename) && this.isParentHover && !this.isParentSelected
+        Boolean(this.iconSettings?.imageHover?.filename) &&
+        this.isParentHover &&
+        !this.isParentSelected
       );
     },
     showSelectedIcon() {
       return (
-        Boolean(this.iconSettings?.imageSelected?.filename) && this.isParentSelected
+        Boolean(this.iconSettings?.imageSelected?.filename) &&
+        this.isParentSelected
       );
     },
     urlIcon() {
@@ -89,7 +87,7 @@ export default {
     },
     urlIconSelected() {
       return this.imageDir + this.iconSettings?.imageSelected?.filename;
-    }
+    },
   },
 };
 </script>

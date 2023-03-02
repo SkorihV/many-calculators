@@ -11,7 +11,12 @@
         <div class="empty-block" v-if="notEmpty">*</div>
         <slot name="prompt"></slot>
       </div>
-      <div class="calc__select-change-wrapper" ref="changeElement" :style="[maxWidthSettings]" :class="{ error: isErrorClass }">
+      <div
+        class="calc__select-change-wrapper"
+        ref="changeElement"
+        :style="[maxWidthSettings]"
+        :class="{ error: isErrorClass }"
+      >
         <div
           v-if="currentOption"
           class="calc__select-change-item"
@@ -32,7 +37,12 @@
           />
           <div class="calc__select-arrow"></div>
         </div>
-        <div class="calc__select-option-wrapper" :style="[maxWidthSettings]" ref="optionList" v-show="isOpen">
+        <div
+          class="calc__select-option-wrapper"
+          :style="[maxWidthSettings]"
+          ref="optionList"
+          v-show="isOpen"
+        >
           <template
             v-for="(option, idx) in selectValuesAfterProcessingDependency"
             :key="idx"
@@ -67,7 +77,11 @@
         :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
-    <div class="calc__dev-block-wrapper" v-if="devModeData" v-html="devModeData"></div>
+    <div
+      class="calc__dev-block-wrapper"
+      v-if="devModeData"
+      v-html="devModeData"
+    ></div>
   </div>
 </template>
 
@@ -127,9 +141,9 @@ export default {
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
     }, 200);
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.resetMaxWidthSelectList();
-    })
+    });
   },
   props: {
     selectValues: {
@@ -270,7 +284,7 @@ export default {
     },
     resetMaxWidthSelectList() {
       this.maxWidthSelectList = null;
-    }
+    },
   },
   watch: {
     selectedItem() {
@@ -297,15 +311,21 @@ export default {
       if (newValue) {
         this.$nextTick(() => {
           this.resetMaxWidthSelectList();
-          if ( this.$refs.optionList.offsetWidth > this.$refs.changeElement.offsetWidth) {
+          if (
+            this.$refs.optionList.offsetWidth >
+            this.$refs.changeElement.offsetWidth
+          ) {
             this.maxWidthSelectList = this.$refs.optionList.offsetWidth;
           } else {
             this.maxWidthSelectList = this.$refs.changeElement.offsetWidth;
           }
-        })
+        });
       }
     },
-
+    /**
+     * Обновить глобальные данные об элементе, если изменится количество пунктов в списке
+     * @returns {null}
+     */
     amountVisibleSelects() {
       let length = this.selectValuesAfterProcessingDependency.length;
       if (!this.currentOption) {
@@ -345,7 +365,10 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-
+    /**
+     * Количество видимых элементов в списке.
+     * @returns {number}
+     */
     amountVisibleSelects() {
       return this.selectValuesAfterProcessingDependency.filter(
         (item) => item.isShow
@@ -468,7 +491,9 @@ export default {
       });
     },
     maxWidthSettings() {
-      return this.maxWidthSelectList ? "max-width:" + this.maxWidthSelectList + "px;" + "width : 100%;" : null;
+      return this.maxWidthSelectList
+        ? "max-width:" + this.maxWidthSelectList + "px;" + "width : 100%;"
+        : null;
     },
   },
 };
