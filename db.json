@@ -3948,7 +3948,7 @@
         "formOutputMethod": "valueSumm",
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
-        "elementName": "",
+        "elementName": "ползунок",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -3970,7 +3970,7 @@
         "formOutputMethod": "summ",
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
-        "elementName": "",
+        "elementName": "длинна",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -3978,68 +3978,27 @@
         "values": [
           {
             "title": "Название пункта:",
-            "selectName": "Название пункта: 1",
+            "selectName": "Пункт 1",
             "cost": 32,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689413907",
-                "filename": "fence2_1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageHover": {
-                "image_id": "689007507",
-                "filename": "barn1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 45,
-              "maxHeight": 65,
-              "location": "leftSide"
-            },
             "prompt": "gdfgdfg"
           },
           {
             "title": "Название",
-            "selectName": "Название 43",
-            "cost": 43,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689303707",
-                "filename": "fence2.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageHover": {
-                "image_id": "689303507",
-                "filename": "fence3.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "location": "leftSide"
-            }
+            "selectName": "Пункт 2",
+            "cost": 43
           },
           {
-            "title": "Название пункта 453:",
-            "selectName": "Назв3434 ",
+            "title": "Пункт 3:",
+            "selectName": "Пункт 3",
             "cost": 32,
             "prompt": "gdfgdfg"
           },
           {
-            "title": "Назв4343ание пунк345та 453:",
-            "selectName": "Назв3434 ",
+            "title": "Пункт 4 йцу",
+            "selectName": "Пункт 4 йцу ",
             "cost": 32,
-            "prompt": "gdfgdfg"
+            "prompt": "gdfgdfg",
+            "extraValueForDependency" : "йцу"
           }
         ],
         "prompt": "",
@@ -4067,7 +4026,7 @@
                 "title": "Окна Цвет",
                 "label": "Цвет",
                 "isColumn": false,
-                "selectedItem": "0",
+                "selectedItem": "9",
                 "isNeedChoice": false,
                 "notEmpty": false,
                 "formOutputMethod": "value",
@@ -4079,19 +4038,49 @@
                 "template": "UiSelect",
                 "values": [
                   {
-                    "title": "Белый",
-                    "selectName": "Белый",
-                    "cost": 263
+                    "title": "1",
+                    "selectName": "1",
+                    "cost": 1
                   },
                   {
-                    "title": "Цветной",
-                    "selectName": "Цветной",
-                    "cost": 653
+                    "title": "2",
+                    "selectName": "2",
+                    "cost": 2
                   },
                   {
-                    "title": "Цветной 2",
-                    "selectName": "Цветной 2",
-                    "cost": 653
+                    "title": "3",
+                    "selectName": "длинна === 'йцу'",
+                    "cost": 3,
+                    "dependencyFormulaItem": "длинна === 'йцу'"
+                  },
+                  {
+                    "title": "3",
+                    "selectName": "длинна === 2 1",
+                    "cost": 4,
+                    "dependencyFormulaItem": "длинна === 2"
+                  },
+                  {
+                    "title": "4",
+                    "selectName": "длинна === 2 2",
+                    "cost": 5,
+                    "dependencyFormulaItem": "длинна === 2",
+                    "dependencyPrices": [
+                      {
+                        "cost": 100,
+                        "dependencyFormulaCost": 0,
+                        "dependencyFormulaCost": "ползунок > 20"
+                      },
+                      {
+                        "cost": 99,
+                        "dependencyFormulaCost": 0,
+                        "dependencyFormulaCost": "ползунок > 22"
+                      },
+                      {
+                        "cost": 50,
+                        "dependencyFormulaCost": 0,
+                        "dependencyFormulaCost": "ползунок > 25"
+                      }
+                    ]
                   }
                 ],
                 "prompt": "",
@@ -4100,47 +4089,10 @@
             ],
             "maxWidthSide": "100",
             "prompt": "23423",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689303707",
-                "filename": "fence2.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageHover": {
-                "image_id": "689303507",
-                "filename": "fence3.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "location": "rightSide"
-            },
-            "backgroundImageSettings": {
-              "title": "",
-              "image": {
-                "image_id": "615170707",
-                "filename": "qwqe2_icon_wooden_pier_view_from_afar_sketchy_few_details_black_3ff45d35-c304-4a0c-9489-21cd510b20cf.png",
-                "ver_id": 2422030,
-                "image_width": "1024",
-                "image_height": "1024",
-                "ext": "png"
-              },
-              "backgroundHorizontalPosition": "right",
-              "backgroundVerticalPosition": "bottom",
-              "backgroundRepeat": "no-repeat",
-              "behaviorImage": "contain",
-              "unitSize": "px",
-              "opacitySubstrate": 5
-            },
-            "parent": "0;52409506;"
+            "location": "rightSide"
           }
         ],
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "длинна !== 'null'",
         "classes": "",
         "template": "UiAccordion",
         "parent": "0;"
@@ -4212,23 +4164,6 @@
                 "ext": "svg"
               },
               "location": "leftSide"
-            },
-            "backgroundImageSettings": {
-              "title": "",
-              "image": {
-                "image_id": "684059307",
-                "filename": "barn.png",
-                "ver_id": 2422030,
-                "image_width": "96",
-                "image_height": "96",
-                "ext": "png"
-              },
-              "backgroundHorizontalPosition": "right",
-              "backgroundVerticalPosition": "bottom",
-              "backgroundRepeat": "no-repeat",
-              "behaviorImage": "contain",
-              "unitSize": "px",
-              "opacitySubstrate": 5
             },
             "parent": "0;52593306;"
           },

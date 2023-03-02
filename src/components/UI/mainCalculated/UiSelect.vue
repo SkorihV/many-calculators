@@ -112,14 +112,17 @@ export default {
 
     if (!this.notEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
-        if (this.currentIndexOption === null && this.localSelectValues.length) {
-          this.currentIndexOption =
-            this.checkedValueOnVoid(this.selectedItem) &&
-            parseInt(this.selectedItem) < this.localSelectValues.length
-              ? parseInt(this.selectedItem)
-              : this.localSelectValues.length - 1;
+        if (this.isCurrentIndexOptionsNotExist && this.localSelectValues.length) {
+          this.localSelectedItem = parseInt(this.selectedItem) ?  parseInt(this.selectedItem) - 1 : 0;
 
-          this.changeSelect(
+          this.currentIndexOption =
+            this.checkedValueOnVoid(this.localSelectedItem) &&
+            this.localSelectedItem  < this.localSelectValues.length
+              ? this.localSelectedItem
+              : 0;
+
+
+              this.changeSelect(
             this.localSelectValues[this.currentIndexOption],
             this.currentIndexOption,
             "mounted"
@@ -192,6 +195,7 @@ export default {
       canBeShownTooltip: false,
       hoverElementIndex: null,
       maxWidthSelectList: null,
+      localSelectedItem: 1,
     };
   },
   methods: {
@@ -234,7 +238,7 @@ export default {
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
         value: this.currentOptionValue,
-        displayValue: this.currentOption?.selectName,
+        displayValue: this.currentOptionDisplayValue,
         index: this.currentIndexOption,
         name: this.localElementName,
         type: "select",
@@ -273,7 +277,7 @@ export default {
         name: this.localElementName,
         value: this.currentOptionValue,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.currentOption?.selectName,
+        displayValue: this.currentOptionDisplayValue,
         type: "select",
       });
     },
@@ -287,16 +291,6 @@ export default {
     },
   },
   watch: {
-    selectedItem() {
-      this.currentIndexOption =
-        this.checkedValueOnVoid(this.newValue) &&
-        parseInt(this.newValue) < this.localSelectValues.length
-          ? parseInt(this.newValue)
-          : this.localSelectValues.length - 1;
-      this.currentOption = this.localSelectValues[this.currentIndexOption];
-      this.changeValue();
-    },
-
     isOpen(newValue) {
       if (newValue && !Object.keys(this.localDependencyList)?.length) {
         this.localSelectValues?.forEach((select) => {
@@ -386,7 +380,7 @@ export default {
       return this.getImageDir;
     },
     isErrorEmpty() {
-      return this.notEmpty && this.currentIndexOption === null;
+      return this.notEmpty && this.isCurrentIndexOptionsNotExist;
     },
     isErrorClass() {
       return (
@@ -396,6 +390,9 @@ export default {
       );
     },
 
+    isCurrentIndexOptionsNotExist() {
+      return this.currentIndexOption === null;
+    },
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
@@ -403,7 +400,7 @@ export default {
      */
     localCost() {
       if (
-        this.currentIndexOption === null ||
+        this.isCurrentIndexOptionsNotExist ||
         !this.isVisibilityFromDependency
       ) {
         return null;
@@ -416,14 +413,25 @@ export default {
       let newCost = this.costAfterProcessingDependencyPrice(
         this.currentOption?.dependencyPrices
       );
+
       if (newCost !== null) {
         return newCost;
       }
       return this.currentOption?.cost ? this.currentOption?.cost : null;
     },
+    currentOptionDisplayValue() {
+      if (
+        (this.needMockValue && this.isCurrentIndexOptionsNotExist) ||
+        !this.isVisibilityFromDependency
+      ) {
+        return null;
+      }
+
+      return this.currentOption?.selectName
+    },
     currentOptionValue() {
       if (
-        (this.needMockValue && this.currentIndexOption === null) ||
+        (this.needMockValue && this.isCurrentIndexOptionsNotExist) ||
         !this.isVisibilityFromDependency
       ) {
         return null;
@@ -450,6 +458,7 @@ export default {
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
+
       return this.mutationSelectValue.map((selectItem) => {
         if (!selectItem?.dependencyFormulaItem?.length) {
           selectItem.isShow = true;
