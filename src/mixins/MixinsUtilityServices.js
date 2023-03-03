@@ -56,7 +56,7 @@ export const MixinsUtilityServices = {
      * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
      * @returns {{summ: *, name: string}}
      */
-    getProxyFreeVariables(value, name = null) {
+    getProxyFreeVariables (value, name = null) {
       return new Proxy(
         {
           name: name === null ? this.getNameReserveVariable : name,
@@ -69,120 +69,6 @@ export const MixinsUtilityServices = {
           },
         }
       );
-    },
-    /**
-     * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных отсутствующих в формуле
-     * @param dataList
-     * @param variablesList
-     * @returns {*}
-     */
-    getListVariablesMissedInFormula(dataList, variablesList) {
-      return dataList
-        ?.filter((dataOnCalcComponent) => {
-          const isFormula = variablesList.some(
-            (varOnFormula) => varOnFormula === dataOnCalcComponent.name
-          );
-          return !isFormula;
-        })
-        .filter((item) => {
-          return item;
-        });
-    },
-    /**
-     * Получить линейную сумму всех переданных значений
-     * Условия:
-     *           item.cost !== null &&
-     *           !item.excludeFromCalculations &&
-     *           item.isShow
-     * @param dataList
-     * @returns {*}
-     */
-    getSummaFreeVariablesInFormula(dataList) {
-      return dataList.reduce((sum, item) => {
-        const isAllowSummingCost =
-          item?.cost !== null && !item.excludeFromCalculations && item.isShow;
-
-        if (isAllowSummingCost) {
-          sum += parseFloat(item.cost);
-          return sum;
-        }
-        return sum;
-      }, 0);
-    },
-    /**
-     * Обрабатываем массив данных и получаем сумму всех значений из item.summ
-     * @param dataListVariables
-     * @returns {*}
-     */
-    parsingDataInFormulaOnSumma(dataListVariables) {
-      return dataListVariables?.reduce((resultText, item) => {
-        const isExistCost = item?.cost && typeof item?.cost === "number";
-
-        if (isExistCost) {
-          resultText += item.cost.toString();
-          return resultText;
-        }
-        resultText += item;
-        return resultText;
-      }, "");
-    },
-
-    /**
-     * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
-     * zero - выводит ноль
-     * error - выводит null что в расчете формулы приведет к ошибке
-     *
-     * @param dataList
-     * @returns {*[]}
-     */
-    processingArrayOnFormulaProcessingLogic(dataList) {
-      let resultList = [];
-      let localDataList = dataList;
-      for (let i = 0; i < localDataList.length; i++) {
-        const currentItemList = localDataList[i];
-        const isProcessingLogic =
-          currentItemList?.formulaProcessingLogic?.length &&
-          currentItemList?.cost === null;
-        const isItemObject = typeof currentItemList === "object";
-        const isExistCost = typeof currentItemList?.cost === "number";
-        const error = "ОшибкаЗаполнения";
-
-        if (!isItemObject) {
-          resultList.push(currentItemList);
-        } else if (isItemObject && isProcessingLogic) {
-          if (currentItemList.formulaProcessingLogic === "error") {
-            resultList.push(error);
-          } else if (currentItemList.formulaProcessingLogic === "zero") {
-            resultList.push(0);
-          }
-        } else if (isItemObject && isExistCost) {
-          resultList.push(currentItemList.cost);
-        } else {
-          resultList.push(currentItemList);
-        }
-      }
-      return resultList;
-    },
-    /**
-     * получить список значений полей в объекте - рекурсивно
-     * @param object
-     * @returns {*[]}
-     */
-    getNameElementsRecursive(object) {
-      let resultArray = [];
-      getPropInObject(this.originData?.templates, "elementName");
-      function getPropInObject(object) {
-        for (let prop in object) {
-          if (typeof object[prop] === "object") {
-            getPropInObject(object[prop]);
-          } else if (prop === "elementName") {
-            resultArray.push(
-              object[prop]?.length ? object[prop] : object["json_id"]
-            );
-          }
-        }
-      }
-      return resultArray;
     },
   },
   computed: {

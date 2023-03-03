@@ -18,9 +18,13 @@ export const useBaseStore = defineStore("base", {
       showInsideElementStatusData: false,
       elementsIsMounted: {},
       tooltipOn: true,
+      currency: "руб"
     };
   },
   getters: {
+    getCurrency: ({currency}) => {
+      return currency
+    },
     /**
      * Получить весь список элементов результата
      * @param globalResultsElements
@@ -136,6 +140,7 @@ export const useBaseStore = defineStore("base", {
         value,
         displayValue,
         formOutputMethod,
+        resultOutputMethod,
         eventType,
         unit,
         isShow,
@@ -151,6 +156,7 @@ export const useBaseStore = defineStore("base", {
         label,
         cost,
         formOutputMethod,
+        resultOutputMethod,
         value,
         summ: cost,
         displayValue,
@@ -224,5 +230,8 @@ export const useBaseStore = defineStore("base", {
     setTooltipOn(flag) {
       this.tooltipOn = !flag;
     },
+    setCurrency(currency) {
+      this.currency = currency !== null ? currency : "руб";
+    }
   },
 });

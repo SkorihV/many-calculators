@@ -167,6 +167,7 @@ export default {
       "isColumn",
       "isNeedChoice",
       "formOutputMethod",
+      "resultOutputMethod",
       "label",
       "notEmpty",
       "excludeFromCalculations",
@@ -246,6 +247,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        resultOutputMethod:
+          this.resultOutputMethod !== "no" ? this.resultOutputMethod : null,
         excludeFromCalculations: this.excludeFromCalculations,
         isShow: this.isVisibilityFromDependency,
         eventType,

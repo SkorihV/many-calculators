@@ -1,4 +1,5 @@
 <template>
+  {{outOptions?.resultOptions?.currency}}
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
@@ -92,7 +93,8 @@
       <result-block-for-output
         :options="outOptions"
         :init-teleport-is-ready="initTeleportIsReady"
-        :output-html-text="finalTextForOutput"
+        :dataForResult="sortPositionDataForOutput"
+        :final-summa-for-output="finalSummaForOutput"
       ></result-block-for-output>
       <error-names-templates
         v-if="devMode"
@@ -131,6 +133,8 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 
 import localData from "@/servises/localData";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
+
+import {parseResultValueObjectItem, processingArrayOnFormulaProcessingLogic, parsingDataInFormulaOnSumma, getSummaFreeVariablesInFormula, getListVariablesMissedInFormula} from "@/servises/UtilityServices.js";
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
@@ -259,8 +263,7 @@ export default {
     this.mistake = this.outOptions?.methodProcessingMistakes
       ? this.outOptions?.methodProcessingMistakes
       : "no";
-    this.currency =
-      this?.outOptions !== null ? this?.outOptions?.currency : "руб";
+    this.setCurrency(this?.outOptions?.resultOptions?.currency);
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
@@ -281,7 +284,6 @@ export default {
       isUseFormula: false, // использовать формулу
       displayResultData: false, // включить работу формул и вывод данных
       mistake: "no",
-      currency: "руб",
       submitResult: null,
       initEnabledSendForm: false,
       eventNotShowTooltips: [
@@ -368,61 +370,6 @@ export default {
         });
       }
     },
-    parseResultValueObjectItem(item) {
-      let result = "";
-      let currentValue =
-        !isNaN(parseFloat(item.value)) && isFinite(item.value)
-          ? Math.abs(item.value)
-          : item.value;
-
-      const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
-      const isAllowDataOutput =
-        item.formOutputMethod &&
-        item.displayValue !== null &&
-        item.isShow &&
-        isAllowZeroValue;
-      const isAllowValueOutput =
-        item.formOutputMethod === "value" ||
-        item.formOutputMethod === "valueSumm";
-      const isAllowCostOutput =
-        item.cost !== null &&
-        (item.formOutputMethod === "summ" ||
-          item.formOutputMethod === "valueSumm");
-      const unit = item?.unit ? item.unit : "";
-
-      if (isAllowDataOutput) {
-        result +=
-          "\n<div class='calc__result-block-field-label'>" +
-          item.label +
-          " </div>";
-
-        result += "<div class='calc__result-block-field-right'>";
-        if (isAllowValueOutput) {
-          result +=
-            "<div class='calc__result-block-field-value'>" +
-            item.displayValue +
-            " " +
-            unit;
-
-          if (isAllowCostOutput) {
-            result += " - ";
-          }
-
-          result += "</div>";
-        }
-        if (isAllowCostOutput) {
-          let sum = item?.cost?.toString();
-          result +=
-            "<div class='calc__result-block-field-cost'>" +
-            sum +
-            " " +
-            this.currency +
-            "</div>";
-        }
-        result += "</div>";
-      }
-      return result;
-    },
     /**
      *
      * @param item
@@ -471,6 +418,8 @@ export default {
       "getImageDir",
       "appIsMounted",
       "setTooltipOn",
+      "setCurrency",
+      "getCurrency"
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
@@ -499,7 +448,7 @@ export default {
      * @returns {[]}
      */
     freeVariablesOutsideFormula() {
-      return this.getListVariablesMissedInFormula(
+      return getListVariablesMissedInFormula(
         this.baseDataForCalculate,
         this.variablesInFormula
       );
@@ -510,7 +459,7 @@ export default {
      * @returns {*}
      */
     summaFreeVariables() {
-      return this.getSummaFreeVariablesInFormula(
+      return getSummaFreeVariablesInFormula(
         this.freeVariablesOutsideFormula
       );
     },
@@ -536,8 +485,8 @@ export default {
      * @returns {*}
      */
     resultTextForComputed() {
-      let resultString = this.parsingDataInFormulaOnSumma(
-        this.processingArrayOnFormulaProcessingLogic(
+      let resultString = parsingDataInFormulaOnSumma(
+        processingArrayOnFormulaProcessingLogic(
           this.dataListVariablesOnFormula
         )
       );
@@ -569,10 +518,8 @@ export default {
      * Данные нужные только для вывода в форму
      * @returns {*[]}
      */
-    dataForOutputText() {
-      return this.baseDataForCalculate
-        .filter((item) => item.formOutputMethod !== "no")
-        .sort((itemA, itemB) => itemA.position - itemB.position);
+    sortPositionDataForOutput() {
+      return this.baseDataForCalculate.sort((itemA, itemB) => itemA.position - itemB.position);
     },
     /**
      * Текст со всеми полями которые должны отображаться в форме
@@ -580,27 +527,27 @@ export default {
      */
     resultTextDataForForm() {
       let result = "";
-      this.dataForOutputText.forEach((item) => {
+      this.sortPositionDataForOutput.forEach((item) => {
         if (item.type === "duplicator") {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                if (this.parseResultValueObjectItem(duplicator)?.length) {
+                if (parseResultValueObjectItem(duplicator, "formOutputMethod", this.getCurrency)?.length) {
                   result += "<div class='calc__result-block-delimiter'></div>";
                   result +=
                     "<div class='calc__result-block-field-wrapper'>" +
-                    this.parseResultValueObjectItem(duplicator) +
+                    parseResultValueObjectItem(duplicator, "formOutputMethod", this.getCurrency) +
                     "</div>";
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
                     if (
-                      this.parseResultValueObjectItem(templateInDuplicator)
+                      parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency)
                         ?.length
                     ) {
                       result +=
                         "<div class='calc__result-block-field-wrapper'>" +
-                        this.parseResultValueObjectItem(templateInDuplicator) +
+                        parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency) +
                         "</div>";
                     }
                   }
@@ -610,11 +557,10 @@ export default {
             });
           }
         } else {
-          if (this.parseResultValueObjectItem(item)?.length) {
+          const data = parseResultValueObjectItem(item, "formOutputMethod",this.getCurrency);
+          if (data.length) {
             result +=
-              "<div class='calc__result-block-field-wrapper'> " +
-              this.parseResultValueObjectItem(item) +
-              "</div>";
+              "<div class='calc__result-block-field-wrapper'> " + data + "</div>";
           }
         }
       });
@@ -664,7 +610,7 @@ export default {
           this.finalSummaForOutput +
           "</div>" +
           "<div class='calc__result-block-field-summ-currency'> " +
-          this.currency +
+          this.getCurrency +
           "</div>" +
           "</div>";
       }

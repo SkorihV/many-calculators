@@ -60,6 +60,7 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {processingArrayOnFormulaProcessingLogic} from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicatorWrapper",
@@ -124,6 +125,7 @@ export default {
         value: null,
         displayValue: this.localCost,
         formOutputMethod: this.mutationsInputData?.formOutputMethod,
+        resultOutputMethod: this.mutationsInputData?.resultOutputMethod,
         eventType: data.eventType,
         unit: "",
         isShow: this.parentIsShow,
@@ -371,7 +373,7 @@ export default {
         return this.resultSummaDataFriVariablesOutsideFormula;
       }
 
-      return this.processingArrayOnFormulaProcessingLogic(
+      return processingArrayOnFormulaProcessingLogic(
         this.dataListVariablesOnFormula
       )
         .map((item) => {

@@ -123,6 +123,7 @@ export default {
     },
     ...UsePropsTemplates([
       "formOutputMethod",
+      "resultOutputMethod",
       "isChecked",
       "isNeedChoice",
       "dependencyPrices",
@@ -191,6 +192,8 @@ export default {
         cost: this.localCost,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        resultOutputMethod:
+          this.resultOutputMethod !== "no" ? this.resultOutputMethod : null,
         excludeFromCalculations: this.excludeFromCalculations,
         isShow: this.isVisibilityFromDependency,
         eventType,

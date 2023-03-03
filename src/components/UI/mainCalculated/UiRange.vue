@@ -157,6 +157,7 @@ export default {
       "excludeFromCalculations",
       "elementName",
       "formOutputMethod",
+      "resultOutputMethod",
       "parentName",
       "isNeedChoice",
       "formulaProcessingLogic",
@@ -274,6 +275,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        resultOutputMethod:
+          this.resultOutputMethod !== "no" ? this.resultOutputMethod : null,
         excludeFromCalculations: this.excludeFromCalculations,
         isShow: this.isVisibilityFromDependency,
         unit: this.unit,

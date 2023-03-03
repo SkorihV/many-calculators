@@ -186,6 +186,16 @@ export default function (propsName) {
   };
 
   /**
+   * метод вывода данных в результирующий блок
+   */
+  const resultOutputMethod = () => {
+    return {
+      type: String,
+      default: "no",
+    };
+  };
+
+  /**
    *     Всегда включена. Отключить нельзя
    */
   const isChecked = () => {
@@ -275,6 +285,7 @@ export default function (propsName) {
     isColumn: isColumn(),
     isNeedChoice: isNeedChoice(),
     formOutputMethod: formOutputMethod(),
+    resultOutputMethod: resultOutputMethod(),
     isChecked: isChecked(),
     formula: formula(),
     min: min(),

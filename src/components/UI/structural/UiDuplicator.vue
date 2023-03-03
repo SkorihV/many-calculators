@@ -32,8 +32,9 @@
 import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
+
+import {getNameElementsRecursive} from "@/servises/UtilityServices"
 
 export default {
   name: "UiDuplicator",
@@ -42,7 +43,6 @@ export default {
   mixins: [
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
-    MixinsUtilityServices,
   ],
   props: {
     duplicateTemplate: {
@@ -51,6 +51,7 @@ export default {
     },
     ...UsePropsTemplates([
       "formOutputMethod",
+      "resultOutputMethod",
       "label",
       "dependencyFormulaDisplay",
       "excludeFromCalculations",
@@ -98,23 +99,7 @@ export default {
           this.localCost += parseFloat(item.cost);
         }
       });
-      this.$emit("changedValue", {
-        name: this.elementName,
-        type: "duplicator",
-        label: this.duplicateTemplate.label,
-        cost: this.localCost,
-        value: null,
-        displayValue: this.localCost,
-        formOutputMethod: this.duplicateTemplate.formOutputMethod,
-        eventType: data.eventType,
-        unit: "",
-        isShow: this.isVisibilityFromDependency,
-        excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
-        insertedTemplates: this.returnsLocalResultsElements,
-        formulaProcessingLogic: this.formulaProcessingLogic,
-        position: this.positionElement,
-        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
-      });
+      this.emitChangeValue(data.eventType, this.localCost);
     },
     calculateResult() {
       this.shownAllTooltips = true;
@@ -141,40 +126,33 @@ export default {
           this.localCost += parseFloat(item.cost);
         }
       });
+      this.emitChangeValue("deleteDuplicate");
+    },
+    emitChangeValue(eventType, displayValue = null) {
       this.$emit("changedValue", {
         name: this.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
         cost: this.localCost,
         value: null,
-        displayValue: null,
+        displayValue: displayValue,
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
-        eventType: "deleteDuplicate",
+        resultOutputMethod: this.duplicateTemplate.resultOutputMethod,
+        eventType: eventType,
         unit: "",
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
         insertedTemplates: this.returnsLocalResultsElements,
+        formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
-    },
+    }
   },
   watch: {
     isVisibilityFromDependency(newValue) {
       if (newValue === false) {
-        this.$emit("changedValue", {
-          name: this.elementName,
-          type: "duplicator",
-          label: this.duplicateTemplate.label,
-          cost: this.localCost,
-          value: null,
-          displayValue: null,
-          formOutputMethod: this.duplicateTemplate.formOutputMethod,
-          eventType: "deleteDuplicate",
-          unit: "",
-          isShow: this.isVisibilityFromDependency,
-          excludeFromCalculations:
-            this.duplicateTemplate.excludeFromCalculations,
-          insertedTemplates: this.returnsLocalResultsElements,
-        });
+        this.emitChangeValue("deleteDuplicate");
       }
     },
   },
@@ -185,7 +163,7 @@ export default {
       );
     },
     originVariablesInDuplicator() {
-      let result = this.getNameElementsRecursive(this.originData?.templates);
+      let result = getNameElementsRecursive(this.originData?.templates);
       return result.filter((item) => item?.length > 0);
     },
   },

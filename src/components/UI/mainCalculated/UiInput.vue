@@ -223,14 +223,6 @@ export default {
     customErrorText: {
       type: String,
     },
-
-    /**
-     * метод вывода данных в результирующую форму
-     */
-    formOutputMethod: {
-      type: String,
-      default: "no",
-    },
     ...UsePropsTemplates([
       "label",
       "notEmpty",
@@ -247,6 +239,7 @@ export default {
       "min",
       "isColumn",
       "formOutputMethod",
+      "resultOutputMethod",
       "dependencyFormulaDisplay",
       "parentIsShow",
       "positionElement",
@@ -357,6 +350,8 @@ export default {
         label: this.label,
         formOutputMethod:
           this.formOutputMethod !== "no" ? this.formOutputMethod : null,
+        resultOutputMethod:
+          this.resultOutputMethod !== "no" ? this.resultOutputMethod : null,
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.excludeFromCalculations,
         unit: this.unit,
@@ -435,6 +430,9 @@ export default {
       }
     },
     plus() {
+      if (!this.isOnlyNumber) {
+        return false;
+      }
       if (this.valueIsNaN) {
         this.resetNumberValue();
       }
@@ -449,6 +447,9 @@ export default {
       this.shownTooltip();
     },
     minus() {
+      if (!this.isOnlyNumber) {
+        return false;
+      }
       if (this.valueIsNaN) {
         this.resetNumberValue();
       }
