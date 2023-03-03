@@ -19,9 +19,21 @@ export const useBaseStore = defineStore("base", {
       elementsIsMounted: {},
       tooltipOn: true,
       currency: "руб",
+      methodBeginningCalculation: "no",
+      initEnabledSendForm: false,
+      allowShowResultBlock: false,
     };
   },
   getters: {
+    checkInitEnabledSendForm({initEnabledSendForm}) {
+      return initEnabledSendForm;
+    },
+    checkAllowShowResultBlock({allowShowResultBlock}){
+      return allowShowResultBlock;
+    },
+    getMethodBeginningCalculation({methodBeginningCalculation}) {
+      return methodBeginningCalculation;
+    },
     getCurrency: ({ currency }) => {
       return currency;
     },
@@ -97,21 +109,29 @@ export const useBaseStore = defineStore("base", {
       },
     /**
      * Есть ли во всем калькуляторе элементы с ошибками валидации
+     * игнорировать скрытые элементы
      * @param state
      * @returns {boolean}
      */
-    isCheckedGlobalValidation: ({ validationsErrorsList }) =>
+
+    isExistGlobalErrorsValidationIgnoreHiddenElement: ({ validationsErrorsList }) =>
       Boolean(
         Object.values(validationsErrorsList).filter(
           (item) => item.error && item.isShow
         ).length
       ),
     /**
-     * Список элементов с информацией о валидации
+     * Есть ли во всем калькуляторе элементы с ошибками валидации
+     * учитывать скрытые элементы
      * @param state
-     * @returns {{}}
+     * @returns {boolean}
      */
-    validationList: ({ validationsErrorsList }) => validationsErrorsList,
+    isExistGlobalErrorsValidationTakeIntoHiddenElement: ({ validationsErrorsList }) =>
+      Boolean(
+        Object.values(validationsErrorsList).filter(
+          (item) => item.error
+        ).length
+      ),
     /**
      * название спецпеременной служащей для суммирования в себе всех значений
      * @param state
@@ -227,11 +247,22 @@ export const useBaseStore = defineStore("base", {
     tryToggleElementIsMounted(name, flag) {
       this.elementsIsMounted[name] = flag;
     },
-    setTooltipOn(flag) {
-      this.tooltipOn = !flag;
+    setTooltipOn(dataOptions) {
+      this.tooltipOn = !Boolean(dataOptions?.tooltipOff);
     },
-    setCurrency(currency) {
-      this.currency = currency !== null ? currency : "руб";
+    setCurrency(dataOptions) {
+      this.currency = dataOptions?.resultOptions?.currency !== null ? dataOptions?.resultOptions?.currency  : "руб";
     },
+    setMethodBeginningCalculation(dataOptions) {
+      this.methodBeginningCalculation = dataOptions?.methodBeginningCalculation
+        ? dataOptions?.methodBeginningCalculation
+        : "no";
+    },
+    setInitEnabledSendForm(flag){
+        this.initEnabledSendForm = flag;
+    },
+    setAllowShowResultBlock(flag) {
+      this.allowShowResultBlock = flag;
+    }
   },
 });

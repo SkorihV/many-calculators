@@ -1,5 +1,4 @@
 <template>
-  {{ outOptions?.resultOptions?.currency }}
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
@@ -68,7 +67,7 @@
         />
       </template>
       <div v-if="showErrorTextBlock" class="calc__error-block">
-        Заполните, пожалуйста, все обязательные поля корректно.
+        Заполните, пожалуйста, все обязательные поля.
       </div>
       <div
         v-if="!showErrorTextBlock && showErrorSummaBlock"
@@ -76,26 +75,17 @@
       >
         Не все поля участвующие в расчете были заполнены.
       </div>
-      <button
-        class="calc__show-result-btn"
-        @click="calculateResult"
-        v-if="showResultBtn"
-        @mouseover="isHoverButtonResult = true"
-        @mouseleave="isHoverButtonResult = false"
-      >
-        <icon-element-wrapper
-          :alt="outOptions?.resultOptions?.titleButton ?? 'Рассчитать'"
-          :icon-settings="outOptions?.resultOptions?.iconSettings"
-        >
-          {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
-        </icon-element-wrapper>
-      </button>
+      <result-button-for-computed
+        :resultOptions="outOptions?.resultOptions"
+        @checkEnabledResultButton="checkEnabledResultButton"
+      />
+
       <result-block-for-output
-        :options="outOptions"
-        :init-teleport-is-ready="initTeleportIsReady"
+        v-if="outOptions?.resultOptions"
+        :result-options="outOptions?.resultOptions"
         :dataForResult="sortPositionDataForOutput"
         :final-summa-for-output="finalSummaForOutput"
-      ></result-block-for-output>
+      />
       <error-names-templates
         v-if="devMode"
         :templates="calculatorTemplates"
@@ -113,7 +103,9 @@
       v-html="devModeData"
     ></div>
   </div>
-  <spinner-element v-if="!appIsMounted" />
+  <spinner-element
+    :init-show="!appIsMounted"
+  ></spinner-element>
 </template>
 
 <script>
@@ -122,17 +114,18 @@ import UiTab from "@/components/UI/structural/UiTab.vue";
 import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import UiBisection from "@/components/UI/structural/UiBisection.vue";
+
 import ErrorNamesTemplates from "@/components/UI/other/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
+import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
+import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import localData from "@/servises/localData";
-import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
 
 import {
   parseResultValueObjectItem,
@@ -141,12 +134,13 @@ import {
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
 } from "@/servises/UtilityServices.js";
+
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    ResultButtonForComputed,
     ResultBlockForOutput,
-    IconElementWrapper,
     BackgroundImageElement,
     SpinnerElement,
     TemplatesWrapper,
@@ -265,18 +259,12 @@ export default {
 
     this.isUseFormula = this.outOptions?.computedMethod === "formula";
     this.displayResultData = this.outOptions?.computedMethod !== "no";
+    this.setMethodBeginningCalculation(this.outOptions);
+    this.setCurrency(this.outOptions);
 
-    this.mistake = this.outOptions?.methodProcessingMistakes
-      ? this.outOptions?.methodProcessingMistakes
-      : "no";
-    this.setCurrency(this?.outOptions?.resultOptions?.currency);
-    this.initEnabledSendForm =
-      this?.outOptions?.methodProcessingMistakes === "useAutomatic";
+    this.setInitEnabledSendForm(this?.outOptions?.methodBeginningCalculation === "useAutomatic" || this?.outOptions?.methodBeginningCalculation === "useButtonAfterCalculation")  ;
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
-    this.outOptions.resultOptions.titleButton = this.outOptions?.resultOptions
-      ? this.outOptions?.resultOptions?.titleButton
-      : "Рассчитать";
-    this.setTooltipOn(Boolean(this.outOptions?.tooltipOff));
+    this.setTooltipOn(this.outOptions);
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
@@ -289,9 +277,7 @@ export default {
       formula: "", // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       displayResultData: false, // включить работу формул и вывод данных
-      mistake: "no",
       submitResult: null,
-      initEnabledSendForm: false,
       eventNotShowTooltips: [
         "delete",
         "mounted",
@@ -325,18 +311,13 @@ export default {
         });
       }
 
-      if (
-        !this.eventNotShowTooltips.includes(eventType) &&
-        this.mistake === "useAutomatic"
-      ) {
+      if (!this.eventNotShowTooltips.includes(eventType) && this.isAutomaticCalculate ) {
         this.showAllTooltipsOn();
+        if (!this.isMethodBeginningAfterCalculation) {
+          this.setAllowShowResultBlock(true);
+        }
       }
 
-      this.checkEnabledResultButton();
-    },
-    calculateResult() {
-      this.showAllTooltipsOn();
-      this.initEnabledSendForm = true;
       this.checkEnabledResultButton();
     },
     /**
@@ -401,11 +382,34 @@ export default {
       }
       return { newItem, shiftIndex };
     },
+    showForm() {
+      if(!this.formElement) {
+        return false;
+      }
+      this.formElement.style.display = "block";
+    },
+    hiddenForm() {
+      if(!this.formElement) {
+        return false;
+      }
+      this.formElement.style.display = "none";
+    }
   },
   watch: {
-    isCheckedGlobalValidation() {
+    isExistGlobalErrorsValidationIgnoreHiddenElement() {
       this.checkEnabledResultButton();
     },
+    checkAllowShowResultBlock: {
+      handler(newValue){
+        if (newValue) {
+          this.showForm()
+        } else {
+          this.hiddenForm()
+        }
+      },
+      deep: true,
+      immediate: true
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -414,8 +418,7 @@ export default {
       "tryModifiedResultElement",
       "tryToggleDevMode",
       "isCanShowAllTooltips",
-      "isCheckedGlobalValidation",
-      "validationList",
+      "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "globalDependenciesList",
       "getNameReserveVariable",
       "getAllResultsElements",
@@ -426,7 +429,17 @@ export default {
       "setTooltipOn",
       "setCurrency",
       "getCurrency",
+      "setMethodBeginningCalculation",
+      "getMethodBeginningCalculation",
+      "setInitEnabledSendForm",
+      "checkInitEnabledSendForm",
+      "setAllowShowResultBlock",
+      "checkAllowShowResultBlock",
     ]),
+    formElement() {
+      let form = document.querySelector(".calc__form-for-result");
+      return form ? form : false;
+    },
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
     },
@@ -647,39 +660,33 @@ export default {
     finalTextForOutputForTeleport() {
       return this.finalTextForOutput.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
     },
-
+    isAutomaticCalculate() {
+      return this.getMethodBeginningCalculation === "useAutomatic" || this.getMethodBeginningCalculation === "useButtonAfterCalculation"
+    },
+    isMethodBeginningAfterCalculation() {
+      return this.getMethodBeginningCalculation === "useButtonAfterCalculation";
+    },
     /**
      * Отобразить блок с текстом о наличии ошибок,
      * если ошибки есть и глобально разрешено их отображение
      * @returns {false|boolean}
      */
     showErrorTextBlock() {
-      return this.isCheckedGlobalValidation && this.isCanShowAllTooltips;
-    },
-    /**
-     * Добавить данные в форму если нет ошибок валидации
-     * @returns {boolean}
-     */
-    initTeleportIsReady() {
-      return (
-        !this.isCheckedGlobalValidation &&
-        this.initEnabledSendForm &&
-        this.isCanShowAllTooltips
-      );
+      return this.isExistGlobalErrorsValidationIgnoreHiddenElement && this.isCanShowAllTooltips;
     },
     isEnabledSendForm() {
       return (
-        this.initEnabledSendForm &&
+        this.checkInitEnabledSendForm &&
         this.finalTextForOutput?.length &&
-        this.isCanShowAllTooltips &&
-        !this.isCheckedGlobalValidation
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement
       );
     },
+    /**
+     * Отправить данные в форму если нет ошибок валидации и разрешена отправка
+     * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
+     */
     allowTeleport() {
-      return this.initTeleportIsReady && this.submitResult;
-    },
-    showResultBtn() {
-      return this.mistake === "useButton";
+      return this.submitResult && !this.isExistGlobalErrorsValidationIgnoreHiddenElement && this.checkInitEnabledSendForm;
     },
     showErrorSummaBlock() {
       return (
@@ -707,7 +714,6 @@ export default {
         ? `<div class="calc__dev-block-element">Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
         : "";
     },
-
     showDevBlock() {
       return this.devMode && this.showInsideElementStatus;
     },
@@ -970,7 +976,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       line-height: 20px;
       padding: 20px 35px;
       max-width: 304px;
-      font-weight: 700;
       background: $c_element_input_color;
       color: $c_element_text_default;
       border: $c_element_border-width solid $c_element_border_color;
@@ -2523,17 +2528,25 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__spinner {
     &-wrapper {
       width: 100%;
-      height: 70px;
+      min-height: 70px;
       display: flex;
       margin: 20px;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+    }
+
+    &-text {
+      font-size: 25px;
+      font-weight: 700;
+      font-style: italic;
+      color: $c_base_title;
     }
 
     &-block {
       position: relative;
-      width: 100px;
-      height: 100px;
+      width: 70px;
+      height: 70px;
       &:before,
       &:after {
         content: "";
@@ -2647,6 +2660,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       border-width: 2px;
       border-style: solid;
       width: 100%;
+      display: none;
       &:focus,
       &:hover {
         border-color: $c_decor_border_color_hover;

@@ -1228,7 +1228,7 @@
 
   "calculator-options": {
     "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна) + test123 + 22 + null + _otherSum_",
-    "methodProcessingMistakes": "useButton",
+    "methodBeginningCalculation": "useButton",
     "currency": "руб",
     "form": "7981901",
     "devModeEnabled": 1,
@@ -3737,8 +3737,7 @@
 
   "test-color-options": {
     "formula": "",
-    "methodProcessingMistakes": "useButton",
-
+    "methodBeginningCalculation": "useButton",
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
@@ -3751,7 +3750,9 @@
       "titleButton": "Рассчитать",
       "titleSumma": "ИТОГО:",
       "showResultDataForBlock": 1,
-      "currency": "яблоки"
+      "currency": "яблоки",
+      "textForSpinner" : "фывфы фв фыв",
+      "timerForSpinner": 5
     }
   },
 
@@ -4136,8 +4137,8 @@
                 "controls": false,
                 "step": "1",
                 "isColumn": false,
-                "notEmpty": false,
-                "onlyNumber": false,
+                "notEmpty": true,
+                "onlyNumber": true,
                 "isCurrency": false,
                 "onlyInteger": false,
                 "formOutputMethod": "no",

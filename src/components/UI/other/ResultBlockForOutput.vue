@@ -2,26 +2,26 @@
   <div
     class="calc__result-block-wrapper"
     :class="{
-      isVisualSeparate: options.resultOptions?.visuallySeparateElement,
+      isVisualSeparate: resultOptions?.visuallySeparateElement,
     }"
-    v-if="showResultDataForBlock && initTeleportIsReady"
+    v-if="isShowResultBlock"
   >
     <background-image-element
       class="result"
-      v-if="options.resultOptions?.backgroundImageSettings"
-      :image-settings-data="options.resultOptions?.backgroundImageSettings"
+      v-if="resultOptions?.backgroundImageSettings"
+      :image-settings-data="resultOptions?.backgroundImageSettings"
     />
     <div
       class="calc__result-block-title-wrapper"
       v-if="isShowResultBlockTitle || isShowResultBlockSubtitle"
     >
       <div class="calc__result-block-title-main" v-if="isShowResultBlockTitle">
-        {{ options.resultOptions.title }}
+        {{ resultOptions.title }}
       </div>
       <div
         class="calc__result-block-title-sub"
         v-if="isShowResultBlockSubtitle"
-        v-html="options.resultOptions.subtitle"
+        v-html="resultOptions.subtitle"
       />
     </div>
     <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
@@ -38,13 +38,9 @@ export default {
   name: "ResultBlockForOutput",
   components: { backgroundImageElement },
   props: {
-    options: {
+    resultOptions: {
       type: Object,
       require: true,
-    },
-    initTeleportIsReady: {
-      type: Boolean,
-      default: false,
     },
     dataForResult: {
       type: Array,
@@ -56,21 +52,34 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["getCurrency"]),
+    ...mapState(useBaseStore, ["getCurrency","isExistGlobalErrorsValidationIgnoreHiddenElement", "checkInitEnabledSendForm", "checkAllowShowResultBlock"]),
     isShowResultBlockTitle() {
-      return Boolean(this.options?.resultOptions?.title?.length);
+      return Boolean(this.resultOptions?.title?.length);
     },
     isShowResultBlockSubtitle() {
-      return Boolean(this.options?.resultOptions?.subtitle?.length);
+      return Boolean(this.resultOptions?.subtitle?.length);
     },
-    showResultDataForBlock() {
-      return this.options?.resultOptions
-        ? this.options?.resultOptions?.showResultDataForBlock
+    allowShowResultInOptions() {
+      return this.resultOptions
+        ? this.resultOptions?.showResultDataForBlock
         : false;
     },
     showSumma() {
-      return !this.options?.resultOptions?.hiddenSumma;
+      return !this.resultOptions?.hiddenSumma;
     },
+    /**
+     * Добавить данные в форму если нет ошибок валидации
+     * @returns {boolean}
+     */
+    isShowResultBlock() {
+      return (
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+        this.checkInitEnabledSendForm &&
+        this.allowShowResultInOptions &&
+        this.checkAllowShowResultBlock
+      );
+    },
+
     /**
      * Текст со всеми полями которые должны отображаться в блоке
      * @returns {string}
@@ -162,7 +171,7 @@ export default {
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
-          this.options?.resultOptions?.titleSumma +
+          this.resultOptions?.titleSumma +
           "</div>" +
           "<div class='calc__result-block-field-summ-cost'> " +
           this.finalSummaForOutput +
