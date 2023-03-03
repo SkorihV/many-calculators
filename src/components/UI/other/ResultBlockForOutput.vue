@@ -2,25 +2,20 @@
   <div
     class="calc__result-block-wrapper"
     :class="{
-          isVisualSeparate: options.resultOptions?.visuallySeparateElement,
-        }"
+      isVisualSeparate: options.resultOptions?.visuallySeparateElement,
+    }"
     v-if="showResultDataForBlock && initTeleportIsReady"
   >
     <background-image-element
       class="result"
       v-if="options.resultOptions?.backgroundImageSettings"
-      :image-settings-data="
-            options.resultOptions?.backgroundImageSettings
-          "
+      :image-settings-data="options.resultOptions?.backgroundImageSettings"
     />
     <div
       class="calc__result-block-title-wrapper"
       v-if="isShowResultBlockTitle || isShowResultBlockSubtitle"
     >
-      <div
-        class="calc__result-block-title-main"
-        v-if="isShowResultBlockTitle"
-      >
+      <div class="calc__result-block-title-main" v-if="isShowResultBlockTitle">
         {{ options.resultOptions.title }}
       </div>
       <div
@@ -41,29 +36,27 @@ import backgroundImageElement from "@/components/UI/supporting/background-image-
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 export default {
   name: "ResultBlockForOutput",
-  components: {backgroundImageElement},
+  components: { backgroundImageElement },
   props: {
     options: {
       type: Object,
-      require: true
+      require: true,
     },
     initTeleportIsReady: {
       type: Boolean,
-      default: false
+      default: false,
     },
     dataForResult: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     finalSummaForOutput: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   computed: {
-    ...mapState(useBaseStore,[
-      "getCurrency"
-    ]),
+    ...mapState(useBaseStore, ["getCurrency"]),
     isShowResultBlockTitle() {
       return Boolean(this.options?.resultOptions?.title?.length);
     },
@@ -71,7 +64,9 @@ export default {
       return Boolean(this.options?.resultOptions?.subtitle?.length);
     },
     showResultDataForBlock() {
-      return this.options?.resultOptions ? this.options?.resultOptions?.showResultDataForBlock : false;
+      return this.options?.resultOptions
+        ? this.options?.resultOptions?.showResultDataForBlock
+        : false;
     },
     showSumma() {
       return !this.options?.resultOptions?.hiddenSumma;
@@ -87,22 +82,39 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                if (parseResultValueObjectItem(duplicator, "resultOutputMethod", this.getCurrency)?.length) {
+                if (
+                  parseResultValueObjectItem(
+                    duplicator,
+                    "resultOutputMethod",
+                    this.getCurrency
+                  )?.length
+                ) {
                   result += "<div class='calc__result-block-delimiter'></div>";
                   result +=
                     "<div class='calc__result-block-field-wrapper'>" +
-                    parseResultValueObjectItem(duplicator, "resultOutputMethod", this.getCurrency) +
+                    parseResultValueObjectItem(
+                      duplicator,
+                      "resultOutputMethod",
+                      this.getCurrency
+                    ) +
                     "</div>";
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
                     if (
-                      parseResultValueObjectItem(templateInDuplicator, "resultOutputMethod", this.getCurrency)
-                        ?.length
+                      parseResultValueObjectItem(
+                        templateInDuplicator,
+                        "resultOutputMethod",
+                        this.getCurrency
+                      )?.length
                     ) {
                       result +=
                         "<div class='calc__result-block-field-wrapper'>" +
-                        parseResultValueObjectItem(templateInDuplicator, "resultOutputMethod", this.getCurrency) +
+                        parseResultValueObjectItem(
+                          templateInDuplicator,
+                          "resultOutputMethod",
+                          this.getCurrency
+                        ) +
                         "</div>";
                     }
                   }
@@ -112,10 +124,20 @@ export default {
             });
           }
         } else {
-          if (parseResultValueObjectItem(item, "resultOutputMethod", this.getCurrency)?.length) {
+          if (
+            parseResultValueObjectItem(
+              item,
+              "resultOutputMethod",
+              this.getCurrency
+            )?.length
+          ) {
             result +=
               "<div class='calc__result-block-field-wrapper'> " +
-              parseResultValueObjectItem(item, "resultOutputMethod", this.getCurrency) +
+              parseResultValueObjectItem(
+                item,
+                "resultOutputMethod",
+                this.getCurrency
+              ) +
               "</div>";
           }
         }
@@ -135,7 +157,7 @@ export default {
 
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
-      } else if(this.finalSummaForOutput !== false && this.showSumma) {
+      } else if (this.finalSummaForOutput !== false && this.showSumma) {
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
@@ -152,10 +174,8 @@ export default {
       }
       return result;
     },
-  }
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

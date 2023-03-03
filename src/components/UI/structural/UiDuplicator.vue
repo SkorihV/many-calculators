@@ -34,16 +34,13 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
-import {getNameElementsRecursive} from "@/servises/UtilityServices"
+import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
   components: { UiDuplicatorWrapper },
   emits: ["changedValue"],
-  mixins: [
-    MixinsForProcessingFormula,
-    MixinsGeneralItemData,
-  ],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
     duplicateTemplate: {
       type: Object,
@@ -147,7 +144,7 @@ export default {
         position: this.positionElement,
         zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
-    }
+    },
   },
   watch: {
     isVisibilityFromDependency(newValue) {

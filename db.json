@@ -4006,7 +4006,7 @@
             "selectName": "Пункт 4 йцу ",
             "cost": 32,
             "prompt": "gdfgdfg",
-            "extraValueForDependency" : "йцу"
+            "extraValueForDependency": "йцу"
           }
         ],
         "prompt": "",

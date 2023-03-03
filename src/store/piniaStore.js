@@ -18,12 +18,12 @@ export const useBaseStore = defineStore("base", {
       showInsideElementStatusData: false,
       elementsIsMounted: {},
       tooltipOn: true,
-      currency: "руб"
+      currency: "руб",
     };
   },
   getters: {
-    getCurrency: ({currency}) => {
-      return currency
+    getCurrency: ({ currency }) => {
+      return currency;
     },
     /**
      * Получить весь список элементов результата
@@ -232,6 +232,6 @@ export const useBaseStore = defineStore("base", {
     },
     setCurrency(currency) {
       this.currency = currency !== null ? currency : "руб";
-    }
+    },
   },
 });

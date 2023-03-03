@@ -112,17 +112,21 @@ export default {
 
     if (!this.notEmpty && !this.isNeedChoice) {
       let timer = setInterval(() => {
-        if (this.isCurrentIndexOptionsNotExist && this.localSelectValues.length) {
-          this.localSelectedItem = parseInt(this.selectedItem) ?  parseInt(this.selectedItem) - 1 : 0;
+        if (
+          this.isCurrentIndexOptionsNotExist &&
+          this.localSelectValues.length
+        ) {
+          this.localSelectedItem = parseInt(this.selectedItem)
+            ? parseInt(this.selectedItem) - 1
+            : 0;
 
           this.currentIndexOption =
             this.checkedValueOnVoid(this.localSelectedItem) &&
-            this.localSelectedItem  < this.localSelectValues.length
+            this.localSelectedItem < this.localSelectValues.length
               ? this.localSelectedItem
               : 0;
 
-
-              this.changeSelect(
+          this.changeSelect(
             this.localSelectValues[this.currentIndexOption],
             this.currentIndexOption,
             "mounted"
@@ -430,7 +434,7 @@ export default {
         return null;
       }
 
-      return this.currentOption?.selectName
+      return this.currentOption?.selectName;
     },
     currentOptionValue() {
       if (
@@ -461,7 +465,6 @@ export default {
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
-
       return this.mutationSelectValue.map((selectItem) => {
         if (!selectItem?.dependencyFormulaItem?.length) {
           selectItem.isShow = true;

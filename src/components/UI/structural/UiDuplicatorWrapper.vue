@@ -60,7 +60,7 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
-import {processingArrayOnFormulaProcessingLogic} from "@/servises/UtilityServices";
+import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicatorWrapper",

@@ -1,5 +1,4 @@
-
-const parseResultValueObjectItem = function(item, fieldName, currency) {
+const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
   let currentValue =
     !isNaN(parseFloat(item.value)) && isFinite(item.value)
@@ -12,21 +11,17 @@ const parseResultValueObjectItem = function(item, fieldName, currency) {
     item.displayValue !== null &&
     item.isShow &&
     isAllowZeroValue &&
-    item[fieldName] !== 'no';
+    item[fieldName] !== "no";
   const isAllowValueOutput =
-    item[fieldName] === "value" ||
-    item[fieldName] === "valueSumm";
+    item[fieldName] === "value" || item[fieldName] === "valueSumm";
   const isAllowCostOutput =
     item.cost !== null &&
-    (item[fieldName] === "summ" ||
-      item[fieldName] === "valueSumm");
+    (item[fieldName] === "summ" || item[fieldName] === "valueSumm");
   const unit = item?.unit ? item.unit : "";
 
   if (isAllowDataOutput) {
     result +=
-      "\n<div class='calc__result-block-field-label'>" +
-      item.label +
-      " </div>";
+      "\n<div class='calc__result-block-field-label'>" + item.label + " </div>";
 
     result += "<div class='calc__result-block-field-right'>";
     if (isAllowValueOutput) {
@@ -54,7 +49,7 @@ const parseResultValueObjectItem = function(item, fieldName, currency) {
     result += "</div>";
   }
   return result;
-}
+};
 
 /**
  * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
@@ -64,7 +59,7 @@ const parseResultValueObjectItem = function(item, fieldName, currency) {
  * @param dataList
  * @returns {*[]}
  */
-const processingArrayOnFormulaProcessingLogic = function(dataList) {
+const processingArrayOnFormulaProcessingLogic = function (dataList) {
   let resultList = [];
   let localDataList = dataList;
   for (let i = 0; i < localDataList.length; i++) {
@@ -91,14 +86,14 @@ const processingArrayOnFormulaProcessingLogic = function(dataList) {
     }
   }
   return resultList;
-}
+};
 
 /**
  * Обрабатываем массив данных и получаем сумму всех значений из item.summ
  * @param dataListVariables
  * @returns {*}
  */
-const parsingDataInFormulaOnSumma = function(dataListVariables) {
+const parsingDataInFormulaOnSumma = function (dataListVariables) {
   return dataListVariables?.reduce((resultText, item) => {
     const isExistCost = item?.cost && typeof item?.cost === "number";
 
@@ -109,7 +104,7 @@ const parsingDataInFormulaOnSumma = function(dataListVariables) {
     resultText += item;
     return resultText;
   }, "");
-}
+};
 
 /**
  * Получить линейную сумму всех переданных значений
@@ -120,7 +115,7 @@ const parsingDataInFormulaOnSumma = function(dataListVariables) {
  * @param dataList
  * @returns {*}
  */
-const getSummaFreeVariablesInFormula = function(dataList) {
+const getSummaFreeVariablesInFormula = function (dataList) {
   return dataList.reduce((sum, item) => {
     const isAllowSummingCost =
       item?.cost !== null && !item.excludeFromCalculations && item.isShow;
@@ -131,7 +126,7 @@ const getSummaFreeVariablesInFormula = function(dataList) {
     }
     return sum;
   }, 0);
-}
+};
 
 /**
  * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных отсутствующих в формуле
@@ -139,7 +134,7 @@ const getSummaFreeVariablesInFormula = function(dataList) {
  * @param variablesList
  * @returns {*}
  */
-const getListVariablesMissedInFormula = function(dataList, variablesList) {
+const getListVariablesMissedInFormula = function (dataList, variablesList) {
   return dataList
     ?.filter((dataOnCalcComponent) => {
       const isFormula = variablesList.some(
@@ -150,14 +145,14 @@ const getListVariablesMissedInFormula = function(dataList, variablesList) {
     .filter((item) => {
       return item;
     });
-}
+};
 
 /**
  * получить список значений полей в объекте - рекурсивно
  * @param object
  * @returns {*[]}
  */
-const getNameElementsRecursive = function(object) {
+const getNameElementsRecursive = function (object) {
   let resultArray = [];
   getPropInObject(object, "elementName");
   function getPropInObject(object) {
@@ -172,6 +167,13 @@ const getNameElementsRecursive = function(object) {
     }
   }
   return resultArray;
-}
+};
 
-export {parseResultValueObjectItem,  processingArrayOnFormulaProcessingLogic, parsingDataInFormulaOnSumma, getSummaFreeVariablesInFormula, getListVariablesMissedInFormula, getNameElementsRecursive}
+export {
+  parseResultValueObjectItem,
+  processingArrayOnFormulaProcessingLogic,
+  parsingDataInFormulaOnSumma,
+  getSummaFreeVariablesInFormula,
+  getListVariablesMissedInFormula,
+  getNameElementsRecursive,
+};

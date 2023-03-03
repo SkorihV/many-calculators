@@ -56,7 +56,7 @@ export const MixinsUtilityServices = {
      * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
      * @returns {{summ: *, name: string}}
      */
-    getProxyFreeVariables (value, name = null) {
+    getProxyFreeVariables(value, name = null) {
       return new Proxy(
         {
           name: name === null ? this.getNameReserveVariable : name,

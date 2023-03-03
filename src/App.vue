@@ -1,5 +1,5 @@
 <template>
-  {{outOptions?.resultOptions?.currency}}
+  {{ outOptions?.resultOptions?.currency }}
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
@@ -134,7 +134,13 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import localData from "@/servises/localData";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
 
-import {parseResultValueObjectItem, processingArrayOnFormulaProcessingLogic, parsingDataInFormulaOnSumma, getSummaFreeVariablesInFormula, getListVariablesMissedInFormula} from "@/servises/UtilityServices.js";
+import {
+  parseResultValueObjectItem,
+  processingArrayOnFormulaProcessingLogic,
+  parsingDataInFormulaOnSumma,
+  getSummaFreeVariablesInFormula,
+  getListVariablesMissedInFormula,
+} from "@/servises/UtilityServices.js";
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
@@ -419,7 +425,7 @@ export default {
       "appIsMounted",
       "setTooltipOn",
       "setCurrency",
-      "getCurrency"
+      "getCurrency",
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
@@ -459,9 +465,7 @@ export default {
      * @returns {*}
      */
     summaFreeVariables() {
-      return getSummaFreeVariablesInFormula(
-        this.freeVariablesOutsideFormula
-      );
+      return getSummaFreeVariablesInFormula(this.freeVariablesOutsideFormula);
     },
     /**
      * Список переменных из формулы вместе с данными
@@ -486,9 +490,7 @@ export default {
      */
     resultTextForComputed() {
       let resultString = parsingDataInFormulaOnSumma(
-        processingArrayOnFormulaProcessingLogic(
-          this.dataListVariablesOnFormula
-        )
+        processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
       );
       return resultString?.replace(
         /[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g,
@@ -519,7 +521,9 @@ export default {
      * @returns {*[]}
      */
     sortPositionDataForOutput() {
-      return this.baseDataForCalculate.sort((itemA, itemB) => itemA.position - itemB.position);
+      return this.baseDataForCalculate.sort(
+        (itemA, itemB) => itemA.position - itemB.position
+      );
     },
     /**
      * Текст со всеми полями которые должны отображаться в форме
@@ -532,22 +536,39 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                if (parseResultValueObjectItem(duplicator, "formOutputMethod", this.getCurrency)?.length) {
+                if (
+                  parseResultValueObjectItem(
+                    duplicator,
+                    "formOutputMethod",
+                    this.getCurrency
+                  )?.length
+                ) {
                   result += "<div class='calc__result-block-delimiter'></div>";
                   result +=
                     "<div class='calc__result-block-field-wrapper'>" +
-                    parseResultValueObjectItem(duplicator, "formOutputMethod", this.getCurrency) +
+                    parseResultValueObjectItem(
+                      duplicator,
+                      "formOutputMethod",
+                      this.getCurrency
+                    ) +
                     "</div>";
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
                     if (
-                      parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency)
-                        ?.length
+                      parseResultValueObjectItem(
+                        templateInDuplicator,
+                        "formOutputMethod",
+                        this.getCurrency
+                      )?.length
                     ) {
                       result +=
                         "<div class='calc__result-block-field-wrapper'>" +
-                        parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency) +
+                        parseResultValueObjectItem(
+                          templateInDuplicator,
+                          "formOutputMethod",
+                          this.getCurrency
+                        ) +
                         "</div>";
                     }
                   }
@@ -557,10 +578,16 @@ export default {
             });
           }
         } else {
-          const data = parseResultValueObjectItem(item, "formOutputMethod",this.getCurrency);
+          const data = parseResultValueObjectItem(
+            item,
+            "formOutputMethod",
+            this.getCurrency
+          );
           if (data.length) {
             result +=
-              "<div class='calc__result-block-field-wrapper'> " + data + "</div>";
+              "<div class='calc__result-block-field-wrapper'> " +
+              data +
+              "</div>";
           }
         }
       });
