@@ -89,38 +89,11 @@
           {{ outOptions?.resultOptions?.titleButton ?? "Рассчитать" }}
         </icon-element-wrapper>
       </button>
-      <div
-        class="calc__result-block-wrapper"
-        :class="{
-          isVisualSeparate: outOptions.resultOptions?.visuallySeparateElement,
-        }"
-        v-if="showResultDataForBlock && initTeleportIsReady"
-      >
-        <background-image-element
-          class="result"
-          v-if="outOptions.resultOptions?.backgroundImageSettings"
-          :image-settings-data="
-            outOptions.resultOptions?.backgroundImageSettings
-          "
-        />
-        <div
-          class="calc__result-block-title-wrapper"
-          v-if="isShowResultBlockTitle || isShowResultBlockSubtitle"
-        >
-          <div
-            class="calc__result-block-title-main"
-            v-if="isShowResultBlockTitle"
-          >
-            {{ outOptions.resultOptions.title }}
-          </div>
-          <div
-            class="calc__result-block-title-sub"
-            v-if="isShowResultBlockSubtitle"
-            v-html="outOptions.resultOptions.subtitle"
-          />
-        </div>
-        <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
-      </div>
+      <result-block-for-output
+        :options="outOptions"
+        :init-teleport-is-ready="initTeleportIsReady"
+        :output-html-text="finalTextForOutput"
+      ></result-block-for-output>
       <error-names-templates
         v-if="devMode"
         :templates="calculatorTemplates"
@@ -157,10 +130,12 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import localData from "@/servises/localData";
+import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    ResultBlockForOutput,
     IconElementWrapper,
     BackgroundImageElement,
     SpinnerElement,
@@ -289,9 +264,6 @@ export default {
     this.initEnabledSendForm =
       this?.outOptions?.methodProcessingMistakes === "useAutomatic";
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
-    this.showResultDataForBlock = this.outOptions?.resultOptions
-      ? this.outOptions?.resultOptions.showResultDataForBlock
-      : false;
     this.outOptions.resultOptions.titleButton = this.outOptions?.resultOptions
       ? this.outOptions?.resultOptions?.titleButton
       : "Рассчитать";
@@ -312,7 +284,6 @@ export default {
       currency: "руб",
       submitResult: null,
       initEnabledSendForm: false,
-      showResultDataForBlock: false, // выводить результаты выбора и расчета вне формы
       eventNotShowTooltips: [
         "delete",
         "mounted",
@@ -336,7 +307,6 @@ export default {
         this.checkEnabledResultButton();
         return false;
       }
-
       this.tryAddResultElement(data);
 
       if (type === "duplicator") {
@@ -764,12 +734,7 @@ export default {
         ? `<div class="calc__dev-block-element">Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
         : "";
     },
-    isShowResultBlockTitle() {
-      return Boolean(this.outOptions?.resultOptions?.title?.length);
-    },
-    isShowResultBlockSubtitle() {
-      return Boolean(this.outOptions?.resultOptions?.subtitle?.length);
-    },
+
     showDevBlock() {
       return this.devMode && this.showInsideElementStatus;
     },

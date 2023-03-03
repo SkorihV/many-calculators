@@ -284,7 +284,9 @@ export default {
       });
       this.tryPassDependency();
       this.changeValid(eventType);
-      this.shownTooltip();
+      if (eventType !== "mounted") {
+        this.shownTooltip();
+      }
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
