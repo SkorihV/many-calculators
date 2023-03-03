@@ -751,8 +751,14 @@ export default {
 //$c_base_error_border_width      : var(--c_base_error_border_width);
 //
 //$c_base_button_text_color        : var(--c_base_button_text_color);
+//$c_base_button_text_color_hover  : var(--c_base_button_text_color_hover);
+//
 //$c_base_button_bg                : var(--c_base_button_bg);
+//$c_base_button_bg_hover          : var(--c_base_button_bg_hover);
+//
 //$c_base_button_border            : var(--c_base_button_border);
+//$c_base_button_border_hover      : var(--c_base_button_border_hover);
+//
 //$c_base_button_border_radius     : var(--c_base_button_border_radius);
 //$c_base_button_border_width      : var(--c_base_button_border_width);
 
@@ -763,9 +769,15 @@ $c_base_error_border: #e80000;
 $c_base_error_border_radius: 9px;
 $c_base_error_border_width: 2px;
 
-$c_base_button_text_color: #000000;
+$c_base_button_text_color: #e80000;
+$c_base_button_text_color_hover: #ff5e00;
+
 $c_base_button_bg: #f9f9f9;
+$c_base_button_bg_hover: #ffffff;
+
 $c_base_button_border: #ff6531;
+$c_base_button_border_hover: #ff6531;
+
 $c_base_button_border_radius: 9px;
 $c_base_button_border_width: 2px;
 
@@ -985,6 +997,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       line-height: 20px;
       padding: 20px 35px;
       max-width: 304px;
+      font-weight: 700;
       background: $c_element_input_color;
       color: $c_element_text_default;
       border: $c_element_border-width solid $c_element_border_color;
@@ -1001,7 +1014,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         color: $c_element_text_hover;
       }
       &.is-number {
-        font-weight: 700;
         max-width: 150px;
         padding: 20px 15px;
         @media all and (max-width: 480px) {
@@ -1112,9 +1124,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c_element_range_color;
-        border: 4px solid $c_element_border_color;
-        box-shadow: 0 7px 11px -4px $c_element_border_color;
+        background-color: $c_element_bg_color_selected;
+        border: 4px solid $c_element_border_color_selected;
+        box-shadow: 0 7px 11px -4px $c_element_border_color_selected;
         margin-top: -10px;
 
         &:hover {
@@ -1130,9 +1142,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         height: 24px;
         width: 24px;
         border-radius: 50%;
-        background-color: $c_element_range_color;
-        border: 4px solid $c_element_border_color;
-        box-shadow: 0 7px 11px -4px $c_element_border_color;
+        background-color: $c_element_bg_color_selected;
+        border: 4px solid $c_element_border_color_selected;
+        box-shadow: 0 7px 11px -4px $c_element_border_color_selected;
         margin-top: -16px;
         &:hover {
           background-color: $c_element_bg_color_hover;
@@ -2651,10 +2663,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &:hover {
         border-color: $c_decor_border_color_hover;
       }
-      &:invalid {
-        border-color: $c_base_error_color;
-        color: $c_base_error_color;
-      }
     }
     textarea {
       @include style-decor-border-radius;
@@ -2669,10 +2677,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &:focus,
       &:hover {
         border-color: $c_decor_border_color_hover;
-      }
-      &:invalid {
-        border-color: $c_base_error_color;
-        color: $c_base_error_color;
       }
     }
     button {
