@@ -3737,13 +3737,13 @@
 
   "test-color-options": {
     "formula": "",
-    "methodBeginningCalculation": "useAutomatic",
+    "methodBeginningCalculation": "useButton",
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
     "computedMethod": "linear",
     "tooltipOff": false,
-    "methodWorksForm": "show",
+    "methodWorksForm": "showAfterCalculation",
     "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
     "resultOptions": {
       "title": "Результаты расчета:",
@@ -3753,7 +3753,7 @@
       "showResultDataForBlock": 1,
       "currency": "яблоки",
       "textForSpinner" : "фывфы фв фыв",
-      "timerForSpinner": 0
+      "timerForSpinner": 3
     }
   },
 
