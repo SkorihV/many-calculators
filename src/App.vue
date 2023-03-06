@@ -258,9 +258,13 @@ export default {
 
     this.isUseFormula = this.outOptions?.computedMethod === "formula";
     this.displayResultData = this.outOptions?.computedMethod !== "no";
+    this.methodWorksForm = this.outOptions?.methodWorksForm ? this.outOptions.methodWorksForm : 'show';
+
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
-
+    if (this.showFormIsAllow) {
+      this.showForm();
+    }
     this.setInitEnabledSendForm(this?.outOptions?.methodBeginningCalculation === "useAutomatic" || this?.outOptions?.methodBeginningCalculation === "useButtonAfterCalculation")  ;
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
     this.setTooltipOn(this.outOptions);
@@ -286,6 +290,7 @@ export default {
         "changeAmountSelectList",
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
+      methodWorksForm: 'show'
     };
   },
   methods: {
@@ -382,32 +387,24 @@ export default {
       return { newItem, shiftIndex };
     },
     showForm() {
-      if(!this.formElement) {
-        return false;
-      }
       this.formElement.style.display = "block";
     },
     hiddenForm() {
-      if(!this.formElement) {
-        return false;
-      }
-      this.formElement.style.display = "none";
+        this.formElement.style.display = "none";
     }
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement() {
       this.checkEnabledResultButton();
     },
-    checkAllowShowResultBlock: {
+    showFormIsAllow: {
       handler(newValue){
         if (newValue) {
           this.showForm()
         } else {
           this.hiddenForm()
         }
-      },
-      deep: true,
-      immediate: true
+      }
     }
   },
   computed: {
@@ -715,6 +712,21 @@ export default {
     },
     showDevBlock() {
       return this.devMode && this.showInsideElementStatus;
+    },
+    showFormIsAllow() {
+      if (this.formElement === false || this.methodWorksForm === "hidden") {
+        return false;
+      }
+
+      if (this.methodWorksForm === "show") {
+        return true;
+      }
+
+      return (
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+        this.checkInitEnabledSendForm &&
+        this.checkAllowShowResultBlock
+      );
     },
   },
 };
@@ -1031,7 +1043,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
     &-unit {
       margin-left: 5px;
-      font-weight: 700;
       font-size: 17px;
       line-height: 20px;
       color: $c_element_text_default;
@@ -1062,7 +1073,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
 
     &-unit {
-      font-weight: 700;
       font-size: 17px;
       line-height: 20px;
       color: $c_element_text_default;
@@ -1224,7 +1234,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-weight: 700;
         font-size: 14px;
         line-height: 16px;
         top: 15px;
@@ -1437,7 +1446,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 2px solid $c_element_text_default;
+          border: 1px solid $c_element_text_default;
           position: relative;
 
           &:after {
@@ -1469,7 +1478,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       background-color: $c_element_bg_color;
       border-radius: $c_element_border_radius;
       border: $c_element_border_width solid $c_element_border_color;
-      font-weight: 700;
       cursor: pointer;
       @include transition;
       gap: 8px;
@@ -1600,7 +1608,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         background-color: $c_element_bg_color;
         color: $c_element_text_default;
         padding: 20px 35px;
-        font-weight: 700;
         display: flex;
         align-items: center;
         @media all and (max-width: 480px) {
@@ -1985,7 +1992,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-main {
           @include style-title-main;
           color: $c_decor_text_default;
-          font-weight: 700;
         }
         &-sub {
           @include style-label-sub;
@@ -2115,7 +2121,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-main {
           @include style-title-main;
           color: $c_decor_text_default;
-          font-weight: 700;
         }
 
         &-sub {
@@ -2351,7 +2356,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
       &-main {
         @include style-title-main;
-        font-weight: 700;
         margin-top: 20px;
         font-size: 21px;
       }
@@ -2394,15 +2398,14 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           width: 100%;
         }
       }
-      &-value {
-        font-weight: bold;
-      }
-      &-cost {
-        font-weight: bold;
-      }
+      //&-value {
+      //  font-weight: bold;
+      //}
+      //&-cost {
+      //  font-weight: bold;
+      //}
       &-summ {
         @include style-title-main;
-        font-weight: 700;
         margin: 20px 0;
         display: flex;
         white-space: pre-wrap;
@@ -2552,7 +2555,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
     &-text {
       font-size: 25px;
-      font-weight: 700;
       font-style: italic;
       color: $c_base_title;
     }
@@ -2618,6 +2620,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 }
 
 .calc__form-for-result {
+  display: none;
   * {
     margin: 0;
     padding: 0;

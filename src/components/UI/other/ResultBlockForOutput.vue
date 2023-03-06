@@ -54,7 +54,7 @@ export default {
       default: () => [],
     },
     finalSummaForOutput: {
-      type: Number,
+      type: [Number, Boolean],
       default: null,
     },
   },
@@ -182,7 +182,7 @@ export default {
      */
     finalTextForOutput() {
       let result = this.resultTextDataForResultBlock;
-      if (this.finalSummaForOutput === null) {
+      if (this.finalSummaForOutput === null || this.finalSummaForOutput === false) {
         return result;
       }
 
