@@ -1236,7 +1236,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
 
       &-dynamic {
-        font-weight: 700;
+        font-weight: normal;
         font-size: 16px;
         line-height: 20px;
         padding: 20px 20px;

@@ -3737,7 +3737,7 @@
 
   "test-color-options": {
     "formula": "",
-    "methodBeginningCalculation": "useButton",
+    "methodBeginningCalculation": "useAutomatic",
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",

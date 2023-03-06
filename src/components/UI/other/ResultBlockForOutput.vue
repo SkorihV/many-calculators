@@ -1,10 +1,16 @@
 <template>
+  <spinner-element
+    :init-show="isNeedSpinner"
+    :timer-time="timeForSpinner"
+    :text="textForSpinner"
+    @finished="spinnerIsFinished"
+  />
   <div
     class="calc__result-block-wrapper"
     :class="{
       isVisualSeparate: resultOptions?.visuallySeparateElement,
     }"
-    v-if="isShowResultBlock"
+    v-if="isShowResultBlock && !isNeedSpinner"
   >
     <background-image-element
       class="result"
@@ -31,12 +37,13 @@
 <script>
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 export default {
   name: "ResultBlockForOutput",
-  components: { BackgroundImageElement },
+  components: { BackgroundImageElement, SpinnerElement },
   props: {
     resultOptions: {
       type: Object,
@@ -50,6 +57,21 @@ export default {
       type: Number,
       default: null,
     },
+  },
+  data() {
+    return {
+      isNeedSpinner: false
+    }
+  },
+  methods: {
+    spinnerIsFinished() {
+      this.isNeedSpinner = false;
+    }
+  },
+  watch: {
+    isShowResultBlock(newValue) {
+      this.isNeedSpinner = Boolean(this.resultOptions?.timerForSpinner) && newValue;
+    }
   },
   computed: {
     ...mapState(useBaseStore, ["getCurrency","isExistGlobalErrorsValidationIgnoreHiddenElement", "checkInitEnabledSendForm", "checkAllowShowResultBlock"]),
@@ -183,6 +205,12 @@ export default {
       }
       return result;
     },
+    timeForSpinner() {
+      return Number(this.resultOptions?.timerForSpinner);
+    },
+    textForSpinner() {
+      return this.resultOptions?.textForSpinner;
+    }
   },
 };
 </script>

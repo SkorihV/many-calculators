@@ -2,7 +2,7 @@
   <button
     class="calc__show-result-btn"
     @click="calculateResult"
-    v-if="showResultBtn || showResultBtnAfterValidation"
+    v-if="showBtn"
     @mouseover="isHoverButton = true"
     @mouseleave="isHoverButton = false"
   >
@@ -48,6 +48,12 @@ export default {
       if (!newValue && this.isMethodBeginningCalculation) {
         this.setAllowShowResultBlock(false);
       }
+    },
+    isExistGlobalErrorsValidationIgnoreHiddenElement(newValue) {
+      if (newValue && (this.showResultBtn || this.isMethodBeginningCalculation)) {
+        this.setInitEnabledSendForm(false);
+        this.setAllowShowResultBlock(false);
+      }
     }
   },
   computed: {
@@ -56,6 +62,7 @@ export default {
       "showAllTooltipsOn",
       "setInitEnabledSendForm",
       "isExistGlobalErrorsValidationTakeIntoHiddenElement",
+      "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "setAllowShowResultBlock"
     ]),
     iconSettings() {
@@ -69,6 +76,9 @@ export default {
     },
     showResultBtnAfterValidation() {
       return this.isMethodBeginningCalculation && !this.isExistGlobalErrorsValidationTakeIntoHiddenElement;
+    },
+    showBtn() {
+      return this.showResultBtnAfterValidation || this.showResultBtn;
     }
   },
 };
