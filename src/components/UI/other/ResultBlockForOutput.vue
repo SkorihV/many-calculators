@@ -32,11 +32,11 @@
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
-import backgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 export default {
   name: "ResultBlockForOutput",
-  components: { backgroundImageElement },
+  components: { BackgroundImageElement },
   props: {
     resultOptions: {
       type: Object,

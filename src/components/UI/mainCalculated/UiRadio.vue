@@ -310,7 +310,7 @@ export default {
         : null;
     },
     selectedValueInRadio() {
-      if (this.isRadioItemSelected) {
+      if (!this.isRadioItemSelected) {
         return null;
       }
       return this.currentSelectedRadioButton?.extraValueForDependency?.length

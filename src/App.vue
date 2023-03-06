@@ -123,7 +123,7 @@ import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComput
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+
 
 import localData from "@/servises/localData";
 
@@ -141,7 +141,6 @@ export default {
   components: {
     ResultButtonForComputed,
     ResultBlockForOutput,
-    BackgroundImageElement,
     SpinnerElement,
     TemplatesWrapper,
     UiAccordion,
@@ -1096,6 +1095,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         border-radius: 90px;
       }
 
+
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
@@ -1128,6 +1128,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           background-color: $c_element_bg_color_hover;
           border: 4px solid $c_element_border_color_hover;
           box-shadow: 0 7px 11px -4px $c_element_border_color_hover;
+        }
+
+      }
+
+      &.isError {
+        &::-moz-range-thumb {
+          border-color: $c_base_error_color;
+        }
+        &::-webkit-slider-thumb {
+          border-color: $c_base_error_color;
         }
       }
     }
@@ -1232,7 +1242,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 20px 20px;
         max-width: 90px;
         right: 0;
-        border: none;
+        border: $c_base_error_border_width solid transparent;
+        outline: none;
         color: $c_element_text_default;
         background-color: $c_element_range_color;
         text-align: center;
@@ -1247,6 +1258,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &:hover,
         &:focus-visible {
           outline: none;
+        }
+        &.isError {
+          border: $c_base_error_border_width solid $c_base_error_border;
         }
       }
     }

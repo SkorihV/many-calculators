@@ -15,6 +15,7 @@
           <input
             ref="thisElement"
             class="calc__range-item"
+            :class="{'isError': isClassError}"
             type="range"
             :min="localMin"
             :max="localMax"
@@ -51,6 +52,7 @@
         >
           <input
             class="calc__range-current-dynamic"
+            :class="{'isError': isClassError}"
             v-if="showDynamicValue"
             type="text"
             v-model="dynamicValue"
@@ -431,6 +433,9 @@ export default {
     },
     localCanBeShownTooltip() {
       return this.canBeShownTooltip && this.isVisibilityFromDependency;
+    },
+    isClassError() {
+      return (this.localCanBeShownTooltip || this.isCanShowAllTooltips ) && this.isErrorEmpty;
     },
 
     /**

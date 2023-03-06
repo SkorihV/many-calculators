@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 export default {
   name: "ResultButtonForComputed",
-  components: {iconElementWrapper},
+  components: {IconElementWrapper},
   props: {
     resultOptions: {
       type: Object,
@@ -70,7 +70,7 @@ export default {
     showResultBtnAfterValidation() {
       return this.isMethodBeginningCalculation && !this.isExistGlobalErrorsValidationTakeIntoHiddenElement;
     }
-  }
+  },
 };
 </script>
 
