@@ -63,7 +63,8 @@ export default {
       "setInitEnabledSendForm",
       "isExistGlobalErrorsValidationTakeIntoHiddenElement",
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
-      "setAllowShowResultBlock"
+      "setAllowShowResultBlock",
+      "checkAllowShowResultBlock"
     ]),
     iconSettings() {
       return this.options
@@ -75,10 +76,10 @@ export default {
       return this.getMethodBeginningCalculation === "useButtonAfterCalculation";
     },
     showResultBtnAfterValidation() {
-      return this.isMethodBeginningCalculation && !this.isExistGlobalErrorsValidationTakeIntoHiddenElement;
+      return this.isMethodBeginningCalculation && !this.isExistGlobalErrorsValidationTakeIntoHiddenElement ;
     },
     showBtn() {
-      return this.showResultBtnAfterValidation || this.showResultBtn;
+      return (this.showResultBtnAfterValidation || this.showResultBtn) && !this.checkAllowShowResultBlock;
     }
   },
 };

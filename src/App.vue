@@ -262,9 +262,13 @@ export default {
 
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
+    this.findForm();
+    this.findSubmitForm();
+
     if (this.showFormIsAllow) {
       this.showForm();
     }
+
     this.setInitEnabledSendForm(this?.outOptions?.methodBeginningCalculation === "useAutomatic" || this?.outOptions?.methodBeginningCalculation === "useButtonAfterCalculation")  ;
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
     this.setTooltipOn(this.outOptions);
@@ -290,7 +294,9 @@ export default {
         "changeAmountSelectList",
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
-      methodWorksForm: 'show'
+      methodWorksForm: 'show',
+      formElement: null,
+      eventSubmittingFormAdded: null,
     };
   },
   methods: {
@@ -328,15 +334,20 @@ export default {
      * Разрешаем отправку формы
      */
     checkEnabledResultButton() {
-      const textAreaTeleportElement = document.querySelector("#teleport");
-      if (textAreaTeleportElement) {
-        textAreaTeleportElement.readOnly = true;
+      if(!this.formElement) {
+        this.findForm();
+      }
+      if (!this.submitResult) {
+        this.findSubmitForm();
+      }
+      this.setReadOnlyForTeleportField();
+
+      if (this.submitResult && !this.eventSubmittingFormAdded){
+        this.setEventOnSubmit();
       }
 
-      if (!this.submitResult) {
-        this.submitResult = document.querySelector(
-          "#App ~ .tpl-anketa button[type=submit]"
-        );
+      if (this.showFormIsAllow) {
+        this.showForm();
       }
 
       if (this.isEnabledSendForm && this.submitResult) {
@@ -387,6 +398,9 @@ export default {
       return { newItem, shiftIndex };
     },
     showForm() {
+      if (!this.formElement) {
+        return false;
+      }
       if (Number(this.outOptions?.resultOptions?.timerForSpinner) > 0 && this.methodWorksForm !== 'show') {
         setTimeout(() => {
           this.formElement.style.display = "block";
@@ -396,7 +410,40 @@ export default {
       }
     },
     hiddenForm() {
-      this.formElement.style.display = "none";
+      if (this.formElement) {
+        this.formElement.style.display = "none";
+      }
+    },
+    findForm() {
+      const form = document.querySelector(".calc__form-for-result");
+      this.formElement = form ? form : null;
+    },
+    findSubmitForm() {
+      const submit = document.querySelector(
+        "#App ~ .tpl-anketa button[type=submit]"
+      );
+      this.submitResult = submit ? submit : null;
+    },
+    findTeleportField() {
+      const teleportField = document.querySelector("#teleport");
+      return teleportField ? teleportField : null;
+    },
+    setReadOnlyForTeleportField() {
+      const teleportField = this.findTeleportField();
+      if (teleportField) {
+        teleportField.readOnly = true;
+      }
+    },
+    setEventOnSubmit() {
+      this.submitResult.addEventListener("click", () => {
+        setTimeout(() => {
+          this.formElement = null;
+          this.submitResult = null;
+          this.eventSubmittingFormAdded = false;
+          this.checkEnabledResultButton();
+        }, 500)
+      }, {once: true});
+      this.eventSubmittingFormAdded = true;
     }
   },
   watch: {
@@ -438,10 +485,6 @@ export default {
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
     ]),
-    formElement() {
-      let form = document.querySelector(".calc__form-for-result");
-      return form ? form : false;
-    },
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
     },
@@ -2690,10 +2733,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       border-width: 2px;
       border-style: solid;
       width: 100%;
-      display: none;
       &:focus,
       &:hover {
         border-color: $c_decor_border_color_hover;
+      }
+      &#teleport {
+        display: none;
       }
     }
     button {
