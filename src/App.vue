@@ -200,16 +200,21 @@ export default {
           if (currentItem.items?.length) {
             const itemsLength = currentItem?.items.length;
             for (let i = 0; i < itemsLength; i++) {
-              let currentTemplates = currentItem?.items[i].templates;
-              let currentTempLength = currentTemplates.length;
-              let newTemplates = [];
-
-              for (let q = 0; q < currentTempLength; q++) {
-                currentTemplates[q].position = templatesPositionIndex;
-                templatesPositionIndex++;
-                newTemplates.push(currentTemplates[q]);
+              if (typeof currentItem?.items[i] === 'object') {
+                let currentTemplates = currentItem?.items[i].templates;
+                let currentTempLength = currentTemplates?.length;
+                let newTemplates = [];
+                if (currentTempLength) {
+                  for (let q = 0; q < currentTempLength; q++) {
+                    if (typeof currentTemplates[q] === 'object') {
+                      currentTemplates[q].position = templatesPositionIndex;
+                      templatesPositionIndex++;
+                      newTemplates.push(currentTemplates[q]);
+                    }
+                  }
+                }
+                currentItem.items[i].templates = newTemplates;
               }
-              currentItem.items[i].templates = newTemplates;
             }
           }
           calculatorTemplatesWitchPositions.push(currentItem);
@@ -383,16 +388,26 @@ export default {
       let shiftIndex = index;
       if (newItem.leftSide?.length) {
         newItem.leftSide = newItem?.leftSide?.map((itemLeft) => {
-          itemLeft.position = shiftIndex;
-          shiftIndex++;
-          return itemLeft;
+          if (typeof itemLeft === 'object') {
+            itemLeft.position = shiftIndex;
+            shiftIndex++;
+            return itemLeft;
+          } else {
+            shiftIndex++;
+            return itemLeft;
+          }
         });
       }
       if (newItem.rightSide?.length) {
         newItem.rightSide = newItem?.rightSide?.map((itemRight) => {
-          itemRight.position = shiftIndex;
-          shiftIndex++;
-          return itemRight;
+          if (typeof itemRight === 'object') {
+            itemRight.position = shiftIndex;
+            shiftIndex++;
+            return itemRight;
+          } else {
+            shiftIndex++;
+            return itemRight;
+          }
         });
       }
       return { newItem, shiftIndex };
@@ -403,7 +418,9 @@ export default {
       }
       if (Number(this.outOptions?.resultOptions?.timerForSpinner) > 0 && this.methodWorksForm !== 'show') {
         setTimeout(() => {
-          this.formElement.style.display = "block";
+          if (this.showFormIsAllow) {
+            this.formElement.style.display = "block";
+          }
         }, this.outOptions?.resultOptions?.timerForSpinner * 1000)
       } else {
         this.formElement.style.display = "block";
@@ -420,7 +437,7 @@ export default {
     },
     findSubmitForm() {
       const submit = document.querySelector(
-        "#App ~ .tpl-anketa button[type=submit]"
+        "#App_calc ~ .tpl-anketa button[type=submit]"
       );
       this.submitResult = submit ? submit : null;
     },
@@ -1307,10 +1324,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 20px 20px;
         max-width: 90px;
         right: 0;
-        border: $c_base_error_border_width solid transparent;
+        border: $c_base_error_border_width solid $c_element_border_color;
+
         outline: none;
         color: $c_element_text_default;
-        background-color: $c_element_range_color;
+        background: $c_element_input_color;
         text-align: center;
         border-radius: $c_element_border_radius;
         &:hover {
@@ -1323,9 +1341,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &:hover,
         &:focus-visible {
           outline: none;
+          border-color: $c_element_border_color_hover;
+          background: $c_element_bg_color_hover;
+          color: $c_element_text_hover;
         }
         &.isError {
-          border: $c_base_error_border_width solid $c_base_error_border;
+          border-color: $c_base_error_border;
+          outline-color: $c_base_error_color;
         }
       }
     }

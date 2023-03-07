@@ -6,4 +6,4 @@ const AppCalc = createApp(App);
 
 AppCalc.config.unwrapInjectedRef = true;
 AppCalc.use(createPinia());
-AppCalc.mount("#App");
+AppCalc.mount("#App_calc");
