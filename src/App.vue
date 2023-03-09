@@ -302,6 +302,7 @@ export default {
       methodWorksForm: 'show',
       formElement: null,
       eventSubmittingFormAdded: null,
+      intervalName: null,
     };
   },
   methods: {
@@ -452,14 +453,22 @@ export default {
       }
     },
     setEventOnSubmit() {
-      this.submitResult.addEventListener("click", () => {
-        setTimeout(() => {
-          this.formElement = null;
-          this.submitResult = null;
-          this.eventSubmittingFormAdded = false;
-          this.checkEnabledResultButton();
-        }, 500)
-      }, {once: true});
+      if (!this.intervalName) {
+        this.submitResult.addEventListener("click", () => {
+          let counter = 0;
+          this.intervalName = setInterval(() => {
+            this.formElement = null;
+            this.submitResult = null;
+
+            this.eventSubmittingFormAdded = false;
+            this.checkEnabledResultButton();
+            counter++;
+            if (counter > 5) {
+              clearInterval(this.intervalName)
+            }
+          }, 1000)
+        });
+      }
       this.eventSubmittingFormAdded = true;
     }
   },
