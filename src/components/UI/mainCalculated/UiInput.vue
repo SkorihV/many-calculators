@@ -2,6 +2,7 @@
   <div
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
+    :id="elementName"
     ref="parent"
   >
     <div class="calc__input-wrapper" :class="[classes]">

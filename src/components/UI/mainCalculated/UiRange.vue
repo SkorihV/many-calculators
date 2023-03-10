@@ -2,6 +2,7 @@
   <div
     ref="parent"
     class="calc__wrapper-group-data"
+    :id="elementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
     <div class="calc__range-wrapper" :class="classes">

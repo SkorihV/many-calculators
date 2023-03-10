@@ -6,6 +6,7 @@
       (templateData?.rightSide.length || templateData?.leftSide.length) &&
       isVisibilityFromDependency
     "
+    :id="elementName"
   >
     <background-image-element
       v-if="templateData?.backgroundImageSettings"

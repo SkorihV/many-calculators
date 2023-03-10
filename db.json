@@ -3813,6 +3813,7 @@
         "elementName": "Block2",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
+        "scrollIntoName": "dup",
         "classes": "",
         "template": "UiCheckbox",
         "dependencyPrices": null,
@@ -4497,6 +4498,7 @@
         "dependencyFormulaDisplay": "Block1 > 20 && Block2 === true",
         "classes": "",
         "template": "UiDuplicator",
+        "elementName": "dup",
         "prompt": "ываы аы",
         "parent": "0;"
       }

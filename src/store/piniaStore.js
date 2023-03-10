@@ -251,7 +251,7 @@ export const useBaseStore = defineStore("base", {
       this.tooltipOn = !Boolean(dataOptions?.tooltipOff);
     },
     setCurrency(dataOptions) {
-      this.currency = dataOptions?.resultOptions?.currency !== null ? dataOptions?.resultOptions?.currency  : "руб";
+      this.currency = !!dataOptions?.resultOptions?.currency? dataOptions?.resultOptions?.currency  : "руб";
     },
     setMethodBeginningCalculation(dataOptions) {
       this.methodBeginningCalculation = dataOptions?.methodBeginningCalculation

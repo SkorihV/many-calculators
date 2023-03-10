@@ -3,6 +3,7 @@
     class="calc__duplicator"
     :class="classes"
     v-show="isVisibilityFromDependency"
+    :id="elementName"
   >
     <ui-duplicator-wrapper
       v-for="(duplicator, idx) in localTemplates"

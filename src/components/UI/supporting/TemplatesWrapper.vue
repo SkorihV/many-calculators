@@ -62,6 +62,7 @@
     :result-output-method="template?.resultOutputMethod"
     :dependency-prices="template?.dependencyPrices"
     :exclude-from-calculations="template?.excludeFromCalculations"
+    :scroll-into-name="template?.scrollIntoName"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
     :parent-name="parentName"

@@ -2,6 +2,7 @@
   <div
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
+    :id="elementName"
     ref="parent"
   >
     <div
@@ -121,6 +122,10 @@ export default {
       type: String,
       require: true,
     },
+    scrollIntoName: {
+      type: String,
+      default: null
+    },
     ...UsePropsTemplates([
       "formOutputMethod",
       "resultOutputMethod",
@@ -203,6 +208,9 @@ export default {
       });
       this.tryPassDependency();
       this.changeValid(eventType);
+      if (this.isLocalChecked && this.scrollIntoName) {
+        this.goToElementScroll()
+      }
     },
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
@@ -229,6 +237,14 @@ export default {
         type: "checkbox",
       });
     },
+    goToElementScroll() {
+      this.$nextTick(() => {
+          const elementToScroll = document.querySelector("#" + this.scrollIntoName)
+          if(Boolean(elementToScroll)) {
+            elementToScroll.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
+          }
+      })
+    }
   },
   watch: {
     isVisibilityFromDependency(value) {

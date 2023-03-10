@@ -4,6 +4,7 @@
     class="calc__tab-wrapper"
     :class="[classes]"
     v-show="showBlock && isVisibilityFromDependency"
+    :id="elementName"
   >
     <div class="calc__tab-main-label" v-if="tabData?.label?.length">
       {{ tabData.label }}

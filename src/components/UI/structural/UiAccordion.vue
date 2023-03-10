@@ -3,6 +3,7 @@
     class="calc__accordion-wrapper"
     :class="[classes]"
     v-show="showBlock && isVisibilityFromDependency"
+    :id="elementName"
   >
     <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">
       {{ accordionData.label }}

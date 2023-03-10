@@ -7,7 +7,11 @@
           :accordion-data="template"
           :label="template?.label"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiAccordion' + index"
+          :element-name="
+            template?.elementName?.length
+              ? template?.elementName
+              : template?.json_id || 'UiAccordion' + index
+          "
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           :template-name="template.template"
           @changedValue="changeValue"
@@ -29,7 +33,11 @@
           :label="template?.label"
           :width-left-side="template?.widthLeftSide"
           :classes="template?.classes"
-          :element-name="template?.json_id || 'UiBisection' + index"
+          :element-name="
+            template?.elementName?.length
+              ? template?.elementName
+              : template?.json_id || 'UiBisection' + index
+          "
           :dependency-formula-display="template?.dependencyFormulaDisplay"
           :dependency-formula-display-left-side="
             template?.dependencyFormulaDisplayLeftSide
@@ -711,11 +719,12 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else {
+        const titleSumma = !!this.outOptions?.resultOptions?.titleSumma ? this.outOptions?.resultOptions?.titleSumma : "";
         result +=
-          "\n" +
+        "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
-          this.outOptions?.resultOptions?.titleSumma +
+          titleSumma +
           "</div>" +
           "<div class='calc__result-block-field-summ-cost'> " +
           this.finalSummaForOutput +

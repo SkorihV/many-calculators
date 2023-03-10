@@ -4,6 +4,7 @@
       ref="parent"
       v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
+      :id="elementName"
       :class="[{ 'is-column': isColumn, 'is-open': isOpen }, classes]"
     >
       <div class="calc__select-label" v-if="label">
