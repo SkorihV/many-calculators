@@ -2,6 +2,7 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 export const MixinsForProcessingFormula = {
   mixins: [MixinsUtilityServices],
@@ -11,6 +12,7 @@ export const MixinsForProcessingFormula = {
        * список переменных от которого зависит именно текущий элемент
        */
       localDependencyList: {},
+      countUpdatedDependency: 0
     };
   },
   methods: {
@@ -44,26 +46,29 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     processingVariablesOnFormula(formula) {
-      return formula?.reduce((resultText, item) => {
+      const result = formula?.reduce((resultText, item) => {
         const elementDependency =
           item in this.localDependencyList
             ? this.localDependencyList[item]
             : null;
 
-        const elementIsShow = elementDependency && elementDependency?.isShow;
+        const elementIsExist = elementDependency !== null;
         const valueIsExist = !isNaN(
           parseFloat(elementDependency?.value) &&
             !Array.isArray(elementDependency?.value) &&
             typeof elementDependency?.value !== "boolean"
         );
         const valueIsBool = typeof elementDependency?.value === "boolean";
+        const valueIsNull = elementDependency?.value === null;
         const valueIsArray = Array.isArray(elementDependency?.value);
 
-        if (elementIsShow) {
+        if (elementIsExist) {
           if (valueIsExist) {
             return resultText + elementDependency?.value + " ";
           } else if (valueIsBool) {
             return resultText + Boolean(elementDependency?.value) + " ";
+          } else if (valueIsNull) {
+            return resultText + elementDependency?.value + " ";
           } else if (valueIsArray) {
             return resultText + elementDependency?.value + " ";
           } else {
@@ -72,6 +77,7 @@ export const MixinsForProcessingFormula = {
         }
         return resultText + item + " ";
       }, "");
+      return result;
     },
     /**
      * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -168,6 +174,7 @@ export const MixinsForProcessingFormula = {
           if (isUpdatedDependencyList) {
             this.localDependencyList[key] = newValue[key];
             isUpdated = true;
+            this.countUpdatedDependency++;
           }
         }
         if (isUpdated) {
@@ -176,6 +183,19 @@ export const MixinsForProcessingFormula = {
       },
       deep: true,
     },
+    localDependencyList: {
+      handler(newValue, oldValue) {
+
+        let isUpdated = false
+        Object.entries(newValue).forEach(([key, data]) => {
+          if (data.value !== oldValue[key].value) {
+            isUpdated = true;
+          }
+
+        })
+      },
+      deep: true
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -213,6 +233,7 @@ export const MixinsForProcessingFormula = {
      * @returns {string|boolean}
      */
     parsingFormulaVariables() {
+
       if (!this.isDependencyElementVisibility) {
         return false;
       }
@@ -220,6 +241,7 @@ export const MixinsForProcessingFormula = {
       let formula = this.getArrayElementsFromFormula(
         this.dependencyFormulaDisplay
       );
+
       this.constructLocalListElementDependencyInFormula(formula);
       return this.processingVariablesOnFormula(formula);
     },

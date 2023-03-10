@@ -106,7 +106,7 @@
         "formulaProcessingLogic": "error",
         "classes": "",
         "template": "UiCheckbox",
-        "dependencyFormulaDisplay": "первыйИнпут === 50 || первыйИнпут !== 'null'",
+        "dependencyFormulaDisplay": "первыйИнпут === 50 || первыйИнпут !== null",
         "prompt": "",
         "dependencyPrices": [
           {
@@ -3666,7 +3666,7 @@
             "formOutputMethod": "value",
             "excludeFromCalculations": false,
             "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot; && строение !== 'null'",
+            "dependencyFormulaDisplay": "строение !== 'забор' &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot; && строение !== null",
             "prompt": "всплывающая подсказка",
             "dependencyPrices": null,
             "zeroValueDisplayIgnore": true
@@ -3792,6 +3792,60 @@
         "prompt": "подсказка"
       },
       {
+        "json_id": "184759306",
+        "meta_id": "59850506",
+        "ver_id": "2422030",
+        "title": "Зеркало - Картинка подцветки",
+        "modified": "1675417312",
+        "created": "1666759287",
+        "type_group_id": "60",
+        "label": "картинка 1",
+        "elementName": "Картинка",
+        "defaultImage": {
+          "image_id": "2639651106",
+          "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
+          "ver_id": 2422030,
+          "image_width": "1280",
+          "image_height": "1280",
+          "ext": "jpg"
+        },
+        "maxWidth": "300",
+        "dependencyFormulaDisplay": "Block8 !== null",
+        "classes": "",
+        "template": "UiImage",
+        "maxHeight": "300",
+        "dependencyImages": [
+          {
+            "title": "",
+            "label": "заголовок картинки",
+            "image": {
+              "image_id": "2639651306",
+              "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+              "ver_id": 2422030,
+              "image_width": "1280",
+              "image_height": "1280",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "Block8 === 3"
+          },
+          {
+            "title": 4,
+            "label": 4,
+            "image": {
+              "image_id": "2639651506",
+              "filename": "https://klike.net/uploads/posts/2021-06/1623669312_1.jpg",
+              "ver_id": 2422030,
+              "image_width": "1280",
+              "image_height": "1280",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "Block8 === 4"
+          }
+        ],
+        "prompt": "",
+        "parent": "0;59416706;"
+      },
+      {
         "json_id": "65498907",
         "meta_id": "49242506",
         "ver_id": "2422030",
@@ -3890,7 +3944,7 @@
         "excludeFromCalculations": false,
         "elementName": "Block5",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "Block8 !== null",
         "classes": "",
         "template": "UiCheckbox",
         "dependencyPrices": null,
@@ -3981,9 +4035,9 @@
         "resultOutputMethod": "summ",
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
-        "elementName": "длинна",
+        "elementName": "Block8",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "Block3 === true",
         "classes": "",
         "template": "UiSelect",
         "values": [
@@ -4021,6 +4075,7 @@
         "ver_id": "2422030",
         "title": "Аккордеон - для цветовых настроек",
         "label": "Блок 9",
+        "elementName": "Аккордеон",
         "items": [
           {
             "json_id": "65506507",
@@ -4061,21 +4116,27 @@
                   },
                   {
                     "title": "3",
-                    "selectName": "длинна === 'йцу'",
+                    "selectName": "Block8 === 'йцу'",
                     "cost": 3,
-                    "dependencyFormulaItem": "длинна === 'йцу'"
+                    "dependencyFormulaItem": "Block8 === 'йцу'"
                   },
                   {
                     "title": "3",
-                    "selectName": "длинна === 2 1",
+                    "selectName": "Block8 === 2 1",
                     "cost": 4,
-                    "dependencyFormulaItem": "длинна === 2"
+                    "dependencyFormulaItem": "Block8 === 2"
+                  },
+                  {
+                    "title": "проверка на null",
+                    "selectName": "проверка на null",
+                    "cost": 4,
+                    "dependencyFormulaItem": "Block6 !== null"
                   },
                   {
                     "title": "4",
-                    "selectName": "длинна === 2 2",
+                    "selectName": "Block8 === 2 2",
                     "cost": 5,
-                    "dependencyFormulaItem": "длинна === 2",
+                    "dependencyFormulaItem": "Block8 === 2",
                     "dependencyPrices": [
                       {
                         "cost": 100,
@@ -4104,7 +4165,7 @@
             "location": "rightSide"
           }
         ],
-        "dependencyFormulaDisplay": "длинна !== 'null'",
+        "dependencyFormulaDisplay": "Block8 !== null",
         "classes": "",
         "template": "UiAccordion",
         "parent": "0;"
