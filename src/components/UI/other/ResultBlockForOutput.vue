@@ -189,7 +189,7 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else if (this.finalSummaForOutput !== false && this.showSumma) {
-        const titleSumma = !!this.outOptions?.resultOptions?.titleSumma ? this.outOptions?.resultOptions?.titleSumma : "";
+        const titleSumma = !!this.resultOptions?.titleSumma ? this.resultOptions?.titleSumma : "";
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +

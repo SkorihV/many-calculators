@@ -14,9 +14,8 @@
     :is-column="template?.isColumn"
     :not-empty="template?.notEmpty"
     :is-currency="template?.isCurrency"
-    :only-number="template?.onlyNumber"
+    :data-type="template?.dataType"
     :classes="template?.classes"
-    :only-integer="template?.onlyInteger"
     :element-name="
       template?.elementName?.length
         ? template?.elementName

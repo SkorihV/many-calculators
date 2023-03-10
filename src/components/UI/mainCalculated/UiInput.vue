@@ -178,17 +178,6 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-
-    /**
-     * только числа
-     */
-    onlyNumber: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
     /**
      * разделять сотни пробелами
      */
@@ -200,16 +189,15 @@ export default {
       },
     },
     /**
-     * только целые числа
+     * Тип данных разрешенный вводить в поле
+     * mixed
+     * onlyNumber
+     * onlyInteger
      */
-    onlyInteger: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+    dataType: {
+      type: String,
+      default: 'mixed'
     },
-
     /**
      *     шаблон rex для ручной валидации
      */
@@ -490,6 +478,12 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
+    onlyNumber() {
+      return this.dataType === "onlyNumber" || this.onlyInteger;
+    },
+    onlyInteger() {
+      return this.dataType === "onlyInteger";
+    },
     localMax() {
       return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
     },
