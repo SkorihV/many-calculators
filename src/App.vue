@@ -122,7 +122,7 @@ import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import UiBisection from "@/components/UI/structural/UiBisection.vue";
 
-import ErrorNamesTemplates from "@/components/UI/other/ErrorNamesTemplates.vue";
+import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
@@ -142,6 +142,8 @@ import {
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
 } from "@/servises/UtilityServices.js";
+
+import {updatePositionElementsInBiSection, updatePositionElementsInTabAndAccordion} from "@/servises/UpdatedPositionOnTemplates.js"
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -196,7 +198,7 @@ export default {
         let currentItem = item;
 
         if (currentItem.template === "UiBisection") {
-          let { newItem, shiftIndex } = this.updatePositionElementsInBiSection(
+          let { newItem, shiftIndex } = updatePositionElementsInBiSection(
             currentItem,
             templatesPositionIndex
           );
@@ -207,24 +209,9 @@ export default {
           currentItem.template === "UiAccordion"
         ) {
           if (currentItem.items?.length) {
-            const itemsLength = currentItem?.items.length;
-            for (let i = 0; i < itemsLength; i++) {
-              if (typeof currentItem?.items[i] === "object") {
-                let currentTemplates = currentItem?.items[i].templates;
-                let currentTempLength = currentTemplates?.length;
-                let newTemplates = [];
-                if (currentTempLength) {
-                  for (let q = 0; q < currentTempLength; q++) {
-                    if (typeof currentTemplates[q] === "object") {
-                      currentTemplates[q].position = templatesPositionIndex;
-                      templatesPositionIndex++;
-                      newTemplates.push(currentTemplates[q]);
-                    }
-                  }
-                }
-                currentItem.items[i].templates = newTemplates;
-              }
-            }
+            let { newItem, shiftIndex } = updatePositionElementsInTabAndAccordion(currentItem, templatesPositionIndex);
+            currentItem = newItem;
+            templatesPositionIndex = shiftIndex;
           }
           calculatorTemplatesWitchPositions.push(currentItem);
         } else if (currentItem.template === "UiDuplicator") {
@@ -232,13 +219,12 @@ export default {
           if (currentDuplicatorItem?.templates?.length) {
             let currentPositionDuplicatorIndex = 0;
             let newDuplicatorTemplates = [];
-
             for (let r = 0; r < currentDuplicatorItem.templates.length; r++) {
               if (
                 currentDuplicatorItem.templates[r].template === "UiBisection"
               ) {
                 let { newItem, shiftIndex } =
-                  this.updatePositionElementsInBiSection(
+                  updatePositionElementsInBiSection(
                     currentDuplicatorItem.templates[r],
                     currentPositionDuplicatorIndex
                   );
@@ -251,7 +237,6 @@ export default {
                 newDuplicatorTemplates.push(currentDuplicatorItem.templates[r]);
               }
             }
-
             currentDuplicatorItem.templates = newDuplicatorTemplates;
             currentItem.position = templatesPositionIndex;
             templatesPositionIndex++;
@@ -304,7 +289,6 @@ export default {
       formula: "", // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       displayResultData: false, // включить работу формул и вывод данных
-      submitResult: null,
       eventNotShowTooltips: [
         "delete",
         "mounted",
@@ -316,6 +300,8 @@ export default {
       isHoverButtonResult: false,
       methodWorksForm: "show",
       formElement: null,
+      textAreaResult: null,
+      submitResult: null,
       eventSubmittingFormAdded: null,
       intervalName: null,
     };
@@ -396,41 +382,6 @@ export default {
         });
       }
     },
-    /**
-     *
-     * @param item
-     * @param index
-     * @returns {{newItem: Object, shiftIndex: Number}}
-     */
-    updatePositionElementsInBiSection(item, index) {
-      let newItem = item;
-      let shiftIndex = index;
-      if (newItem.leftSide?.length) {
-        newItem.leftSide = newItem?.leftSide?.map((itemLeft) => {
-          if (typeof itemLeft === "object") {
-            itemLeft.position = shiftIndex;
-            shiftIndex++;
-            return itemLeft;
-          } else {
-            shiftIndex++;
-            return itemLeft;
-          }
-        });
-      }
-      if (newItem.rightSide?.length) {
-        newItem.rightSide = newItem?.rightSide?.map((itemRight) => {
-          if (typeof itemRight === "object") {
-            itemRight.position = shiftIndex;
-            shiftIndex++;
-            return itemRight;
-          } else {
-            shiftIndex++;
-            return itemRight;
-          }
-        });
-      }
-      return { newItem, shiftIndex };
-    },
     showForm() {
       if (!this.formElement) {
         return false;
@@ -492,6 +443,17 @@ export default {
       }
       this.eventSubmittingFormAdded = true;
     },
+    toggleTextAreaResultForDevMode() {
+      if (this.showInsideElementStatus) {
+        this.textAreaResult = document.querySelector("#teleport.calc__form-textarea");
+        if (this.textAreaResult ) {
+          this.textAreaResult .style.display = 'block';
+        }
+      }
+      if (!this.showInsideElementStatus && this.textAreaResult) {
+        this.textAreaResult .style.display = 'none';
+      }
+    }
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement() {
@@ -506,6 +468,9 @@ export default {
         }
       },
     },
+    showInsideElementStatus() {
+      this.toggleTextAreaResultForDevMode();
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
