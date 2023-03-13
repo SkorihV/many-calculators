@@ -90,8 +90,8 @@ export const MixinsGeneralItemData = {
         : "";
     },
     dependencyFormulaBeforeProcessingHtml() {
-      return this.parsingFormulaVariables?.length
-        ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.parsingFormulaVariables}</div>`
+      return this.formulaAfterProcessingVariables?.length
+        ? `<div class="calc__dev-block-element">Формула зависимости отображения после обработки: ${this.formulaAfterProcessingVariables}</div>`
         : "";
     },
     valueHtml() {

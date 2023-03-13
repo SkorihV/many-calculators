@@ -105,11 +105,12 @@
     <teleport v-if="allowTeleport" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
-    <div
-      class="calc__dev-block-wrapper"
-      v-if="showDevBlock"
-      v-html="devModeData"
-    ></div>
+    <dev-block
+      :formula="formula"
+      :formula-variables="resultTextForComputed"
+      :local-cost="finalSummaForOutput"
+      hidden-value
+    ></dev-block>
   </div>
   <spinner-element
     :init-show="!appIsMounted"
@@ -127,6 +128,8 @@ import ErrorNamesTemplates from "@/components/UI/other/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
+
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
@@ -156,6 +159,7 @@ export default {
     UiBisection,
     UiDuplicator,
     ErrorNamesTemplates,
+    devBlock,
   },
   async mounted() {
     let isLocal = false;
@@ -604,7 +608,7 @@ export default {
             this.resultTextForComputed
           );
         }
-        return false;
+        return null;
       }
     },
 
@@ -775,27 +779,6 @@ export default {
         this.isCanShowAllTooltips &&
         this.displayResultData
       );
-    },
-    devModeData() {
-      return `
-      ${this.formulaHtml}
-      ${this.formulaVariablesHtml}
-      `;
-    },
-    formulaHtml() {
-      return this.variablesInFormula?.length
-        ? `<div class="calc__dev-block-element">Формула расчета: ${this.variablesInFormula.join(
-            " "
-          )}</div>`
-        : "";
-    },
-    formulaVariablesHtml() {
-      return this.mainFormulaIsExist
-        ? `<div class="calc__dev-block-element">Формула с подставленными значениями: ${this.resultTextForComputed}</div>`
-        : "";
-    },
-    showDevBlock() {
-      return this.devMode && this.showInsideElementStatus;
     },
     showFormIsAllow() {
       if (this.formElement === false || this.methodWorksForm === "hidden") {
@@ -2528,7 +2511,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     margin-bottom: 5px;
     &-wrapper {
       position: relative;
-      padding: 30px 0 10px;
+      padding: 50px 0 10px;
       border-bottom: 2px groove $c_decor_border_color;
       margin-bottom: 10px;
       &:hover {
@@ -2539,6 +2522,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @include style-title-main;
       font-weight: 600;
       text-align: center;
+      margin-bottom: 15px;
     }
     &-duplicate,
     &-delete {
@@ -2546,7 +2530,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       position: absolute;
       display: flex;
       right: 0;
-      top: 5px;
+      top: 0;
       background-color: $c_decor_bg_color;
       color: $c_decor_text_default;
       border: $c_decor_border_width solid $c_decor_border_color;

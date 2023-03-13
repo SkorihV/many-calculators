@@ -22,15 +22,20 @@
       @changedValue="changeValue"
     />
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :label="label"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+    :element-name="elementName"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    value="null"
+  />
 </template>
 
 <script>
 import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
@@ -39,7 +44,7 @@ import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
-  components: { UiDuplicatorWrapper },
+  components: { UiDuplicatorWrapper, devBlock },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {

@@ -71,15 +71,20 @@
       </div>
     </div>
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="isLocalChecked"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -91,7 +96,7 @@ export default {
   name: "UiCheckbox",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip },
+  components: { UiTooltip, devBlock },
   props: {
     /**
      * Начальное значение
@@ -260,6 +265,7 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
+      "showInsideElementStatus"
     ]),
     /**
      *

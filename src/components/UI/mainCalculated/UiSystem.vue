@@ -1,14 +1,19 @@
 <template>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="localCost"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -18,6 +23,7 @@ export default {
   name: "UiSystem",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  components: {devBlock},
   props: {
     ...UsePropsTemplates([
       "cost",
@@ -29,6 +35,7 @@ export default {
       "dependencyPrices",
       "label",
       "dependencyFormulaDisplay",
+      "positionElement",
     ]),
   },
   mounted() {
@@ -37,19 +44,20 @@ export default {
   methods: {
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
-        value: parseFloat(this.localCost),
+        value: this.localCost,
         displayValue: null,
         name: this.localElementName,
         type: "system",
-        cost: parseFloat(this.localCost),
-        label: "",
+        cost: this.localCost,
+        label: null,
         formOutputMethod: null,
-        // isShow: this.isVisibilityFromDependency,
-        isShow: true,
+        resultOutputMethod: null,
+        isShow: this.parentIsShow,
         excludeFromCalculations: false,
-        unit: "",
+        unit: null,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
+        position: this.positionElement,
       });
       this.changeValid(eventType);
     },
@@ -70,7 +78,7 @@ export default {
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: parseFloat(this.localCost),
+        value: this.localCost,
         isShow: this.isVisibilityFromDependency,
         displayValue: null,
         type: "system",
@@ -100,20 +108,20 @@ export default {
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
-     * @returns {Number|String|*}
+     * @returns {number}
      */
     localCost() {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return this.cost;
+        return parseFloat(this.cost);
       }
-
       let newCost = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices
       );
+
       if (newCost !== null) {
-        return newCost;
+        return parseFloat(newCost);
       }
-      return this.cost;
+      return parseFloat(this.cost);
     },
   },
 };

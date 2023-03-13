@@ -190,6 +190,7 @@ export default {
         result += "Есть ошибка в расчетах!";
       } else if (this.finalSummaForOutput !== false && this.showSumma) {
         const titleSumma = !!this.resultOptions?.titleSumma ? this.resultOptions?.titleSumma : "";
+        const sum = parseFloat(this.finalSummaForOutput).toLocaleString("ru")
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
@@ -197,7 +198,7 @@ export default {
           titleSumma +
           "</div>" +
           "<div class='calc__result-block-field-summ-cost'> " +
-          this.finalSummaForOutput +
+          sum +
           "</div>" +
           "<div class='calc__result-block-field-summ-currency'> " +
           this.getCurrency +

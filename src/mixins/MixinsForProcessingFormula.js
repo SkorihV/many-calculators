@@ -2,7 +2,6 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 export const MixinsForProcessingFormula = {
   mixins: [MixinsUtilityServices],
@@ -46,6 +45,9 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     processingVariablesOnFormula(formula) {
+      if (!formula) {
+        return null;
+      }
       const result = formula?.reduce((resultText, item) => {
         const elementDependency =
           item in this.localDependencyList
@@ -91,6 +93,7 @@ export const MixinsForProcessingFormula = {
           if (item.disabledFormula) {
             return resultReduce;
           }
+
           let formula = this.getArrayElementsFromFormula(
             item?.dependencyFormulaCost
           );
@@ -210,10 +213,10 @@ export const MixinsForProcessingFormula = {
     isVisibilityFromDependency() {
       if (this.isDependencyElementVisibility && this.parentIsShow) {
         try {
-          return eval(this.parsingFormulaVariables);
+          return eval(this.formulaAfterProcessingVariables);
         } catch (e) {
           if (this.devMode) {
-            console.error(e.message, this.parsingFormulaVariables);
+            console.error(e.message, this.formulaAfterProcessingVariables);
           }
           return false;
         }
@@ -229,11 +232,10 @@ export const MixinsForProcessingFormula = {
     },
 
     /**
-     * Получить массив значений из формулы
+     * Преобразовать строку формулы в массив переменных со знаками
      * @returns {string|boolean}
      */
     parsingFormulaVariables() {
-
       if (!this.isDependencyElementVisibility) {
         return false;
       }
@@ -243,7 +245,14 @@ export const MixinsForProcessingFormula = {
       );
 
       this.constructLocalListElementDependencyInFormula(formula);
-      return this.processingVariablesOnFormula(formula);
+      return formula;
     },
+    /**
+     * Формула после замены переменных на их значения
+     * @returns {string}
+     */
+    formulaAfterProcessingVariables() {
+      return this.processingVariablesOnFormula(this.parsingFormulaVariables)
+    }
   },
 };

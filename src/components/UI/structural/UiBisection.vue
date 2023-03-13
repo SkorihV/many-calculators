@@ -73,11 +73,25 @@
         />
       </div>
     </div>
+    <dev-block
+      :label="label"
+      :element-name="elementName"
+      :is-visibility-from-dependency="isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+      hidden-cost
+      hidden-value
+      :left-dependency-formula-display="dependencyFormulaDisplayLeftSide"
+      :left-parsing-formula-variables="leftDependencyVariablesFormula"
+      :right-dependency-formula-display="dependencyFormulaDisplayRightSide"
+      :right-parsing-formula-variables="rightDependencyVariablesFormula"
+    ></dev-block>
   </div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
@@ -87,7 +101,7 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 
 export default {
   name: "UiBisection",
-  components: { BackgroundImageElement, TemplatesWrapper },
+  components: { BackgroundImageElement, TemplatesWrapper, devBlock },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -132,15 +146,20 @@ export default {
       this.$emit("changedValue", data);
     },
 
-    processingFormula(formula) {
-      let result = this.getArrayElementsFromFormula(formula);
+    getArrayElementsFormula(formula){
+      const result = this.getArrayElementsFromFormula(formula);
       this.constructLocalListElementDependencyInFormula(result);
-      result = this.processingVariablesOnFormula(result);
+      return result;
+    },
+    getVariablesDataInFormula(formula) {
+      return this.processingVariablesOnFormula(formula);
+    },
+    processingFormula(formula) {
       try {
-        return eval(result);
+        return eval(formula);
       } catch (e) {
         if (this.devMode) {
-          console.error(e.message, result);
+          console.error(e.message, formula);
         }
         return false;
       }
@@ -148,15 +167,22 @@ export default {
   },
   computed: {
     ...mapState(useBaseStore, ["devMode", "getImageDir"]),
+    leftDependencyVariablesFormula() {
+      const formula = this.getArrayElementsFormula(this.dependencyFormulaDisplayLeftSide);
+      return this.getVariablesDataInFormula(formula)
+    },
+    rightDependencyVariablesFormula() {
+      const formula = this.getArrayElementsFormula(this.dependencyFormulaDisplayRightSide);
+      return this.getVariablesDataInFormula(formula)
+    },
     /**
-     *
      * @returns {any|boolean}
      */
     isShowLeftSide() {
       if (!this.dependencyFormulaDisplayLeftSide?.length) {
         return true;
       }
-      return this.processingFormula(this.dependencyFormulaDisplayLeftSide);
+      return this.processingFormula(this.leftDependencyVariablesFormula);
     },
     /**
      *
@@ -166,7 +192,7 @@ export default {
       if (!this.dependencyFormulaDisplayRightSide?.length) {
         return true;
       }
-      return this.processingFormula(this.dependencyFormulaDisplayRightSide);
+      return this.processingFormula(this.rightDependencyVariablesFormula);
     },
     /**
      *

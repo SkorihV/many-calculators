@@ -3736,12 +3736,12 @@
   },
 
   "test-color-options": {
-    "formula": "",
+    "formula": "Block1 + Block2 * ползунок + _otherSum_",
     "methodBeginningCalculation": "useButton",
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
-    "computedMethod": "linear",
+    "computedMethod": "formula",
     "tooltipOff": false,
     "methodWorksForm": "showAfterCalculation",
     "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
@@ -3775,9 +3775,8 @@
         "step": "1",
         "discreteStep": 1,
         "notEmpty": 1,
-        "onlyNumber": 1,
+        "dataType": "onlyInteger",
         "isCurrency": false,
-        "onlyInteger": 1,
         "isColumn": false,
         "formOutputMethod": "valueSumm",
         "resultOutputMethod": "valueSumm",
@@ -4201,9 +4200,8 @@
                 "step": "1",
                 "isColumn": false,
                 "notEmpty": true,
-                "onlyNumber": true,
                 "isCurrency": false,
-                "onlyInteger": false,
+                "dataType": "onlyInteger",
                 "formOutputMethod": "no",
                 "resultOutputMethod": "value",
                 "excludeFromCalculations": false,
@@ -4266,9 +4264,8 @@
                 "step": "1",
                 "isColumn": false,
                 "notEmpty": false,
-                "onlyNumber": false,
+                "dataType": "mixed",
                 "isCurrency": false,
-                "onlyInteger": false,
                 "template": "UiInput",
                 "elementName": "Block15",
                 "customErrorPattern": "",
@@ -4357,9 +4354,32 @@
         "parent": "0;"
       },
       {
+        "json_id": "5267463232",
+        "title": "Системное поле тестирования зависимостей",
+        "cost": "1",
+        "elementName": "Block33System",
+        "formulaProcessingLogic": "error",
+        "template": "UiSystem",
+        "dependencyPrices": [
+          {
+            "title": "Значение 2",
+            "disabledFormula": 0,
+            "cost": 2,
+            "dependencyFormulaCost": "ползунок > 10"
+          },
+          {
+            "title": "Значение 3",
+            "disabledFormula": 0,
+            "cost": 3,
+            "dependencyFormulaCost": "ползунок > 20"
+          }
+        ]
+      },
+      {
         "json_id": "65527907",
         "meta_id": "54008706",
         "ver_id": "2422030",
+        "elementName": "Колонки1",
         "title": "Колонки - для цветовых настроек",
         "label": "Блок 18",
         "labelSub": "Подзаголовок блока:",
@@ -4381,9 +4401,8 @@
             "step": "1",
             "isColumn": false,
             "notEmpty": false,
-            "onlyNumber": false,
+            "dataType": "mixed",
             "isCurrency": false,
-            "onlyInteger": false,
             "template": "UiInput",
             "elementName": "Block19",
             "customErrorPattern": "",
@@ -4424,9 +4443,9 @@
           }
         ],
         "widthLeftSide": "50",
-        "dependencyFormulaDisplay": "input12 > 56",
-        "dependencyFormulaDisplayLeftSide": "",
-        "dependencyFormulaDisplayRightSide": "",
+        "dependencyFormulaDisplay": "ползунок > 10",
+        "dependencyFormulaDisplayLeftSide": "ползунок > 10",
+        "dependencyFormulaDisplayRightSide": "ползунок > 10",
         "visuallySeparateElement": false,
         "classes": "",
         "template": "UiBisection",
@@ -4497,9 +4516,8 @@
             "step": "1",
             "discreteStep": false,
             "notEmpty": false,
-            "onlyNumber": true,
             "isCurrency": false,
-            "onlyInteger": false,
+            "dataType": "onlyNumber",
             "isColumn": false,
             "formOutputMethod": "no",
             "resultOutputMethod": "no",
@@ -4523,7 +4541,7 @@
             "label": "Блок 24",
             "value": "",
             "placeholder": "",
-            "cost": "10",
+            "cost": "1",
             "unit": "",
             "min": "",
             "max": "",
@@ -4531,9 +4549,8 @@
             "step": "1",
             "discreteStep": false,
             "notEmpty": false,
-            "onlyNumber": true,
+            "dataType": "onlyNumber",
             "isCurrency": false,
-            "onlyInteger": false,
             "isColumn": false,
             "formOutputMethod": "no",
             "resultOutputMethod": "no",
@@ -4547,13 +4564,35 @@
             "dependencyPrices": null,
             "prompt": "",
             "parent": "0;74117906;"
+          },
+          {
+            "json_id": "5267564464343232",
+            "title": "Системное поле тестирования зависимостей",
+            "cost": "1",
+            "elementName": "system2",
+            "formulaProcessingLogic": "error",
+            "template": "UiSystem",
+            "formOutputMethod": "no",
+            "dependencyPrices": [
+              {
+                "title": "Значение 2",
+                "disabledFormula": 0,
+                "cost": 2,
+                "dependencyFormulaCost": "Block24 > 5"
+              },
+              {
+                "title": "Значение 3",
+                "disabledFormula": 0,
+                "cost": 3,
+                "dependencyFormulaCost": "Block24 > 18"
+              }
+            ]
           }
         ],
         "buttonName": "Дублировать",
         "formOutputMethod": "valueSumm",
         "resultOutputMethod": "valueSumm",
         "excludeFromCalculations": false,
-        "elementName": "",
         "formulaProcessingLogic": "zero",
         "formula": "Block23 * 5 + _otherSum_",
         "dependencyFormulaDisplay": "Block1 > 20 && Block2 === true",

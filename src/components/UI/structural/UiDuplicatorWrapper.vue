@@ -3,7 +3,7 @@
     class="calc__duplicator-wrapper"
     v-if="mutationsInputData?.templates.length"
   >
-    <div class="calc__duplicator-label">{{ mutationsInputData?.label }}</div>
+    <div class="calc__duplicator-label" v-if="mutationsInputData?.label?.length">{{ mutationsInputData?.label }}</div>
     <template
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
@@ -44,15 +44,18 @@
       X
     </button>
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="showDevBlock"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :element-name="mutationsInputData?.elementName"
+    :local-cost="localCost"
+    :formula="formula"
+    :formula-variables="compileFormulaWitchData"
+    hidden-value
+  />
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperForDuplicator from "@/components/UI/supporting/TemplatesWrapperForDuplicator.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
@@ -62,10 +65,11 @@ import { mapState } from "pinia";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
+
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { TemplatesWrapper, TemplatesWrapperForDuplicator },
+  components: { devBlock, TemplatesWrapper, TemplatesWrapperForDuplicator },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
@@ -432,37 +436,6 @@ export default {
     },
     showDevBlock() {
       return this.devMode && this.showInsideElementStatus;
-    },
-    devModeData() {
-      return `
-      <hr/>
-      ${this.labelHtml}
-      ${this.formulaHtml}
-      ${this.formulaOnDataHtml}
-      ${this.summElementInFormulaHtml}
-      `;
-    },
-    labelHtml() {
-      return `<div class="calc__dev-block-element">Название группы элементов в дупликаторе: ${this.mutationsInputData?.label}</div>`;
-    },
-    formulaHtml() {
-      return `<div class="calc__dev-block-element">Базовая формула: ${
-        this.formula?.length
-          ? this.getArrayElementsFromFormula(this.formula).join(" ")
-          : "Нет"
-      }</div>`;
-    },
-    formulaOnDataHtml() {
-      return `<div class="calc__dev-block-element">Формула с данными: ${
-        this.compileFormulaWitchData?.length
-          ? this.compileFormulaWitchData
-          : "Нет"
-      }</div>`;
-    },
-    summElementInFormulaHtml() {
-      return `<div class="calc__dev-block-element">Результат расчета: ${
-        this.localCost !== null ? this.localCost : " не возможно посчитать!"
-      }</div>`;
     },
   },
 };

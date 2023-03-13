@@ -79,6 +79,14 @@
         @changedValue="changeValue"
       />
     </template>
+    <dev-block
+      :label="label"
+      :element-name="elementName"
+      :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+      hidden-cost
+    ></dev-block>
   </div>
 </template>
 
@@ -86,6 +94,7 @@
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/UiTabItem.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -95,7 +104,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 
 export default {
   name: "UiTab",
-  components: { IconElementWrapper, UiTooltip, UiPrompt, UiTabItem },
+  components: { IconElementWrapper, UiTooltip, UiPrompt, UiTabItem, devBlock},
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {

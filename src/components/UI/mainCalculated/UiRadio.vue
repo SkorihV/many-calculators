@@ -58,16 +58,21 @@
       />
     </div>
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="selectedValueInRadio"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
@@ -80,7 +85,7 @@ export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiPrompt, UiTooltip, IconElementWrapper },
+  components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock},
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },

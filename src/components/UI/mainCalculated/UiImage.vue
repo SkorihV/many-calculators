@@ -23,15 +23,20 @@
       </div>
     </div>
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    hidden-value
+    hidden-cost
+    :label="label"
+    :element-name="elementName"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -41,7 +46,7 @@ import { mapState } from "pinia";
 
 export default {
   name: "UiImage",
-  components: { UiPrompt },
+  components: { UiPrompt, devBlock},
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);

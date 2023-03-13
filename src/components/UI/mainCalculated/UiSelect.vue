@@ -78,17 +78,22 @@
         :local-can-be-shown="isVisibilityFromDependency && canBeShownTooltip"
       />
     </div>
-    <div
-      class="calc__dev-block-wrapper"
-      v-if="devModeData"
-      v-html="devModeData"
-    ></div>
+    <dev-block
+      :label="label"
+      :element-name="localElementName"
+      :value="currentOptionValue"
+      :local-cost="localCost"
+      :is-visibility-from-dependency="isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+    />
   </div>
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -101,7 +106,7 @@ export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { IconElementWrapper, UiTooltip, UiPrompt },
+  components: { IconElementWrapper, UiTooltip, UiPrompt,devBlock },
   created() {
     this.tryToggleElementIsMounted(this.localElementName, false);
   },

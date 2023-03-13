@@ -1,6 +1,5 @@
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-
 export const MixinsUtilityServices = {
   methods: {
     /**
@@ -35,7 +34,7 @@ export const MixinsUtilityServices = {
       let formulaInOut = formula
         ?.split(
           // /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)+)/g
-          /([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9](\.[0-9])*)*/g
+          /([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9]*(\.[0-9])*)/g
         )
         .filter((item) => item?.trim()?.length);
 

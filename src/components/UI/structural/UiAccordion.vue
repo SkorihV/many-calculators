@@ -20,17 +20,27 @@
         @changedValue="changeValue"
       />
     </template>
+    <dev-block
+      :label="label"
+      :element-name="elementName"
+      :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+      hidden-cost
+    ></dev-block>
   </div>
 </template>
 
 <script>
 import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 export default {
   name: "UiAccordion",
-  components: { UiAccordionItem },
+  components: { DevBlock, UiAccordionItem, devBlock },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {

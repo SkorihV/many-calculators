@@ -203,6 +203,7 @@
     :formula-processing-logic="template?.formulaProcessingLogic"
     :parent-name="parentName"
     :template-name="template.template"
+    :position-element="template?.position"
     @changedValue="changeValue"
   ></ui-system>
 </template>

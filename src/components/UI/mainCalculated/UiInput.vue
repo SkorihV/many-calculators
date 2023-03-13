@@ -62,22 +62,27 @@
           <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
         </div>
         <ui-tooltip
-          :is-show="tooltipError?.error"
+          :is-show="Boolean(tooltipError?.error)"
           :tooltip-text="tooltipError?.errorText"
           :local-can-be-shown="localCanBeShownTooltip"
         />
       </label>
     </div>
   </div>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devModeData"
-    v-html="devModeData"
-  ></div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="resultValue"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -89,7 +94,7 @@ export default {
   name: "UiInput",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip },
+  components: { UiTooltip, devBlock },
   props: {
     /**
      * данные для инпута
