@@ -3,7 +3,12 @@
     class="calc__duplicator-wrapper"
     v-if="mutationsInputData?.templates.length"
   >
-    <div class="calc__duplicator-label" v-if="mutationsInputData?.label?.length">{{ mutationsInputData?.label }}</div>
+    <div
+      class="calc__duplicator-label"
+      v-if="mutationsInputData?.label?.length"
+    >
+      {{ mutationsInputData?.label }}
+    </div>
     <template
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
@@ -64,7 +69,6 @@ import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
-
 
 export default {
   name: "UiDuplicatorWrapper",

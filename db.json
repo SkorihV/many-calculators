@@ -3752,7 +3752,7 @@
       "titleSumma": "ИТОГО:",
       "showResultDataForBlock": 1,
       "currency": "яблоки",
-      "textForSpinner" : "фывфы фв фыв",
+      "textForSpinner": "фывфы фв фыв",
       "timerForSpinner": 3
     }
   },

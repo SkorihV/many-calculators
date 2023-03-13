@@ -22,25 +22,25 @@ import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 export default {
   name: "ResultButtonForComputed",
-  components: {IconElementWrapper},
+  components: { IconElementWrapper },
   props: {
     resultOptions: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   emits: ["checkEnabledResultButton"],
   data() {
     return {
-      isHoverButton: false
-    }
+      isHoverButton: false,
+    };
   },
   methods: {
     calculateResult() {
       this.showAllTooltipsOn();
       this.setInitEnabledSendForm(true);
       this.setAllowShowResultBlock(true);
-      this.$emit('checkEnabledResultButton');
+      this.$emit("checkEnabledResultButton");
     },
   },
   watch: {
@@ -50,11 +50,14 @@ export default {
       }
     },
     isExistGlobalErrorsValidationIgnoreHiddenElement(newValue) {
-      if (newValue && (this.showResultBtn || this.isMethodBeginningCalculation)) {
+      if (
+        newValue &&
+        (this.showResultBtn || this.isMethodBeginningCalculation)
+      ) {
         this.setInitEnabledSendForm(false);
         this.setAllowShowResultBlock(false);
       }
-    }
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -64,10 +67,10 @@ export default {
       "isExistGlobalErrorsValidationTakeIntoHiddenElement",
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "setAllowShowResultBlock",
-      "checkAllowShowResultBlock"
+      "checkAllowShowResultBlock",
     ]),
     iconSettings() {
-      return this.options
+      return this.options;
     },
     showResultBtn() {
       return this.getMethodBeginningCalculation === "useButton";
@@ -76,15 +79,19 @@ export default {
       return this.getMethodBeginningCalculation === "useButtonAfterCalculation";
     },
     showResultBtnAfterValidation() {
-      return this.isMethodBeginningCalculation && !this.isExistGlobalErrorsValidationTakeIntoHiddenElement ;
+      return (
+        this.isMethodBeginningCalculation &&
+        !this.isExistGlobalErrorsValidationTakeIntoHiddenElement
+      );
     },
     showBtn() {
-      return (this.showResultBtnAfterValidation || this.showResultBtn) && !this.checkAllowShowResultBlock;
-    }
+      return (
+        (this.showResultBtnAfterValidation || this.showResultBtn) &&
+        !this.checkAllowShowResultBlock
+      );
+    },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

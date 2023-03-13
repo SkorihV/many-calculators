@@ -129,7 +129,7 @@ export default {
     },
     scrollIntoName: {
       type: String,
-      default: null
+      default: null,
     },
     ...UsePropsTemplates([
       "formOutputMethod",
@@ -214,7 +214,7 @@ export default {
       this.tryPassDependency();
       this.changeValid(eventType);
       if (this.isLocalChecked && this.scrollIntoName) {
-        this.goToElementScroll()
+        this.goToElementScroll();
       }
     },
     changeValid(eventType) {
@@ -244,12 +244,18 @@ export default {
     },
     goToElementScroll() {
       this.$nextTick(() => {
-          const elementToScroll = document.querySelector("#" + this.scrollIntoName)
-          if(Boolean(elementToScroll)) {
-            elementToScroll.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
-          }
-      })
-    }
+        const elementToScroll = document.querySelector(
+          "#" + this.scrollIntoName
+        );
+        if (Boolean(elementToScroll)) {
+          elementToScroll.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "start",
+          });
+        }
+      });
+    },
   },
   watch: {
     isVisibilityFromDependency(value) {
@@ -265,7 +271,7 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
-      "showInsideElementStatus"
+      "showInsideElementStatus",
     ]),
     /**
      *

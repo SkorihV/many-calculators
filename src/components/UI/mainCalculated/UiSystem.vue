@@ -23,7 +23,7 @@ export default {
   name: "UiSystem",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: {devBlock},
+  components: { devBlock },
   props: {
     ...UsePropsTemplates([
       "cost",

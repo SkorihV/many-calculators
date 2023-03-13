@@ -85,7 +85,7 @@ export default {
   name: "UiRadio",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock},
+  components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },

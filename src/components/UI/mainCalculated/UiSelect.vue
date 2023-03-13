@@ -106,7 +106,7 @@ export default {
   name: "UiSelect",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { IconElementWrapper, UiTooltip, UiPrompt,devBlock },
+  components: { IconElementWrapper, UiTooltip, UiPrompt, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.localElementName, false);
   },

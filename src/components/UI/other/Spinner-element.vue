@@ -1,7 +1,7 @@
 <template>
   <div class="calc__spinner-wrapper" v-if="allowShow">
     <div class="calc__spinner-block"></div>
-    <div class="calc__spinner-text" v-if="text.length">{{text}}</div>
+    <div class="calc__spinner-text" v-if="text.length">{{ text }}</div>
   </div>
 </template>
 
@@ -12,40 +12,40 @@ export default {
   props: {
     text: {
       type: String,
-      default: ""
+      default: "",
     },
     initShow: {
       type: Boolean,
-      default: false
+      default: false,
     },
     timerTime: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
-      allowShow: false
-    }
+      allowShow: false,
+    };
   },
   watch: {
     initShow: {
       handler(newValue) {
         if (newValue) {
-          this.allowShow = newValue
+          this.allowShow = newValue;
           if (this.timerTime) {
             setTimeout(() => {
               this.allowShow = false;
               this.$emit("finished");
-            }, this.timerTime * 1000)
+            }, this.timerTime * 1000);
           }
-        } else  {
+        } else {
           this.allowShow = newValue;
           this.$emit("finished");
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 };
 </script>

@@ -46,7 +46,7 @@ import { mapState } from "pinia";
 
 export default {
   name: "UiImage",
-  components: { UiPrompt, devBlock},
+  components: { UiPrompt, devBlock },
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);

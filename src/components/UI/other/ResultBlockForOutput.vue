@@ -60,21 +60,27 @@ export default {
   },
   data() {
     return {
-      isNeedSpinner: false
-    }
+      isNeedSpinner: false,
+    };
   },
   methods: {
     spinnerIsFinished() {
       this.isNeedSpinner = false;
-    }
+    },
   },
   watch: {
     isShowResultBlock(newValue) {
-      this.isNeedSpinner = Boolean(this.resultOptions?.timerForSpinner) && newValue;
-    }
+      this.isNeedSpinner =
+        Boolean(this.resultOptions?.timerForSpinner) && newValue;
+    },
   },
   computed: {
-    ...mapState(useBaseStore, ["getCurrency","isExistGlobalErrorsValidationIgnoreHiddenElement", "checkInitEnabledSendForm", "checkAllowShowResultBlock"]),
+    ...mapState(useBaseStore, [
+      "getCurrency",
+      "isExistGlobalErrorsValidationIgnoreHiddenElement",
+      "checkInitEnabledSendForm",
+      "checkAllowShowResultBlock",
+    ]),
     isShowResultBlockTitle() {
       return Boolean(this.resultOptions?.title?.length);
     },
@@ -182,15 +188,20 @@ export default {
      */
     finalTextForOutput() {
       let result = this.resultTextDataForResultBlock;
-      if (this.finalSummaForOutput === null || this.finalSummaForOutput === false) {
+      if (
+        this.finalSummaForOutput === null ||
+        this.finalSummaForOutput === false
+      ) {
         return result;
       }
 
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else if (this.finalSummaForOutput !== false && this.showSumma) {
-        const titleSumma = !!this.resultOptions?.titleSumma ? this.resultOptions?.titleSumma : "";
-        const sum = parseFloat(this.finalSummaForOutput).toLocaleString("ru")
+        const titleSumma = !!this.resultOptions?.titleSumma
+          ? this.resultOptions?.titleSumma
+          : "";
+        const sum = parseFloat(this.finalSummaForOutput).toLocaleString("ru");
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
@@ -212,7 +223,7 @@ export default {
     },
     textForSpinner() {
       return this.resultOptions?.textForSpinner;
-    }
+    },
   },
 };
 </script>

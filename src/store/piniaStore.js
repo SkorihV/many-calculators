@@ -25,13 +25,13 @@ export const useBaseStore = defineStore("base", {
     };
   },
   getters: {
-    checkInitEnabledSendForm({initEnabledSendForm}) {
+    checkInitEnabledSendForm({ initEnabledSendForm }) {
       return initEnabledSendForm;
     },
-    checkAllowShowResultBlock({allowShowResultBlock}){
+    checkAllowShowResultBlock({ allowShowResultBlock }) {
       return allowShowResultBlock;
     },
-    getMethodBeginningCalculation({methodBeginningCalculation}) {
+    getMethodBeginningCalculation({ methodBeginningCalculation }) {
       return methodBeginningCalculation;
     },
     getCurrency: ({ currency }) => {
@@ -114,7 +114,9 @@ export const useBaseStore = defineStore("base", {
      * @returns {boolean}
      */
 
-    isExistGlobalErrorsValidationIgnoreHiddenElement: ({ validationsErrorsList }) =>
+    isExistGlobalErrorsValidationIgnoreHiddenElement: ({
+      validationsErrorsList,
+    }) =>
       Boolean(
         Object.values(validationsErrorsList).filter(
           (item) => item.error && item.isShow
@@ -126,11 +128,11 @@ export const useBaseStore = defineStore("base", {
      * @param state
      * @returns {boolean}
      */
-    isExistGlobalErrorsValidationTakeIntoHiddenElement: ({ validationsErrorsList }) =>
+    isExistGlobalErrorsValidationTakeIntoHiddenElement: ({
+      validationsErrorsList,
+    }) =>
       Boolean(
-        Object.values(validationsErrorsList).filter(
-          (item) => item.error
-        ).length
+        Object.values(validationsErrorsList).filter((item) => item.error).length
       ),
     /**
      * название спецпеременной служащей для суммирования в себе всех значений
@@ -251,18 +253,20 @@ export const useBaseStore = defineStore("base", {
       this.tooltipOn = !Boolean(dataOptions?.tooltipOff);
     },
     setCurrency(dataOptions) {
-      this.currency = !!dataOptions?.resultOptions?.currency? dataOptions?.resultOptions?.currency  : "руб";
+      this.currency = !!dataOptions?.resultOptions?.currency
+        ? dataOptions?.resultOptions?.currency
+        : "руб";
     },
     setMethodBeginningCalculation(dataOptions) {
       this.methodBeginningCalculation = dataOptions?.methodBeginningCalculation
         ? dataOptions?.methodBeginningCalculation
         : "no";
     },
-    setInitEnabledSendForm(flag){
-        this.initEnabledSendForm = flag;
+    setInitEnabledSendForm(flag) {
+      this.initEnabledSendForm = flag;
     },
     setAllowShowResultBlock(flag) {
       this.allowShowResultBlock = flag;
-    }
+    },
   },
 });

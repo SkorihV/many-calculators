@@ -146,7 +146,7 @@ export default {
       this.$emit("changedValue", data);
     },
 
-    getArrayElementsFormula(formula){
+    getArrayElementsFormula(formula) {
       const result = this.getArrayElementsFromFormula(formula);
       this.constructLocalListElementDependencyInFormula(result);
       return result;
@@ -168,12 +168,16 @@ export default {
   computed: {
     ...mapState(useBaseStore, ["devMode", "getImageDir"]),
     leftDependencyVariablesFormula() {
-      const formula = this.getArrayElementsFormula(this.dependencyFormulaDisplayLeftSide);
-      return this.getVariablesDataInFormula(formula)
+      const formula = this.getArrayElementsFormula(
+        this.dependencyFormulaDisplayLeftSide
+      );
+      return this.getVariablesDataInFormula(formula);
     },
     rightDependencyVariablesFormula() {
-      const formula = this.getArrayElementsFormula(this.dependencyFormulaDisplayRightSide);
-      return this.getVariablesDataInFormula(formula)
+      const formula = this.getArrayElementsFormula(
+        this.dependencyFormulaDisplayRightSide
+      );
+      return this.getVariablesDataInFormula(formula);
     },
     /**
      * @returns {any|boolean}

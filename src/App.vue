@@ -112,9 +112,7 @@
       hidden-value
     ></dev-block>
   </div>
-  <spinner-element
-    :init-show="!appIsMounted"
-  ></spinner-element>
+  <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
 
 <script>
@@ -134,7 +132,6 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-
 
 import localData from "@/servises/localData";
 
@@ -212,13 +209,13 @@ export default {
           if (currentItem.items?.length) {
             const itemsLength = currentItem?.items.length;
             for (let i = 0; i < itemsLength; i++) {
-              if (typeof currentItem?.items[i] === 'object') {
+              if (typeof currentItem?.items[i] === "object") {
                 let currentTemplates = currentItem?.items[i].templates;
                 let currentTempLength = currentTemplates?.length;
                 let newTemplates = [];
                 if (currentTempLength) {
                   for (let q = 0; q < currentTempLength; q++) {
-                    if (typeof currentTemplates[q] === 'object') {
+                    if (typeof currentTemplates[q] === "object") {
                       currentTemplates[q].position = templatesPositionIndex;
                       templatesPositionIndex++;
                       newTemplates.push(currentTemplates[q]);
@@ -275,7 +272,9 @@ export default {
 
     this.isUseFormula = this.outOptions?.computedMethod === "formula";
     this.displayResultData = this.outOptions?.computedMethod !== "no";
-    this.methodWorksForm = this.outOptions?.methodWorksForm ? this.outOptions.methodWorksForm : 'show';
+    this.methodWorksForm = this.outOptions?.methodWorksForm
+      ? this.outOptions.methodWorksForm
+      : "show";
 
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
@@ -286,7 +285,11 @@ export default {
       this.showForm();
     }
 
-    this.setInitEnabledSendForm(this?.outOptions?.methodBeginningCalculation === "useAutomatic" || this?.outOptions?.methodBeginningCalculation === "useButtonAfterCalculation")  ;
+    this.setInitEnabledSendForm(
+      this?.outOptions?.methodBeginningCalculation === "useAutomatic" ||
+        this?.outOptions?.methodBeginningCalculation ===
+          "useButtonAfterCalculation"
+    );
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
     this.setTooltipOn(this.outOptions);
 
@@ -311,7 +314,7 @@ export default {
         "changeAmountSelectList",
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
-      methodWorksForm: 'show',
+      methodWorksForm: "show",
       formElement: null,
       eventSubmittingFormAdded: null,
       intervalName: null,
@@ -339,7 +342,10 @@ export default {
         });
       }
 
-      if (!this.eventNotShowTooltips.includes(eventType) && this.isAutomaticCalculate ) {
+      if (
+        !this.eventNotShowTooltips.includes(eventType) &&
+        this.isAutomaticCalculate
+      ) {
         this.showAllTooltipsOn();
         if (!this.isMethodBeginningAfterCalculation) {
           this.setAllowShowResultBlock(true);
@@ -352,7 +358,7 @@ export default {
      * Разрешаем отправку формы
      */
     checkEnabledResultButton() {
-      if(!this.formElement) {
+      if (!this.formElement) {
         this.findForm();
       }
       if (!this.submitResult) {
@@ -360,7 +366,7 @@ export default {
       }
       this.setReadOnlyForTeleportField();
 
-      if (this.submitResult && !this.eventSubmittingFormAdded){
+      if (this.submitResult && !this.eventSubmittingFormAdded) {
         this.setEventOnSubmit();
       }
 
@@ -401,7 +407,7 @@ export default {
       let shiftIndex = index;
       if (newItem.leftSide?.length) {
         newItem.leftSide = newItem?.leftSide?.map((itemLeft) => {
-          if (typeof itemLeft === 'object') {
+          if (typeof itemLeft === "object") {
             itemLeft.position = shiftIndex;
             shiftIndex++;
             return itemLeft;
@@ -413,7 +419,7 @@ export default {
       }
       if (newItem.rightSide?.length) {
         newItem.rightSide = newItem?.rightSide?.map((itemRight) => {
-          if (typeof itemRight === 'object') {
+          if (typeof itemRight === "object") {
             itemRight.position = shiftIndex;
             shiftIndex++;
             return itemRight;
@@ -429,12 +435,15 @@ export default {
       if (!this.formElement) {
         return false;
       }
-      if (Number(this.outOptions?.resultOptions?.timerForSpinner) > 0 && this.methodWorksForm !== 'show') {
+      if (
+        Number(this.outOptions?.resultOptions?.timerForSpinner) > 0 &&
+        this.methodWorksForm !== "show"
+      ) {
         setTimeout(() => {
           if (this.showFormIsAllow) {
             this.formElement.style.display = "block";
           }
-        }, this.outOptions?.resultOptions?.timerForSpinner * 1000)
+        }, this.outOptions?.resultOptions?.timerForSpinner * 1000);
       } else {
         this.formElement.style.display = "block";
       }
@@ -476,27 +485,27 @@ export default {
             this.checkEnabledResultButton();
             counter++;
             if (counter > 5) {
-              clearInterval(this.intervalName)
+              clearInterval(this.intervalName);
             }
-          }, 1000)
+          }, 1000);
         });
       }
       this.eventSubmittingFormAdded = true;
-    }
+    },
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement() {
       this.checkEnabledResultButton();
     },
     showFormIsAllow: {
-      handler(newValue){
+      handler(newValue) {
         if (newValue) {
-          this.showForm()
+          this.showForm();
         } else {
-          this.hiddenForm()
+          this.hiddenForm();
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -723,9 +732,11 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else {
-        const titleSumma = !!this.outOptions?.resultOptions?.titleSumma ? this.outOptions?.resultOptions?.titleSumma : "";
+        const titleSumma = !!this.outOptions?.resultOptions?.titleSumma
+          ? this.outOptions?.resultOptions?.titleSumma
+          : "";
         result +=
-        "\n" +
+          "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
           titleSumma +
@@ -745,7 +756,10 @@ export default {
       return this.finalTextForOutput.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
     },
     isAutomaticCalculate() {
-      return this.getMethodBeginningCalculation === "useAutomatic" || this.getMethodBeginningCalculation === "useButtonAfterCalculation"
+      return (
+        this.getMethodBeginningCalculation === "useAutomatic" ||
+        this.getMethodBeginningCalculation === "useButtonAfterCalculation"
+      );
     },
     isMethodBeginningAfterCalculation() {
       return this.getMethodBeginningCalculation === "useButtonAfterCalculation";
@@ -756,7 +770,10 @@ export default {
      * @returns {false|boolean}
      */
     showErrorTextBlock() {
-      return this.isExistGlobalErrorsValidationIgnoreHiddenElement && this.isCanShowAllTooltips;
+      return (
+        this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+        this.isCanShowAllTooltips
+      );
     },
     isEnabledSendForm() {
       return (
@@ -770,7 +787,11 @@ export default {
      * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
      */
     allowTeleport() {
-      return this.submitResult && !this.isExistGlobalErrorsValidationIgnoreHiddenElement && this.checkInitEnabledSendForm;
+      return (
+        this.submitResult &&
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+        this.checkInitEnabledSendForm
+      );
     },
     showErrorSummaBlock() {
       return (
@@ -1179,7 +1200,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         border-radius: 90px;
       }
 
-
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
@@ -1213,7 +1233,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           border: 4px solid $c_element_border_color_hover;
           box-shadow: 0 7px 11px -4px $c_element_border_color_hover;
         }
-
       }
 
       &.isError {

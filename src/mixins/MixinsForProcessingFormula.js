@@ -11,7 +11,7 @@ export const MixinsForProcessingFormula = {
        * список переменных от которого зависит именно текущий элемент
        */
       localDependencyList: {},
-      countUpdatedDependency: 0
+      countUpdatedDependency: 0,
     };
   },
   methods: {
@@ -188,17 +188,15 @@ export const MixinsForProcessingFormula = {
     },
     localDependencyList: {
       handler(newValue, oldValue) {
-
-        let isUpdated = false
+        let isUpdated = false;
         Object.entries(newValue).forEach(([key, data]) => {
           if (data.value !== oldValue[key].value) {
             isUpdated = true;
           }
-
-        })
+        });
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -252,7 +250,7 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     formulaAfterProcessingVariables() {
-      return this.processingVariablesOnFormula(this.parsingFormulaVariables)
-    }
+      return this.processingVariablesOnFormula(this.parsingFormulaVariables);
+    },
   },
 };

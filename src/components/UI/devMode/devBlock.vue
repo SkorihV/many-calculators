@@ -1,24 +1,75 @@
 <template>
-  <div class="calc__dev-block-wrapper" v-if="devMode && showInsideElementStatus">
-    <div class="calc__dev-block-element" v-if="label?.length">Заголовок элемента: {{label}}</div>
-    <div class="calc__dev-block-element" v-if="elementName?.length">Имя элемента: {{elementName}}</div>
+  <div
+    class="calc__dev-block-wrapper"
+    v-if="devMode && showInsideElementStatus"
+  >
+    <div class="calc__dev-block-element" v-if="label?.length">
+      Заголовок элемента: {{ label }}
+    </div>
+    <div class="calc__dev-block-element" v-if="elementName?.length">
+      Имя элемента: {{ elementName }}
+    </div>
 
-    <div class="calc__dev-block-element" v-if="dependencyFormulaDisplay?.length">Формула зависимости отображения: {{dependencyFormulaDisplay}}</div>
-    <div class="calc__dev-block-element" v-if="parsingFormulaVariables?.length">Формула зависимости отображения после обработки: {{parsingFormulaVariables}}</div>
+    <div
+      class="calc__dev-block-element"
+      v-if="dependencyFormulaDisplay?.length"
+    >
+      Формула зависимости отображения: {{ dependencyFormulaDisplay }}
+    </div>
+    <div class="calc__dev-block-element" v-if="parsingFormulaVariables?.length">
+      Формула зависимости отображения после обработки:
+      {{ parsingFormulaVariables }}
+    </div>
 
-    <div class="calc__dev-block-element" v-if="leftDependencyFormulaDisplay?.length">Формула зависимости отображения левой колонки: {{leftDependencyFormulaDisplay}}</div>
-    <div class="calc__dev-block-element" v-if="leftParsingFormulaVariables?.length">Формула зависимости отображения левой колонки после обработки: {{leftParsingFormulaVariables}}</div>
+    <div
+      class="calc__dev-block-element"
+      v-if="leftDependencyFormulaDisplay?.length"
+    >
+      Формула зависимости отображения левой колонки:
+      {{ leftDependencyFormulaDisplay }}
+    </div>
+    <div
+      class="calc__dev-block-element"
+      v-if="leftParsingFormulaVariables?.length"
+    >
+      Формула зависимости отображения левой колонки после обработки:
+      {{ leftParsingFormulaVariables }}
+    </div>
 
-    <div class="calc__dev-block-element" v-if="rightDependencyFormulaDisplay?.length">Формула зависимости отображения правой колонки: {{rightDependencyFormulaDisplay}}</div>
-    <div class="calc__dev-block-element" v-if="rightParsingFormulaVariables?.length">Формула зависимости отображения правой колонки после обработки: {{rightParsingFormulaVariables}}</div>
+    <div
+      class="calc__dev-block-element"
+      v-if="rightDependencyFormulaDisplay?.length"
+    >
+      Формула зависимости отображения правой колонки:
+      {{ rightDependencyFormulaDisplay }}
+    </div>
+    <div
+      class="calc__dev-block-element"
+      v-if="rightParsingFormulaVariables?.length"
+    >
+      Формула зависимости отображения правой колонки после обработки:
+      {{ rightParsingFormulaVariables }}
+    </div>
 
-    <div class="calc__dev-block-element" v-if="formula?.length">Формула расчета: {{formula}}</div>
-    <div class="calc__dev-block-element" v-if="formulaVariables?.length">Формула расчета после обработки: {{formulaVariables}}</div>
+    <div class="calc__dev-block-element" v-if="formula?.length">
+      Формула расчета: {{ formula }}
+    </div>
+    <div class="calc__dev-block-element" v-if="formulaVariables?.length">
+      Формула расчета после обработки: {{ formulaVariables }}
+    </div>
 
-
-    <div class="calc__dev-block-element" v-if="!hiddenValue">Значение элемента: {{value === null ? 'null' : value}}</div>
-    <div class="calc__dev-block-element" v-if="isVisibilityFromDependency !== null">Элемент виден: {{isVisibilityFromDependency}}</div>
-    <div class="calc__dev-block-element" v-if="!hiddenCost">Текущая стоимость: {{localCost === null ? 'null' : localCost}}</div>
+    <div class="calc__dev-block-element" v-if="!hiddenValue">
+      Значение элемента: {{ value === null ? "null" : value }}
+    </div>
+    <div
+      class="calc__dev-block-element"
+      v-if="isVisibilityFromDependency !== null"
+    >
+      Элемент виден: {{ isVisibilityFromDependency }}
+    </div>
+    <div class="calc__dev-block-element" v-if="!hiddenCost">
+      Текущая стоимость: {{ localCost === null ? "null" : localCost }}
+    </div>
   </div>
 </template>
 
@@ -32,76 +83,68 @@ export default {
     value: {},
     label: {
       type: String,
-      default: null
+      default: null,
     },
     elementName: {
       type: String,
-      default: null
+      default: null,
     },
     dependencyFormulaDisplay: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     parsingFormulaVariables: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     isVisibilityFromDependency: {
       type: Boolean,
-      default: null
+      default: null,
     },
     localCost: {
       type: Number,
-      default: null
+      default: null,
     },
     hiddenCost: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hiddenValue: {
       type: Boolean,
-      default: false
+      default: false,
     },
     leftDependencyFormulaDisplay: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     leftParsingFormulaVariables: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     rightDependencyFormulaDisplay: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     rightParsingFormulaVariables: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     formula: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
     formulaVariables: {
       type: [String, Boolean],
-      default: null
+      default: null,
     },
-
   },
   data() {
-    return {
-
-    }
+    return {};
   },
   computed: {
-    ...mapState(useBaseStore,[
-      "devMode",
-      "showInsideElementStatus",
-    ]),
-  }
+    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

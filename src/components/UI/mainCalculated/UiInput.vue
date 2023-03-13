@@ -201,7 +201,7 @@ export default {
      */
     dataType: {
       type: String,
-      default: 'mixed'
+      default: "mixed",
     },
     /**
      *     шаблон rex для ручной валидации
