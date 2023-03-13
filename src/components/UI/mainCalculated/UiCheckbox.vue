@@ -42,6 +42,7 @@
             <template v-if="isBase">
               {{ currentLocalValue }}
             </template>
+            <div class="empty-block" v-if="!label?.length && isNeedChoice">*</div>
             <slot name="prompt"></slot>
           </div>
           <div
@@ -156,7 +157,9 @@ export default {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
-    this.isLocalChecked = this.checkboxValue || this.isChecked;
+    if (!this.isNeedChoice) {
+      this.isLocalChecked = Boolean(this.checkboxValue || this.isChecked);
+    }
     if (this.isLocalChecked) {
       this.currentLocalValue = this.buttonTextChecked?.length
         ? this.buttonTextChecked
@@ -173,7 +176,7 @@ export default {
   data() {
     return {
       currentLocalValue: "",
-      isLocalChecked: false,
+      isLocalChecked: null,
       textErrorNotEmpty: "Обязательное поле.",
       canBeShownTooltip: false,
     };
@@ -194,7 +197,7 @@ export default {
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
-        value: this.isLocalChecked,
+        value: this.isVisibilityFromDependency ? this.isLocalChecked : null,
         displayValue: this.isLocalChecked ? "Да" : "Нет",
         name: this.localElementName,
         type: "checkbox",
@@ -236,7 +239,7 @@ export default {
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.isLocalChecked,
+        value: this.isVisibilityFromDependency ? this.isLocalChecked : null,
         isShow: this.isVisibilityFromDependency,
         displayValue: this.currentLocalValue,
         type: "checkbox",
@@ -259,8 +262,10 @@ export default {
   },
   watch: {
     isVisibilityFromDependency(value) {
-      if (!value) {
-        this.isLocalChecked = false;
+      if (value) {
+        this.isLocalChecked = !this.isNeedChoice ? Boolean(this.checkboxValue || this.isChecked) : null;
+      } else {
+        this.isLocalChecked = null;
       }
       this.changeValue("dependency");
     },

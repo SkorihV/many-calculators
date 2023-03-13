@@ -264,6 +264,7 @@ export default {
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
     this.findForm();
+    this.findTeleportField();
     this.findSubmitForm();
 
     if (this.showFormIsAllow) {
@@ -300,7 +301,7 @@ export default {
       isHoverButtonResult: false,
       methodWorksForm: "show",
       formElement: null,
-      textAreaResult: null,
+      teleportField: null,
       submitResult: null,
       eventSubmittingFormAdded: null,
       intervalName: null,
@@ -415,13 +416,15 @@ export default {
       this.submitResult = submit ? submit : null;
     },
     findTeleportField() {
-      const teleportField = document.querySelector("#teleport");
-      return teleportField ? teleportField : null;
+      const teleportField = this.formElement.querySelector("#teleport");
+      this.teleportField = teleportField ? teleportField : null;
     },
     setReadOnlyForTeleportField() {
-      const teleportField = this.findTeleportField();
-      if (teleportField) {
-        teleportField.readOnly = true;
+      if (this.teleportField) {
+        this.findTeleportField();
+      }
+      if (this.teleportField) {
+        this.teleportField.readOnly = true;
       }
     },
     setEventOnSubmit() {
@@ -431,7 +434,6 @@ export default {
           this.intervalName = setInterval(() => {
             this.formElement = null;
             this.submitResult = null;
-
             this.eventSubmittingFormAdded = false;
             this.checkEnabledResultButton();
             counter++;
@@ -445,13 +447,15 @@ export default {
     },
     toggleTextAreaResultForDevMode() {
       if (this.showInsideElementStatus) {
-        this.textAreaResult = document.querySelector("#teleport.calc__form-textarea");
-        if (this.textAreaResult ) {
-          this.textAreaResult .style.display = 'block';
+        if (this.teleportField) {
+          this.findTeleportField();
+        }
+        if (this.teleportField ) {
+          this.teleportField.style.display = 'block';
         }
       }
-      if (!this.showInsideElementStatus && this.textAreaResult) {
-        this.textAreaResult .style.display = 'none';
+      if (!this.showInsideElementStatus && this.teleportField) {
+        this.teleportField.style.display = 'none';
       }
     }
   },
@@ -2444,6 +2448,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 4px 0;
         @media all and (max-width: 768px) {
           flex-direction: column;
+        }
+        &:hover {
+          background-color: $c_decor_bg_color_hover;
+          color: $c_decor_text_hover;
         }
       }
       &-label {

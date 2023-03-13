@@ -34,6 +34,12 @@ const updatePositionElementsInBiSection = function(item, index) {
   return { newItem, shiftIndex };
 }
 
+/**
+ * Добавление позиций для шаблонов аккордеона и табов
+ * @param currentItem
+ * @param shiftIndex
+ * @returns {{newItem: *, shiftIndex}}
+ */
 const updatePositionElementsInTabAndAccordion = function(currentItem, shiftIndex) {
   let newItem = currentItem;
   const itemsLength = newItem?.items.length;
@@ -56,11 +62,6 @@ const updatePositionElementsInTabAndAccordion = function(currentItem, shiftIndex
   }
   return {newItem, shiftIndex};
 }
-
-
-
-
-
 
 export {
   updatePositionElementsInBiSection,

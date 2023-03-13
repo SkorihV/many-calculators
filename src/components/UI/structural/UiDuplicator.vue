@@ -40,6 +40,9 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import UsePropsTemplates from "@/servises/UsePropsTemplates";
 
+import { mapState } from "pinia";
+import {useBaseStore} from "@/store/piniaStore";
+
 import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
@@ -96,12 +99,7 @@ export default {
       if (data?.name) {
         this.localResultsElements[data.name] = data;
       }
-      this.localCost = 0;
-      this.returnsLocalResultsElements.forEach((item) => {
-        if (item.cost !== null) {
-          this.localCost += parseFloat(item.cost);
-        }
-      });
+      this.updateLocalCost();
       this.emitChangeValue(data.eventType, this.localCost);
     },
     calculateResult() {
@@ -123,22 +121,29 @@ export default {
       this.localTemplates.splice(index, 1);
 
       delete this.localResultsElements[elementName];
+      this.updateLocalCost();
+      this.emitChangeValue("deleteDuplicate");
+    },
+    updateLocalCost() {
+      if (!this.isVisibilityFromDependency) {
+        this.localCost = null;
+        return false;
+      }
       this.localCost = 0;
       this.returnsLocalResultsElements.forEach((item) => {
         if (item.cost !== null) {
           this.localCost += parseFloat(item.cost);
         }
       });
-      this.emitChangeValue("deleteDuplicate");
     },
-    emitChangeValue(eventType, displayValue = null) {
+    emitChangeValue(eventType) {
       this.$emit("changedValue", {
         name: this.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
-        cost: this.localCost,
-        value: null,
-        displayValue: displayValue,
+        cost:  this.localCost,
+        value: this.localCost,
+        displayValue: this.localCost,
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
         resultOutputMethod: this.duplicateTemplate.resultOutputMethod,
         eventType: eventType,
@@ -150,6 +155,16 @@ export default {
         position: this.positionElement,
         zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
+      this.tryPassDependency();
+    },
+    tryPassDependency() {
+      this.tryAddDependencyElement({
+        name: this.elementName,
+        value: this.localCost,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.localCost,
+        type: "duplicator",
+      });
     },
   },
   watch: {
@@ -160,6 +175,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(useBaseStore, ["tryAddDependencyElement"]),
     returnsLocalResultsElements() {
       return Object.values(this.localResultsElements).sort(
         (itemA, itemB) => itemA?.position - itemB?.position
