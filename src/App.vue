@@ -410,14 +410,17 @@ export default {
       this.formElement = form ? form : null;
     },
     findSubmitForm() {
-      const submit = document.querySelector(
-        "#App_calc ~ .tpl-anketa button[type=submit]"
-      );
-      this.submitResult = submit ? submit : null;
+      if (this.formElement) {
+        const submit = this.formElement.querySelector("button[type=submit]");
+        this.submitResult = submit ? submit : null;
+      }
     },
     findTeleportField() {
-      const teleportField = this.formElement.querySelector("#teleport");
-      this.teleportField = teleportField ? teleportField : null;
+      if (this.formElement) {
+        const teleportField = this.formElement.querySelector("#teleport");
+        this.teleportField = teleportField ? teleportField : null;
+      }
+
     },
     setReadOnlyForTeleportField() {
       if (this.teleportField) {

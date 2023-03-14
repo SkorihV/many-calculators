@@ -60,6 +60,7 @@ export default {
         position: this.positionElement,
       });
       this.changeValid(eventType);
+      this.tryPassDependency();
     },
     /**
      * возвращает общее состояние не валидности инпута
@@ -108,9 +109,12 @@ export default {
     /**
      * Возвращает цену подходящую условию, если моле отображается
      * Если не одна цена не подходит, то возвращается стандартная
-     * @returns {number}
+     * @returns {number|null}
      */
     localCost() {
+      if (!this.isVisibilityFromDependency) {
+        return null;
+      }
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return parseFloat(this.cost);
       }

@@ -148,7 +148,6 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-
     /**
      * отобразить динамичное значение
      */
@@ -187,17 +186,7 @@ export default {
   },
   mounted() {
     if (!this.isNeedChoice) {
-      let timer = setInterval(() => {
-        if (this.checkedValueOnVoid(this.rangeValue)) {
-          this.resultValue = parseFloat(this.rangeValue);
-          this.dynamicValue = parseFloat(this.rangeValue);
-          this.changeValue("mounted");
-          clearInterval(timer);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
+      this.initBaseData();
     } else {
       this.changeValue("mounted");
     }
@@ -240,6 +229,19 @@ export default {
     };
   },
   methods: {
+    initBaseData(eventType = "mounted") {
+      let timer = setInterval(() => {
+        if (this.checkedValueOnVoid(this.rangeValue)) {
+          this.resultValue = parseFloat(this.rangeValue);
+          this.dynamicValue = parseFloat(this.rangeValue);
+          this.changeValue(eventType);
+          clearInterval(timer);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(timer);
+      }, 10000);
+    },
     changeValueStep(step) {
       this.resultValue = this.checkValidValueReturnNumber(step);
       this.changeValue("changeValueStep");
@@ -317,7 +319,7 @@ export default {
         name: this.localElementName,
         value: this.isVisibilityFromDependency ? this.resultValue : null,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.resultValue,
+        displayValue: this.isVisibilityFromDependency ? this.resultValue : null,
         type: "range",
       });
     },
@@ -362,13 +364,15 @@ export default {
       }, 1500);
     },
 
-    isVisibilityFromDependency(value) {
-      if (value) {
-        setTimeout(() => {
-          this.elementWidth = this.$refs.thisElement.offsetWidth;
-        }, 500);
+    isVisibilityFromDependency: {
+      handler(newValue, oldValue) {
+        if (newValue) {
+          setTimeout(() => {
+            this.elementWidth = this.$refs.thisElement.offsetWidth;
+          }, 500);
+        }
+        this.changeValue("dependency");
       }
-      this.changeValue("dependency");
     },
     dynamicValue(newValue) {
       this.dynamicValue = this.checkValidValueReturnNumber(newValue);

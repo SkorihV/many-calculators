@@ -43,8 +43,6 @@
     v-else-if="template.template === 'UiCheckbox'"
     :cost="template?.cost"
     :label="template?.label"
-    :checkbox-value="template?.value"
-    :is-checked="template?.isChecked"
     :is-column="template?.isColumn"
     :button-text-checked="template?.buttonTextChecked"
     :button-text="template?.buttonText"

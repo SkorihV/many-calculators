@@ -114,38 +114,11 @@ export default {
     this.localSelectValues = this.selectValues;
     if (this.needMockValue) {
       this.localSelectValues.unshift(this.mockOption);
-    }
-
-    if (!this.notEmpty && !this.isNeedChoice) {
-      let timer = setInterval(() => {
-        if (
-          this.isCurrentIndexOptionsNotExist &&
-          this.localSelectValues.length
-        ) {
-          this.localSelectedItem = parseInt(this.selectedItem)
-            ? parseInt(this.selectedItem) - 1
-            : 0;
-
-          this.currentIndexOption =
-            this.checkedValueOnVoid(this.localSelectedItem) &&
-            this.localSelectedItem < this.localSelectValues.length
-              ? this.localSelectedItem
-              : 0;
-
-          this.changeSelect(
-            this.localSelectValues[this.currentIndexOption],
-            this.currentIndexOption,
-            "mounted"
-          );
-          clearInterval(timer);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
+      this.initSelectMockData();
     } else {
-      this.changeSelect(this.localSelectValues[0], null, "mounted");
+      this.initSelectData()
     }
+
     window.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
         this.close();
@@ -212,6 +185,39 @@ export default {
   methods: {
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
+    },
+    initSelectMockData(eventType = "mounted") {
+      if (this.needMockValue) {
+        this.changeSelect(this.localSelectValues[0], null, eventType);
+      }
+    },
+    initSelectData(eventType = "mounted") {
+      let timer = setInterval(() => {
+        if (
+          this.isCurrentIndexOptionsNotExist &&
+          this.localSelectValues.length
+        ) {
+          this.localSelectedItem = parseInt(this.selectedItem)
+            ? parseInt(this.selectedItem) - 1
+            : 0;
+
+          this.currentIndexOption =
+            this.checkedValueOnVoid(this.localSelectedItem) &&
+            this.localSelectedItem < this.localSelectValues.length
+              ? this.localSelectedItem
+              : 0;
+
+          this.changeSelect(
+            this.localSelectValues[this.currentIndexOption],
+            this.currentIndexOption,
+            eventType
+          );
+          clearInterval(timer);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(timer);
+      }, 10000);
     },
     open() {
       if (
@@ -359,8 +365,18 @@ export default {
         }
       }
     },
-    isVisibilityFromDependency() {
-      this.changeValue("dependency");
+    isVisibilityFromDependency: {
+      handler(newValue, oldValue) {
+        if (newValue && !oldValue) {
+          if (this.needMockValue) {
+            this.initSelectMockData("dependency")
+          } else {
+            this.initSelectData("dependency")
+          }
+        } else {
+          this.changeValue("dependency");
+        }
+      }
     },
   },
   computed: {

@@ -126,7 +126,6 @@ export default {
     ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
-      "isChecked",
       "isNeedChoice",
       "dependencyPrices",
       "cost",
