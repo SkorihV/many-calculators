@@ -23,7 +23,7 @@
             error: isErrorClass,
           }"
         >
-          {{ currentLocalValue }}
+          {{ currentLocalTextButton }}
           <slot name="prompt"></slot>
         </div>
         <div
@@ -40,7 +40,7 @@
               {{ buttonText }}
             </template>
             <template v-if="isBase">
-              {{ currentLocalValue }}
+              {{ currentLocalTextButton }}
             </template>
             <div class="empty-block" v-if="!label?.length && isNeedChoice">*</div>
             <slot name="prompt"></slot>
@@ -101,16 +101,6 @@ export default {
   components: { UiTooltip, devBlock },
   props: {
     /**
-     * Начальное значение
-     */
-    checkboxValue: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
      *  альтернативный способ смены вида чекбокас - текстом
      *  default - base
      *  switcher - горизонтальный переключатель
@@ -152,21 +142,25 @@ export default {
       "positionElement",
       "isColumn",
       "zeroValueDisplayIgnore",
+      "baseValue",
     ]),
   },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
+    this.checkboxValue = this.baseValue === 'active';
+    this.isChecked = this.baseValue === 'selected';
+
     if (!this.isNeedChoice) {
       this.isLocalChecked = Boolean(this.checkboxValue || this.isChecked);
     }
     if (this.isLocalChecked) {
-      this.currentLocalValue = this.buttonTextChecked?.length
+      this.currentLocalTextButton = this.buttonTextChecked?.length
         ? this.buttonTextChecked
         : this.buttonText;
     } else {
-      this.currentLocalValue = this.buttonText;
+      this.currentLocalTextButton = this.buttonText;
     }
     this.changeValue("mounted");
 
@@ -176,10 +170,12 @@ export default {
   },
   data() {
     return {
-      currentLocalValue: "",
+      currentLocalTextButton: "",
       isLocalChecked: null,
       textErrorNotEmpty: "Обязательное поле.",
       canBeShownTooltip: false,
+      isChecked: false,  // активирована
+      checkboxValue: false, // начальное значение
     };
   },
   methods: {
@@ -187,7 +183,7 @@ export default {
       if (!this.isChecked) {
         this.isLocalChecked = !this.isLocalChecked;
       }
-      this.currentLocalValue =
+      this.currentLocalTextButton =
         this.isLocalChecked && this.buttonTextChecked?.length
           ? this.buttonTextChecked
           : this.buttonText;
@@ -242,7 +238,7 @@ export default {
         name: this.localElementName,
         value: this.isVisibilityFromDependency ? this.isLocalChecked : null,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.currentLocalValue,
+        displayValue: this.currentLocalTextButton,
         type: "checkbox",
       });
     },

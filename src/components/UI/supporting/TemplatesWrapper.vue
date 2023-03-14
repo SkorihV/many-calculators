@@ -64,6 +64,7 @@
     :scroll-into-name="template?.scrollIntoName"
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
+    :base-value="template?.baseValue"
     :parent-name="parentName"
     :template-name="template.template"
     :position-element="template?.position"
