@@ -35,7 +35,7 @@
 import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 export default {
@@ -52,7 +52,7 @@ export default {
       type: [String, Number],
       default: 100,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "label",
       "elementName",
       "classes",

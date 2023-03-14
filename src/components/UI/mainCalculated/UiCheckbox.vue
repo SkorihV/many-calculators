@@ -89,9 +89,10 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiCheckbox",
@@ -132,7 +133,7 @@ export default {
       type: String,
       default: null,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
       "isChecked",

@@ -17,7 +17,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiSystem",
@@ -25,7 +25,7 @@ export default {
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   components: { devBlock },
   props: {
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "cost",
       "elementName",
       "parentName",

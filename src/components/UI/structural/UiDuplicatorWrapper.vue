@@ -67,7 +67,7 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 export default {
@@ -92,7 +92,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "formula",
       "parentName",
       "parentIsShow",

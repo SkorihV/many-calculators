@@ -3775,6 +3775,7 @@
         "typeDisplayClass": "base",
         "elementName": "",
         "classes": "",
+        "baseValue": "default",
         "template": "UiCheckbox",
         "formOutputMethod": "value",
         "dependencyFormulaDisplay": "",

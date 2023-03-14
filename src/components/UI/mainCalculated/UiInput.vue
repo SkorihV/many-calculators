@@ -88,7 +88,8 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiInput",
@@ -217,7 +218,7 @@ export default {
     customErrorText: {
       type: String,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "label",
       "notEmpty",
       "excludeFromCalculations",

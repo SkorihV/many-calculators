@@ -38,7 +38,7 @@ import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 import { mapState } from "pinia";
 import {useBaseStore} from "@/store/piniaStore";
@@ -55,7 +55,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
       "label",

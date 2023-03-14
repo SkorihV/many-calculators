@@ -99,7 +99,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
@@ -173,7 +173,7 @@ export default {
         return !isNaN(Number(value));
       },
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "isColumn",
       "isNeedChoice",
       "formOutputMethod",

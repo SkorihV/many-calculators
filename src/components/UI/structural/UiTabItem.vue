@@ -27,7 +27,7 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiTabItem",
@@ -55,7 +55,7 @@ export default {
       type: Number,
       default: null,
     },
-    ...UsePropsTemplates(["elementName", "parentIsShow"]),
+    ...propsTemplate.getProps(["elementName", "parentIsShow"]),
   },
   data() {
     return {

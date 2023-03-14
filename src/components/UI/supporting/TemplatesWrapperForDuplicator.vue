@@ -54,7 +54,7 @@
 import UiTab from "@/components/UI/structural/UiTab.vue";
 import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
 import UiBisection from "@/components/UI/structural/UiBisection.vue";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapperForDuplicator",
@@ -65,7 +65,7 @@ export default {
     UiBisection,
   },
   props: {
-    ...UsePropsTemplates(["template", "index", "parentIsShow", "parentName"]),
+    ...propsTemplate.getProps(["template", "index", "parentIsShow", "parentName"]),
   },
   methods: {
     changeValue(data) {

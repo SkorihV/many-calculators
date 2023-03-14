@@ -67,7 +67,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
@@ -99,7 +99,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "elementName",
       "parentIsShow",
       "maxWidth",

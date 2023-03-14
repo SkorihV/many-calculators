@@ -91,7 +91,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiRange",
@@ -159,7 +159,7 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "label",
       "notEmpty",
       "excludeFromCalculations",

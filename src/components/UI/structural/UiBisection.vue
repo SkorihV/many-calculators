@@ -94,7 +94,7 @@ import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
@@ -121,7 +121,7 @@ export default {
       type: String,
       default: null,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "label",
       "elementName",
       "classes",

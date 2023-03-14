@@ -1,27 +1,64 @@
 /**
  *
- * @param propsName
- * @returns {{}}
  */
-export default function (propsName) {
-  const propsForReturn = {};
+class Props {
+  constructor() {
+    if (typeof Props.instance === 'object') {
+      return Props.instance;
+    }
+    this.propsData = {
+      label: this.label(),
+      elementName: this.elementName(),
+      classes: this.classes(),
+      dependencyFormulaDisplay: this.dependencyFormulaDisplay(),
+      parentIsShow: this.parentIsShow(),
+      prompt: this.prompt(),
+      notEmpty: this.notEmpty(),
+      excludeFromCalculations: this.excludeFromCalculations(),
+      parentName: this.parentName(),
+      formulaProcessingLogic: this.formulaProcessingLogic(),
+      templateName: this.templateName(),
+      maxWidthSide: this.maxWidthSide(),
+      maxWidth: this.maxWidth(),
+      maxHeight: this.maxHeight(),
+      template: this.template(),
+      index: this.index(),
+      cost: this.cost(),
+      dependencyPrices: this.dependencyPrices(),
+      isColumn: this.isColumn(),
+      isNeedChoice: this.isNeedChoice(),
+      formOutputMethod: this.formOutputMethod(),
+      resultOutputMethod: this.resultOutputMethod(),
+      isChecked: this.isChecked(),
+      formula: this.formula(),
+      min: this.min(),
+      max: this.max(),
+      unit: this.unit(),
+      positionElement: this.positionElement(),
+      zeroValueDisplayIgnore: this.zeroValueDisplayIgnore(),
+      baseValue : this.baseValue(),
+    };
+    Props.instance = this;
+    return this;
+  }
+
 
   /**
    * заголовок
    */
-  const label = () => {
+  label() {
     return {
       type: String,
       default: "",
     };
   };
-  const elementName = () => {
+  elementName(){
     return {
       type: String,
       default: Math.random().toString(),
     };
   };
-  const classes = () => {
+  classes() {
     return {
       type: String,
       default: null,
@@ -32,70 +69,70 @@ export default function (propsName) {
    * Формула на результатах вычисления которой будет строиться результат отображения элемента
    * @returns {{default: string, type: StringConstructor}}
    */
-  const dependencyFormulaDisplay = () => {
+  dependencyFormulaDisplay() {
     return {
       type: String,
       default: "",
     };
   };
 
-  const parentIsShow = () => {
+  parentIsShow() {
     return {
       type: Boolean,
       default: true,
     };
   };
 
-  const prompt = () => {
+  prompt(){
     return {
       type: String,
       default: null,
     };
   };
 
-  const maxWidthSide = () => {
+  maxWidthSide() {
     return {
       type: [Number, String],
       default: 50,
     };
   };
 
-  const maxWidth = () => {
+  maxWidth() {
     return {
       type: [Number, String],
       default: 50,
     };
   };
 
-  const maxHeight = () => {
+  maxHeight() {
     return {
       type: [Number, String],
       default: 50,
     };
   };
 
-  const templateName = () => {
+  templateName() {
     return {
       type: String,
       default: null,
     };
   };
 
-  const template = () => {
+  template() {
     return {
       type: Object,
       default: null,
     };
   };
 
-  const formulaProcessingLogic = () => {
+  formulaProcessingLogic() {
     return {
       type: String,
       default: "error",
     };
   };
 
-  const parentName = () => {
+  parentName() {
     return {
       type: String,
       default: null,
@@ -105,7 +142,7 @@ export default function (propsName) {
   /**
    * Исключить элемент из расчета по формуле
    */
-  const excludeFromCalculations = () => {
+  excludeFromCalculations() {
     return {
       type: [Boolean, Number],
       default: false,
@@ -117,7 +154,7 @@ export default function (propsName) {
   /**
    * элемент не может быть пустым и требуется выбор
    */
-  const notEmpty = () => {
+  notEmpty() {
     return {
       type: [Boolean, Number],
       default: false,
@@ -127,14 +164,14 @@ export default function (propsName) {
     };
   };
 
-  const index = () => {
+  index() {
     return {
       type: [Number, String],
       default: null,
     };
   };
 
-  const cost = () => {
+  cost() {
     return {
       type: [Number, String],
       default: null,
@@ -146,14 +183,14 @@ export default function (propsName) {
   /**
    * Список цен с зависимостями / условиями
    */
-  const dependencyPrices = () => {
+  dependencyPrices() {
     return {
       type: Array,
       default: () => [],
     };
   };
 
-  const isColumn = () => {
+  isColumn() {
     return {
       type: [Boolean, Number],
       default: false,
@@ -166,7 +203,7 @@ export default function (propsName) {
   /**
    * По умолчанию не выбрано - нужно сделать выбор.
    */
-  const isNeedChoice = () => {
+  isNeedChoice() {
     return {
       type: [Boolean, Number],
       default: false,
@@ -178,7 +215,7 @@ export default function (propsName) {
   /**
    * метод вывода данных в результирующую форму
    */
-  const formOutputMethod = () => {
+  formOutputMethod() {
     return {
       type: String,
       default: "no",
@@ -188,7 +225,7 @@ export default function (propsName) {
   /**
    * метод вывода данных в результирующий блок
    */
-  const resultOutputMethod = () => {
+  resultOutputMethod() {
     return {
       type: String,
       default: "no",
@@ -198,7 +235,7 @@ export default function (propsName) {
   /**
    *     Всегда включена. Отключить нельзя
    */
-  const isChecked = () => {
+  isChecked() {
     return {
       type: [Boolean, Number],
       default: false,
@@ -208,14 +245,14 @@ export default function (propsName) {
     };
   };
 
-  const formula = () => {
+  formula() {
     return {
       type: String,
       default: "",
     };
   };
 
-  const min = () => {
+  min() {
     return {
       type: [Number, String],
       default: 0,
@@ -225,7 +262,7 @@ export default function (propsName) {
     };
   };
 
-  const max = () => {
+  max() {
     return {
       type: [Number, String],
       default: 10,
@@ -235,14 +272,14 @@ export default function (propsName) {
     };
   };
 
-  const unit = () => {
+  unit() {
     return {
       type: String,
       default: "",
     };
   };
 
-  const positionElement = () => {
+  positionElement() {
     return {
       type: Number,
       default: 0,
@@ -253,7 +290,7 @@ export default function (propsName) {
    * Игнорировать пустое значение при выводе в результат
    * @returns {{default: boolean, validator(*): *, type: (BooleanConstructor|NumberConstructor)[]}|boolean}
    */
-  const zeroValueDisplayIgnore = () => {
+  zeroValueDisplayIgnore() {
     return {
       type: [Boolean, Number],
       default: true,
@@ -262,47 +299,27 @@ export default function (propsName) {
       },
     };
   };
-
-  const resultsData = {
-    label: label(),
-    elementName: elementName(),
-    classes: classes(),
-    dependencyFormulaDisplay: dependencyFormulaDisplay(),
-    parentIsShow: parentIsShow(),
-    prompt: prompt(),
-    notEmpty: notEmpty(),
-    excludeFromCalculations: excludeFromCalculations(),
-    parentName: parentName(),
-    formulaProcessingLogic: formulaProcessingLogic(),
-    templateName: templateName(),
-    maxWidthSide: maxWidthSide(),
-    maxWidth: maxWidth(),
-    maxHeight: maxHeight(),
-    template: template(),
-    index: index(),
-    cost: cost(),
-    dependencyPrices: dependencyPrices(),
-    isColumn: isColumn(),
-    isNeedChoice: isNeedChoice(),
-    formOutputMethod: formOutputMethod(),
-    resultOutputMethod: resultOutputMethod(),
-    isChecked: isChecked(),
-    formula: formula(),
-    min: min(),
-    max: max(),
-    unit: unit(),
-    positionElement: positionElement(),
-    zeroValueDisplayIgnore: zeroValueDisplayIgnore(),
+  baseValue() {
+    return {
+      type: String,
+      default: "default",
+    };
   };
 
-  if (Array.isArray(propsName)) {
-    propsName.map((name) => {
-      if (resultsData[name]) {
-        propsForReturn[name] = resultsData[name];
-      } else {
-        throw "Попытка вызвать отсутствующий в базе Props - " + name;
-      }
-    });
+  getProps(props) {
+    let propsForReturn = {};
+    if (Array.isArray(props)) {
+      props.map((name) => {
+        if (this.propsData[name]) {
+          propsForReturn[name] = this.propsData[name];
+        } else {
+          throw "Попытка вызвать отсутствующий в базе Props - " + name;
+        }
+      });
+      return propsForReturn;
+    }
   }
-  return propsForReturn;
 }
+const propsTemplate = new Props();
+
+export { propsTemplate };

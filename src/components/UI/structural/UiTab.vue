@@ -99,7 +99,7 @@ import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula"
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
@@ -116,7 +116,7 @@ export default {
       type: [String, Number],
       default: 100,
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "label",
       "classes",
       "elementName",

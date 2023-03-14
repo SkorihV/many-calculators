@@ -40,7 +40,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
-import UsePropsTemplates from "@/servises/UsePropsTemplates";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
@@ -65,7 +65,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    ...UsePropsTemplates([
+    ...propsTemplate.getProps([
       "classes",
       "elementName",
       "maxHeight",
