@@ -17,6 +17,7 @@
       :parent-is-show="isVisibilityFromDependency"
       :origin-variables="originVariablesInDuplicator"
       :position-element="idx"
+      :show-duplicate-button="countElementsDuple < maximumDuple"
       @duplicate="duplicate"
       @deleteDuplicator="deleteDuplicator"
       @changedValue="changeValue"
@@ -54,6 +55,13 @@ export default {
     duplicateTemplate: {
       type: Object,
       default: () => {},
+    },
+    maximumDuple: {
+      type: [Number, String],
+      default: 5,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
     },
     ...propsTemplate.getProps([
       "formOutputMethod",
@@ -185,6 +193,9 @@ export default {
       let result = getNameElementsRecursive(this.originData?.templates);
       return result.filter((item) => item?.length > 0);
     },
+    countElementsDuple() {
+      return this.localTemplates?.length ? this.localTemplates?.length : 0;
+    }
   },
 };
 </script>

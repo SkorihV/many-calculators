@@ -201,7 +201,7 @@ export default {
         const titleSumma = !!this.resultOptions?.titleSumma
           ? this.resultOptions?.titleSumma
           : "";
-        const sum = parseFloat(this.finalSummaForOutput).toLocaleString("ru");
+        const sum = parseFloat(this.finalSummaForOutput)?.toLocaleString("ru");
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +

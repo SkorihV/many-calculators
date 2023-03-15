@@ -31,7 +31,7 @@
       />
     </template>
     <button
-      v-if="!isDuplicate"
+      v-if="!isDuplicate && showDuplicateButton"
       class="calc__duplicator-duplicate"
       @click="tryDuplicate"
     >
@@ -83,6 +83,10 @@ export default {
     isDuplicate: {
       type: Boolean,
       default: false,
+    },
+    showDuplicateButton: {
+      type: Boolean,
+      default: true
     },
     originVariables: {
       type: Array,
@@ -179,18 +183,15 @@ export default {
           object[prop].length;
         const propIsSecondField = prop === "labelSecond";
         const propIsLabelField = prop === "label";
+        const propIsButtonText = prop === "buttonText";
+        const propIsButtonTextChecked = prop === "buttonTextChecked";
         const propIsObject = typeof object[prop] === "object";
 
         if (propIsObject) {
           object[prop] = this.updateIndexElementsInDuple(object[prop], index);
         } else if (propIsElementNameField) {
           object[prop] = this.updateNameItem(object, index);
-        } else if (propIsLabelField) {
-          object[prop] =
-            object[prop]?.length && index > 0
-              ? object[prop] + " ( " + index + " )"
-              : object[prop];
-        } else if (propIsSecondField) {
+        } else if (propIsLabelField || propIsSecondField || propIsButtonText || propIsButtonTextChecked) {
           object[prop] =
             object[prop]?.length && index > 0
               ? object[prop] + " ( " + index + " )"

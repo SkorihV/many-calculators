@@ -1227,7 +1227,7 @@
   },
 
   "calculator-options": {
-    "formula": "строение * (длинна * ширина * этажность + материал) + (мансарда * ширина * длинна) + test123 + 22 + null + _otherSum_",
+    "formula": "_otherSum_",
     "methodBeginningCalculation": "useButton",
     "currency": "руб",
     "form": "7981901",
@@ -3736,7 +3736,7 @@
   },
 
   "test-color-options": {
-    "formula": "ползунок * _otherSum_",
+    "formula": "_otherSum_",
     "methodBeginningCalculation": "useButton",
     "form": "7981901",
     "devModeEnabled": 1,
@@ -3829,17 +3829,17 @@
         "ver_id": "2422030",
         "title": "Input - для цветовых настроек",
         "label": "Блок 1",
-        "value": "10",
-        "placeholder": "",
+        "value": "",
+        "placeholder": "ntcns",
         "cost": "1",
         "unit": "м2",
-        "min": "10",
-        "max": "100",
+        "min": "",
+        "max": "",
         "controls": false,
         "step": "1",
         "discreteStep": 1,
-        "notEmpty": 1,
-        "dataType": "onlyNumber",
+        "notEmpty": false,
+        "dataType": "mixed",
         "isCurrency": false,
         "isColumn": false,
         "formOutputMethod": "valueSumm",
@@ -4643,8 +4643,140 @@
         "meta_id": "74117906",
         "ver_id": "2422030",
         "title": "",
-        "label": "Блок 22",
+        "label": "Дупликатор 22",
         "templates": [
+          {
+            "json_id": "6523506707",
+            "meta_id": "52409506",
+            "ver_id": "2422030",
+            "title": "Аккордеон",
+            "label": "Блок 40",
+            "elementName": "Блок 40",
+            "items": [
+              {
+                "json_id": "65502436507",
+                "meta_id": "5249542306",
+                "ver_id": "2422030",
+                "title": "Вкладка - Заголовок вкладки 1:",
+                "label": "Блок 41",
+                "sublabel": "Подзаголовок вкладки:",
+                "templates": [
+                  {
+                    "json_id": "243632706",
+                    "meta_id": "59413906",
+                    "ver_id": "2422030",
+                    "title": "Окна Цвет",
+                    "label": "Блок 42",
+                    "isColumn": false,
+                    "selectedItem": "9",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "excludeFromCalculations": false,
+                    "elementName": "Block11",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "1",
+                        "selectName": "1",
+                        "cost": 1
+                      },
+                      {
+                        "title": "2",
+                        "selectName": "2",
+                        "cost": 2
+                      },
+                      {
+                        "title": "3",
+                        "selectName": "Block8 === 'йцу'",
+                        "cost": 3,
+                        "dependencyFormulaItem": "Block8 === 'йцу'"
+                      },
+                      {
+                        "title": "3",
+                        "selectName": "Block8 === 2 1",
+                        "cost": 4,
+                        "dependencyFormulaItem": "Block8 === 2"
+                      },
+                      {
+                        "title": "проверка на null",
+                        "selectName": "проверка на null",
+                        "cost": 4,
+                        "dependencyFormulaItem": "Block6 !== null"
+                      },
+                      {
+                        "title": "4",
+                        "selectName": "Block8 === 2 2",
+                        "cost": 5,
+                        "dependencyFormulaItem": "Block8 === 2",
+                        "dependencyPrices": [
+                          {
+                            "cost": 100,
+                            "dependencyFormulaCost": 0,
+                            "disabledFormula": "ползунок > 20"
+                          },
+                          {
+                            "cost": 99,
+                            "dependencyFormulaCost": 0,
+                            "disabledFormula": "ползунок > 22"
+                          },
+                          {
+                            "cost": 50,
+                            "dependencyFormulaCost": 0,
+                            "disabledFormula": "ползунок > 25"
+                          }
+                        ]
+                      }
+                    ],
+                    "prompt": "",
+                    "parent": "0;52409506;52495306;"
+                  },
+                  {
+                    "json_id": "fdsf42343",
+                    "meta_id": "49242506",
+                    "ver_id": "2422030",
+                    "title": "Скрытый чекбокс в дупликаторе",
+                    "modified": "1676284852",
+                    "created": "1665113422",
+                    "type_group_id": "2",
+                    "label": "",
+                    "value": false,
+                    "cost": "10",
+                    "isNeedChoice": false,
+                    "isChecked": 1,
+                    "typeDisplayClass": "base",
+                    "elementName": "Блок 43",
+                    "classes": "",
+                    "baseValue": "default",
+                    "template": "UiCheckbox",
+                    "formOutputMethod": "value",
+                    "dependencyFormulaDisplay": "",
+                    "excludeFromCalculations": false,
+                    "formulaProcessingLogic": "error",
+                    "buttonText": "Сантехнические работы",
+                    "buttonTextChecked": "",
+                    "isColumn": false,
+                    "zeroValueDisplayIgnore": false,
+                    "prompt": "",
+                    "dependencyPrices": null,
+                    "parent": "0;54008706;"
+                  }
+
+                ],
+                "maxWidthSide": "100",
+                "prompt": "23423",
+                "location": "rightSide"
+              }
+            ],
+            "dependencyFormulaDisplay": "Block33 === true",
+            "classes": "",
+            "template": "UiAccordion",
+            "parent": "0;"
+          },
           {
             "json_id": "65406307",
             "meta_id": "49173306",
@@ -4759,6 +4891,103 @@
                 "dependencyFormulaCost": "Block24 > 18"
               }
             ]
+          },
+          {
+            "json_id": "233r23r2",
+            "title": "Разделитель",
+            "label": "Разделитель в дубле",
+            "labelLeft": "Параметры конструкции",
+            "labelRight": "",
+            "leftSide": [
+              {
+                "json_id": "2342",
+                "title": "Окна - ширина",
+                "label": "Ширина",
+                "value": "1300",
+                "placeholder": "",
+                "cost": "1",
+                "unit": "мм",
+                "min": "1300",
+                "max": "3000",
+                "controls": false,
+                "step": "1",
+                "discreteStep": false,
+                "isColumn": false,
+                "notEmpty": 1,
+                "onlyNumber": 1,
+                "isCurrency": false,
+                "onlyInteger": false,
+                "formOutputMethod": "value",
+                "excludeFromCalculations": false,
+                "elementName": "ШиринаВДублеЛевая",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiInput"
+              }
+            ],
+            "rightSide": [
+              {
+                "json_id": "5353453",
+                "title": "Окна - ширина",
+                "label": "Ширина правая",
+                "value": "1300",
+                "placeholder": "",
+                "cost": "2",
+                "unit": "мм",
+                "min": "1300",
+                "max": "3000",
+                "controls": false,
+                "step": "1",
+                "discreteStep": false,
+                "isColumn": false,
+                "notEmpty": 1,
+                "onlyNumber": 1,
+                "isCurrency": false,
+                "onlyInteger": false,
+                "formOutputMethod": "value",
+                "excludeFromCalculations": false,
+                "elementName": "ШиринаВДублеПравая",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiInput"
+              },
+              {
+                "json_id": "65456798907",
+                "meta_id": "49242506",
+                "ver_id": "2422030",
+                "title": "",
+                "type_group_id": "2",
+                "label": "",
+                "buttonText": "Кнопка",
+                "buttonTextChecked": "Кнопка активная",
+                "cost": "100",
+                "value": false,
+                "isNeedChoice": 1,
+                "isChecked": false,
+                "isColumn": 1,
+                "typeDisplayClass": "base",
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "summ",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "Block265",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "scrollIntoName": "",
+                "classes": "",
+                "template": "UiCheckbox",
+                "dependencyPrices": null,
+                "prompt": ""
+              }
+            ],
+            "widthLeftSide": "60",
+            "dependencyFormulaDisplay": "",
+            "dependencyFormulaDisplayLeftSide": "",
+            "dependencyFormulaDisplayRightSide": "",
+            "classes": "",
+            "template": "UiBisection"
           }
         ],
         "buttonName": "Дублировать",

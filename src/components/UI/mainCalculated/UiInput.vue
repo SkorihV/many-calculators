@@ -245,10 +245,13 @@ export default {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
-    if (!this.valueIsNaN && this.localMin > this.inputValue) {
-      this.localInputValue = this.min;
+    if (this.isOnlyNumber && this.localMin > Number(this.inputValue)) {
+      this.localInputValue = this.localMin;
       this.changeValue("mounted");
-    } else {
+    } else if(this.isOnlyNumber && this.localMax < Number(this.inputValue)) {
+      this.localInputValue = this.localMax;
+      this.changeValue("mounted");
+    } else if (this.isOnlyNumber) {
       this.localInputValue = this.inputValue;
       this.changeValue("mounted");
     }
@@ -337,8 +340,8 @@ export default {
     },
     changeValue(eventType = "input") {
       this.$emit("changedValue", {
-        value: this.resultValue,
-        displayValue: this.resultValue,
+        value: this.resultValue?.toString()?.length ? this.resultValue : null,
+        displayValue: this.resultValue?.toString()?.length ? this.resultValue : null,
         name: this.localElementName,
         type: "input",
         cost: this.localCost,
@@ -392,9 +395,9 @@ export default {
     tryPassDependency() {
       this.tryAddDependencyElement({
         name: this.localElementName,
-        value: this.resultValue,
+        value: this.resultValue?.toString()?.length ? this.resultValue : null,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.resultValue,
+        displayValue: this.resultValue?.toString()?.length ? this.resultValue : null,
         type: "input",
       });
     },

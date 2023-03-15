@@ -61,6 +61,7 @@
           :form-output-method="template?.formOutputMethod"
           :exclude-from-calculations="template?.excludeFromCalculations"
           :duplicate-template="template"
+          :maximum-duple="template?.maximumDuple"
           :formula-processing-logic="template?.formulaProcessingLogic"
           :template-name="template.template"
           :position-element="template?.position"
