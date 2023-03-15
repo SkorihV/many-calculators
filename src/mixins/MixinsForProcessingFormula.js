@@ -97,6 +97,19 @@ export const MixinsForProcessingFormula = {
           let formula = this.getArrayElementsFromFormula(
             item?.dependencyFormulaCost
           );
+
+          if (this.templateName === "UiInput") {
+            formula = formula.map((item) =>
+              item.toLowerCase() === "_self_" ? this.localInputValue : item
+            );
+          }
+          if (this.templateName === "UiRange") {
+            formula = formula.map((item) =>
+              item.toLowerCase() === "_self_" ? this.resultValue : item
+            );
+          }
+
+
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 

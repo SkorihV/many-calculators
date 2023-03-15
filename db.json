@@ -3851,7 +3851,24 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiInput",
-        "dependencyPrices": null,
+        "dependencyPrices": [
+          {
+            "cost": 2,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 20"
+          },
+          {
+            "cost": 3,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 22"
+          },
+          {
+            "cost": 10,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 25"
+          }
+
+        ],
         "prompt": "подсказка"
       },
       {
@@ -4097,7 +4114,24 @@
         "dependencyFormulaDisplay": "Block3 === true",
         "classes": "",
         "template": "UiRange",
-        "dependencyPrices": null,
+        "dependencyPrices": [
+          {
+            "cost": 2,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 20"
+          },
+          {
+            "cost": 3,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 22"
+          },
+          {
+            "cost": 10,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "_self_ > 25"
+          }
+
+        ],
         "prompt": "54353е",
         "parent": "0;"
       },
