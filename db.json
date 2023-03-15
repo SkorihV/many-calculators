@@ -3760,6 +3760,40 @@
   "test-color": {
     "calculatorTemplates": [
       {
+        "title": "Селект 1",
+        "values": [
+          { "title": "Первый пункт", "selectName": "Первый пункт", "dependencyFormulaItem": "_self_!== select2", "cost": 100 },
+          { "title": "второй пункт", "selectName": "второй пункт", "dependencyFormulaItem": "_self_!== select2","cost": 101 },
+          { "title": "третий пункт", "selectName": "третий пункт", "dependencyFormulaItem": "_self_!== select2","cost": 102 }
+        ],
+        "prompt": "",
+        "label": "Селект 1",
+        "isColumn": false,
+        "selectedItem": 1,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "",
+        "template": "UiSelect",
+        "elementName": "select1"
+      },
+      {
+        "title": "Селект 2",
+        "values": [
+          { "title": "Первый пункт", "selectName": "Первый пункт", "dependencyFormulaItem": "_self_!== select1","cost": 103 },
+          { "title": "второй пункт", "selectName": "второй пункт", "dependencyFormulaItem": "_self_!== select1","cost": 104 },
+          { "title": "третий пункт", "selectName": "третий пункт", "dependencyFormulaItem": "_self_!== select1","cost": 105 }
+        ],
+        "prompt": "",
+        "label": "Селект 2",
+        "isColumn": false,
+        "selectedItem": 1,
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "typeDisplayClass": "",
+        "template": "UiSelect",
+        "elementName": "select2"
+      },
+      {
         "json_id": "156823453506",
         "meta_id": "49242506",
         "ver_id": "2422030",
@@ -3801,11 +3835,11 @@
         "unit": "м2",
         "min": "10",
         "max": "100",
-        "controls": 1,
+        "controls": false,
         "step": "1",
         "discreteStep": 1,
         "notEmpty": 1,
-        "dataType": "onlyInteger",
+        "dataType": "onlyNumber",
         "isCurrency": false,
         "isColumn": false,
         "formOutputMethod": "valueSumm",
@@ -3896,7 +3930,7 @@
         "elementName": "Block2",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
-        "scrollIntoName": "dup",
+        "scrollIntoName": "",
         "classes": "",
         "template": "UiCheckbox",
         "dependencyPrices": null,
@@ -3925,7 +3959,24 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiCheckbox",
-        "dependencyPrices": null,
+        "dependencyPrices": [
+          {
+            "cost": 100,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "ползунок > 20"
+          },
+          {
+            "cost": 99,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "ползунок > 22"
+          },
+          {
+            "cost": 50,
+            "disabledFormula": 0,
+            "dependencyFormulaCost": "ползунок > 18"
+          }
+
+        ],
         "prompt": "подсказка"
       },
       {
@@ -3937,15 +3988,15 @@
         "buttonText": "Текст кнопки",
         "buttonTextChecked": "Активная кнопка",
         "cost": "34",
-        "value": false,
+        "baseValue": "default",
         "isNeedChoice": false,
-        "isChecked": false,
         "isColumn": 1,
         "typeDisplayClass": "switcher-vertical",
         "formOutputMethod": "summ",
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
         "elementName": "Block4",
+        "scrollIntoName": "Block8",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
         "classes": "",
@@ -4005,7 +4056,7 @@
             "title": "Пункт 1",
             "radioName": "пункт 1",
             "subradioName": "подзаголовок кнопки",
-            "cost": 12,
+            "cost": "",
             "prompt": "фв фыв&nbsp;"
           },
           {
@@ -4066,7 +4117,7 @@
         "excludeFromCalculations": false,
         "elementName": "Block8",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "Block3 === true",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiSelect",
         "values": [

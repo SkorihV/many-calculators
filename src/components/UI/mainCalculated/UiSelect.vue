@@ -174,6 +174,7 @@ export default {
       mockOption: {
         selectName: "Не выбрано!",
         value: null,
+        isShow: true,
       },
       localSelectValues: [],
       canBeShownTooltip: false,
@@ -192,7 +193,7 @@ export default {
       }
     },
     initSelectData(eventType = "mounted") {
-      let timer = setInterval(() => {
+      // let timer = setInterval(() => {
         if (
           this.isCurrentIndexOptionsNotExist &&
           this.localSelectValues.length
@@ -212,12 +213,12 @@ export default {
             this.currentIndexOption,
             eventType
           );
-          clearInterval(timer);
+          // clearInterval(timer);
         }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
+      // }, 1000);
+      // setTimeout(() => {
+      //   clearInterval(timer);
+      // }, 10000);
     },
     open() {
       if (
@@ -249,7 +250,9 @@ export default {
 
       this.currentOption = item;
 
-      this.changeValue(eventType);
+      setTimeout(()=>{
+        this.changeValue(eventType);
+      },100)
       this.close();
     },
     changeValue(eventType = "click") {
@@ -301,9 +304,20 @@ export default {
       });
     },
     resetSelectedValue() {
-      this.currentIndexOption = 0;
-      this.currentOption = this.selectValuesAfterProcessingDependency[0];
-      this.changeValue("click");
+      this.$nextTick(() => {
+        let length = this.selectValuesAfterProcessingDependency.length;
+        for (let i = 0; i < length; i++) {
+          let currentOptionItem = this.selectValuesAfterProcessingDependency[i];
+          if (currentOptionItem.isShow) {
+            this.changeSelect(
+              currentOptionItem,
+              i,
+              "changeAmountSelectList"
+            );
+            return;
+          }
+        }
+      })
     },
     resetMaxWidthSelectList() {
       this.maxWidthSelectList = null;
@@ -335,36 +349,6 @@ export default {
         });
       }
     },
-    /**
-     * Обновить глобальные данные об элементе, если изменится количество пунктов в списке
-     * @returns {null}
-     */
-    amountVisibleSelects() {
-      let length = this.selectValuesAfterProcessingDependency.length;
-      if (!this.currentOption) {
-        return null;
-      }
-      for (let i = 0; i < length; i++) {
-        if (
-          this.selectValuesAfterProcessingDependency[i].value ===
-            this.currentOptionValue &&
-          this.currentOption.isShow
-        ) {
-          return;
-        }
-      }
-
-      for (let i = 0; i < length; i++) {
-        if (this.selectValuesAfterProcessingDependency[i].isShow) {
-          this.changeSelect(
-            this.selectValuesAfterProcessingDependency[i],
-            i,
-            "changeAmountSelectList"
-          );
-          return;
-        }
-      }
-    },
     isVisibilityFromDependency: {
       handler(newValue, oldValue) {
         if (newValue && !oldValue) {
@@ -388,15 +372,6 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-    /**
-     * Количество видимых элементов в списке.
-     * @returns {number}
-     */
-    amountVisibleSelects() {
-      return this.selectValuesAfterProcessingDependency.filter(
-        (item) => item.isShow
-      ).length;
-    },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
     },
@@ -428,6 +403,7 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
+
       if (
         this.isCurrentIndexOptionsNotExist ||
         !this.isVisibilityFromDependency
@@ -459,6 +435,7 @@ export default {
       return this.currentOption?.selectName;
     },
     currentOptionValue() {
+
       if (
         (this.needMockValue && this.isCurrentIndexOptionsNotExist) ||
         !this.isVisibilityFromDependency
@@ -487,7 +464,7 @@ export default {
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
-      return this.mutationSelectValue.map((selectItem) => {
+      return this.mutationSelectValue.map((selectItem, index) => {
         if (!selectItem?.dependencyFormulaItem?.length) {
           selectItem.isShow = true;
           return selectItem;
@@ -496,6 +473,7 @@ export default {
         let formula = this.getArrayElementsFromFormula(
           selectItem.dependencyFormulaItem
         );
+        this.constructLocalListElementDependencyInFormula(formula);
 
         let allDependencyShow = formula.every((item) => {
           if (this.isElementDependency(item)) {
@@ -510,21 +488,24 @@ export default {
         }
 
         formula = formula.map((item) =>
-          item.toLowerCase() === "self" ? selectItem.value : item
+          item.toLowerCase() === "_self_" ? selectItem.value : item
         );
-        this.constructLocalListElementDependencyInFormula(formula);
 
         formula = this.processingVariablesOnFormula(formula);
+        let newDataIsShow;
         try {
-          selectItem.isShow = eval(formula);
-          return selectItem;
+          newDataIsShow = eval(formula);
         } catch (e) {
           if (this.devMode) {
             console.error(e.message, formula);
           }
-          selectItem.isShow = false;
-          return selectItem;
+          newDataIsShow = false;
         }
+        selectItem.isShow = newDataIsShow;
+        if (!newDataIsShow && selectItem.value === this.currentOptionValue) {
+          this.resetSelectedValue();
+        }
+        return selectItem;
       });
     },
     maxWidthSettings() {

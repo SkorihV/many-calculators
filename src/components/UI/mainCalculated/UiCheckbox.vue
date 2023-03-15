@@ -341,6 +341,7 @@ export default {
       let newCost = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices
       );
+
       if (newCost !== null) {
         return newCost;
       }

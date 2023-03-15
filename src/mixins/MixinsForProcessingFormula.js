@@ -104,15 +104,13 @@ export const MixinsForProcessingFormula = {
             if (eval(formula)) {
               resultReduce.changed = true;
               resultReduce.cost = item.cost ? item.cost : 0;
-              return resultReduce;
             }
-            return resultReduce;
           } catch (e) {
             if (this.devMode) {
               console.error(e.message, formula);
             }
-            return resultReduce;
           }
+          return resultReduce;
         },
         /**
          * changed - необходим для понимания сработала формула хоть раз или нет,

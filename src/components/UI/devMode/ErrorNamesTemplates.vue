@@ -170,7 +170,7 @@ export default {
       listComputedFormula: [], //Список всех формул отвечающих за расчет
       listBannedElementsName: [
         "_otherSum_",
-        "self",
+        "_self_",
         "true",
         "false",
         "empty",
@@ -197,7 +197,7 @@ export default {
         "||",
         "&&",
         "_otherSum_",
-        "self",
+        "_self_",
         "true",
         "false",
         "empty",

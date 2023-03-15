@@ -20,7 +20,7 @@
           <div
             class="calc__input-buttons-minus"
             :class="{ disabled: isDisabledMin }"
-            v-if="controls"
+            v-if="showControlsButton"
             @click="minus"
           >
             -
@@ -54,7 +54,7 @@
           <div
             class="calc__input-buttons-plus"
             :class="{ disabled: isDisabledMax }"
-            v-if="controls"
+            v-if="showControlsButton"
             @click="plus"
           >
             +
@@ -289,7 +289,7 @@ export default {
           return this.localInputValue;
         }
 
-        if (this.isErrorNumber || (this.isOnlyNumber && this.isErrorEmpty)) {
+        if (this.isErrorNumber || this.isErrorEmpty) {
           this.resetNumberValue();
           return null;
         }
@@ -317,7 +317,7 @@ export default {
           this.localInputValue = "";
         }
 
-        if (this.onlyInteger) {
+        if (this.onlyIntegerValue) {
           this.localInputValue = !this.valueIsNaN
             ? parseInt(this.localInputValue)
             : null;
@@ -484,23 +484,29 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-    onlyNumber() {
-      return this.dataType === "onlyNumber" || this.onlyInteger;
+    isMixedValue() {
+      return this.dataType === "mixed"
     },
-    onlyInteger() {
+    onlyNumberValue() {
+      return this.dataType === "onlyNumber";
+    },
+    onlyIntegerValue() {
       return this.dataType === "onlyInteger";
     },
     localMax() {
-      return this.checkedValueOnVoid(this.max) ? Number(this.max) : null;
+      return this.checkedValueOnVoid(this.max) && !this.isMixedValue ? Number(this.max) : null;
     },
     localMin() {
-      return this.checkedValueOnVoid(this.min) ? Number(this.min) : null;
+      return this.checkedValueOnVoid(this.min) && !this.isMixedValue ? Number(this.min) : null;
     },
     localStep() {
       return this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
     },
     isOnlyNumber() {
-      return this.onlyNumber || this.controls;
+      return this.onlyNumberValue || this.onlyIntegerValue;
+    },
+    showControlsButton() {
+      return this.controls && this.isOnlyNumber;
     },
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -511,7 +517,7 @@ export default {
       if (!this.isVisibilityFromDependency) {
         return null;
       }
-      if (this.onlyNumber) {
+      if (this.isOnlyNumber) {
         return this.resultWitchNumberValid();
       } else {
         return this.localInputValue;
@@ -534,9 +540,7 @@ export default {
     },
     isErrorNumber() {
       return (
-        (this.isOnlyNumber ||
-          this.localMax !== null ||
-          this.localMin !== null) &&
+        this.isOnlyNumber &&
         this.valueIsNaN &&
         this.localInputValue?.toString()?.length
       );
