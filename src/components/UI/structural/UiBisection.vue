@@ -52,6 +52,7 @@
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'left' + '_' + inx"
+          :parent-name="elementName"
           @changedValue="changeValue"
         />
       </div>
@@ -69,6 +70,7 @@
           :key="inx"
           :template="template"
           :index="elementName + '_' + 'right' + '_' + inx"
+          :parent-name="elementName"
           @changedValue="changeValue"
         />
       </div>

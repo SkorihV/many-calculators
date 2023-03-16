@@ -57,7 +57,7 @@ import UiBisection from "@/components/UI/structural/UiBisection.vue";
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
-  name: "TemplatesWrapperForDuplicator",
+  name: "TemplatesWrapperStructural",
   emits: ["changedValue"],
   components: {
     UiTab,
@@ -65,7 +65,7 @@ export default {
     UiBisection,
   },
   props: {
-    ...propsTemplate.getProps(["template", "index", "parentIsShow", "parentName"]),
+    ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
   },
   methods: {
     changeValue(data) {

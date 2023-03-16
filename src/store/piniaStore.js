@@ -7,6 +7,7 @@ export const useBaseStore = defineStore("base", {
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
       reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
+      nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBisection"],
       specSymbols: Object.entries({
         "&gt;": ">",
         "&lt;": "<",
@@ -151,6 +152,7 @@ export const useBaseStore = defineStore("base", {
         Object.values(elementsIsMounted).filter((value) => !value).length
       ),
     isTooltipOn: ({ tooltipOn }) => tooltipOn,
+    isStructureTemplate: ({nameTemplatesForStructure}) => (templateName) => nameTemplatesForStructure.includes(templateName),
   },
   actions: {
     tryAddResultElement(dataResultItem) {

@@ -2,50 +2,11 @@
   <div id="app-base-constructor-calculator" v-show="appIsMounted">
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
-        <ui-accordion
-          v-if="template.template === 'UiAccordion'"
-          :accordion-data="template"
-          :label="template?.label"
-          :classes="template?.classes"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiAccordion' + index
-          "
-          :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :template-name="template.template"
-          @changedValue="changeValue"
-        />
-        <ui-tab
-          v-else-if="template.template === 'UiTab'"
-          :tab-data="template"
-          :label="template?.label"
-          :classes="template?.classes"
-          :element-name="template?.json_id || 'UiTab' + index"
-          :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :max-width="template?.maxWidth"
-          :template-name="template.template"
-          @changedValue="changeValue"
-        />
-        <ui-bisection
-          v-else-if="template.template === 'UiBisection'"
-          :template-data="template"
-          :label="template?.label"
-          :width-left-side="template?.widthLeftSide"
-          :classes="template?.classes"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiBisection' + index
-          "
-          :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :dependency-formula-display-left-side="
-            template?.dependencyFormulaDisplayLeftSide
-          "
-          :dependency-formula-display-right-side="
-            template?.dependencyFormulaDisplayRightSide
-          "
-          :template-name="template.template"
+        <templates-wrapper-structural
+          v-if="isStructureTemplate(template.template)"
+          :parent-is-show="true"
+          :template="template"
+          :index="index"
           @changedValue="changeValue"
         />
         <ui-duplicator
@@ -117,11 +78,9 @@
 </template>
 
 <script>
-import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
-import UiTab from "@/components/UI/structural/UiTab.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import UiBisection from "@/components/UI/structural/UiBisection.vue";
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
@@ -150,13 +109,11 @@ export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
+    TemplatesWrapperStructural,
     ResultButtonForComputed,
     ResultBlockForOutput,
     SpinnerElement,
     TemplatesWrapper,
-    UiAccordion,
-    UiTab,
-    UiBisection,
     UiDuplicator,
     ErrorNamesTemplates,
     devBlock,
@@ -504,6 +461,7 @@ export default {
       "checkInitEnabledSendForm",
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
+      "isStructureTemplate"
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);

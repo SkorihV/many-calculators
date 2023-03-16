@@ -13,12 +13,11 @@
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
     >
-      <templates-wrapper-for-duplicator
+      <templates-wrapper-structural
         v-if="isStructureTemplate(template?.template)"
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
-        :parent-name="mutationsInputData.elementName"
         @changedValue="changeValue"
       />
       <templates-wrapper
@@ -61,7 +60,7 @@
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import TemplatesWrapperForDuplicator from "@/components/UI/supporting/TemplatesWrapperForDuplicator.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
@@ -73,7 +72,7 @@ import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServi
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { devBlock, TemplatesWrapper, TemplatesWrapperForDuplicator },
+  components: { devBlock, TemplatesWrapper, TemplatesWrapperStructural },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
@@ -120,7 +119,6 @@ export default {
       mutationsInputData: null,
       regExpStringSplitFormula:
         /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/,
-      nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBisection"],
     };
   },
   methods: {
@@ -233,9 +231,6 @@ export default {
         this.originVariables.includes(item);
       return isFound && isFoundVariableInOriginVariables;
     },
-    isStructureTemplate(templateName) {
-      return this.nameTemplatesForStructure.includes(templateName);
-    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -245,6 +240,7 @@ export default {
       "getResultElementOnName",
       "devMode",
       "showInsideElementStatus",
+      "isStructureTemplate"
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
