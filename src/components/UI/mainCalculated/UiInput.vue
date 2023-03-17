@@ -29,9 +29,8 @@
             ref="trueInput"
             :id="localElementName"
             type="text"
-            :value="resultValue"
+            v-model="localInputBufferValue"
             :placeholder="inputPlaceholder"
-            @input="tryChangeValueInput"
             @keydown.enter="trueTrueValue"
             @keydown.up="plus"
             @keydown.down="minus"
@@ -211,20 +210,6 @@ export default {
       type: String,
       default: "mixed",
     },
-    /**
-     *     шаблон rex для ручной валидации
-     */
-    customErrorPattern: {
-      type: [RegExp, String],
-      default: null,
-    },
-
-    /**
-     *     текст для ошибки созданной в ручную
-     */
-    customErrorText: {
-      type: String,
-    },
     ...propsTemplate.getProps([
       "label",
       "notEmpty",
@@ -282,10 +267,10 @@ export default {
   data() {
     return {
       inputFocus: false,
+      localInputBufferValue: null,
       localInputValue: null,
       nameTimer: null,
-      nameTimerForUpdateInputValue: null,
-      fakeValueHidden: this.isCurrency && this.isOnlyNumber,
+      fakeValueHidden: Boolean(this.isCurrency && this.isOnlyNumber),
       isInvalid: false,
       canBeShownTooltip: false,
     };
@@ -294,7 +279,9 @@ export default {
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
+
         this.localInputValue = parseFloat(this.localInputValue)
+
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
           this.localInputValue?.toString().slice(0) === "-"
@@ -316,12 +303,9 @@ export default {
         }
 
         if (this.discreteStep) {
-          this.clearTimer(this.nameTimerForUpdateInputValue);
-          this.nameTimerForUpdateInputValue = setTimeout(() => {
             this.localInputValue =
               Math.round(parseFloat(this.localInputValue) / this.step) *
               this.step;
-          }, 1500);
         } else {
           this.localInputValue = parseFloat(this.localInputValue);
         }
@@ -336,8 +320,10 @@ export default {
             : null;
         }
 
-        if (this.needFixedResult) {
-          this.localInputValue = this.localInputValue.toFixed(this.numberSignsAfterComma);
+        this.localInputValue = this.updateValueAfterSignComma(this.localInputValue);
+
+        if (!this.inputFocus) {
+          this.localInputBufferValue = this.localInputValue;
         }
 
         return this.localInputValue;
@@ -346,11 +332,6 @@ export default {
           console.error(e.message);
         }
       }
-    },
-    tryChangeValueInput(e) {
-      this.localInputValue = e.target.value;
-      this.changeValue();
-      this.shownTooltip();
     },
     changeValue(eventType = "input") {
       this.$emit("changedValue", {
@@ -387,7 +368,6 @@ export default {
           this.isErrorMax,
           this.isErrorEmpty,
           this.isErrorNumber,
-          this.isErrorCustom,
         ].some((item) => item);
 
         this.checkValidationDataAndToggle({
@@ -454,7 +434,9 @@ export default {
       if (this.checkedValueOnVoid(this.localMax)) {
         value = value <= this.localMax ? value : this.localMax;
       }
+      value = this.updateValueAfterSignComma(value)
       this.localInputValue = value;
+      this.localInputBufferValue = value;
       this.changeValue("plus");
       this.shownTooltip();
     },
@@ -470,9 +452,14 @@ export default {
       if (this.checkedValueOnVoid(this.localMin)) {
         value = value >= this.localMin ? value : this.localMin;
       }
+      value = this.updateValueAfterSignComma(value)
       this.localInputValue = value;
+      this.localInputBufferValue = value;
       this.changeValue("minus");
       this.shownTooltip();
+    },
+    updateValueAfterSignComma(value) {
+      return this.needFixedResult ? parseFloat(value.toFixed(this.numberSignsAfterComma)) : value;
     },
     shownTooltip() {
       if (!this.canBeShownTooltip) {
@@ -492,6 +479,15 @@ export default {
     isVisibilityFromDependency() {
       this.changeValue("dependency");
     },
+    inputFocus: {
+      handler(isFocus) {
+        if (!isFocus) {
+          this.localInputValue = this.localInputBufferValue;
+          this.changeValue();
+          this.shownTooltip();
+        }
+      }
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -534,7 +530,6 @@ export default {
       if (!this.isVisibilityFromDependency) {
         return null;
       }
-
       if (this.isOnlyNumber) {
         return this.resultWitchNumberValid();
       } else {
@@ -542,8 +537,8 @@ export default {
       }
     },
     resultValueDouble() {
-      return this.localInputValue?.toString().length
-        ? parseFloat(this.localInputValue).toLocaleString("ru")
+      return this.localInputBufferValue?.toString().length
+        ? this.localInputBufferValue.toLocaleString("ru")
         : "";
     },
     valueIsNaN() {
@@ -601,14 +596,6 @@ export default {
         ? `Минимальное значение ${this.localMin}`
         : null;
     },
-    isErrorCustom() {
-      return this.customErrorPattern
-        ? this.localInputValue?.toString().search(this.customErrorPattern) < 0
-        : false;
-    },
-    customErrorTextOut() {
-      return this.isErrorCustom ? this.customErrorText : "";
-    },
     isErrorClass() {
       return this.tooltipError?.error && this.isCanShowAllTooltips;
     },
@@ -619,11 +606,6 @@ export default {
         return { error: this.isErrorMax, errorText: this.errorMaxText };
       } else if (this.isErrorMin) {
         return { error: this.isErrorMin, errorText: this.errorMinText };
-      } else if (this.isErrorCustom) {
-        return {
-          error: this.isErrorCustom,
-          errorText: this.customErrorTextOut,
-        };
       } else if (this.isErrorEmpty) {
         return { error: this.isErrorEmpty, errorText: this.errorEmptyText };
       } else {

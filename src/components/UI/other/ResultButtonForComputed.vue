@@ -78,9 +78,10 @@ export default {
         const valueIsBool = typeof elementDependency?.value === "boolean";
         const valueIsNull = elementDependency?.value === null;
         const valueIsArray = Array.isArray(elementDependency?.value);
+        const valueIsNum = !isNaN(parseFloat(elementDependency?.value))
 
         if (elementIsExist) {
-          if (valueIsExist) {
+          if (valueIsNum) {
             return resultText + elementDependency?.value + " ";
           } else if (valueIsBool) {
             return resultText + Boolean(elementDependency?.value) + " ";
@@ -92,6 +93,7 @@ export default {
             return resultText + "'" + elementDependency.value + "' ";
           }
         }
+
         return resultText + name + " ";
       }, "");
       return result;

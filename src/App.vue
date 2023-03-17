@@ -418,13 +418,13 @@ export default {
         this.teleportField.style.display = 'none';
       }
     },
-    tryPassDependency(resultSum) {
+    tryPassDependency(name, value, isShow, displayValue, type) {
       this.tryAddDependencyElement({
-        name: "_globalSum_",
-        value: resultSum,
-        isShow: resultSum !== null,
-        displayValue: resultSum,
-        type: "App_calc",
+        name,
+        value,
+        isShow,
+        displayValue,
+        type,
       });
     },
 
@@ -528,6 +528,7 @@ export default {
     dataListVariablesOnFormula() {
       return this.variablesInFormula?.map((item) => {
         if (item === this.getNameReserveVariable) {
+          this.tryPassDependency("_otherSum_", this.summaFreeVariables, Boolean(this.summaFreeVariables !== null), this.summaFreeVariables, "_otherSum_");
           return this.getProxyFreeVariables(this.summaFreeVariables);
         } else {
           const data = this.baseDataForCalculate.filter(
@@ -654,7 +655,7 @@ export default {
      */
     finalSummaForOutput() {
       if (!this.displayResultData || this.isExistGlobalErrorsValidationIgnoreHiddenElement) {
-        this.tryPassDependency(null);
+        this.tryPassDependency("_globalSum_", null, false, null, "App_calc");
         return null;
       }
       let resultSum = null;
@@ -668,7 +669,7 @@ export default {
           return sum + 0;
         }, 0);
       }
-      this.tryPassDependency(resultSum);
+      this.tryPassDependency("_globalSum_", resultSum, Boolean(resultSum !== null), resultSum, "App_calc");
       return resultSum;
     },
     /**
