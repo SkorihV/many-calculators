@@ -6,7 +6,7 @@
     <div class="calc__dev-block-element" v-if="label?.length">
       Заголовок элемента: {{ label }}
     </div>
-    <div class="calc__dev-block-element" v-if="elementName?.length">
+    <div class="calc__dev-block-element calc__dev-block-element-name" v-if="elementName?.length">
       Имя элемента: {{ elementName }}
     </div>
 
@@ -58,16 +58,16 @@
       Формула расчета после обработки: {{ formulaVariables }}
     </div>
 
-    <div class="calc__dev-block-element" v-if="!hiddenValue">
+    <div class="calc__dev-block-element calc__dev-block-element-value" v-if="!hiddenValue">
       Значение элемента: {{ value === null ? "null" : value }}
     </div>
     <div
-      class="calc__dev-block-element"
+      class="calc__dev-block-element calc__dev-block-element-show"
       v-if="isVisibilityFromDependency !== null"
     >
       Элемент виден: {{ isVisibilityFromDependency }}
     </div>
-    <div class="calc__dev-block-element" v-if="!hiddenCost">
+    <div class="calc__dev-block-element calc__dev-block-element-cost" v-if="!hiddenCost">
       Текущая стоимость: {{ localCost === null ? "null" : localCost }}
     </div>
   </div>

@@ -218,6 +218,7 @@ export default {
     this.methodWorksForm = this.outOptions?.methodWorksForm
       ? this.outOptions.methodWorksForm
       : "show";
+    this.existFormulaForHiddenResultButton = Boolean(this.outOptions?.resultOptions?.formulaDisplayButton?.length);
 
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
@@ -229,11 +230,7 @@ export default {
       this.showForm();
     }
 
-    this.setInitEnabledSendForm(
-      this?.outOptions?.methodBeginningCalculation === "useAutomatic" ||
-        this?.outOptions?.methodBeginningCalculation ===
-          "useButtonAfterCalculation"
-    );
+    this.setInitEnabledSendForm(this.methodBeginningCalculationIsAutomatic);
     this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
     this.setTooltipOn(this.outOptions);
 
@@ -263,6 +260,7 @@ export default {
       submitResult: null,
       eventSubmittingFormAdded: null,
       intervalName: null,
+      existFormulaForHiddenResultButton: false
     };
   },
   methods: {
@@ -289,12 +287,13 @@ export default {
 
       if (
         !this.eventNotShowTooltips.includes(eventType) &&
-        this.isAutomaticCalculate
+        this.methodBeginningCalculationIsAutomatic
       ) {
         this.showAllTooltipsOn();
-        if (!this.isMethodBeginningAfterCalculation) {
-          this.setAllowShowResultBlock(true);
-        }
+        this.setAllowShowResultBlock(true);
+      }
+      if (!this.eventNotShowTooltips.includes(eventType) && this.existFormulaForHiddenResultButton && this.methodBeginningCalculationIsButton) {
+        this.showAllTooltipsOn();
       }
 
       this.checkEnabledResultButton();
@@ -418,7 +417,17 @@ export default {
       if (!this.showInsideElementStatus && this.teleportField) {
         this.teleportField.style.display = 'none';
       }
-    }
+    },
+    tryPassDependency(resultSum) {
+      this.tryAddDependencyElement({
+        name: "_globalSum_",
+        value: resultSum,
+        isShow: resultSum !== null,
+        displayValue: resultSum,
+        type: "App_calc",
+      });
+    },
+
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement() {
@@ -435,6 +444,13 @@ export default {
     },
     showInsideElementStatus() {
       this.toggleTextAreaResultForDevMode();
+    },
+    showErrorSummaBlock: {
+      handler(newValue) {
+        if (newValue) {
+          this.setAllowShowResultBlock(false)
+        }
+      }
     }
   },
   computed: {
@@ -456,12 +472,14 @@ export default {
       "setCurrency",
       "getCurrency",
       "setMethodBeginningCalculation",
-      "getMethodBeginningCalculation",
+      "methodBeginningCalculationIsAutomatic",
+      "methodBeginningCalculationIsButton",
       "setInitEnabledSendForm",
       "checkInitEnabledSendForm",
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
-      "isStructureTemplate"
+      "isStructureTemplate",
+      "tryAddDependencyElement"
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
@@ -635,20 +653,23 @@ export default {
      * @returns {*|boolean}
      */
     finalSummaForOutput() {
-      if (!this.displayResultData) {
+      if (!this.displayResultData || this.isExistGlobalErrorsValidationIgnoreHiddenElement) {
+        this.tryPassDependency(null);
         return null;
       }
-
+      let resultSum = null;
       if (this.isUseFormula && this.mainFormulaIsExist) {
-        return this.combinedFormulaDataTogether;
+        resultSum = this.combinedFormulaDataTogether;
       } else {
-        return this.baseDataForCalculate.reduce((sum, item) => {
+        resultSum = this.baseDataForCalculate.reduce((sum, item) => {
           if (item.cost !== null && !item.excludeFromCalculations) {
             return sum + parseFloat(item.cost);
           }
           return sum + 0;
         }, 0);
       }
+      this.tryPassDependency(resultSum);
+      return resultSum;
     },
     /**
      * Текст для вывода в форму
@@ -686,22 +707,13 @@ export default {
     finalTextForOutputForTeleport() {
       return this.finalTextForOutput.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
     },
-    isAutomaticCalculate() {
-      return (
-        this.getMethodBeginningCalculation === "useAutomatic" ||
-        this.getMethodBeginningCalculation === "useButtonAfterCalculation"
-      );
-    },
-    isMethodBeginningAfterCalculation() {
-      return this.getMethodBeginningCalculation === "useButtonAfterCalculation";
-    },
     /**
      * Отобразить блок с текстом о наличии ошибок,
      * если ошибки есть и глобально разрешено их отображение
      * @returns {false|boolean}
      */
     showErrorTextBlock() {
-      return (
+      return Boolean(
         this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
         this.isCanShowAllTooltips
       );
@@ -710,7 +722,8 @@ export default {
       return (
         this.checkInitEnabledSendForm &&
         this.finalTextForOutput?.length &&
-        !this.isExistGlobalErrorsValidationIgnoreHiddenElement
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+        !this.showErrorSummaBlock
       );
     },
     /**
@@ -718,14 +731,14 @@ export default {
      * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
      */
     allowTeleport() {
-      return (
+      return Boolean(
         this.submitResult &&
         !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
         this.checkInitEnabledSendForm
       );
     },
     showErrorSummaBlock() {
-      return (
+      return Boolean(
         (this.finalSummaForOutput === null ||
           this.finalSummaForOutput === false) &&
         this.isCanShowAllTooltips &&
@@ -741,7 +754,7 @@ export default {
         return true;
       }
 
-      return (
+      return Boolean(
         !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
         this.checkInitEnabledSendForm &&
         this.checkAllowShowResultBlock
@@ -2516,6 +2529,21 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
     &-element {
       color: #000;
+      padding: 1px 5px;
+      &-name {
+        background-color: red;
+        color: white;
+      }
+      &-value {
+        background-color: blue;
+        color: white;
+      }
+      &-show {
+        background-color: orange;
+      }
+      &-cost {
+        background-color: yellow;
+      }
     }
   }
 

@@ -69,6 +69,49 @@ export const MixinsUtilityServices = {
         }
       );
     },
+
+    /**
+     * Обработать полученные переменные из формулы
+     * и получить строку со значениями
+     * @returns {string}
+     */
+    processingVariablesOnFormula(formula) {
+      if (!formula) {
+        return null;
+      }
+      const result = formula?.reduce((resultText, item) => {
+        const elementDependency =
+          item in this.localDependencyList
+            ? this.localDependencyList[item]
+            : null;
+
+        const elementIsExist = elementDependency !== null;
+        const valueIsExist = !isNaN(
+          parseFloat(elementDependency?.value) &&
+          !Array.isArray(elementDependency?.value) &&
+          typeof elementDependency?.value !== "boolean"
+        );
+        const valueIsBool = typeof elementDependency?.value === "boolean";
+        const valueIsNull = elementDependency?.value === null;
+        const valueIsArray = Array.isArray(elementDependency?.value);
+
+        if (elementIsExist) {
+          if (valueIsExist) {
+            return resultText + elementDependency?.value + " ";
+          } else if (valueIsBool) {
+            return resultText + Boolean(elementDependency?.value) + " ";
+          } else if (valueIsNull) {
+            return resultText + elementDependency?.value + " ";
+          } else if (valueIsArray) {
+            return resultText + elementDependency?.value + " ";
+          } else {
+            return resultText + "'" + elementDependency.value + "' ";
+          }
+        }
+        return resultText + item + " ";
+      }, "");
+      return result;
+    },
   },
   computed: {
     ...mapState(useBaseStore, ["getSpecSymbols"]),

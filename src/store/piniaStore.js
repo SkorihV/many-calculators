@@ -32,8 +32,11 @@ export const useBaseStore = defineStore("base", {
     checkAllowShowResultBlock({ allowShowResultBlock }) {
       return allowShowResultBlock;
     },
-    getMethodBeginningCalculation({ methodBeginningCalculation }) {
-      return methodBeginningCalculation;
+    methodBeginningCalculationIsButton({ methodBeginningCalculation }) {
+      return methodBeginningCalculation === "useButton";
+    },
+    methodBeginningCalculationIsAutomatic({ methodBeginningCalculation }) {
+      return methodBeginningCalculation === "useAutomatic";
     },
     getCurrency: ({ currency }) => {
       return currency;

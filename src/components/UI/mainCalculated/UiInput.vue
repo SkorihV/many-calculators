@@ -35,6 +35,8 @@
             @keydown.enter="trueTrueValue"
             @keydown.up="plus"
             @keydown.down="minus"
+            @blur="inputFocus = false"
+            @focus="inputFocus = true"
             class="calc__input-item"
             :class="{ 'is-number': isOnlyNumber, error: isErrorClass }"
             autocomplete="off"
@@ -43,6 +45,8 @@
           <template v-if="fakeValueHidden">
             <input
               @click="showTrueValue"
+              @blur="inputFocus = false"
+              @focus="inputFocus = true"
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
@@ -167,6 +171,9 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    /**
+     * Включить кратность шага для поля ввода
+     */
     discreteStep: {
       type: [Boolean, Number],
       default: false,
@@ -254,6 +261,8 @@ export default {
     } else if (this.isOnlyNumber) {
       this.localInputValue = this.inputValue;
       this.changeValue("mounted");
+    } else {
+      this.changeValue("mounted");
     }
 
     if (this.isCurrency && this.isOnlyNumber) {
@@ -272,6 +281,7 @@ export default {
   },
   data() {
     return {
+      inputFocus: false,
       localInputValue: null,
       nameTimer: null,
       nameTimerForUpdateInputValue: null,
@@ -284,7 +294,7 @@ export default {
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
-
+        this.localInputValue = parseFloat(this.localInputValue)
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
           this.localInputValue?.toString().slice(0) === "-"
@@ -324,6 +334,10 @@ export default {
           this.localInputValue = !this.valueIsNaN
             ? parseInt(this.localInputValue)
             : null;
+        }
+
+        if (this.needFixedResult) {
+          this.localInputValue = this.localInputValue.toFixed(this.numberSignsAfterComma);
         }
 
         return this.localInputValue;
@@ -520,6 +534,7 @@ export default {
       if (!this.isVisibilityFromDependency) {
         return null;
       }
+
       if (this.isOnlyNumber) {
         return this.resultWitchNumberValid();
       } else {
@@ -639,6 +654,12 @@ export default {
       }
       return this.updatedCostForOut(this.cost);
     },
+    needFixedResult() {
+      return Boolean((this.discreteStep || this.controls) &&  this.onlyNumberValue);
+    },
+    numberSignsAfterComma() {
+       return this.step.toString().includes(".") && this.needFixedResult ? this.step.toString().split(".").pop().length : 0;
+    }
   },
 };
 </script>

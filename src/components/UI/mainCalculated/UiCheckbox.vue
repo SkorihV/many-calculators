@@ -312,10 +312,10 @@ export default {
      * @returns {boolean}
      */
     isErrorEmpty() {
-      return this.isNeedChoice && !this.isLocalChecked;
+      return Boolean(this.isNeedChoice && !this.isLocalChecked);
     },
     isErrorClass() {
-      return (
+      return Boolean(
         this.isErrorEmpty &&
         this.isVisibilityFromDependency &&
         this.isCanShowAllTooltips

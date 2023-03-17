@@ -1233,7 +1233,7 @@
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
-    "computedMethod": "formula",
+    "computedMethod": "linear",
     "tooltipOff": false,
     "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
     "resultOptions": {
@@ -3736,27 +3736,28 @@
   },
 
   "test-color-options": {
-    "formula": "_otherSum_",
+    "formula": "select2 + _otherSum_",
     "methodBeginningCalculation": "useButton",
     "form": "7981901",
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
     "computedMethod": "formula",
     "tooltipOff": false,
-    "methodWorksForm": "showAfterCalculation",
+    "methodWorksForm": "show",
     "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
     "resultOptions": {
       "title": "Результаты расчета:",
       "subtitle": "Расчет приблизительный, за точным расчетом обратитесь к нашему специалисту!",
       "titleButton": "Рассчитать",
+      "formulaDisplayButton": "_globalSum_ !== null && Block1 > 10",
       "titleSumma": "ИТОГО:",
       "showResultDataForBlock": 1,
       "currency": "яблоки",
       "textForSpinner": "фывфы фв фыв",
-      "timerForSpinner": 0
+      "timerForSpinner": 0,
+      "hiddenSumma" : true
     }
   },
-
   "test-color": {
     "calculatorTemplates": [
       {
@@ -3787,10 +3788,11 @@
         "label": "Селект 2",
         "isColumn": false,
         "selectedItem": 1,
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "notEmpty": false,
         "typeDisplayClass": "",
         "template": "UiSelect",
+        "formulaProcessingLogic": "error",
         "elementName": "select2"
       },
       {
@@ -3829,17 +3831,17 @@
         "ver_id": "2422030",
         "title": "Input - для цветовых настроек",
         "label": "Блок 1",
-        "value": "",
-        "placeholder": "ntcns",
+        "value": "1",
+        "placeholder": "",
         "cost": "1",
         "unit": "м2",
-        "min": "",
-        "max": "",
-        "controls": false,
-        "step": "1",
-        "discreteStep": 1,
+        "min": "0",
+        "max": "50",
+        "controls": true,
+        "step": "0.101",
+        "discreteStep": true,
         "notEmpty": false,
-        "dataType": "mixed",
+        "dataType": "onlyNumber",
         "isCurrency": false,
         "isColumn": false,
         "formOutputMethod": "valueSumm",
