@@ -141,7 +141,7 @@ export default {
      */
     selectedItem: {
       type: [Number, String],
-      default: 0,
+      default: 1,
       validator(value) {
         return !isNaN(Number(value));
       },
@@ -193,12 +193,10 @@ export default {
       }
     },
     initSelectData(eventType = "mounted") {
-      // let timer = setInterval(() => {
         if (
-          this.isCurrentIndexOptionsNotExist &&
           this.localSelectValues.length
         ) {
-          this.localSelectedItem = parseInt(this.selectedItem)
+          this.localSelectedItem = !!parseInt(this.selectedItem)
             ? parseInt(this.selectedItem) - 1
             : 0;
 
@@ -213,12 +211,7 @@ export default {
             this.currentIndexOption,
             eventType
           );
-          // clearInterval(timer);
         }
-      // }, 1000);
-      // setTimeout(() => {
-      //   clearInterval(timer);
-      // }, 10000);
     },
     open() {
       if (

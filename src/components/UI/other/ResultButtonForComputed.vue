@@ -15,6 +15,7 @@
     </icon-element-wrapper>
   </button>
   <dev-block
+    v-if="showResultBtn"
     :label="resultOptions?.titleButton ?? 'Рассчитать'"
     :dependency-formula-display="resultOptions?.formulaDisplayButton"
     :parsing-formula-variables="formulaOnDataVariables"

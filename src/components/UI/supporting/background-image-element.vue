@@ -15,9 +15,11 @@
 <script>
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 export default {
   name: "background-image-element",
+  mixins: [MixinsForProcessingFormula],
   props: {
     imageSettingsData: {
       type: Object,
@@ -28,12 +30,47 @@ export default {
     return {
       maxWidth: this.imageSettingsData?.maxWidth || 250,
       maxHeight: this.imageSettingsData?.maxHeight || 250,
+      currentImageUrl: null
     };
+  },
+  methods: {
+    changeValue() {
+      return null;
+    },
+    getImageAndUpdated(url) {
+      const urlImage = new Promise(function(resolve, reject){
+        let img = new Image();
+        img.onload = () => {
+          resolve(img);
+        };
+        img.onerror = () => {
+          reject(img);
+        };
+        img.src = url;
+      })
+
+      urlImage.then(img => {
+          this.currentImageUrl = img.src;
+        });
+      urlImage.catch(img => {
+        console.error("Картина по адресу " +  img.src + " не была загружены");
+      })
+    }
+  },
+  watch: {
+    urlImageAfterProcessingDependency: {
+      handler(newUrl, oldUrl) {
+        if (newUrl !== oldUrl && Boolean(newUrl)) {
+          this.getImageAndUpdated(this.getImageDir + newUrl);
+        }
+      },
+      immediate: true
+    }
   },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
     isBackgroundImage() {
-      return !!this.imageSettingsData?.image?.filename;
+      return Boolean(this.currentImageUrl);
     },
     isSubstrate() {
       return !!this.imageSettingsData?.isSubstrate;
@@ -53,8 +90,7 @@ export default {
     styleBackgroundImageUrl() {
       return (
         'background-image : url("' +
-        this.getImageDir +
-        this.imageSettingsData?.image?.filename +
+        this.currentImageUrl +
         '");'
       );
     },
@@ -93,6 +129,35 @@ export default {
         ];
       }
       return [];
+    },
+    urlImageAfterProcessingDependency() {
+      let currentUrl = this.imageSettingsData?.image?.filename.length ? this.imageSettingsData?.image?.filename : false;
+      if (!this.imageSettingsData?.dependencyImages?.length) {
+        return currentUrl;
+      }
+      this.imageSettingsData.dependencyImages.forEach((imageItem) => {
+        if (
+          imageItem.dependencyFormulaDisplay?.length &&
+          imageItem?.image?.filename.length
+        ) {
+          let formula = this.getArrayElementsFromFormula(
+            imageItem.dependencyFormulaDisplay
+          );
+          this.constructLocalListElementDependencyInFormula(formula);
+          formula = this.processingVariablesOnFormula(formula);
+
+          try {
+            if (eval(formula)) {
+              currentUrl = imageItem.image.filename
+            }
+          } catch (e) {
+            if (this.devMode) {
+              console.error(e.message, formula);
+            }
+          }
+        }
+      });
+      return currentUrl;
     },
   },
 };

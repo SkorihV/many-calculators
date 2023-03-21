@@ -160,23 +160,23 @@ export const MixinsForProcessingFormula = {
     },
   },
   watch: {
-    /**
-     * Отправить команду на удаление элемента из общих данных при его скрытии
-     */
-    isVisibilityFromDependency() {
-      if (this.isCanShowAllTooltips) {
-        this.changeValue("dependency");
-      }
-    },
-    /**
-     *
-     * @param newValue
-     */
-    isCanShowAllTooltips(newValue) {
-      if (newValue && this.isVisibilityFromDependency) {
-        this.changeValue("dependency");
-      }
-    },
+    // /**
+    //  * Отправить команду на удаление элемента из общих данных при его скрытии
+    //  */
+    // isVisibilityFromDependency() {
+    //   if (this.isCanShowAllTooltips) {    //
+    //     this.changeValue("dependency");
+    //   }
+    // },
+    // /**
+    //  *
+    //  * @param newValue
+    //  */
+    // isCanShowAllTooltips(newValue) {
+    //   if (newValue && this.isVisibilityFromDependency) {
+    //     this.changeValue("dependency");
+    //   }
+    // },
     globalDependenciesList: {
       handler(newValue) {
         let isUpdated = false;

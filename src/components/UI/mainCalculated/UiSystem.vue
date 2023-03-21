@@ -95,6 +95,9 @@ export default {
       },
       deep: true,
     },
+    isVisibilityFromDependency() {
+      this.changeValue("dependency");
+    },
   },
   computed: {
     ...mapState(useBaseStore, [

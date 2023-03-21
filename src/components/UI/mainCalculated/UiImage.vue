@@ -1,7 +1,7 @@
 <template>
   <div
     class="calc__wrapper-group-data"
-    v-if="isVisibilityFromDependency && localDataForDisplay?.url?.length"
+    v-if="isVisibilityFromDependency && urlIsExist"
   >
     <div class="calc__image-wrapper" :class="classes">
       <div
@@ -93,6 +93,9 @@ export default {
       "getImageDir",
       "tryToggleElementIsMounted",
     ]),
+    urlIsExist() {
+      return Boolean(this.localDataForDisplay?.url?.length);
+    },
     width() {
       return "max-width:" + this.maxWidth + "px";
     },
@@ -100,9 +103,10 @@ export default {
       return "max-height:" + this.maxHeight + "px";
     },
     localDataForDisplay() {
+      let url = Boolean(this.defaultImage?.filename?.length) ? this.getImageDir + this.defaultImage?.filename : '';
       let dataForOut = {
         label: this.label,
-        url: this.getImageDir + this.defaultImage.filename,
+        url: url,
         prompt: this.prompt,
       };
       if (!this.dependencyImages?.length) {
@@ -119,8 +123,9 @@ export default {
           this.constructLocalListElementDependencyInFormula(formula);
           formula = this.processingVariablesOnFormula(formula);
 
+          const currentUrlIsExist = Boolean(imageItem?.image?.filename.length);
           try {
-            if (eval(formula)) {
+            if (eval(formula) && currentUrlIsExist) {
               dataForOut = {
                 label: imageItem.label?.toString().length
                   ? imageItem.label
