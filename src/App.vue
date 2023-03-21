@@ -914,6 +914,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   transition: all 0.2s ease-in-out;
 }
 
+@mixin style-prompt-absolute-shift {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1382,7 +1389,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         color: $c_element_text_default;
         border-radius: $c_element_border_radius;
         border: $c_element_border_width solid $c_element_border_color;
-
         background-color: $c_element_bg_color;
         padding: 20px 40px;
         font-weight: 400;
@@ -1393,6 +1399,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         justify-content: space-between;
         text-align: start;
+        position: relative;
         &:hover {
           border-color: $c_element_border_color_hover;
           background-color: $c_element_bg_color_hover;
@@ -1412,6 +1419,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           flex: 0 0 auto;
           transform: rotate(45deg);
           -webkit-transform: rotate(45deg);
+        }
+
+        .calc__prompt-wrapper {
+          @include style-prompt-absolute-shift;
         }
       }
     }
@@ -1448,6 +1459,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 10px 40px;
         cursor: pointer;
         width: 100%;
+        position: relative;
         &-text {
           font-weight: 400;
           font-size: 16px;
@@ -1460,6 +1472,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           .calc__select-option-item-text {
             color: $c_element_text_hover;
           }
+        }
+        .calc__prompt-wrapper {
+          @include style-prompt-absolute-shift;
         }
       }
     }
@@ -1515,6 +1530,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
     &-label {
       display: flex;
+      position: relative;
       align-items: center;
       justify-content: center;
       padding: 21px 35px;
@@ -1530,6 +1546,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
       &.onlyImage {
         padding: 10px;
+      }
+      &.isShowPrompt {
+        padding-right: 35px;
+      }
+      .calc__prompt-wrapper {
+        @include style-prompt-absolute-shift;
       }
       &:hover {
         background-color: $c_element_bg_color_hover;
@@ -1653,6 +1675,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 20px 35px;
         display: flex;
         align-items: center;
+        position: relative;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
@@ -1670,6 +1693,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &.error {
           color: $c_base_error_color;
           border-color: $c_base_error_color;
+        }
+        .calc__prompt-wrapper {
+          @include style-prompt-absolute-shift;
         }
       }
       &-element {
@@ -2040,6 +2066,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           @include style-label-sub;
           color: $c_decor_text_default;
         }
+        .calc__prompt-wrapper {
+          @include style-prompt-absolute-shift;
+        }
       }
       &-content {
         margin-top: -$c_decor_border_width;
@@ -2072,6 +2101,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         width: 24px;
         height: 20px;
         display: flex;
+        padding-right: 60px;
       }
       &-plus:before,
       &-minus:before {
@@ -2169,6 +2199,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-sub {
           @include style-label-sub;
           color: $c_decor_text_default;
+        }
+        .calc__prompt-wrapper {
+          @include style-prompt-absolute-shift;;
         }
       }
       &-content-wrapper {

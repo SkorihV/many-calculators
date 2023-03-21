@@ -23,6 +23,7 @@
               checked: currentIndexRadioButton === radio.index,
               error: isErrorClass,
               onlyImage: onlyImage,
+              isShowPrompt: Boolean(radio?.prompt?.length)
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"

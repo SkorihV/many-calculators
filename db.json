@@ -1434,7 +1434,7 @@
             }
           }
         ],
-        "prompt": "",
+        "prompt": "asdadasd3",
         "parent": "0;"
       },
       {
@@ -1442,7 +1442,7 @@
         "values": [
           { "title": "Первый пункт", "selectName": "Первый пункт", "dependencyFormulaItem": "_self_!== select2", "cost": 100 },
           { "title": "второй пункт", "selectName": "второй пункт", "dependencyFormulaItem": "_self_!== select2","cost": 101 },
-          { "title": "третий пункт", "selectName": "третий пункт", "dependencyFormulaItem": "_self_!== select2","cost": 102 }
+          { "title": "третий пункт", "selectName": "третий пункт", "dependencyFormulaItem": "_self_!== select2","cost": 102, "prompt": "asdasdasd" }
         ],
         "prompt": "",
         "label": "Селект 1",
@@ -1927,7 +1927,7 @@
                 "formOutputMethod": "value",
                 "resultOutputMethod": "value",
                 "excludeFromCalculations": false,
-                "elementName": "Block11",
+                "elementName": "Block11.2",
                 "formulaProcessingLogic": "error",
                 "dependencyFormulaDisplay": "",
                 "classes": "",
@@ -2008,6 +2008,50 @@
                 "template": "UiCheckbox",
                 "formOutputMethod": "value",
                 "dependencyFormulaDisplay": "",
+                "excludeFromCalculations": false,
+                "formulaProcessingLogic": "error",
+                "buttonText": "Сантехнические работы",
+                "buttonTextChecked": "",
+                "isColumn": false,
+                "zeroValueDisplayIgnore": false,
+                "prompt": "",
+                "dependencyPrices": null,
+                "parent": "0;54008706;"
+              }
+
+            ],
+            "maxWidthSide": "100",
+            "prompt": "23423",
+            "location": "rightSide"
+          },
+          {
+            "json_id": "65534535306507",
+            "meta_id": "52495306",
+            "ver_id": "2422030",
+            "title": "Вкладка - Заголовок вкладки 1:",
+            "label": "Вкладка два от аккордеона",
+            "sublabel": "Подзаголовок вкладки 2",
+            "templates": [
+              {
+                "json_id": "fd345345sf343",
+                "meta_id": "49242506",
+                "ver_id": "2422030",
+                "title": "Скрытый чекбокс в дупликаторе",
+                "modified": "1676284852",
+                "created": "1665113422",
+                "type_group_id": "2",
+                "label": "",
+                "value": false,
+                "cost": "",
+                "isNeedChoice": false,
+                "isChecked": 1,
+                "typeDisplayClass": "base",
+                "elementName": "checkbox_222",
+                "classes": "",
+                "baseValue": "default",
+                "template": "UiCheckbox",
+                "formOutputMethod": "value",
+                "dependencyFormulaDisplay": "checkbox_111 === true",
                 "excludeFromCalculations": false,
                 "formulaProcessingLogic": "error",
                 "buttonText": "Сантехнические работы",
@@ -2171,31 +2215,31 @@
                       "ext": "png"
                     },
                     "prompt": "текст подсказки",
-                    "dependencyFormulaItem": "input12 > 57"
+                    "dependencyFormulaItem": "ползунок > 50"
                   },
                   {
                     "title": "1",
                     "radioName": "1",
                     "cost": 3000,
-                    "dependencyFormulaItem": "input12 > 57"
+                    "dependencyFormulaItem": "ползунок > 51"
                   },
                   {
                     "title": "2",
                     "radioName": "2",
                     "cost": 3500,
-                    "dependencyFormulaItem": "input12 > 57"
+                    "dependencyFormulaItem": "ползунок > 52"
                   },
                   {
                     "title": "3",
                     "radioName": "3",
                     "cost": 3500,
-                    "dependencyFormulaItem": "input12 > 56"
+                    "dependencyFormulaItem": "ползунок > 53"
                   },
                   {
                     "title": "4",
                     "radioName": "4",
                     "cost": 3500,
-                    "dependencyFormulaItem": "input12 > 57"
+                    "dependencyFormulaItem": "ползунок > 54"
                   }
                 ],
                 "prompt": ""
