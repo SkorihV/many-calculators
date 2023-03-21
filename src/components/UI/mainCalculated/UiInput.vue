@@ -11,10 +11,16 @@
         class="calc__input-label"
         :class="{ 'is-column': isColumn }"
       >
-        <div v-if="label" class="calc__input-label-text">
-          {{ label }}
-          <div class="empty-block" v-if="notEmpty">*</div>
-          <slot name="prompt" />
+        <div v-if="label" class="calc__input-label-wrapper">
+          <icon-element-wrapper
+            :icon-settings="iconSettings"
+          >
+            <div class="calc__input-label-text">
+              {{ label }}
+              <div class="empty-block" v-if="notEmpty">*</div>
+              <slot name="prompt" />
+            </div>
+          </icon-element-wrapper>
         </div>
         <div class="calc__input-wrapper-data">
           <div
@@ -86,6 +92,7 @@
 <script>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -98,7 +105,7 @@ export default {
   name: "UiInput",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip, devBlock },
+  components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
     /**
      * данные для инпута
@@ -231,6 +238,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
+      "iconSettings"
     ]),
   },
   created() {

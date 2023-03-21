@@ -6,10 +6,15 @@
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
     <div class="calc__range-wrapper" :class="classes">
-      <div v-if="label" class="calc__range-label">
-        {{ label }}
-        <div class="empty-block" v-if="notEmpty">*</div>
-        <slot name="prompt"></slot>
+
+      <div v-if="label" class="calc__range-label-wrapper">
+        <icon-element-wrapper :icon-settings="iconSettings">
+          <div class="calc__range-label-text">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt"></slot>
+          </div>
+        </icon-element-wrapper>
       </div>
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
@@ -86,6 +91,7 @@
 <script>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
+import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
@@ -97,7 +103,7 @@ export default {
   name: "UiRange",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip, devBlock },
+  components: { UiTooltip, devBlock, iconElementWrapper },
   props: {
     rangeValue: {
       type: [Number, String],
@@ -167,6 +173,7 @@ export default {
       "resultOutputMethod",
       "parentName",
       "isNeedChoice",
+      "isColumn",
       "formulaProcessingLogic",
       "templateName",
       "classes",
@@ -179,6 +186,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
+      "iconSettings"
     ]),
   },
   created() {

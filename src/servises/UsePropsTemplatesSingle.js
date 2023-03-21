@@ -37,6 +37,7 @@ class Props {
       positionElement: this.positionElement(),
       zeroValueDisplayIgnore: this.zeroValueDisplayIgnore(),
       baseValue : this.baseValue(),
+      iconSettings: this.iconSettings(),
     };
     Props.instance = this;
     return this;
@@ -305,6 +306,13 @@ class Props {
       default: "default",
     };
   };
+
+  iconSettings() {
+    return {
+      type: Object,
+      default: () => {},
+    }
+  }
 
   getProps(props) {
     let propsForReturn = {};

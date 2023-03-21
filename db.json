@@ -1162,7 +1162,7 @@
                 "controls": false,
                 "step": "1",
                 "discreteStep": false,
-                "isColumn": false,
+                "isColumn": true,
                 "notEmpty": 1,
                 "onlyNumber": 1,
                 "isCurrency": false,
@@ -1190,7 +1190,7 @@
                 "controls": false,
                 "step": "1",
                 "discreteStep": false,
-                "isColumn": false,
+                "isColumn": true,
                 "notEmpty": 1,
                 "onlyNumber": 1,
                 "isCurrency": false,
@@ -1252,7 +1252,7 @@
     "devModeEnabled": 1,
     "title": "Калькулятор фундамента ( конструктор )",
     "computedMethod": "formula",
-    "tooltipOff": false,
+    "tooltipOff": true,
     "methodWorksForm": "show",
     "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
     "resultOptions": {
@@ -1439,6 +1439,20 @@
       },
       {
         "title": "Селект 1",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "leftSide"
+        },
         "values": [
           { "title": "Первый пункт", "selectName": "Первый пункт", "dependencyFormulaItem": "_self_!== select2", "cost": 100 },
           { "title": "второй пункт", "selectName": "второй пункт", "dependencyFormulaItem": "_self_!== select2","cost": 101 },
@@ -1452,10 +1466,25 @@
         "notEmpty": false,
         "typeDisplayClass": "",
         "template": "UiSelect",
-        "elementName": "select1"
+        "elementName": "select1",
+        "prompt": "rfsf sdf sf 43 fsd"
       },
       {
         "title": "Селект 2",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "values": [
           { "title": "Первый пункт", "selectName": "Первый пункт", "dependencyFormulaItem": "_self_!== select1","cost": 103 },
           { "title": "второй пункт", "selectName": "второй пункт", "dependencyFormulaItem": "_self_!== select1","cost": 104 },
@@ -1480,7 +1509,7 @@
         "modified": "1676284852",
         "created": "1665113422",
         "type_group_id": "2",
-        "label": "",
+        "label": "Заголовок",
         "value": false,
         "cost": "",
         "isNeedChoice": false,
@@ -1500,6 +1529,20 @@
         "zeroValueDisplayIgnore": false,
         "prompt": "",
         "dependencyPrices": null,
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "parent": "0;54008706;"
       },
       {
@@ -1520,7 +1563,7 @@
         "notEmpty": false,
         "dataType": "onlyNumber",
         "isCurrency": true,
-        "isColumn": false,
+        "isColumn": true,
         "formOutputMethod": "valueSumm",
         "resultOutputMethod": "valueSumm",
         "zeroValueDisplayIgnore": false,
@@ -1530,6 +1573,20 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiInput",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "dependencyPrices": [
           {
             "cost": 2,
@@ -1569,7 +1626,7 @@
           "ext": "jpg"
         },
         "maxWidth": "300",
-        "dependencyFormulaDisplay": "Block8 !== null",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiImage",
         "maxHeight": "300",
@@ -1686,7 +1743,7 @@
         "cost": "34",
         "baseValue": "default",
         "isNeedChoice": false,
-        "isColumn": 1,
+        "isColumn": false,
         "typeDisplayClass": "switcher-vertical",
         "formOutputMethod": "summ",
         "zeroValueDisplayIgnore": false,
@@ -1720,7 +1777,7 @@
         "excludeFromCalculations": false,
         "elementName": "Block5",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "Block8 !== null",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiCheckbox",
         "dependencyPrices": null,
@@ -1734,7 +1791,7 @@
         "title": "Radio - для цветовых настроек",
         "label": "Блок 6",
         "selectedItem": "0",
-        "isColumn": 1,
+        "isColumn": true,
         "isNeedChoice": false,
         "notEmpty": false,
         "typeDisplayClass": "base",
@@ -1744,9 +1801,23 @@
         "excludeFromCalculations": false,
         "elementName": "Block6",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "Block3 === true",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiRadio",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "leftSide"
+        },
         "values": [
           {
             "title": "Пункт 1",
@@ -1781,6 +1852,7 @@
         "showSteps": 1,
         "stepPrompt": "15",
         "isNeedChoice": true,
+        "isColumn": true,
         "notEmpty": true,
         "showStaticValue": false,
         "showDynamicValue": 1,
@@ -1790,9 +1862,23 @@
         "excludeFromCalculations": false,
         "elementName": "ползунок",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "Block3 === true",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiRange",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "leftSide"
+        },
         "dependencyPrices": [
           {
             "cost": 2,
@@ -1830,7 +1916,7 @@
         },
         "maxWidth": "150",
         "maxHeight": "150",
-        "dependencyFormulaDisplay": "Block8 !== null",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiImage",
         "dependencyImages": [
@@ -1844,7 +1930,31 @@
               "image_height": "500",
               "ext": "jpg"
             },
-            "dependencyFormulaDisplay": "Block8 === 2"
+            "dependencyFormulaDisplay": "ползунок > 2"
+          },
+          {
+            "title": "Белый матовый",
+            "image": {
+              "image_id": "1460626507",
+              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
+              "ver_id": 4867762,
+              "image_width": "500",
+              "image_height": "500",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "ползунок > 10"
+          },
+          {
+            "title": "Белый матовый",
+            "image": {
+              "image_id": "1460626507",
+              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
+              "ver_id": 4867762,
+              "image_width": "500",
+              "image_height": "500",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "ползунок > 30"
           }
         ],
         "prompt": "",
@@ -1856,17 +1966,17 @@
         "ver_id": "2422030",
         "title": "Select - для цветовых настроек",
         "label": "Блок 8",
-        "isColumn": 1,
+        "isColumn": false,
         "selectedItem": 1,
         "isNeedChoice": false,
-        "notEmpty": true,
+        "notEmpty": false,
         "formOutputMethod": "summ",
         "resultOutputMethod": "summ",
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
         "elementName": "Block8",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "Block4 === true",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiSelect",
         "values": [
@@ -2031,6 +2141,20 @@
             "title": "Вкладка - Заголовок вкладки 1:",
             "label": "Вкладка два от аккордеона",
             "sublabel": "Подзаголовок вкладки 2",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "689303707",
+                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+                "ver_id": 2422030,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "maxWidth": 60,
+              "maxHeight": 60,
+              "location": "rightSide"
+            },
             "templates": [
               {
                 "json_id": "fd345345sf343",
@@ -2051,7 +2175,7 @@
                 "baseValue": "default",
                 "template": "UiCheckbox",
                 "formOutputMethod": "value",
-                "dependencyFormulaDisplay": "checkbox_111 === true",
+                "dependencyFormulaDisplay": "",
                 "excludeFromCalculations": false,
                 "formulaProcessingLogic": "error",
                 "buttonText": "Сантехнические работы",
@@ -2069,7 +2193,7 @@
             "location": "rightSide"
           }
         ],
-        "dependencyFormulaDisplay": "Block8 !== null",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiAccordion",
         "parent": "0;"
@@ -2126,7 +2250,7 @@
               "title": "",
               "image": {
                 "image_id": "689303707",
-                "filename": "fence2.svg",
+                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
                 "ver_id": 2422030,
                 "image_width": "0",
                 "image_height": "0",
@@ -2134,7 +2258,7 @@
               },
               "imageHover": {
                 "image_id": "689303507",
-                "filename": "fence3.svg",
+                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
                 "ver_id": 2422030,
                 "image_width": "0",
                 "image_height": "0",
@@ -2176,7 +2300,7 @@
                 "customErrorPattern": "",
                 "customErrorText": "",
                 "notOnlyForCalculations": 1,
-                "dependencyFormulaDisplay": "Block11 === 2",
+                "dependencyFormulaDisplay": "",
                 "prompt": "",
                 "parent": "0;52593306;52593506;"
               },
@@ -2194,7 +2318,7 @@
                 "excludeFromCalculations": false,
                 "elementName": "профильнаяСистема",
                 "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "Block11 === 2",
+                "dependencyFormulaDisplay": "",
                 "classes": "",
                 "template": "UiRadio",
                 "onlyImage": false,
@@ -2208,7 +2332,7 @@
                     "cost": 1000,
                     "image": {
                       "image_id": "3373825106",
-                      "filename": "https://dummyimage.com/150x100/a1a1a1/ccc",
+                      "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
                       "ver_id": 2422030,
                       "image_width": "264",
                       "image_height": "384",
@@ -2290,6 +2414,20 @@
         "labelSub": "Подзаголовок блока:",
         "labelLeft": "Заголовок левой колонки:",
         "labelRight": "Заголовок правкой колонки блока:",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "leftSide"
+        },
         "leftSide": [
           {
             "json_id": "151614506",
@@ -2348,7 +2486,7 @@
           }
         ],
         "widthLeftSide": "50",
-        "dependencyFormulaDisplay": "Block8 !== null",
+        "dependencyFormulaDisplay": "",
         "dependencyFormulaDisplayLeftSide": "",
         "dependencyFormulaDisplayRightSide": "",
         "visuallySeparateElement": false,
@@ -2408,7 +2546,7 @@
         "label": "Блок 21",
         "defaultImage": {
           "image_id": "1072882903",
-          "filename": "54837701_2.jpg",
+          "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
           "ver_id": 2422030,
           "image_width": "1920",
           "image_height": "1280",
@@ -2445,6 +2583,20 @@
                 "title": "Вкладка - Заголовок вкладки 1:",
                 "label": "Блок 41",
                 "sublabel": "Подзаголовок вкладки:",
+                "iconSettings": {
+                  "title": "",
+                  "image": {
+                    "image_id": "689303707",
+                    "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+                    "ver_id": 2422030,
+                    "image_width": "0",
+                    "image_height": "0",
+                    "ext": "svg"
+                  },
+                  "maxWidth": 60,
+                  "maxHeight": 60,
+                  "location": "leftSide"
+                },
                 "templates": [
                   {
                     "json_id": "243632706",
@@ -2557,7 +2709,7 @@
                 "location": "rightSide"
               }
             ],
-            "dependencyFormulaDisplay": "Block33 === true",
+            "dependencyFormulaDisplay": "",
             "classes": "",
             "template": "UiAccordion",
             "parent": "0;"
@@ -2697,7 +2849,7 @@
                 "controls": false,
                 "step": "1",
                 "discreteStep": false,
-                "isColumn": false,
+                "isColumn": true,
                 "notEmpty": 1,
                 "onlyNumber": 1,
                 "isCurrency": false,
@@ -2725,7 +2877,7 @@
                 "controls": false,
                 "step": "1",
                 "discreteStep": false,
-                "isColumn": false,
+                "isColumn": true,
                 "notEmpty": 1,
                 "onlyNumber": 1,
                 "isCurrency": false,
@@ -2781,7 +2933,7 @@
         "excludeFromCalculations": false,
         "formulaProcessingLogic": "zero",
         "formula": "Block23 * 5 + _otherSum_",
-        "dependencyFormulaDisplay": "Block1 > 20 && Block2 === true",
+        "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiDuplicator",
         "elementName": "dup",

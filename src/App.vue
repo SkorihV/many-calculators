@@ -1001,6 +1001,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         position: relative;
         gap: 2px;
+        flex: 1 1 100%;
       }
     }
 
@@ -1008,8 +1009,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-
+      gap: 5px;
       &.is-column {
         flex-direction: column;
         align-items: flex-start;
@@ -1019,13 +1019,18 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: start;
         justify-content: center;
       }
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        flex: 1 2 100%;
+        gap: 20px;
+      }
       &-text {
         @include style-title-main;
+        align-items: flex-start;
         display: flex;
-        margin-right: 30px;
         padding: 5px 0;
         gap: 2px;
-        text-align: start;
       }
     }
 
@@ -1106,11 +1111,19 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       min-height: 60px;
     }
     &-label {
-      @include style-title-main;
-      display: flex;
-      margin-bottom: 10px;
-      gap: 2px;
-      text-align: start;
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        gap: 20px;
+      }
+      &-text {
+        @include style-title-main;
+        display: flex;
+        align-items: flex-start;
+        gap: 2px;
+      }
+
     }
     &-item-left-side {
       width: 100%;
@@ -1129,6 +1142,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         align-items: baseline;
         gap: 32px;
+        width: 100%;
       }
 
       -webkit-appearance: none;
@@ -1358,11 +1372,18 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     &-label {
-      display: flex;
-      flex: 1 2 100%;
-      @include style-title-main;
-      gap: 2px;
-      text-align: start;
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        flex: 1 2 100%;
+        gap: 20px;
+      }
+      &-text {
+        @include style-title-main;
+        gap: 2px;
+        display: flex;
+        align-items: flex-start;;
+      }
     }
     &-change {
       &-wrapper {
@@ -1486,11 +1507,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      &-buttons {
+      gap: 5px;
+      @media (max-width: 480px) {
+        flex-direction: column;
+        align-items: start;
+      }
+    &-buttons {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 5px;
+        flex: 1 1 100%;
       }
       &.column {
         flex-direction: column;
@@ -1520,15 +1546,20 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
     }
-    &-title {
+    &-label-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1 2 100%;
+      margin-bottom: 8px;
+      gap: 20px;
+    }
+    &-label-text {
       @include style-title-main;
       display: flex;
-      margin-bottom: 8px;
       gap: 2px;
-      flex-shrink: 1;
       text-align: start;
     }
-    &-label {
+    &-label-button {
       display: flex;
       position: relative;
       align-items: center;
@@ -1615,7 +1646,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-wrapper {
       display: flex;
       gap: 10px;
-      cursor: pointer;
       align-items: center;
       flex-wrap: wrap;
       @media all and (max-width: 480px) {
@@ -1628,12 +1658,20 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     &-label {
-      @include style-title-main;
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      @include transition;
-      text-align: start;
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        @include transition;
+        text-align: start;
+      }
+      &-text {
+        display: flex;
+        align-items: flex-start;
+        gap: 2px;
+        @include style-title-main;
+      }
+
     }
 
     &-control {
@@ -1644,6 +1682,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         position: relative;
         align-items: center;
         display: flex;
+        cursor: pointer;
       }
       &-text,
       &-text_checked {
@@ -2225,12 +2264,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-label {
       &-wrapper {
         display: flex;
-        flex-direction: column;
         margin: 0 10px 10px 10px;
-        gap: 5px;
+        gap: 20px;
         border-bottom: 1px dashed $c_decor_border_color;
         width: calc(100% - 20px);
         padding-bottom: 10px;
+        align-items: center;
+      }
+      &_text {
+        display: flex;
+        flex-direction: column;
       }
       &_main {
         @include style-title-main;

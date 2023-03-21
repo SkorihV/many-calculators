@@ -7,14 +7,23 @@
   >
     <div
       class="calc__checkbox-wrapper"
-      @click="inputLocalValue"
       :class="[classes, { 'is-column': isColumn }]"
     >
-      <div v-if="label?.length" class="calc__checkbox-label">
-        {{ label }}
-        <div class="empty-block" v-if="isNeedChoice">*</div>
+      <div v-if="Boolean(label?.length)" class="calc__checkbox-label">
+        <div class="calc__checkbox-label-wrapper">
+          <icon-element-wrapper
+            :icon-settings="iconSettings"
+          >
+            <div class="calc__checkbox-label-text">
+              {{ label }}
+              <div class="empty-block" v-if="isNeedChoice">*</div>
+            </div>
+          </icon-element-wrapper>
+        </div>
       </div>
-      <div class="calc__checkbox-control-wrapper">
+      <div
+        @click="inputLocalValue"
+        class="calc__checkbox-control-wrapper">
         <div
           class="calc__checkbox-control-button"
           v-if="isButton"
@@ -88,6 +97,7 @@ import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -98,7 +108,7 @@ export default {
   name: "UiCheckbox",
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  components: { UiTooltip, devBlock },
+  components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
     /**
      *  альтернативный способ смены вида чекбокас - текстом
@@ -142,6 +152,7 @@ export default {
       "isColumn",
       "zeroValueDisplayIgnore",
       "baseValue",
+      "iconSettings",
     ]),
   },
   created() {

@@ -9,15 +9,20 @@
       class="calc__radio-wrapper"
       :class="[radioType, { column: isColumn, onlyImage: onlyImage }, classes]"
     >
-      <div class="calc__radio-title" v-if="label">
-        {{ label }}
-        <div class="empty-block" v-if="notEmpty">*</div>
-        <slot name="prompt" />
+      <div class="calc__radio-label-wrapper" v-if="label">
+        <icon-element-wrapper :icon-settings="iconSettings">
+          <div class="calc__radio-label-text" >
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt" />
+          </div>
+        </icon-element-wrapper>
       </div>
+
       <div class="calc__radio-wrapper-buttons">
         <template v-for="radio in radioListOnOut" :key="radio.index">
           <div
-            class="calc__radio-label"
+            class="calc__radio-label-button"
             :id="localElementName + '_' + radio.index"
             :class="{
               checked: currentIndexRadioButton === radio.index,
@@ -155,6 +160,7 @@ export default {
       "templateName",
       "positionElement",
       "zeroValueDisplayIgnore",
+      "iconSettings"
     ]),
   },
   data() {

@@ -7,10 +7,16 @@
       :id="elementName"
       :class="[{ 'is-column': isColumn, 'is-open': isOpen }, classes]"
     >
-      <div class="calc__select-label" v-if="label">
-        {{ label }}
-        <div class="empty-block" v-if="notEmpty">*</div>
-        <slot name="prompt"></slot>
+      <div class="calc__select-label-wrapper" v-if="Boolean(label.length)">
+        <icon-element-wrapper
+        :icon-settings="iconSettings"
+        >
+          <div class="calc__select-label-text">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt"></slot>
+          </div>
+        </icon-element-wrapper>
       </div>
       <div
         class="calc__select-change-wrapper"
@@ -163,6 +169,7 @@ export default {
       "dependencyFormulaDisplay",
       "positionElement",
       "zeroValueDisplayIgnore",
+      "iconSettings",
     ]),
   },
   data() {

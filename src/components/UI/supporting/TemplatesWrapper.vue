@@ -32,6 +32,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -67,6 +68,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -99,6 +101,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -118,6 +121,7 @@
     :show-steps="template?.showSteps"
     :step-prompt="template?.stepPrompt"
     :is-need-choice="template?.isNeedChoice"
+    :is-column="template?.isColumn"
     :show-static-value="template?.showStaticValue"
     :show-dynamic-value="template?.showDynamicValue"
     :element-name="
@@ -138,6 +142,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -169,6 +174,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

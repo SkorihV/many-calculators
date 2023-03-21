@@ -13,18 +13,24 @@
       :image-settings-data="templateData?.backgroundImageSettings"
     />
     <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
-      <div
-        class="calc__bisection-label_main"
-        v-if="templateData?.label?.length"
+      <icon-element-wrapper
+      :icon-settings="templateData?.iconSettings"
       >
-        {{ templateData?.label }}
-      </div>
-      <div
-        class="calc__bisection-label_sub"
-        v-if="templateData?.labelSub?.length"
-      >
-        {{ templateData?.labelSub }}
-      </div>
+        <div class="calc__bisection-label-text">
+          <div
+            class="calc__bisection-label_main"
+            v-if="templateData?.label?.length"
+          >
+            {{ templateData?.label }}
+          </div>
+          <div
+            class="calc__bisection-label_sub"
+            v-if="templateData?.labelSub?.length"
+          >
+            {{ templateData?.labelSub }}
+          </div>
+        </div>
+      </icon-element-wrapper>
     </div>
     <div class="calc__bisection-label-desktop">
       <div
@@ -95,6 +101,7 @@
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
@@ -103,7 +110,7 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 
 export default {
   name: "UiBisection",
-  components: { BackgroundImageElement, TemplatesWrapper, devBlock },
+  components: { BackgroundImageElement, TemplatesWrapper, devBlock, IconElementWrapper },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
