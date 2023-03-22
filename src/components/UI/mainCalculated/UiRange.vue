@@ -5,17 +5,16 @@
     :id="elementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="classes">
-
-      <div v-if="label" class="calc__range-label-wrapper">
-        <icon-element-wrapper :icon-settings="iconSettings">
-          <div class="calc__range-label-text">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt"></slot>
-          </div>
-        </icon-element-wrapper>
-      </div>
+    <div class="calc__range-wrapper" :class="[classes, {'column': isColumn}]">
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? label : ''">
+        <div class="calc__range-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt"></slot>
+        </div>
+      </icon-element-wrapper>
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
           <input
@@ -401,6 +400,9 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
+    isExistLabel() {
+      return Boolean(this.label?.length);
+    },
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;
     },

@@ -1,27 +1,29 @@
 <template>
-  <div
-    class="calc__duplicator"
-    :class="classes"
-    v-show="isVisibilityFromDependency"
-    :id="elementName"
+  <div class="calc__wrapper-group-data"
+       :class="classes"
+       v-show="isVisibilityFromDependency"
+       :id="elementName"
   >
-    <ui-duplicator-wrapper
-      v-for="(duplicator, idx) in localTemplates"
-      :origin-data="originData"
-      :key="duplicator?.index ? duplicator?.index : 0"
-      :index="duplicator?.index ? duplicator?.index : 0"
-      :duplicator-data="duplicator"
-      :is-duplicate="duplicator?.isDuplicate"
-      :formula="originData?.formula"
-      :parent-name="originData.elementName"
-      :parent-is-show="isVisibilityFromDependency"
-      :origin-variables="originVariablesInDuplicator"
-      :position-element="idx"
-      :show-duplicate-button="countElementsDuple < maximumDuple"
-      @duplicate="duplicate"
-      @deleteDuplicator="deleteDuplicator"
-      @changedValue="changeValue"
-    />
+    <div class="calc__duplicator">
+      <ui-duplicator-wrapper
+        v-for="(duplicator, idx) in localTemplates"
+        :origin-data="originData"
+        :key="duplicator?.index ? duplicator?.index : 0"
+        :index="duplicator?.index ? duplicator?.index : 0"
+        :duplicator-data="duplicator"
+        :is-duplicate="duplicator?.isDuplicate"
+        :formula="originData?.formula"
+        :parent-name="originData.elementName"
+        :parent-is-show="isVisibilityFromDependency"
+        :origin-variables="originVariablesInDuplicator"
+        :position-element="idx"
+        :show-duplicate-button="countElementsDuple < maximumDuple"
+        :icon-settings="originData?.iconSettings"
+        @duplicate="duplicate"
+        @deleteDuplicator="deleteDuplicator"
+        @changedValue="changeValue"
+      />
+    </div>
   </div>
   <dev-block
     :label="label"

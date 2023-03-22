@@ -7,20 +7,16 @@
   >
     <div
       class="calc__checkbox-wrapper"
-      :class="[classes, { 'is-column': isColumn }]"
+      :class="[classes, { 'column': isColumn }]"
     >
-      <div v-if="Boolean(label?.length)" class="calc__checkbox-label">
-        <div class="calc__checkbox-label-wrapper">
-          <icon-element-wrapper
-            :icon-settings="iconSettings"
-          >
-            <div class="calc__checkbox-label-text">
-              {{ label }}
-              <div class="empty-block" v-if="isNeedChoice">*</div>
-            </div>
-          </icon-element-wrapper>
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+      >
+        <div class="calc__checkbox-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="isNeedChoice">*</div>
         </div>
-      </div>
+      </icon-element-wrapper>
       <div
         @click="inputLocalValue"
         class="calc__checkbox-control-wrapper">
@@ -283,7 +279,6 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
-      "showInsideElementStatus",
     ]),
     /**
      *
@@ -293,6 +288,9 @@ export default {
       return this.checkedValueOnVoid(this.elementName)
         ? this.elementName
         : Math.random().toString();
+    },
+    isExistLabel() {
+      return Boolean(this.label?.length);
     },
     /**
      *

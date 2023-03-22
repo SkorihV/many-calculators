@@ -1,23 +1,24 @@
 <template>
-  <div class="calc__wrapper-group-data">
+  <div class="calc__wrapper-group-data"
+       ref="parent"
+       v-if="isVisibilityFromDependency"
+       :id="elementName"
+  >
     <div
-      ref="parent"
-      v-if="isVisibilityFromDependency"
       class="calc__select-wrapper"
-      :id="elementName"
-      :class="[{ 'is-column': isColumn, 'is-open': isOpen }, classes]"
+      :class="[{ 'column': isColumn, 'open': isOpen }, classes]"
     >
-      <div class="calc__select-label-wrapper" v-if="Boolean(label.length)">
-        <icon-element-wrapper
+      <icon-element-wrapper
         :icon-settings="iconSettings"
-        >
-          <div class="calc__select-label-text">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt"></slot>
-          </div>
-        </icon-element-wrapper>
-      </div>
+        :alt="isExistLabel ? label : ''"
+      >
+        <div class="calc__select-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt"></slot>
+        </div>
+      </icon-element-wrapper>
+
       <div
         class="calc__select-change-wrapper"
         ref="changeElement"
@@ -372,6 +373,9 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
+    isExistLabel() {
+      return Boolean(this.label.length);
+    },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
     },

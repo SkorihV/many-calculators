@@ -921,6 +921,18 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   margin: 5px;
 }
 
+@mixin style-element-main-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -993,6 +1005,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //--------Стили input text-----
   &__input {
     &-wrapper {
+      @include style-element-main-wrapper;
       &.is-stretch {
         flex: 1 1 100%;
       }
@@ -1003,33 +1016,17 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         gap: 2px;
         flex: 1 1 100%;
       }
-    }
-
-    &-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 5px;
-      &.is-column {
+      &.column {
         flex-direction: column;
         align-items: flex-start;
       }
-      @media all and (max-width: 480px) {
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
-      }
-      &-wrapper {
-        display: flex;
-        align-items: center;
-        flex: 1 2 100%;
-        gap: 20px;
-      }
+    }
+
+    &-label {
       &-text {
         @include style-title-main;
         align-items: flex-start;
         display: flex;
-        padding: 5px 0;
         gap: 2px;
       }
     }
@@ -1104,26 +1101,19 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
   &__range {
     &-wrapper {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      position: relative;
-      min-height: 60px;
+      @include style-element-main-wrapper;
+      &.column {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
     &-label {
-      &-wrapper {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        gap: 20px;
-      }
       &-text {
         @include style-title-main;
         display: flex;
         align-items: flex-start;
         gap: 2px;
       }
-
     }
     &-item-left-side {
       width: 100%;
@@ -1200,7 +1190,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           box-shadow: 0 7px 11px -4px $c_element_border_color_hover;
         }
       }
-
       &.isError {
         &::-moz-range-thumb {
           border-color: $c_base_error_color;
@@ -1210,7 +1199,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
     }
-
     &-steps {
       &-wrapper {
         display: flex;
@@ -1228,7 +1216,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-item {
         position: absolute;
         cursor: pointer;
-
         &-value {
           font-size: 12px;
           line-height: 12px;
@@ -1272,7 +1259,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
     }
-
     &-current {
       &-wrapper {
         display: flex;
@@ -1280,7 +1266,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         margin-left: auto;
         gap: 5px;
       }
-
       &-static {
         color: $c_element_text_default;
         background-color: $c_element_bg_color;
@@ -1302,7 +1287,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           border: 1px solid $c_element_border_color_hover;
         }
       }
-
       &-dynamic {
         font-weight: normal;
         font-size: 16px;
@@ -1342,16 +1326,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //---------Стили select-----
   &__select {
     &-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      position: relative;
-      width: 100%;
-      &.is-column {
+      @include style-element-main-wrapper;
+      &.column {
         flex-direction: column;
         align-items: flex-start;
       }
-      &.is-open {
+      &.open {
         .calc__select-arrow {
           border-color: $c_element_text_default;
           transform: rotate(-135deg);
@@ -1372,17 +1352,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     &-label {
-      &-wrapper {
-        display: flex;
-        align-items: center;
-        flex: 1 2 100%;
-        gap: 20px;
-      }
       &-text {
         @include style-title-main;
-        gap: 2px;
+        align-items: flex-start;
         display: flex;
-        align-items: flex-start;;
+        gap: 2px;
       }
     }
     &-change {
@@ -1393,6 +1367,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         position: relative;
         flex: 1 1 100%;
         min-width: 30%;
+        @media all and (max-width: 480px) {
+          width: 100%;
+        }
         &.error {
           .calc__select-change-item {
             border-color: $c_base_error_color;
@@ -1504,14 +1481,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //-----------------Радио кнопки ---------------
   &__radio {
     &-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 5px;
-      @media (max-width: 480px) {
-        flex-direction: column;
-        align-items: start;
-      }
+      @include style-element-main-wrapper;
     &-buttons {
         display: flex;
         flex-wrap: wrap;
@@ -1521,9 +1491,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &.column {
         flex-direction: column;
         align-items: flex-start;
-        .calc__radio-wrapper-buttons {
-          gap: 8px;
-        }
       }
       &.base {
         .calc__radio-indicator {
@@ -1546,18 +1513,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
     }
-    &-label-wrapper {
-      display: flex;
-      align-items: center;
-      flex: 1 2 100%;
-      margin-bottom: 8px;
-      gap: 20px;
-    }
     &-label-text {
       @include style-title-main;
+      align-items: flex-start;
       display: flex;
       gap: 2px;
-      text-align: start;
     }
     &-label-button {
       display: flex;
@@ -1572,6 +1532,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @include transition;
       gap: 8px;
       text-align: start;
+      .calc__icon-element-label-wrapper {
+        flex: none;
+      }
       @media all and (max-width: 480px) {
         padding: 11px 15px;
       }
@@ -1644,32 +1607,18 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //--------Стили чекбокса --------------
   &__checkbox {
     &-wrapper {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      @media all and (max-width: 480px) {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      &.is-column {
+      @include style-element-main-wrapper;
+      &.column {
         flex-direction: column;
         align-items: flex-start;
       }
     }
     &-label {
-      &-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        @include transition;
-        text-align: start;
-      }
       &-text {
-        display: flex;
-        align-items: flex-start;
-        gap: 2px;
         @include style-title-main;
+        align-items: flex-start;
+        display: flex;
+        gap: 2px;
       }
 
     }
@@ -1683,6 +1632,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         display: flex;
         cursor: pointer;
+        flex: 1 1 100%;
       }
       &-text,
       &-text_checked {
@@ -2013,23 +1963,15 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__accordion {
     &-main-label {
       @include style-title-main;
-      display: flex;
-      margin-bottom: 8px;
     }
     &-wrapper {
       display: flex;
-      flex-direction: column;
+      gap: 8px;
+      position: relative;
       width: 100%;
-      margin-bottom: 10px;
+      flex-direction: column;
       &:hover {
-        //.calc__accordion-item-content {
-        //  border-color: $c_decor_border_color_hover;
-        //  border-top-color: transparent;
-        //  color: $c_decor_text_hover;
-        //  background-color: $c_decor_bg_color_hover;
-        //}
-
-        .isOpen.calc__accordion-item-label {
+        .open.calc__accordion-item-label {
           border-color: $c_decor_border_color_selected;
           border-bottom-color: transparent;
           color: $c_decor_text_selected;
@@ -2044,7 +1986,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         padding: 19px 6px 21px 20px;
         min-height: 60px;
-        margin-bottom: 11px;
         background-color: $c_decor_bg_color;
         border: $c_decor_border_width solid $c_decor_border_color;
         cursor: pointer;
@@ -2055,7 +1996,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
-        &.isOpen {
+        &.open {
           margin-bottom: 0;
           .calc__accordion-item-label-sub,
           .calc__accordion-item-label-main,
@@ -2070,7 +2011,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
         }
-        &:hover:not(.isOpen) {
+        &:hover:not(.open) {
           background-color: $c_decor_bg_color_hover;
           border-color: $c_decor_border_color_hover;
           .calc__accordion-item-label-sub,
@@ -2081,7 +2022,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           }
         }
 
-        &.isError {
+        &.error {
           border-color: $c_base_error_color;
           .calc__accordion-item-label-main {
             color: $c_base_error_color;
@@ -2110,15 +2051,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
       &-content {
-        margin-top: -$c_decor_border_width;
+        margin-top: -$c_decor_border_width - 8px;
         width: 100%;
         border: $c_decor_border_width solid $c_decor_border_color_selected;
         border-bottom-left-radius: $c_decor_border_radius;
         border-bottom-right-radius: $c_decor_border_radius;
         border-top-color: transparent;
-        margin-bottom: 10px;
         position: relative;
-        //overflow: hidden;
         @include transition;
         &-wrapper {
           .calc__wrapper-group-data {
@@ -2169,18 +2108,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__tab {
     &-main-label {
       @include style-title-main;
-      color: $c_base_title;
-      display: flex;
-      margin-bottom: 8px;
     }
     &-wrapper {
-      display: flex;
-      justify-content: flex-start;
-      align-items: start;
+      @include style-element-main-wrapper;
       flex-direction: column;
-      flex-wrap: wrap;
-      width: 100%;
-      margin-bottom: 10px;
+      align-items: start;
     }
     &-item {
       &-label {
@@ -2193,6 +2125,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         cursor: pointer;
         gap: 20px;
         position: relative;
+        flex: 1 1 auto;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
@@ -2300,17 +2233,15 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       width: 100%;
       @include style-decor-border-radius;
       &.isVisualSeparate {
-        margin: 20px 10px;
         box-shadow: 0 0 25px -10px $c_decor_text_default;
-        padding: 15px;
-        width: calc(100% - 20px);
+        padding: 10px;
       }
     }
     &-content-wrapper {
       position: relative;
       display: flex;
       width: 100%;
-      gap: 15px;
+      gap: 10px;
       @media all and (max-width: 768px) {
         flex-direction: column;
         align-items: start;
@@ -2327,7 +2258,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-left-label,
     &-right-label {
       font-size: 16px;
-      font-weight: 600;
       color: $c_base_title;
       width: 100%;
       padding: 10px;
@@ -2425,7 +2355,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //----------Элемент image--------------
   &__image {
     &-wrapper {
-      display: flex;
+      @include style-element-main-wrapper;
       flex-direction: column;
       align-items: start;
       &-image {
@@ -2558,15 +2488,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 50px 0 10px;
       border-bottom: 2px groove $c_decor_border_color;
       margin-bottom: 10px;
+      .calc__icon-element-label-wrapper {
+        margin-bottom: 8px;
+      }
       &:hover {
         border-color: $c_decor_border_color_selected;
       }
     }
     &-label {
       @include style-title-main;
-      font-weight: 600;
       text-align: center;
-      margin-bottom: 15px;
     }
     &-duplicate,
     &-delete {
@@ -2632,13 +2563,24 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   }
 
   //-----------Элемент иконки-----------
+  &__icon-element-label-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    @include transition;
+    text-align: start;
+    flex: 1 2 100%;
+  }
   &__icon-wrapper {
     width: 100%;
     height: 100%;
     position: relative;
     display: flex;
     justify-content: flex-end;
+    border-radius: $c_decor_border_radius;
     flex-shrink: 0;
+    overflow: hidden;
     img {
       width: 100%;
       height: auto;

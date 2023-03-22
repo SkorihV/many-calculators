@@ -1,14 +1,16 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
-    <img class="calc__icon_normal" v-if="showIcon" :src="urlIcon" :alt="alt" />
+    <img class="calc__icon_normal" :style="[behaviorImage]" v-if="showIcon" :src="urlIcon" :alt="alt" />
     <img
       class="calc__icon_hover"
+      :style="[behaviorImage]"
       v-if="showHoverIcon"
       :src="urlIconHover"
       :alt="alt"
     />
     <img
       class="calc__icon_selected"
+      :style="[behaviorImage]"
       v-if="showSelectedIcon"
       :src="urlIconSelected"
       :alt="alt"
@@ -62,6 +64,13 @@ export default {
         ? this.iconSettings?.maxHeight
         : this.baseSizeIcon;
       return "height:" + localValue + "px;";
+    },
+    behaviorImage() {
+      const behaviorImage = this.iconSettings?.behaviorImage
+        ? this.iconSettings.behaviorImage
+        : "contain";
+
+      return "object-fit:" + behaviorImage + ";"
     },
     showIcon() {
       return !this.showHoverIcon && !this.showSelectedIcon;

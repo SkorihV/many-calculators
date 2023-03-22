@@ -9,16 +9,16 @@
       class="calc__radio-wrapper"
       :class="[radioType, { column: isColumn, onlyImage: onlyImage }, classes]"
     >
-      <div class="calc__radio-label-wrapper" v-if="label">
-        <icon-element-wrapper :icon-settings="iconSettings">
-          <div class="calc__radio-label-text" >
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt" />
-          </div>
-        </icon-element-wrapper>
-      </div>
-
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? label : ''"
+      >
+        <div class="calc__radio-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt" />
+        </div>
+      </icon-element-wrapper>
       <div class="calc__radio-wrapper-buttons">
         <template v-for="radio in radioListOnOut" :key="radio.index">
           <div
@@ -296,11 +296,12 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-
+    isExistLabel() {
+      return Boolean(this.label?.length);
+    },
     isRadioItemSelected() {
       return this.currentSelectedRadioButton !== null;
     },
-
     radioType() {
       return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
     },

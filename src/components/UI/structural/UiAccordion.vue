@@ -1,46 +1,57 @@
 <template>
   <div
-    class="calc__accordion-wrapper"
-    :class="[classes]"
+    class="calc__wrapper-group-data"
     v-show="showBlock && isVisibilityFromDependency"
     :id="elementName"
+    ref="parent"
   >
-    <div class="calc__accordion-main-label" v-if="accordionData?.label?.length">
-      {{ accordionData.label }}
+    <div
+      class="calc__accordion-wrapper"
+      :class="[classes]"
+    >
+      <icon-element-wrapper
+      :icon-settings="iconSettings"
+      :alt="isExistLabel ? accordionData?.label : ''">
+        <div class="calc__accordion-main-label" v-if="isExistLabel">
+          {{ label }}
+        </div>
+      </icon-element-wrapper>
+
+      <template v-if="accordionData?.items?.length">
+        <ui-accordion-item
+          v-for="(item, key) in accordionData.items"
+          :key="key"
+          :parent-is-show="isVisibilityFromDependency"
+          :accordionItem="item"
+          :accordion-name="elementName"
+          :accordion-item-id="key"
+          :element-name="elementName + item?.json_id + '_' + key"
+          @changedValue="changeValue"
+        />
+      </template>
     </div>
-    <template v-if="accordionData?.items?.length">
-      <ui-accordion-item
-        v-for="(item, key) in accordionData.items"
-        :key="key"
-        :parent-is-show="isVisibilityFromDependency"
-        :accordionItem="item"
-        :accordion-name="elementName"
-        :accordion-item-id="key"
-        :element-name="elementName + item?.json_id + '_' + key"
-        @changedValue="changeValue"
-      />
-    </template>
-    <dev-block
-      :label="label"
-      :element-name="elementName"
-      :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
-      :dependency-formula-display="dependencyFormulaDisplay"
-      :parsing-formula-variables="formulaAfterProcessingVariables"
-      hidden-cost
-    ></dev-block>
   </div>
+  <dev-block
+    :label="label"
+    :element-name="elementName"
+    :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+    hidden-cost
+  ></dev-block>
 </template>
 
 <script>
 import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 export default {
   name: "UiAccordion",
-  components: { DevBlock, UiAccordionItem, devBlock },
+  components: { DevBlock, UiAccordionItem, devBlock, IconElementWrapper },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -58,6 +69,7 @@ export default {
       "classes",
       "parentIsShow",
       "dependencyFormulaDisplay",
+      "iconSettings"
     ]),
   },
   data() {
@@ -90,6 +102,9 @@ export default {
       }
       return result.some((item) => item);
     },
+    isExistLabel() {
+      return Boolean(this.label?.length)
+    }
   },
 };
 </script>

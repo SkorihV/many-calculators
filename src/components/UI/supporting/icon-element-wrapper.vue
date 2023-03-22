@@ -1,19 +1,21 @@
 <template>
-  <icon-element
-    v-if="showLeftIcon"
-    :alt="alt"
-    :icon-settings="iconSettings"
-    :is-parent-hover="isParentHover"
-    :is-parent-selected="isParentSelected"
-  />
-  <slot />
-  <icon-element
-    v-if="showRightIcon"
-    :alt="alt"
-    :icon-settings="iconSettings"
-    :is-parent-hover="isParentHover"
-    :is-parent-selected="isParentSelected"
-  />
+  <div class="calc__icon-element-label-wrapper">
+    <icon-element
+      v-if="showLeftIcon"
+      :alt="alt"
+      :icon-settings="iconSettings"
+      :is-parent-hover="isParentHover"
+      :is-parent-selected="isParentSelected"
+    />
+    <slot />
+    <icon-element
+      v-if="showRightIcon"
+      :alt="alt"
+      :icon-settings="iconSettings"
+      :is-parent-hover="isParentHover"
+      :is-parent-selected="isParentSelected"
+    />
+  </div>
 </template>
 
 <script>

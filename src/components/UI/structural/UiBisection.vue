@@ -1,100 +1,105 @@
 <template>
   <div
-    class="calc__bisection-wrapper"
-    :class="[classes, { isVisualSeparate: isVisualSeparate }]"
+    class="calc__wrapper-group-data"
     v-show="
       (templateData?.rightSide.length || templateData?.leftSide.length) &&
       isVisibilityFromDependency
     "
     :id="elementName"
+    ref="parent"
   >
-    <background-image-element
-      v-if="templateData?.backgroundImageSettings"
-      :image-settings-data="templateData?.backgroundImageSettings"
-    />
-    <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
-      <icon-element-wrapper
-      :icon-settings="templateData?.iconSettings"
-      >
-        <div class="calc__bisection-label-text">
-          <div
-            class="calc__bisection-label_main"
-            v-if="templateData?.label?.length"
-          >
-            {{ templateData?.label }}
+    <div
+      class="calc__bisection-wrapper"
+      :class="[classes, { isVisualSeparate: isVisualSeparate }]"
+    >
+      <background-image-element
+        v-if="templateData?.backgroundImageSettings"
+        :image-settings-data="templateData?.backgroundImageSettings"
+      />
+      <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
+        <icon-element-wrapper
+        :icon-settings="iconSettings"
+        >
+          <div class="calc__bisection-label-text">
+            <div
+              class="calc__bisection-label_main"
+              v-if="templateData?.label?.length"
+            >
+              {{ templateData?.label }}
+            </div>
+            <div
+              class="calc__bisection-label_sub"
+              v-if="templateData?.labelSub?.length"
+            >
+              {{ templateData?.labelSub }}
+            </div>
           </div>
-          <div
-            class="calc__bisection-label_sub"
-            v-if="templateData?.labelSub?.length"
-          >
-            {{ templateData?.labelSub }}
-          </div>
-        </div>
-      </icon-element-wrapper>
-    </div>
-    <div class="calc__bisection-label-desktop">
-      <div
-        class="calc__bisection-left-label desktop"
-        :style="styleWidthLeftSide"
-      >
-        {{ templateData?.labelLeft }}
+        </icon-element-wrapper>
       </div>
-      <div class="calc__bisection-right-label desktop">
-        {{ templateData?.labelRight }}
-      </div>
-    </div>
-    <div class="calc__bisection-content-wrapper">
-      <div
-        v-show="isShowLeftSide"
-        class="calc__bisection-left-side-wrapper"
-        :style="styleWidthLeftSide"
-      >
-        <div class="calc__bisection-left-label mobile">
+      <div class="calc__bisection-label-desktop">
+        <div
+          class="calc__bisection-left-label desktop"
+          :style="styleWidthLeftSide"
+        >
           {{ templateData?.labelLeft }}
         </div>
-        <templates-wrapper
-          v-for="(template, inx) in templateData?.leftSide"
-          :parent-is-show="isVisibilityFromDependency && isShowLeftSide"
-          :key="inx"
-          :template="template"
-          :index="elementName + '_' + 'left' + '_' + inx"
-          :parent-name="elementName"
-          @changedValue="changeValue"
-        />
-      </div>
-      <div
-        v-show="isShowRightSide"
-        class="calc__bisection-right-side-wrapper"
-        :style="styleWidthRightSide"
-      >
-        <div class="calc__bisection-right-label mobile">
+        <div class="calc__bisection-right-label desktop">
           {{ templateData?.labelRight }}
         </div>
-        <templates-wrapper
-          v-for="(template, inx) in templateData?.rightSide"
-          :parent-is-show="isVisibilityFromDependency && isShowRightSide"
-          :key="inx"
-          :template="template"
-          :index="elementName + '_' + 'right' + '_' + inx"
-          :parent-name="elementName"
-          @changedValue="changeValue"
-        />
+      </div>
+      <div class="calc__bisection-content-wrapper">
+        <div
+          v-show="isShowLeftSide"
+          class="calc__bisection-left-side-wrapper"
+          :style="styleWidthLeftSide"
+        >
+          <div class="calc__bisection-left-label mobile">
+            {{ templateData?.labelLeft }}
+          </div>
+          <templates-wrapper
+            v-for="(template, inx) in templateData?.leftSide"
+            :parent-is-show="isVisibilityFromDependency && isShowLeftSide"
+            :key="inx"
+            :template="template"
+            :index="elementName + '_' + 'left' + '_' + inx"
+            :parent-name="elementName"
+            @changedValue="changeValue"
+          />
+        </div>
+        <div
+          v-show="isShowRightSide"
+          class="calc__bisection-right-side-wrapper"
+          :style="styleWidthRightSide"
+        >
+          <div class="calc__bisection-right-label mobile">
+            {{ templateData?.labelRight }}
+          </div>
+          <templates-wrapper
+            v-for="(template, inx) in templateData?.rightSide"
+            :parent-is-show="isVisibilityFromDependency && isShowRightSide"
+            :key="inx"
+            :template="template"
+            :index="elementName + '_' + 'right' + '_' + inx"
+            :parent-name="elementName"
+            @changedValue="changeValue"
+          />
+        </div>
       </div>
     </div>
-    <dev-block
-      :label="label"
-      :element-name="elementName"
-      :is-visibility-from-dependency="isVisibilityFromDependency"
-      :dependency-formula-display="dependencyFormulaDisplay"
-      :parsing-formula-variables="formulaAfterProcessingVariables"
-      hidden-cost
-      hidden-value
-      :left-dependency-formula-display="dependencyFormulaDisplayLeftSide"
-      :left-parsing-formula-variables="leftDependencyVariablesFormula"
-      :right-dependency-formula-display="dependencyFormulaDisplayRightSide"
-      :right-parsing-formula-variables="rightDependencyVariablesFormula"
-    ></dev-block>
   </div>
+  <dev-block
+    :label="label"
+    :element-name="elementName"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+    hidden-cost
+    hidden-value
+    :left-dependency-formula-display="dependencyFormulaDisplayLeftSide"
+    :left-parsing-formula-variables="leftDependencyVariablesFormula"
+    :right-dependency-formula-display="dependencyFormulaDisplayRightSide"
+    :right-parsing-formula-variables="rightDependencyVariablesFormula"
+  ></dev-block>
 </template>
 
 <script>
@@ -136,6 +141,7 @@ export default {
       "classes",
       "parentIsShow",
       "dependencyFormulaDisplay",
+      "iconSettings",
     ]),
   },
   mounted() {

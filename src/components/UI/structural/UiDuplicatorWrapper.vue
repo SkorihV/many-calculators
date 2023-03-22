@@ -3,12 +3,18 @@
     class="calc__duplicator-wrapper"
     v-if="mutationsInputData?.templates.length"
   >
-    <div
-      class="calc__duplicator-label"
-      v-if="mutationsInputData?.label?.length"
+    <icon-element-wrapper
+      :icon-settings="iconSettings"
+      :alt="isExistLabel ? mutationsInputData.label : ''"
     >
-      {{ mutationsInputData?.label }}
-    </div>
+      <div
+        class="calc__duplicator-label"
+        v-if="isExistLabel"
+      >
+        {{ mutationsInputData.label }}
+      </div>
+    </icon-element-wrapper>
+
     <template
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"
@@ -61,6 +67,7 @@
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
@@ -72,7 +79,7 @@ import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServi
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { devBlock, TemplatesWrapper, TemplatesWrapperStructural },
+  components: { devBlock, TemplatesWrapper, TemplatesWrapperStructural, IconElementWrapper },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
@@ -103,6 +110,7 @@ export default {
       "dependencyFormulaDisplay",
       "elementName",
       "positionElement",
+      "iconSettings"
     ]),
   },
   mounted() {
@@ -239,8 +247,7 @@ export default {
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",
-      "showInsideElementStatus",
-      "isStructureTemplate"
+       "isStructureTemplate"
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -435,9 +442,9 @@ export default {
         (itemA, itemB) => itemA.position - itemB.position
       );
     },
-    showDevBlock() {
-      return this.devMode && this.showInsideElementStatus;
-    },
+    isExistLabel() {
+      return Boolean(this.mutationsInputData?.label?.length);
+    }
   },
 };
 </script>

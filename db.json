@@ -1221,6 +1221,21 @@
         "dependencyFormulaDisplay": "radio1 === 1",
         "classes": "",
         "template": "UiDuplicator",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "behaviorImage": "cover",
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "prompt": "Текст подсказки для дупликатора!"
       }
     ]
@@ -1277,7 +1292,7 @@
         "title": "фундамент - Тип строения:",
         "label": "Тип строения:",
         "selectedItem": "1",
-        "isColumn": false,
+        "isColumn": true,
         "isNeedChoice": false,
         "notEmpty": 1,
         "typeDisplayClass": "onlyImage",
@@ -1460,7 +1475,7 @@
         ],
         "prompt": "",
         "label": "Селект 1",
-        "isColumn": false,
+        "isColumn": true,
         "selectedItem": 1,
         "isNeedChoice": false,
         "notEmpty": false,
@@ -1539,6 +1554,7 @@
             "image_height": "0",
             "ext": "svg"
           },
+          "behaviorImage": "cover",
           "maxWidth": 60,
           "maxHeight": 60,
           "location": "rightSide"
@@ -1737,7 +1753,7 @@
         "meta_id": "49242506",
         "ver_id": "2422030",
         "title": "Checkbox  - для цветовых настроек 3",
-        "label": "Блок 4",
+        "label": "",
         "buttonText": "Текст кнопки",
         "buttonTextChecked": "Активная кнопка",
         "cost": "34",
@@ -1852,7 +1868,7 @@
         "showSteps": 1,
         "stepPrompt": "15",
         "isNeedChoice": true,
-        "isColumn": true,
+        "isColumn": false,
         "notEmpty": true,
         "showStaticValue": false,
         "showDynamicValue": 1,
@@ -2196,6 +2212,21 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiAccordion",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "behaviorImage": "cover",
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "parent": "0;"
       },
       {
@@ -2380,6 +2411,21 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiTab",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "behaviorImage": "cover",
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "rightSide"
+        },
         "parent": "0;"
       },
       {
@@ -2489,7 +2535,7 @@
         "dependencyFormulaDisplay": "",
         "dependencyFormulaDisplayLeftSide": "",
         "dependencyFormulaDisplayRightSide": "",
-        "visuallySeparateElement": false,
+        "visuallySeparateElement": true,
         "classes": "",
         "template": "UiBisection",
         "backgroundImageSettings": {
@@ -2596,6 +2642,28 @@
                   "maxWidth": 60,
                   "maxHeight": 60,
                   "location": "leftSide"
+                },
+                "backgroundImageSettings": {
+                  "title": "",
+                  "image": {
+                    "image_id": "731690107",
+                    "filename": "https://azbyka.ru/wp-content/uploads/2016/07/priroda.jpg",
+                    "ver_id": 2422030,
+                    "image_width": "1219",
+                    "image_height": "775",
+                    "ext": "png"
+                  },
+                  "backgroundHorizontalPosition": "right",
+                  "backgroundVerticalPosition": "bottom",
+                  "backgroundRepeat": "no-repeat",
+                  "behaviorImage": "contain",
+                  "fixedSize": 1,
+                  "maxWidth": 540,
+                  "maxHeight": 320,
+                  "unitSize": "px",
+                  "isSubstrate": 1,
+                  "colorSubstrate": "#ffffff",
+                  "opacitySubstrate": 40
                 },
                 "templates": [
                   {
@@ -2938,6 +3006,20 @@
         "template": "UiDuplicator",
         "elementName": "dup",
         "prompt": "ываы аы",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "689303707",
+            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+            "ver_id": 2422030,
+            "image_width": "0",
+            "image_height": "0",
+            "ext": "svg"
+          },
+          "maxWidth": 60,
+          "maxHeight": 60,
+          "location": "leftSide"
+        },
         "parent": "0;"
       }
     ]

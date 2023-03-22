@@ -5,23 +5,17 @@
     :id="elementName"
     ref="parent"
   >
-    <div class="calc__input-wrapper" :class="[classes]">
-      <label
-        :for="localElementName"
-        class="calc__input-label"
-        :class="{ 'is-column': isColumn }"
-      >
-        <div v-if="label" class="calc__input-label-wrapper">
-          <icon-element-wrapper
-            :icon-settings="iconSettings"
-          >
-            <div class="calc__input-label-text">
-              {{ label }}
-              <div class="empty-block" v-if="notEmpty">*</div>
-              <slot name="prompt" />
-            </div>
-          </icon-element-wrapper>
-        </div>
+    <div class="calc__input-wrapper" :class="[classes, {'column': isColumn}]">
+        <icon-element-wrapper
+          :icon-settings="iconSettings"
+          :alt="isExistLabel ? label : ''"
+        >
+          <div class="calc__input-label-text"  v-if="isExistLabel">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt" />
+          </div>
+        </icon-element-wrapper>
         <div class="calc__input-wrapper-data">
           <div
             class="calc__input-buttons-minus"
@@ -33,7 +27,6 @@
           </div>
           <input
             ref="trueInput"
-            :id="localElementName"
             type="text"
             v-model="localInputBufferValue"
             :placeholder="inputPlaceholder"
@@ -75,7 +68,6 @@
           :tooltip-text="tooltipError?.errorText"
           :local-can-be-shown="localCanBeShownTooltip"
         />
-      </label>
     </div>
   </div>
   <dev-block
@@ -181,16 +173,6 @@ export default {
      * Включить кратность шага для поля ввода
      */
     discreteStep: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
-    /**
-     * отображать заголовок и инпут в колонку
-     */
-    isColumn: {
       type: [Boolean, Number],
       default: false,
       validator(value) {
@@ -505,6 +487,9 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
+    isExistLabel() {
+      return Boolean(this.label?.length);
+    },
     isMixedValue() {
       return this.dataType === "mixed"
     },

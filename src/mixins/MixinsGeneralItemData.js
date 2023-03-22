@@ -26,7 +26,6 @@ export const MixinsGeneralItemData = {
     ...mapState(useBaseStore, [
       "isCanShowAllTooltips",
       "devMode",
-      "showInsideElementStatus",
     ]),
     /**
      * Существует список цен с зависимостями

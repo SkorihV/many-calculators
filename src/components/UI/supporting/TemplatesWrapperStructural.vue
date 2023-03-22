@@ -11,6 +11,7 @@
     "
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   />
   <ui-tab
@@ -25,6 +26,7 @@
     "
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   />
   <ui-bisection
@@ -46,6 +48,7 @@
     :dependency-formula-display-right-side="
       template?.dependencyFormulaDisplayRightSide
     "
+    :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   />
 </template>
