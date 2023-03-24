@@ -41,6 +41,7 @@ class Props {
       iconSettings: this.iconSettings(),
       backgroundImageSettings: this.backgroundImageSettings(),
       templates: this.templates(),
+      isStretch: this.isStretch(),
     };
     Props.instance = this;
     return this;
@@ -207,6 +208,16 @@ class Props {
   };
 
   isColumn() {
+    return {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
+    };
+  };
+
+  isStretch() {
     return {
       type: [Boolean, Number],
       default: false,

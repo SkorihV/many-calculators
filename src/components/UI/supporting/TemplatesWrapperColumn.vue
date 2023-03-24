@@ -12,6 +12,7 @@
         ? template?.elementName
         : template?.json_id || 'UiColumns' + index
         "
+      :adaptation-method="template?.adaptationMethod"
       :parent-name="parentName"
       @changedValue="changeValue"
     ></ui-columns>

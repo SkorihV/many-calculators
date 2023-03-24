@@ -23,7 +23,7 @@
         class="calc__select-change-wrapper"
         ref="changeElement"
         :style="[maxWidthSettings]"
-        :class="{ error: isErrorClass }"
+        :class="{ error: isErrorClass, 'stretch' : isStretch }"
       >
         <div
           v-if="currentOption"
@@ -155,6 +155,7 @@ export default {
     },
     ...propsTemplate.getProps([
       "isColumn",
+      "isStretch",
       "isNeedChoice",
       "formOutputMethod",
       "resultOutputMethod",

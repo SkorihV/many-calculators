@@ -119,7 +119,8 @@ export default {
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
-      "globalDependenciesList"
+      "globalDependenciesList",
+      "devMode"
     ]),
     iconSettings() {
       return this.options;

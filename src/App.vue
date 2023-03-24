@@ -996,6 +996,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       margin: 0 10px 10px;
       width: calc(100% - 20px);
       position: relative;
+      flex-direction: column;
     }
   }
   &__error-block {
@@ -1044,6 +1045,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         position: relative;
         gap: 2px;
         flex: 1 1 100%;
+        &.stretch {
+          width: 100%;
+        }
       }
       &.column {
         flex-direction: column;
@@ -1080,12 +1084,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         background: $c_element_bg_color_hover;
         color: $c_element_text_hover;
       }
-      &.is-number {
+      &.number {
         max-width: 150px;
         padding: 20px 15px;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
+      }
+      &.stretch {
+        width: 100%;
+        max-width: none;
       }
 
       &.error {
@@ -1410,6 +1418,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           .calc__select-option-wrapper {
             border-color: $c_base_error_color;
           }
+        }
+        &.stretch {
+          width: 100%;
         }
       }
       &-item {
@@ -1994,7 +2005,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
     &-wrapper {
       display: flex;
-      gap: 8px;
       position: relative;
       width: 100%;
       flex-direction: column;
@@ -2285,6 +2295,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         flex-wrap: wrap;
         width: 100%;
+        &.column {
+          flex-direction: column;
+        }
       }
       &-label {
         @include style-title-main;
@@ -2555,7 +2568,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       align-items: flex-start;
       padding: 10px;
       border: 1px dotted gray;
-      width: calc(100% - 30px);
       margin-bottom: 10px;
       background-color: #fff;
     }

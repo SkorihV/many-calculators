@@ -16,10 +16,12 @@
             <slot name="prompt" />
           </div>
         </icon-element-wrapper>
-        <div class="calc__input-wrapper-data">
+        <div class="calc__input-wrapper-data"
+          :class="{'stretch' : isStretch}"
+        >
           <div
             class="calc__input-buttons-minus"
-            :class="{ disabled: isDisabledMin }"
+            :class="{ disabled: isDisabledMin}"
             v-if="showControlsButton"
             @click="minus"
           >
@@ -36,7 +38,7 @@
             @blur="inputFocus = false"
             @focus="inputFocus = true"
             class="calc__input-item"
-            :class="{ 'is-number': isOnlyNumber, error: isErrorClass }"
+            :class="{ 'number': isOnlyNumber, error: isErrorClass, 'stretch' : isStretch }"
             autocomplete="off"
             v-if="!fakeValueHidden"
           />
@@ -48,7 +50,7 @@
               type="text"
               :value="resultValueDouble"
               class="calc__input-item currency"
-              :class="{ 'is-number': isOnlyNumber, error: isErrorClass }"
+              :class="{ 'number': isOnlyNumber, error: isErrorClass,  'stretch' : isStretch }"
               autocomplete="off"
               :placeholder="inputPlaceholder"
             />
@@ -214,6 +216,7 @@ export default {
       "max",
       "min",
       "isColumn",
+      "isStretch",
       "formOutputMethod",
       "resultOutputMethod",
       "dependencyFormulaDisplay",
