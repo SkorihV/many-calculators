@@ -10,7 +10,16 @@
       :style="{ maxWidth: divideWidthElement }"
       :key="key_in"
     >
+      <templates-wrapper-column
+        v-if="template?.template === 'UiColumns'"
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="itemName + '_' + key_in"
+        :parent-name="elementName"
+        @changedValue="changeValue"
+      />
       <templates-wrapper
+        v-else
         :parent-is-show="parentIsShow"
         :template="template"
         :index="itemName + key_in"
@@ -23,6 +32,7 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -31,7 +41,7 @@ import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiTabItem",
-  components: { BackgroundImageElement, TemplatesWrapper },
+  components: { BackgroundImageElement, TemplatesWrapper, TemplatesWrapperColumn },
   emits: ["changedValue"],
   mounted() {
     this.currentWidthContent = document.body.clientWidth;

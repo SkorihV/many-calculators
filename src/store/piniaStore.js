@@ -7,7 +7,7 @@ export const useBaseStore = defineStore("base", {
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
       reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
-      nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBisection"],
+      nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
       specSymbols: Object.entries({
         "&gt;": ">",
         "&lt;": "<",

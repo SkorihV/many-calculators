@@ -47,21 +47,31 @@
       class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: divideWidthElement }"
     >
-      <templates-wrapper
-        v-for="(template, key_in) in accordionItem?.templates"
-        :key="key_in"
+      <template v-for="(template, key_in) in accordionItem?.templates" :key="key_in">
+      <templates-wrapper-column
+        v-if="template?.template === 'UiColumns'"
         :parent-is-show="parentIsShow"
         :template="template"
         :index="itemIdName + '_' + key_in"
         :parent-name="elementName"
         @changedValue="changeValue"
       />
+      <templates-wrapper
+        v-else
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="itemIdName + '_' + key_in"
+        :parent-name="elementName"
+        @changedValue="changeValue"
+      />
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
@@ -79,6 +89,7 @@ export default {
     UiTooltip,
     UiPrompt,
     TemplatesWrapper,
+    TemplatesWrapperColumn,
   },
   emits: ["changedValue"],
   mounted() {

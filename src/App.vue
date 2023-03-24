@@ -3,7 +3,7 @@
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <templates-wrapper-structural
-          v-if="isStructureTemplate(template.template)"
+          v-if="isStructureTemplate(template?.template)"
           :parent-is-show="true"
           :template="template"
           :index="index"
@@ -27,10 +27,20 @@
           :template-name="template.template"
           :position-element="template?.position"
           :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+          :parent-is-show="true"
+          @changedValue="changeValue"
+        />
+        <templates-wrapper-column
+          v-if="template?.template === 'UiColumns'"
+          :parent-is-show="true"
+          :template="template"
+          :index="index"
+          :parent-name="'calc__app'"
           @changedValue="changeValue"
         />
         <templates-wrapper
           v-else
+          :parent-is-show="true"
           :template="template"
           :index="index"
           @changedValue="changeValue"
@@ -72,7 +82,7 @@
       :formula-variables="resultTextForComputed"
       :local-cost="finalSummaForOutput"
       hidden-value
-    ></dev-block>
+    />
   </div>
   <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
@@ -81,6 +91,7 @@
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
@@ -103,17 +114,18 @@ import {
   getListVariablesMissedInFormula,
 } from "@/servises/UtilityServices.js";
 
-import {updatePositionElementsInBiSection, updatePositionElementsInTabAndAccordion} from "@/servises/UpdatedPositionOnTemplates.js"
+import {updatePositionElementsInBlockSection, updatePositionElementsInTabAndAccordion, updatePositionInBaseTemplates} from "@/servises/UpdatedPositionOnTemplates.js"
 
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices],
   components: {
     TemplatesWrapperStructural,
+    TemplatesWrapperColumn,
+    TemplatesWrapper,
     ResultButtonForComputed,
     ResultBlockForOutput,
     SpinnerElement,
-    TemplatesWrapper,
     UiDuplicator,
     ErrorNamesTemplates,
     devBlock,
@@ -143,72 +155,88 @@ export default {
       );
       this.outOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
     }
-
     /**
      * у всех элементов калькулятора добавляем порядковый номер.
      * @type {*[]}
      */
-    let calculatorTemplatesWitchPositions = [];
-    if (this.outData?.calculatorTemplates?.length) {
+    const calculatorTemplatesWitchPositions = [];
+    const countTemplatesInOutData = this.outData?.calculatorTemplates?.length;
+    if (Boolean(countTemplatesInOutData)) {
       let templatesPositionIndex = 0;
 
       this.outData?.calculatorTemplates.forEach((item) => {
-        let currentItem = item;
+        let currentMainItem = item;
+        const currentMainTemplateName = currentMainItem?.template;
 
-        if (currentItem.template === "UiBisection") {
-          let { newItem, shiftIndex } = updatePositionElementsInBiSection(
-            currentItem,
+        if (currentMainTemplateName === "UiBlockSection") {
+          const { newItem, shiftIndex } = updatePositionElementsInBlockSection(
+            currentMainItem,
             templatesPositionIndex
           );
           templatesPositionIndex = shiftIndex;
           calculatorTemplatesWitchPositions.push(newItem);
         } else if (
-          currentItem.template === "UiTab" ||
-          currentItem.template === "UiAccordion"
+          currentMainTemplateName === "UiTab" ||
+          currentMainTemplateName === "UiAccordion"
         ) {
-          if (currentItem.items?.length) {
-            let { newItem, shiftIndex } = updatePositionElementsInTabAndAccordion(currentItem, templatesPositionIndex);
-            currentItem = newItem;
-            templatesPositionIndex = shiftIndex;
-          }
-          calculatorTemplatesWitchPositions.push(currentItem);
-        } else if (currentItem.template === "UiDuplicator") {
-          let currentDuplicatorItem = currentItem;
-          if (currentDuplicatorItem?.templates?.length) {
+
+          const { newItem, shiftIndex } = updatePositionElementsInTabAndAccordion(currentMainItem, templatesPositionIndex);
+          currentMainItem = newItem;
+          templatesPositionIndex = shiftIndex;
+          calculatorTemplatesWitchPositions.push(currentMainItem);
+
+        } else if (currentMainTemplateName === "UiDuplicator") {
+
+          const currentDuplicatorItem = currentMainItem;
+          const duplicatorTemplates = currentDuplicatorItem?.templates;
+          const lengthDuplicatorTemplates = duplicatorTemplates?.length
+
+          if (Boolean(lengthDuplicatorTemplates)) {
             let currentPositionDuplicatorIndex = 0;
-            let newDuplicatorTemplates = [];
-            for (let r = 0; r < currentDuplicatorItem.templates.length; r++) {
+            const newDuplicatorTemplates = [];
+
+            for (let r = 0; r < lengthDuplicatorTemplates; r++) {
+              const duplicatorItemTemplateName = duplicatorTemplates[r].template;
+              let newTemplate = duplicatorTemplates[r];
+
               if (
-                currentDuplicatorItem.templates[r].template === "UiBisection"
+                duplicatorItemTemplateName === "UiBlockSection"
               ) {
-                let { newItem, shiftIndex } =
-                  updatePositionElementsInBiSection(
-                    currentDuplicatorItem.templates[r],
+                const { newItem, shiftIndex } =
+                  updatePositionElementsInBlockSection(
+                    newTemplate,
                     currentPositionDuplicatorIndex
                   );
                 currentPositionDuplicatorIndex = shiftIndex;
-                newDuplicatorTemplates.push(newItem);
+                newTemplate = newItem;
+              } else if (
+                duplicatorItemTemplateName === "UiTab" ||
+                duplicatorItemTemplateName === "UiAccordion"
+              ) {
+                const {newItem, shiftIndex} = updatePositionElementsInTabAndAccordion(newTemplate, currentPositionDuplicatorIndex);
+                currentPositionDuplicatorIndex = shiftIndex;
+                newTemplate = newItem;
               } else {
-                currentDuplicatorItem.templates[r].position =
-                  currentPositionDuplicatorIndex;
-                currentPositionDuplicatorIndex++;
-                newDuplicatorTemplates.push(currentDuplicatorItem.templates[r]);
+                const {newItem, shiftIndex} = updatePositionInBaseTemplates(newTemplate, currentPositionDuplicatorIndex)
+                currentPositionDuplicatorIndex = shiftIndex;
+                newTemplate = newItem;
               }
+              newDuplicatorTemplates.push(newTemplate);
             }
             currentDuplicatorItem.templates = newDuplicatorTemplates;
-            currentItem.position = templatesPositionIndex;
+            currentMainItem.position = templatesPositionIndex;
             templatesPositionIndex++;
             calculatorTemplatesWitchPositions.push(currentDuplicatorItem);
           }
         } else {
-          currentItem.position = templatesPositionIndex;
-          templatesPositionIndex++;
-          calculatorTemplatesWitchPositions.push(currentItem);
+          const {newItem, shiftIndex} = updatePositionInBaseTemplates(currentMainItem, templatesPositionIndex)
+          templatesPositionIndex = shiftIndex;
+          calculatorTemplatesWitchPositions.push(newItem);
         }
       });
     }
-    this.calculatorTemplates = calculatorTemplatesWitchPositions;
 
+    this.calculatorTemplates = calculatorTemplatesWitchPositions;
     this.formula = this.outOptions?.formula?.length
       ? this.outOptions?.formula
       : "";
@@ -236,7 +264,7 @@ export default {
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
-  },
+    },
   data() {
     return {
       outData: {}, // внешние данные с шаблонами элементов калькулятора
@@ -544,7 +572,7 @@ export default {
      * @returns {*}
      */
     resultTextForComputed() {
-      let resultString = parsingDataInFormulaOnSumma(
+      const resultString = parsingDataInFormulaOnSumma(
         processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
       );
       return resultString?.replace(
@@ -964,6 +992,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     align-items: flex-start;
     margin: 10px;
     &-group-data {
+      display: flex;
       margin: 0 10px 10px;
       width: calc(100% - 20px);
       position: relative;
@@ -1620,7 +1649,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         gap: 2px;
       }
-
     }
 
     &-control {
@@ -2193,16 +2221,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
   }
 
-  &__bisection {
+  &__block-section {
     &-label {
       &-wrapper {
         display: flex;
-        margin: 0 10px 10px 10px;
-        gap: 20px;
+        flex: 1 1 100%;
         border-bottom: 1px dashed $c_decor_border_color;
-        width: calc(100% - 20px);
-        padding-bottom: 10px;
-        align-items: center;
       }
       &_text {
         display: flex;
@@ -2228,8 +2252,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       position: relative;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 10px;
+      gap: 8px;
       width: 100%;
       @include style-decor-border-radius;
       &.isVisualSeparate {
@@ -2240,36 +2263,37 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-content-wrapper {
       position: relative;
       display: flex;
+      flex-direction: column;
       width: 100%;
-      gap: 10px;
-      @media all and (max-width: 768px) {
-        flex-direction: column;
-        align-items: start;
-      }
     }
-    &-left-side-wrapper,
-    &-right-side-wrapper {
-      flex: 1 0 auto;
+  }
+
+  &__columns {
+    &-wrapper {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       width: 100%;
+      gap: 8px;
     }
-    &-left-label,
-    &-right-label {
-      font-size: 16px;
-      color: $c_base_title;
-      width: 100%;
-      padding: 10px;
-      &.desktop {
-        @media all and (max-width: 768px) {
-          display: none;
-        }
+    &-label {
+      &-text {
+        @include style-title-main;
       }
-      &.mobile {
-        @media all and (min-width: 768px) {
-          display: none;
-        }
+    }
+    &-column {
+      &-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      &-label {
+        @include style-title-main;
+      }
+      &-item {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+        width: 100%;
       }
     }
   }

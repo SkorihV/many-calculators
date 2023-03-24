@@ -9,26 +9,26 @@
     ref="parent"
   >
     <div
-      class="calc__bisection-wrapper"
+      class="calc__block-section-wrapper"
       :class="[classes, { isVisualSeparate: isVisualSeparate }]"
     >
       <background-image-element
         v-if="templateData?.backgroundImageSettings"
         :image-settings-data="templateData?.backgroundImageSettings"
       />
-      <div class="calc__bisection-label-wrapper" v-if="isShowLabel">
+      <div class="calc__block-section-label-wrapper" v-if="isShowLabel">
         <icon-element-wrapper
         :icon-settings="iconSettings"
         >
-          <div class="calc__bisection-label-text">
+          <div class="calc__block-section-label-text">
             <div
-              class="calc__bisection-label_main"
+              class="calc__block-section-label_main"
               v-if="templateData?.label?.length"
             >
               {{ templateData?.label }}
             </div>
             <div
-              class="calc__bisection-label_sub"
+              class="calc__block-section-label_sub"
               v-if="templateData?.labelSub?.length"
             >
               {{ templateData?.labelSub }}
@@ -36,24 +36,24 @@
           </div>
         </icon-element-wrapper>
       </div>
-      <div class="calc__bisection-label-desktop">
+      <div class="calc__block-section-label-desktop">
         <div
-          class="calc__bisection-left-label desktop"
+          class="calc__block-section-left-label desktop"
           :style="styleWidthLeftSide"
         >
           {{ templateData?.labelLeft }}
         </div>
-        <div class="calc__bisection-right-label desktop">
+        <div class="calc__block-section-right-label desktop">
           {{ templateData?.labelRight }}
         </div>
       </div>
-      <div class="calc__bisection-content-wrapper">
+      <div class="calc__block-section-content-wrapper">
         <div
           v-show="isShowLeftSide"
-          class="calc__bisection-left-side-wrapper"
+          class="calc__block-section-left-side-wrapper"
           :style="styleWidthLeftSide"
         >
-          <div class="calc__bisection-left-label mobile">
+          <div class="calc__block-section-left-label mobile">
             {{ templateData?.labelLeft }}
           </div>
           <templates-wrapper
@@ -68,10 +68,10 @@
         </div>
         <div
           v-show="isShowRightSide"
-          class="calc__bisection-right-side-wrapper"
+          class="calc__block-section-right-side-wrapper"
           :style="styleWidthRightSide"
         >
-          <div class="calc__bisection-right-label mobile">
+          <div class="calc__block-section-right-label mobile">
             {{ templateData?.labelRight }}
           </div>
           <templates-wrapper
@@ -99,7 +99,7 @@
     :left-parsing-formula-variables="leftDependencyVariablesFormula"
     :right-dependency-formula-display="dependencyFormulaDisplayRightSide"
     :right-parsing-formula-variables="rightDependencyVariablesFormula"
-  ></dev-block>
+  />
 </template>
 
 <script>
@@ -114,7 +114,7 @@ import { mapState } from "pinia";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 export default {
-  name: "UiBisection",
+  name: "UiBlockSection",
   components: { BackgroundImageElement, TemplatesWrapper, devBlock, IconElementWrapper },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],

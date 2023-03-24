@@ -8,6 +8,7 @@ class Props {
     }
     this.propsData = {
       label: this.label(),
+      labelSub: this.labelSub(),
       elementName: this.elementName(),
       classes: this.classes(),
       dependencyFormulaDisplay: this.dependencyFormulaDisplay(),
@@ -38,16 +39,30 @@ class Props {
       zeroValueDisplayIgnore: this.zeroValueDisplayIgnore(),
       baseValue : this.baseValue(),
       iconSettings: this.iconSettings(),
+      backgroundImageSettings: this.backgroundImageSettings(),
+      templates: this.templates(),
     };
     Props.instance = this;
     return this;
   }
 
+  templates() {
+    return {
+      type: Array,
+      default: () => [],
+    }
+  };
 
   /**
    * заголовок
    */
   label() {
+    return {
+      type: String,
+      default: "",
+    };
+  };
+  labelSub() {
     return {
       type: String,
       default: "",
@@ -308,6 +323,12 @@ class Props {
   };
 
   iconSettings() {
+    return {
+      type: Object,
+      default: () => {},
+    }
+  }
+  backgroundImageSettings() {
     return {
       type: Object,
       default: () => {},

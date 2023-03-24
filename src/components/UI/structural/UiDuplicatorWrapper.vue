@@ -26,6 +26,14 @@
         :index="index + '_' + inx"
         @changedValue="changeValue"
       />
+      <templates-wrapper-column
+        v-if="template?.template === 'UiColumns'"
+        :parent-is-show="parentIsShow"
+        :template="template"
+        :index="index + '_' + inx"
+        :parent-name="mutationsInputData.elementName"
+        @changedValue="changeValue"
+      />
       <templates-wrapper
         v-else
         :parent-is-show="parentIsShow"
@@ -65,6 +73,7 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
@@ -79,7 +88,7 @@ import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServi
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { devBlock, TemplatesWrapper, TemplatesWrapperStructural, IconElementWrapper },
+  components: { devBlock, TemplatesWrapper, TemplatesWrapperColumn, TemplatesWrapperStructural, IconElementWrapper },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {

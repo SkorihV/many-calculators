@@ -29,26 +29,22 @@
     :icon-settings="template?.iconSettings"
     @changedValue="changeValue"
   />
-  <ui-bisection
-    v-else-if="template.template === 'UiBisection'"
-    :template-data="template"
+  <ui-block-section
+    v-else-if="template.template === 'UiBlockSection'"
+    :templates-data="template?.templates"
     :label="template?.label"
-    :width-left-side="template?.widthLeftSide"
+    :labelSub="template?.labelSub"
     :classes="template?.classes"
     :element-name="
       template?.elementName?.length
         ? template?.elementName
-        : template?.json_id || 'UiBisection' + index
+        : template?.json_id || 'UiBlockSection' + index
     "
     :parent-is-show="parentIsShow"
+    :visual-separate="template?.visuallySeparateElement"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
-    :dependency-formula-display-left-side="
-      template?.dependencyFormulaDisplayLeftSide
-    "
-    :dependency-formula-display-right-side="
-      template?.dependencyFormulaDisplayRightSide
-    "
     :icon-settings="template?.iconSettings"
+    :background-image-settings="template?.backgroundImageSettings"
     @changedValue="changeValue"
   />
 </template>
@@ -56,7 +52,7 @@
 <script>
 import UiTab from "@/components/UI/structural/UiTab.vue";
 import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
-import UiBisection from "@/components/UI/structural/UiBisection.vue";
+import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
@@ -65,7 +61,7 @@ export default {
   components: {
     UiTab,
     UiAccordion,
-    UiBisection,
+    UiBlockSection,
   },
   props: {
     ...propsTemplate.getProps(["template", "index", "parentIsShow"]),

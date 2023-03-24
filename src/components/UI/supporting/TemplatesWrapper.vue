@@ -195,6 +195,7 @@
     :classes="template?.classes"
     :parent-is-show="parentIsShow"
   ></ui-image>
+
   <ui-system
     v-else-if="template.template === 'UiSystem'"
     :cost="template?.cost"

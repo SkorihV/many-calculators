@@ -38,7 +38,7 @@
     :dependency-formula-display="dependencyFormulaDisplay"
     :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-cost
-  ></dev-block>
+  />
 </template>
 
 <script>
