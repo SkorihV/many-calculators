@@ -11,7 +11,7 @@
   </div>
   <template v-for="(template, index_in) in column?.templates">
     <templates-wrapper
-      :parent-is-show="parentIsShow"
+      :parent-is-show="showColumn"
       :template="template"
       :index="parentName + '_' + idColumn + '_' + index_in"
       :parent-name="parentName"
@@ -25,9 +25,12 @@ import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
+import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+
 export default {
   name: "ColumnElement",
   components:{TemplatesWrapper, IconElementWrapper},
+  mixins: [MixinsForProcessingFormula],
   emits: ['changedValue'],
   props: {
     idColumn:{
@@ -38,7 +41,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    ...propsTemplate.getProps(['parentIsShow', 'parentName', 'template'])
+    ...propsTemplate.getProps(['parentIsShow', 'parentName', 'template', 'dependencyFormulaDisplay'])
   },
   methods: {
     changeValue(data) {
@@ -48,7 +51,10 @@ export default {
   computed: {
     isExistLabel() {
       return this.column?.label?.length
-    }
+    },
+    showColumn() {
+      return Boolean(this.isVisibilityFromDependency && this.parentIsShow );
+    },
   },
 };
 </script>

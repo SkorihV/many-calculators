@@ -19,6 +19,7 @@
           :column="column"
           :id-column="index"
           :parent-name="elementName"
+          :dependency-formula-display="column?.dependencyFormulaDisplay"
           @changedValue="changeValue"
         />
       </div>
