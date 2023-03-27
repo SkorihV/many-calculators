@@ -28,13 +28,7 @@ import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 export default {
   name: "ColumnElement",
   components:{TemplatesWrapper, IconElementWrapper},
-  emits: ['changedValue', 'giveWidthColumn'],
-  mounted() {
-    this.updatedCurrentWidth();
-    window.addEventListener('resize', ()=> {
-        this.updatedCurrentWidth();
-    })
-  },
+  emits: ['changedValue'],
   props: {
     idColumn:{
       type: Number,
@@ -46,48 +40,10 @@ export default {
     },
     ...propsTemplate.getProps(['parentIsShow', 'parentName', 'template'])
   },
-  data() {
-    return {
-      currentWidthElement: null,
-      timerName: null,
-    }
-  },
   methods: {
     changeValue(data) {
       this.$emit("changedValue", data);
     },
-    sizeWidthColumn() {
-      this.$emit('giveWidthColumn',{width: this.currentWidthElement, idColumn: this.idColumn})
-    },
-    updatedCurrentWidth() {
-      if (this.$refs.parent && this.$refs.parent?.offsetWidth !== 0) {
-        this.currentWidthElement = this.$refs.parent.offsetWidth;
-        clearInterval(this.timerName);
-      }
-    }
-  },
-  watch: {
-    currentWidthElement: {
-      handler(newValue) {
-        if( newValue !== null) {
-          this.sizeWidthColumn()
-        }
-      }
-    },
-    parentIsShow: {
-      handler(newValue) {
-        if (newValue) {
-          let step = 0;
-          this.timerName = setInterval(() => {
-            this.updatedCurrentWidth();
-            if (step > 10) {
-              clearInterval(this.timerName);
-            }
-          },500)
-
-        }
-      }
-    }
   },
   computed: {
     isExistLabel() {

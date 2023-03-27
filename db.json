@@ -1339,7 +1339,7 @@
                   "parent": "0;34349707;34349907;"
                 }
               ],
-              "maxWidth": "35",
+              "maxWidth": "25",
               "iconSettings": null,
               "parent": "0;34349707;"
             },
@@ -1429,7 +1429,7 @@
                   "parent": "0;34349707;34349907;"
                 }
               ],
-              "maxWidth": "35",
+              "maxWidth": "25",
               "iconSettings": null,
               "parent": "0;34349707;"
             },
@@ -1452,7 +1452,7 @@
                   "label": "",
                   "defaultImage": {
                     "image_id": "1445105307",
-                    "filename": "image_14.png",
+                    "filename": "https://works-addon.21.oml.ru/d/bathhouse.svg",
                     "ver_id": 4865318,
                     "image_width": "1920",
                     "image_height": "1920",
@@ -1526,7 +1526,7 @@
                   "parent": "0;34349707;34349907;"
                 }
               ],
-              "maxWidth": "30",
+              "maxWidth": "25",
               "iconSettings": null,
               "parent": "0;34349707;"
             },
@@ -1634,7 +1634,7 @@
                   "parent": "0;34349707;34349907;"
                 }
               ],
-              "maxWidth": "35",
+              "maxWidth": "25",
               "iconSettings": null,
               "parent": "0;34349707;"
             }

@@ -1,8 +1,4 @@
 <template>
-  <pre>
-    {{stateColumns}}
-
-  </pre>
   <div class="calc__columns-wrapper"
     ref="parent"
     v-show="showElementColumns"
@@ -16,7 +12,7 @@
         {{ label }}
       </div>
     </icon-element-wrapper>
-    <div class="calc__columns-column-wrapper" :class="{'column': isColumn}">
+    <div class="calc__columns-column-wrapper">
       <div class="calc__columns-column-item" :style="getMaxLengthColumn(index)" v-for="(column, index) in columnListBeforeLimiting" :key="index">
         <column-element
           :parent-is-show="showElementColumns"
@@ -24,7 +20,6 @@
           :id-column="index"
           :parent-name="elementName"
           @changedValue="changeValue"
-          @giveWidthColumn="updateWidthColumn"
         />
       </div>
     </div>
@@ -49,7 +44,7 @@ import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import { watch } from "vue";
+
 export default {
   name: "UiColumns",
   components: { TemplatesWrapper, DevBlock, IconElementWrapper, ColumnElement },
@@ -60,6 +55,12 @@ export default {
     window.addEventListener('resize', ()=> {
       this.updatedCurrentWidth();
     })
+
+    this.columnList.forEach(item => {
+      this.stateColumns.push({maxWidth: item.maxWidth});
+    })
+
+
   },
   props: {
     columnList: {
@@ -71,7 +72,7 @@ export default {
      */
     adaptationMethod: {
       type: String,
-      default: "last",
+      default: "first",
     },
     ...propsTemplate.getProps([
       "label",
@@ -87,7 +88,7 @@ export default {
     return {
       maximumColumns: 4,
       currentWidthElement: null,
-      stateColumns: {},
+      stateColumns: [],
       timerName: null,
     }
   },
@@ -96,39 +97,10 @@ export default {
       this.$emit("changedValue", data);
     },
     getMaxLengthColumn(index) {
-      let columnData = this.stateColumns[index];
-      if (!this.columnListBeforeLimiting[index]?.maxWidth || columnData?.change) {
+      if (!this.stateColumns[index]?.maxWidth) {
         return null;
       }
-
-      // if (this.stateColumns.get(index) && this.adaptationMethod !== 'free'){
-
-        if (columnData?.width < 230) {
-
-          if (this.adaptationMethod === 'first' && (index === 3 || index === 2)) {
-            columnData.change = true;
-            return null;
-          }
-          if (this.adaptationMethod === 'last' && (index === 0 || index === 1)) {
-            columnData.change = true;
-            return null;
-          }
-          if (this.adaptationMethod === 'center' && (index === 0 || index === 3)) {
-            columnData.change = true;
-            return null;
-          }
-        }
-      // }
-
-
-      return `max-width: ${this.columnListBeforeLimiting[index]?.maxWidth}%;`
-    },
-    updateWidthColumn({ width,  idColumn}) {
-      if (idColumn in this.stateColumns) {
-        this.stateColumns[idColumn].width = width;
-      } else {
-        this.stateColumns[idColumn] = {width, change: false}
-      }
+      return `max-width: ${this.stateColumns[index]?.maxWidth}%;`
     },
     updatedCurrentWidth() {
       if (this.$refs.parent && this.$refs.parent?.offsetWidth !== 0) {
@@ -151,6 +123,78 @@ export default {
 
         }
       }
+    },
+    currentWidthElement: {
+      handler(width) {
+        if (width > 880) {
+          this.stateColumns = Object.values(this.stateColumns).map((item, index) => {
+            item.maxWidth = this.columnList[index].maxWidth;
+            return item;
+          })
+        }
+
+        if (width <= 880) {
+          if (this.countColumns === 4 ) {
+            if (['free','first','center'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 33;
+              this.stateColumns[1].maxWidth = 33;
+              this.stateColumns[2].maxWidth = 33;
+              this.stateColumns[3].maxWidth = 100;
+            } else if (['last'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 50;
+              this.stateColumns[1].maxWidth = 50;
+              this.stateColumns[2].maxWidth = 50;
+              this.stateColumns[3].maxWidth = 50;
+            }
+          }
+
+          if (this.countColumns === 3 || this.countColumns === 2) {
+            this.stateColumns = Object.values(this.stateColumns).map(item => {
+              item.maxWidth = this.countColumns === 3 ? 33 : 50;
+              return item;
+            })
+          }
+        }
+
+        if (width <= 660) {
+          if (this.countColumns === 4 ) {
+            if (['free','first','last'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 50;
+              this.stateColumns[1].maxWidth = 50;
+              this.stateColumns[2].maxWidth = 50;
+              this.stateColumns[3].maxWidth = 50;
+            } else if (['center'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 100;
+              this.stateColumns[1].maxWidth = 50;
+              this.stateColumns[2].maxWidth = 50;
+              this.stateColumns[3].maxWidth = 100;
+            }
+          }
+
+          if (this.countColumns === 3 ) {
+            if (['free','first'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 50;
+              this.stateColumns[1].maxWidth = 50;
+              this.stateColumns[2].maxWidth = 100;
+            } else if (['center','last'].includes(this.adaptationMethod)) {
+              this.stateColumns[0].maxWidth = 100;
+              this.stateColumns[1].maxWidth = 50;
+              this.stateColumns[2].maxWidth = 50;
+            }
+          }
+
+          if (this.countColumns === 2 ) {
+            this.stateColumns[0].maxWidth = 50;
+            this.stateColumns[1].maxWidth = 50;
+          }
+        }
+        if (width <= 440) {
+          this.stateColumns = Object.values(this.stateColumns).map(item => {
+            item.maxWidth = 100;
+            return item;
+          })
+        }
+      }
     }
   },
   computed: {
@@ -166,18 +210,6 @@ export default {
     countColumns() {
       return this.columnList?.length
     },
-    isColumn() {
-      // if (this.countColumns === 1 && this.currentWidthElement <= 480) {
-      //   return true;
-      // } else if (this.countColumns === 2 && this.currentWidthElement <= 520) {
-      //   return true;
-      // } else if (this.countColumns === 3 && this.currentWidthElement <= 720) {
-      //   return true;
-      // } else if (this.countColumns === 4 && this.currentWidthElement <= 900) {
-      //   return true;
-      // }
-      return false;
-    }
   }
 
 };
