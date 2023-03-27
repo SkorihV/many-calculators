@@ -7,7 +7,7 @@
       :is-parent-hover="isParentHover"
       :is-parent-selected="isParentSelected"
     />
-    <slot/>
+    <slot />
     <icon-element
       v-if="showRightIcon"
       :alt="alt"
@@ -44,7 +44,7 @@ export default {
     },
     isExistLabel: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   computed: {

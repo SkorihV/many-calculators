@@ -40,7 +40,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
@@ -103,7 +103,9 @@ export default {
       return "max-height:" + this.maxHeight + "px";
     },
     localDataForDisplay() {
-      let url = Boolean(this.defaultImage?.filename?.length) ? this.getImageDir + this.defaultImage?.filename : '';
+      let url = Boolean(this.defaultImage?.filename?.length)
+        ? this.getImageDir + this.defaultImage?.filename
+        : "";
       let dataForOut = {
         label: this.label,
         url: url,

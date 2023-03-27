@@ -1,12 +1,16 @@
 <template>
-  <div class="calc__wrapper-group-data"
-       ref="parent"
-       v-if="isVisibilityFromDependency"
-       :id="elementName"
+  <div
+    class="calc__wrapper-group-data"
+    ref="parent"
+    v-if="isVisibilityFromDependency"
+    :id="elementName"
   >
     <div
       class="calc__select-wrapper"
-      :class="[{ 'column': isColumn || isMakeElementColumn, 'open': isOpen }, classes]"
+      :class="[
+        { column: isColumn || isMakeElementColumn, open: isOpen },
+        classes,
+      ]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettings"
@@ -24,7 +28,7 @@
         class="calc__select-change-wrapper"
         ref="changeElement"
         :style="[maxWidthSettings]"
-        :class="{ error: isErrorClass, 'stretch' : isStretch }"
+        :class="{ error: isErrorClass, stretch: isStretch }"
       >
         <div
           v-if="currentOption"
@@ -104,17 +108,21 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
-import {MixinCurrentWidthElement} from "@/mixins/MixinCurrentWidthElement";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinCurrentWidthElement,
+  ],
   components: { IconElementWrapper, UiTooltip, UiPrompt, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.localElementName, false);
@@ -125,7 +133,7 @@ export default {
       this.localSelectValues.unshift(this.mockOption);
       this.initSelectMockData();
     } else {
-      this.initSelectData()
+      this.initSelectData();
     }
 
     window.addEventListener("click", (e) => {
@@ -204,25 +212,23 @@ export default {
       }
     },
     initSelectData(eventType = "mounted") {
-        if (
-          this.localSelectValues.length
-        ) {
-          this.localSelectedItem = !!parseInt(this.selectedItem)
-            ? parseInt(this.selectedItem) - 1
+      if (this.localSelectValues.length) {
+        this.localSelectedItem = !!parseInt(this.selectedItem)
+          ? parseInt(this.selectedItem) - 1
+          : 0;
+
+        this.currentIndexOption =
+          this.checkedValueOnVoid(this.localSelectedItem) &&
+          this.localSelectedItem < this.localSelectValues.length
+            ? this.localSelectedItem
             : 0;
 
-          this.currentIndexOption =
-            this.checkedValueOnVoid(this.localSelectedItem) &&
-            this.localSelectedItem < this.localSelectValues.length
-              ? this.localSelectedItem
-              : 0;
-
-          this.changeSelect(
-            this.localSelectValues[this.currentIndexOption],
-            this.currentIndexOption,
-            eventType
-          );
-        }
+        this.changeSelect(
+          this.localSelectValues[this.currentIndexOption],
+          this.currentIndexOption,
+          eventType
+        );
+      }
     },
     open() {
       if (
@@ -254,9 +260,9 @@ export default {
 
       this.currentOption = item;
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.changeValue(eventType);
-      },100)
+      }, 100);
       this.close();
     },
     changeValue(eventType = "click") {
@@ -313,15 +319,11 @@ export default {
         for (let i = 0; i < length; i++) {
           let currentOptionItem = this.selectValuesAfterProcessingDependency[i];
           if (currentOptionItem.isShow) {
-            this.changeSelect(
-              currentOptionItem,
-              i,
-              "changeAmountSelectList"
-            );
+            this.changeSelect(currentOptionItem, i, "changeAmountSelectList");
             return;
           }
         }
-      })
+      });
     },
     resetMaxWidthSelectList() {
       this.maxWidthSelectList = null;
@@ -357,14 +359,14 @@ export default {
       handler(newValue, oldValue) {
         if (newValue && !oldValue) {
           if (this.needMockValue) {
-            this.initSelectMockData("dependency")
+            this.initSelectMockData("dependency");
           } else {
-            this.initSelectData("dependency")
+            this.initSelectData("dependency");
           }
         } else {
           this.changeValue("dependency");
         }
-      }
+      },
     },
   },
   computed: {
@@ -410,7 +412,6 @@ export default {
      * @returns {Number|String|*}
      */
     localCost() {
-
       if (
         this.isCurrentIndexOptionsNotExist ||
         !this.isVisibilityFromDependency
@@ -442,7 +443,6 @@ export default {
       return this.currentOption?.selectName;
     },
     currentOptionValue() {
-
       if (
         (this.needMockValue && this.isCurrentIndexOptionsNotExist) ||
         !this.isVisibilityFromDependency

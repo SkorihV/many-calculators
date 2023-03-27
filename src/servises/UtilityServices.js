@@ -169,9 +169,6 @@ const getNameElementsRecursive = function (object) {
   return resultArray;
 };
 
-
-
-
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,

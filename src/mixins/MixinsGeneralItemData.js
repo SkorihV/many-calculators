@@ -23,10 +23,7 @@ export const MixinsGeneralItemData = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, [
-      "isCanShowAllTooltips",
-      "devMode",
-    ]),
+    ...mapState(useBaseStore, ["isCanShowAllTooltips", "devMode"]),
     /**
      * Существует список цен с зависимостями
      * @returns {boolean}

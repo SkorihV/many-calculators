@@ -30,7 +30,7 @@ export default {
     return {
       maxWidth: this.imageSettingsData?.maxWidth || 250,
       maxHeight: this.imageSettingsData?.maxHeight || 250,
-      currentImageUrl: null
+      currentImageUrl: null,
     };
   },
   methods: {
@@ -38,7 +38,7 @@ export default {
       return null;
     },
     getImageAndUpdated(url) {
-      const urlImage = new Promise(function(resolve, reject){
+      const urlImage = new Promise(function (resolve, reject) {
         let img = new Image();
         img.onload = () => {
           resolve(img);
@@ -47,15 +47,15 @@ export default {
           reject(img);
         };
         img.src = url;
-      })
+      });
 
-      urlImage.then(img => {
-          this.currentImageUrl = img.src;
-        });
-      urlImage.catch(img => {
-        console.error("Картина по адресу " +  img.src + " не была загружены");
-      })
-    }
+      urlImage.then((img) => {
+        this.currentImageUrl = img.src;
+      });
+      urlImage.catch((img) => {
+        console.error("Картина по адресу " + img.src + " не была загружены");
+      });
+    },
   },
   watch: {
     urlImageAfterProcessingDependency: {
@@ -64,8 +64,8 @@ export default {
           this.getImageAndUpdated(this.getImageDir + newUrl);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   computed: {
     ...mapState(useBaseStore, ["getImageDir"]),
@@ -88,11 +88,7 @@ export default {
       );
     },
     styleBackgroundImageUrl() {
-      return (
-        'background-image : url("' +
-        this.currentImageUrl +
-        '");'
-      );
+      return 'background-image : url("' + this.currentImageUrl + '");';
     },
     styleBackgroundRepeat() {
       return (
@@ -131,7 +127,9 @@ export default {
       return [];
     },
     urlImageAfterProcessingDependency() {
-      let currentUrl = this.imageSettingsData?.image?.filename.length ? this.imageSettingsData?.image?.filename : false;
+      let currentUrl = this.imageSettingsData?.image?.filename.length
+        ? this.imageSettingsData?.image?.filename
+        : false;
       if (!this.imageSettingsData?.dependencyImages?.length) {
         return currentUrl;
       }
@@ -148,7 +146,7 @@ export default {
 
           try {
             if (eval(formula)) {
-              currentUrl = imageItem.image.filename
+              currentUrl = imageItem.image.filename;
             }
           } catch (e) {
             if (this.devMode) {

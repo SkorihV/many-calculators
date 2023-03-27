@@ -53,7 +53,7 @@
 import UiTab from "@/components/UI/structural/UiTab.vue";
 import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
 import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapperStructural",

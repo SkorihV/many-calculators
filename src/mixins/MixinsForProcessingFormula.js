@@ -63,11 +63,11 @@ export const MixinsForProcessingFormula = {
         const valueIsBool = typeof elementDependency?.value === "boolean";
         const valueIsNull = elementDependency?.value === null;
         const valueIsArray = Array.isArray(elementDependency?.value);
-        const valueIsNum = !isNaN(parseFloat(elementDependency?.value))
+        const valueIsNum = !isNaN(parseFloat(elementDependency?.value));
 
         if (elementIsExist) {
           if (valueIsNum) {
-             return resultText + elementDependency?.value + " ";
+            return resultText + elementDependency?.value + " ";
           } else if (valueIsBool) {
             return resultText + Boolean(elementDependency?.value) + " ";
           } else if (valueIsNull) {
@@ -222,7 +222,6 @@ export const MixinsForProcessingFormula = {
      */
     isVisibilityFromDependency() {
       if (this.isDependencyElementVisibility && this.parentIsShow) {
-
         try {
           return eval(this.formulaAfterProcessingVariables);
         } catch (e) {

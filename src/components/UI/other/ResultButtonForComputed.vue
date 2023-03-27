@@ -28,9 +28,8 @@
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
-import {MixinsUtilityServices} from "@/mixins/MixinsUtilityServices";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-
 
 export default {
   name: "ResultButtonForComputed",
@@ -73,13 +72,13 @@ export default {
         const elementIsExist = elementDependency !== null;
         const valueIsExist = !isNaN(
           parseFloat(elementDependency?.value) &&
-          !Array.isArray(elementDependency?.value) &&
-          typeof elementDependency?.value !== "boolean"
+            !Array.isArray(elementDependency?.value) &&
+            typeof elementDependency?.value !== "boolean"
         );
         const valueIsBool = typeof elementDependency?.value === "boolean";
         const valueIsNull = elementDependency?.value === null;
         const valueIsArray = Array.isArray(elementDependency?.value);
-        const valueIsNum = !isNaN(parseFloat(elementDependency?.value))
+        const valueIsNum = !isNaN(parseFloat(elementDependency?.value));
 
         if (elementIsExist) {
           if (valueIsNum) {
@@ -102,10 +101,7 @@ export default {
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement(newValue) {
-      if (
-        newValue &&
-        this.showResultBtn
-      ) {
+      if (newValue && this.showResultBtn) {
         this.setInitEnabledSendForm(false);
         this.setAllowShowResultBlock(false);
       }
@@ -120,7 +116,7 @@ export default {
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
       "globalDependenciesList",
-      "devMode"
+      "devMode",
     ]),
     iconSettings() {
       return this.options;
@@ -130,28 +126,33 @@ export default {
     },
     showBtn() {
       return (
-         this.showResultBtn &&
-         this.showButtonOnDependency &&
-        !this.checkAllowShowResultBlock
+        this.showResultBtn &&
+        this.showButtonOnDependency &&
+        !this.checkAllowShowResultBlock &&
+        !this.isExistGlobalErrorsValidationIgnoreHiddenElement
       );
     },
     isFormulaDisplayButton() {
       return Boolean(this.resultOptions?.formulaDisplayButton?.length);
     },
     variablesInFormula() {
-      return this.isFormulaDisplayButton ? this.getArrayElementsFromFormula(this.resultOptions?.formulaDisplayButton) : [];
+      return this.isFormulaDisplayButton
+        ? this.getArrayElementsFromFormula(
+            this.resultOptions?.formulaDisplayButton
+          )
+        : [];
     },
     localDependencyList() {
-      let listObject = {}
-      this.variablesInFormula.forEach(name => {
+      let listObject = {};
+      this.variablesInFormula.forEach((name) => {
         if (this.globalDependenciesList[name]) {
-          listObject[name] = this.globalDependenciesList[name]
+          listObject[name] = this.globalDependenciesList[name];
         }
-      })
+      });
       return listObject;
     },
     formulaOnDataVariables() {
-      return this.processingVariablesOnFormula(this.variablesInFormula)
+      return this.processingVariablesOnFormula(this.variablesInFormula);
     },
     /**
      *  рассчитываем формулу через eval
@@ -171,8 +172,10 @@ export default {
       }
     },
     showButtonOnDependency() {
-      return !this.isFormulaDisplayButton ? true : this.isDisplayButtonOnFormulaDependency
-    }
+      return !this.isFormulaDisplayButton
+        ? true
+        : this.isDisplayButtonOnFormulaDependency;
+    },
   },
 };
 </script>

@@ -14,27 +14,19 @@
         :image-settings-data="backgroundImageSettings"
       />
       <div class="calc__block-section-label-wrapper" v-if="isExistLabel">
-        <icon-element-wrapper
-            :icon-settings="iconSettings"
-          >
-            <div class="calc__block-section-label-text">
-              <div
-                class="calc__block-section-label_main"
-                v-if="isExistLabel"
-              >
-                {{ label }}
-              </div>
-              <div
-                class="calc__block-section-label_sub"
-                v-if="isExistLabelSub"
-              >
+        <icon-element-wrapper :icon-settings="iconSettings">
+          <div class="calc__block-section-label-text">
+            <div class="calc__block-section-label_main" v-if="isExistLabel">
+              {{ label }}
+            </div>
+            <div class="calc__block-section-label_sub" v-if="isExistLabelSub">
               {{ labelSub }}
             </div>
           </div>
         </icon-element-wrapper>
       </div>
       <div class="calc__block-section-content-wrapper">
-        <template  v-for="(item, inx) in templatesData" :key="inx">
+        <template v-for="(item, inx) in templatesData" :key="inx">
           <templates-wrapper-column
             v-if="item?.template === 'UiColumns'"
             :parent-is-show="showSection"
@@ -74,14 +66,21 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import UiColumns from "@/components/UI/structural/UiColumns.vue";
 
 export default {
   name: "UiBlockSection",
-  components: { UiColumns, BackgroundImageElement, TemplatesWrapper, devBlock, IconElementWrapper, TemplatesWrapperColumn },
+  components: {
+    UiColumns,
+    BackgroundImageElement,
+    TemplatesWrapper,
+    devBlock,
+    IconElementWrapper,
+    TemplatesWrapperColumn,
+  },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
   props: {
@@ -134,8 +133,12 @@ export default {
       return Boolean(this.visualSeparate);
     },
     showSection() {
-      return Boolean(this.isExistTemplatesData && this.parentIsShow && this.isVisibilityFromDependency);
-    }
+      return Boolean(
+        this.isExistTemplatesData &&
+          this.parentIsShow &&
+          this.isVisibilityFromDependency
+      );
+    },
   },
 };
 </script>

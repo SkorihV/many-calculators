@@ -37,11 +37,15 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiTabItem",
-  components: { BackgroundImageElement, TemplatesWrapper, TemplatesWrapperColumn },
+  components: {
+    BackgroundImageElement,
+    TemplatesWrapper,
+    TemplatesWrapperColumn,
+  },
   emits: ["changedValue"],
   mounted() {
     this.currentWidthContent = document.body.clientWidth;

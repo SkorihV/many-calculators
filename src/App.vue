@@ -114,7 +114,11 @@ import {
   getListVariablesMissedInFormula,
 } from "@/servises/UtilityServices.js";
 
-import {updatePositionElementsInBlockSection, updatePositionElementsInTabAndAccordion, updatePositionInBaseTemplates} from "@/servises/UpdatedPositionOnTemplates.js"
+import {
+  updatePositionElementsInBlockSection,
+  updatePositionElementsInTabAndAccordion,
+  updatePositionInBaseTemplates,
+} from "@/servises/UpdatedPositionOnTemplates.js";
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -179,29 +183,29 @@ export default {
           currentMainTemplateName === "UiTab" ||
           currentMainTemplateName === "UiAccordion"
         ) {
-
-          const { newItem, shiftIndex } = updatePositionElementsInTabAndAccordion(currentMainItem, templatesPositionIndex);
+          const { newItem, shiftIndex } =
+            updatePositionElementsInTabAndAccordion(
+              currentMainItem,
+              templatesPositionIndex
+            );
           currentMainItem = newItem;
           templatesPositionIndex = shiftIndex;
           calculatorTemplatesWitchPositions.push(currentMainItem);
-
         } else if (currentMainTemplateName === "UiDuplicator") {
-
           const currentDuplicatorItem = currentMainItem;
           const duplicatorTemplates = currentDuplicatorItem?.templates;
-          const lengthDuplicatorTemplates = duplicatorTemplates?.length
+          const lengthDuplicatorTemplates = duplicatorTemplates?.length;
 
           if (Boolean(lengthDuplicatorTemplates)) {
             let currentPositionDuplicatorIndex = 0;
             const newDuplicatorTemplates = [];
 
             for (let r = 0; r < lengthDuplicatorTemplates; r++) {
-              const duplicatorItemTemplateName = duplicatorTemplates[r].template;
+              const duplicatorItemTemplateName =
+                duplicatorTemplates[r].template;
               let newTemplate = duplicatorTemplates[r];
 
-              if (
-                duplicatorItemTemplateName === "UiBlockSection"
-              ) {
+              if (duplicatorItemTemplateName === "UiBlockSection") {
                 const { newItem, shiftIndex } =
                   updatePositionElementsInBlockSection(
                     newTemplate,
@@ -213,11 +217,18 @@ export default {
                 duplicatorItemTemplateName === "UiTab" ||
                 duplicatorItemTemplateName === "UiAccordion"
               ) {
-                const {newItem, shiftIndex} = updatePositionElementsInTabAndAccordion(newTemplate, currentPositionDuplicatorIndex);
+                const { newItem, shiftIndex } =
+                  updatePositionElementsInTabAndAccordion(
+                    newTemplate,
+                    currentPositionDuplicatorIndex
+                  );
                 currentPositionDuplicatorIndex = shiftIndex;
                 newTemplate = newItem;
               } else {
-                const {newItem, shiftIndex} = updatePositionInBaseTemplates(newTemplate, currentPositionDuplicatorIndex)
+                const { newItem, shiftIndex } = updatePositionInBaseTemplates(
+                  newTemplate,
+                  currentPositionDuplicatorIndex
+                );
                 currentPositionDuplicatorIndex = shiftIndex;
                 newTemplate = newItem;
               }
@@ -229,7 +240,10 @@ export default {
             calculatorTemplatesWitchPositions.push(currentDuplicatorItem);
           }
         } else {
-          const {newItem, shiftIndex} = updatePositionInBaseTemplates(currentMainItem, templatesPositionIndex)
+          const { newItem, shiftIndex } = updatePositionInBaseTemplates(
+            currentMainItem,
+            templatesPositionIndex
+          );
           templatesPositionIndex = shiftIndex;
           calculatorTemplatesWitchPositions.push(newItem);
         }
@@ -246,7 +260,9 @@ export default {
     this.methodWorksForm = this.outOptions?.methodWorksForm
       ? this.outOptions.methodWorksForm
       : "show";
-    this.existFormulaForHiddenResultButton = Boolean(this.outOptions?.resultOptions?.formulaDisplayButton?.length);
+    this.existFormulaForHiddenResultButton = Boolean(
+      this.outOptions?.resultOptions?.formulaDisplayButton?.length
+    );
 
     this.setMethodBeginningCalculation(this.outOptions);
     this.setCurrency(this.outOptions);
@@ -264,7 +280,7 @@ export default {
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
-    },
+  },
   data() {
     return {
       outData: {}, // внешние данные с шаблонами элементов калькулятора
@@ -288,7 +304,7 @@ export default {
       submitResult: null,
       eventSubmittingFormAdded: null,
       intervalName: null,
-      existFormulaForHiddenResultButton: false
+      existFormulaForHiddenResultButton: false,
     };
   },
   methods: {
@@ -320,7 +336,11 @@ export default {
         this.showAllTooltipsOn();
         this.setAllowShowResultBlock(true);
       }
-      if (!this.eventNotShowTooltips.includes(eventType) && this.existFormulaForHiddenResultButton && this.methodBeginningCalculationIsButton) {
+      if (
+        !this.eventNotShowTooltips.includes(eventType) &&
+        this.existFormulaForHiddenResultButton &&
+        this.methodBeginningCalculationIsButton
+      ) {
         this.showAllTooltipsOn();
       }
 
@@ -405,7 +425,6 @@ export default {
         const teleportField = this.formElement.querySelector("#teleport");
         this.teleportField = teleportField ? teleportField : null;
       }
-
     },
     setReadOnlyForTeleportField() {
       if (this.teleportField) {
@@ -438,12 +457,12 @@ export default {
         if (this.teleportField) {
           this.findTeleportField();
         }
-        if (this.teleportField ) {
-          this.teleportField.style.display = 'block';
+        if (this.teleportField) {
+          this.teleportField.style.display = "block";
         }
       }
       if (!this.showInsideElementStatus && this.teleportField) {
-        this.teleportField.style.display = 'none';
+        this.teleportField.style.display = "none";
       }
     },
     tryPassDependency(name, value, isShow, displayValue, type) {
@@ -455,7 +474,6 @@ export default {
         type,
       });
     },
-
   },
   watch: {
     isExistGlobalErrorsValidationIgnoreHiddenElement() {
@@ -476,10 +494,10 @@ export default {
     showErrorSummaBlock: {
       handler(newValue) {
         if (newValue) {
-          this.setAllowShowResultBlock(false)
+          this.setAllowShowResultBlock(false);
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -507,7 +525,7 @@ export default {
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
       "isStructureTemplate",
-      "tryAddDependencyElement"
+      "tryAddDependencyElement",
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
@@ -556,7 +574,13 @@ export default {
     dataListVariablesOnFormula() {
       return this.variablesInFormula?.map((item) => {
         if (item === this.getNameReserveVariable) {
-          this.tryPassDependency("_otherSum_", this.summaFreeVariables, Boolean(this.summaFreeVariables !== null), this.summaFreeVariables, "_otherSum_");
+          this.tryPassDependency(
+            "_otherSum_",
+            this.summaFreeVariables,
+            Boolean(this.summaFreeVariables !== null),
+            this.summaFreeVariables,
+            "_otherSum_"
+          );
           return this.getProxyFreeVariables(this.summaFreeVariables);
         } else {
           const data = this.baseDataForCalculate.filter(
@@ -682,7 +706,10 @@ export default {
      * @returns {*|boolean}
      */
     finalSummaForOutput() {
-      if (!this.displayResultData || this.isExistGlobalErrorsValidationIgnoreHiddenElement) {
+      if (
+        !this.displayResultData ||
+        this.isExistGlobalErrorsValidationIgnoreHiddenElement
+      ) {
         this.tryPassDependency("_globalSum_", null, false, null, "App_calc");
         return null;
       }
@@ -697,7 +724,13 @@ export default {
           return sum + 0;
         }, 0);
       }
-      this.tryPassDependency("_globalSum_", resultSum, Boolean(resultSum !== null), resultSum, "App_calc");
+      this.tryPassDependency(
+        "_globalSum_",
+        resultSum,
+        Boolean(resultSum !== null),
+        resultSum,
+        "App_calc"
+      );
       return resultSum;
     },
     /**
@@ -744,7 +777,7 @@ export default {
     showErrorTextBlock() {
       return Boolean(
         this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-        this.isCanShowAllTooltips
+          this.isCanShowAllTooltips
       );
     },
     isEnabledSendForm() {
@@ -762,16 +795,16 @@ export default {
     allowTeleport() {
       return Boolean(
         this.submitResult &&
-        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-        this.checkInitEnabledSendForm
+          !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
+          this.checkInitEnabledSendForm
       );
     },
     showErrorSummaBlock() {
       return Boolean(
         (this.finalSummaForOutput === null ||
           this.finalSummaForOutput === false) &&
-        this.isCanShowAllTooltips &&
-        this.displayResultData
+          this.isCanShowAllTooltips &&
+          this.displayResultData
       );
     },
     showFormIsAllow() {
@@ -785,8 +818,8 @@ export default {
 
       return Boolean(
         !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-        this.checkInitEnabledSendForm &&
-        this.checkAllowShowResultBlock
+          this.checkInitEnabledSendForm &&
+          this.checkAllowShowResultBlock
       );
     },
   },
@@ -1522,7 +1555,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__radio {
     &-wrapper {
       @include style-element-main-wrapper;
-    &-buttons {
+      &-buttons {
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
@@ -2211,7 +2244,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           color: $c_decor_text_default;
         }
         .calc__prompt-wrapper {
-          @include style-prompt-absolute-shift;;
+          @include style-prompt-absolute-shift;
         }
       }
       &-content-wrapper {

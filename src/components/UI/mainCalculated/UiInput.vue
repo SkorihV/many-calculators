@@ -5,72 +5,81 @@
     :id="elementName"
     ref="parent"
   >
-    <div class="calc__input-wrapper" :class="[classes, {'column': isColumn || isMakeElementColumn}]">
-        <icon-element-wrapper
-          :icon-settings="iconSettings"
-          :alt="isExistLabel ? label : ''"
-          :isExistLabel="isExistLabel"
+    <div
+      class="calc__input-wrapper"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+    >
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
+      >
+        <div class="calc__input-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt" />
+        </div>
+      </icon-element-wrapper>
+      <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
+        <div
+          class="calc__input-buttons-minus"
+          :class="{ disabled: isDisabledMin }"
+          v-if="showControlsButton"
+          @click="minus"
         >
-          <div class="calc__input-label-text"  v-if="isExistLabel">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt" />
-          </div>
-        </icon-element-wrapper>
-        <div class="calc__input-wrapper-data"
-          :class="{'stretch' : isStretch}"
-        >
-          <div
-            class="calc__input-buttons-minus"
-            :class="{ disabled: isDisabledMin}"
-            v-if="showControlsButton"
-            @click="minus"
-          >
-            -
-          </div>
+          -
+        </div>
+        <input
+          ref="trueInput"
+          type="text"
+          v-model="localInputBufferValue"
+          :placeholder="inputPlaceholder"
+          @keydown.enter="trueTrueValue"
+          @keydown.up="plus"
+          @keydown.down="minus"
+          @blur="inputFocus = false"
+          @focus="inputFocus = true"
+          class="calc__input-item"
+          :class="{
+            number: isOnlyNumber,
+            error: isErrorClass,
+            stretch: isStretch,
+          }"
+          autocomplete="off"
+          v-if="!fakeValueHidden"
+        />
+        <template v-if="fakeValueHidden">
           <input
-            ref="trueInput"
-            type="text"
-            v-model="localInputBufferValue"
-            :placeholder="inputPlaceholder"
-            @keydown.enter="trueTrueValue"
-            @keydown.up="plus"
-            @keydown.down="minus"
+            @click="showTrueValue"
             @blur="inputFocus = false"
             @focus="inputFocus = true"
-            class="calc__input-item"
-            :class="{ 'number': isOnlyNumber, error: isErrorClass, 'stretch' : isStretch }"
+            type="text"
+            :value="resultValueDouble"
+            class="calc__input-item currency"
+            :class="{
+              number: isOnlyNumber,
+              error: isErrorClass,
+              stretch: isStretch,
+            }"
             autocomplete="off"
-            v-if="!fakeValueHidden"
+            :placeholder="inputPlaceholder"
           />
-          <template v-if="fakeValueHidden">
-            <input
-              @click="showTrueValue"
-              @blur="inputFocus = false"
-              @focus="inputFocus = true"
-              type="text"
-              :value="resultValueDouble"
-              class="calc__input-item currency"
-              :class="{ 'number': isOnlyNumber, error: isErrorClass,  'stretch' : isStretch }"
-              autocomplete="off"
-              :placeholder="inputPlaceholder"
-            />
-          </template>
-          <div
-            class="calc__input-buttons-plus"
-            :class="{ disabled: isDisabledMax }"
-            v-if="showControlsButton"
-            @click="plus"
-          >
-            +
-          </div>
-          <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+        </template>
+        <div
+          class="calc__input-buttons-plus"
+          :class="{ disabled: isDisabledMax }"
+          v-if="showControlsButton"
+          @click="plus"
+        >
+          +
         </div>
-        <ui-tooltip
-          :is-show="Boolean(tooltipError?.error)"
-          :tooltip-text="tooltipError?.errorText"
-          :local-can-be-shown="localCanBeShownTooltip"
-        />
+        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+      </div>
+      <ui-tooltip
+        :is-show="Boolean(tooltipError?.error)"
+        :tooltip-text="tooltipError?.errorText"
+        :local-can-be-shown="localCanBeShownTooltip"
+      />
     </div>
   </div>
   <dev-block
@@ -95,12 +104,16 @@ import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiInput",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinCurrentWidthElement,
+  ],
   components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
     /**
@@ -225,7 +238,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   created() {
@@ -235,7 +248,7 @@ export default {
     if (this.isOnlyNumber && this.localMin > Number(this.inputValue)) {
       this.localInputValue = this.localMin;
       this.changeValue("mounted");
-    } else if(this.isOnlyNumber && this.localMax < Number(this.inputValue)) {
+    } else if (this.isOnlyNumber && this.localMax < Number(this.inputValue)) {
       this.localInputValue = this.localMax;
       this.changeValue("mounted");
     } else if (this.isOnlyNumber) {
@@ -275,7 +288,7 @@ export default {
       try {
         this.clearTimer(this.nameTimer);
 
-        this.localInputValue = parseFloat(this.localInputValue)
+        this.localInputValue = parseFloat(this.localInputValue);
 
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
@@ -298,9 +311,9 @@ export default {
         }
 
         if (this.discreteStep) {
-            this.localInputValue =
-              Math.round(parseFloat(this.localInputValue) / this.step) *
-              this.step;
+          this.localInputValue =
+            Math.round(parseFloat(this.localInputValue) / this.step) *
+            this.step;
         } else {
           this.localInputValue = parseFloat(this.localInputValue);
         }
@@ -315,7 +328,9 @@ export default {
             : null;
         }
 
-        this.localInputValue = this.updateValueAfterSignComma(this.localInputValue);
+        this.localInputValue = this.updateValueAfterSignComma(
+          this.localInputValue
+        );
 
         if (!this.inputFocus) {
           this.localInputBufferValue = this.localInputValue;
@@ -331,7 +346,9 @@ export default {
     changeValue(eventType = "input") {
       this.$emit("changedValue", {
         value: this.resultValue?.toString()?.length ? this.resultValue : null,
-        displayValue: this.resultValue?.toString()?.length ? this.resultValue : null,
+        displayValue: this.resultValue?.toString()?.length
+          ? this.resultValue
+          : null,
         name: this.localElementName,
         type: "input",
         cost: this.localCost,
@@ -386,7 +403,9 @@ export default {
         name: this.localElementName,
         value: this.resultValue?.toString()?.length ? this.resultValue : null,
         isShow: this.isVisibilityFromDependency,
-        displayValue: this.resultValue?.toString()?.length ? this.resultValue : null,
+        displayValue: this.resultValue?.toString()?.length
+          ? this.resultValue
+          : null,
         type: "input",
       });
     },
@@ -429,7 +448,7 @@ export default {
       if (this.checkedValueOnVoid(this.localMax)) {
         value = value <= this.localMax ? value : this.localMax;
       }
-      value = this.updateValueAfterSignComma(value)
+      value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
       this.changeValue("plus");
@@ -447,14 +466,16 @@ export default {
       if (this.checkedValueOnVoid(this.localMin)) {
         value = value >= this.localMin ? value : this.localMin;
       }
-      value = this.updateValueAfterSignComma(value)
+      value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
       this.changeValue("minus");
       this.shownTooltip();
     },
     updateValueAfterSignComma(value) {
-      return this.needFixedResult ? parseFloat(value.toFixed(this.numberSignsAfterComma)) : value;
+      return this.needFixedResult
+        ? parseFloat(value.toFixed(this.numberSignsAfterComma))
+        : value;
     },
     shownTooltip() {
       if (!this.canBeShownTooltip) {
@@ -481,8 +502,8 @@ export default {
           this.changeValue();
           this.shownTooltip();
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -496,7 +517,7 @@ export default {
       return Boolean(this.label?.length);
     },
     isMixedValue() {
-      return this.dataType === "mixed"
+      return this.dataType === "mixed";
     },
     onlyNumberValue() {
       return this.dataType === "onlyNumber";
@@ -505,10 +526,14 @@ export default {
       return this.dataType === "onlyInteger";
     },
     localMax() {
-      return this.checkedValueOnVoid(this.max) && !this.isMixedValue ? Number(this.max) : null;
+      return this.checkedValueOnVoid(this.max) && !this.isMixedValue
+        ? Number(this.max)
+        : null;
     },
     localMin() {
-      return this.checkedValueOnVoid(this.min) && !this.isMixedValue ? Number(this.min) : null;
+      return this.checkedValueOnVoid(this.min) && !this.isMixedValue
+        ? Number(this.min)
+        : null;
     },
     localStep() {
       return this.checkedValueOnVoid(this.step) ? Number(this.step) : 1;
@@ -635,11 +660,15 @@ export default {
       return this.updatedCostForOut(this.cost);
     },
     needFixedResult() {
-      return Boolean((this.discreteStep || this.controls) &&  this.onlyNumberValue);
+      return Boolean(
+        (this.discreteStep || this.controls) && this.onlyNumberValue
+      );
     },
     numberSignsAfterComma() {
-       return this.step.toString().includes(".") && this.needFixedResult ? this.step.toString().split(".").pop().length : 0;
-    }
+      return this.step.toString().includes(".") && this.needFixedResult
+        ? this.step.toString().split(".").pop().length
+        : 0;
+    },
   },
 };
 </script>

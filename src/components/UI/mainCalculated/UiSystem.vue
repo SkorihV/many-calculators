@@ -17,7 +17,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiSystem",

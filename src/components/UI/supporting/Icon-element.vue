@@ -1,6 +1,12 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
-    <img class="calc__icon_normal" :style="[behaviorImage]" v-if="showIcon" :src="urlIcon" :alt="alt" />
+    <img
+      class="calc__icon_normal"
+      :style="[behaviorImage]"
+      v-if="showIcon"
+      :src="urlIcon"
+      :alt="alt"
+    />
     <img
       class="calc__icon_hover"
       :style="[behaviorImage]"
@@ -70,7 +76,7 @@ export default {
         ? this.iconSettings.behaviorImage
         : "contain";
 
-      return "object-fit:" + behaviorImage + ";"
+      return "object-fit:" + behaviorImage + ";";
     },
     showIcon() {
       return !this.showHoverIcon && !this.showSelectedIcon;

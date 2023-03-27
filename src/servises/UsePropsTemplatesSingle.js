@@ -3,7 +3,7 @@
  */
 class Props {
   constructor() {
-    if (typeof Props.instance === 'object') {
+    if (typeof Props.instance === "object") {
       return Props.instance;
     }
     this.propsData = {
@@ -37,7 +37,7 @@ class Props {
       unit: this.unit(),
       positionElement: this.positionElement(),
       zeroValueDisplayIgnore: this.zeroValueDisplayIgnore(),
-      baseValue : this.baseValue(),
+      baseValue: this.baseValue(),
       iconSettings: this.iconSettings(),
       backgroundImageSettings: this.backgroundImageSettings(),
       templates: this.templates(),
@@ -51,8 +51,8 @@ class Props {
     return {
       type: Array,
       default: () => [],
-    }
-  };
+    };
+  }
 
   /**
    * заголовок
@@ -62,25 +62,25 @@ class Props {
       type: String,
       default: "",
     };
-  };
+  }
   labelSub() {
     return {
       type: String,
       default: "",
     };
-  };
-  elementName(){
+  }
+  elementName() {
     return {
       type: String,
       default: Math.random().toString(),
     };
-  };
+  }
   classes() {
     return {
       type: String,
       default: null,
     };
-  };
+  }
 
   /**
    * Формула на результатах вычисления которой будет строиться результат отображения элемента
@@ -91,70 +91,70 @@ class Props {
       type: String,
       default: "",
     };
-  };
+  }
 
   parentIsShow() {
     return {
       type: Boolean,
       default: true,
     };
-  };
+  }
 
-  prompt(){
+  prompt() {
     return {
       type: String,
       default: null,
     };
-  };
+  }
 
   maxWidthSide() {
     return {
       type: [Number, String],
       default: 50,
     };
-  };
+  }
 
   maxWidth() {
     return {
       type: [Number, String],
       default: 50,
     };
-  };
+  }
 
   maxHeight() {
     return {
       type: [Number, String],
       default: 50,
     };
-  };
+  }
 
   templateName() {
     return {
       type: String,
       default: null,
     };
-  };
+  }
 
   template() {
     return {
       type: Object,
       default: null,
     };
-  };
+  }
 
   formulaProcessingLogic() {
     return {
       type: String,
       default: "error",
     };
-  };
+  }
 
   parentName() {
     return {
       type: String,
       default: null,
     };
-  };
+  }
 
   /**
    * Исключить элемент из расчета по формуле
@@ -167,7 +167,7 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
   /**
    * элемент не может быть пустым и требуется выбор
    */
@@ -179,14 +179,14 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
 
   index() {
     return {
       type: [Number, String],
       default: null,
     };
-  };
+  }
 
   cost() {
     return {
@@ -196,7 +196,7 @@ class Props {
         return !isNaN(Number(value));
       },
     };
-  };
+  }
   /**
    * Список цен с зависимостями / условиями
    */
@@ -205,7 +205,7 @@ class Props {
       type: Array,
       default: () => [],
     };
-  };
+  }
 
   isColumn() {
     return {
@@ -215,7 +215,7 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
 
   isStretch() {
     return {
@@ -225,7 +225,7 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
 
   /**
    * По умолчанию не выбрано - нужно сделать выбор.
@@ -238,7 +238,7 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
   /**
    * метод вывода данных в результирующую форму
    */
@@ -247,7 +247,7 @@ class Props {
       type: String,
       default: "no",
     };
-  };
+  }
 
   /**
    * метод вывода данных в результирующий блок
@@ -257,7 +257,7 @@ class Props {
       type: String,
       default: "no",
     };
-  };
+  }
 
   /**
    *     Всегда включена. Отключить нельзя
@@ -270,14 +270,14 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
 
   formula() {
     return {
       type: String,
       default: "",
     };
-  };
+  }
 
   min() {
     return {
@@ -287,7 +287,7 @@ class Props {
         return !isNaN(Number(value));
       },
     };
-  };
+  }
 
   max() {
     return {
@@ -297,21 +297,21 @@ class Props {
         return !isNaN(Number(value));
       },
     };
-  };
+  }
 
   unit() {
     return {
       type: String,
       default: "",
     };
-  };
+  }
 
   positionElement() {
     return {
       type: Number,
       default: 0,
     };
-  };
+  }
 
   /**
    * Игнорировать пустое значение при выводе в результат
@@ -325,25 +325,25 @@ class Props {
         return value === false || value === true || value === 0 || value === 1;
       },
     };
-  };
+  }
   baseValue() {
     return {
       type: String,
       default: "default",
     };
-  };
+  }
 
   iconSettings() {
     return {
       type: Object,
       default: () => {},
-    }
+    };
   }
   backgroundImageSettings() {
     return {
       type: Object,
       default: () => {},
-    }
+    };
   }
 
   getProps(props) {

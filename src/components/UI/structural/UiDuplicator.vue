@@ -1,8 +1,9 @@
 <template>
-  <div class="calc__wrapper-group-data"
-       :class="classes"
-       v-show="isVisibilityFromDependency"
-       :id="elementName"
+  <div
+    class="calc__wrapper-group-data"
+    :class="classes"
+    v-show="isVisibilityFromDependency"
+    :id="elementName"
   >
     <div class="calc__duplicator">
       <ui-duplicator-wrapper
@@ -41,10 +42,10 @@ import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { mapState } from "pinia";
-import {useBaseStore} from "@/store/piniaStore";
+import { useBaseStore } from "@/store/piniaStore";
 
 import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
@@ -151,7 +152,7 @@ export default {
         name: this.elementName,
         type: "duplicator",
         label: this.duplicateTemplate.label,
-        cost:  this.localCost,
+        cost: this.localCost,
         value: this.localCost,
         displayValue: this.localCost,
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
@@ -197,7 +198,7 @@ export default {
     },
     countElementsDuple() {
       return this.localTemplates?.length ? this.localTemplates?.length : 0;
-    }
+    },
   },
 };
 </script>

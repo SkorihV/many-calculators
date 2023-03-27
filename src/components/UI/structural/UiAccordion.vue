@@ -5,13 +5,11 @@
     :id="elementName"
     ref="parent"
   >
-    <div
-      class="calc__accordion-wrapper"
-      :class="[classes]"
-    >
+    <div class="calc__accordion-wrapper" :class="[classes]">
       <icon-element-wrapper
-      :icon-settings="iconSettings"
-      :alt="isExistLabel ? accordionData?.label : ''">
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? accordionData?.label : ''"
+      >
         <div class="calc__accordion-main-label" v-if="isExistLabel">
           {{ label }}
         </div>
@@ -46,7 +44,7 @@ import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 export default {
@@ -69,7 +67,7 @@ export default {
       "classes",
       "parentIsShow",
       "dependencyFormulaDisplay",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   data() {
@@ -103,8 +101,8 @@ export default {
       return result.some((item) => item);
     },
     isExistLabel() {
-      return Boolean(this.label?.length)
-    }
+      return Boolean(this.label?.length);
+    },
   },
 };
 </script>

@@ -7,7 +7,7 @@
   >
     <div
       class="calc__checkbox-wrapper"
-      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettings"
@@ -19,9 +19,7 @@
           <div class="empty-block" v-if="isNeedChoice">*</div>
         </div>
       </icon-element-wrapper>
-      <div
-        @click="inputLocalValue"
-        class="calc__checkbox-control-wrapper">
+      <div @click="inputLocalValue" class="calc__checkbox-control-wrapper">
         <div
           class="calc__checkbox-control-button"
           v-if="isButton"
@@ -49,7 +47,9 @@
             <template v-if="isBase">
               {{ currentLocalTextButton }}
             </template>
-            <div class="empty-block" v-if="!label?.length && isNeedChoice">*</div>
+            <div class="empty-block" v-if="!label?.length && isNeedChoice">
+              *
+            </div>
             <slot name="prompt"></slot>
           </div>
           <div
@@ -101,12 +101,16 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiCheckbox",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinCurrentWidthElement,
+  ],
   components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
     /**
@@ -158,8 +162,8 @@ export default {
     this.tryToggleElementIsMounted(this.elementName, false);
   },
   mounted() {
-    this.checkboxValue = this.baseValue === 'active';
-    this.isChecked = this.baseValue === 'selected';
+    this.checkboxValue = this.baseValue === "active";
+    this.isChecked = this.baseValue === "selected";
 
     if (!this.isNeedChoice) {
       this.isLocalChecked = Boolean(this.checkboxValue || this.isChecked);
@@ -183,7 +187,7 @@ export default {
       isLocalChecked: null,
       textErrorNotEmpty: "Обязательное поле.",
       canBeShownTooltip: false,
-      isChecked: false,  // активирована
+      isChecked: false, // активирована
       checkboxValue: false, // начальное значение
     };
   },
@@ -269,7 +273,9 @@ export default {
   watch: {
     isVisibilityFromDependency(value) {
       if (value) {
-        this.isLocalChecked = !this.isNeedChoice ? Boolean(this.checkboxValue || this.isChecked) : null;
+        this.isLocalChecked = !this.isNeedChoice
+          ? Boolean(this.checkboxValue || this.isChecked)
+          : null;
       } else {
         this.isLocalChecked = null;
       }
@@ -329,8 +335,8 @@ export default {
     isErrorClass() {
       return Boolean(
         this.isErrorEmpty &&
-        this.isVisibilityFromDependency &&
-        this.isCanShowAllTooltips
+          this.isVisibilityFromDependency &&
+          this.isCanShowAllTooltips
       );
     },
     /**

@@ -225,7 +225,7 @@ import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox.vue";
 import UiImage from "@/components/UI/mainCalculated/UiImage.vue";
 import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapper",
@@ -241,7 +241,12 @@ export default {
     UiSystem,
   },
   props: {
-    ...propsTemplate.getProps(["template", "index", "parentIsShow", "parentName"]),
+    ...propsTemplate.getProps([
+      "template",
+      "index",
+      "parentIsShow",
+      "parentName",
+    ]),
   },
   methods: {
     changeValue(data) {

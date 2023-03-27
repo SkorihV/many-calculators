@@ -4,7 +4,7 @@
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"
-    :class="{ 'open': isOpen, 'error': isShowError && !isOpen }"
+    :class="{ open: isOpen, error: isShowError && !isOpen }"
     @mouseover="hoverElement = true"
     @mouseleave="hoverElement = false"
   >
@@ -47,23 +47,26 @@
       class="calc__accordion-item-content-wrapper"
       :style="{ maxWidth: divideWidthElement }"
     >
-      <template v-for="(template, key_in) in accordionItem?.templates" :key="key_in">
-      <templates-wrapper-column
-        v-if="template?.template === 'UiColumns'"
-        :parent-is-show="parentIsShow"
-        :template="template"
-        :index="itemIdName + '_' + key_in"
-        :parent-name="elementName"
-        @changedValue="changeValue"
-      />
-      <templates-wrapper
-        v-else
-        :parent-is-show="parentIsShow"
-        :template="template"
-        :index="itemIdName + '_' + key_in"
-        :parent-name="elementName"
-        @changedValue="changeValue"
-      />
+      <template
+        v-for="(template, key_in) in accordionItem?.templates"
+        :key="key_in"
+      >
+        <templates-wrapper-column
+          v-if="template?.template === 'UiColumns'"
+          :parent-is-show="parentIsShow"
+          :template="template"
+          :index="itemIdName + '_' + key_in"
+          :parent-name="elementName"
+          @changedValue="changeValue"
+        />
+        <templates-wrapper
+          v-else
+          :parent-is-show="parentIsShow"
+          :template="template"
+          :index="itemIdName + '_' + key_in"
+          :parent-name="elementName"
+          @changedValue="changeValue"
+        />
       </template>
     </div>
   </div>
@@ -77,7 +80,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 

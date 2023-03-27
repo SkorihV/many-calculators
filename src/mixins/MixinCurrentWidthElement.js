@@ -1,4 +1,4 @@
-export const MixinCurrentWidthElement =  {
+export const MixinCurrentWidthElement = {
   mounted() {
     let stepInterval = 0;
     this.timerName = setInterval(() => {
@@ -8,17 +8,17 @@ export const MixinCurrentWidthElement =  {
       }
 
       stepInterval++;
-    }, 500)
+    }, 500);
 
-    window.addEventListener('resize', ()=> {
+    window.addEventListener("resize", () => {
       this.updatedCurrentWidth();
-    })
+    });
   },
   data() {
     return {
       currentWidthElement: null,
       timerName: null,
-    }
+    };
   },
   methods: {
     updatedCurrentWidth() {
@@ -26,9 +26,9 @@ export const MixinCurrentWidthElement =  {
         this.$nextTick(() => {
           this.currentWidthElement = this.$refs.parent.offsetWidth;
           clearInterval(this.timerName);
-          })
+        });
       }
-    }
+    },
   },
   watch: {
     parentIsShow: {
@@ -41,17 +41,17 @@ export const MixinCurrentWidthElement =  {
               clearInterval(this.timerName);
             }
             stepInterval++;
-          },500)
-
+          }, 500);
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     isMakeElementColumn() {
-      return this.currentWidthElement <= 350 && this.isExistLabel || this.currentWidthElement <= 220;
-    }
-  }
+      return (
+        (this.currentWidthElement <= 350 && this.isExistLabel) ||
+        this.currentWidthElement <= 220
+      );
+    },
+  },
 };
-
-

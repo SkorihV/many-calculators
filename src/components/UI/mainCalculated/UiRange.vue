@@ -5,17 +5,20 @@
     :id="elementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="[classes, {'column': isColumn || isMakeElementColumn}]">
+    <div
+      class="calc__range-wrapper"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+    >
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
-          <div class="calc__range-label-text" v-if="isExistLabel">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt"></slot>
-          </div>
+        <div class="calc__range-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt"></slot>
+        </div>
       </icon-element-wrapper>
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
@@ -55,7 +58,7 @@
         </div>
         <div
           class="calc__range-current-wrapper"
-          v-if="(showDynamicValue || unit?.length)"
+          v-if="showDynamicValue || unit?.length"
         >
           <input
             class="calc__range-current-dynamic"
@@ -95,16 +98,20 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
-import {MixinCurrentWidthElement} from "@/mixins/MixinCurrentWidthElement";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiRange",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinCurrentWidthElement,
+  ],
   components: { UiTooltip, devBlock, iconElementWrapper },
   props: {
     rangeValue: {
@@ -188,7 +195,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   created() {
@@ -348,9 +355,7 @@ export default {
       );
     },
     updateWidthElement() {
-      if (
-        this.elementWidth !== this.$refs?.thisElement?.offsetWidth
-      ) {
+      if (this.elementWidth !== this.$refs?.thisElement?.offsetWidth) {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
     },
@@ -375,7 +380,7 @@ export default {
           }, 500);
         }
         this.changeValue("dependency");
-      }
+      },
     },
     dynamicValue(newValue) {
       this.dynamicValue = this.checkValidValueReturnNumber(newValue);
@@ -528,7 +533,7 @@ export default {
     },
     isShowStepLine() {
       return this.showSteps && this.elementWidth > 220;
-    }
+    },
   },
 };
 </script>

@@ -5,10 +5,7 @@
     :id="elementName"
     ref="parent"
   >
-    <div
-      class="calc__tab-wrapper"
-      :class="[classes]"
-    >
+    <div class="calc__tab-wrapper" :class="[classes]">
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? label : ''"
@@ -108,7 +105,7 @@ import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula"
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 export default {
@@ -131,7 +128,7 @@ export default {
       "elementName",
       "parentIsShow",
       "dependencyFormulaDisplay",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   data() {
@@ -175,7 +172,7 @@ export default {
     },
     isExistLabel() {
       return Boolean(this.label?.length);
-    }
+    },
   },
 };
 </script>

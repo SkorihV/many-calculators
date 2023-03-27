@@ -155,7 +155,10 @@ export const useBaseStore = defineStore("base", {
         Object.values(elementsIsMounted).filter((value) => !value).length
       ),
     isTooltipOn: ({ tooltipOn }) => tooltipOn,
-    isStructureTemplate: ({nameTemplatesForStructure}) => (templateName) => nameTemplatesForStructure.includes(templateName),
+    isStructureTemplate:
+      ({ nameTemplatesForStructure }) =>
+      (templateName) =>
+        nameTemplatesForStructure.includes(templateName),
   },
   actions: {
     tryAddResultElement(dataResultItem) {

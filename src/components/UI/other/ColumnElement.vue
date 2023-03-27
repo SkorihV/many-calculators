@@ -4,7 +4,7 @@
       :icon-settings="column.iconSettings"
       :alt="isExistLabel ? column.label : ''"
     >
-      <div class="calc__columns-column-label"  v-if="isExistLabel">
+      <div class="calc__columns-column-label" v-if="isExistLabel">
         {{ column.label }}
       </div>
     </icon-element-wrapper>
@@ -23,25 +23,30 @@
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 export default {
   name: "ColumnElement",
-  components:{TemplatesWrapper, IconElementWrapper},
+  components: { TemplatesWrapper, IconElementWrapper },
   mixins: [MixinsForProcessingFormula],
-  emits: ['changedValue'],
+  emits: ["changedValue"],
   props: {
-    idColumn:{
+    idColumn: {
       type: Number,
-      require: true
+      require: true,
     },
     column: {
       type: Object,
       default: () => {},
     },
-    ...propsTemplate.getProps(['parentIsShow', 'parentName', 'template', 'dependencyFormulaDisplay'])
+    ...propsTemplate.getProps([
+      "parentIsShow",
+      "parentName",
+      "template",
+      "dependencyFormulaDisplay",
+    ]),
   },
   methods: {
     changeValue(data) {
@@ -50,15 +55,13 @@ export default {
   },
   computed: {
     isExistLabel() {
-      return this.column?.label?.length
+      return this.column?.label?.length;
     },
     showColumn() {
-      return Boolean(this.isVisibilityFromDependency && this.parentIsShow );
+      return Boolean(this.isVisibilityFromDependency && this.parentIsShow);
     },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

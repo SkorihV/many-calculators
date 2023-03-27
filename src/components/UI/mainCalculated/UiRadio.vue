@@ -7,7 +7,11 @@
   >
     <div
       class="calc__radio-wrapper"
-      :class="[radioType, { column: isColumn || isMakeElementColumn, onlyImage: onlyImage }, classes]"
+      :class="[
+        radioType,
+        { column: isColumn || isMakeElementColumn, onlyImage: onlyImage },
+        classes,
+      ]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettings"
@@ -29,7 +33,7 @@
               checked: currentIndexRadioButton === radio.index,
               error: isErrorClass,
               onlyImage: onlyImage,
-              isShowPrompt: Boolean(radio?.prompt?.length)
+              isShowPrompt: Boolean(radio?.prompt?.length),
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"
@@ -87,12 +91,16 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "UiRadio",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinCurrentWidthElement,
+  ],
   components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);
@@ -162,7 +170,7 @@ export default {
       "templateName",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   data() {

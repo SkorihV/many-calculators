@@ -7,10 +7,7 @@
       :icon-settings="iconSettings"
       :alt="isExistLabel ? mutationsInputData.label : ''"
     >
-      <div
-        class="calc__duplicator-label"
-        v-if="isExistLabel"
-      >
+      <div class="calc__duplicator-label" v-if="isExistLabel">
         {{ mutationsInputData.label }}
       </div>
     </icon-element-wrapper>
@@ -82,13 +79,19 @@ import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicatorWrapper",
   emits: ["changedValue", "duplicate", "deleteDuplicator"],
-  components: { devBlock, TemplatesWrapper, TemplatesWrapperColumn, TemplatesWrapperStructural, IconElementWrapper },
+  components: {
+    devBlock,
+    TemplatesWrapper,
+    TemplatesWrapperColumn,
+    TemplatesWrapperStructural,
+    IconElementWrapper,
+  },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
     duplicatorData: {
@@ -101,7 +104,7 @@ export default {
     },
     showDuplicateButton: {
       type: Boolean,
-      default: true
+      default: true,
     },
     originVariables: {
       type: Array,
@@ -119,7 +122,7 @@ export default {
       "dependencyFormulaDisplay",
       "elementName",
       "positionElement",
-      "iconSettings"
+      "iconSettings",
     ]),
   },
   mounted() {
@@ -206,7 +209,12 @@ export default {
           object[prop] = this.updateIndexElementsInDuple(object[prop], index);
         } else if (propIsElementNameField) {
           object[prop] = this.updateNameItem(object, index);
-        } else if (propIsLabelField || propIsSecondField || propIsButtonText || propIsButtonTextChecked) {
+        } else if (
+          propIsLabelField ||
+          propIsSecondField ||
+          propIsButtonText ||
+          propIsButtonTextChecked
+        ) {
           object[prop] =
             object[prop]?.length && index > 0
               ? object[prop] + " ( " + index + " )"
@@ -256,7 +264,7 @@ export default {
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",
-       "isStructureTemplate"
+      "isStructureTemplate",
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -453,7 +461,7 @@ export default {
     },
     isExistLabel() {
       return Boolean(this.mutationsInputData?.label?.length);
-    }
+    },
   },
 };
 </script>
