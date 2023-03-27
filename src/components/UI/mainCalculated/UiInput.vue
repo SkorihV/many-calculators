@@ -5,10 +5,11 @@
     :id="elementName"
     ref="parent"
   >
-    <div class="calc__input-wrapper" :class="[classes, {'column': isColumn}]">
+    <div class="calc__input-wrapper" :class="[classes, {'column': isColumn || isMakeElementColumn}]">
         <icon-element-wrapper
           :icon-settings="iconSettings"
           :alt="isExistLabel ? label : ''"
+          :isExistLabel="isExistLabel"
         >
           <div class="calc__input-label-text"  v-if="isExistLabel">
             {{ label }}
@@ -89,6 +90,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -98,7 +100,7 @@ import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 export default {
   name: "UiInput",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
   components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
     /**

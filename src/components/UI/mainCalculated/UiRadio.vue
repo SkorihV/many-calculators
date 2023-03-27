@@ -7,11 +7,12 @@
   >
     <div
       class="calc__radio-wrapper"
-      :class="[radioType, { column: isColumn, onlyImage: onlyImage }, classes]"
+      :class="[radioType, { column: isColumn || isMakeElementColumn, onlyImage: onlyImage }, classes]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
       >
         <div class="calc__radio-label-text" v-if="isExistLabel">
           {{ label }}
@@ -81,6 +82,7 @@ import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -90,7 +92,7 @@ import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 export default {
   name: "UiRadio",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
   components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.elementName, false);

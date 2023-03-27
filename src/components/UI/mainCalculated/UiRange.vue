@@ -5,15 +5,17 @@
     :id="elementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
-    <div class="calc__range-wrapper" :class="[classes, {'column': isColumn}]">
+    <div class="calc__range-wrapper" :class="[classes, {'column': isColumn || isMakeElementColumn}]">
       <icon-element-wrapper
         :icon-settings="iconSettings"
-        :alt="isExistLabel ? label : ''">
-        <div class="calc__range-label-text" v-if="isExistLabel">
-          {{ label }}
-          <div class="empty-block" v-if="notEmpty">*</div>
-          <slot name="prompt"></slot>
-        </div>
+        :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
+      >
+          <div class="calc__range-label-text" v-if="isExistLabel">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt"></slot>
+          </div>
       </icon-element-wrapper>
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
@@ -29,7 +31,7 @@
             @input="tryChangeValue"
             :name="localElementName"
           />
-          <div v-if="showSteps" class="calc__range-steps-wrapper">
+          <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
             <div
               class="calc__range-steps-item"
               @click="changeValueStep(step)"
@@ -53,7 +55,7 @@
         </div>
         <div
           class="calc__range-current-wrapper"
-          v-if="showDynamicValue || unit?.length"
+          v-if="(showDynamicValue || unit?.length)"
         >
           <input
             class="calc__range-current-dynamic"
@@ -93,6 +95,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import {MixinCurrentWidthElement} from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -101,7 +104,7 @@ import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 export default {
   name: "UiRange",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
   components: { UiTooltip, devBlock, iconElementWrapper },
   props: {
     rangeValue: {
@@ -198,24 +201,18 @@ export default {
       this.changeValue("mounted");
     }
 
-    if (this.$refs?.thisElement?.offsetWidth) {
-      this.elementWidth = this.$refs?.thisElement?.offsetWidth;
-    }
+    this.updateWidthElement();
 
     window.addEventListener("resize", () => {
-      if (this.$refs?.thisElement?.offsetWidth) {
-        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
-      }
+      this.updateWidthElement();
     });
     document.addEventListener("DOMContentLoaded", () => {
-      if (this.$refs?.thisElement?.offsetWidth) {
-        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
-      }
+      this.updateWidthElement();
     });
 
     let timer = setInterval(() => {
       if (this.$refs?.thisElement?.offsetWidth || this.elementWidth) {
-        this.updateWidthElements();
+        this.updateWidthElement();
         clearInterval(timer);
       }
     }, 500);
@@ -282,7 +279,7 @@ export default {
       return value;
     },
     changeValue(eventType = "input") {
-      this.updateWidthElements();
+      this.updateWidthElement();
       this.$emit("changedValue", {
         value: this.isVisibilityFromDependency ? this.resultValue : null,
         displayValue: this.isVisibilityFromDependency ? this.resultValue : null,
@@ -350,10 +347,9 @@ export default {
         this.dynamicValue - this.localStep
       );
     },
-    updateWidthElements() {
+    updateWidthElement() {
       if (
-        this.elementWidth !== this.$refs?.thisElement?.offsetWidth &&
-        this.showStaticValue
+        this.elementWidth !== this.$refs?.thisElement?.offsetWidth
       ) {
         this.elementWidth = this.$refs?.thisElement?.offsetWidth;
       }
@@ -530,6 +526,9 @@ export default {
         isFinite(this.resultValue)
       );
     },
+    isShowStepLine() {
+      return this.showSteps && this.elementWidth > 220;
+    }
   },
 };
 </script>

@@ -59,8 +59,6 @@ export default {
     this.columnList.forEach(item => {
       this.stateColumns.push({maxWidth: item.maxWidth});
     })
-
-
   },
   props: {
     columnList: {
@@ -156,7 +154,7 @@ export default {
           }
         }
 
-        if (width <= 660) {
+        if (width <= 700) {
           if (this.countColumns === 4 ) {
             if (['free','first','last'].includes(this.adaptationMethod)) {
               this.stateColumns[0].maxWidth = 50;

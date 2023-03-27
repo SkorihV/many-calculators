@@ -1,6 +1,15 @@
 export const MixinCurrentWidthElement =  {
   mounted() {
-    this.updatedCurrentWidth();
+    let stepInterval = 0;
+    this.timerName = setInterval(() => {
+      this.updatedCurrentWidth();
+      if (stepInterval > 10) {
+        clearInterval(this.timerName);
+      }
+
+      stepInterval++;
+    }, 500)
+
     window.addEventListener('resize', ()=> {
       this.updatedCurrentWidth();
     })
@@ -14,8 +23,10 @@ export const MixinCurrentWidthElement =  {
   methods: {
     updatedCurrentWidth() {
       if (this.$refs?.parent && this.$refs.parent?.offsetWidth !== 0) {
-        this.currentWidthElement = this.$refs.parent.offsetWidth;
-        clearInterval(this.timerName);
+        this.$nextTick(() => {
+          this.currentWidthElement = this.$refs.parent.offsetWidth;
+          clearInterval(this.timerName);
+          })
       }
     }
   },
@@ -23,12 +34,13 @@ export const MixinCurrentWidthElement =  {
     parentIsShow: {
       handler(newValue) {
         if (newValue) {
-          let step = 0;
+          let stepInterval = 0;
           this.timerName = setInterval(() => {
             this.updatedCurrentWidth();
-            if (step > 10) {
+            if (stepInterval > 10) {
               clearInterval(this.timerName);
             }
+            stepInterval++;
           },500)
 
         }
@@ -37,7 +49,7 @@ export const MixinCurrentWidthElement =  {
   },
   computed: {
     isMakeElementColumn() {
-      return this.currentWidthElement <= 220;
+      return this.currentWidthElement <= 350 && this.isExistLabel || this.currentWidthElement <= 220;
     }
   }
 };

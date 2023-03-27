@@ -1168,7 +1168,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-wrapper {
         display: flex;
         align-items: baseline;
-        gap: 32px;
+        gap: 8px;
         width: 100%;
       }
 
@@ -1564,7 +1564,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       position: relative;
       align-items: center;
       justify-content: center;
-      padding: 21px 35px;
+      padding: 20px 30px;
       background-color: $c_element_bg_color;
       border-radius: $c_element_border_radius;
       border: $c_element_border_width solid $c_element_border_color;
@@ -1929,9 +1929,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       left: 50%;
       transform: translateX(-50%);
       background-color: $c_base_error_bg;
-      padding: 21px 35px;
+      padding: 20px 30px;
       @media all and (max-width: 480px) {
-        padding: 11px 15px;
+        padding: 10px 15px;
       }
       &.isLeft {
         left: auto;
@@ -1994,7 +1994,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       color: $c_base_error_color;
       border-radius: $c_base_error_border_radius;
       justify-content: center;
-      min-width: 300px;
+      min-width: 200px;
     }
   }
 

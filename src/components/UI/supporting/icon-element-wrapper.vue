@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__icon-element-label-wrapper">
+  <div class="calc__icon-element-label-wrapper" v-if="isExistLabel || isImage">
     <icon-element
       v-if="showLeftIcon"
       :alt="alt"
@@ -7,7 +7,7 @@
       :is-parent-hover="isParentHover"
       :is-parent-selected="isParentSelected"
     />
-    <slot />
+    <slot/>
     <icon-element
       v-if="showRightIcon"
       :alt="alt"
@@ -42,10 +42,14 @@ export default {
       type: [String, Number],
       default: "",
     },
+    isExistLabel: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     isImage() {
-      return !!this.iconSettings?.image?.filename;
+      return Boolean(this.iconSettings?.image?.filename);
     },
     showLeftIcon() {
       return this.isImage && this.iconSettings?.location === "leftSide";

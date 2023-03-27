@@ -6,11 +6,12 @@
   >
     <div
       class="calc__select-wrapper"
-      :class="[{ 'column': isColumn, 'open': isOpen }, classes]"
+      :class="[{ 'column': isColumn || isMakeElementColumn, 'open': isOpen }, classes]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
       >
         <div class="calc__select-label-text" v-if="isExistLabel">
           {{ label }}
@@ -103,6 +104,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import {MixinCurrentWidthElement} from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -112,7 +114,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 export default {
   name: "UiSelect",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinCurrentWidthElement],
   components: { IconElementWrapper, UiTooltip, UiPrompt, devBlock },
   created() {
     this.tryToggleElementIsMounted(this.localElementName, false);
