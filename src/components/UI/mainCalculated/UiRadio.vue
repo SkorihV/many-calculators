@@ -87,6 +87,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
+import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -100,11 +101,9 @@ export default {
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
     MixinCurrentWidthElement,
+    MixinDisplaySpinner,
   ],
   components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock },
-  created() {
-    this.tryToggleElementIsMounted(this.elementName, false);
-  },
   mounted() {
     this.localElementName = this.checkedValueOnVoid(this.elementName)
       ? this.elementName
@@ -124,9 +123,7 @@ export default {
     setTimeout(() => {
       this.changeValue("mounted");
     }, 100);
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200);
+
   },
   props: {
     radioValues: {

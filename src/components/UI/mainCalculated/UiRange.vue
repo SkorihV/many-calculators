@@ -99,6 +99,7 @@ import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
+import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -111,6 +112,7 @@ export default {
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
     MixinCurrentWidthElement,
+    MixinDisplaySpinner,
   ],
   components: { UiTooltip, devBlock, iconElementWrapper },
   props: {
@@ -198,9 +200,6 @@ export default {
       "iconSettings",
     ]),
   },
-  created() {
-    this.tryToggleElementIsMounted(this.elementName, false);
-  },
   mounted() {
     if (!this.isNeedChoice) {
       this.initBaseData();
@@ -223,10 +222,6 @@ export default {
         clearInterval(timer);
       }
     }, 500);
-
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200);
   },
   data() {
     return {

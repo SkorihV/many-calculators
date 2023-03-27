@@ -1,96 +1,98 @@
 <template>
-  <div
-    class="calc__wrapper-group-data"
-    v-if="isVisibilityFromDependency"
-    :id="elementName"
-    ref="parent"
-  >
     <div
-      class="calc__input-wrapper"
-      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+      class="calc__wrapper-group-data"
+      v-if="isVisibilityFromDependency"
+      :id="elementName"
+      ref="parent"
     >
-      <icon-element-wrapper
-        :icon-settings="iconSettings"
-        :alt="isExistLabel ? label : ''"
-        :isExistLabel="isExistLabel"
+      <div
+        class="calc__input-wrapper"
+        :class="[classes, { column: isColumn || isMakeElementColumn }]"
       >
-        <div class="calc__input-label-text" v-if="isExistLabel">
-          {{ label }}
-          <div class="empty-block" v-if="notEmpty">*</div>
-          <slot name="prompt" />
-        </div>
-      </icon-element-wrapper>
-      <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
-        <div
-          class="calc__input-buttons-minus"
-          :class="{ disabled: isDisabledMin }"
-          v-if="showControlsButton"
-          @click="minus"
+        <icon-element-wrapper
+          :icon-settings="iconSettings"
+          :alt="isExistLabel ? label : ''"
+          :isExistLabel="isExistLabel"
         >
-          -
-        </div>
-        <input
-          ref="trueInput"
-          type="text"
-          v-model="localInputBufferValue"
-          :placeholder="inputPlaceholder"
-          @keydown.enter="trueTrueValue"
-          @keydown.up="plus"
-          @keydown.down="minus"
-          @blur="inputFocus = false"
-          @focus="inputFocus = true"
-          class="calc__input-item"
-          :class="{
+          <div class="calc__input-label-text" v-if="isExistLabel">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt" />
+          </div>
+        </icon-element-wrapper>
+        <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
+          <div
+            class="calc__input-buttons-minus"
+            :class="{ disabled: isDisabledMin }"
+            v-if="showControlsButton"
+            @click="minus"
+          >
+            -
+          </div>
+          <input
+            ref="trueInput"
+            type="text"
+            v-model="localInputBufferValue"
+            :placeholder="inputPlaceholder"
+            @keydown.enter="trueTrueValue"
+            @keydown.up="plus"
+            @keydown.down="minus"
+            @blur="inputFocus = false"
+            @focus="inputFocus = true"
+            class="calc__input-item"
+            :class="{
             number: isOnlyNumber,
             error: isErrorClass,
             stretch: isStretch,
           }"
-          autocomplete="off"
-          v-if="!fakeValueHidden"
-        />
-        <template v-if="fakeValueHidden">
-          <input
-            @click="showTrueValue"
-            @blur="inputFocus = false"
-            @focus="inputFocus = true"
-            type="text"
-            :value="resultValueDouble"
-            class="calc__input-item currency"
-            :class="{
+            autocomplete="off"
+            v-if="!fakeValueHidden"
+          />
+          <template v-if="fakeValueHidden">
+            <input
+              @click="showTrueValue"
+              @blur="inputFocus = false"
+              @focus="inputFocus = true"
+              type="text"
+              :value="resultValueDouble"
+              class="calc__input-item currency"
+              :class="{
               number: isOnlyNumber,
               error: isErrorClass,
               stretch: isStretch,
             }"
-            autocomplete="off"
-            :placeholder="inputPlaceholder"
-          />
-        </template>
-        <div
-          class="calc__input-buttons-plus"
-          :class="{ disabled: isDisabledMax }"
-          v-if="showControlsButton"
-          @click="plus"
-        >
-          +
+              autocomplete="off"
+              :placeholder="inputPlaceholder"
+            />
+          </template>
+          <div
+            class="calc__input-buttons-plus"
+            :class="{ disabled: isDisabledMax }"
+            v-if="showControlsButton"
+            @click="plus"
+          >
+            +
+          </div>
+          <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
         </div>
-        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+        <ui-tooltip
+          :is-show="Boolean(tooltipError?.error)"
+          :tooltip-text="tooltipError?.errorText"
+          :local-can-be-shown="localCanBeShownTooltip"
+        />
       </div>
-      <ui-tooltip
-        :is-show="Boolean(tooltipError?.error)"
-        :tooltip-text="tooltipError?.errorText"
-        :local-can-be-shown="localCanBeShownTooltip"
-      />
     </div>
-  </div>
-  <dev-block
-    :label="label"
-    :element-name="localElementName"
-    :value="resultValue"
-    :local-cost="localCost"
-    :is-visibility-from-dependency="isVisibilityFromDependency"
-    :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
-  />
+    <dev-block
+      :label="label"
+      :element-name="localElementName"
+      :value="resultValue"
+      :local-cost="localCost"
+      :is-visibility-from-dependency="isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+    />
+
+
 </template>
 
 <script>
@@ -100,6 +102,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
+import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -113,6 +116,7 @@ export default {
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
     MixinCurrentWidthElement,
+    MixinDisplaySpinner,
   ],
   components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
@@ -241,9 +245,6 @@ export default {
       "iconSettings",
     ]),
   },
-  created() {
-    this.tryToggleElementIsMounted(this.elementName, false);
-  },
   mounted() {
     if (this.isOnlyNumber && this.localMin > Number(this.inputValue)) {
       this.localInputValue = this.localMin;
@@ -268,9 +269,6 @@ export default {
         }
       });
     }
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200);
   },
   data() {
     return {

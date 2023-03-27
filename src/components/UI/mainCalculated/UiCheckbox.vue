@@ -96,12 +96,15 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
+import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
 
 export default {
   name: "UiCheckbox",
@@ -110,6 +113,7 @@ export default {
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
     MixinCurrentWidthElement,
+    MixinDisplaySpinner,
   ],
   components: { UiTooltip, devBlock, IconElementWrapper },
   props: {
@@ -158,9 +162,6 @@ export default {
       "iconSettings",
     ]),
   },
-  created() {
-    this.tryToggleElementIsMounted(this.elementName, false);
-  },
   mounted() {
     this.checkboxValue = this.baseValue === "active";
     this.isChecked = this.baseValue === "selected";
@@ -177,9 +178,6 @@ export default {
     }
     this.changeValue("mounted");
 
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200);
   },
   data() {
     return {

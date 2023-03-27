@@ -109,6 +109,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
+import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -122,11 +123,9 @@ export default {
     MixinsForProcessingFormula,
     MixinsGeneralItemData,
     MixinCurrentWidthElement,
+    MixinDisplaySpinner,
   ],
   components: { IconElementWrapper, UiTooltip, UiPrompt, devBlock },
-  created() {
-    this.tryToggleElementIsMounted(this.localElementName, false);
-  },
   mounted() {
     this.localSelectValues = this.selectValues;
     if (this.needMockValue) {
@@ -144,9 +143,6 @@ export default {
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
     }, 200);
-    window.addEventListener("resize", () => {
-      this.resetMaxWidthSelectList();
-    });
   },
   props: {
     selectValues: {
