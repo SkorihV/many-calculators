@@ -2064,6 +2064,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @include transition;
         text-align: start;
         position: relative;
+        margin-bottom: 8px;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
@@ -2122,13 +2123,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
       }
       &-content {
-        margin-top: -$c_decor_border_width - 8px;
         width: 100%;
         border: $c_decor_border_width solid $c_decor_border_color_selected;
         border-bottom-left-radius: $c_decor_border_radius;
         border-bottom-right-radius: $c_decor_border_radius;
         border-top-color: transparent;
         position: relative;
+        margin-bottom: 8px;
         @include transition;
         &-wrapper {
           .calc__wrapper-group-data {

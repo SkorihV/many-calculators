@@ -110,7 +110,7 @@ class Props {
   maxWidthSide() {
     return {
       type: [Number, String],
-      default: 50,
+      default: 100,
     };
   }
 

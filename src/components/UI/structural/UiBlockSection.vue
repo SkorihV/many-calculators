@@ -25,7 +25,8 @@
           </div>
         </icon-element-wrapper>
       </div>
-      <div class="calc__block-section-content-wrapper">
+      <div class="calc__block-section-content-wrapper"
+      :style="{maxWidth: maxWidth}">
         <template v-for="(item, inx) in templatesData" :key="inx">
           <templates-wrapper-column
             v-if="item?.template === 'UiColumns'"
@@ -65,6 +66,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
@@ -82,7 +84,7 @@ export default {
     TemplatesWrapperColumn,
   },
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula],
+  mixins: [MixinsForProcessingFormula, MixinCurrentWidthElement],
   props: {
     templatesData: {
       type: Array,
@@ -101,6 +103,7 @@ export default {
       "dependencyFormulaDisplay",
       "backgroundImageSettings",
       "iconSettings",
+      "maxWidthSide"
     ]),
   },
   methods: {
@@ -139,6 +142,11 @@ export default {
           this.isVisibilityFromDependency
       );
     },
+    maxWidth() {
+      return this.currentWidthElement > 600
+      ? this.maxWidthSide + "%"
+        : "100%";
+    }
   },
 };
 </script>

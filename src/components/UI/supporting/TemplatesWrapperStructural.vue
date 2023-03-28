@@ -45,6 +45,7 @@
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :icon-settings="template?.iconSettings"
     :background-image-settings="template?.backgroundImageSettings"
+    :max-width-side="template?.maxWidthSide"
     @changedValue="changeValue"
   />
 </template>

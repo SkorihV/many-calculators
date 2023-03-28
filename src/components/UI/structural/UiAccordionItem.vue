@@ -45,7 +45,7 @@
     />
     <div
       class="calc__accordion-item-content-wrapper"
-      :style="{ maxWidth: divideWidthElement }"
+      :style="{ maxWidth: maxWidth }"
     >
       <template
         v-for="(template, key_in) in accordionItem?.templates"
@@ -78,6 +78,7 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperC
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -95,12 +96,7 @@ export default {
     TemplatesWrapperColumn,
   },
   emits: ["changedValue"],
-  mounted() {
-    this.currentWidthContent = document.body.clientWidth;
-    window.addEventListener("resize", () => {
-      this.currentWidthContent = document.body.clientWidth;
-    });
-  },
+  mixins: [MixinCurrentWidthElement],
   props: {
     accordionItem: {
       type: Object,
@@ -116,8 +112,6 @@ export default {
     ...propsTemplate.getProps([
       "elementName",
       "parentIsShow",
-      "maxWidth",
-      "maxHeight",
     ]),
   },
   data() {
@@ -126,7 +120,6 @@ export default {
       errorsElements: new Set(),
       visibilityList: new Set(),
       hoverElement: null,
-      currentWidthContent: 1920,
     };
   },
   methods: {
@@ -189,9 +182,9 @@ export default {
       return this.localListValidationError?.filter((item) => !item.isShow)
         .length;
     },
-    divideWidthElement() {
-      return this.currentWidthContent > 1024
-        ? this.accordionItem?.maxWidthSide + "%"
+    maxWidth() {
+      return this.currentWidthElement > 600
+        ? `${this.accordionItem?.maxWidthSide}%`
         : "100%";
     },
   },

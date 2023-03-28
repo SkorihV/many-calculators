@@ -7,7 +7,7 @@
     <div
       class="calc__tab-item-content"
       v-for="(template, key_in) in tabItem?.templates"
-      :style="{ maxWidth: divideWidthElement }"
+      :style="{ maxWidth: maxWidth }"
       :key="key_in"
     >
       <templates-wrapper-column
@@ -34,6 +34,7 @@
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -46,13 +47,8 @@ export default {
     TemplatesWrapper,
     TemplatesWrapperColumn,
   },
+  mixins: [MixinCurrentWidthElement],
   emits: ["changedValue"],
-  mounted() {
-    this.currentWidthContent = document.body.clientWidth;
-    window.addEventListener("resize", () => {
-      this.currentWidthContent = document.body.clientWidth;
-    });
-  },
   props: {
     tabItem: {
       type: Object,
@@ -75,7 +71,6 @@ export default {
     return {
       errorsElements: new Set(),
       visibilityList: new Set(),
-      currentWidthContent: 1920,
     };
   },
   methods: {
@@ -91,8 +86,8 @@ export default {
     itemName() {
       return this.tabName + "_" + this.elementName;
     },
-    divideWidthElement() {
-      return this.currentWidthContent > 1024
+    maxWidth() {
+      return this.currentWidthElement > 600
         ? this.tabItem?.maxWidthSide + "%"
         : "100%";
     },
