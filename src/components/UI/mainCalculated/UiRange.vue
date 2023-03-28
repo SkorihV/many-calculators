@@ -480,6 +480,10 @@ export default {
       return this.updatedCostForOut(this.cost);
     },
     positionStaticResultValue() {
+      this.updateWidthElement();
+      if (this.resultValue === null) {
+        return null;
+      }
       const width = this.elementWidth - 25;
 
       let newPosition =
@@ -523,7 +527,8 @@ export default {
       return (
         this.showStaticValue &&
         typeof this.resultValue === "number" &&
-        isFinite(this.resultValue)
+        isFinite(this.resultValue) &&
+        this.positionStaticResultValue !== null
       );
     },
     isShowStepLine() {

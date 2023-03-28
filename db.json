@@ -1919,7 +1919,7 @@
         "step": "1",
         "showSteps": 1,
         "stepPrompt": "1",
-        "isNeedChoice": false,
+        "isNeedChoice": true,
         "notEmpty": false,
         "showStaticValue": 1,
         "showDynamicValue": 0,
