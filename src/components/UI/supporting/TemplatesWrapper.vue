@@ -86,6 +86,7 @@
     :selected-item="template?.selectedItem"
     :is-need-choice="template?.isNeedChoice"
     :type-display-class="template?.typeDisplayClass"
+    :is-stretch="template?.isStretch"
     :element-name="
       template?.elementName?.length
         ? template?.elementName
@@ -211,6 +212,7 @@
     :formula-processing-logic="template?.formulaProcessingLogic"
     :parent-name="parentName"
     :template-name="template.template"
+    :dependency-formula-display="template?.dependencyFormulaDisplay"
     :position-element="template?.position"
     @changedValue="changeValue"
   ></ui-system>

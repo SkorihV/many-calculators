@@ -232,7 +232,7 @@ export default {
       return Boolean(this.label?.length);
     },
     countColumns() {
-      return this.columnList?.length;
+      return this.columnListBeforeLimiting?.length;
     },
   },
 };

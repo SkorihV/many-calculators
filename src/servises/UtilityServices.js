@@ -12,12 +12,14 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
     item.isShow &&
     isAllowZeroValue &&
     item[fieldName] !== "no";
+  const onlyTitle = item[fieldName] === 'onlyTitle';
   const isAllowValueOutput =
-    item[fieldName] === "value" || item[fieldName] === "valueSumm";
+    (item[fieldName] === "value" || item[fieldName] === "valueSumm") && !onlyTitle;
   const isAllowCostOutput =
     item.cost !== null &&
-    (item[fieldName] === "summ" || item[fieldName] === "valueSumm");
+    (item[fieldName] === "summ" || item[fieldName] === "valueSumm") && !onlyTitle;
   const unit = item?.unit ? item.unit : "";
+
 
   if (isAllowDataOutput) {
     result +=

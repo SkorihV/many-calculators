@@ -1420,6 +1420,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex-direction: column;
         align-items: flex-start;
       }
+      &-right-side {
+        display: flex;
+        flex: 1 1 100%;
+        width: 100%;
+      }
     }
     &-label {
       &-text {
@@ -1564,6 +1569,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex-wrap: wrap;
         gap: 5px;
         flex: 1 1 100%;
+        width: 100%;
       }
       &.column {
         flex-direction: column;
@@ -1609,6 +1615,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @include transition;
       gap: 8px;
       text-align: start;
+      &.stretch {
+        flex: 1 1 auto;
+      }
       .calc__icon-element-label-wrapper {
         flex: none;
       }

@@ -151,26 +151,6 @@ export default {
       default: () => [],
     },
     /**
-     * минимальное значение в инпуте
-     */
-    min: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    /**
-     * максимальное значение в инпуте
-     */
-    max: {
-      type: [Number, String],
-      default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
-    },
-    /**
      * отобразить элементы управления
      */
     controls: {

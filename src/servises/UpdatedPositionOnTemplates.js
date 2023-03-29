@@ -120,15 +120,15 @@ const updatePositionElementsInColumns = function (currentColumnsObject, index) {
     let currentTemplatesInColumn = currentColumns[i]?.templates;
     const countTemplatesInColumn = currentTemplatesInColumn?.length;
     if (!Boolean(countTemplatesInColumn)) {
-      i++;
-      continue;
+      currentColumns[i].templates = [];
+    } else {
+      currentTemplatesInColumn = currentTemplatesInColumn.map((templateItem) => {
+        templateItem.position = newIndex;
+        newIndex++;
+        return templateItem;
+      });
+      currentColumns[i].templates = currentTemplatesInColumn;
     }
-    currentTemplatesInColumn = currentTemplatesInColumn.map((templateItem) => {
-      templateItem.position = newIndex;
-      newIndex++;
-      return templateItem;
-    });
-    currentColumns[i].templates = currentTemplatesInColumn;
     newSetColumns.push(currentColumns[i]);
   }
 

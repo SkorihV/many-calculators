@@ -23,68 +23,70 @@
           <slot name="prompt"></slot>
         </div>
       </icon-element-wrapper>
-
-      <div
-        class="calc__select-change-wrapper"
-        ref="changeElement"
-        :style="[maxWidthForChangeElement]"
-        :class="{ error: isErrorClass, stretch: isStretch}"
-      >
+      <div class="calc__select-wrapper-right-side">
         <div
-          v-if="currentOption"
-          class="calc__select-change-item"
-          @click="toggleOpenClose"
-          @mouseover="hoverElementIndex = 'main'"
-          @mouseleave="hoverElementIndex = null"
+          class="calc__select-change-wrapper"
+          ref="changeElement"
+          :style="[maxWidthForChangeElement]"
+          :class="{ error: isErrorClass, stretch: isStretch}"
         >
-          <icon-element-wrapper
-            :alt="currentOption?.selectName"
-            :icon-settings="currentOption?.iconSettings"
-            :is-parent-hover="hoverElementIndex === 'main'"
+          <div
+            v-if="currentOption"
+            class="calc__select-change-item"
+            @click="toggleOpenClose"
+            @mouseover="hoverElementIndex = 'main'"
+            @mouseleave="hoverElementIndex = null"
           >
-            {{ currentOption.selectName }}
-          </icon-element-wrapper>
-          <ui-prompt
-            v-if="isExistCurrentPrompt"
-            :prompt-text="currentOption.prompt"
-          />
-          <div class="calc__select-arrow"></div>
-        </div>
-        <div
-          class="calc__select-option-wrapper"
-          :class="{stretch: isStretch }"
-          :style="[maxWidthForOptionList]"
-          ref="optionList"
-          v-show="isOpen"
-        >
-          <template
-            v-for="(option, idx) in selectValuesAfterProcessingDependency"
-            :key="idx"
-          >
-            <div
-              class="calc__select-option-item"
-              @click="changeSelect(option, idx)"
-              v-if="currentOption?.value !== option?.value && option.isShow"
-              @mouseover="hoverElementIndex = idx"
-              @mouseleave="hoverElementIndex = null"
+            <icon-element-wrapper
+              :alt="currentOption?.selectName"
+              :icon-settings="currentOption?.iconSettings"
+              :is-parent-hover="hoverElementIndex === 'main'"
             >
-              <icon-element-wrapper
-                :alt="option?.selectName"
-                :icon-settings="option?.iconSettings"
-                :is-parent-hover="hoverElementIndex === idx"
+              {{ currentOption.selectName }}
+            </icon-element-wrapper>
+            <ui-prompt
+              v-if="isExistCurrentPrompt"
+              :prompt-text="currentOption.prompt"
+            />
+            <div class="calc__select-arrow" v-if="isShowArrow"></div>
+          </div>
+          <div
+            class="calc__select-option-wrapper"
+            :class="{stretch: isStretch }"
+            :style="[maxWidthForOptionList]"
+            ref="optionList"
+            v-show="isOpen"
+          >
+            <template
+              v-for="(option, idx) in selectValuesAfterProcessingDependency"
+              :key="idx"
+            >
+              <div
+                class="calc__select-option-item"
+                @click="changeSelect(option, idx)"
+                v-if="currentOption?.value !== option?.value && option.isShow"
+                @mouseover="hoverElementIndex = idx"
+                @mouseleave="hoverElementIndex = null"
               >
-                <div class="calc__select-option-item-text">
-                  {{ option.selectName }}
-                </div>
-              </icon-element-wrapper>
-              <ui-prompt
-                v-if="option?.prompt?.length"
-                :prompt-text="option.prompt"
-              />
-            </div>
-          </template>
+                <icon-element-wrapper
+                  :alt="option?.selectName"
+                  :icon-settings="option?.iconSettings"
+                  :is-parent-hover="hoverElementIndex === idx"
+                >
+                  <div class="calc__select-option-item-text">
+                    {{ option.selectName }}
+                  </div>
+                </icon-element-wrapper>
+                <ui-prompt
+                  v-if="option?.prompt?.length"
+                  :prompt-text="option.prompt"
+                />
+              </div>
+            </template>
+          </div>
         </div>
       </div>
+
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
@@ -325,6 +327,9 @@ export default {
         }
       });
     },
+    resetWidthSelect() {
+      this.maxWidthSelectList = null;
+    },
     updatedWidthSelect() {
       if (this.$refs.optionList?.offsetWidth === 0 || this.$refs.changeElement?.offsetWidth === 0 || this.maxWidthSelectList !== null) {
         return false;
@@ -361,6 +366,7 @@ export default {
     isVisibilityFromDependency: {
       handler(newValue, oldValue) {
         if (newValue && !oldValue) {
+          this.resetWidthSelect();
           if (this.needMockValue) {
             this.initSelectMockData("dependency");
           } else {
@@ -386,6 +392,12 @@ export default {
     },
     isExistCurrentPrompt() {
       return Boolean(this.currentOption?.prompt?.length);
+    },
+    currentAmountSelectList(){
+      return Object.values(this.selectValuesAfterProcessingDependency)?.filter(item => item?.isShow)?.length
+    },
+    isShowArrow() {
+      return Boolean(this.currentAmountSelectList > 1)
     },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;

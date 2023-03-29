@@ -30,10 +30,11 @@
             class="calc__radio-label-button"
             :id="localElementName + '_' + radio.index"
             :class="{
-              checked: currentIndexRadioButton === radio.index,
-              error: isErrorClass,
-              onlyImage: onlyImage,
-              isShowPrompt: Boolean(radio?.prompt?.length),
+              'checked': currentIndexRadioButton === radio.index,
+              'error': isErrorClass,
+              'onlyImage': onlyImage,
+              'isShowPrompt': Boolean(radio?.prompt?.length),
+              'stretch': isStretch,
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"
@@ -168,6 +169,7 @@ export default {
       "positionElement",
       "zeroValueDisplayIgnore",
       "iconSettings",
+      "isStretch"
     ]),
   },
   data() {
