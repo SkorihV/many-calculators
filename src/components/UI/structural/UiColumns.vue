@@ -78,6 +78,10 @@ export default {
       type: String,
       default: "first",
     },
+    changedStateParent: {
+      type: Boolean,
+      default: false
+    },
     ...propsTemplate.getProps([
       "label",
       "elementName",
@@ -115,16 +119,25 @@ export default {
   },
   watch: {
     parentIsShow: {
-      handler(newValue) {
-        if (newValue) {
-          let step = 0;
-          this.timerName = setInterval(() => {
-            this.updatedCurrentWidth();
-            if (step > 10) {
-              clearInterval(this.timerName);
-            }
-          }, 500);
-        }
+      handler() {
+        let step = 0;
+        this.timerName = setInterval(() => {
+          this.updatedCurrentWidth();
+          if (step > 10) {
+            clearInterval(this.timerName);
+          }
+        }, 500);
+      },
+    },
+    changedStateParent: {
+      handler() {
+        let step = 0;
+        this.timerName = setInterval(() => {
+          this.updatedCurrentWidth();
+          if (step > 10) {
+            clearInterval(this.timerName);
+          }
+        }, 100);
       },
     },
     currentWidthElement: {

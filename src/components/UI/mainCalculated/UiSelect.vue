@@ -27,8 +27,8 @@
       <div
         class="calc__select-change-wrapper"
         ref="changeElement"
-        :style="[maxWidthSettings]"
-        :class="{ error: isErrorClass, stretch: isStretch }"
+        :style="[maxWidthForChangeElement]"
+        :class="{ error: isErrorClass, stretch: isStretch}"
       >
         <div
           v-if="currentOption"
@@ -45,14 +45,15 @@
             {{ currentOption.selectName }}
           </icon-element-wrapper>
           <ui-prompt
-            v-if="currentOption?.prompt?.length"
+            v-if="isExistCurrentPrompt"
             :prompt-text="currentOption.prompt"
           />
           <div class="calc__select-arrow"></div>
         </div>
         <div
           class="calc__select-option-wrapper"
-          :style="[maxWidthSettings]"
+          :class="{stretch: isStretch }"
+          :style="[maxWidthForOptionList]"
           ref="optionList"
           v-show="isOpen"
         >
@@ -140,8 +141,11 @@ export default {
         this.close();
       }
     });
+
+
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
+      this.updatedWidthSelect();
     }, 200);
   },
   props: {
@@ -321,9 +325,20 @@ export default {
         }
       });
     },
-    resetMaxWidthSelectList() {
-      this.maxWidthSelectList = null;
-    },
+    updatedWidthSelect() {
+      if (this.$refs.optionList?.offsetWidth === 0 || this.$refs.changeElement?.offsetWidth === 0 || this.maxWidthSelectList !== null) {
+        return false;
+      }
+      setTimeout(() => {
+          if (
+            this.$refs.optionList?.offsetWidth > this.$refs.changeElement?.offsetWidth) {
+            this.maxWidthSelectList = this.$refs.optionList?.offsetWidth;
+          } else {
+            this.maxWidthSelectList = this.$refs.changeElement?.offsetWidth;
+          }
+      }, 100)
+
+    }
   },
   watch: {
     isOpen(newValue) {
@@ -339,16 +354,8 @@ export default {
       }
       if (newValue) {
         this.$nextTick(() => {
-          this.resetMaxWidthSelectList();
-          if (
-            this.$refs.optionList.offsetWidth >
-            this.$refs.changeElement.offsetWidth
-          ) {
-            this.maxWidthSelectList = this.$refs.optionList.offsetWidth;
-          } else {
-            this.maxWidthSelectList = this.$refs.changeElement.offsetWidth;
-          }
-        });
+          this.updatedWidthSelect();
+        })
       }
     },
     isVisibilityFromDependency: {
@@ -376,6 +383,9 @@ export default {
     ]),
     isExistLabel() {
       return Boolean(this.label.length);
+    },
+    isExistCurrentPrompt() {
+      return Boolean(this.currentOption?.prompt?.length);
     },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
@@ -511,9 +521,14 @@ export default {
         return selectItem;
       });
     },
-    maxWidthSettings() {
+    maxWidthForChangeElement() {
       return this.maxWidthSelectList
-        ? "max-width:" + this.maxWidthSelectList + "px;" + "width : 100%;"
+        ? "max-width:" + this.maxWidthSelectList + "px; width: 100%;"
+        : null;
+    },
+    maxWidthForOptionList() {
+      return this.maxWidthSelectList
+        ? "max-width:" + this.maxWidthSelectList + "px; width: 100%;"
         : null;
     },
   },

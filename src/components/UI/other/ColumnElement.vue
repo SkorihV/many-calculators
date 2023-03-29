@@ -1,8 +1,9 @@
 <template>
-  <div class="calc__wrapper-group-data" ref="parent">
+  <div class="calc__columns-column-label-wrapper" ref="parent">
     <icon-element-wrapper
       :icon-settings="column.iconSettings"
       :alt="isExistLabel ? column.label : ''"
+      :isExistLabel="isExistLabel"
     >
       <div class="calc__columns-column-label" v-if="isExistLabel">
         {{ column.label }}
@@ -55,7 +56,7 @@ export default {
   },
   computed: {
     isExistLabel() {
-      return this.column?.label?.length;
+      return Boolean(this.column?.label?.length);
     },
     showColumn() {
       return Boolean(this.isVisibilityFromDependency && this.parentIsShow);

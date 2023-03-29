@@ -1435,8 +1435,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         font-size: 15px;
         line-height: 16px;
         position: relative;
-        flex: 1 1 100%;
-        min-width: 30%;
+        //flex: 1 1 100%;
+        min-width: 200px;
         @media all and (max-width: 480px) {
           width: 100%;
         }
@@ -1461,7 +1461,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         border-radius: $c_element_border_radius;
         border: $c_element_border_width solid $c_element_border_color;
         background-color: $c_element_bg_color;
-        padding: 20px 40px;
+        padding: 20px 50px 20px 40px;
         font-weight: 400;
         font-size: 16px;
         line-height: 20px;
@@ -1490,6 +1490,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           flex: 0 0 auto;
           transform: rotate(45deg);
           -webkit-transform: rotate(45deg);
+          position: absolute;
+          right: 30px;
         }
 
         .calc__prompt-wrapper {
@@ -1502,7 +1504,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: calc(100% - $c_element_border_width);
         border-bottom-left-radius: $c_element_border-radius;
         border-bottom-right-radius: $c_element_border-radius;
         z-index: 99;
@@ -1520,6 +1521,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         &:hover {
         }
+        &.stretch {
+          width: 100%;
+        }
       }
       &-item {
         background-color: $c_element_bg_color;
@@ -1527,7 +1531,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         gap: 20px;
         text-align: start;
-        padding: 10px 40px;
+        padding: 10px 50px 10px 40px;
         cursor: pointer;
         width: 100%;
         position: relative;
@@ -2132,6 +2136,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         margin-bottom: 8px;
         @include transition;
         &-wrapper {
+          width: 100%;
           .calc__wrapper-group-data {
             padding-left: 20px;
             padding-right: 20px;
@@ -2335,6 +2340,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
       &-label {
         @include style-title-main;
+        &-wrapper {
+          display: flex;
+          margin-bottom: 8px;
+        }
       }
       &-item {
         display: flex;
@@ -2559,9 +2568,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 50px 0 10px;
       border-bottom: 2px groove $c_decor_border_color;
       margin-bottom: 10px;
-      .calc__icon-element-label-wrapper {
-        margin-bottom: 8px;
-      }
       &:hover {
         border-color: $c_decor_border_color_selected;
       }
@@ -2569,6 +2575,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-label {
       @include style-title-main;
       text-align: center;
+      margin-bottom: 8px;
     }
     &-duplicate,
     &-delete {

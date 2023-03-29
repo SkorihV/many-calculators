@@ -4,7 +4,7 @@
     :element-name="localElementName"
     :value="localCost"
     :local-cost="localCost"
-    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :is-visibility-from-dependency="showElement"
     :dependency-formula-display="dependencyFormulaDisplay"
     :parsing-formula-variables="formulaAfterProcessingVariables"
   />
@@ -72,7 +72,7 @@ export default {
         type: "system",
         label: "",
         eventType,
-        isShow: true,
+        isShow: this.showElement,
         parentName: this.parentName,
       });
     },
@@ -80,7 +80,7 @@ export default {
       this.tryAddDependencyElement({
         name: this.localElementName,
         value: this.localCost,
-        isShow: this.isVisibilityFromDependency,
+        isShow: this.showElement,
         displayValue: null,
         type: "system",
       });
@@ -115,7 +115,7 @@ export default {
      * @returns {number|null}
      */
     localCost() {
-      if (!this.isVisibilityFromDependency) {
+      if (!this.showElement) {
         return null;
       }
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
@@ -130,6 +130,9 @@ export default {
       }
       return parseFloat(this.cost);
     },
+    showElement() {
+      return this.parentIsShow && this.isVisibilityFromDependency;
+    }
   },
 };
 </script>

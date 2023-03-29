@@ -16,6 +16,7 @@
         :template="template"
         :index="itemName + '_' + key_in"
         :parent-name="elementName"
+        :change-state-parent="isShowItem"
         @changedValue="changeValue"
       />
       <templates-wrapper

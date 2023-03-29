@@ -57,6 +57,7 @@
           :template="template"
           :index="itemIdName + '_' + key_in"
           :parent-name="elementName"
+          :change-state-parent="isOpen"
           @changedValue="changeValue"
         />
         <templates-wrapper

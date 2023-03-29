@@ -7,6 +7,7 @@
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :parent-is-show="parentIsShow"
     :icon-settings="template?.iconSettings"
+    :changed-state-parent="changeStateParent"
     :element-name="
       template?.elementName?.length
         ? template?.elementName
@@ -29,6 +30,10 @@ export default {
     UiColumns,
   },
   props: {
+    changeStateParent: {
+      type: Boolean,
+      default: false
+    },
     ...propsTemplate.getProps([
       "template",
       "index",

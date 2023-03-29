@@ -1225,6 +1225,97 @@
   "test-columns": {
     "calculatorTemplates": [
       {
+        "json_id": "116703452707",
+        "meta_id": "31621307",
+        "ver_id": "4865318",
+        "title": "Цвет потолка",
+        "created": "1679637148",
+        "type_group_id": "9005",
+        "label": "Цвет потолка",
+        "selectedItem": "1",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "isColumn": 1,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 0,
+        "values": [
+          {
+            "title": "Элемент списка - Белый",
+            "selectName": "Белый",
+            "prompt": "текст подсказки"
+          },
+          {
+            "title": "Элемент списка - Серый",
+            "selectName": "Серый"
+          },
+          {
+            "title": "Элемент списка - Желтый",
+            "selectName": "Желтый"
+          },
+          {
+            "title": "Элемент списка - Желтый",
+            "selectName": "длинноеСловоОчень"
+          }
+        ],
+        "prompt": "Текстовая подсказка",
+        "iconSettings": null,
+        "parent": "0;34349707;34349907;"
+      },
+      {
+        "json_id": "121862707",
+        "title": "Вид включение подсветки",
+        "label": "",
+        "defaultImage": {
+          "image_id": "1460627507",
+          "filename": "cvet2bel1_1.jpg",
+          "ver_id": 4867762,
+          "image_width": "1280",
+          "image_height": "1280",
+          "ext": "jpg"
+        },
+        "maxWidth": "150",
+        "maxHeight": "150",
+        "dependencyFormulaDisplay": "материал === 1 || материал === 2",
+        "classes": "",
+        "template": "UiImage",
+        "dependencyImages": [
+          {
+            "title": "",
+            "image": {
+              "image_id": "1460627907",
+              "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
+              "ver_id": 4867762,
+              "image_width": "1280",
+              "image_height": "1280",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "включениеПодсветки === 3"
+          },
+          {
+            "title": "",
+            "image": {
+              "image_id": "1460627707",
+              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
+              "ver_id": 4867762,
+              "image_width": "1280",
+              "image_height": "1280",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "включениеПодсветки === 4"
+          }
+        ],
+        "prompt": "",
+        "parent": "0;35787307;35787507;"
+      },
+      {
         "json_id": "116703707",
         "meta_id": "34349707",
         "ver_id": "4865318",
@@ -1263,7 +1354,7 @@
                 "dependencyFormulaDisplay": "",
                 "classes": "",
                 "template": "UiSelect",
-                "isStretch": 1,
+                "isStretch": false,
                 "values": [
                   {
                     "title": "Элемент списка - Ткань",
@@ -1839,7 +1930,7 @@
                     "title": "Дополнительные опции - 3",
                     "created": "1679640888",
                     "type_group_id": "9018",
-                    "label": "",
+                    "label": "234234",
                     "templates": [
                       {
                         "json_id": "105138107",

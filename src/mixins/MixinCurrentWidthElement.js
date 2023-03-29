@@ -16,7 +16,7 @@ export const MixinCurrentWidthElement = {
   },
   data() {
     return {
-      currentWidthElement: null,
+      currentWidthElement: 980,
       timerName: null,
     };
   },
