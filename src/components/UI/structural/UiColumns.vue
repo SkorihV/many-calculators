@@ -8,6 +8,7 @@
     <icon-element-wrapper
       :icon-settings="iconSettings"
       :alt="isExistLabel ? label : ''"
+      :is-exist-label="isExistLabel"
     >
       <div class="calc__columns-label-text" v-if="isExistLabel">
         {{ label }}

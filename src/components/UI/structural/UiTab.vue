@@ -9,6 +9,7 @@
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? label : ''"
+        :is-exist-label="isExistLabel"
       >
         <div class="calc__tab-main-label" v-if="isExistLabel">
           {{ label }}
@@ -42,6 +43,7 @@
               :icon-settings="item?.iconSettings"
               :is-parent-hover="hoverElementIndex === idx"
               :is-parent-selected="shownIdTab === idx"
+              :is-exist-label="Boolean(item.label?.length)"
             >
               <div class="calc__tab-item-label-text">
                 <div class="calc__tab-item-label-main">{{ item.label }}</div>

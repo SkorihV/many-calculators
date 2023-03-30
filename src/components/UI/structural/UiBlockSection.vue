@@ -14,7 +14,11 @@
         :image-settings-data="backgroundImageSettings"
       />
       <div class="calc__block-section-label-wrapper" v-if="isExistLabel">
-        <icon-element-wrapper :icon-settings="iconSettings">
+        <icon-element-wrapper
+          :icon-settings="iconSettings"
+          :alt="isExistLabel ? label : ''"
+          :is-exist-label="isExistLabel"
+        >
           <div class="calc__block-section-label-text">
             <div class="calc__block-section-label_main" v-if="isExistLabel">
               {{ label }}

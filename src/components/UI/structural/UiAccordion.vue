@@ -9,6 +9,7 @@
       <icon-element-wrapper
         :icon-settings="iconSettings"
         :alt="isExistLabel ? accordionData?.label : ''"
+        :is-exist-label="isExistLabel"
       >
         <div class="calc__accordion-main-label" v-if="isExistLabel">
           {{ label }}

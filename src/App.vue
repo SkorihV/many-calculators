@@ -1414,6 +1414,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         .calc__select-option-wrapper {
           border-color: $c_element_border_color;
+          overflow: auto;
+          max-height: 300px;
         }
       }
       @media all and (max-width: 480px) {
