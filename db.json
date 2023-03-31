@@ -1211,7 +1211,7 @@
     "resultOptions": {
       "title": "ИТОГО:",
       "titleButton": "Рассчитать",
-      "formulaDisplayButton": "площадь &gt; 0 &amp;&amp; материал !== null",
+      "formulaDisplayButton": "",
       "showResultDataForBlock": 1,
       "titleSumma": "Расчетная сумма составляет:",
       "currency": "руб.",
@@ -1497,7 +1497,7 @@
             "selectName": "длинноеСловоОчень"
           }
         ],
-        "prompt": "Текстовая подсказка",
+        "prompt": "Текстовая подсказка 132131",
         "iconSettings": null,
         "parent": "0;34349707;34349907;"
       },
@@ -1771,7 +1771,7 @@
                 "title": "Картинка потолка",
                 "created": "1679637202",
                 "type_group_id": "9007",
-                "label": "",
+                "label": "Название картинки",
                 "defaultImage": {
                   "image_id": "1445105307",
                   "filename": "https://works-addon.21.oml.ru/d/bathhouse.svg",

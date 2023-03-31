@@ -23,7 +23,7 @@
       <div class="calc__range-item-wrapper">
         <div class="calc__range-item-left-side">
           <input
-            ref="thisElement"
+            ref="thisElementInputRange"
             class="calc__range-item"
             :class="{ isError: isClassError }"
             type="range"
@@ -217,7 +217,7 @@ export default {
     });
 
     let timer = setInterval(() => {
-      if (this.$refs?.thisElement?.offsetWidth || this.elementWidth) {
+      if (this.$refs?.thisElementInputRange?.offsetWidth || this.elementWidth) {
         this.updateWidthElement();
         clearInterval(timer);
       }
@@ -350,8 +350,8 @@ export default {
       );
     },
     updateWidthElement() {
-      if (this.elementWidth !== this.$refs?.thisElement?.offsetWidth) {
-        this.elementWidth = this.$refs?.thisElement?.offsetWidth;
+      if (this.elementWidth !== this.$refs?.thisElementInputRange?.offsetWidth) {
+        this.elementWidth = this.$refs?.thisElementInputRange?.offsetWidth;
       }
     },
   },
@@ -371,7 +371,7 @@ export default {
       handler(newValue, oldValue) {
         if (newValue) {
           setTimeout(() => {
-            this.elementWidth = this.$refs.thisElement.offsetWidth;
+            this.elementWidth = this.$refs.thisElementInputRange.offsetWidth;
           }, 500);
         }
         this.changeValue("dependency");

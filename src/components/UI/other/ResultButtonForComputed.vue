@@ -128,8 +128,7 @@ export default {
       return (
         this.showResultBtn &&
         this.showButtonOnDependency &&
-        !this.checkAllowShowResultBlock &&
-        !this.isExistGlobalErrorsValidationIgnoreHiddenElement
+        !this.checkAllowShowResultBlock
       );
     },
     isFormulaDisplayButton() {

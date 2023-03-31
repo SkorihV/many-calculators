@@ -20,10 +20,15 @@
         :position-element="idx"
         :show-duplicate-button="countElementsDuple < maximumDuple"
         :icon-settings="originData?.iconSettings"
+        :prompt="originData?.prompt"
         @duplicate="duplicate"
         @deleteDuplicator="deleteDuplicator"
         @changedValue="changeValue"
-      />
+      >
+        <template v-slot:prompt v-if="IsExistPrompt">
+          <ui-prompt :prompt-text="originData.prompt" />
+        </template>
+      </ui-duplicator-wrapper>>
     </div>
   </div>
   <dev-block
@@ -43,6 +48,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
@@ -51,7 +57,7 @@ import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
-  components: { UiDuplicatorWrapper, devBlock },
+  components: { UiDuplicatorWrapper, devBlock, UiPrompt},
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
@@ -199,6 +205,9 @@ export default {
     countElementsDuple() {
       return this.localTemplates?.length ? this.localTemplates?.length : 0;
     },
+    IsExistPrompt(){
+      return Boolean(this.originData.prompt?.length);
+    }
   },
 };
 </script>

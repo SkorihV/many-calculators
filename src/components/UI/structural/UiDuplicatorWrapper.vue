@@ -10,6 +10,7 @@
       <div class="calc__duplicator-label" v-if="isExistLabel">
         {{ mutationsInputData.label }}
       </div>
+      <slot name="prompt"/>
     </icon-element-wrapper>
 
     <template
@@ -17,7 +18,7 @@
       :key="index + '_' + inx"
     >
       <templates-wrapper-structural
-        v-if="isStructureTemplate(template?.template)"
+        v-if="checkedIsStructureTemplate(template?.template)"
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
@@ -90,7 +91,7 @@ export default {
     TemplatesWrapper,
     TemplatesWrapperColumn,
     TemplatesWrapperStructural,
-    IconElementWrapper,
+    IconElementWrapper
   },
   mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
   props: {
@@ -115,6 +116,7 @@ export default {
       default: () => {},
     },
     ...propsTemplate.getProps([
+      "prompt",
       "formula",
       "parentName",
       "parentIsShow",
@@ -264,7 +266,7 @@ export default {
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",
-      "isStructureTemplate",
+      "checkedIsStructureTemplate",
     ]),
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.

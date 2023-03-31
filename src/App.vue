@@ -3,7 +3,7 @@
     <div class="calc calc__wrapper" id="custom-stile">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <templates-wrapper-structural
-          v-if="isStructureTemplate(template?.template)"
+          v-if="checkedIsStructureTemplate(template?.template)"
           :parent-is-show="true"
           :template="template"
           :index="index"
@@ -439,7 +439,7 @@ export default {
       "checkInitEnabledSendForm",
       "setAllowShowResultBlock",
       "checkAllowShowResultBlock",
-      "isStructureTemplate",
+      "checkedIsStructureTemplate",
       "tryAddDependencyElement",
     ]),
     mainFormulaIsExist() {
@@ -917,6 +917,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
 .main-wrapper {
   max-width: 980px;
+  width: 100%;
   margin: 0 auto;
   background-color: #dadada;
   padding: 3px;
@@ -2527,7 +2528,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     &-label {
       @include style-title-main;
       text-align: center;
-      margin-bottom: 8px;
     }
     &-duplicate,
     &-delete {
