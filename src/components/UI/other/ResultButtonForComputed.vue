@@ -163,8 +163,8 @@ export default {
         return eval(this.formulaOnDataVariables);
       } catch (e) {
         if (this.devMode) {
-          console.error(
-            "Ошибка в расчете формулы кнопки: ",
+          console.warn(
+            "Рассчитываемая формула кнопки: ",
             this.formulaOnDataVariables
           );
         }

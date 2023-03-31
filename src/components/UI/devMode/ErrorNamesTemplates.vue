@@ -159,7 +159,7 @@ export default {
       this.processingAllTemplatesOnData();
       this.checkInShowing();
     }, 2000);
-    console.info(
+    console.warn(
       "Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов."
     );
   },

@@ -178,6 +178,7 @@
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     :icon-settings="template?.iconSettings"
+    :is-search="template?.isSearch"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

@@ -1,4 +1,100 @@
 /**
+ * у всех элементов калькулятора добавляем порядковый номер.
+ * @param inputData
+ * @returns {*[]}
+ */
+const initUpdatingPositionData = function(inputData) {
+  const calculatorTemplatesWitchPositions = [];
+  const templatesInExist = Boolean(inputData?.calculatorTemplates?.length);
+  if (templatesInExist) {
+    let templatesPositionIndex = 0;
+
+    inputData.calculatorTemplates.forEach((item) => {
+      let currentMainItem = item;
+      const currentMainTemplateName = currentMainItem?.template;
+
+      if (currentMainTemplateName === "UiBlockSection") {
+        const { newItem, shiftIndex } = updatePositionElementsInBlockSection(
+          currentMainItem,
+          templatesPositionIndex
+        );
+        templatesPositionIndex = shiftIndex;
+        calculatorTemplatesWitchPositions.push(newItem);
+      } else if (
+        currentMainTemplateName === "UiTab" ||
+        currentMainTemplateName === "UiAccordion"
+      ) {
+        const { newItem, shiftIndex } =
+          updatePositionElementsInTabAndAccordion(
+            currentMainItem,
+            templatesPositionIndex
+          );
+        currentMainItem = newItem;
+        templatesPositionIndex = shiftIndex;
+        calculatorTemplatesWitchPositions.push(currentMainItem);
+      } else if (currentMainTemplateName === "UiDuplicator") {
+        const currentDuplicatorItem = currentMainItem;
+        const duplicatorTemplates = currentDuplicatorItem?.templates;
+        const lengthDuplicatorTemplates = duplicatorTemplates?.length;
+        const duplicatorTemplatesInExist = Boolean(lengthDuplicatorTemplates);
+        if (duplicatorTemplatesInExist) {
+          let currentPositionDuplicatorIndex = 0;
+          const newDuplicatorTemplates = [];
+
+          for (let r = 0; r < lengthDuplicatorTemplates; r++) {
+            const duplicatorItemTemplateName =
+              duplicatorTemplates[r].template;
+            let newTemplate = duplicatorTemplates[r];
+
+            if (duplicatorItemTemplateName === "UiBlockSection") {
+              const { newItem, shiftIndex } =
+                updatePositionElementsInBlockSection(
+                  newTemplate,
+                  currentPositionDuplicatorIndex
+                );
+              currentPositionDuplicatorIndex = shiftIndex;
+              newTemplate = newItem;
+            } else if (
+              duplicatorItemTemplateName === "UiTab" ||
+              duplicatorItemTemplateName === "UiAccordion"
+            ) {
+              const { newItem, shiftIndex } =
+                updatePositionElementsInTabAndAccordion(
+                  newTemplate,
+                  currentPositionDuplicatorIndex
+                );
+              currentPositionDuplicatorIndex = shiftIndex;
+              newTemplate = newItem;
+            } else {
+              const { newItem, shiftIndex } = updatePositionInBaseTemplates(
+                newTemplate,
+                currentPositionDuplicatorIndex
+              );
+              currentPositionDuplicatorIndex = shiftIndex;
+              newTemplate = newItem;
+            }
+            newDuplicatorTemplates.push(newTemplate);
+          }
+          currentDuplicatorItem.templates = newDuplicatorTemplates;
+          currentMainItem.position = templatesPositionIndex;
+          templatesPositionIndex++;
+          calculatorTemplatesWitchPositions.push(currentDuplicatorItem);
+        }
+      } else {
+        const { newItem, newIndex } = updatePositionInBaseTemplates(
+          currentMainItem,
+          templatesPositionIndex
+        );
+        templatesPositionIndex = newIndex;
+        calculatorTemplatesWitchPositions.push(newItem);
+      }
+    });
+  }
+
+  return calculatorTemplatesWitchPositions;
+}
+
+/**
  * Добавление позиций для элементов Блок-секции
  * @param item
  * @param index
@@ -97,6 +193,7 @@ const updatePositionInBaseTemplates = function (currentItem, shiftIndex) {
     bufferItem.position = shiftIndex;
     bufferIndex++;
   }
+
   return { newItem: bufferItem, newIndex: bufferIndex };
 };
 
@@ -137,7 +234,5 @@ const updatePositionElementsInColumns = function (currentColumnsObject, index) {
 };
 
 export {
-  updatePositionElementsInBlockSection,
-  updatePositionElementsInTabAndAccordion,
-  updatePositionInBaseTemplates,
+  initUpdatingPositionData
 };

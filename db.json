@@ -1323,7 +1323,7 @@
         "selectedItem": "1",
         "isNeedChoice": false,
         "notEmpty": false,
-        "isColumn": 0,
+        "isColumn": 1,
         "formOutputMethod": "value",
         "resultOutputMethod": "value",
         "zeroValueDisplayIgnore": 1,
@@ -1333,7 +1333,7 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiSelect",
-        "isStretch": 1,
+        "isStretch": 0,
         "values": [
           {
             "title": "Элемент списка - Белый",
@@ -1577,6 +1577,7 @@
                 "selectedItem": "1",
                 "isNeedChoice": 1,
                 "notEmpty": 1,
+                "isSearch": 1,
                 "formOutputMethod": "valueSumm",
                 "resultOutputMethod": "value",
                 "zeroValueDisplayIgnore": false,
@@ -1808,6 +1809,7 @@
                 "formulaProcessingLogic": "zero",
                 "dependencyFormulaDisplay": "",
                 "classes": "",
+                "isSearch": 1,
                 "template": "UiSelect",
                 "isStretch": 1,
                 "values": [

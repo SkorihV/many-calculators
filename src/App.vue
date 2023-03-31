@@ -56,13 +56,13 @@
         Не все поля участвующие в расчете были заполнены.
       </div>
       <result-button-for-computed
-        :resultOptions="outOptions?.resultOptions"
+        :resultOptions="inputOptions?.resultOptions"
         @checkEnabledResultButton="checkEnabledResultButton"
       />
 
       <result-block-for-output
-        v-if="outOptions?.resultOptions"
-        :result-options="outOptions?.resultOptions"
+        v-if="inputOptions?.resultOptions"
+        :result-options="inputOptions?.resultOptions"
         :dataForResult="sortPositionDataForOutput"
         :final-summa-for-output="finalSummaForOutput"
       />
@@ -114,11 +114,7 @@ import {
   getListVariablesMissedInFormula,
 } from "@/servises/UtilityServices.js";
 
-import {
-  updatePositionElementsInBlockSection,
-  updatePositionElementsInTabAndAccordion,
-  updatePositionInBaseTemplates,
-} from "@/servises/UpdatedPositionOnTemplates.js";
+import {initUpdatingPositionData} from "@/servises/UpdatedPositionOnTemplates.js";
 
 export default {
   name: "TheBasicCalculatorConstructor",
@@ -146,126 +142,45 @@ export default {
       await fetch(localPathData)
         .then((response) => response.json())
         .then((data) => {
-          this.outData = data;
+          this.inputData = data;
         });
       await fetch(localPathOptions)
         .then((response) => response.json())
         .then((data) => {
-          this.outOptions = data;
+          this.inputOptions = data;
         });
     } else {
-      this.outData.calculatorTemplates = JSON.parse(
-        JSON.stringify(window?.calculatorTemplates)
-      );
-      this.outOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
+      try {
+        this.inputData.calculatorTemplates = JSON.parse(
+          JSON.stringify(window?.calculatorTemplates)
+        );
+      } catch (e) {
+        this.inputData.calculatorTemplates = [];
+      }
+
+      try {
+        this.inputOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
+      } catch (e) {
+        console.error("Ошибка при получении настроек калькулятора " + e.message)
+       this.inputOptions = {}
+      }
     }
-    /**
-     * у всех элементов калькулятора добавляем порядковый номер.
-     * @type {*[]}
-     */
-    const calculatorTemplatesWitchPositions = [];
-    const countTemplatesInOutData = this.outData?.calculatorTemplates?.length;
-    if (Boolean(countTemplatesInOutData)) {
-      let templatesPositionIndex = 0;
-
-      this.outData?.calculatorTemplates.forEach((item) => {
-        let currentMainItem = item;
-        const currentMainTemplateName = currentMainItem?.template;
-
-        if (currentMainTemplateName === "UiBlockSection") {
-          const { newItem, shiftIndex } = updatePositionElementsInBlockSection(
-            currentMainItem,
-            templatesPositionIndex
-          );
-          templatesPositionIndex = shiftIndex;
-          calculatorTemplatesWitchPositions.push(newItem);
-        } else if (
-          currentMainTemplateName === "UiTab" ||
-          currentMainTemplateName === "UiAccordion"
-        ) {
-          const { newItem, shiftIndex } =
-            updatePositionElementsInTabAndAccordion(
-              currentMainItem,
-              templatesPositionIndex
-            );
-          currentMainItem = newItem;
-          templatesPositionIndex = shiftIndex;
-          calculatorTemplatesWitchPositions.push(currentMainItem);
-        } else if (currentMainTemplateName === "UiDuplicator") {
-          const currentDuplicatorItem = currentMainItem;
-          const duplicatorTemplates = currentDuplicatorItem?.templates;
-          const lengthDuplicatorTemplates = duplicatorTemplates?.length;
-
-          if (Boolean(lengthDuplicatorTemplates)) {
-            let currentPositionDuplicatorIndex = 0;
-            const newDuplicatorTemplates = [];
-
-            for (let r = 0; r < lengthDuplicatorTemplates; r++) {
-              const duplicatorItemTemplateName =
-                duplicatorTemplates[r].template;
-              let newTemplate = duplicatorTemplates[r];
-
-              if (duplicatorItemTemplateName === "UiBlockSection") {
-                const { newItem, shiftIndex } =
-                  updatePositionElementsInBlockSection(
-                    newTemplate,
-                    currentPositionDuplicatorIndex
-                  );
-                currentPositionDuplicatorIndex = shiftIndex;
-                newTemplate = newItem;
-              } else if (
-                duplicatorItemTemplateName === "UiTab" ||
-                duplicatorItemTemplateName === "UiAccordion"
-              ) {
-                const { newItem, shiftIndex } =
-                  updatePositionElementsInTabAndAccordion(
-                    newTemplate,
-                    currentPositionDuplicatorIndex
-                  );
-                currentPositionDuplicatorIndex = shiftIndex;
-                newTemplate = newItem;
-              } else {
-                const { newItem, shiftIndex } = updatePositionInBaseTemplates(
-                  newTemplate,
-                  currentPositionDuplicatorIndex
-                );
-                currentPositionDuplicatorIndex = shiftIndex;
-                newTemplate = newItem;
-              }
-              newDuplicatorTemplates.push(newTemplate);
-            }
-            currentDuplicatorItem.templates = newDuplicatorTemplates;
-            currentMainItem.position = templatesPositionIndex;
-            templatesPositionIndex++;
-            calculatorTemplatesWitchPositions.push(currentDuplicatorItem);
-          }
-        } else {
-          const { newItem, shiftIndex } = updatePositionInBaseTemplates(
-            currentMainItem,
-            templatesPositionIndex
-          );
-          templatesPositionIndex = shiftIndex;
-          calculatorTemplatesWitchPositions.push(newItem);
-        }
-      });
-    }
-
-    this.calculatorTemplates = calculatorTemplatesWitchPositions;
-    this.formula = this.outOptions?.formula?.length
-      ? this.outOptions?.formula
+    this.calculatorTemplates = initUpdatingPositionData(this.inputData);
+    this.formula = this.inputOptions?.formula?.length
+      ? this.inputOptions?.formula
       : "";
 
-    this.isUseFormula = this.outOptions?.computedMethod === "formula";
-    this.displayResultData = this.outOptions?.computedMethod !== "no";
-    this.methodWorksForm = this.outOptions?.methodWorksForm
-      ? this.outOptions.methodWorksForm
+    this.isUseFormula = this.inputOptions?.computedMethod === "formula";
+    this.displayResultData = this.inputOptions?.computedMethod !== "no";
+    this.methodWorksForm = this.inputOptions?.methodWorksForm
+      ? this.inputOptions.methodWorksForm
       : "show";
     this.existFormulaForHiddenResultButton = Boolean(
-      this.outOptions?.resultOptions?.formulaDisplayButton?.length
+      this.inputOptions?.resultOptions?.formulaDisplayButton?.length
     );
 
-    this.setMethodBeginningCalculation(this.outOptions);
-    this.setCurrency(this.outOptions);
+    this.setMethodBeginningCalculation(this.inputOptions);
+    this.setCurrency(this.inputOptions);
     this.findForm();
     this.findTeleportField();
     this.findSubmitForm();
@@ -275,16 +190,16 @@ export default {
     }
 
     this.setInitEnabledSendForm(this.methodBeginningCalculationIsAutomatic);
-    this.tryToggleDevMode(Boolean(this.outOptions?.devModeEnabled));
-    this.setTooltipOn(this.outOptions);
+    this.tryToggleDevMode(Boolean(this.inputOptions?.devModeEnabled));
+    this.setTooltipOn(this.inputOptions);
 
     delete window?.calculatorTemplates;
     delete window?.calculatorOptions;
   },
   data() {
     return {
-      outData: {}, // внешние данные с шаблонами элементов калькулятора
-      outOptions: {}, // внешние данные с общими настройками калькулятора
+      inputData: {}, // внешние данные с шаблонами элементов калькулятора
+      inputOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
       formula: "", // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
@@ -393,14 +308,14 @@ export default {
         return false;
       }
       if (
-        Number(this.outOptions?.resultOptions?.timerForSpinner) > 0 &&
+        Number(this.inputOptions?.resultOptions?.timerForSpinner) > 0 &&
         this.methodWorksForm !== "show"
       ) {
         setTimeout(() => {
           if (this.showFormIsAllow) {
             this.formElement.style.display = "block";
           }
-        }, this.outOptions?.resultOptions?.timerForSpinner * 1000);
+        }, this.inputOptions?.resultOptions?.timerForSpinner * 1000);
       } else {
         this.formElement.style.display = "block";
       }
@@ -614,8 +529,8 @@ export default {
         return eval(this.resultTextForComputed);
       } catch (e) {
         if (this.devMode) {
-          console.error(
-            "Ошибка в расчете формулы: ",
+          console.warn(
+            "Рассчитываемая формула: ",
             this.resultTextForComputed
           );
         }
@@ -746,8 +661,8 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else {
-        const titleSumma = !!this.outOptions?.resultOptions?.titleSumma
-          ? this.outOptions?.resultOptions?.titleSumma
+        const titleSumma = !!this.inputOptions?.resultOptions?.titleSumma
+          ? this.inputOptions?.resultOptions?.titleSumma
           : "";
         result +=
           "\n" +
@@ -1190,6 +1105,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       flex-direction: column;
       position: relative;
+      min-width: 0;
     }
 
     &-unit {
@@ -1279,6 +1195,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
+        width: 100%;
+        min-width: 0;
         @media all and (max-width: 480px) {
           display: none;
         }
@@ -1414,8 +1332,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         .calc__select-option-wrapper {
           border-color: $c_element_border_color;
-          overflow: auto;
-          max-height: 300px;
         }
       }
       @media all and (max-width: 480px) {
@@ -1530,6 +1446,31 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         &.stretch {
           width: 100%;
+        }
+      }
+      &-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        overflow: auto;
+        max-height: 300px;
+      }
+      &-search {
+        font-size: 16px;
+        line-height: 20px;
+        padding: 10px 50px 10px 40px;
+        background: $c_element_bg_color;
+        color: $c_element_text_default;
+        border: $c_element_border_width solid
+        $c_element_border_color;
+        width: 100%;
+        border-radius: $c_element_border_radius;
+        &:focus,
+        &:hover {
+          outline: none;
+          border-color: $c_element_border_color_hover;
+          background: $c_element_bg_color_hover;
+          color: $c_element_text_hover;
         }
       }
       &-item {
@@ -2789,6 +2730,14 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 }
 
 .calc__form-for-result {
+  textarea {
+    &#teleport {
+      display: none;
+    }
+  }
+}
+
+.calc__form-for-result-style {
   display: none;
   * {
     margin: 0;

@@ -57,32 +57,36 @@
             ref="optionList"
             v-show="isOpen"
           >
-            <template
-              v-for="(option, idx) in selectValuesAfterProcessingDependency"
-              :key="idx"
-            >
-              <div
-                class="calc__select-option-item"
-                @click="changeSelect(option, idx)"
-                v-if="currentOption?.value !== option?.value && option.isShow"
-                @mouseover="hoverElementIndex = idx"
-                @mouseleave="hoverElementIndex = null"
+            <input class="calc__select-option-search" type="text" v-if="isSearch" v-model="searchField">
+            <div class="calc__select-option-list">
+              <template
+                v-for="(option, idx) in selectValuesAfterProcessingDependency"
+                :key="idx"
               >
-                <icon-element-wrapper
-                  :alt="option?.selectName"
-                  :icon-settings="option?.iconSettings"
-                  :is-parent-hover="hoverElementIndex === idx"
+                <div
+                  class="calc__select-option-item"
+                  @click="changeSelect(option, idx)"
+                  v-if="currentOption?.value !== option?.value && option.isShow"
+                  @mouseover="hoverElementIndex = idx"
+                  @mouseleave="hoverElementIndex = null"
                 >
-                  <div class="calc__select-option-item-text">
-                    {{ option.selectName }}
-                  </div>
-                </icon-element-wrapper>
-                <ui-prompt
-                  v-if="option?.prompt?.length"
-                  :prompt-text="option.prompt"
-                />
-              </div>
-            </template>
+                  <icon-element-wrapper
+                    :alt="option?.selectName"
+                    :icon-settings="option?.iconSettings"
+                    :is-parent-hover="hoverElementIndex === idx"
+                  >
+                    <div class="calc__select-option-item-text">
+                      {{ option.selectName }}
+                    </div>
+                  </icon-element-wrapper>
+                  <ui-prompt
+                    v-if="option?.prompt?.length"
+                    :prompt-text="option.prompt"
+                  />
+                </div>
+              </template>
+            </div>
+
           </div>
         </div>
       </div>
@@ -165,6 +169,13 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    isSearch: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      }
+    },
     ...propsTemplate.getProps([
       "isColumn",
       "isStretch",
@@ -188,6 +199,7 @@ export default {
   },
   data() {
     return {
+      searchField: '',
       isOpen: true,
       currentOption: this.mockOption,
       currentIndexOption: null,
@@ -529,6 +541,11 @@ export default {
         selectItem.isShow = newDataIsShow;
         if (!newDataIsShow && selectItem.value === this.currentOptionValue) {
           this.resetSelectedValue();
+        }
+        return selectItem;
+      }).filter(selectItem => {
+        if (this.isSearch && this.searchField?.length) {
+          return selectItem.selectName.toLowerCase().indexOf(this.searchField.toLowerCase()) !== -1
         }
         return selectItem;
       });
