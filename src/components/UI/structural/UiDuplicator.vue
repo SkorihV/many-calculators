@@ -28,7 +28,7 @@
         <template v-slot:prompt v-if="IsExistPrompt">
           <ui-prompt :prompt-text="originData.prompt" />
         </template>
-      </ui-duplicator-wrapper>>
+      </ui-duplicator-wrapper>
     </div>
   </div>
   <dev-block
@@ -38,7 +38,6 @@
     :element-name="elementName"
     :local-cost="localCost"
     :is-visibility-from-dependency="isVisibilityFromDependency"
-    value="null"
   />
 </template>
 

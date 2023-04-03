@@ -1,6 +1,7 @@
 <template>
   <div
     class="calc__columns-wrapper"
+    :class="[classes]"
     ref="parent"
     v-show="showElementColumns"
     :id="elementName"

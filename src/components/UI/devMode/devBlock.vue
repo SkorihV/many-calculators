@@ -96,7 +96,6 @@ export default {
       default: null,
     },
     formulaVariables: {
-      type: [String, Boolean],
       default: null,
     },
   },

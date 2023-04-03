@@ -2521,6 +2521,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 50px 0 10px;
       border-bottom: 2px groove $c_decor_border_color;
       margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       &:hover {
         border-color: $c_decor_border_color_selected;
       }
