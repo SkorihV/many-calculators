@@ -7,10 +7,12 @@
       :icon-settings="iconSettings"
       :alt="isExistLabel ? mutationsInputData.label : ''"
     >
-      <div class="calc__duplicator-label" v-if="isExistLabel">
-        {{ mutationsInputData.label }}
-      </div>
-      <slot name="prompt"/>
+      <template>
+        <div class="calc__duplicator-label" v-if="isExistLabel">
+          {{ mutationsInputData.label }}
+        </div>
+        <slot name="prompt"/>
+      </template>
     </icon-element-wrapper>
 
     <template

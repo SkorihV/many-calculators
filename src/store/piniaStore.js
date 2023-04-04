@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useBaseStore = defineStore("base", {
   state: () => {
     return {
+      inputOptions: null,
       dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
@@ -19,7 +20,6 @@ export const useBaseStore = defineStore("base", {
       showInsideElementStatusData: false,
       elementsIsMounted: {},
       tooltipOn: true,
-      currency: "руб",
       methodBeginningCalculation: "no",
       initEnabledSendForm: false,
       allowShowResultBlock: false,
@@ -32,14 +32,29 @@ export const useBaseStore = defineStore("base", {
     checkAllowShowResultBlock({ allowShowResultBlock }) {
       return allowShowResultBlock;
     },
-    methodBeginningCalculationIsButton({ methodBeginningCalculation }) {
-      return methodBeginningCalculation === "useButton";
+    /**
+     *
+     * @returns {string}
+     */
+    getMethodBeginningCalculation({inputOptions}) {
+      return inputOptions?.methodBeginningCalculation
+        ? inputOptions?.methodBeginningCalculation
+        : "no";
     },
-    methodBeginningCalculationIsAutomatic({ methodBeginningCalculation }) {
-      return methodBeginningCalculation === "useAutomatic";
+    methodBeginningCalculationIsButton() {
+      return this.getMethodBeginningCalculation === "useButton";
     },
-    getCurrency: ({ currency }) => {
-      return currency;
+    methodBeginningCalculationIsAutomatic() {
+      return this.getMethodBeginningCalculation === "useAutomatic";
+    },
+    /**
+     *
+     * @returns {string|string|*}
+     */
+    getCurrency: ({inputOptions}) => {
+      return Boolean(inputOptions?.resultOptions?.currency)
+        ? inputOptions?.resultOptions?.currency
+        : "руб";
     },
     /**
      * Получить весь список элементов результата
@@ -159,6 +174,25 @@ export const useBaseStore = defineStore("base", {
       ({ nameTemplatesForStructure }) =>
       (templateName) =>
         nameTemplatesForStructure.includes(templateName),
+    /**
+     *
+     * @returns {number}
+     */
+    getSignAfterDot({inputOptions}) {
+      let sing = parseInt(inputOptions?.resultOptions?.signAfterDot);
+      if ( !isNaN(sing) && typeof sing === 'number') {
+        return sing;
+      } else {
+        return 0;
+      }
+    },
+    getRoundOffType({inputOptions}) {
+      let type = inputOptions?.resultOptions?.roundOffType;
+      return type ? type : 'round';
+    },
+    getTitleSum({inputOptions}) {
+      return inputOptions?.resultOptions?.titleSumma?.length ? inputOptions?.resultOptions?.titleSumma : "";
+    }
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -260,21 +294,14 @@ export const useBaseStore = defineStore("base", {
     setTooltipOn(dataOptions) {
       this.tooltipOn = !Boolean(dataOptions?.tooltipOff);
     },
-    setCurrency(dataOptions) {
-      this.currency = !!dataOptions?.resultOptions?.currency
-        ? dataOptions?.resultOptions?.currency
-        : "руб";
-    },
-    setMethodBeginningCalculation(dataOptions) {
-      this.methodBeginningCalculation = dataOptions?.methodBeginningCalculation
-        ? dataOptions?.methodBeginningCalculation
-        : "no";
-    },
     setInitEnabledSendForm(flag) {
       this.initEnabledSendForm = flag;
     },
     setAllowShowResultBlock(flag) {
       this.allowShowResultBlock = flag;
     },
+    setInputOptions(inputOptions) {
+      this.inputOptions = inputOptions;
+    }
   },
 });

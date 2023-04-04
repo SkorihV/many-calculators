@@ -46,18 +46,20 @@
               :is-parent-hover="hoverElementIndex === radio.index"
               :is-parent-selected="currentIndexRadioButton === radio.index"
             >
-              <span
-                class="calc__radio-indicator"
-                v-if="radioType === 'base' && !onlyImage"
-              ></span>
-              <div class="calc__radio-text" v-if="!onlyImage">
-                <div class="calc__radio-name">
-                  {{ radio.radioName }}
+              <template>
+                 <span
+                   class="calc__radio-indicator"
+                   v-if="radioType === 'base' && !onlyImage"
+                 ></span>
+                <div class="calc__radio-text" v-if="!onlyImage">
+                  <div class="calc__radio-name">
+                    {{ radio.radioName }}
+                  </div>
+                  <div class="calc__radio-subname">
+                    {{ radio?.subradioName }}
+                  </div>
                 </div>
-                <div class="calc__radio-subname">
-                  {{ radio?.subradioName }}
-                </div>
-              </div>
+              </template>
             </icon-element-wrapper>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>

@@ -80,6 +80,7 @@ export default {
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "checkInitEnabledSendForm",
       "checkAllowShowResultBlock",
+      "getTitleSum"
     ]),
     isShowResultBlockTitle() {
       return Boolean(this.resultOptions?.title?.length);
@@ -198,15 +199,12 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else if (this.finalSummaForOutput !== false && this.showSumma) {
-        const titleSumma = !!this.resultOptions?.titleSumma
-          ? this.resultOptions?.titleSumma
-          : "";
         const sum = parseFloat(this.finalSummaForOutput)?.toLocaleString("ru");
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
-          titleSumma +
+          this.getTitleSum +
           "</div>" +
           "<div class='calc__result-block-field-summ-cost'> " +
           sum +

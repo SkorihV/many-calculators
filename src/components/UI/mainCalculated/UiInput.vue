@@ -253,6 +253,7 @@ export default {
   data() {
     return {
       inputFocus: false,
+      focusTimerName: null,
       localInputBufferValue: null,
       localInputValue: null,
       nameTimer: null,
@@ -429,8 +430,6 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
-      this.changeValue("plus");
-      this.shownTooltip();
     },
     minus() {
       if (!this.isOnlyNumber) {
@@ -447,8 +446,6 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
-      this.changeValue("minus");
-      this.shownTooltip();
     },
     updateValueAfterSignComma(value) {
       return this.needFixedResult
@@ -476,12 +473,27 @@ export default {
     inputFocus: {
       handler(isFocus) {
         if (!isFocus) {
-          this.localInputValue = this.localInputBufferValue;
           this.changeValue();
           this.shownTooltip();
+          clearTimeout(this.focusTimerName);
         }
       },
     },
+    localInputBufferValue: {
+      handler(newValue ) {
+        this.localInputValue = newValue;
+        clearTimeout(this.focusTimerName);
+        this.focusTimerName = setTimeout(() => {
+          if (this.inputFocus) {
+            setTimeout(() => this.inputFocus = true, 1000 )
+          } else {
+            this.changeValue();
+            this.shownTooltip();
+          }
+          this.inputFocus = false;
+        }, 3000)
+      }
+    }
   },
   computed: {
     ...mapState(useBaseStore, [

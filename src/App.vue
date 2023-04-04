@@ -112,6 +112,7 @@ import {
   parsingDataInFormulaOnSumma,
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
+  decimalAdjust
 } from "@/servises/UtilityServices.js";
 
 import {initUpdatingPositionData} from "@/servises/UpdatedPositionOnTemplates.js";
@@ -179,8 +180,7 @@ export default {
       this.inputOptions?.resultOptions?.formulaDisplayButton?.length
     );
 
-    this.setMethodBeginningCalculation(this.inputOptions);
-    this.setCurrency(this.inputOptions);
+    this.setInputOptions(this.inputOptions)
     this.findForm();
     this.findTeleportField();
     this.findSubmitForm();
@@ -430,9 +430,7 @@ export default {
       "getImageDir",
       "appIsMounted",
       "setTooltipOn",
-      "setCurrency",
       "getCurrency",
-      "setMethodBeginningCalculation",
       "methodBeginningCalculationIsAutomatic",
       "methodBeginningCalculationIsButton",
       "setInitEnabledSendForm",
@@ -441,6 +439,11 @@ export default {
       "checkAllowShowResultBlock",
       "checkedIsStructureTemplate",
       "tryAddDependencyElement",
+      "getSignAfterDot",
+      "getRoundOffType",
+      "setInputOptions",
+      "getTitleSum",
+
     ]),
     mainFormulaIsExist() {
       return Boolean(this.formula?.length);
@@ -452,7 +455,6 @@ export default {
     baseDataForCalculate() {
       return Object.values(this.getAllResultsElements);
     },
-
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
      * Избавляемся от пустых элементов.
@@ -639,6 +641,8 @@ export default {
           return sum + 0;
         }, 0);
       }
+      resultSum = decimalAdjust(resultSum, this.getSignAfterDot, this.getRoundOffType);
+
       this.tryPassDependency(
         "_globalSum_",
         resultSum,
@@ -646,6 +650,7 @@ export default {
         resultSum,
         "App_calc"
       );
+
       return resultSum;
     },
     /**
@@ -661,14 +666,11 @@ export default {
       if (this.finalSummaForOutput === false) {
         result += "Есть ошибка в расчетах!";
       } else {
-        const titleSumma = !!this.inputOptions?.resultOptions?.titleSumma
-          ? this.inputOptions?.resultOptions?.titleSumma
-          : "";
         result +=
           "\n" +
           "<div class='calc__result-block-field-summ'>" +
           "<div class='calc__result-block-field-summ-title'>" +
-          titleSumma +
+          this.getTitleSum +
           "</div>" +
           "<div class='calc__result-block-field-summ-cost'> " +
           this.finalSummaForOutput +
@@ -1009,7 +1011,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @include style-title-main;
         align-items: flex-start;
         display: flex;
-        gap: 2px;
+        gap: 5px;
       }
     }
 
@@ -1098,7 +1100,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @include style-title-main;
         display: flex;
         align-items: flex-start;
-        gap: 2px;
+        gap: 5px;
       }
     }
     &-item-left-side {
@@ -1350,7 +1352,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @include style-title-main;
         align-items: flex-start;
         display: flex;
-        gap: 2px;
+        gap: 5px;
       }
     }
     &-change {
@@ -1544,7 +1546,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @include style-title-main;
       align-items: flex-start;
       display: flex;
-      gap: 2px;
+      gap: 5px;
     }
     &-label-button {
       display: flex;
@@ -1648,7 +1650,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @include style-title-main;
         align-items: flex-start;
         display: flex;
-        gap: 2px;
+        gap: 5px;
       }
     }
 
@@ -1667,6 +1669,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-text_checked {
         display: flex;
         align-items: center;
+        gap: 5px;
         @include style-title-main;
         color: $c_element_text_default;
       }
@@ -1834,7 +1837,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   //-------всплывающая подсказка ------
   &__prompt {
     &-wrapper {
-      margin-left: 5px;
     }
     &-button {
       cursor: pointer;
@@ -2064,6 +2066,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         &-text {
           display: flex;
+          gap: 5px;
           flex-direction: column;
           align-items: flex-start;
         }
@@ -2189,6 +2192,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           gap: 10px;
         }
         &-text {
+          gap: 5px;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -2233,6 +2237,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &_text {
         display: flex;
         flex-direction: column;
+        gap: 5px;
       }
       &_main {
         @include style-title-main;
