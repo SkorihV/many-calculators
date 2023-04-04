@@ -70,7 +70,7 @@
         v-if="devMode"
         :templates="calculatorTemplates"
         :init-template="devMode"
-        :formula="mainFormulaIsExist && isUseFormula ? formula : ''"
+        :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
       />
       <div id="prompt-text-element"></div>
     </div>
@@ -78,7 +78,7 @@
       {{ finalTextForOutputForTeleport }}
     </teleport>
     <dev-block
-      :formula="formula"
+      :formula="mainFormulaResult"
       :formula-variables="resultTextForComputed"
       :local-cost="finalSummaForOutput"
       hidden-value
@@ -167,9 +167,6 @@ export default {
       }
     }
     this.calculatorTemplates = initUpdatingPositionData(this.inputData);
-    this.formula = this.inputOptions?.formula?.length
-      ? this.inputOptions?.formula
-      : "";
 
     this.isUseFormula = this.inputOptions?.computedMethod === "formula";
     this.displayResultData = this.inputOptions?.computedMethod !== "no";
@@ -201,7 +198,6 @@ export default {
       inputData: {}, // внешние данные с шаблонами элементов калькулятора
       inputOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
-      formula: "", // формула для кастомного расчета
       isUseFormula: false, // использовать формулу
       displayResultData: false, // включить работу формул и вывод данных
       eventNotShowTooltips: [
@@ -446,7 +442,12 @@ export default {
 
     ]),
     mainFormulaIsExist() {
-      return Boolean(this.formula?.length);
+      return Boolean(this.mainFormulaResult?.length);
+    },
+    mainFormulaResult() {
+      return this.inputOptions?.formula?.length
+        ? this.inputOptions?.formula
+        : "";
     },
     /**
      * Данные которые подходят для вывода или расчета
@@ -462,7 +463,7 @@ export default {
      */
     variablesInFormula() {
       if (this.mainFormulaIsExist) {
-        return this.getArrayElementsFromFormula(this.formula);
+        return this.getArrayElementsFromFormula(this.mainFormulaResult);
       }
       return [];
     },

@@ -1,19 +1,12 @@
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
+import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
 export const MixinsForProcessingFormula = {
-  mixins: [MixinsUtilityServices],
-  data() {
-    return {
-      /**
-       * список переменных от которого зависит именно текущий элемент
-       */
-      localDependencyList: {},
-      countUpdatedDependency: 0,
-    };
-  },
+  mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   methods: {
     /**
      *
@@ -22,66 +15,6 @@ export const MixinsForProcessingFormula = {
      */
     checkedValueOnVoid(value) {
       return value?.length !== 0 && value !== undefined && value !== null;
-    },
-
-    /**
-     * Собираем локальный список зависимостей из глобального на основе формулы
-     * @param formula
-     */
-    constructLocalListElementDependencyInFormula(formula) {
-      formula.forEach((name) => {
-        if (
-          this.isElementDependency(name) &&
-          !this.existLocalElementDependency(name)
-        ) {
-          this.putElementDependencyInLocalList(name);
-        }
-      });
-    },
-
-    /**
-     * Обработать полученные переменные из формулы
-     * и получить строку со значениями
-     * @returns {string}
-     */
-    processingVariablesOnFormula(formula) {
-      if (!formula) {
-        return null;
-      }
-      const result = formula?.reduce((resultText, item) => {
-        const elementDependency =
-          item in this.localDependencyList
-            ? this.localDependencyList[item]
-            : null;
-
-        const elementIsExist = elementDependency !== null;
-        const valueIsExist = !isNaN(
-          parseFloat(elementDependency?.value) &&
-            !Array.isArray(elementDependency?.value) &&
-            typeof elementDependency?.value !== "boolean"
-        );
-        const valueIsBool = typeof elementDependency?.value === "boolean";
-        const valueIsNull = elementDependency?.value === null;
-        const valueIsArray = Array.isArray(elementDependency?.value);
-        const valueIsNum = !isNaN(parseFloat(elementDependency?.value));
-
-        if (elementIsExist) {
-          if (valueIsNum) {
-            return resultText + elementDependency?.value + " ";
-          } else if (valueIsBool) {
-            return resultText + Boolean(elementDependency?.value) + " ";
-          } else if (valueIsNull) {
-            return resultText + elementDependency?.value + " ";
-          } else if (valueIsArray) {
-            return resultText + elementDependency?.value + " ";
-          } else {
-            return resultText + "'" + elementDependency.value + "' ";
-          }
-        }
-
-        return resultText + item + " ";
-      }, "");
-      return result;
     },
     /**
      * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -112,7 +45,7 @@ export const MixinsForProcessingFormula = {
           }
 
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          formula = processingVariablesOnFormula(formula, this.localDependencyList);
 
           try {
             if (eval(formula)) {
@@ -134,30 +67,6 @@ export const MixinsForProcessingFormula = {
       );
       return result.changed ? result.cost : null;
     },
-    /**
-     * Существует ли элемент от которого идет зависимость
-     * @returns {*|null}
-     */
-    isElementDependency(name) {
-      const elementIsNotExist = !name?.length && !this.globalDependenciesList;
-      if (elementIsNotExist) {
-        return false;
-      }
-      return name in this.globalDependenciesList;
-    },
-    /**
-     * @param name
-     * @returns {boolean}
-     */
-    existLocalElementDependency(name) {
-      return name in this.localDependencyList;
-    },
-    /**
-     * @param name
-     */
-    putElementDependencyInLocalList(name) {
-      this.localDependencyList[name] = this.globalDependenciesList[name];
-    },
   },
   watch: {
     // /**
@@ -177,38 +86,6 @@ export const MixinsForProcessingFormula = {
     //     this.changeValue("dependency");
     //   }
     // },
-    globalDependenciesList: {
-      handler(newValue) {
-        let isUpdated = false;
-        for (let key in newValue) {
-          const isUpdatedDependencyList =
-            this.existLocalElementDependency(key) &&
-            (newValue[key].value !== this.localDependencyList[key].value ||
-              newValue[key].isShow !== this.localDependencyList[key].isShow);
-
-          if (isUpdatedDependencyList) {
-            this.localDependencyList[key] = newValue[key];
-            isUpdated = true;
-            this.countUpdatedDependency++;
-          }
-        }
-        if (isUpdated) {
-          this.changeValue("changeValueDependenciesElements");
-        }
-      },
-      deep: true,
-    },
-    localDependencyList: {
-      handler(newValue, oldValue) {
-        let isUpdated = false;
-        Object.entries(newValue).forEach(([key, data]) => {
-          if (data.value !== oldValue[key].value) {
-            isUpdated = true;
-          }
-        });
-      },
-      deep: true,
-    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -262,7 +139,7 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     formulaAfterProcessingVariables() {
-      return this.processingVariablesOnFormula(this.parsingFormulaVariables);
+      return processingVariablesOnFormula(this.parsingFormulaVariables, this.localDependencyList);
     },
   },
 };

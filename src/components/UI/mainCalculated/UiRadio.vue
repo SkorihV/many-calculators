@@ -92,6 +92,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -360,7 +361,7 @@ export default {
             radio.dependencyFormulaItem
           );
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          formula = processingVariablesOnFormula(formula, this.localDependencyList);
           try {
             radio.isShow = eval(formula);
           } catch (e) {

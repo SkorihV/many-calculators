@@ -16,6 +16,7 @@
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
+import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 
 export default {
   name: "background-image-element",
@@ -142,7 +143,7 @@ export default {
             imageItem.dependencyFormulaDisplay
           );
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          formula = processingVariablesOnFormula(formula, this.localDependencyList);
 
           try {
             if (eval(formula)) {

@@ -39,6 +39,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
@@ -123,7 +124,7 @@ export default {
             imageItem.dependencyFormulaDisplay
           );
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = this.processingVariablesOnFormula(formula);
+          formula = processingVariablesOnFormula(formula, this.localDependencyList);
 
           const currentUrlIsExist = Boolean(imageItem?.image?.filename.length);
           try {

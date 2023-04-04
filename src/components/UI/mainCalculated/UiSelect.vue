@@ -117,6 +117,7 @@ import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula"
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
+import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -528,7 +529,7 @@ export default {
           item.toLowerCase() === "_self_" ? selectItem.value : item
         );
 
-        formula = this.processingVariablesOnFormula(formula);
+        formula = processingVariablesOnFormula(formula, this.localDependencyList);
         let newDataIsShow;
         try {
           newDataIsShow = eval(formula);
