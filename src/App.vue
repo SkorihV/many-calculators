@@ -101,6 +101,7 @@ import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComput
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
+import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
@@ -116,10 +117,11 @@ import {
 } from "@/servises/UtilityServices.js";
 
 import {initUpdatingPositionData} from "@/servises/UpdatedPositionOnTemplates.js";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
   name: "TheBasicCalculatorConstructor",
-  mixins: [MixinsUtilityServices],
+  mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   components: {
     TemplatesWrapperStructural,
     TemplatesWrapperColumn,
@@ -445,9 +447,40 @@ export default {
       return Boolean(this.mainFormulaResult?.length);
     },
     mainFormulaResult() {
+      if (!this.isExistDependencyMainFormula) {
+        return this.inputOptions?.formula?.length
+          ? this.inputOptions?.formula
+          : "";
+      }
+      const formulaAfterDependency = this.inputOptions.dependencyMainFormula?.reduce((resultFormula, item) => {
+          let dependencyFormula = this.getArrayElementsFromFormula(item.dependencyFormula);
+          this.constructLocalListElementDependencyInFormula(dependencyFormula);
+          dependencyFormula = processingVariablesOnFormula(dependencyFormula, this.localDependencyList);
+
+          const formulaIsExist = Boolean(item?.formula?.length)
+          try {
+            if (eval(dependencyFormula) && formulaIsExist) {
+              resultFormula = item.formula;
+            }
+          } catch(e) {
+            if (this.devMode) {
+              console.error("Формула зависимости для смены главной формулы: " + e.message)
+            }
+        }
+        return resultFormula;
+      }, "");
+
+      const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
+      if (isFormulaAfterDependency) {
+        return formulaAfterDependency;
+      }
+
       return this.inputOptions?.formula?.length
         ? this.inputOptions?.formula
         : "";
+    },
+    isExistDependencyMainFormula() {
+      return Boolean(this.inputOptions?.dependencyMainFormula?.length)
     },
     /**
      * Данные которые подходят для вывода или расчета

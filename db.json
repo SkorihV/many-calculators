@@ -1211,7 +1211,7 @@
       },
       {
         "title": 3,
-        "dependencyFormula": "площадь &gt; 3",
+        "dependencyFormula": "цветПотолка === 3",
         "formula": "материал * площадь + _otherSum_ + 3"
       }
     ],

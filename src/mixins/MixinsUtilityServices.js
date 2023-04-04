@@ -70,6 +70,6 @@ export const MixinsUtilityServices = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["getSpecSymbols"]),
+    ...mapState(useBaseStore, ["getSpecSymbols", "getNameReserveVariable"]),
   },
 };
