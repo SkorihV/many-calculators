@@ -110,7 +110,7 @@ import localData from "@/servises/localData";
 import {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
-  parsingDataInFormulaOnSumma,
+  parsingDataInFormulaOnSum,
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
   decimalAdjust
@@ -547,7 +547,7 @@ export default {
      * @returns {*}
      */
     resultTextForComputed() {
-      const resultString = parsingDataInFormulaOnSumma(
+      const resultString = parsingDataInFormulaOnSum(
         processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
       );
       return resultString?.replace(

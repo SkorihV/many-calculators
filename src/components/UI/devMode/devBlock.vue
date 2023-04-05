@@ -92,7 +92,6 @@ export default {
       default: false,
     },
     formula: {
-      type: [String, Boolean],
       default: null,
     },
     formulaVariables: {

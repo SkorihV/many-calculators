@@ -147,7 +147,6 @@ export default {
       if (data?.name) {
         this.localResultData[data.name] = data;
       }
-
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,
         type: "duplicator",

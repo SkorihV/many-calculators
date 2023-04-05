@@ -1,10 +1,12 @@
-<template>
+<template>{{cost}}
   <dev-block
     :label="label"
     :element-name="localElementName"
     :value="localCost"
     :local-cost="localCost"
     :is-visibility-from-dependency="showElement"
+    :formula-variables="processingVariablesInFormula"
+    :formula="localCostFormula"
     :dependency-formula-display="dependencyFormulaDisplay"
     :parsing-formula-variables="formulaAfterProcessingVariables"
   />
@@ -13,7 +15,9 @@
 <script>
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
+import {MixinsUtilityServices} from "@/mixins/MixinsUtilityServices";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
+import {processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -22,11 +26,14 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 export default {
   name: "UiSystem",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinsUtilityServices],
   components: { devBlock },
   props: {
+    cost: {
+      type: [Number, String],
+      default: null,
+    },
     ...propsTemplate.getProps([
-      "cost",
       "elementName",
       "parentName",
       "formulaProcessingLogic",
@@ -58,6 +65,7 @@ export default {
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
+        zeroValueDisplayIgnore: true,
       });
       this.changeValid(eventType);
       this.tryPassDependency();
@@ -103,6 +111,8 @@ export default {
     ...mapState(useBaseStore, [
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
+      "getResultElementOnName",
+      "listGlobalsVariables"
     ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -110,25 +120,71 @@ export default {
         : Math.random().toString();
     },
     /**
-     * Возвращает цену подходящую условию, если моле отображается
-     * Если не одна цена не подходит, то возвращается стандартная
-     * @returns {number|null}
+     * Возвращает формулу цены без данных
+     * @returns {number|*|number|string|null}
      */
-    localCost() {
+    localCostFormula() {
       if (!this.showElement) {
         return null;
       }
-      if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
-        return parseFloat(this.cost);
+      if (!this.initProcessingDependencyPrice || !this.dependencyPrices?.length) {
+        return this.cost;
       }
-      let newCost = this.costAfterProcessingDependencyPrice(
+      let formulaCost = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices
       );
 
-      if (newCost !== null) {
-        return parseFloat(newCost);
+      if (formulaCost !== null) {
+        return formulaCost;
       }
-      return parseFloat(this.cost);
+      return this.cost;
+    },
+    /**
+     * возвращает цену или формулу цены из собранных данных
+     * @returns {number|string|null}
+     */
+    processingVariablesInFormula() {
+      if (!this.showElement) {
+        return null;
+      }
+      let cost = Number(this.localCostFormula)
+      if (!isNaN(cost) && typeof cost === 'number'){
+        return cost;
+      }
+
+      let formulaCostArr = this.getArrayElementsFromFormula(this.localCostFormula);
+
+      let formulaCost = formulaCostArr?.map((item) => {
+        const isReserveVariable = item === this.getNameReserveVariable;
+        const isGlobalVariable = this.getResultElementOnName(item) !== null;
+
+        if (isReserveVariable) {
+          return this.getProxyFreeVariables(
+            0
+          );
+        } else if (isGlobalVariable) {
+          return this.getResultElementOnName(item);
+        } else {
+          return item;
+        }
+      });
+      return processingArrayOnFormulaProcessingLogic(formulaCost).join(' ');
+    },
+
+    /**
+     *
+     * @returns {number|null|any}
+     */
+    localCost() {
+      if (!this.showElement || this.processingVariablesInFormula === null) {
+        return null;
+      }
+      try {
+        return eval(this.processingVariablesInFormula);
+      } catch (e) {
+        console.error("Системное поле, обработка формулы стоимости: ", this.processingVariablesInFormula);
+        return null
+      }
     },
     showElement() {
       return this.parentIsShow && this.isVisibilityFromDependency;

@@ -49,7 +49,7 @@
               Имя элемента '{{ key }}' обнаружено у следующих элементов:
             </div>
             <div class="calc__error-item-name" v-for="label in error">
-              {{ label.length ? label : "Отсутствует" }}
+              {{ label?.length ? label : "Отсутствует" }}
             </div>
           </div>
           <p class="calc__error-alert">Имена должны быть уникальными!</p>

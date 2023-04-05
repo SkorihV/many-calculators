@@ -1202,12 +1202,12 @@
     "json_large": "{\"resultOptions\":{\"title\":\"ИТОГО:\",\"titleButton\":\"Рассчитать\",\"formulaDisplayButton\":\"площадь &gt; 0 &amp;&amp; материал !== null\",\"showResultDataForBlock\":1,\"titleSumma\":\"Расчетная сумма составляет:\",\"currency\":\"руб.\",\"textForSpinner\":\"Идет расчет...\"},\"textAbove\":\"\",\"textAfter\":\"\"}",
     "type_group_id": "51214106",
     "computedMethod": "formula",
-    "formula": "материал * площадь + _otherSum_",
+    "formula": "материал * площадь + _otherSum_ - системное",
     "dependencyMainFormula": [
       {
         "title": 2,
         "dependencyFormula": "площадь &gt; 2",
-        "formula": "материал * площадь + _otherSum_ + 1"
+        "formula": "материал * площадь + _otherSum_ + 1 + системное"
       },
       {
         "title": 3,
@@ -1239,10 +1239,54 @@
   "test-columns": {
     "calculatorTemplates": [
       {
-        "json_id": "132590907",
+        "json_id": "13494sdf0707",
+        "title": "системное",
+        "cost": "0 + ползунок + 5",
+        "elementName": "системное",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "",
+        "template": "UiSystem",
+        "dependencyPrices": [
+          {
+            "title": "условие",
+            "cost": "10 * ползунок",
+            "dependencyFormulaCost": "ползунок > 6"
+          },
+          {
+            "title": "условие",
+            "cost": 10000,
+            "dependencyFormulaCost": "ползунок > 20"
+          }
+        ],
+        "parent": "0;"
+      },
+      {
+        "json_id": "132gfd590907",
         "title": "Дупликатор с иконкой",
         "label": "Дупликатор с иконкой",
         "templates": [
+          {
+            "json_id": "13494sdf0707",
+            "title": "системное2",
+            "cost": "0 + _otherSum_ + 55",
+            "elementName": "системное2",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "template": "UiSystem",
+            "dependencyPrices": [
+              {
+                "title": "условие",
+                "cost": "10 * ползунок",
+                "dependencyFormulaCost": "ползунок > 6"
+              },
+              {
+                "title": "условие",
+                "cost": 10000,
+                "dependencyFormulaCost": "ползунок > 20"
+              }
+            ],
+            "parent": "0;"
+          },
           {
             "json_id": "12452sdf38507",
             "meta_id": "31030507",
@@ -1459,8 +1503,8 @@
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
         "elementName": "ползунок",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "площадь > 0",
         "classes": "",
         "template": "UiRange",
         "dependencyPrices": null,
@@ -1493,33 +1537,13 @@
         "zeroValueDisplayIgnore": false,
         "excludeFromCalculations": false,
         "elementName": "ползунок2",
-        "formulaProcessingLogic": "zero",
+        "formulaProcessingLogic": "error",
         "dependencyFormulaDisplay": "ползунок &gt; 10",
         "classes": "",
         "template": "UiRange",
         "dependencyPrices": null,
         "prompt": "",
         "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "124528707",
-        "meta_id": "31030907",
-        "ver_id": "4601302",
-        "title": "системное",
-        "type_group_id": "9006",
-        "cost": "1",
-        "elementName": "системное",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "ползунок2 &gt; 10",
-        "template": "UiSystem",
-        "dependencyPrices": [
-          {
-            "title": "",
-            "cost": 33,
-            "dependencyFormulaCost": "ползунок2 &gt; 20"
-          }
-        ],
         "parent": "0;"
       },
       {

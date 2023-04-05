@@ -91,11 +91,11 @@ const processingArrayOnFormulaProcessingLogic = function (dataList) {
 };
 
 /**
- * Обрабатываем массив данных и получаем сумму всех значений из item.summ
+ * Обрабатываем массив данных и получаем сумму всех значений из item.cost
  * @param dataListVariables
  * @returns {*}
  */
-const parsingDataInFormulaOnSumma = function (dataListVariables) {
+const parsingDataInFormulaOnSum = function (dataListVariables) {
   return dataListVariables?.reduce((resultText, item) => {
     const isExistCost = item?.cost && typeof item?.cost === "number";
 
@@ -198,7 +198,7 @@ const decimalAdjust = function (value, exp = 0, type = 'round') {
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
-  parsingDataInFormulaOnSumma,
+  parsingDataInFormulaOnSum,
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
   getNameElementsRecursive,
