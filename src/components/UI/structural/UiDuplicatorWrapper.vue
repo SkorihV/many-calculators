@@ -48,11 +48,7 @@
       class="calc__duplicator-duplicate"
       @click="tryDuplicate"
     >
-      {{
-        duplicatorData?.buttonName?.length
-          ? duplicatorData?.buttonName
-          : "Дублировать"
-      }}
+      {{buttonDupleTitle}}
     </button>
     <button
       v-if="isDuplicate"
@@ -65,7 +61,7 @@
   <dev-block
     :element-name="mutationsInputData?.elementName"
     :local-cost="localCost"
-    :formula="formula"
+    :formula="mainFormulaResult"
     :formula-variables="compileFormulaWitchData"
     hidden-value
   />
@@ -77,13 +73,14 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperC
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
+import {MixinLocalDependencyList} from "@/mixins/MixinLocalDependencyList";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
   name: "UiDuplicatorWrapper",
@@ -95,7 +92,7 @@ export default {
     TemplatesWrapperStructural,
     IconElementWrapper
   },
-  mixins: [MixinsForProcessingFormula, MixinsUtilityServices],
+  mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   props: {
     duplicatorData: {
       type: Object,
@@ -147,10 +144,10 @@ export default {
   },
   methods: {
     changeValue(data) {
-      if (!data?.name) {
-        return null;
+      if (data?.name) {
+        this.localResultData[data.name] = data;
       }
-      this.localResultData[data.name] = data;
+
       this.$emit("changedValue", {
         name: this.mutationsInputData.elementName,
         type: "duplicator",
@@ -184,6 +181,11 @@ export default {
       });
       this.$emit("deleteDuplicator", this.duplicatorData.elementName);
     },
+    /**
+     * @param data
+     * @param index
+     * @returns {*}
+     */
     updateInputData(data, index) {
       let mutationsData = JSON.parse(JSON.stringify(data));
 
@@ -195,6 +197,11 @@ export default {
 
       return mutationsData;
     },
+    /**
+     * @param object
+     * @param index
+     * @returns {*}
+     */
     updateIndexElementsInDuple(object, index) {
       for (let prop in object) {
         const propIsElementNameField = prop === "elementName";
@@ -232,14 +239,24 @@ export default {
       }
       return object;
     },
-
+    /**
+     * @param item
+     * @param index
+     * @returns {string}
+     */
     updateNameItem(item, index) {
       item.elementName = item?.elementName?.length
         ? item?.elementName + "_" + index
         : item?.json_id + "_" + index;
       return item.elementName;
     },
-
+    assignThePrefixArrayItems(arr){
+      let newArr = [];
+      for (let i = 0; i < arr.length; i++) {
+        newArr.push(arr[i] + "_" + this.index);
+      }
+      return newArr;
+    },
     /**
      * в формулу добавляем префиксы для переменных дупликатора
      * @param formulaString
@@ -248,18 +265,32 @@ export default {
      */
     addIndexIndexInFormulaElements(formulaString, index) {
       return this.getArrayElementsFromFormula(formulaString).map((item) => {
-        if (this.isAllowedAddIndex(item)) {
+        if (this.isLocalVariable(item)) {
           item = item + "_" + index;
         }
         return item;
       });
     },
-    isAllowedAddIndex(item) {
+    /**
+     *
+     * @param item
+     * @returns {boolean}
+     */
+    isLocalVariable(item) {
       const isFound = !Boolean(item.match(this.regExpStringSplitFormula));
       const isFoundVariableInOriginVariables =
         this.originVariables.includes(item);
       return isFound && isFoundVariableInOriginVariables;
     },
+  },
+  watch: {
+    localCost(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        const data = {}
+        data.eventType = 'dependencyCost'
+        this.changeValue(data)
+      }
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -271,14 +302,72 @@ export default {
       "checkedIsStructureTemplate",
     ]),
     /**
+     *
+     * @returns {boolean}
+     */
+    isExistDependencyMainFormula() {
+      return Boolean(this.originData?.dependencyMainFormula?.length)
+    },
+    /**
+     *
+     * @returns {boolean}
+     */
+    mainFormulaIsExist() {
+      return Boolean(this.mainFormulaResult?.length);
+    },
+    /**
+     *
+     * @returns {*|{length}|T|(function(): {default: string, type: String | StringConstructor})|string}
+     */
+    mainFormulaResult() {
+      if (!this.isExistDependencyMainFormula) {
+        return this.formula?.length
+          ? this.formula
+          : "";
+      }
+      const formulaAfterDependency = this.originData.dependencyMainFormula?.reduce((resultFormula, item) => {
+        let dependencyFormula = this.getArrayElementsFromFormula(item.dependencyFormula);
+
+        dependencyFormula = dependencyFormula.map(variable => {
+            if (this.isLocalVariable(variable)) {
+              return variable + "_" + this.index;
+            }
+          return variable;
+        })
+
+        this.constructLocalListElementDependencyInFormula(dependencyFormula);
+        dependencyFormula = processingVariablesOnFormula(dependencyFormula, this.localDependencyList);
+
+        const formulaIsExist = Boolean(item?.formula?.length)
+        try {
+          if (eval(dependencyFormula) && formulaIsExist) {
+            resultFormula = item.formula;
+          }
+        } catch(e) {
+          if (this.devMode) {
+            console.error("Формула зависимости для смены главной формулы дупликатора: " + e.message)
+          }
+        }
+        return resultFormula;
+      }, "");
+
+      const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
+      if (isFormulaAfterDependency) {
+        return formulaAfterDependency;
+      }
+
+      return this.formula?.length
+        ? this.formula
+        : "";
+    },
+    /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
      * Избавляемся от пустых элементов.
      * @returns {*}
      */
     variablesInFormula() {
-      return this.getArrayElementsFromFormula(this.formula);
+      return this.getArrayElementsFromFormula(this.mainFormulaResult);
     },
-
     /**
      * Список переменных в формуле из глобального окружения
      * @returns {*}
@@ -287,7 +376,7 @@ export default {
       return this.variablesInFormula.filter(
         (item) =>
           !this.originVariables.includes(item) &&
-          !Boolean(item.match(this.regExpStringSplitFormula)) &&
+          !Boolean(item?.match(this.regExpStringSplitFormula)) &&
           item !== this.getNameReserveVariable
       );
     },
@@ -298,9 +387,7 @@ export default {
     listLocalVariablesUsedInFormula() {
       return this.variablesInFormula.filter(
         (item) =>
-          !Boolean(item.match(this.regExpStringSplitFormula)) &&
-          item !== this.getNameReserveVariable &&
-          !this.listGlobalsVariables.includes(item)
+          this.isLocalVariable(item)
       );
     },
     /**
@@ -308,18 +395,17 @@ export default {
      * @returns {*}
      */
     listLocalVariablesUsedInFormulaForPrefix() {
-      return this.listLocalVariablesUsedInFormula.map(
-        (item) => item + "_" + this.index
-      );
+      return this.assignThePrefixArrayItems(this.listLocalVariablesUsedInFormula);
     },
     /**
      * Список локальных переменных не используемых в формуле
      * @returns {*[]}
      */
     arrayFreeVariablesOutsideFormula() {
-      return this.originVariables
-        .filter((item) => !this.listLocalVariablesUsedInFormula.includes(item))
-        .map((item) => item + "_" + this.index);
+      let variablesListUnusedInFormula = this.originVariables
+        .filter((item) => !this.listLocalVariablesUsedInFormula.includes(item));
+
+      return this.assignThePrefixArrayItems(variablesListUnusedInFormula)
     },
     /**
      * Список переменных не используемых в формуле
@@ -359,7 +445,7 @@ export default {
      */
     attachIndexForFormulaElements() {
       return this.variablesInFormula.map((item) => {
-        if (this.isAllowedAddIndex(item)) {
+        if (this.isLocalVariable(item)) {
           item = item + "_" + this.index;
         }
         return item;
@@ -405,7 +491,6 @@ export default {
       if (!this.variablesInFormula.length) {
         return this.resultSummaDataFriVariablesOutsideFormula;
       }
-
       return processingArrayOnFormulaProcessingLogic(
         this.dataListVariablesOnFormula
       )
@@ -436,7 +521,10 @@ export default {
         .join(" ")
         ?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, "");
     },
-
+    /**
+     *
+     * @returns {any|null}
+     */
     localCost() {
       const localCostIsNull =
         typeof this.compileFormulaWitchData === "string" &&
@@ -447,25 +535,45 @@ export default {
       }
 
       try {
-        return eval(this.compileFormulaWitchData);
+        const result = eval(this.compileFormulaWitchData);
+        const formulaIsComputed = typeof result === 'number'
+        if (formulaIsComputed) {
+          return result;
+        } else {
+          throw new Error();
+        }
       } catch (e) {
         if (this.devMode) {
           console.warn(
-            "Рассчитываемая формула: ",
+            "Рассчитываемая формула в дупликаторе: ",
             this.compileFormulaWitchData
           );
         }
         return null;
       }
     },
+    /**
+     *
+     * @returns {unknown[]}
+     */
     returnsLocalResultData() {
       return Object.values(this.localResultData).sort(
         (itemA, itemB) => itemA.position - itemB.position
       );
     },
+    /**
+     *
+     * @returns {boolean}
+     */
     isExistLabel() {
       return Boolean(this.mutationsInputData?.label?.length);
     },
+    buttonDupleTitle() {
+      const inputTitleIsExist = Boolean(this.duplicatorData?.buttonName?.length);
+      return inputTitleIsExist
+        ? this.duplicatorData?.buttonName
+        : "Дублировать"
+    }
   },
 };
 </script>

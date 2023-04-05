@@ -116,7 +116,7 @@ export default {
         this.localResultsElements[data.name] = data;
       }
       this.updateLocalCost();
-      this.emitChangeValue(data.eventType, this.localCost);
+      this.emitChangeValue(data.eventType);
     },
     calculateResult() {
       this.shownAllTooltips = true;

@@ -1239,6 +1239,202 @@
   "test-columns": {
     "calculatorTemplates": [
       {
+        "json_id": "132590907",
+        "title": "Дупликатор с иконкой",
+        "label": "Дупликатор с иконкой",
+        "templates": [
+          {
+            "json_id": "12452sdf38507",
+            "meta_id": "31030507",
+            "ver_id": "4601302",
+            "title": "тест 2",
+            "type_group_id": "9004",
+            "label": "тест2",
+            "value": "0",
+            "min": "0",
+            "max": "100",
+            "cost": "1",
+            "unit": "",
+            "step": "1",
+            "showSteps": false,
+            "stepPrompt": "1",
+            "isNeedChoice": false,
+            "notEmpty": false,
+            "showStaticValue": 1,
+            "showDynamicValue": 1,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "valueSumm",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "ползунок66",
+            "formulaProcessingLogic": "zero",
+            "classes": "",
+            "template": "UiRange",
+            "dependencyPrices": null,
+            "prompt": "",
+            "iconSettings": null,
+            "parent": "0;"
+          },
+          {
+            "json_id": "132587707",
+            "title": "иконка радио",
+            "label": "иконка радио",
+            "selectedItem": "1",
+            "isNeedChoice": false,
+            "notEmpty": false,
+            "isColumn": false,
+            "isStretch": false,
+            "typeDisplayClass": "base",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "valueSumm",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "дубРадио",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - пункт радио",
+                "radioName": "пункт радио",
+                "cost": 100,
+                "iconSettings": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1595471507",
+                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "image_width": "500",
+                    "image_height": "500",
+                    "ext": "jpg"
+                  },
+                  "maxWidth": 48,
+                  "maxHeight": 48,
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - второй пункт",
+                "radioName": "второй пункт",
+                "cost": 50,
+                "subradioName": "второй пункт",
+                "iconSettings": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1595471907",
+                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "image_width": "500",
+                    "image_height": "500",
+                    "ext": "jpg"
+                  },
+                  "location": "leftSide"
+                }
+              }
+            ],
+            "prompt": "",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1750859907",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "image_width": "512",
+                "image_height": "512",
+                "ext": "png"
+              },
+              "maxWidth": 48,
+              "maxHeight": 48,
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            },
+            "parent": "0;35854107;"
+          },
+          {
+            "json_id": "132588107",
+            "title": "иконка ползунок",
+            "label": "иконка ползунок",
+            "value": "0",
+            "min": "0",
+            "max": "100",
+            "cost": "5",
+            "unit": "",
+            "step": "1",
+            "showSteps": false,
+            "stepPrompt": "1",
+            "isNeedChoice": false,
+            "notEmpty": false,
+            "showStaticValue": false,
+            "showDynamicValue": false,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "valueSumm",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "дубПолзунок",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "дубПолзунок",
+            "template": "UiRange",
+            "dependencyPrices": null,
+            "prompt": "",
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1750859907",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "image_width": "512",
+                "image_height": "512",
+                "ext": "png"
+              },
+              "maxWidth": 48,
+              "maxHeight": 48,
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            },
+            "parent": "0;35854107;"
+          }
+        ],
+        "buttonName": "Дублировать",
+        "maximumDuple": "3",
+        "formOutputMethod": "onlyTitle",
+        "resultOutputMethod": "onlyTitle",
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "formula": "дубРадио + дубПолзунок + _otherSum_",
+        "dependencyMainFormula": [
+          {
+            "title": 2,
+            "dependencyFormula": "ползунок > 5",
+            "formula": "дубРадио + дубПолзунок + _otherSum_ + 55"
+          },
+          {
+            "title": 2,
+            "dependencyFormula": "дубПолзунок > 5",
+            "formula": "дубРадио + дубПолзунок + _otherSum_ + 1000"
+          }
+        ],
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiDuplicator",
+        "prompt": "",
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1750859907",
+            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "image_width": "512",
+            "image_height": "512",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
         "json_id": "124525707",
         "meta_id": "31030507",
         "ver_id": "4601302",
