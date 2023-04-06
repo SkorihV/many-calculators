@@ -35,9 +35,9 @@
             v-model="localInputBufferValue"
             :placeholder="inputPlaceholder"
             @keydown.enter="trueTrueValue"
-            @keydown.up="plus"
-            @keydown.down="minus"
-            @blur="inputFocus = false"
+            @keydown.up="plus('key')"
+            @keydown.down="minus('key')"
+            @blur="inputFocus ? inputFocus = false : null"
             @focus="inputFocus = true"
             class="calc__input-item"
             :class="{
@@ -51,7 +51,7 @@
           <template v-if="fakeValueHidden">
             <input
               @click="showTrueValue"
-              @blur="inputFocus = false"
+              @blur="inputFocus ? inputFocus = false : null"
               @focus="inputFocus = true"
               type="text"
               :value="resultValueDouble"
@@ -301,13 +301,15 @@ export default {
 
         if (this.onlyIntegerValue) {
           this.localInputValue = !this.valueIsNaN
-            ? parseInt(this.localInputValue)
+            ? parseFloat(this.localInputValue)
             : null;
         }
 
         this.localInputValue = this.updateValueAfterSignComma(
           this.localInputValue
         );
+
+        this.localInputValue = parseFloat((this.localInputValue).toFixed(5));
 
         if (!this.inputFocus) {
           this.localInputBufferValue = this.localInputValue;
@@ -412,7 +414,7 @@ export default {
         this.fakeValueHidden = true;
       }
     },
-    plus() {
+    plus(payload) {
       if (!this.isOnlyNumber) {
         return false;
       }
@@ -428,8 +430,11 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
+      if (payload !== 'key') {
+        this.changeValue('plus');
+      }
     },
-    minus() {
+    minus(payload) {
       if (!this.isOnlyNumber) {
         return false;
       }
@@ -444,6 +449,9 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
+      if (payload !== 'key') {
+        this.changeValue('minus');
+      }
     },
     updateValueAfterSignComma(value) {
       return this.needFixedResult
@@ -460,9 +468,9 @@ export default {
     },
     updatedCostForOut(cost) {
       return this.isOnlyNumber && this.checkedValueOnVoid(cost)
-        ? parseFloat((cost * this.localInputValue).toFixed(2))
+        ? parseFloat((cost * this.localInputValue).toFixed(5))
         : null;
-    },
+    }
   },
   watch: {
     isVisibilityFromDependency() {
@@ -471,7 +479,7 @@ export default {
     inputFocus: {
       handler(isFocus) {
         if (!isFocus) {
-          this.changeValue();
+          this.changeValue('notFocus');
           this.shownTooltip();
           clearTimeout(this.focusTimerName);
         }
@@ -484,9 +492,6 @@ export default {
         this.focusTimerName = setTimeout(() => {
           if (this.inputFocus) {
             setTimeout(() => this.inputFocus = true, 1000 )
-          } else {
-            this.changeValue();
-            this.shownTooltip();
           }
           this.inputFocus = false;
         }, 3000)
