@@ -1599,7 +1599,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex: 1 1 auto;
       }
       .calc__icon-element-label-wrapper {
-        flex: none;
+        //flex: none;
       }
       @media all and (max-width: 480px) {
         padding: 11px 15px;
@@ -1658,6 +1658,12 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       align-items: flex-start;
       flex-direction: column;
+
+      &-wrapper {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
     }
     &-name {
       font-size: 16px;

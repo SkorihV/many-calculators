@@ -297,7 +297,7 @@ export default {
         : Math.random().toString();
     },
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label.toString()?.length);
     },
     /**
      *

@@ -401,7 +401,7 @@ export default {
       "tryToggleElementIsMounted",
     ]),
     isExistLabel() {
-      return Boolean(this.label.length);
+      return Boolean(this.label?.toString().length);
     },
     isExistCurrentPrompt() {
       return Boolean(this.currentOption?.prompt?.length);

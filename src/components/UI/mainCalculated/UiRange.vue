@@ -397,7 +397,7 @@ export default {
       "tryToggleElementIsMounted",
     ]),
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
     localMin() {
       return this.checkedValueOnVoid(this.min) ? parseFloat(this.min) : 0;

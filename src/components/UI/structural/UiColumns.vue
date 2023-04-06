@@ -231,7 +231,7 @@ export default {
       );
     },
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
     countColumns() {
       return this.columnListBeforeLimiting?.length;

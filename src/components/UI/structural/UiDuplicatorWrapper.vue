@@ -565,7 +565,7 @@ export default {
      * @returns {boolean}
      */
     isExistLabel() {
-      return Boolean(this.mutationsInputData?.label?.length);
+      return Boolean(this.mutationsInputData?.label?.toString()?.length);
     },
     buttonDupleTitle() {
       const inputTitleIsExist = Boolean(this.duplicatorData?.buttonName?.length);

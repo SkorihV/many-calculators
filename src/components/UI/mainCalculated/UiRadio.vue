@@ -46,7 +46,7 @@
               :is-parent-hover="hoverElementIndex === radio.index"
               :is-parent-selected="currentIndexRadioButton === radio.index"
             >
-              <template>
+              <div class="calc__radio-text-wrapper">
                  <span
                    class="calc__radio-indicator"
                    v-if="radioType === 'base' && !onlyImage"
@@ -59,7 +59,8 @@
                     {{ radio?.subradioName }}
                   </div>
                 </div>
-              </template>
+              </div>
+
             </icon-element-wrapper>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
@@ -309,7 +310,7 @@ export default {
       "tryToggleElementIsMounted",
     ]),
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
     isRadioItemSelected() {
       return this.currentSelectedRadioButton !== null;
@@ -356,6 +357,7 @@ export default {
     },
     radioListAfterCheckDependency() {
       return this.originRadioList?.map((radio) => {
+
         if (radio?.dependencyFormulaItem?.length) {
           let formula = this.getArrayElementsFromFormula(
             radio.dependencyFormulaItem

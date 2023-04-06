@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     isExistLabel() {
-      return Boolean(this.column?.label?.length);
+      return Boolean(this.column?.label?.toString()?.length);
     },
     showColumn() {
       return Boolean(this.isVisibilityFromDependency && this.parentIsShow);

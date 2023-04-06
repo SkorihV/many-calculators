@@ -1239,6 +1239,283 @@
   "test-columns": {
     "calculatorTemplates": [
       {
+        "json_id": "100886307",
+        "title": "Откуда",
+        "label": "Откуда",
+        "isColumn": false,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "откуда",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 1,
+        "values": [
+          {
+            "title": "Элемент списка - Москва",
+            "selectName": "Москва",
+            "dependencyPrices": [
+              {
+                "title": "Московская Область",
+                "cost": 100,
+                "dependencyFormulaCost": "куда === &quot;мо&quot;"
+              },
+              {
+                "title": "Белгород",
+                "cost": 671,
+                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+              },
+              {
+                "title": "Брянск",
+                "cost": 671,
+                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+              },
+              {
+                "title": "Владимир",
+                "cost": 186,
+                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+              },
+              {
+                "title": "Воронеж",
+                "cost": 526,
+                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Московская Область",
+            "selectName": "Московская Область",
+            "dependencyPrices": [
+              {
+                "title": "Москва",
+                "cost": 100,
+                "dependencyFormulaCost": "куда === &quot;москва&quot;"
+              },
+              {
+                "title": "Белгород",
+                "cost": 571,
+                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+              },
+              {
+                "title": "Брянск",
+                "cost": 294,
+                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+              },
+              {
+                "title": "Владимир",
+                "cost": 86,
+                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+              },
+              {
+                "title": "Воронеж",
+                "cost": 426,
+                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Белгород",
+            "selectName": "Белгород",
+            "dependencyPrices": [
+              {
+                "title": "Москва",
+                "cost": 671,
+                "dependencyFormulaCost": "куда === &quot;москва&quot;"
+              },
+              {
+                "title": "Московская Область",
+                "cost": 571,
+                "dependencyFormulaCost": "куда === &quot;мо&quot;"
+              },
+              {
+                "title": "Брянск",
+                "cost": 419,
+                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+              },
+              {
+                "title": "Владимир",
+                "cost": 853,
+                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+              },
+              {
+                "title": "Воронеж",
+                "cost": 257,
+                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Брянск",
+            "selectName": "Брянск",
+            "dependencyPrices": [
+              {
+                "title": "Москва",
+                "cost": 394,
+                "dependencyFormulaCost": "куда === &quot;москва&quot;"
+              },
+              {
+                "title": "Московская Область",
+                "cost": 294,
+                "dependencyFormulaCost": "куда === &quot;мо&quot;"
+              },
+              {
+                "title": "Белгород",
+                "cost": 419,
+                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+              },
+              {
+                "title": "Владимир",
+                "cost": 594,
+                "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
+              },
+              {
+                "title": "Воронеж",
+                "cost": 441,
+                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Владимир",
+            "selectName": "Владимир",
+            "dependencyPrices": [
+              {
+                "title": "Москва",
+                "cost": 186,
+                "dependencyFormulaCost": "куда === &quot;москва&quot;"
+              },
+              {
+                "title": "Московская Область",
+                "cost": 86,
+                "dependencyFormulaCost": "куда === &quot;мо&quot;"
+              },
+              {
+                "title": "Белгород",
+                "cost": 853,
+                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+              },
+              {
+                "title": "Брянск",
+                "cost": 594,
+                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+              },
+              {
+                "title": "Воронеж",
+                "cost": 682,
+                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_  !== куда"
+          },
+          {
+            "title": "Элемент списка - Воронеж",
+            "selectName": "Воронеж",
+            "dependencyPrices": [
+              {
+                "title": "Москва",
+                "cost": 526,
+                "dependencyFormulaCost": "куда === &quot;москва&quot;"
+              },
+              {
+                "title": "Московская Область",
+                "cost": 426,
+                "dependencyFormulaCost": "куда === &quot;мо&quot;"
+              },
+              {
+                "title": "Белгород",
+                "cost": 257,
+                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+              },
+              {
+                "title": "Брянск",
+                "cost": 441,
+                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+              },
+              {
+                "title": "Владимир",
+                "cost": 682,
+                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+              }
+            ],
+            "dependencyFormulaItem": "_self_ !== куда"
+          }
+        ],
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;30492307;35352507;35352707;"
+      },
+      {
+        "json_id": "100916907",
+        "title": "Куда",
+        "label": "Куда",
+        "isColumn": false,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "куда",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 1,
+        "values": [
+          {
+            "title": "Элемент списка - Москва",
+            "selectName": "Москва",
+            "extraValueForDependency": "москва",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          },
+          {
+            "title": "Элемент списка - Московская Область",
+            "selectName": "Московская Область",
+            "extraValueForDependency": "мо",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          },
+          {
+            "title": "Элемент списка - Белгород",
+            "selectName": "Белгород",
+            "extraValueForDependency": "белгород",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          },
+          {
+            "title": "Элемент списка - Брянск",
+            "selectName": "Брянск",
+            "extraValueForDependency": "брянск",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          },
+          {
+            "title": "Элемент списка - Владимир",
+            "selectName": "Владимир",
+            "extraValueForDependency": "владимир",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          },
+          {
+            "title": "Элемент списка - Воронеж",
+            "selectName": "Воронеж",
+            "extraValueForDependency": "воронеж",
+            "dependencyFormulaItem": "_self_ !== откуда"
+          }
+        ],
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;30492307;35352507;35352707;"
+      },
+
+      {
         "json_id": "13494sdf0707",
         "title": "системное",
         "cost": "0 + ползунок + 5",

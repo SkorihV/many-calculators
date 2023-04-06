@@ -1,4 +1,4 @@
-<template>{{cost}}
+<template>
   <dev-block
     :label="label"
     :element-name="localElementName"

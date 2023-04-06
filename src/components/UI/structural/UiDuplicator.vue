@@ -37,6 +37,7 @@
     :parsing-formula-variables="formulaAfterProcessingVariables"
     :element-name="elementName"
     :local-cost="localCost"
+    :value="localCost"
     :is-visibility-from-dependency="isVisibilityFromDependency"
   />
 </template>

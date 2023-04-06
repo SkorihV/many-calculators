@@ -128,7 +128,7 @@ export default {
   computed: {
     ...mapState(useBaseStore, ["devMode"]),
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
     isExistTemplatesData() {
       return Boolean(this.templatesData.length);

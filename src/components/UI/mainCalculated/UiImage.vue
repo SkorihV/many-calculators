@@ -6,7 +6,7 @@
     <div class="calc__image-wrapper" :class="classes">
       <div
         class="calc__image-label-wrapper"
-        v-if="localDataForDisplay?.label?.length"
+        v-if="localDataForDisplay?.label?.toString()?.length"
       >
         <div class="calc__image-label">{{ localDataForDisplay?.label }}</div>
         <ui-prompt

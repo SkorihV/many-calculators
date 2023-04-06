@@ -173,7 +173,7 @@ export default {
       return result.some((item) => item);
     },
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
   },
 };

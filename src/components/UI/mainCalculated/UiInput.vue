@@ -504,7 +504,7 @@ export default {
       "tryToggleElementIsMounted",
     ]),
     isExistLabel() {
-      return Boolean(this.label?.length);
+      return Boolean(this.label?.toString()?.length);
     },
     isMixedValue() {
       return this.dataType === "mixed";
