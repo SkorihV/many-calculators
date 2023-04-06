@@ -503,6 +503,8 @@ export default {
      */
     selectValuesAfterProcessingDependency() {
       return this.mutationSelectValue.map((selectItem, index) => {
+        const extraValueIsExist = Boolean(selectItem?.extraValueForDependency?.toString()?.length);
+
         if (!selectItem?.dependencyFormulaItem?.length) {
           selectItem.isShow = true;
           return selectItem;
@@ -525,9 +527,14 @@ export default {
           return selectItem;
         }
 
-        formula = formula.map((item) =>
-          item.toLowerCase() === "_self_" ? selectItem.value : item
-        );
+        formula = formula.map((item) => {
+          if (item.toLowerCase() === "_self_" && extraValueIsExist) {
+            return '"' + selectItem?.extraValueForDependency + '"';
+          } else if (item.toLowerCase() === "_self_" && !extraValueIsExist) {
+            return selectItem.value
+          }
+          return item
+        })
 
         formula = processingVariablesOnFormula(formula, this.localDependencyList);
         let newDataIsShow;

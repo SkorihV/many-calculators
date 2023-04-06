@@ -91,8 +91,6 @@
       :dependency-formula-display="dependencyFormulaDisplay"
       :parsing-formula-variables="formulaAfterProcessingVariables"
     />
-
-
 </template>
 
 <script>

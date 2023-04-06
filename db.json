@@ -1260,6 +1260,7 @@
           {
             "title": "Элемент списка - Москва",
             "selectName": "Москва",
+            "extraValueForDependency": "москва",
             "dependencyPrices": [
               {
                 "title": "Московская Область",
@@ -1292,6 +1293,7 @@
           {
             "title": "Элемент списка - Московская Область",
             "selectName": "Московская Область",
+            "extraValueForDependency": "мо",
             "dependencyPrices": [
               {
                 "title": "Москва",
@@ -1324,6 +1326,7 @@
           {
             "title": "Элемент списка - Белгород",
             "selectName": "Белгород",
+            "extraValueForDependency": "белгород",
             "dependencyPrices": [
               {
                 "title": "Москва",
@@ -1356,6 +1359,7 @@
           {
             "title": "Элемент списка - Брянск",
             "selectName": "Брянск",
+            "extraValueForDependency": "брянск",
             "dependencyPrices": [
               {
                 "title": "Москва",
@@ -1388,6 +1392,7 @@
           {
             "title": "Элемент списка - Владимир",
             "selectName": "Владимир",
+            "extraValueForDependency": "владимир",
             "dependencyPrices": [
               {
                 "title": "Москва",
@@ -1420,6 +1425,7 @@
           {
             "title": "Элемент списка - Воронеж",
             "selectName": "Воронеж",
+            "extraValueForDependency": "воронеж",
             "dependencyPrices": [
               {
                 "title": "Москва",
