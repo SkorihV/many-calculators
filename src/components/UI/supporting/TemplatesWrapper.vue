@@ -202,7 +202,9 @@
 
   <ui-system
     v-else-if="template.template === 'UiSystem'"
+    :show-element="template?.showElement"
     :cost="template?.cost"
+    :label="template?.label"
     :dependency-prices="template?.dependencyPrices"
     :parent-is-show="parentIsShow"
     :element-name="
@@ -211,12 +213,22 @@
         : template?.json_id || 'UiSystem' + index
     "
     :formula-processing-logic="template?.formulaProcessingLogic"
+    :form-output-method="template?.formOutputMethod"
+    :result-output-method="template?.resultOutputMethod"
+    :dependency-formula-display="template?.dependencyFormulaDisplay"
     :parent-name="parentName"
     :template-name="template.template"
-    :dependency-formula-display="template?.dependencyFormulaDisplay"
     :position-element="template?.position"
+    :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+    :exclude-from-calculations="template?.excludeFromCalculations"
+    :icon-settings="template?.iconSettings"
+    :unit="template?.unit"
     @changedValue="changeValue"
-  ></ui-system>
+  >
+    <template v-slot:prompt>
+      <ui-prompt :prompt-text="template.prompt" />
+    </template>
+  </ui-system>
 </template>
 
 <script>

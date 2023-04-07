@@ -20,7 +20,6 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
     (item[fieldName] === "summ" || item[fieldName] === "valueSumm") && !onlyTitle;
   const unit = item?.unit ? item.unit : "";
 
-
   if (isAllowDataOutput) {
     result +=
       "\n<div class='calc__result-block-field-label'>" + item.label + " </div>";

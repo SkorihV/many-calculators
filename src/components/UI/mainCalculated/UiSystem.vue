@@ -1,10 +1,35 @@
 <template>
+  <div
+    class="calc__wrapper-group-data"
+    ref="parent"
+    v-if="isVisibilityFromDependency && showElement && isExistLocalCost"
+    :id="elementName"
+  >
+    <div class="calc__system-wrapper"
+         :class="{ column: isMakeElementColumn }"
+    >
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
+      >
+        <div class="calc__system-label-text" v-if="isExistLabel">
+          {{ label }}
+          <slot name="prompt" />
+        </div>
+      </icon-element-wrapper>
+      <div class="calc__system-data-wrapper">
+        <div class="calc__system-data-value">{{localCost}}</div>
+        <div class="calc__system-data-unit" v-if="isExistUnit">{{unit}}</div>
+      </div>
+    </div>
+  </div>
   <dev-block
     :label="label"
     :element-name="localElementName"
     :value="localCost"
     :local-cost="localCost"
-    :is-visibility-from-dependency="showElement"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
     :formula-variables="processingVariablesInFormula"
     :formula="localCostFormula"
     :dependency-formula-display="dependencyFormulaDisplay"
@@ -16,22 +41,32 @@
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import {MixinsUtilityServices} from "@/mixins/MixinsUtilityServices";
+import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import {processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 export default {
   name: "UiSystem",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinsUtilityServices],
-  components: { devBlock },
+  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinsUtilityServices, MixinCurrentWidthElement],
+  components: { UiPrompt, IconElementWrapper, devBlock },
   props: {
     cost: {
       type: [Number, String],
       default: null,
+    },
+    showElement: {
+      type: [Boolean, Number],
+      default: false,
+      validator(value) {
+        return value === false || value === true || value === 0 || value === 1;
+      },
     },
     ...propsTemplate.getProps([
       "elementName",
@@ -41,8 +76,14 @@ export default {
       "parentIsShow",
       "dependencyPrices",
       "label",
+      "formOutputMethod",
+      "resultOutputMethod",
       "dependencyFormulaDisplay",
       "positionElement",
+      "zeroValueDisplayIgnore",
+      "excludeFromCalculations",
+      "iconSettings",
+      "unit"
     ]),
   },
   mounted() {
@@ -52,27 +93,24 @@ export default {
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
         value: this.localCost,
-        displayValue: null,
+        displayValue: this.localCost,
         name: this.localElementName,
         type: "system",
         cost: this.localCost,
-        label: null,
-        formOutputMethod: null,
-        resultOutputMethod: null,
+        label: this.label,
+        formOutputMethod: this.formOutputMethod,
+        resultOutputMethod: this.resultOutputMethod,
         isShow: this.parentIsShow,
-        excludeFromCalculations: false,
-        unit: null,
+        excludeFromCalculations: this.excludeFromCalculations,
+        unit: this.unit,
         eventType,
         formulaProcessingLogic: this.formulaProcessingLogic,
         position: this.positionElement,
-        zeroValueDisplayIgnore: true,
+        zeroValueDisplayIgnore: this.zeroValueDisplayIgnore,
       });
       this.changeValid(eventType);
       this.tryPassDependency();
     },
-    /**
-     * возвращает общее состояние не валидности инпута
-     */
     changeValid(eventType) {
       this.checkValidationDataAndToggle({
         error: false,
@@ -80,7 +118,7 @@ export default {
         type: "system",
         label: "",
         eventType,
-        isShow: this.showElement,
+        isShow: this.isVisibilityFromDependency,
         parentName: this.parentName,
       });
     },
@@ -88,8 +126,8 @@ export default {
       this.tryAddDependencyElement({
         name: this.localElementName,
         value: this.localCost,
-        isShow: this.showElement,
-        displayValue: null,
+        isShow: this.isVisibilityFromDependency,
+        displayValue: this.localCost,
         type: "system",
       });
     },
@@ -124,7 +162,7 @@ export default {
      * @returns {number|*|number|string|null}
      */
     localCostFormula() {
-      if (!this.showElement) {
+      if (!this.isVisibilityFromDependency) {
         return null;
       }
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices?.length) {
@@ -144,7 +182,7 @@ export default {
      * @returns {number|string|null}
      */
     processingVariablesInFormula() {
-      if (!this.showElement) {
+      if (!this.isVisibilityFromDependency) {
         return null;
       }
       let cost = Number(this.localCostFormula)
@@ -176,7 +214,7 @@ export default {
      * @returns {number|null|any}
      */
     localCost() {
-      if (!this.showElement || this.processingVariablesInFormula === null) {
+      if (!this.isVisibilityFromDependency || this.processingVariablesInFormula === null) {
         return null;
       }
       try {
@@ -186,8 +224,14 @@ export default {
         return null
       }
     },
-    showElement() {
-      return this.parentIsShow && this.isVisibilityFromDependency;
+    isExistLabel() {
+      return Boolean(this.label?.toString()?.length);
+    },
+    isExistLocalCost() {
+      return this.localCost !== null;
+    },
+    isExistUnit() {
+      return Boolean(this.unit?.toString()?.length);
     }
   },
 };

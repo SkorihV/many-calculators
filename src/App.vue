@@ -1155,6 +1155,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         align-items: baseline;
         gap: 8px;
+        flex: 1 1 100%;
         width: 100%;
       }
 
@@ -1870,6 +1871,43 @@ $c_prompt_element_sing_bg_hover: #ff6531;
             border: 1px solid $c_element_border_color_selected;
           }
         }
+      }
+    }
+  }
+
+  &__system {
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      width: 100%;
+
+      &.column {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    &-label {
+      &-text {
+        @include style-title-main;
+        align-items: flex-start;
+        display: flex;
+        gap: 5px;
+      }
+    }
+    &-data {
+      &-wrapper {
+        display: flex;
+        gap: 8px;
+        flex: 1 1 100%;
+        width: 100%;
+      }
+      &-value {
+        @include style-title-main;
+      }
+      &-unit {
+        @include style-title-main;
       }
     }
   }
