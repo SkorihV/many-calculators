@@ -1657,7 +1657,7 @@
             "notEmpty": false,
             "isColumn": false,
             "isStretch": false,
-            "typeDisplayClass": "base",
+            "typeDisplayClass": "column",
             "formOutputMethod": "valueSumm",
             "resultOutputMethod": "valueSumm",
             "zeroValueDisplayIgnore": false,

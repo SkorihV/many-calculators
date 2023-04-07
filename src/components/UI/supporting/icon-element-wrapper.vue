@@ -1,5 +1,5 @@
 <template>
-  <div class="calc__icon-element-label-wrapper" v-if="isExistLabel || isImage">
+  <div class="calc__icon-element-label-wrapper" v-if="(isExistLabel || isImage) && !hidden" :class="{'column': isColumn}">
     <icon-element
       v-if="showLeftIcon"
       :alt="alt"
@@ -46,6 +46,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    isColumn: {
+      type: Boolean,
+      default: false
+    },
+    hidden: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     isImage() {

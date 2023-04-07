@@ -2686,6 +2686,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     @include transition;
     text-align: start;
     flex: 1 2 100%;
+    &.column {
+      flex-direction: column;
+      gap: 8px;
+    }
   }
   &__icon-wrapper {
     width: 100%;

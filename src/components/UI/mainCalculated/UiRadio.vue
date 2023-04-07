@@ -8,8 +8,7 @@
     <div
       class="calc__radio-wrapper"
       :class="[
-        radioType,
-        { column: isColumn || isMakeElementColumn, onlyImage: onlyImage },
+        { column: isColumn || isMakeElementColumn, 'onlyImage': onlyImage, 'base': isBase },
         classes,
       ]"
     >
@@ -45,11 +44,14 @@
               :icon-settings="radio?.iconSettings"
               :is-parent-hover="hoverElementIndex === radio.index"
               :is-parent-selected="currentIndexRadioButton === radio.index"
+              :is-column="isColumnType"
+              :is-exist-label="Boolean(radio.radioName?.toString()?.length)"
+              :hidden="onlyImage"
             >
               <div class="calc__radio-text-wrapper">
                  <span
                    class="calc__radio-indicator"
-                   v-if="radioType === 'base' && !onlyImage"
+                   v-if="isBase"
                  ></span>
                 <div class="calc__radio-text" v-if="!onlyImage">
                   <div class="calc__radio-name">
@@ -150,6 +152,7 @@ export default {
      *  default - base
      *  1) buttons
      *  2) onlyImage
+     *  3) column
      */
     typeDisplayClass: {
       type: String,
@@ -315,11 +318,14 @@ export default {
     isRadioItemSelected() {
       return this.currentSelectedRadioButton !== null;
     },
-    radioType() {
-      return this.typeDisplayClass?.length ? this.typeDisplayClass : "base";
+    isBase() {
+      return this.typeDisplayClass === "base";
     },
     onlyImage() {
       return this.typeDisplayClass === "onlyImage";
+    },
+    isColumnType() {
+      return this.typeDisplayClass  === 'column';
     },
     isErrorClass() {
       return (
