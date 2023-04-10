@@ -140,6 +140,13 @@ export default {
       type: String,
       default: null,
     },
+    costForVoid: {
+      type: [String, Number],
+      default: null,
+      validator(value) {
+        return !isNaN(Number(value));
+      },
+    },
     ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
@@ -165,6 +172,7 @@ export default {
   mounted() {
     this.checkboxValue = this.baseValue === "active";
     this.isChecked = this.baseValue === "selected";
+    this.notActive = this.baseValue === 'notActive';
 
     if (!this.isNeedChoice) {
       this.isLocalChecked = Boolean(this.checkboxValue || this.isChecked);
@@ -186,11 +194,15 @@ export default {
       textErrorNotEmpty: "Обязательное поле.",
       canBeShownTooltip: false,
       isChecked: false, // активирована
+      notActive: false, // невозможно активировать
       checkboxValue: false, // начальное значение
     };
   },
   methods: {
     inputLocalValue() {
+      if (this.notActive) {
+        return null;
+      }
       if (!this.isChecked) {
         this.isLocalChecked = !this.isLocalChecked;
       }
@@ -199,9 +211,6 @@ export default {
           ? this.buttonTextChecked
           : this.buttonText;
       this.changeValue("click");
-    },
-    checkedValueOnVoid(value) {
-      return value?.length !== 0 && value !== undefined && value !== null;
     },
     changeValue(eventType = "click") {
       this.$emit("changedValue", {
@@ -349,8 +358,8 @@ export default {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.isLocalChecked && this.checkedValueOnVoid(this.cost)
           ? parseFloat(this.cost)
-          : !this.isLocalChecked && this.checkedValueOnVoid(this.cost)
-          ? 0
+          : !this.isLocalChecked && this.checkedValueOnVoid(this.costForVoid)
+          ? parseFloat(this.costForVoid)
           : null;
       }
 
@@ -363,8 +372,8 @@ export default {
       }
       return this.isLocalChecked && this.checkedValueOnVoid(this.cost)
         ? parseFloat(this.cost)
-        : !this.isLocalChecked && this.checkedValueOnVoid(this.cost)
-        ? 0
+        : !this.isLocalChecked && this.checkedValueOnVoid(this.costForVoid)
+        ? parseFloat(this.costForVoid)
         : null;
     },
   },

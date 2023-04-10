@@ -1238,6 +1238,32 @@
 
   "test-columns": {
     "calculatorTemplates": [
+      {
+        "json_id": "139_______381907",
+        "title": "Добавить тюль?",
+        "label": "Добавить тюль?",
+        "buttonText": "Да",
+        "buttonTextChecked": "Нет",
+        "cost": "",
+        "baseValue": "notActive",
+        "isNeedChoice": false,
+        "isColumn": 1,
+        "typeDisplayClass": "switcher",
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "тюль",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "откуда !== null",
+        "scrollIntoName": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;41285907;41286107;"
+      },
         {
           "json_id": "138484307",
           "title": "Системное поле",
@@ -3059,6 +3085,32 @@
 
   "test-color": {
     "calculatorTemplates": [
+      {
+        "json_id": "139381907",
+        "title": "Добавить тюль?",
+        "label": "Добавить тюль?",
+        "buttonText": "Да",
+        "buttonTextChecked": "Нет",
+        "cost": "",
+        "baseValue": "default",
+        "isNeedChoice": false,
+        "isColumn": 1,
+        "typeDisplayClass": "switcher",
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "тюль",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "категория === 1 || категория === 2",
+        "scrollIntoName": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;41285907;41286107;"
+      },
       {
         "json_id": "161410706",
         "meta_id": "54482706",
