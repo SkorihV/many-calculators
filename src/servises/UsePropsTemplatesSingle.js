@@ -22,6 +22,8 @@ class Props {
       maxWidthSide: this.maxWidthSide(),
       maxWidth: this.maxWidth(),
       maxHeight: this.maxHeight(),
+      globalMaxWidth: this.globalMaxWidth(),
+      globalMaxHeight: this.globalMaxHeight(),
       template: this.template(),
       index: this.index(),
       cost: this.cost(),
@@ -42,6 +44,7 @@ class Props {
       backgroundImageSettings: this.backgroundImageSettings(),
       templates: this.templates(),
       isStretch: this.isStretch(),
+      elementPosition: this.elementPosition(),
     };
     Props.instance = this;
     return this;
@@ -117,14 +120,28 @@ class Props {
   maxWidth() {
     return {
       type: [Number, String],
-      default: 50,
+      default: null,
     };
   }
 
   maxHeight() {
     return {
       type: [Number, String],
-      default: 50,
+      default: null,
+    };
+  }
+
+
+  globalMaxWidth() {
+    return {
+      type: [Number, String],
+      default: null,
+    };
+  }
+  globalMaxHeight() {
+    return {
+      type: [Number, String],
+      default: null,
     };
   }
 
@@ -339,6 +356,14 @@ class Props {
       default: () => {},
     };
   }
+
+  elementPosition() {
+    return {
+      type: String,
+      default: 'default',
+    };
+  }
+
   backgroundImageSettings() {
     return {
       type: Object,

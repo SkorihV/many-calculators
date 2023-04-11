@@ -1317,8 +1317,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         font-weight: normal;
         font-size: 16px;
         line-height: 20px;
-        padding: 20px 20px;
-        max-width: 90px;
+        padding: 20px 10px;
+        max-width: 100px;
         right: 0;
         border: $c_base_error_border_width solid $c_element_border_color;
 
@@ -2350,6 +2350,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      &.horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        > .calc__wrapper-group-data {
+          width: auto;
+          flex: 0 1 auto;
+        }
+      }
     }
   }
 
@@ -2387,6 +2397,25 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex-direction: column;
         width: 100%;
       }
+      &-elements {
+        &-wrapper {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          flex: 1 1 auto;
+          &.horizontal {
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            > .calc__wrapper-group-data {
+              width: auto;
+              flex: 0 1 auto;
+            }
+          }
+        }
+
+      }
+
     }
   }
 

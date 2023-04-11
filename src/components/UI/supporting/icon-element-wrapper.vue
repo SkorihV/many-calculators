@@ -1,11 +1,13 @@
 <template>
-  <div class="calc__icon-element-label-wrapper" v-if="(isExistLabel || isImage) && !hidden" :class="{'column': isColumn}">
+  <div class="calc__icon-element-label-wrapper" v-if="isExistLabel || isImage" :class="{'column': isColumn}">
     <icon-element
       v-if="showLeftIcon"
       :alt="alt"
       :icon-settings="iconSettings"
       :is-parent-hover="isParentHover"
       :is-parent-selected="isParentSelected"
+      :global-max-width="globalMaxWidth"
+      :global-max-height="globalMaxHeight"
     />
     <slot />
     <icon-element
@@ -14,12 +16,16 @@
       :icon-settings="iconSettings"
       :is-parent-hover="isParentHover"
       :is-parent-selected="isParentSelected"
+      :global-max-width="globalMaxWidth"
+      :global-max-height="globalMaxHeight"
     />
   </div>
 </template>
 
 <script>
 import IconElement from "@/components/UI/supporting/Icon-element.vue";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+
 export default {
   name: "icon-element-wrapper",
   components: {
@@ -46,14 +52,11 @@ export default {
       type: Boolean,
       default: true,
     },
-    isColumn: {
-      type: Boolean,
-      default: false
-    },
-    hidden: {
-      type: Boolean,
-      default: false
-    }
+    ...propsTemplate.getProps([
+      "isColumn",
+      "globalMaxWidth",
+      "globalMaxHeight"
+    ])
   },
   computed: {
     isImage() {

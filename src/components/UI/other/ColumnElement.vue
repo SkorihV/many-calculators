@@ -10,15 +10,18 @@
       </div>
     </icon-element-wrapper>
   </div>
-  <template v-for="(template, index_in) in column?.templates">
+  <div class="calc__columns-column-elements-wrapper"
+    :class="{'horizontal': isHorizontal}"
+  >
     <templates-wrapper
+      v-for="(template, index_in) in column?.templates"
       :parent-is-show="showColumn"
       :template="template"
       :index="parentName + '_' + idColumn + '_' + index_in"
       :parent-name="parentName"
       @changedValue="changeValue"
     />
-  </template>
+  </div>
 </template>
 
 <script>
@@ -47,6 +50,7 @@ export default {
       "parentName",
       "template",
       "dependencyFormulaDisplay",
+      "elementPosition"
     ]),
   },
   methods: {
@@ -61,6 +65,9 @@ export default {
     showColumn() {
       return Boolean(this.isVisibilityFromDependency && this.parentIsShow);
     },
+    isHorizontal() {
+      return this.elementPosition === "horizontal";
+    }
   },
 };
 </script>

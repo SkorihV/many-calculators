@@ -1239,6 +1239,148 @@
   "test-columns": {
     "calculatorTemplates": [
       {
+        "json_id": "143721307",
+        "title": "35345",
+        "label": "",
+        "selectedItem": "1",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "isColumn": false,
+        "isStretch": false,
+        "typeDisplayClass": "onlyImage",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "200",
+        "globalMaxHeight": "200",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - 543",
+            "radioName": 543,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1813162307",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "ver_id": 4601302,
+                "image_width": "308",
+                "image_height": "410",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - 34635",
+            "radioName": 34635,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1813149707",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "ver_id": 4601302,
+                "image_width": "308",
+                "image_height": "410",
+                "ext": "jpg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          }
+        ],
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "143661707",
+        "meta_id": "31030707",
+        "ver_id": "4601302",
+        "title": "5",
+        "label": "5",
+        "selectedItem": "1",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "isColumn": false,
+        "isStretch": false,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "200",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - 5",
+            "selectName": 5,
+            "iconSettings": {
+              "title": "",
+              "maxWidth": 32,
+              "maxHeight": 32,
+              "image": {
+                "image_id": "1813162707",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "ver_id": 4601302,
+                "image_width": "308",
+                "image_height": "410",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент списка - 6",
+            "selectName": 6,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1813162307",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "ver_id": 4601302,
+                "image_width": "308",
+                "image_height": "410",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент списка - 8",
+            "selectName": 8,
+            "iconSettings": {
+              "title": "",
+              "image": {
+                "image_id": "1813148507",
+                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "ver_id": 4601302,
+                "image_width": "308",
+                "image_height": "410",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          }
+        ],
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
         "json_id": "139_______381907",
         "title": "Добавить тюль?",
         "label": "Добавить тюль?",
@@ -2152,7 +2294,8 @@
             "title": "Основные параметры: - 1",
             "created": "1679637090",
             "type_group_id": "9018",
-            "label": "",
+            "label": "Основные параметры: - 1",
+            "elementPosition": "horizontal",
             "templates": [
               {
                 "json_id": "105071107",
@@ -2250,7 +2393,7 @@
                 "parent": "0;34349707;34349907;"
               }
             ],
-            "maxWidth": "25",
+            "maxWidth": "100",
             "iconSettings": null,
             "parent": "0;34349707;"
           },
@@ -2261,7 +2404,7 @@
             "title": "Основные параметры: - 2",
             "created": "1679637162",
             "type_group_id": "9018",
-            "label": "",
+            "label": "Основные параметры: - 2",
             "templates": [
               {
                 "json_id": "116702707",

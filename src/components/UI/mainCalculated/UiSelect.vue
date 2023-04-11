@@ -28,7 +28,7 @@
           class="calc__select-change-wrapper"
           ref="changeElement"
           :style="[maxWidthForChangeElement]"
-          :class="{ error: isErrorClass, stretch: isStretch}"
+          :class="{ 'error': isErrorClass, 'stretch': isStretch}"
         >
           <div
             v-if="currentOption"
@@ -40,6 +40,8 @@
             <icon-element-wrapper
               :alt="currentOption?.selectName"
               :icon-settings="currentOption?.iconSettings"
+              :global-max-width="globalMaxWidth"
+              :global-max-height="globalMaxHeight"
               :is-parent-hover="hoverElementIndex === 'main'"
             >
               {{ currentOption.selectName }}
@@ -73,6 +75,8 @@
                   <icon-element-wrapper
                     :alt="option?.selectName"
                     :icon-settings="option?.iconSettings"
+                    :global-max-width="globalMaxWidth"
+                    :global-max-height="globalMaxHeight"
                     :is-parent-hover="hoverElementIndex === idx"
                   >
                     <div class="calc__select-option-item-text">
@@ -196,6 +200,8 @@ export default {
       "positionElement",
       "zeroValueDisplayIgnore",
       "iconSettings",
+      "globalMaxWidth",
+      "globalMaxHeight"
     ]),
   },
   data() {

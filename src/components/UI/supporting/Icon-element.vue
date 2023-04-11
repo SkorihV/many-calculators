@@ -27,6 +27,7 @@
 <script>
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
+import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "Icon-element",
@@ -48,6 +49,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    ...propsTemplate.getProps([
+      "globalMaxWidth",
+      "globalMaxHeight"
+    ])
   },
   data() {
     return {
@@ -60,16 +65,18 @@ export default {
       return this.getImageDir;
     },
     width() {
-      const localValue = this.iconSettings?.maxWidth
+      const value = this.iconSettings?.maxWidth
         ? this.iconSettings?.maxWidth
+        : this.globalMaxWidth ? this.globalMaxWidth
         : this.baseSizeIcon;
-      return "width:" + localValue + "px;";
+      return "width:" + value + "px;";
     },
     height() {
-      const localValue = this.iconSettings?.maxHeight
+      const value = this.iconSettings?.maxHeight
         ? this.iconSettings?.maxHeight
+        : this.globalMaxHeight ? this.globalMaxHeight
         : this.baseSizeIcon;
-      return "height:" + localValue + "px;";
+      return "height:" + value + "px;";
     },
     behaviorImage() {
       const behaviorImage = this.iconSettings?.behaviorImage

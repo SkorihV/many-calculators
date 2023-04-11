@@ -29,8 +29,11 @@
           </div>
         </icon-element-wrapper>
       </div>
-      <div class="calc__block-section-content-wrapper"
-      :style="{maxWidth: maxWidth}">
+      <div
+        class="calc__block-section-content-wrapper"
+        :style="{maxWidth: maxWidth}"
+        :class="{'horizontal': isHorizontal}"
+      >
         <template v-for="(item, inx) in templatesData" :key="inx">
           <templates-wrapper-column
             v-if="item?.template === 'UiColumns'"
@@ -107,7 +110,8 @@ export default {
       "dependencyFormulaDisplay",
       "backgroundImageSettings",
       "iconSettings",
-      "maxWidthSide"
+      "maxWidthSide",
+      "elementPosition"
     ]),
   },
   methods: {
@@ -150,6 +154,9 @@ export default {
       return this.currentWidthElement > 600
       ? this.maxWidthSide + "%"
         : "100%";
+    },
+    isHorizontal() {
+      return this.elementPosition === "horizontal";
     }
   },
 };

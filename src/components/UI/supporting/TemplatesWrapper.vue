@@ -104,6 +104,8 @@
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     :icon-settings="template?.iconSettings"
+    :global-max-width="template?.globalMaxWidth"
+    :global-max-height="template?.globalMaxHeight"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -179,6 +181,8 @@
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     :icon-settings="template?.iconSettings"
     :is-search="template?.isSearch"
+    :global-max-width="template?.globalMaxWidth"
+    :global-max-height="template?.globalMaxHeight"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

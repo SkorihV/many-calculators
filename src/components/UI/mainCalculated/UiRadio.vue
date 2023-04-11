@@ -42,18 +42,19 @@
             <icon-element-wrapper
               :alt="radio?.radioName"
               :icon-settings="radio?.iconSettings"
+              :global-max-width="globalMaxWidth"
+              :global-max-height="globalMaxHeight"
               :is-parent-hover="hoverElementIndex === radio.index"
               :is-parent-selected="currentIndexRadioButton === radio.index"
               :is-column="isColumnType"
               :is-exist-label="Boolean(radio.radioName?.toString()?.length)"
-              :hidden="onlyImage"
             >
-              <div class="calc__radio-text-wrapper">
+              <div class="calc__radio-text-wrapper" v-if="!onlyImage">
                  <span
                    class="calc__radio-indicator"
                    v-if="isBase"
                  ></span>
-                <div class="calc__radio-text" v-if="!onlyImage">
+                <div class="calc__radio-text">
                   <div class="calc__radio-name">
                     {{ radio.radioName }}
                   </div>
@@ -176,7 +177,9 @@ export default {
       "positionElement",
       "zeroValueDisplayIgnore",
       "iconSettings",
-      "isStretch"
+      "isStretch",
+      "globalMaxWidth",
+      "globalMaxHeight"
     ]),
   },
   data() {
