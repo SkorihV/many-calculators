@@ -11,8 +11,6 @@ export const MixinDisplaySpinner = {
     }, 200);
   },
   computed: {
-    ...mapState(useBaseStore, [
-      "tryToggleElementIsMounted",
-    ])
-  }
-}
+    ...mapState(useBaseStore, ["tryToggleElementIsMounted"]),
+  },
+};

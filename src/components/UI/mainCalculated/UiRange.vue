@@ -350,7 +350,9 @@ export default {
       );
     },
     updateWidthElement() {
-      if (this.elementWidth !== this.$refs?.thisElementInputRange?.offsetWidth) {
+      if (
+        this.elementWidth !== this.$refs?.thisElementInputRange?.offsetWidth
+      ) {
         this.elementWidth = this.$refs?.thisElementInputRange?.offsetWidth;
       }
     },
@@ -471,8 +473,9 @@ export default {
         return this.updatedCostForOut(this.cost);
       }
 
-      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices, 'dependencyFormulaCost'
+      let { cost: newCost } = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices,
+        "dependencyFormulaCost"
       );
       if (newCost !== null) {
         return this.updatedCostForOut(newCost);

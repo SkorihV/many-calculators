@@ -57,7 +57,7 @@ import { getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
-  components: { UiDuplicatorWrapper, devBlock, UiPrompt},
+  components: { UiDuplicatorWrapper, devBlock, UiPrompt },
   emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
   props: {
@@ -205,9 +205,9 @@ export default {
     countElementsDuple() {
       return this.localTemplates?.length ? this.localTemplates?.length : 0;
     },
-    IsExistPrompt(){
+    IsExistPrompt() {
       return Boolean(this.originData.prompt?.length);
-    }
+    },
   },
 };
 </script>

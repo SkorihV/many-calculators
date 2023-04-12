@@ -99,12 +99,10 @@ import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-
 
 export default {
   name: "UiCheckbox",
@@ -172,7 +170,7 @@ export default {
   mounted() {
     this.checkboxValue = this.baseValue === "active";
     this.isChecked = this.baseValue === "selected";
-    this.notActive = this.baseValue === 'notActive';
+    this.notActive = this.baseValue === "notActive";
 
     if (!this.isNeedChoice) {
       this.isLocalChecked = Boolean(this.checkboxValue || this.isChecked);
@@ -185,7 +183,6 @@ export default {
       this.currentLocalTextButton = this.buttonText;
     }
     this.changeValue("mounted");
-
   },
   data() {
     return {
@@ -363,8 +360,9 @@ export default {
           : null;
       }
 
-      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices, 'dependencyFormulaCost'
+      let { cost: newCost } = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices,
+        "dependencyFormulaCost"
       );
 
       if (newCost !== null) {

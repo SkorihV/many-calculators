@@ -8,7 +8,11 @@
     <div
       class="calc__radio-wrapper"
       :class="[
-        { column: isColumn || isMakeElementColumn, 'onlyImage': onlyImage, 'base': isBase },
+        {
+          column: isColumn || isMakeElementColumn,
+          onlyImage: onlyImage,
+          base: isBase,
+        },
         classes,
       ]"
     >
@@ -29,11 +33,11 @@
             class="calc__radio-label-button"
             :id="localElementName + '_' + radio.index"
             :class="{
-              'checked': currentIndexRadioButton === radio.index,
-              'error': isErrorClass,
-              'onlyImage': onlyImage,
-              'isShowPrompt': Boolean(radio?.prompt?.length),
-              'stretch': isStretch,
+              checked: currentIndexRadioButton === radio.index,
+              error: isErrorClass,
+              onlyImage: onlyImage,
+              isShowPrompt: Boolean(radio?.prompt?.length),
+              stretch: isStretch,
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"
@@ -50,10 +54,7 @@
               :is-exist-label="Boolean(radio.radioName?.toString()?.length)"
             >
               <div class="calc__radio-text-wrapper" v-if="!onlyImage">
-                 <span
-                   class="calc__radio-indicator"
-                   v-if="isBase"
-                 ></span>
+                <span class="calc__radio-indicator" v-if="isBase"></span>
                 <div class="calc__radio-text">
                   <div class="calc__radio-name">
                     {{ radio.radioName }}
@@ -63,7 +64,6 @@
                   </div>
                 </div>
               </div>
-
             </icon-element-wrapper>
             <ui-prompt :prompt-text="radio.prompt" />
           </div>
@@ -96,7 +96,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -131,7 +131,6 @@ export default {
     setTimeout(() => {
       this.changeValue("mounted");
     }, 100);
-
   },
   props: {
     radioValues: {
@@ -179,7 +178,7 @@ export default {
       "iconSettings",
       "isStretch",
       "globalMaxWidth",
-      "globalMaxHeight"
+      "globalMaxHeight",
     ]),
   },
   data() {
@@ -328,7 +327,7 @@ export default {
       return this.typeDisplayClass === "onlyImage";
     },
     isColumnType() {
-      return this.typeDisplayClass  === 'column';
+      return this.typeDisplayClass === "column";
     },
     isErrorClass() {
       return (
@@ -366,13 +365,15 @@ export default {
     },
     radioListAfterCheckDependency() {
       return this.originRadioList?.map((radio) => {
-
         if (radio?.dependencyFormulaItem?.length) {
           let formula = this.getArrayElementsFromFormula(
             radio.dependencyFormulaItem
           );
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = processingVariablesOnFormula(formula, this.localDependencyList);
+          formula = processingVariablesOnFormula(
+            formula,
+            this.localDependencyList
+          );
           try {
             radio.isShow = eval(formula);
           } catch (e) {
@@ -408,8 +409,9 @@ export default {
     radioListAfterCheckedCostElements() {
       return this.radioListAfterCheckVisibility?.map((item, index) => {
         if (item?.dependencyPrices?.length) {
-          let { cost : newCost } = this.costAfterProcessingDependencyPrice(
-            item?.dependencyPrices, 'dependencyFormulaCost'
+          let { cost: newCost } = this.costAfterProcessingDependencyPrice(
+            item?.dependencyPrices,
+            "dependencyFormulaCost"
           );
           if (newCost !== null) {
             item.cost = newCost;

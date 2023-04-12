@@ -3,7 +3,7 @@
  * @param inputData
  * @returns {*[]}
  */
-const initUpdatingPositionData = function(inputData) {
+const initUpdatingPositionData = function (inputData) {
   const calculatorTemplatesWitchPositions = [];
   const templatesInExist = Boolean(inputData?.calculatorTemplates?.length);
   if (templatesInExist) {
@@ -24,11 +24,10 @@ const initUpdatingPositionData = function(inputData) {
         currentMainTemplateName === "UiTab" ||
         currentMainTemplateName === "UiAccordion"
       ) {
-        const { newItem, shiftIndex } =
-          updatePositionElementsInTabAndAccordion(
-            currentMainItem,
-            templatesPositionIndex
-          );
+        const { newItem, shiftIndex } = updatePositionElementsInTabAndAccordion(
+          currentMainItem,
+          templatesPositionIndex
+        );
         currentMainItem = newItem;
         templatesPositionIndex = shiftIndex;
         calculatorTemplatesWitchPositions.push(currentMainItem);
@@ -42,8 +41,7 @@ const initUpdatingPositionData = function(inputData) {
           const newDuplicatorTemplates = [];
 
           for (let r = 0; r < lengthDuplicatorTemplates; r++) {
-            const duplicatorItemTemplateName =
-              duplicatorTemplates[r].template;
+            const duplicatorItemTemplateName = duplicatorTemplates[r].template;
             let newTemplate = duplicatorTemplates[r];
 
             if (duplicatorItemTemplateName === "UiBlockSection") {
@@ -92,7 +90,7 @@ const initUpdatingPositionData = function(inputData) {
   }
 
   return calculatorTemplatesWitchPositions;
-}
+};
 
 /**
  * Добавление позиций для элементов Блок-секции
@@ -219,11 +217,13 @@ const updatePositionElementsInColumns = function (currentColumnsObject, index) {
     if (!Boolean(countTemplatesInColumn)) {
       currentColumns[i].templates = [];
     } else {
-      currentTemplatesInColumn = currentTemplatesInColumn.map((templateItem) => {
-        templateItem.position = newIndex;
-        newIndex++;
-        return templateItem;
-      });
+      currentTemplatesInColumn = currentTemplatesInColumn.map(
+        (templateItem) => {
+          templateItem.position = newIndex;
+          newIndex++;
+          return templateItem;
+        }
+      );
       currentColumns[i].templates = currentTemplatesInColumn;
     }
     newSetColumns.push(currentColumns[i]);
@@ -233,6 +233,4 @@ const updatePositionElementsInColumns = function (currentColumnsObject, index) {
   return { newItem: currentColumnsObject, newIndex };
 };
 
-export {
-  initUpdatingPositionData
-};
+export { initUpdatingPositionData };

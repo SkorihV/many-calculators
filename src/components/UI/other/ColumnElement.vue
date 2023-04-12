@@ -10,8 +10,9 @@
       </div>
     </icon-element-wrapper>
   </div>
-  <div class="calc__columns-column-elements-wrapper"
-    :class="{'horizontal': isHorizontal}"
+  <div
+    class="calc__columns-column-elements-wrapper"
+    :class="{ horizontal: isHorizontal }"
   >
     <templates-wrapper
       v-for="(template, index_in) in column?.templates"
@@ -50,7 +51,7 @@ export default {
       "parentName",
       "template",
       "dependencyFormulaDisplay",
-      "elementPosition"
+      "elementPosition",
     ]),
   },
   methods: {
@@ -67,7 +68,7 @@ export default {
     },
     isHorizontal() {
       return this.elementPosition === "horizontal";
-    }
+    },
   },
 };
 </script>

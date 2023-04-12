@@ -1,5 +1,5 @@
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 
 import { useBaseStore } from "@/store/piniaStore";
@@ -23,13 +23,16 @@ export const MixinsForProcessingFormula = {
      * @returns {number|number|*|null}
      */
     costAfterProcessingDependencyPrice(dependencyArrayItems, formulaFieldName) {
-      if (dependencyArrayItems === null || formulaFieldName === undefined ) {
-        return  { item: null, cost: null};
+      if (dependencyArrayItems === null || formulaFieldName === undefined) {
+        return { item: null, cost: null };
       }
 
       let result = dependencyArrayItems?.reduce(
         (resultReduce, item) => {
-          const notExistFormula = item?.disabledFormula || typeof item[formulaFieldName] === "undefined" || !Boolean(item[formulaFieldName].toString().length);
+          const notExistFormula =
+            item?.disabledFormula ||
+            typeof item[formulaFieldName] === "undefined" ||
+            !Boolean(item[formulaFieldName].toString().length);
           if (notExistFormula) {
             return resultReduce;
           }
@@ -50,7 +53,10 @@ export const MixinsForProcessingFormula = {
           }
 
           this.constructLocalListElementDependencyInFormula(formula);
-          formula = processingVariablesOnFormula(formula, this.localDependencyList);
+          formula = processingVariablesOnFormula(
+            formula,
+            this.localDependencyList
+          );
 
           try {
             if (eval(formula)) {
@@ -64,7 +70,7 @@ export const MixinsForProcessingFormula = {
           }
           return resultReduce;
         },
-        { item: null, cost: null}
+        { item: null, cost: null }
       );
       return result;
     },
@@ -140,7 +146,10 @@ export const MixinsForProcessingFormula = {
      * @returns {string}
      */
     formulaAfterProcessingVariables() {
-      return processingVariablesOnFormula(this.parsingFormulaVariables, this.localDependencyList);
+      return processingVariablesOnFormula(
+        this.parsingFormulaVariables,
+        this.localDependencyList
+      );
     },
   },
 };

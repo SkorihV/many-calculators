@@ -83,7 +83,7 @@ export default {
     },
     changedStateParent: {
       type: Boolean,
-      default: false
+      default: false,
     },
     ...propsTemplate.getProps([
       "label",

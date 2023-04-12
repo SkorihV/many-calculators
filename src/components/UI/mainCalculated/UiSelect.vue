@@ -28,7 +28,7 @@
           class="calc__select-change-wrapper"
           ref="changeElement"
           :style="[maxWidthForChangeElement]"
-          :class="{ 'error': isErrorClass, 'stretch': isStretch}"
+          :class="{ error: isErrorClass, stretch: isStretch }"
         >
           <div
             v-if="currentOption"
@@ -54,12 +54,17 @@
           </div>
           <div
             class="calc__select-option-wrapper"
-            :class="{stretch: isStretch }"
+            :class="{ stretch: isStretch }"
             :style="[maxWidthForOptionList]"
             ref="optionList"
             v-show="isOpen"
           >
-            <input class="calc__select-option-search" type="text" v-if="isSearch" v-model="searchField">
+            <input
+              class="calc__select-option-search"
+              type="text"
+              v-if="isSearch"
+              v-model="searchField"
+            />
             <div class="calc__select-option-list">
               <template
                 v-for="(option, idx) in selectValuesAfterProcessingDependency"
@@ -90,7 +95,6 @@
                 </div>
               </template>
             </div>
-
           </div>
         </div>
       </div>
@@ -121,7 +125,7 @@ import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula"
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -153,7 +157,6 @@ export default {
       }
     });
 
-
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
       this.updatedWidthSelect();
@@ -179,7 +182,7 @@ export default {
       default: false,
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
-      }
+      },
     },
     ...propsTemplate.getProps([
       "isColumn",
@@ -201,12 +204,12 @@ export default {
       "zeroValueDisplayIgnore",
       "iconSettings",
       "globalMaxWidth",
-      "globalMaxHeight"
+      "globalMaxHeight",
     ]),
   },
   data() {
     return {
-      searchField: '',
+      searchField: "",
       isOpen: true,
       currentOption: this.mockOption,
       currentIndexOption: null,
@@ -350,19 +353,24 @@ export default {
       this.maxWidthSelectList = null;
     },
     updatedWidthSelect() {
-      if (this.$refs.optionList?.offsetWidth === 0 || this.$refs.changeElement?.offsetWidth === 0 || this.maxWidthSelectList !== null) {
+      if (
+        this.$refs.optionList?.offsetWidth === 0 ||
+        this.$refs.changeElement?.offsetWidth === 0 ||
+        this.maxWidthSelectList !== null
+      ) {
         return false;
       }
       setTimeout(() => {
-          if (
-            this.$refs.optionList?.offsetWidth > this.$refs.changeElement?.offsetWidth) {
-            this.maxWidthSelectList = this.$refs.optionList?.offsetWidth;
-          } else {
-            this.maxWidthSelectList = this.$refs.changeElement?.offsetWidth;
-          }
-      }, 100)
-
-    }
+        if (
+          this.$refs.optionList?.offsetWidth >
+          this.$refs.changeElement?.offsetWidth
+        ) {
+          this.maxWidthSelectList = this.$refs.optionList?.offsetWidth;
+        } else {
+          this.maxWidthSelectList = this.$refs.changeElement?.offsetWidth;
+        }
+      }, 100);
+    },
   },
   watch: {
     isOpen(newValue) {
@@ -379,7 +387,7 @@ export default {
       if (newValue) {
         this.$nextTick(() => {
           this.updatedWidthSelect();
-        })
+        });
       }
     },
     isVisibilityFromDependency: {
@@ -412,11 +420,13 @@ export default {
     isExistCurrentPrompt() {
       return Boolean(this.currentOption?.prompt?.length);
     },
-    currentAmountSelectList(){
-      return Object.values(this.selectValuesAfterProcessingDependency)?.filter(item => item?.isShow)?.length
+    currentAmountSelectList() {
+      return Object.values(this.selectValuesAfterProcessingDependency)?.filter(
+        (item) => item?.isShow
+      )?.length;
     },
     isShowArrow() {
-      return Boolean(this.currentAmountSelectList > 1)
+      return Boolean(this.currentAmountSelectList > 1);
     },
     needMockValue() {
       return this.notEmpty || this.isNeedChoice;
@@ -460,8 +470,9 @@ export default {
         return this.currentOption?.cost ? this.currentOption?.cost : null;
       }
 
-      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
-        this.currentOption?.dependencyPrices, 'dependencyFormulaCost'
+      let { cost: newCost } = this.costAfterProcessingDependencyPrice(
+        this.currentOption?.dependencyPrices,
+        "dependencyFormulaCost"
       );
 
       if (newCost !== null) {
@@ -508,61 +519,72 @@ export default {
      * @returns {*[]}
      */
     selectValuesAfterProcessingDependency() {
-      return this.mutationSelectValue.map((selectItem, index) => {
-        const extraValueIsExist = Boolean(selectItem?.extraValueForDependency?.toString()?.length);
+      return this.mutationSelectValue
+        .map((selectItem, index) => {
+          const extraValueIsExist = Boolean(
+            selectItem?.extraValueForDependency?.toString()?.length
+          );
 
-        if (!selectItem?.dependencyFormulaItem?.length) {
-          selectItem.isShow = true;
-          return selectItem;
-        }
-
-        let formula = this.getArrayElementsFromFormula(
-          selectItem.dependencyFormulaItem
-        );
-        this.constructLocalListElementDependencyInFormula(formula);
-
-        let allDependencyShow = formula.every((item) => {
-          if (this.isElementDependency(item)) {
-            return this.localDependencyList[item]?.isShow;
+          if (!selectItem?.dependencyFormulaItem?.length) {
+            selectItem.isShow = true;
+            return selectItem;
           }
-          return true;
-        });
 
-        if (!allDependencyShow) {
-          selectItem.isShow = true;
-          return selectItem;
-        }
+          let formula = this.getArrayElementsFromFormula(
+            selectItem.dependencyFormulaItem
+          );
+          this.constructLocalListElementDependencyInFormula(formula);
 
-        formula = formula.map((item) => {
-          if (item.toLowerCase() === "_self_" && extraValueIsExist) {
-            return '"' + selectItem?.extraValueForDependency + '"';
-          } else if (item.toLowerCase() === "_self_" && !extraValueIsExist) {
-            return selectItem.value
+          let allDependencyShow = formula.every((item) => {
+            if (this.isElementDependency(item)) {
+              return this.localDependencyList[item]?.isShow;
+            }
+            return true;
+          });
+
+          if (!allDependencyShow) {
+            selectItem.isShow = true;
+            return selectItem;
           }
-          return item
+
+          formula = formula.map((item) => {
+            if (item.toLowerCase() === "_self_" && extraValueIsExist) {
+              return '"' + selectItem?.extraValueForDependency + '"';
+            } else if (item.toLowerCase() === "_self_" && !extraValueIsExist) {
+              return selectItem.value;
+            }
+            return item;
+          });
+
+          formula = processingVariablesOnFormula(
+            formula,
+            this.localDependencyList
+          );
+          let newDataIsShow;
+          try {
+            newDataIsShow = eval(formula);
+          } catch (e) {
+            if (this.devMode) {
+              console.error(e.message, formula);
+            }
+            newDataIsShow = false;
+          }
+          selectItem.isShow = newDataIsShow;
+          if (!newDataIsShow && selectItem.value === this.currentOptionValue) {
+            this.resetSelectedValue();
+          }
+          return selectItem;
         })
-
-        formula = processingVariablesOnFormula(formula, this.localDependencyList);
-        let newDataIsShow;
-        try {
-          newDataIsShow = eval(formula);
-        } catch (e) {
-          if (this.devMode) {
-            console.error(e.message, formula);
+        .filter((selectItem) => {
+          if (this.isSearch && this.searchField?.length) {
+            return (
+              selectItem.selectName
+                .toLowerCase()
+                .indexOf(this.searchField.toLowerCase()) !== -1
+            );
           }
-          newDataIsShow = false;
-        }
-        selectItem.isShow = newDataIsShow;
-        if (!newDataIsShow && selectItem.value === this.currentOptionValue) {
-          this.resetSelectedValue();
-        }
-        return selectItem;
-      }).filter(selectItem => {
-        if (this.isSearch && this.searchField?.length) {
-          return selectItem.selectName.toLowerCase().indexOf(this.searchField.toLowerCase()) !== -1
-        }
-        return selectItem;
-      });
+          return selectItem;
+        });
     },
     maxWidthForChangeElement() {
       return this.maxWidthSelectList

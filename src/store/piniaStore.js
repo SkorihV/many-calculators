@@ -36,7 +36,7 @@ export const useBaseStore = defineStore("base", {
      *
      * @returns {string}
      */
-    getMethodBeginningCalculation({inputOptions}) {
+    getMethodBeginningCalculation({ inputOptions }) {
       return inputOptions?.methodBeginningCalculation
         ? inputOptions?.methodBeginningCalculation
         : "no";
@@ -51,7 +51,7 @@ export const useBaseStore = defineStore("base", {
      *
      * @returns {string|string|*}
      */
-    getCurrency: ({inputOptions}) => {
+    getCurrency: ({ inputOptions }) => {
       return Boolean(inputOptions?.resultOptions?.currency)
         ? inputOptions?.resultOptions?.currency
         : "руб";
@@ -178,21 +178,23 @@ export const useBaseStore = defineStore("base", {
      *
      * @returns {number}
      */
-    getSignAfterDot({inputOptions}) {
+    getSignAfterDot({ inputOptions }) {
       let sing = parseInt(inputOptions?.resultOptions?.signAfterDot);
-      if ( !isNaN(sing) && typeof sing === 'number') {
+      if (!isNaN(sing) && typeof sing === "number") {
         return sing;
       } else {
         return 0;
       }
     },
-    getRoundOffType({inputOptions}) {
+    getRoundOffType({ inputOptions }) {
       let type = inputOptions?.resultOptions?.roundOffType;
-      return type ? type : 'round';
+      return type ? type : "round";
     },
-    getTitleSum({inputOptions}) {
-      return inputOptions?.resultOptions?.titleSumma?.length ? inputOptions?.resultOptions?.titleSumma : "";
-    }
+    getTitleSum({ inputOptions }) {
+      return inputOptions?.resultOptions?.titleSumma?.length
+        ? inputOptions?.resultOptions?.titleSumma
+        : "";
+    },
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -302,6 +304,6 @@ export const useBaseStore = defineStore("base", {
     },
     setInputOptions(inputOptions) {
       this.inputOptions = inputOptions;
-    }
+    },
   },
 });

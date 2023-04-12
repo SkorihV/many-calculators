@@ -32,7 +32,7 @@ export default {
   props: {
     changeStateParent: {
       type: Boolean,
-      default: false
+      default: false,
     },
     ...propsTemplate.getProps([
       "template",

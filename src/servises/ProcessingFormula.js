@@ -5,21 +5,19 @@
  * @param localDependencyList
  * @returns {*|null}
  */
-const processingVariablesOnFormula = function(formula, localDependencyList) {
+const processingVariablesOnFormula = function (formula, localDependencyList) {
   if (!formula) {
     return null;
   }
   const result = formula?.reduce((resultText, item) => {
     const elementDependency =
-      item in localDependencyList
-        ? localDependencyList[item]
-        : null;
+      item in localDependencyList ? localDependencyList[item] : null;
 
     const elementIsExist = elementDependency !== null;
     const valueIsExist = !isNaN(
       parseFloat(elementDependency?.value) &&
-      !Array.isArray(elementDependency?.value) &&
-      typeof elementDependency?.value !== "boolean"
+        !Array.isArray(elementDependency?.value) &&
+        typeof elementDependency?.value !== "boolean"
     );
     const valueIsBool = typeof elementDependency?.value === "boolean";
     const valueIsNull = elementDependency?.value === null;
@@ -43,7 +41,6 @@ const processingVariablesOnFormula = function(formula, localDependencyList) {
     return resultText + item + " ";
   }, "");
   return result;
-}
+};
 
-
-export {processingVariablesOnFormula}
+export { processingVariablesOnFormula };

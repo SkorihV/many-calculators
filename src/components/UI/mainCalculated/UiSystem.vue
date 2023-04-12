@@ -5,9 +5,7 @@
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
   >
-    <div class="calc__system-wrapper"
-         :class="{ column: isMakeElementColumn }"
-    >
+    <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
       <div class="calc__system-label-wrapper" v-if="!onlyText">
         <icon-element-wrapper
           :icon-settings="iconSettings"
@@ -20,14 +18,15 @@
           </div>
         </icon-element-wrapper>
         <div class="calc__system-data-wrapper" v-if="isExistLocalCost">
-          <div class="calc__system-data-value">{{localCost}}</div>
-          <div class="calc__system-data-unit" v-if="isExistUnit">{{unit}}</div>
+          <div class="calc__system-data-value">{{ localCost }}</div>
+          <div class="calc__system-data-unit" v-if="isExistUnit">
+            {{ unit }}
+          </div>
         </div>
       </div>
       <div class="calc__system-content" v-if="isExistCurrentHtmlText">
         <div v-html="currentHtmlText"></div>
       </div>
-
     </div>
   </div>
   <dev-block
@@ -46,10 +45,10 @@
 <script>
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
-import {MixinsUtilityServices} from "@/mixins/MixinsUtilityServices";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import {processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -60,16 +59,27 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 export default {
   name: "UiSystem",
   emits: ["changedValue"],
-  mixins: [MixinsForProcessingFormula, MixinsGeneralItemData, MixinsUtilityServices, MixinCurrentWidthElement],
+  mixins: [
+    MixinsForProcessingFormula,
+    MixinsGeneralItemData,
+    MixinsUtilityServices,
+    MixinCurrentWidthElement,
+  ],
   components: { UiPrompt, IconElementWrapper, devBlock },
   props: {
     cost: {
       type: [Number, String],
       default: null,
     },
+    /**
+     * no
+     * show
+     * onlyText
+     * notValue
+     */
     showElement: {
       type: String,
-      default: 'no',
+      default: "no",
     },
     ...propsTemplate.getProps([
       "elementName",
@@ -88,7 +98,7 @@ export default {
       "excludeFromCalculations",
       "iconSettings",
       "htmlText",
-      "unit"
+      "unit",
     ]),
   },
   mounted() {
@@ -155,7 +165,7 @@ export default {
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "getResultElementOnName",
-      "listGlobalsVariables"
+      "listGlobalsVariables",
     ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -174,7 +184,8 @@ export default {
         return this.cost;
       }
       const { cost: formulaCost } = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices, 'dependencyFormulaCost'
+        this.dependencyPrices,
+        "dependencyFormulaCost"
       );
 
       if (formulaCost !== null) {
@@ -187,32 +198,35 @@ export default {
      * @returns {number|string|null}
      */
     processingVariablesInFormula() {
-      if (!this.isVisibilityFromDependency || !this.localCostFormula?.toString()?.length) {
+      if (
+        !this.isVisibilityFromDependency ||
+        !this.localCostFormula?.toString()?.length
+      ) {
         return null;
       }
 
-      let cost = Number(this.localCostFormula)
-      if (!isNaN(cost) && typeof cost === 'number'){
+      let cost = Number(this.localCostFormula);
+      if (!isNaN(cost) && typeof cost === "number") {
         return cost;
       }
 
-      let formulaCostArr = this.getArrayElementsFromFormula(this.localCostFormula);
+      let formulaCostArr = this.getArrayElementsFromFormula(
+        this.localCostFormula
+      );
 
       let formulaCost = formulaCostArr?.map((item) => {
         const isReserveVariable = item === this.getNameReserveVariable;
         const isGlobalVariable = this.getResultElementOnName(item) !== null;
 
         if (isReserveVariable) {
-          return this.getProxyFreeVariables(
-            0
-          );
+          return this.getProxyFreeVariables(0);
         } else if (isGlobalVariable) {
           return this.getResultElementOnName(item);
         } else {
           return item;
         }
       });
-      return processingArrayOnFormulaProcessingLogic(formulaCost).join(' ');
+      return processingArrayOnFormulaProcessingLogic(formulaCost).join(" ");
     },
 
     /**
@@ -220,34 +234,41 @@ export default {
      * @returns {number|null|any}
      */
     localCost() {
-      if (!this.isVisibilityFromDependency || this.processingVariablesInFormula === null) {
+      if (
+        !this.isVisibilityFromDependency ||
+        this.processingVariablesInFormula === null
+      ) {
         return null;
       }
       try {
         return eval(this.processingVariablesInFormula);
       } catch (e) {
-        console.error("Системное поле, обработка формулы стоимости: ", this.processingVariablesInFormula);
-        return null
+        console.error(
+          "Системное поле, обработка формулы стоимости: ",
+          this.processingVariablesInFormula
+        );
+        return null;
       }
     },
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);
     },
     isExistLocalCost() {
-      return this.localCost !== null && this.showElement !== "notValue"
+      return this.localCost !== null && this.showElement !== "notValue";
     },
     isExistUnit() {
       return Boolean(this.unit?.toString()?.length);
     },
     onlyText() {
-      return this.showElement === 'onlyText';
+      return this.showElement === "onlyText";
     },
     currentHtmlText() {
       if (!this.allowProcessingDependencyHtmlText) {
         return this.htmlText;
       }
-      const {item} = this.costAfterProcessingDependencyPrice(
-        this.dependencyHtmlText, 'dependencyFormulaHtmlText'
+      const { item } = this.costAfterProcessingDependencyPrice(
+        this.dependencyHtmlText,
+        "dependencyFormulaHtmlText"
       );
       const textIsExist = Boolean(item?.htmlText?.length);
       if (textIsExist) {
@@ -262,11 +283,15 @@ export default {
       return this.showElement !== "no";
     },
     allowProcessingDependencyPrices() {
-      return this.initProcessingDependencyPrice && this.dependencyPrices?.length;
+      return (
+        this.initProcessingDependencyPrice && this.dependencyPrices?.length
+      );
     },
     allowProcessingDependencyHtmlText() {
-      return this.initProcessingDependencyPrice && this.dependencyHtmlText?.length;
-    }
+      return (
+        this.initProcessingDependencyPrice && this.dependencyHtmlText?.length
+      );
+    },
   },
 };
 </script>

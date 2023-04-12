@@ -12,12 +12,14 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
     item.isShow &&
     isAllowZeroValue &&
     item[fieldName] !== "no";
-  const onlyTitle = item[fieldName] === 'onlyTitle';
+  const onlyTitle = item[fieldName] === "onlyTitle";
   const isAllowValueOutput =
-    (item[fieldName] === "value" || item[fieldName] === "valueSumm") && !onlyTitle;
+    (item[fieldName] === "value" || item[fieldName] === "valueSumm") &&
+    !onlyTitle;
   const isAllowCostOutput =
     item.cost !== null &&
-    (item[fieldName] === "summ" || item[fieldName] === "valueSumm") && !onlyTitle;
+    (item[fieldName] === "summ" || item[fieldName] === "valueSumm") &&
+    !onlyTitle;
   const unit = item?.unit ? item.unit : "";
 
   if (isAllowDataOutput) {
@@ -28,7 +30,7 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
     if (isAllowValueOutput) {
       result +=
         "<div class='calc__result-block-field-value'>" +
-        item.displayValue +
+        item.displayValue?.toLocaleString("ru") +
         " " +
         unit;
 
@@ -39,7 +41,7 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
       result += "</div>";
     }
     if (isAllowCostOutput) {
-      let sum = item?.cost?.toString();
+      let sum = item?.cost?.toLocaleString("ru");
       result +=
         "<div class='calc__result-block-field-cost'>" +
         sum +
@@ -170,9 +172,8 @@ const getNameElementsRecursive = function (object) {
   return resultArray;
 };
 
-
-const decimalAdjust = function (value, exp = 0, type = 'round') {
-  if (typeof exp === 'undefined' || +exp === 0) {
+const decimalAdjust = function (value, exp = 0, type = "round") {
+  if (typeof exp === "undefined" || +exp === 0) {
     try {
       return Math[type](value);
     } catch (e) {
@@ -183,16 +184,16 @@ const decimalAdjust = function (value, exp = 0, type = 'round') {
   value = +value;
   exp = +exp;
   // Если значение не является числом, либо степень не является целым числом...
-  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+  if (isNaN(value) || !(typeof exp === "number" && exp % 1 === 0)) {
     return null;
   }
   // Сдвиг разрядов
-  value = value.toString().split('e');
-  value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+  value = value.toString().split("e");
+  value = Math[type](+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
   // Обратный сдвиг
-  value = value.toString().split('e');
-  return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-}
+  value = value.toString().split("e");
+  return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
+};
 
 export {
   parseResultValueObjectItem,

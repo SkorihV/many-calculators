@@ -113,10 +113,10 @@ import {
   parsingDataInFormulaOnSum,
   getSummaFreeVariablesInFormula,
   getListVariablesMissedInFormula,
-  decimalAdjust
+  decimalAdjust,
 } from "@/servises/UtilityServices.js";
 
-import {initUpdatingPositionData} from "@/servises/UpdatedPositionOnTemplates.js";
+import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
@@ -162,10 +162,14 @@ export default {
       }
 
       try {
-        this.inputOptions = JSON.parse(JSON.stringify(window?.calculatorOptions));
+        this.inputOptions = JSON.parse(
+          JSON.stringify(window?.calculatorOptions)
+        );
       } catch (e) {
-        console.error("Ошибка при получении настроек калькулятора " + e.message)
-       this.inputOptions = {}
+        console.error(
+          "Ошибка при получении настроек калькулятора " + e.message
+        );
+        this.inputOptions = {};
       }
     }
     this.calculatorTemplates = initUpdatingPositionData(this.inputData);
@@ -179,7 +183,7 @@ export default {
       this.inputOptions?.resultOptions?.formulaDisplayButton?.length
     );
 
-    this.setInputOptions(this.inputOptions)
+    this.setInputOptions(this.inputOptions);
     this.findForm();
     this.findTeleportField();
     this.findSubmitForm();
@@ -441,7 +445,6 @@ export default {
       "getRoundOffType",
       "setInputOptions",
       "getTitleSum",
-
     ]),
     mainFormulaIsExist() {
       return Boolean(this.mainFormulaResult?.length);
@@ -452,23 +455,36 @@ export default {
           ? this.inputOptions?.formula
           : "";
       }
-      const formulaAfterDependency = this.inputOptions.dependencyMainFormula?.reduce((resultFormula, item) => {
-          let dependencyFormula = this.getArrayElementsFromFormula(item.dependencyFormula);
-          this.constructLocalListElementDependencyInFormula(dependencyFormula);
-          dependencyFormula = processingVariablesOnFormula(dependencyFormula, this.localDependencyList);
+      const formulaAfterDependency =
+        this.inputOptions.dependencyMainFormula?.reduce(
+          (resultFormula, item) => {
+            let dependencyFormula = this.getArrayElementsFromFormula(
+              item.dependencyFormula
+            );
+            this.constructLocalListElementDependencyInFormula(
+              dependencyFormula
+            );
+            dependencyFormula = processingVariablesOnFormula(
+              dependencyFormula,
+              this.localDependencyList
+            );
 
-          const formulaIsExist = Boolean(item?.formula?.length)
-          try {
-            if (eval(dependencyFormula) && formulaIsExist) {
-              resultFormula = item.formula;
+            const formulaIsExist = Boolean(item?.formula?.length);
+            try {
+              if (eval(dependencyFormula) && formulaIsExist) {
+                resultFormula = item.formula;
+              }
+            } catch (e) {
+              if (this.devMode) {
+                console.error(
+                  "Формула зависимости для смены главной формулы: " + e.message
+                );
+              }
             }
-          } catch(e) {
-            if (this.devMode) {
-              console.error("Формула зависимости для смены главной формулы: " + e.message)
-            }
-        }
-        return resultFormula;
-      }, "");
+            return resultFormula;
+          },
+          ""
+        );
 
       const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
       if (isFormulaAfterDependency) {
@@ -480,7 +496,7 @@ export default {
         : "";
     },
     isExistDependencyMainFormula() {
-      return Boolean(this.inputOptions?.dependencyMainFormula?.length)
+      return Boolean(this.inputOptions?.dependencyMainFormula?.length);
     },
     /**
      * Данные которые подходят для вывода или расчета
@@ -565,10 +581,7 @@ export default {
         return eval(this.resultTextForComputed);
       } catch (e) {
         if (this.devMode) {
-          console.warn(
-            "Рассчитываемая формула: ",
-            this.resultTextForComputed
-          );
+          console.warn("Рассчитываемая формула: ", this.resultTextForComputed);
         }
         return null;
       }
@@ -675,7 +688,11 @@ export default {
           return sum + 0;
         }, 0);
       }
-      resultSum = decimalAdjust(resultSum, this.getSignAfterDot, this.getRoundOffType);
+      resultSum = decimalAdjust(
+        resultSum,
+        this.getSignAfterDot,
+        this.getRoundOffType
+      );
 
       this.tryPassDependency(
         "_globalSum_",
@@ -1499,8 +1516,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 10px 50px 10px 40px;
         background: $c_element_bg_color;
         color: $c_element_text_default;
-        border: $c_element_border_width solid
-        $c_element_border_color;
+        border: $c_element_border_width solid $c_element_border_color;
         width: 100%;
         border-radius: $c_element_border_radius;
         &:focus,
@@ -2424,9 +2440,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
             }
           }
         }
-
       }
-
     }
   }
 

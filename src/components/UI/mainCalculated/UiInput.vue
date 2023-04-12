@@ -1,96 +1,96 @@
 <template>
+  <div
+    class="calc__wrapper-group-data"
+    v-if="isVisibilityFromDependency"
+    :id="elementName"
+    ref="parent"
+  >
     <div
-      class="calc__wrapper-group-data"
-      v-if="isVisibilityFromDependency"
-      :id="elementName"
-      ref="parent"
+      class="calc__input-wrapper"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
     >
-      <div
-        class="calc__input-wrapper"
-        :class="[classes, { column: isColumn || isMakeElementColumn }]"
+      <icon-element-wrapper
+        :icon-settings="iconSettings"
+        :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
       >
-        <icon-element-wrapper
-          :icon-settings="iconSettings"
-          :alt="isExistLabel ? label : ''"
-          :isExistLabel="isExistLabel"
+        <div class="calc__input-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt" />
+        </div>
+      </icon-element-wrapper>
+      <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
+        <div
+          class="calc__input-buttons-minus"
+          :class="{ disabled: isDisabledMin }"
+          v-if="showControlsButton"
+          @click="minus"
         >
-          <div class="calc__input-label-text" v-if="isExistLabel">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt" />
-          </div>
-        </icon-element-wrapper>
-        <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
-          <div
-            class="calc__input-buttons-minus"
-            :class="{ disabled: isDisabledMin }"
-            v-if="showControlsButton"
-            @click="minus"
-          >
-            -
-          </div>
-          <input
-            ref="trueInput"
-            type="text"
-            v-model="localInputBufferValue"
-            :placeholder="inputPlaceholder"
-            @keydown.enter="trueTrueValue"
-            @keydown.up="plus('key')"
-            @keydown.down="minus('key')"
-            @blur="inputFocus ? inputFocus = false : null"
-            @focus="inputFocus = true"
-            class="calc__input-item"
-            :class="{
+          -
+        </div>
+        <input
+          ref="trueInput"
+          type="text"
+          v-model="localInputBufferValue"
+          :placeholder="inputPlaceholder"
+          @keydown.enter="trueTrueValue"
+          @keydown.up="plus('key')"
+          @keydown.down="minus('key')"
+          @blur="inputFocus ? (inputFocus = false) : null"
+          @focus="inputFocus = true"
+          class="calc__input-item"
+          :class="{
             number: isOnlyNumber,
             error: isErrorClass,
             stretch: isStretch,
           }"
-            autocomplete="off"
-            v-if="!fakeValueHidden"
-          />
-          <template v-if="fakeValueHidden">
-            <input
-              @click="showTrueValue"
-              @blur="inputFocus ? inputFocus = false : null"
-              @focus="inputFocus = true"
-              type="text"
-              :value="resultValueDouble"
-              class="calc__input-item currency"
-              :class="{
+          autocomplete="off"
+          v-if="!fakeValueHidden"
+        />
+        <template v-if="fakeValueHidden">
+          <input
+            @click="showTrueValue"
+            @blur="inputFocus ? (inputFocus = false) : null"
+            @focus="inputFocus = true"
+            type="text"
+            :value="resultValueDouble"
+            class="calc__input-item currency"
+            :class="{
               number: isOnlyNumber,
               error: isErrorClass,
               stretch: isStretch,
             }"
-              autocomplete="off"
-              :placeholder="inputPlaceholder"
-            />
-          </template>
-          <div
-            class="calc__input-buttons-plus"
-            :class="{ disabled: isDisabledMax }"
-            v-if="showControlsButton"
-            @click="plus"
-          >
-            +
-          </div>
-          <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+            autocomplete="off"
+            :placeholder="inputPlaceholder"
+          />
+        </template>
+        <div
+          class="calc__input-buttons-plus"
+          :class="{ disabled: isDisabledMax }"
+          v-if="showControlsButton"
+          @click="plus"
+        >
+          +
         </div>
-        <ui-tooltip
-          :is-show="Boolean(tooltipError?.error)"
-          :tooltip-text="tooltipError?.errorText"
-          :local-can-be-shown="localCanBeShownTooltip"
-        />
+        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
       </div>
+      <ui-tooltip
+        :is-show="Boolean(tooltipError?.error)"
+        :tooltip-text="tooltipError?.errorText"
+        :local-can-be-shown="localCanBeShownTooltip"
+      />
     </div>
-    <dev-block
-      :label="label"
-      :element-name="localElementName"
-      :value="resultValue"
-      :local-cost="localCost"
-      :is-visibility-from-dependency="isVisibilityFromDependency"
-      :dependency-formula-display="dependencyFormulaDisplay"
-      :parsing-formula-variables="formulaAfterProcessingVariables"
-    />
+  </div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="resultValue"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
@@ -309,7 +309,7 @@ export default {
           this.localInputValue
         );
 
-        this.localInputValue = parseFloat((this.localInputValue).toFixed(5));
+        this.localInputValue = parseFloat(this.localInputValue.toFixed(5));
 
         if (!this.inputFocus) {
           this.localInputBufferValue = this.localInputValue;
@@ -430,8 +430,8 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
-      if (payload !== 'key') {
-        this.changeValue('plus');
+      if (payload !== "key") {
+        this.changeValue("plus");
       }
     },
     minus(payload) {
@@ -449,8 +449,8 @@ export default {
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
       this.localInputBufferValue = value;
-      if (payload !== 'key') {
-        this.changeValue('minus');
+      if (payload !== "key") {
+        this.changeValue("minus");
       }
     },
     updateValueAfterSignComma(value) {
@@ -470,7 +470,7 @@ export default {
       return this.isOnlyNumber && this.checkedValueOnVoid(cost)
         ? parseFloat((cost * this.localInputValue).toFixed(5))
         : null;
-    }
+    },
   },
   watch: {
     isVisibilityFromDependency() {
@@ -479,24 +479,24 @@ export default {
     inputFocus: {
       handler(isFocus) {
         if (!isFocus) {
-          this.changeValue('notFocus');
+          this.changeValue("notFocus");
           this.shownTooltip();
           clearTimeout(this.focusTimerName);
         }
       },
     },
     localInputBufferValue: {
-      handler(newValue ) {
+      handler(newValue) {
         this.localInputValue = newValue;
         clearTimeout(this.focusTimerName);
         this.focusTimerName = setTimeout(() => {
           if (this.inputFocus) {
-            setTimeout(() => this.inputFocus = true, 1000 )
+            setTimeout(() => (this.inputFocus = true), 1000);
           }
           this.inputFocus = false;
-        }, 3000)
-      }
-    }
+        }, 3000);
+      },
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -644,8 +644,9 @@ export default {
         return this.updatedCostForOut(this.cost);
       }
 
-      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices, 'dependencyFormulaCost'
+      let { cost: newCost } = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices,
+        "dependencyFormulaCost"
       );
       if (newCost !== null) {
         return this.updatedCostForOut(newCost);

@@ -30,7 +30,7 @@ import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
   name: "ResultButtonForComputed",
@@ -108,7 +108,10 @@ export default {
       return listObject;
     },
     formulaOnDataVariables() {
-      return processingVariablesOnFormula(this.variablesInFormula, this.localDependencyList);
+      return processingVariablesOnFormula(
+        this.variablesInFormula,
+        this.localDependencyList
+      );
     },
     /**
      *  рассчитываем формулу через eval

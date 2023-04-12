@@ -1,5 +1,9 @@
 <template>
-  <div class="calc__icon-element-label-wrapper" v-if="isExistLabel || isImage" :class="{'column': isColumn}">
+  <div
+    class="calc__icon-element-label-wrapper"
+    v-if="isExistLabel || isImage"
+    :class="{ column: isColumn }"
+  >
     <icon-element
       v-if="showLeftIcon"
       :alt="alt"
@@ -24,7 +28,7 @@
 
 <script>
 import IconElement from "@/components/UI/supporting/Icon-element.vue";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "icon-element-wrapper",
@@ -55,8 +59,8 @@ export default {
     ...propsTemplate.getProps([
       "isColumn",
       "globalMaxWidth",
-      "globalMaxHeight"
-    ])
+      "globalMaxHeight",
+    ]),
   },
   computed: {
     isImage() {

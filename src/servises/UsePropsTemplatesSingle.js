@@ -137,7 +137,7 @@ class Props {
     return {
       type: String,
       default: null,
-    }
+    };
   }
 
   globalMaxWidth() {
@@ -374,7 +374,7 @@ class Props {
   elementPosition() {
     return {
       type: String,
-      default: 'default',
+      default: "default",
     };
   }
 

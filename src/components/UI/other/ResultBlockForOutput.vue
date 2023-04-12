@@ -80,7 +80,7 @@ export default {
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "checkInitEnabledSendForm",
       "checkAllowShowResultBlock",
-      "getTitleSum"
+      "getTitleSum",
     ]),
     isShowResultBlockTitle() {
       return Boolean(this.resultOptions?.title?.length);

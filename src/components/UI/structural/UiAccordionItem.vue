@@ -110,10 +110,7 @@ export default {
     accordionItemId: {
       type: Number,
     },
-    ...propsTemplate.getProps([
-      "elementName",
-      "parentIsShow",
-    ]),
+    ...propsTemplate.getProps(["elementName", "parentIsShow"]),
   },
   data() {
     return {

@@ -1,4 +1,4 @@
-import {useBaseStore} from "@/store/piniaStore";
+import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
 export const MixinLocalDependencyList = {
@@ -9,7 +9,7 @@ export const MixinLocalDependencyList = {
        */
       localDependencyList: {},
       countUpdatedDependency: 0,
-    }
+    };
   },
   methods: {
     /**
@@ -87,5 +87,5 @@ export const MixinLocalDependencyList = {
       "isCanShowAllTooltips",
       "devMode",
     ]),
-  }
-}
+  },
+};
