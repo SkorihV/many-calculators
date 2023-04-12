@@ -1878,10 +1878,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__system {
     &-wrapper {
       display: flex;
-      align-items: center;
       gap: 8px;
       position: relative;
       width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
 
       &.column {
         flex-direction: column;
@@ -1889,6 +1890,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
     }
     &-label {
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        width: 100%;
+      }
       &-text {
         @include style-title-main;
         align-items: flex-start;
@@ -1909,6 +1917,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-unit {
         @include style-title-main;
       }
+    }
+    &-content {
+      color: $c_base_title;
     }
   }
 

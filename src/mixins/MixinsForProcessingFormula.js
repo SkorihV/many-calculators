@@ -19,18 +19,23 @@ export const MixinsForProcessingFormula = {
     /**
      * Обработать список цен на подходящее условие и вернуть итоговую цену или null
      *
-     * @param dependencyPrice
+     * @param dependencyArrayItems
      * @returns {number|number|*|null}
      */
-    costAfterProcessingDependencyPrice(dependencyPrice) {
-      let result = dependencyPrice?.reduce(
+    costAfterProcessingDependencyPrice(dependencyArrayItems, formulaFieldName) {
+      if (dependencyArrayItems === null || formulaFieldName === undefined ) {
+        return  { item: null, cost: null};
+      }
+
+      let result = dependencyArrayItems?.reduce(
         (resultReduce, item) => {
-          if (item.disabledFormula) {
+          const notExistFormula = item?.disabledFormula || typeof item[formulaFieldName] === "undefined" || !Boolean(item[formulaFieldName].toString().length);
+          if (notExistFormula) {
             return resultReduce;
           }
 
           let formula = this.getArrayElementsFromFormula(
-            item?.dependencyFormulaCost
+            item[formulaFieldName]
           );
 
           if (this.templateName === "UiInput") {
@@ -49,8 +54,8 @@ export const MixinsForProcessingFormula = {
 
           try {
             if (eval(formula)) {
-              resultReduce.changed = true;
-              resultReduce.cost = item.cost ? item.cost : 0;
+              resultReduce.item = item;
+              resultReduce.cost = item?.cost ? item.cost : 0;
             }
           } catch (e) {
             if (this.devMode) {
@@ -59,13 +64,9 @@ export const MixinsForProcessingFormula = {
           }
           return resultReduce;
         },
-        /**
-         * changed - необходим для понимания сработала формула хоть раз или нет,
-         * если не сработала, то блок с зависимыми ценами пропускается и выводится стандартная
-         */
-        { cost: 0, changed: false }
+        { item: null, cost: null}
       );
-      return result.changed ? result.cost : null;
+      return result;
     },
   },
   watch: {

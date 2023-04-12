@@ -210,6 +210,7 @@
     :cost="template?.cost"
     :label="template?.label"
     :dependency-prices="template?.dependencyPrices"
+    :dependency-html-text="template?.dependencyHtmlText"
     :parent-is-show="parentIsShow"
     :element-name="
       template?.elementName?.length
@@ -227,6 +228,7 @@
     :exclude-from-calculations="template?.excludeFromCalculations"
     :icon-settings="template?.iconSettings"
     :unit="template?.unit"
+    :html-text="template?.htmlText"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

@@ -408,8 +408,8 @@ export default {
     radioListAfterCheckedCostElements() {
       return this.radioListAfterCheckVisibility?.map((item, index) => {
         if (item?.dependencyPrices?.length) {
-          let newCost = this.costAfterProcessingDependencyPrice(
-            item?.dependencyPrices
+          let { cost : newCost } = this.costAfterProcessingDependencyPrice(
+            item?.dependencyPrices, 'dependencyFormulaCost'
           );
           if (newCost !== null) {
             item.cost = newCost;

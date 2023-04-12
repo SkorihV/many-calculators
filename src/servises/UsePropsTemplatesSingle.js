@@ -28,6 +28,7 @@ class Props {
       index: this.index(),
       cost: this.cost(),
       dependencyPrices: this.dependencyPrices(),
+      dependencyHtmlText: this.dependencyHtmlText(),
       isColumn: this.isColumn(),
       isNeedChoice: this.isNeedChoice(),
       formOutputMethod: this.formOutputMethod(),
@@ -37,6 +38,7 @@ class Props {
       min: this.min(),
       max: this.max(),
       unit: this.unit(),
+      htmlText: this.htmlText(),
       positionElement: this.positionElement(),
       zeroValueDisplayIgnore: this.zeroValueDisplayIgnore(),
       baseValue: this.baseValue(),
@@ -131,6 +133,12 @@ class Props {
     };
   }
 
+  htmlText() {
+    return {
+      type: String,
+      default: null,
+    }
+  }
 
   globalMaxWidth() {
     return {
@@ -218,6 +226,12 @@ class Props {
    * Список цен с зависимостями / условиями
    */
   dependencyPrices() {
+    return {
+      type: Array,
+      default: () => [],
+    };
+  }
+  dependencyHtmlText() {
     return {
       type: Array,
       default: () => [],

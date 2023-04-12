@@ -644,8 +644,8 @@ export default {
         return this.updatedCostForOut(this.cost);
       }
 
-      let newCost = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices
+      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices, 'dependencyFormulaCost'
       );
       if (newCost !== null) {
         return this.updatedCostForOut(newCost);

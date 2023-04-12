@@ -460,8 +460,8 @@ export default {
         return this.currentOption?.cost ? this.currentOption?.cost : null;
       }
 
-      let newCost = this.costAfterProcessingDependencyPrice(
-        this.currentOption?.dependencyPrices
+      let { cost : newCost } = this.costAfterProcessingDependencyPrice(
+        this.currentOption?.dependencyPrices, 'dependencyFormulaCost'
       );
 
       if (newCost !== null) {

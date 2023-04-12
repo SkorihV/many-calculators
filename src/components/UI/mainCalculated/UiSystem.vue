@@ -2,26 +2,32 @@
   <div
     class="calc__wrapper-group-data"
     ref="parent"
-    v-if="isVisibilityFromDependency && showElement && isExistLocalCost"
+    v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
   >
     <div class="calc__system-wrapper"
          :class="{ column: isMakeElementColumn }"
     >
-      <icon-element-wrapper
-        :icon-settings="iconSettings"
-        :alt="isExistLabel ? label : ''"
-        :isExistLabel="isExistLabel"
-      >
-        <div class="calc__system-label-text" v-if="isExistLabel">
-          {{ label }}
-          <slot name="prompt" />
+      <div class="calc__system-label-wrapper" v-if="!onlyText">
+        <icon-element-wrapper
+          :icon-settings="iconSettings"
+          :alt="isExistLabel ? label : ''"
+          :isExistLabel="isExistLabel"
+        >
+          <div class="calc__system-label-text" v-if="isExistLabel">
+            {{ label }}
+            <slot name="prompt" />
+          </div>
+        </icon-element-wrapper>
+        <div class="calc__system-data-wrapper" v-if="isExistLocalCost">
+          <div class="calc__system-data-value">{{localCost}}</div>
+          <div class="calc__system-data-unit" v-if="isExistUnit">{{unit}}</div>
         </div>
-      </icon-element-wrapper>
-      <div class="calc__system-data-wrapper">
-        <div class="calc__system-data-value">{{localCost}}</div>
-        <div class="calc__system-data-unit" v-if="isExistUnit">{{unit}}</div>
       </div>
+      <div class="calc__system-content" v-if="isExistCurrentHtmlText">
+        <div v-html="currentHtmlText"></div>
+      </div>
+
     </div>
   </div>
   <dev-block
@@ -62,11 +68,8 @@ export default {
       default: null,
     },
     showElement: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      type: String,
+      default: 'no',
     },
     ...propsTemplate.getProps([
       "elementName",
@@ -75,6 +78,7 @@ export default {
       "templateName",
       "parentIsShow",
       "dependencyPrices",
+      "dependencyHtmlText",
       "label",
       "formOutputMethod",
       "resultOutputMethod",
@@ -83,6 +87,7 @@ export default {
       "zeroValueDisplayIgnore",
       "excludeFromCalculations",
       "iconSettings",
+      "htmlText",
       "unit"
     ]),
   },
@@ -165,11 +170,11 @@ export default {
       if (!this.isVisibilityFromDependency) {
         return null;
       }
-      if (!this.initProcessingDependencyPrice || !this.dependencyPrices?.length) {
+      if (!this.allowProcessingDependencyPrices) {
         return this.cost;
       }
-      let formulaCost = this.costAfterProcessingDependencyPrice(
-        this.dependencyPrices
+      const { cost: formulaCost } = this.costAfterProcessingDependencyPrice(
+        this.dependencyPrices, 'dependencyFormulaCost'
       );
 
       if (formulaCost !== null) {
@@ -182,9 +187,10 @@ export default {
      * @returns {number|string|null}
      */
     processingVariablesInFormula() {
-      if (!this.isVisibilityFromDependency) {
+      if (!this.isVisibilityFromDependency || !this.localCostFormula?.toString()?.length) {
         return null;
       }
+
       let cost = Number(this.localCostFormula)
       if (!isNaN(cost) && typeof cost === 'number'){
         return cost;
@@ -228,10 +234,38 @@ export default {
       return Boolean(this.label?.toString()?.length);
     },
     isExistLocalCost() {
-      return this.localCost !== null;
+      return this.localCost !== null && this.showElement !== "notValue"
     },
     isExistUnit() {
       return Boolean(this.unit?.toString()?.length);
+    },
+    onlyText() {
+      return this.showElement === 'onlyText';
+    },
+    currentHtmlText() {
+      if (!this.allowProcessingDependencyHtmlText) {
+        return this.htmlText;
+      }
+      const {item} = this.costAfterProcessingDependencyPrice(
+        this.dependencyHtmlText, 'dependencyFormulaHtmlText'
+      );
+      const textIsExist = Boolean(item?.htmlText?.length);
+      if (textIsExist) {
+        return item.htmlText;
+      }
+      return this.htmlText;
+    },
+    isExistCurrentHtmlText() {
+      return Boolean(this.currentHtmlText?.toString()?.length);
+    },
+    isShowElement() {
+      return this.showElement !== "no";
+    },
+    allowProcessingDependencyPrices() {
+      return this.initProcessingDependencyPrice && this.dependencyPrices?.length;
+    },
+    allowProcessingDependencyHtmlText() {
+      return this.initProcessingDependencyPrice && this.dependencyHtmlText?.length;
     }
   },
 };

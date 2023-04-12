@@ -1239,6 +1239,77 @@
   "test-columns": {
     "calculatorTemplates": [
       {
+        "json_id": "138484307",
+        "title": "Системное поле",
+        "cost": "",
+        "showElement": "onlyText",
+        "label": "Заголовок на сайте",
+        "unit": "руб",
+        "formOutputMethod": "no",
+        "resultOutputMethod": "no",
+        "zeroValueDisplayIgnore": true,
+        "excludeFromCalculations": false,
+        "elementName": "системное25",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "template": "UiSystem",
+        "prompt": "текст подсказки",
+        "htmlText": "какой-то хтмл текст вот так вот да ",
+        "dependencyPrices": [
+          {
+            "title": "условие",
+            "cost": "55 + ad",
+            "dependencyFormulaCost": "откуда === 'москва'",
+            "htmlText": " текст со значением 55"
+          },
+          {
+            "title": "условие",
+            "cost": 10000,
+            "dependencyFormulaCost": "откуда === 'мо'",
+            "htmlText": "текст со значением 10000"
+          },
+          {
+            "title": "условие",
+            "cost": "",
+            "dependencyFormulaCost": "откуда === 'брянск'",
+            "htmlText": "текст со значением Брянск"
+          }
+        ],
+        "dependencyHtmlText": [
+          {
+            "title": "условие",
+            "dependencyFormulaHtmlText": "откуда === 'москва'",
+            "htmlText": " текст со значением 55"
+          },
+          {
+            "title": "условие",
+            "dependencyFormulaHtmlText": "откуда === 'воронеж'",
+            "htmlText": "текст со значением 10000"
+          },
+          {
+            "title": "условие",
+            "dependencyFormulaHtmlText": "откуда === 'владимир'",
+            "htmlText": "текст со значением Брянск"
+          }
+        ],
+        "iconSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1750832707",
+            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "ver_id": 4601302,
+            "image_width": "506",
+            "image_height": "513",
+            "ext": "png"
+          },
+          "maxWidth": 55,
+          "maxHeight": 66,
+          "behaviorImage": "cover",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
         "json_id": "143721307",
         "title": "35345",
         "label": "",
@@ -1406,51 +1477,6 @@
         "iconSettings": null,
         "parent": "0;41285907;41286107;"
       },
-        {
-          "json_id": "138484307",
-          "title": "Системное поле",
-          "cost": "",
-          "showElement": true,
-          "label": "Заголовок на сайте",
-          "unit": "руб",
-          "formOutputMethod": "no",
-          "resultOutputMethod": "no",
-          "zeroValueDisplayIgnore": true,
-          "excludeFromCalculations": false,
-          "elementName": "системное25",
-          "formulaProcessingLogic": "zero",
-          "dependencyFormulaDisplay": "",
-          "template": "UiSystem",
-          "prompt": "текст подсказки",
-          "dependencyPrices": [
-            {
-              "title": "условие",
-              "cost": "10 * 55 + ширина2",
-              "dependencyFormulaCost": "цветПотолка === 3"
-            },
-            {
-              "title": "условие",
-              "cost": 10000,
-              "dependencyFormulaCost": "откуда === 'брянск'"
-            }
-          ],
-          "iconSettings": {
-            "title": "",
-            "image": {
-              "image_id": "1750832707",
-              "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-              "ver_id": 4601302,
-              "image_width": "506",
-              "image_height": "513",
-              "ext": "png"
-            },
-            "maxWidth": 55,
-            "maxHeight": 66,
-            "behaviorImage": "cover",
-            "location": "rightSide"
-          },
-          "parent": "0;"
-        },
       {
         "json_id": "100886307",
         "title": "Откуда",
