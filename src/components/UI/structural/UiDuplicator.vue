@@ -19,7 +19,7 @@
         :origin-variables="originVariablesInDuplicator"
         :position-element="idx"
         :show-duplicate-button="countElementsDuple < maximumDuple"
-        :icon-settings="originData?.iconSettings"
+        :icon-settings-duplicator-label="originData?.iconSettingsDuplicatorLabel"
         :prompt="originData?.prompt"
         @duplicate="duplicate"
         @deleteDuplicator="deleteDuplicator"

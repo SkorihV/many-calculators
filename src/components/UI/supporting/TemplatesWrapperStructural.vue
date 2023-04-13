@@ -11,7 +11,7 @@
     "
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-accordion-label="template?.iconSettingsAccordionLabel"
     @changedValue="changeValue"
   />
   <ui-tab
@@ -26,7 +26,7 @@
     "
     :parent-is-show="parentIsShow"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-tabs-label="template?.iconSettingsTabsLabel"
     @changedValue="changeValue"
   />
   <ui-block-section
@@ -43,7 +43,7 @@
     :parent-is-show="parentIsShow"
     :visual-separate="template?.visuallySeparateElement"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-section-label="template?.iconSettingsSectionLabel"
     :background-image-settings="template?.backgroundImageSettings"
     :element-position="template?.elementPosition"
     :max-width-side="template?.maxWidthSide"

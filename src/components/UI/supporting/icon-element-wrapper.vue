@@ -2,7 +2,7 @@
   <div
     class="calc__icon-element-label-wrapper"
     v-if="isExistLabel || isImage"
-    :class="{ column: isColumn }"
+    :class="{ 'column': isColumn }"
   >
     <icon-element
       v-if="showLeftIcon"

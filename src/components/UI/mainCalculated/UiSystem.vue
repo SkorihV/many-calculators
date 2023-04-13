@@ -5,10 +5,10 @@
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
   >
-    <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
+    <div class="calc__system-wrapper" :class="{ 'column': isMakeElementColumn }">
       <div class="calc__system-label-wrapper" v-if="!onlyText">
         <icon-element-wrapper
-          :icon-settings="iconSettings"
+          :icon-settings="iconSettingsSystemLabel"
           :alt="isExistLabel ? label : ''"
           :isExistLabel="isExistLabel"
         >
@@ -81,6 +81,10 @@ export default {
       type: String,
       default: "no",
     },
+    iconSettingsSystemLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "elementName",
       "parentName",
@@ -96,7 +100,6 @@ export default {
       "positionElement",
       "zeroValueDisplayIgnore",
       "excludeFromCalculations",
-      "iconSettings",
       "htmlText",
       "unit",
     ]),
@@ -288,9 +291,7 @@ export default {
       );
     },
     allowProcessingDependencyHtmlText() {
-      return (
-        this.initProcessingDependencyPrice && this.dependencyHtmlText?.length
-      );
+      return ( this.dependencyHtmlText?.length );
     },
   },
 };

@@ -33,7 +33,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-input-label="template?.iconSettingsInputLabel"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -69,7 +69,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-checkbox-label="template?.iconSettingsCheckboxLabel"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -103,7 +103,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-radio-label="template?.iconSettingsRadioLabel"
     :global-max-width="template?.globalMaxWidth"
     :global-max-height="template?.globalMaxHeight"
     @changedValue="changeValue"
@@ -146,7 +146,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-range-label="template?.iconSettingsRangeLabel"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
@@ -179,7 +179,7 @@
     :template-name="template.template"
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-select-label="template?.iconSettingsSelectLabel"
     :is-search="template?.isSearch"
     :global-max-width="template?.globalMaxWidth"
     :global-max-height="template?.globalMaxHeight"
@@ -226,7 +226,7 @@
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     :exclude-from-calculations="template?.excludeFromCalculations"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-system-label="template?.iconSettingsSystemLabel"
     :unit="template?.unit"
     :html-text="template?.htmlText"
     @changedValue="changeValue"

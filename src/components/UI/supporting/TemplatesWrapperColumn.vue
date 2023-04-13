@@ -6,7 +6,7 @@
     :classes="template?.classes"
     :dependency-formula-display="template?.dependencyFormulaDisplay"
     :parent-is-show="parentIsShow"
-    :icon-settings="template?.iconSettings"
+    :icon-settings-columns-label="template?.iconSettingsColumnsLabel"
     :changed-state-parent="changeStateParent"
     :element-name="
       template?.elementName?.length

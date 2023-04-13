@@ -4,14 +4,14 @@
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"
-    :class="{ open: isOpen, error: isShowError && !isOpen }"
+    :class="{ 'open': isOpen, 'error': isShowError && !isOpen }"
     @mouseover="hoverElement = true"
     @mouseleave="hoverElement = false"
   >
     <div class="calc__accordion-item-label-wrapper">
       <icon-element-wrapper
         :alt="accordionItem.label"
-        :icon-settings="accordionItem.iconSettings"
+        :icon-settings="accordionItem.iconSettingsAccordionItemLabel"
         :is-parent-hover="hoverElement"
         :is-parent-selected="isOpen"
       >

@@ -8,7 +8,7 @@
   <div
     class="calc__result-block-wrapper"
     :class="{
-      isVisualSeparate: resultOptions?.visuallySeparateElement,
+      'isVisualSeparate': resultOptions?.visuallySeparateElement,
     }"
     v-if="isShowResultBlock && !isNeedSpinner"
   >

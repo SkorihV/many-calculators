@@ -7,7 +7,7 @@
   >
     <div class="calc__tab-wrapper" :class="[classes]">
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsTabsLabel"
         :alt="isExistLabel ? label : ''"
         :is-exist-label="isExistLabel"
       >
@@ -20,8 +20,8 @@
           <div
             class="calc__tab-item-label"
             :class="{
-              isOpen: shownIdTab === idx,
-              isError: checkIsShowError(
+              'isOpen': shownIdTab === idx,
+              'isError': checkIsShowError(
                 elementName + item?.json_id + '_' + idx ||
                   elementName + 'tabItem' + '_' + idx,
                 idx
@@ -40,7 +40,7 @@
           >
             <icon-element-wrapper
               :alt="item.label"
-              :icon-settings="item?.iconSettings"
+              :icon-settings="item?.iconSettingsTabsItemLabel"
               :is-parent-hover="hoverElementIndex === idx"
               :is-parent-selected="shownIdTab === idx"
               :is-exist-label="Boolean(item.label?.length)"
@@ -124,13 +124,16 @@ export default {
       type: [String, Number],
       default: 100,
     },
+    iconSettingsTabsLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "label",
       "classes",
       "elementName",
       "parentIsShow",
-      "dependencyFormulaDisplay",
-      "iconSettings",
+      "dependencyFormulaDisplay"
     ]),
   },
   data() {

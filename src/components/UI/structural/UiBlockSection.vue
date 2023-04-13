@@ -7,7 +7,7 @@
   >
     <div
       class="calc__block-section-wrapper"
-      :class="[classes, { isVisualSeparate: isVisualSeparate }]"
+      :class="[classes, { 'isVisualSeparate': isVisualSeparate }]"
     >
       <background-image-element
         v-if="backgroundImageSettings"
@@ -15,7 +15,7 @@
       />
       <div class="calc__block-section-label-wrapper" v-if="isExistLabel">
         <icon-element-wrapper
-          :icon-settings="iconSettings"
+          :icon-settings="iconSettingsSectionLabel"
           :alt="isExistLabel ? label : ''"
           :is-exist-label="isExistLabel"
         >
@@ -32,7 +32,7 @@
       <div
         class="calc__block-section-content-wrapper"
         :style="{ maxWidth: maxWidth }"
-        :class="{ horizontal: isHorizontal }"
+        :class="{ 'horizontal': isHorizontal }"
       >
         <template v-for="(item, inx) in templatesData" :key="inx">
           <templates-wrapper-column
@@ -101,6 +101,10 @@ export default {
       type: [Number, Boolean],
       default: false,
     },
+    iconSettingsSectionLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "label",
       "labelSub",
@@ -109,7 +113,6 @@ export default {
       "parentIsShow",
       "dependencyFormulaDisplay",
       "backgroundImageSettings",
-      "iconSettings",
       "maxWidthSide",
       "elementPosition",
     ]),

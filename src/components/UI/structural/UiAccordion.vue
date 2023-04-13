@@ -7,7 +7,7 @@
   >
     <div class="calc__accordion-wrapper" :class="[classes]">
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsAccordionLabel"
         :alt="isExistLabel ? accordionData?.label : ''"
         :is-exist-label="isExistLabel"
       >
@@ -62,13 +62,16 @@ export default {
       type: [String, Number],
       default: 100,
     },
+    iconSettingsAccordionLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "label",
       "elementName",
       "classes",
       "parentIsShow",
-      "dependencyFormulaDisplay",
-      "iconSettings",
+      "dependencyFormulaDisplay"
     ]),
   },
   data() {

@@ -2,7 +2,7 @@
   <div
     class="calc__error-wrapper"
     v-if="isShow"
-    :class="{ isShow: isShow }"
+    :class="{ 'isShow': isShow }"
     v-cloak
   >
     <div class="calc__error-control-wrapper">

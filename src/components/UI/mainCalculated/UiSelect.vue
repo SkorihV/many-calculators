@@ -8,12 +8,12 @@
     <div
       class="calc__select-wrapper"
       :class="[
-        { column: isColumn || isMakeElementColumn, open: isOpen },
+        { 'column': isColumn || isMakeElementColumn, 'open': isOpen },
         classes,
       ]"
     >
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsSelectLabel"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
@@ -28,7 +28,7 @@
           class="calc__select-change-wrapper"
           ref="changeElement"
           :style="[maxWidthForChangeElement]"
-          :class="{ error: isErrorClass, stretch: isStretch }"
+          :class="{ 'error': isErrorClass, 'stretch': isStretch }"
         >
           <div
             v-if="currentOption"
@@ -39,7 +39,7 @@
           >
             <icon-element-wrapper
               :alt="currentOption?.selectName"
-              :icon-settings="currentOption?.iconSettings"
+              :icon-settings="currentOption?.iconSettingsSelectItem"
               :global-max-width="globalMaxWidth"
               :global-max-height="globalMaxHeight"
               :is-parent-hover="hoverElementIndex === 'main'"
@@ -54,7 +54,7 @@
           </div>
           <div
             class="calc__select-option-wrapper"
-            :class="{ stretch: isStretch }"
+            :class="{ 'stretch': isStretch }"
             :style="[maxWidthForOptionList]"
             ref="optionList"
             v-show="isOpen"
@@ -79,7 +79,7 @@
                 >
                   <icon-element-wrapper
                     :alt="option?.selectName"
-                    :icon-settings="option?.iconSettings"
+                    :icon-settings="option?.iconSettingsSelectItem"
                     :global-max-width="globalMaxWidth"
                     :global-max-height="globalMaxHeight"
                     :is-parent-hover="hoverElementIndex === idx"
@@ -98,7 +98,6 @@
           </div>
         </div>
       </div>
-
       <ui-tooltip
         :is-show="isErrorEmpty"
         :tooltip-text="textErrorNotEmpty"
@@ -184,6 +183,10 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    iconSettingsSelectLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "isColumn",
       "isStretch",
@@ -202,7 +205,6 @@ export default {
       "dependencyFormulaDisplay",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings",
       "globalMaxWidth",
       "globalMaxHeight",
     ]),

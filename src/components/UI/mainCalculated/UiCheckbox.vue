@@ -7,10 +7,10 @@
   >
     <div
       class="calc__checkbox-wrapper"
-      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsCheckboxLabel"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
@@ -145,6 +145,10 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    iconSettingsCheckboxLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
@@ -164,7 +168,6 @@ export default {
       "isColumn",
       "zeroValueDisplayIgnore",
       "baseValue",
-      "iconSettings",
     ]),
   },
   mounted() {

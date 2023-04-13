@@ -1,7 +1,7 @@
 <template>
   <div class="calc__columns-column-label-wrapper" ref="parent">
     <icon-element-wrapper
-      :icon-settings="column.iconSettings"
+      :icon-settings="column.iconSettingsColumnsItemLabel"
       :alt="isExistLabel ? column.label : ''"
       :isExistLabel="isExistLabel"
     >
@@ -12,7 +12,7 @@
   </div>
   <div
     class="calc__columns-column-elements-wrapper"
-    :class="{ horizontal: isHorizontal }"
+    :class="{ 'horizontal': isHorizontal }"
   >
     <templates-wrapper
       v-for="(template, index_in) in column?.templates"

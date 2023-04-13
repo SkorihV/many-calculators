@@ -9,15 +9,15 @@
       class="calc__radio-wrapper"
       :class="[
         {
-          column: isColumn || isMakeElementColumn,
-          onlyImage: onlyImage,
-          base: isBase,
+          'column': isColumn || isMakeElementColumn,
+          'onlyImage': onlyImage,
+          'base': isBase,
         },
         classes,
       ]"
     >
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsRadioLabel"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
@@ -33,11 +33,11 @@
             class="calc__radio-label-button"
             :id="localElementName + '_' + radio.index"
             :class="{
-              checked: currentIndexRadioButton === radio.index,
-              error: isErrorClass,
-              onlyImage: onlyImage,
-              isShowPrompt: Boolean(radio?.prompt?.length),
-              stretch: isStretch,
+              'checked': currentIndexRadioButton === radio.index,
+              'error': isErrorClass,
+              'onlyImage': onlyImage,
+              'isShowPrompt': Boolean(radio?.prompt?.length),
+              'stretch': isStretch,
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"
@@ -45,7 +45,7 @@
           >
             <icon-element-wrapper
               :alt="radio?.radioName"
-              :icon-settings="radio?.iconSettings"
+              :icon-settings="radio?.iconSettingsRadioItem"
               :global-max-width="globalMaxWidth"
               :global-max-height="globalMaxHeight"
               :is-parent-hover="hoverElementIndex === radio.index"
@@ -158,6 +158,10 @@ export default {
       type: String,
       default: "base",
     },
+    iconSettingsRadioLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "isColumn",
       "isNeedChoice",
@@ -175,7 +179,6 @@ export default {
       "templateName",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings",
       "isStretch",
       "globalMaxWidth",
       "globalMaxHeight",

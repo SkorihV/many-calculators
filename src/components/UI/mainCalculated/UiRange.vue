@@ -7,10 +7,10 @@
   >
     <div
       class="calc__range-wrapper"
-      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsRangeLabel"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
@@ -25,7 +25,7 @@
           <input
             ref="thisElementInputRange"
             class="calc__range-item"
-            :class="{ isError: isClassError }"
+            :class="{ 'isError': isClassError }"
             type="range"
             :min="localMin"
             :max="localMax"
@@ -62,7 +62,7 @@
         >
           <input
             class="calc__range-current-dynamic"
-            :class="{ isError: isClassError }"
+            :class="{ 'isError': isClassError }"
             v-if="showDynamicValue"
             type="text"
             v-model="dynamicValue"
@@ -175,6 +175,10 @@ export default {
         return value === false || value === true || value === 0 || value === 1;
       },
     },
+    iconSettingsRangeLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "label",
       "notEmpty",
@@ -197,7 +201,6 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings",
     ]),
   },
   mounted() {

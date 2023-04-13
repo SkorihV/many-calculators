@@ -1,1176 +1,4 @@
 {
-  "test-dependency": {
-    "calculatorTemplates": [
-      {
-        "json_id": "243498106",
-        "title": "Окна - Профильная система",
-        "label": "Профильная система",
-        "selectedItem": "0",
-        "isColumn": false,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "typeDisplayClass": "",
-        "formOutputMethod": "value",
-        "excludeFromCalculations": false,
-        "elementName": "профильнаяСистема",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRadio",
-        "onlyImage": false,
-        "maxWidth": "150",
-        "maxHeight": "150",
-        "values": [
-          {
-            "title": "Бюджет",
-            "radioName": "Бюджет",
-            "subradioName": "подзаголовок",
-            "cost": 1000,
-            "image": {
-              "image_id": "3373825106",
-              "filename": "https://dummyimage.com/150x100/a1a1a1/ccc",
-              "ver_id": 2422030,
-              "image_width": "264",
-              "image_height": "384",
-              "ext": "png"
-            },
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Оптимум",
-            "radioName": "Оптимум",
-            "cost": 3000,
-            "image": {
-              "image_id": "3373824506",
-              "filename": "https://dummyimage.com/150x100/a1a1a1/eee",
-              "ver_id": 2422030,
-              "image_width": "384",
-              "image_height": "300",
-              "ext": "png"
-            }
-          },
-          {
-            "title": "Премиум",
-            "radioName": "Премиум",
-            "cost": 3500,
-            "image": {
-              "image_id": "3373822106",
-              "filename": "https://dummyimage.com/150x100/a1a1a1/ddd",
-              "ver_id": 2422030,
-              "image_width": "384",
-              "image_height": "300",
-              "ext": "png"
-            }
-          }
-        ],
-        "prompt": ""
-      },
-      {
-        "json_id": "165719506",
-        "title": "Input Зависимости 1 уровень 53534",
-        "label": "Input Зависимости 1 уровень 53534",
-        "value": "30",
-        "cost": "10",
-        "unit": "",
-        "min": "",
-        "max": "",
-        "controls": false,
-        "step": "1",
-        "isColumn": false,
-        "notEmpty": false,
-        "onlyNumber": 1,
-        "isCurrency": false,
-        "onlyInteger": false,
-        "formOutputMethod": "no",
-        "elementName": "первыйИнпут",
-        "formulaProcessingLogic": "error",
-        "classes": "",
-        "template": "UiInput",
-        "placeholder": "",
-        "discreteStep": false,
-        "excludeFromCalculations": 0,
-        "dependencyFormulaDisplay": ""
-      },
-      {
-        "json_id": "346345",
-        "title": "checkbox - Зависимости уровень 2",
-        "label": "checkbox - Зависимости уровень 2",
-        "labelSecond": "",
-        "value": false,
-        "cost": "50",
-        "isNeedChoice": false,
-        "isChecked": false,
-        "typeDisplayClass": "",
-        "formOutputMethod": "valueSumm",
-        "elementName": "checklvl2",
-        "formulaProcessingLogic": "error",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyFormulaDisplay": "первыйИнпут === 50 || первыйИнпут !== null",
-        "prompt": "",
-        "dependencyPrices": [
-          {
-            "title": "100",
-            "disabledFormula": 0,
-            "cost": 100,
-            "dependencyFormulaCost": "первыйИнпут &gt; 99"
-          },
-          {
-            "title": "200",
-            "disabledFormula": 0,
-            "cost": 200,
-            "dependencyFormulaCost": "первыйИнпут &gt; 199"
-          },
-          {
-            "title": "300",
-            "disabledFormula": 0,
-            "cost": 300,
-            "dependencyFormulaCost": "первыйИнпут &gt; 299"
-          }
-        ]
-      },
-      {
-        "json_id": "234224",
-        "title": "Input с зависимостью для цены",
-        "label": "Input с зависимостью для цены",
-        "value": "10",
-        "cost": "100",
-        "unit": "",
-        "min": "",
-        "max": "",
-        "controls": false,
-        "step": "1",
-        "isColumn": false,
-        "notEmpty": false,
-        "onlyNumber": true,
-        "isCurrency": false,
-        "onlyInteger": false,
-        "formOutputMethod": "valueSumm",
-        "elementName": "inputName1",
-        "formulaProcessingLogic": "error",
-        "classes": "",
-        "template": "UiInput",
-        "dependencyFormulaDisplay": "",
-        "placeholder": "",
-        "discreteStep": false,
-        "excludeFromCalculations": false,
-        "dependencyPrices": [
-          {
-            "title": "200",
-            "disabledFormula": 0,
-            "cost": 200,
-            "dependencyFormulaCost": "первыйИнпут &gt; 10"
-          },
-          {
-            "title": "300",
-            "disabledFormula": 0,
-            "cost": 300,
-            "dependencyFormulaCost": "первыйИнпут &gt; 20"
-          },
-          {
-            "title": "400",
-            "disabledFormula": 0,
-            "cost": 400,
-            "dependencyFormulaCost": "первыйИнпут &gt; 30"
-          }
-        ],
-        "prompt": ""
-      },
-      {
-        "json_id": "16657139506",
-        "title": "Зависимость цены range от галочки",
-        "label": "Зависимость цены от галочки",
-        "value": "0",
-        "min": "10",
-        "max": "100",
-        "cost": "100",
-        "unit": "",
-        "step": "5",
-        "showSteps": 1,
-        "stepPrompt": "10",
-        "isNeedChoice": true,
-        "notEmpty": false,
-        "showStaticValue": true,
-        "showDynamicValue": 1,
-        "formOutputMethod": "valueSumm",
-        "elementName": "range2",
-        "formulaProcessingLogic": "error",
-        "classes": "",
-        "template": "UiRange",
-        "dependencyFormulaDisplay": "",
-        "dependencyPrices": [
-          {
-            "title": "1000",
-            "disabledFormula": 0,
-            "cost": 999,
-            "dependencyFormulaCost": "checklvl2 === true"
-          },
-          {
-            "title": "1000",
-            "disabledFormula": 0,
-            "cost": 1,
-            "dependencyFormulaCost": "первыйИнпут === inputName1"
-          }
-        ],
-        "prompt": ""
-      },
-      {
-        "json_id": "234253634",
-        "title": "Зависимость radio",
-        "label": "Зависимость цены",
-        "selectedItem": "0",
-        "isColumn": false,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "typeDisplayClass": "buttons",
-        "formOutputMethod": "valueSumm",
-        "elementName": "radio1",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRadio",
-        "values": [
-          {
-            "title": "значение 1",
-            "radioName": "значение 1",
-            "cost": 100,
-            "value": "test",
-            "dependencyPrices": [
-              {
-                "title": "200",
-                "disabledFormula": 0,
-                "cost": 200,
-                "dependencyFormulaCost": "первыйИнпут &gt; 99"
-              },
-              {
-                "title": "300",
-                "disabledFormula": 0,
-                "cost": 300,
-                "dependencyFormulaCost": "первыйИнпут &gt; 199"
-              }
-            ]
-          },
-          {
-            "title": "Значение 2",
-            "radioName": "Значение 2",
-            "cost": 55,
-            "value": 1,
-            "dependencyPrices": [
-              {
-                "title": "66",
-                "disabledFormula": 0,
-                "cost": 66,
-                "dependencyFormulaCost": "первыйИнпут &gt; 99"
-              },
-              {
-                "title": "77",
-                "disabledFormula": 0,
-                "cost": 77,
-                "dependencyFormulaCost": "первыйИнпут &gt; 199"
-              }
-            ]
-          },
-          {
-            "title": "Значение 3",
-            "radioName": "Значение 3 без цены"
-          }
-        ],
-
-        "prompt": ""
-      },
-
-      {
-        "json_id": "675635",
-        "title": "Зависимости select",
-        "label": "Зависимость от выбранного радио пункта 45354",
-        "isColumn": false,
-        "selectedItem": "0",
-        "isNeedChoice": false,
-        "notEmpty": 1,
-        "formOutputMethod": "valueSumm",
-        "elementName": "test123",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "excludeFromCalculations": false,
-        "values": [
-          {
-            "title": "Пункт первый",
-            "selectName": "Пункт первый",
-            "cost": 100,
-            "extraValueForDependency": "первыйПункт",
-            "dependencyPrices": [
-              {
-                "title": "200",
-                "disabledFormula": 0,
-                "cost": 200,
-                "dependencyFormulaCost": "строение === 1"
-              },
-              {
-                "title": "300",
-                "disabledFormula": 0,
-                "cost": 300,
-                "dependencyFormulaCost": "строение === 2"
-              }
-            ]
-          },
-          {
-            "title": "Пункта второй",
-            "selectName": "Пункта второй",
-            "cost": 99,
-            "dependencyPrices": [
-              {
-                "title": "55",
-                "disabledFormula": 0,
-                "cost": 55,
-                "dependencyFormulaCost": "radio1 === 1"
-              },
-              {
-                "title": "888",
-                "disabledFormula": 0,
-                "cost": 888,
-                "dependencyFormulaCost": "radio1 === 2"
-              }
-            ],
-            "prompt": "342423rrf fd sf sdf sdf"
-          },
-          {
-            "title": "Третий пункт для скрытия",
-            "selectName": "Третий пункт для скрытия",
-            "cost": 155,
-            "dependencyFormulaItem": "radio1 !== 3"
-          }
-        ],
-        "prompt": ""
-      },
-
-      {
-        "json_id": "75874563",
-        "title": "Зависимость от ползунка Radio",
-        "label": "Зависимость от ползунка Radio",
-        "selectedItem": "0",
-        "isColumn": false,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "typeDisplayClass": "",
-        "formOutputMethod": "valueSumm",
-        "elementName": "radio_1111111",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRadio",
-        "values": [
-          {
-            "title": "Пункт дефолтный есть всегда",
-            "radioName": "Пункт дефолтный есть всегда без цены",
-            "cost": 1
-          },
-          {
-            "title": "Пункт два",
-            "radioName": "Пункт два условие больше 30",
-            "cost": 150,
-            "dependencyPrices": [
-              {
-                "title": "300",
-                "disabledFormula": 0,
-                "cost": 300,
-                "dependencyFormulaCost": "range2 > 35"
-              },
-              {
-                "title": "400",
-                "disabledFormula": 0,
-                "cost": 400,
-                "dependencyFormulaCost": "range2 > 40"
-              }
-            ],
-            "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 > 30"
-          },
-          {
-            "title": "Пункт 3",
-            "radioName": "условие между 30 и 50",
-            "cost": 300,
-            "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 < 30 || range2 > 50"
-          },
-          {
-            "title": "пункт 4",
-            "radioName": "условие > 50",
-            "cost": 200,
-            "enabledProcessingDependency": 1,
-            "dependencyFormulaItem": "range2 > 50"
-          }
-        ],
-        "prompt": ""
-      },
-
-      {
-        "json_id": "64753425236733",
-        "title": "Зависимости - галочка для отображения инпута",
-        "label": "Зависимости - галочка для отображения инпута",
-        "labelSecond": "",
-        "value": false,
-        "cost": "",
-        "isNeedChoice": false,
-        "isChecked": false,
-        "typeDisplayClass": "button",
-        "formOutputMethod": "no",
-        "elementName": "check_1",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "radio_1111111 === 2",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": ""
-      },
-
-      {
-        "json_id": "2344",
-        "title": "Зависимости - галочка для отображения инпута111111",
-        "label": "Зависимости - галочка для отображения инпута111111",
-        "labelSecond": "",
-        "value": false,
-        "cost": "",
-        "isNeedChoice": false,
-        "isChecked": false,
-        "typeDisplayClass": "button",
-        "formOutputMethod": "no",
-        "elementName": "check_145",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "radio_1111111 === 2",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": ""
-      },
-
-      {
-        "json_id": "64756733",
-        "title": "Зависимости input для отображения ошибок",
-        "label": "Зависимости input для отображения ошибок",
-        "value": "0",
-        "cost": "100",
-        "unit": "м2",
-        "min": "5",
-        "max": "50",
-        "controls": 1,
-        "step": "1",
-        "isColumn": 1,
-        "notEmpty": 1,
-        "onlyNumber": 1,
-        "isCurrency": 1,
-        "onlyInteger": false,
-        "formOutputMethod": "no",
-        "elementName": "",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "check_1 === true",
-        "customErrorPattern": "",
-        "customErrorText": "",
-        "classes": "",
-        "template": "UiInput",
-        "dependencyPrices": null,
-        "prompt": "<p><b>Текст подсказки</b></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>"
-      },
-      {
-        "json_id": "5532",
-        "title": "Зависимости - галочка для отображения инпута3",
-        "label": "Зависимости - галочка для отображения инпута3",
-        "labelSecond": "",
-        "value": false,
-        "cost": "",
-        "isNeedChoice": false,
-        "isChecked": false,
-        "typeDisplayClass": "button",
-        "formOutputMethod": "no",
-        "elementName": "check_123",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "radio_1111111 === 2",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": ""
-      },
-
-      {
-        "json_id": "169744123706",
-        "title": "Зависимости аккордеон",
-        "label": "Зависимости аккордеон",
-        "maxWidth": "50",
-        "items": [
-          {
-            "json_id": "1575633457506",
-            "title": "Дополнительные опции",
-            "templates": [
-              {
-                "json_id": "157554906",
-                "title": "checkbox - Ремонт квартир - Вызова дизайнера на дом",
-                "label": "Вызова дизайнера на дом",
-                "labelSecond": "",
-                "value": false,
-                "cost": "",
-                "isNeedChoice": false,
-                "isChecked": false,
-                "typeDisplayClass": "switcher",
-                "elementName": "chek22",
-                "formulaProcessingLogic": "error",
-                "classes": "",
-                "template": "UiCheckbox",
-                "formOutputMethod": "value",
-                "dependencyFormulaDisplay": "",
-                "excludeFromCalculations": false,
-                "prompt": ""
-              }
-            ],
-            "label": "Дополнительные опции",
-            "sublabel": "gjlpfujkj опции",
-            "prompt": ""
-          },
-          {
-            "json_id": "154987306",
-            "title": "Вкладка с радиокнопками",
-            "templates": [
-              {
-                "json_id": "169748506",
-                "title": "Зависимости радио 1",
-                "label": "Зависимости радио 1",
-                "selectedItem": "0",
-                "isColumn": false,
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "typeDisplayClass": "buttons",
-                "formOutputMethod": "valueSumm",
-                "elementName": "radioForDuplicate",
-                "formulaProcessingLogic": "ignored",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiRadio",
-                "values": [
-                  {
-                    "title": "1",
-                    "radioName": 1,
-                    "cost": 1,
-                    "dependencyPrices": [
-                      {
-                        "title": "999",
-                        "disabledFormula": 0,
-                        "cost": 999,
-                        "dependencyFormulaCost": "chek111 === true"
-                      }
-                    ]
-                  },
-                  {
-                    "title": "2",
-                    "radioName": 2,
-                    "cost": 2
-                  },
-                  {
-                    "title": "3",
-                    "radioName": 3,
-                    "cost": 3
-                  }
-                ],
-                "prompt": ""
-              },
-              {
-                "json_id": "169748706",
-                "title": "Зависимости радио 2",
-                "label": "Зависимости радио 2",
-                "selectedItem": "0",
-                "isColumn": false,
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "typeDisplayClass": "buttons",
-                "formOutputMethod": "valueSumm",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "chek111 === true",
-                "classes": "",
-                "template": "UiRadio",
-                "values": [
-                  {
-                    "title": "11",
-                    "radioName": 11,
-                    "cost": 11
-                  },
-                  {
-                    "title": "22",
-                    "radioName": 22,
-                    "cost": 22
-                  },
-                  {
-                    "title": "33",
-                    "radioName": 33,
-                    "cost": 33
-                  }
-                ],
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с радиокнопками",
-            "prompt": ""
-          },
-          {
-            "json_id": "154986906",
-            "title": "Вкладка с чекбоксами",
-            "templates": [
-              {
-                "json_id": "169749306",
-                "title": "зависимости чекбокс 1",
-                "label": "зависимости чекбокс 1",
-                "labelSecond": "3D-Дизайн проект",
-                "value": false,
-                "cost": "4",
-                "isNeedChoice": false,
-                "isChecked": false,
-                "typeDisplayClass": "",
-                "formOutputMethod": "valueSumm",
-                "elementName": "chek111",
-                "formulaProcessingLogic": "zero",
-                "excludeFromCalculations": false,
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiCheckbox",
-                "dependencyPrices": null,
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с чекбоксами",
-            "prompt": ""
-          },
-          {
-            "json_id": "154876306",
-            "title": "Вкладка с инпутами",
-            "templates": [
-              {
-                "json_id": "169749506",
-                "title": "Заголовок элемента в списке вида - Input:  4",
-                "label": "Заголовок элемента в списке вида - Input: 4",
-                "value": "6",
-                "cost": "44",
-                "unit": "",
-                "min": "1",
-                "max": "44",
-                "controls": 1,
-                "step": "1",
-                "isColumn": false,
-                "notEmpty": 1,
-                "onlyNumber": 1,
-                "isCurrency": false,
-                "onlyInteger": false,
-                "formOutputMethod": "valueSumm",
-                "elementName": "imput12",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "chek111 === true",
-                "customErrorPattern": "",
-                "customErrorText": "",
-                "classes": "",
-                "template": "UiInput",
-                "dependencyPrices": null,
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с инпутами",
-            "prompt": ""
-          }
-        ],
-        "template": "UiAccordion",
-        "classes": "",
-        "dependencyFormulaDisplay": "test123 === 2"
-      },
-      {
-        "json_id": "170192506",
-        "title": "Зависимости табы",
-        "label": "Зависимости табы",
-        "items": [
-          {
-            "title": "Вкладка с селектами",
-            "templates": [
-              {
-                "json_id": "170206106",
-                "title": "Зависимости селект табы",
-                "label": "Зависимости селект табы",
-                "isColumn": false,
-                "selectedItem": "0",
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "formOutputMethod": "valueSumm",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiSelect",
-                "values": [
-                  {
-                    "title": "селект для табов",
-                    "selectName": "селект для табов",
-                    "cost": 12
-                  },
-                  {
-                    "title": "2",
-                    "selectName": 2,
-                    "cost": 123
-                  },
-                  {
-                    "title": "4",
-                    "selectName": 22,
-                    "cost": 32
-                  }
-                ],
-                "prompt": ""
-              },
-              {
-                "json_id": "170206506",
-                "title": "селект для табов 2",
-                "label": "селект для табов 2",
-                "isColumn": false,
-                "selectedItem": "0",
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "formOutputMethod": "no",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiSelect",
-                "values": [
-                  {
-                    "title": "1",
-                    "selectName": 1,
-                    "cost": 1
-                  },
-                  {
-                    "title": "2",
-                    "selectName": 2,
-                    "cost": 2
-                  },
-                  {
-                    "title": "3",
-                    "selectName": 3,
-                    "cost": 3
-                  }
-                ],
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с селектами"
-          },
-          {
-            "json_id": "155336506",
-            "title": "Вкладка с галочками",
-            "templates": [
-              {
-                "json_id": "155336506",
-                "title": "зависимость галочка табы 1",
-                "label": "зависимость галочка табы 1",
-                "labelSecond": "",
-                "value": false,
-                "cost": "",
-                "isNeedChoice": 1,
-                "isChecked": false,
-                "typeDisplayClass": "",
-                "formOutputMethod": "valueSumm",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiCheckbox",
-                "dependencyPrices": null,
-                "prompt": ""
-              },
-              {
-                "json_id": "170211506",
-                "title": "зависимость галочка табы 2",
-                "label": "зависимость галочка табы 2",
-                "labelSecond": "",
-                "value": false,
-                "cost": "13",
-                "isNeedChoice": false,
-                "isChecked": false,
-                "typeDisplayClass": "",
-                "formOutputMethod": "valueSumm",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiCheckbox",
-                "dependencyPrices": null,
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с галочками",
-            "prompt": ""
-          },
-          {
-            "json_id": "155336106",
-            "title": "Вкладка с кнопками",
-            "templates": [
-              {
-                "json_id": "170211906",
-                "title": "зависимости табы диапазон 1",
-                "label": "зависимости табы диапазон 1",
-                "value": "0",
-                "min": "0",
-                "max": "100",
-                "cost": "10",
-                "unit": "",
-                "step": "1",
-                "showSteps": false,
-                "stepPrompt": "1",
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "showStaticValue": false,
-                "showDynamicValue": false,
-                "formOutputMethod": "valueSumm",
-                "elementName": "",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "imput12 &gt; 15 &amp;&amp; imput12 &lt; 25",
-                "classes": "",
-                "template": "UiRange",
-                "dependencyPrices": [
-                  {
-                    "title": "15",
-                    "disabledFormula": 0,
-                    "cost": 15,
-                    "dependencyFormulaCost": "imput12 &gt; 17"
-                  },
-                  {
-                    "title": "20",
-                    "cost": 20,
-                    "dependencyFormulaCost": "imput12 &gt; 20 &amp;&amp; imput12 &lt; 22"
-                  }
-                ],
-                "prompt": ""
-              }
-            ],
-            "label": "Вкладка с кнопками",
-            "prompt": ""
-          }
-        ],
-        "template": "UiTab",
-        "classes": "",
-        "dependencyFormulaDisplay": "imput12 &gt; 10 &amp;&amp; imput12 &lt; 30"
-      },
-      {
-        "json_id": "5267463232",
-        "title": "Системное поле тестирования зависимостей",
-        "cost": "1",
-        "elementName": "system1",
-        "formulaProcessingLogic": "error",
-        "template": "UiSystem",
-        "dependencyPrices": [
-          {
-            "title": "Значение 2",
-            "disabledFormula": 0,
-            "cost": 2,
-            "dependencyFormulaCost": "первыйИнпут &gt; 999"
-          },
-          {
-            "title": "Значение 3",
-            "disabledFormula": 0,
-            "cost": 3,
-            "dependencyFormulaCost": "chek22 === true"
-          }
-        ]
-      },
-      {
-        "json_id": "219632506",
-        "title": "Дупликатор",
-        "label": "Дупликатор",
-        "templates": [
-          {
-            "json_id": "169567444706",
-            "title": "Зависимости аккордеон",
-            "label": "Зависимости аккордеон",
-            "items": [
-              {
-                "json_id": "15764557506",
-                "title": "Дополнительные опции",
-                "templates": [
-                  {
-                    "json_id": "157435554906",
-                    "title": "checkbox - Ремонт квартир - Вызова дизайнера на дом",
-                    "label": "Вызова дизайнера на дом",
-                    "labelSecond": "",
-                    "value": false,
-                    "cost": "",
-                    "isNeedChoice": false,
-                    "isChecked": false,
-                    "typeDisplayClass": "switcher",
-                    "elementName": "chek12345",
-                    "formulaProcessingLogic": "error",
-                    "classes": "",
-                    "template": "UiCheckbox",
-                    "formOutputMethod": "value",
-                    "dependencyFormulaDisplay": "",
-                    "excludeFromCalculations": false,
-                    "prompt": ""
-                  }
-                ],
-                "label": "Дополнительные опции",
-                "prompt": ""
-              },
-              {
-                "json_id": "15493587306",
-                "title": "Вкладка с радиокнопками",
-                "templates": [
-                  {
-                    "json_id": "169748506",
-                    "title": "Зависимости радио 1",
-                    "label": "Зависимости радио 1",
-                    "selectedItem": "0",
-                    "isColumn": false,
-                    "isNeedChoice": false,
-                    "notEmpty": false,
-                    "typeDisplayClass": "buttons",
-                    "formOutputMethod": "valueSumm",
-                    "elementName": "radioForDuplicate2",
-                    "formulaProcessingLogic": "ignored",
-                    "dependencyFormulaDisplay": "",
-                    "classes": "",
-                    "template": "UiRadio",
-                    "values": [
-                      {
-                        "title": "1",
-                        "radioName": 1,
-                        "cost": 1,
-                        "dependencyPrices": [
-                          {
-                            "title": "999",
-                            "disabledFormula": 0,
-                            "cost": 999,
-                            "dependencyFormulaCost": "chek111 === true"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "2",
-                        "radioName": 2,
-                        "cost": 2
-                      },
-                      {
-                        "title": "3",
-                        "radioName": 3,
-                        "cost": 3
-                      }
-                    ],
-                    "prompt": ""
-                  },
-                  {
-                    "json_id": "16974873406",
-                    "title": "Зависимости радио 2",
-                    "label": "Зависимости радио 2",
-                    "selectedItem": "0",
-                    "isColumn": false,
-                    "isNeedChoice": false,
-                    "notEmpty": false,
-                    "typeDisplayClass": "buttons",
-                    "formOutputMethod": "valueSumm",
-                    "elementName": "",
-                    "formulaProcessingLogic": "error",
-                    "dependencyFormulaDisplay": "chek111 === true",
-                    "classes": "",
-                    "template": "UiRadio",
-                    "values": [
-                      {
-                        "title": "11",
-                        "radioName": 11,
-                        "cost": 11
-                      },
-                      {
-                        "title": "22",
-                        "radioName": 22,
-                        "cost": 22
-                      },
-                      {
-                        "title": "33",
-                        "radioName": 33,
-                        "cost": 33
-                      }
-                    ],
-                    "prompt": ""
-                  }
-                ],
-                "label": "Вкладка с радиокнопками",
-                "prompt": ""
-              },
-              {
-                "json_id": "151252498691506",
-                "title": "Вкладка с чекбоксами",
-                "templates": [
-                  {
-                    "json_id": "162349749306",
-                    "title": "зависимости чекбокс 1",
-                    "label": "зависимости чекбокс 1",
-                    "labelSecond": "3D-Дизайн проект",
-                    "value": false,
-                    "cost": "4",
-                    "isNeedChoice": false,
-                    "isChecked": false,
-                    "typeDisplayClass": "",
-                    "formOutputMethod": "valueSumm",
-                    "elementName": "chek1234567q",
-                    "formulaProcessingLogic": "zero",
-                    "excludeFromCalculations": false,
-                    "dependencyFormulaDisplay": "",
-                    "classes": "",
-                    "template": "UiCheckbox",
-                    "dependencyPrices": null,
-                    "prompt": ""
-                  }
-                ],
-                "label": "Вкладка с чекбоксами",
-                "prompt": ""
-              },
-              {
-                "json_id": "123454876306",
-                "title": "Вкладка с инпутами",
-                "templates": [
-                  {
-                    "json_id": "169749506",
-                    "title": "Заголовок элемента в списке вида - Input:  4",
-                    "label": "Заголовок элемента в списке вида - Input: 4",
-                    "value": "6",
-                    "cost": "44",
-                    "unit": "",
-                    "min": "1",
-                    "max": "44",
-                    "controls": 1,
-                    "step": "1",
-                    "isColumn": false,
-                    "notEmpty": 1,
-                    "onlyNumber": 1,
-                    "isCurrency": false,
-                    "onlyInteger": false,
-                    "formOutputMethod": "valueSumm",
-                    "elementName": "imput1223",
-                    "formulaProcessingLogic": "error",
-                    "dependencyFormulaDisplay": "chek111 === true",
-                    "customErrorPattern": "",
-                    "customErrorText": "",
-                    "classes": "",
-                    "template": "UiInput",
-                    "dependencyPrices": null,
-                    "prompt": ""
-                  }
-                ],
-                "label": "Вкладка с инпутами",
-                "prompt": ""
-              }
-            ],
-            "template": "UiAccordion",
-            "classes": "",
-            "dependencyFormulaDisplay": "test123 === 2"
-          },
-
-          {
-            "json_id": "219632106",
-            "title": "Зависимости галочка дупликатор",
-            "label": "Галочка в дупликаторе",
-            "labelSecond": "",
-            "value": false,
-            "cost": "4",
-            "isNeedChoice": true,
-            "isChecked": false,
-            "typeDisplayClass": "",
-            "formOutputMethod": "no",
-            "excludeFromCalculations": false,
-            "elementName": "checkboxForDuplicator",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "первыйИнпут > 30 && check_1 === true",
-            "classes": "",
-            "template": "UiCheckbox",
-            "prompt": "Текст галочки",
-            "dependencyPrices": [
-              {
-                "title": "15",
-                "disabledFormula": 0,
-                "cost": 15,
-                "dependencyFormulaCost": "первыйИнпут > 40"
-              }
-            ]
-          },
-          {
-            "json_id": "219632306",
-            "title": "Зависимости диапазон дупликатор",
-            "label": "Диапазон234234234",
-            "value": "0",
-            "min": "0",
-            "max": "100",
-            "cost": "2",
-            "unit": "м2",
-            "step": "1",
-            "showSteps": false,
-            "stepPrompt": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
-            "showStaticValue": 1,
-            "showDynamicValue": 1,
-            "formOutputMethod": "summ",
-            "excludeFromCalculations": false,
-            "elementName": "RangeFOrDuplicator",
-            "formulaProcessingLogic": "ignored",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiRange",
-            "dependencyPrices": null,
-            "prompt": ""
-          },
-          {
-            "json_id": "546456456",
-            "title": "Зависимости диапазон дупликатор 2",
-            "label": "Диапазон2",
-            "value": "15",
-            "min": "0",
-            "max": "100",
-            "cost": "2",
-            "unit": "м2",
-            "step": "1",
-            "showSteps": false,
-            "stepPrompt": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
-            "showStaticValue": 1,
-            "showDynamicValue": 1,
-            "formOutputMethod": "summ",
-            "excludeFromCalculations": false,
-            "elementName": "",
-            "formulaProcessingLogic": "error",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiRange",
-            "dependencyPrices": null,
-            "prompt": ""
-          }
-        ],
-        "formOutputMethod": "summ",
-        "excludeFromCalculations": false,
-        "elementName": "duplicatorName",
-        "formulaProcessingLogic": "zero",
-        "formula": "RangeFOrDuplicator + 5 + _otherSum_",
-
-        "dependencyFormulaDisplay": "radio1 === 1",
-        "classes": "",
-        "template": "UiDuplicator",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "behaviorImage": "cover",
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "prompt": "Текст подсказки для дупликатора!"
-      }
-    ]
-  },
 
   "calculator-options": {
     "formula": "_otherSum_",
@@ -1188,56 +16,1098 @@
       "titleButton": "Рассчитать",
       "titleSumma": "ИТОГО:",
       "showResultDataForBlock": 1
-    }
+    },
+    "devMode": true
   },
 
-  "test-color-options": {
-    "json_id": "105050107",
-    "meta_id": "31619907",
-    "ver_id": "4865318",
-    "title": "Натяжные потолки",
-    "json": "{\"title\":\"Натяжные потолки\",\"computedMethod\":\"formula\",\"formula\":\"материал * площадь + _otherSum_\",\"methodBeginningCalculation\":\"useButton\",\"form\":\"\",\"methodWorksForm\":\"show\",\"tooltipOff\":false,\"devModeEnabled\":1}",
-    "modified": "1679641526",
-    "created": "1679294467",
-    "json_large": "{\"resultOptions\":{\"title\":\"ИТОГО:\",\"titleButton\":\"Рассчитать\",\"formulaDisplayButton\":\"площадь &gt; 0 &amp;&amp; материал !== null\",\"showResultDataForBlock\":1,\"titleSumma\":\"Расчетная сумма составляет:\",\"currency\":\"руб.\",\"textForSpinner\":\"Идет расчет...\"},\"textAbove\":\"\",\"textAfter\":\"\"}",
-    "type_group_id": "51214106",
-    "computedMethod": "formula",
-    "formula": "материал * площадь + _otherSum_ - системное",
-    "dependencyMainFormula": [
+
+  "test-icons" : {
+    "calculatorTemplates": [
       {
-        "title": 2,
-        "dependencyFormula": "площадь &gt; 2",
-        "formula": "материал * площадь + _otherSum_ + 1 + системное"
+        "json_id": "148303507",
+        "title": "Описание автомобиля",
+        "label": "",
+        "unit": "",
+        "cost": "",
+        "showElement": "onlyText",
+        "formOutputMethod": "no",
+        "resultOutputMethod": "no",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "вес &gt; 0",
+        "template": "UiSystem",
+        "prompt": "",
+        "htmlText": "Небольшой текст для описания автомобиля",
+        "dependencyPrices":null,
+        "dependencyHtmlText": [
+          {
+            "title": "вес &gt; 1000",
+            "htmlText": "вес &gt; 1000",
+            "dependencyFormulaHtmlText": "вес &gt; 1000"
+          },
+          {
+            "title": "вес &gt; 1500",
+            "htmlText": "вес &gt; 1500",
+            "dependencyFormulaHtmlText": "вес &gt; 1500"
+          },
+          {
+            "title": "вес &gt; 3000",
+            "htmlText": "вес &gt; 3000",
+            "dependencyFormulaHtmlText": "вес &gt; 3000"
+          },
+          {
+            "title": "вес &gt; 5000",
+            "htmlText": "вес &gt; 5000",
+            "dependencyFormulaHtmlText": "вес &gt; 5000"
+          },
+          {
+            "title": "вес &gt; 10000",
+            "htmlText": "вес &gt; 10000",
+            "dependencyFormulaHtmlText": "вес &gt; 10000"
+          }
+        ],
+        "iconSettingsSystemLabel": null,
+        "parent": "0;42720707;42720907;"
       },
       {
-        "title": 3,
-        "dependencyFormula": "цветПотолка === 3",
-        "formula": "материал * площадь + _otherSum_ + 3"
-      }
-    ],
-    "methodBeginningCalculation": "useButton",
-    "form": "",
-    "methodWorksForm": "show",
-    "tooltipOff": false,
-    "devModeEnabled": 1,
-    "resultOptions": {
-      "title": "ИТОГО:",
-      "titleButton": "Рассчитать",
-      "formulaDisplayButton": "",
-      "showResultDataForBlock": 1,
-      "roundOffType": "ceil",
-      "signAfterDot": "-3",
-      "titleSumma": "Расчетная сумма составляет:",
-      "currency": "руб.",
-      "textForSpinner": "Идет расчет..."
+        "json_id": "14636536334507",
+        "title": "вес",
+        "label": "вес",
+        "value": "0",
+        "placeholder": "",
+        "cost": "",
+        "unit": "",
+        "min": "0",
+        "max": "100000",
+        "controls": false,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "onlyNumber",
+        "notEmpty": false,
+        "isCurrency": false,
+        "isColumn": false,
+        "isStretch": false,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "вес",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiInput",
+        "prompt": "",
+        "dependencyPrices": [
+          {
+            "title": "вес &gt; 1000",
+            "cost": 1000,
+            "dependencyFormulaCost": "вес &gt; 1000"
+          }
+        ],
+        "iconSettingsInputLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1882366907",
+            "filename": "https://calculators-works.oml.ru/d/container.png",
+            "ver_id": 4601302,
+            "image_width": "128",
+            "image_height": "128",
+            "ext": "png"
+          },
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;31032307;31031507;31031707;33318507;33485707;"
+      },
+      {
+        "json_id": "100916907",
+        "title": "Куда",
+        "label": "Куда",
+        "isColumn": true,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "куда",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": false,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - Москва",
+            "selectName": "Москва",
+            "extraValueForDependency": "москва"
+          },
+          {
+            "title": "Элемент списка - Московская Область",
+            "selectName": "Московская Область",
+            "extraValueForDependency": "мо"
+          },
+          {
+            "title": "Элемент списка - Белгород",
+            "selectName": "Белгород",
+            "extraValueForDependency": "белгород"
+          },
+          {
+            "title": "Элемент списка - Брянск",
+            "selectName": "Брянск",
+            "extraValueForDependency": "брянск"
+          },
+          {
+            "title": "Элемент списка - Владимир",
+            "selectName": "Владимир",
+            "extraValueForDependency": "владимир"
+          },
+          {
+            "title": "Элемент списка - Воронеж",
+            "selectName": "Воронеж",
+            "extraValueForDependency": "воронеж"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": null,
+        "parent": "0;30492307;35352507;35352707;"
+      },
+    {
+      "json_id": "146367307",
+      "title": "Дупликатор",
+      "label": "Дупликатор",
+      "templates": [
+        {
+          "json_id": "146367107",
+          "title": "акк",
+          "label": "аккордеон",
+          "items": [
+            {
+              "json_id": "146366907",
+              "title": "вкл",
+              "label": "вкладка",
+              "sublabel": "",
+              "templates": [
+                {
+                  "json_id": "146366707",
+                  "title": "колон",
+                  "label": "Заголовок блока с колонками",
+                  "columns": [
+                    {
+                      "json_id": "146366507",
+                      "title": "вкл",
+                      "label": "первая колонка",
+                      "templates": [
+                        {
+                          "json_id": "146366334507",
+                          "title": "вес",
+                          "label": "вес",
+                          "value": "0",
+                          "placeholder": "",
+                          "cost": "",
+                          "unit": "",
+                          "min": "0",
+                          "max": "100000",
+                          "controls": false,
+                          "step": "1",
+                          "discreteStep": false,
+                          "dataType": "onlyNumber",
+                          "notEmpty": false,
+                          "isCurrency": false,
+                          "isColumn": false,
+                          "isStretch": false,
+                          "formOutputMethod": "valueSumm",
+                          "resultOutputMethod": "valueSumm",
+                          "zeroValueDisplayIgnore": false,
+                          "excludeFromCalculations": false,
+                          "elementName": "вес4",
+                          "formulaProcessingLogic": "zero",
+                          "dependencyFormulaDisplay": "",
+                          "classes": "",
+                          "template": "UiInput",
+                          "dependencyPrices": null,
+                          "prompt": "",
+                          "iconSettingsInputLabel": {
+                            "title": "",
+                            "image": {
+                              "image_id": "1882366907",
+                              "filename": "https://calculators-works.oml.ru/d/container.png",
+                              "ver_id": 4601302,
+                              "image_width": "128",
+                              "image_height": "128",
+                              "ext": "png"
+                            },
+                            "behaviorImage": "contain",
+                            "location": "leftSide"
+                          },
+                          "parent": "0;31032307;31031507;31031707;33318507;33485707;"
+                        }
+                      ],
+                      "maxWidth": "50",
+                      "dependencyFormulaDisplay": "",
+                      "elementPosition": "default",
+                      "iconSettingsColumnsItemLabel": {
+                        "title": "",
+                        "image": {
+                          "image_id": "1882366907",
+                          "filename": "https://calculators-works.oml.ru/d/container.png",
+                          "ver_id": 4601302,
+                          "image_width": "128",
+                          "image_height": "128",
+                          "ext": "png"
+                        },
+                        "behaviorImage": "contain",
+                        "location": "leftSide"
+                      },
+                      "parent": "0;31032307;31031507;31031707;33318507;"
+                    }
+                  ],
+                  "dependencyFormulaDisplay": "",
+                  "adaptationMethod": "free",
+                  "elementName": "",
+                  "classes": "",
+                  "template": "UiColumns",
+                  "iconSettingsColumnsLabel": {
+                    "title": "",
+                    "image": {
+                      "image_id": "1882366907",
+                      "filename": "https://calculators-works.oml.ru/d/container.png",
+                      "ver_id": 4601302,
+                      "image_width": "128",
+                      "image_height": "128",
+                      "ext": "png"
+                    },
+                    "behaviorImage": "contain",
+                    "location": "leftSide"
+                  },
+                  "parent": "0;31032307;31031507;31031707;"
+                }
+              ],
+              "maxWidthSide": "100",
+              "prompt": "",
+              "backgroundImageSettings": null,
+              "iconSettingsAccordionItemLabel": {
+                "title": "",
+                "image": {
+                  "image_id": "1882366907",
+                  "filename": "https://calculators-works.oml.ru/d/container.png",
+                  "ver_id": 4601302,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "location": "leftSide"
+              },
+              "parent": "0;31032307;31031507;"
+            }
+          ],
+          "dependencyFormulaDisplay": "",
+          "elementName": "",
+          "classes": "",
+          "template": "UiAccordion",
+          "iconSettingsAccordionLabel": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          },
+          "parent": "0;31032307;"
+        }
+      ],
+      "buttonName": "Дублировать",
+      "maximumDuple": "3",
+      "formOutputMethod": "onlyTitle",
+      "resultOutputMethod": "onlyTitle",
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "formula": "45",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "template": "UiDuplicator",
+      "prompt": "",
+      "dependencyMainFormula": null,
+      "iconSettingsDuplicatorLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
     },
-    "textAbove": "",
-    "textAfter": "",
-    "parent": "0;"
+    {
+      "json_id": "1463gtr66307",
+      "title": "Текстовое поле - Input:",
+      "label": "Текстовое поле - Input:",
+      "value": "0",
+      "placeholder": "",
+      "cost": "",
+      "unit": "",
+      "min": "0",
+      "max": "10",
+      "controls": false,
+      "step": "1",
+      "discreteStep": false,
+      "dataType": "onlyNumber",
+      "notEmpty": false,
+      "isCurrency": false,
+      "isColumn": false,
+      "isStretch": false,
+      "formOutputMethod": "valueSumm",
+      "resultOutputMethod": "valueSumm",
+      "zeroValueDisplayIgnore": false,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "template": "UiInput",
+      "dependencyPrices": [],
+      "prompt": "",
+      "iconSettingsInputLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147714107",
+      "title": "галочка",
+      "label": "галоча",
+      "buttonText": "1",
+      "buttonTextChecked": "",
+      "costForVoid": "0",
+      "cost": "",
+      "baseValue": "default",
+      "isNeedChoice": false,
+      "isColumn": false,
+      "typeDisplayClass": "base",
+      "formOutputMethod": "valueSumm",
+      "resultOutputMethod": "valueSumm",
+      "zeroValueDisplayIgnore": false,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "scrollIntoName": "",
+      "classes": "",
+      "template": "UiCheckbox",
+      "dependencyPrices": null,
+      "prompt": "",
+      "iconSettingsCheckboxLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147714307",
+      "title": "радио",
+      "label": "радио",
+      "selectedItem": "1",
+      "isNeedChoice": false,
+      "notEmpty": false,
+      "isColumn": false,
+      "isStretch": false,
+      "typeDisplayClass": "base",
+      "formOutputMethod": "valueSumm",
+      "resultOutputMethod": "valueSumm",
+      "zeroValueDisplayIgnore": false,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "globalMaxWidth": "",
+      "globalMaxHeight": "",
+      "template": "UiRadio",
+      "values": [
+        {
+          "title": "Элемент радио-кнопка - 1",
+          "radioName": 1,
+          "iconSettingsRadioItem": {
+            "title": "",
+            "image": {
+              "image_id": "1882360707",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "imageHover": {
+              "image_id": "1882360707",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "imageSelected": {
+              "image_id": "1882360307",
+              "filename": "https://calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_1.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          }
+        },
+        {
+          "title": "Элемент радио-кнопка - 2",
+          "radioName": 2,
+          "iconSettingsRadioItem": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "imageHover": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "imageSelected": {
+              "image_id": "1882366507",
+              "filename": "https://calculators-works.oml.ru/d/container_1.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          }
+        }
+      ],
+      "prompt": "",
+      "iconSettingsRadioLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147714507",
+      "title": "ползунок",
+      "label": "ползунок",
+      "value": "0",
+      "min": "0",
+      "max": "100",
+      "cost": "",
+      "unit": "",
+      "step": "1",
+      "showSteps": false,
+      "stepPrompt": "1",
+      "isNeedChoice": false,
+      "notEmpty": false,
+      "showStaticValue": false,
+      "showDynamicValue": false,
+      "isColumn": false,
+      "formOutputMethod": "valueSumm",
+      "resultOutputMethod": "valueSumm",
+      "zeroValueDisplayIgnore": false,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "template": "UiRange",
+      "dependencyPrices": null,
+      "prompt": "",
+      "iconSettingsRangeLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147714707",
+      "title": "селект",
+      "label": "селект",
+      "selectedItem": "1",
+      "isNeedChoice": false,
+      "notEmpty": false,
+      "isColumn": false,
+      "isStretch": false,
+      "formOutputMethod": "valueSumm",
+      "resultOutputMethod": "valueSumm",
+      "zeroValueDisplayIgnore": false,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "globalMaxWidth": "",
+      "globalMaxHeight": "",
+      "template": "UiSelect",
+      "values": [
+        {
+          "title": "Элемент списка - 1",
+          "selectName": 1,
+          "iconSettingsSelectItem": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          }
+        },
+        {
+          "title": "Элемент списка - 2",
+          "selectName": 2,
+          "iconSettingsSelectItem": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          }
+        }
+      ],
+      "prompt": "",
+      "iconSettingsSelectLabel": null,
+      "parent": "0;"
+    },
+    {
+      "json_id": "147714907",
+      "title": "системное",
+      "label": "системное",
+      "unit": "",
+      "cost": "",
+      "showElement": "show",
+      "formOutputMethod": "no",
+      "resultOutputMethod": "no",
+      "zeroValueDisplayIgnore": 1,
+      "excludeFromCalculations": false,
+      "elementName": "",
+      "formulaProcessingLogic": "zero",
+      "dependencyFormulaDisplay": "",
+      "template": "UiSystem",
+      "dependencyPrices": null,
+      "prompt": "",
+      "htmlText": "",
+      "dependencyHtmlText": null,
+      "iconSettingsSystemLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147715107",
+      "title": "картинка",
+      "label": "картинка",
+      "defaultImage": {
+        "image_id": "1813162707",
+        "filename": "696bf430-4706-4af1-868c-9e58f438833f.png",
+        "ver_id": 4601302,
+        "image_width": "308",
+        "image_height": "410",
+        "ext": "png"
+      },
+      "maxWidth": "150",
+      "maxHeight": "150",
+      "dependencyFormulaDisplay": "",
+      "classes": "",
+      "template": "UiImage",
+      "dependencyImages": null,
+      "prompt": "",
+      "parent": "0;"
+    },
+    {
+      "json_id": "146367аыва107",
+      "title": "акк",
+      "label": "аккордеон",
+      "items": [
+        {
+          "json_id": "146366346907",
+          "title": "вкл",
+          "label": "вкладка",
+          "sublabel": "",
+          "templates": [
+            {
+              "json_id": "1463ва66707",
+              "title": "колон",
+              "label": "Колонки",
+              "columns": [
+                {
+                  "json_id": "14633453466507",
+                  "title": "вкл",
+                  "label": "первая колонка",
+                  "templates": [
+                    {
+                      "json_id": "146t54252346366307",
+                      "title": "Текстовое поле - Input:",
+                      "label": "Текстовое поле - Input:",
+                      "value": "0",
+                      "placeholder": "",
+                      "cost": "",
+                      "unit": "",
+                      "min": "0",
+                      "max": "10",
+                      "controls": false,
+                      "step": "1",
+                      "discreteStep": false,
+                      "dataType": "onlyNumber",
+                      "notEmpty": false,
+                      "isCurrency": false,
+                      "isColumn": false,
+                      "isStretch": false,
+                      "formOutputMethod": "valueSumm",
+                      "resultOutputMethod": "valueSumm",
+                      "zeroValueDisplayIgnore": false,
+                      "excludeFromCalculations": false,
+                      "elementName": "",
+                      "formulaProcessingLogic": "zero",
+                      "dependencyFormulaDisplay": "",
+                      "classes": "",
+                      "template": "UiInput",
+                      "dependencyPrices": null,
+                      "prompt": "",
+                      "iconSettingsInputLabel": {
+                        "title": "",
+                        "image": {
+                          "image_id": "1882366907",
+                          "filename": "https://calculators-works.oml.ru/d/container.png",
+                          "ver_id": 4601302,
+                          "image_width": "128",
+                          "image_height": "128",
+                          "ext": "png"
+                        },
+                        "behaviorImage": "contain",
+                        "location": "leftSide"
+                      },
+                      "parent": "0;31031507;31031707;33318507;33485707;"
+                    }
+                  ],
+                  "maxWidth": "50",
+                  "dependencyFormulaDisplay": "",
+                  "elementPosition": "default",
+                  "iconSettingsColumnsItemLabel": {
+                    "title": "",
+                    "image": {
+                      "image_id": "1882366907",
+                      "filename": "https://calculators-works.oml.ru/d/container.png",
+                      "ver_id": 4601302,
+                      "image_width": "128",
+                      "image_height": "128",
+                      "ext": "png"
+                    },
+                    "behaviorImage": "contain",
+                    "location": "leftSide"
+                  },
+                  "parent": "0;31031507;31031707;33318507;"
+                }
+              ],
+              "dependencyFormulaDisplay": "",
+              "adaptationMethod": "free",
+              "elementName": "",
+              "classes": "",
+              "template": "UiColumns",
+              "iconSettingsColumnsLabel": {
+                "title": "",
+                "image": {
+                  "image_id": "1882366907",
+                  "filename": "https://calculators-works.oml.ru/d/container.png",
+                  "ver_id": 4601302,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "behaviorImage": "contain",
+                "location": "leftSide"
+              },
+              "parent": "0;31031507;31031707;"
+            }
+          ],
+          "maxWidthSide": "100",
+          "prompt": "",
+          "backgroundImageSettings": null,
+          "iconSettingsAccordionItemLabel": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "location": "leftSide"
+          },
+          "parent": "0;31031507;"
+        }
+      ],
+      "dependencyFormulaDisplay": "",
+      "elementName": "",
+      "classes": "",
+      "template": "UiAccordion",
+      "iconSettingsAccordionLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147715507",
+      "title": "табы",
+      "label": "табы",
+      "items": [
+        {
+          "json_id": "147715307",
+          "title": "таб1",
+          "label": "таб1",
+          "sublabel": "",
+          "templates": [
+            {
+              "json_id": "146dfg366307",
+              "title": "Текстовое поле - Input:",
+              "label": "Текстовое поле - Input:",
+              "value": "0",
+              "placeholder": "",
+              "cost": "",
+              "unit": "",
+              "min": "0",
+              "max": "10",
+              "controls": false,
+              "step": "1",
+              "discreteStep": false,
+              "dataType": "onlyNumber",
+              "notEmpty": false,
+              "isCurrency": false,
+              "isColumn": false,
+              "isStretch": false,
+              "formOutputMethod": "valueSumm",
+              "resultOutputMethod": "valueSumm",
+              "zeroValueDisplayIgnore": false,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "classes": "",
+              "template": "UiInput",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsInputLabel": {
+                "title": "",
+                "image": {
+                  "image_id": "1882366907",
+                  "filename": "https://calculators-works.oml.ru/d/container.png",
+                  "ver_id": 4601302,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "behaviorImage": "contain",
+                "location": "leftSide"
+              },
+              "parent": "0;31031907;31032107;"
+            }
+          ],
+          "maxWidthSide": "100",
+          "prompt": "",
+          "iconSettingsTabsItemLabel": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "location": "leftSide"
+          },
+          "backgroundImageSettings": null,
+          "parent": "0;31031907;"
+        }
+      ],
+      "dependencyFormulaDisplay": "",
+      "elementName": "",
+      "classes": "",
+      "template": "UiTab",
+      "iconSettingsTabsLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "146366707",
+      "title": "колон",
+      "label": "",
+      "columns": [
+        {
+          "json_id": "146366507",
+          "title": "вкл",
+          "label": "",
+          "templates": [
+            {
+              "json_id": "146jkh366307",
+              "title": "Текстовое поле - Input:",
+              "label": "Текстовое поле - Input:",
+              "value": "0",
+              "placeholder": "",
+              "cost": "",
+              "unit": "",
+              "min": "0",
+              "max": "10",
+              "controls": false,
+              "step": "1",
+              "discreteStep": false,
+              "dataType": "onlyNumber",
+              "notEmpty": false,
+              "isCurrency": false,
+              "isColumn": false,
+              "isStretch": false,
+              "formOutputMethod": "valueSumm",
+              "resultOutputMethod": "valueSumm",
+              "zeroValueDisplayIgnore": false,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "classes": "",
+              "template": "UiInput",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsInputLabel": {
+                "title": "",
+                "image": {
+                  "image_id": "1882366907",
+                  "filename": "https://calculators-works.oml.ru/d/container.png",
+                  "ver_id": 4601302,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "behaviorImage": "contain",
+                "location": "leftSide"
+              },
+              "parent": "0;31031907;31032107;"
+            }
+          ],
+          "maxWidth": "50",
+          "dependencyFormulaDisplay": "",
+          "elementPosition": "default",
+          "iconSettingsColumnsItemLabel": {
+            "title": "",
+            "image": {
+              "image_id": "1882366907",
+              "filename": "https://calculators-works.oml.ru/d/container.png",
+              "ver_id": 4601302,
+              "image_width": "128",
+              "image_height": "128",
+              "ext": "png"
+            },
+            "behaviorImage": "contain",
+            "location": "leftSide"
+          },
+          "parent": "0;33318507;"
+        }
+      ],
+      "dependencyFormulaDisplay": "",
+      "adaptationMethod": "free",
+      "elementName": "",
+      "classes": "",
+      "template": "UiColumns",
+      "iconSettingsColumnsLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "parent": "0;"
+    },
+    {
+      "json_id": "147715707",
+      "title": "секция",
+      "label": "секция",
+      "labelSub": "",
+      "templates": [],
+      "dependencyFormulaDisplay": "",
+      "maxWidthSide": "100",
+      "visuallySeparateElement": false,
+      "elementPosition": "default",
+      "elementName": "",
+      "classes": "",
+      "template": "UiBlockSection",
+      "iconSettingsSectionLabel": {
+        "title": "",
+        "image": {
+          "image_id": "1882366907",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "128",
+          "image_height": "128",
+          "ext": "png"
+        },
+        "behaviorImage": "contain",
+        "location": "leftSide"
+      },
+      "backgroundImageSettings": null,
+      "parent": "0;"
+    }
+  ]
   },
 
   "test-columns": {
     "calculatorTemplates": [
+      {
+        "json_id": "1463gtr66307",
+        "title": "Текстовое поле - Input:",
+        "label": "Текстовое поле - Input:",
+        "value": "0",
+        "placeholder": "",
+        "cost": "",
+        "unit": "",
+        "min": "0",
+        "max": "10",
+        "controls": false,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "onlyNumber",
+        "notEmpty": false,
+        "isCurrency": false,
+        "isColumn": false,
+        "isStretch": false,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": [],
+        "prompt": "",
+        "iconSettingsInputLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1882366907",
+            "filename": "https://calculators-works.oml.ru/d/container.png",
+            "ver_id": 4601302,
+            "image_width": "128",
+            "image_height": "128",
+            "ext": "png"
+          },
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
       {
         "json_id": "138484307",
         "title": "Системное поле",
@@ -3256,1570 +3126,6 @@
         "classes": "",
         "template": "UiAccordion",
         "iconSettings": null,
-        "parent": "0;"
-      }
-    ]
-  },
-
-  "test-color": {
-    "calculatorTemplates": [
-      {
-        "json_id": "139381907",
-        "title": "Добавить тюль?",
-        "label": "Добавить тюль?",
-        "buttonText": "Да",
-        "buttonTextChecked": "Нет",
-        "cost": "",
-        "baseValue": "default",
-        "isNeedChoice": false,
-        "isColumn": 1,
-        "typeDisplayClass": "switcher",
-        "formOutputMethod": "value",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "тюль",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "категория === 1 || категория === 2",
-        "scrollIntoName": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;41285907;41286107;"
-      },
-      {
-        "json_id": "161410706",
-        "meta_id": "54482706",
-        "ver_id": "2422030",
-        "title": "фундамент - Тип строения:",
-        "label": "Тип строения:",
-        "selectedItem": "1",
-        "isColumn": true,
-        "isNeedChoice": false,
-        "notEmpty": 1,
-        "typeDisplayClass": "onlyImage",
-        "elementName": "строение",
-        "classes": "",
-        "template": "UiRadio",
-        "formOutputMethod": "valueSumm",
-        "excludeFromCalculations": false,
-        "dependencyFormulaDisplay": "",
-        "formulaProcessingLogic": "zero",
-        "zeroValueDisplayIgnore": false,
-        "resultOutputMethod": "value",
-        "values": [
-          {
-            "title": "Элемент радио-кнопка - Баня",
-            "radioName": "Баня",
-            "subradioName": "Срок возведения от 3х дней",
-            "cost": 2000,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "687811707",
-                "filename": "https://works-addon.21.oml.ru/d/bathhouse.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageSelected": {
-                "image_id": "687847707",
-                "filename": "https://works-addon.21.oml.ru/d/bathhouse1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 50,
-              "maxHeight": 50,
-              "location": "leftSide"
-            },
-            "prompt": "Здесь может быть небольшая подсказка!&nbsp;"
-          },
-          {
-            "title": "Элемент радио-кнопка - Дом",
-            "radioName": "Дом",
-            "subradioName": "Срок возведения от 6 месяцев",
-            "cost": 6000,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "688234707",
-                "filename": "https://works-addon.21.oml.ru/d/house.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageSelected": {
-                "image_id": "688236107",
-                "filename": "https://works-addon.21.oml.ru/d/house1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 50,
-              "maxHeight": 50,
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент радио-кнопка - Забор",
-            "radioName": "Забор",
-            "subradioName": "Справимся за 2 дня",
-            "cost": 500,
-            "extraValueForDependency": "забор",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689413907",
-                "filename": "https://works-addon.21.oml.ru/d/fence2_1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageSelected": {
-                "image_id": "689413307",
-                "filename": "https://works-addon.21.oml.ru/d/fence3_1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 50,
-              "maxHeight": 50,
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент радио-кнопка - Пирс / Причал",
-            "radioName": "Пирс / Причал",
-            "subradioName": "Срок возведения от 10х дней",
-            "cost": 700,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "688558307",
-                "filename": "https://works-addon.21.oml.ru/d/pier.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageSelected": {
-                "image_id": "688558107",
-                "filename": "https://works-addon.21.oml.ru/d/pier1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 50,
-              "maxHeight": 50,
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент радио-кнопка - Пристрой",
-            "radioName": "Пристрой",
-            "cost": 700,
-            "extraValueForDependency": "пристрой",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689007707",
-                "filename": "https://works-addon.21.oml.ru/d/barn.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageSelected": {
-                "image_id": "689007507",
-                "filename": "https://works-addon.21.oml.ru/d/barn1.svg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 50,
-              "maxHeight": 50,
-              "location": "leftSide"
-            }
-          }
-        ],
-        "prompt": "asdadasd3",
-        "parent": "0;"
-      },
-      {
-        "json_id": "1568fdv323453506",
-        "title": "Селект 1",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "leftSide"
-        },
-        "values": [
-          {
-            "title": "Первый пункт",
-            "selectName": "Первый пункт",
-            "dependencyFormulaItem": "_self_!== select2",
-            "cost": 100
-          },
-          {
-            "title": "второй пункт",
-            "selectName": "второй пункт",
-            "dependencyFormulaItem": "_self_!== select2",
-            "cost": 101
-          },
-          {
-            "title": "третий пункт",
-            "selectName": "третий пункт",
-            "dependencyFormulaItem": "_self_!== select2",
-            "cost": 102,
-            "prompt": "asdasdasd"
-          }
-        ],
-        "label": "Селект 1",
-        "isColumn": true,
-        "selectedItem": 1,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "typeDisplayClass": "",
-        "template": "UiSelect",
-        "elementName": "select1",
-        "prompt": "rfsf sdf sf 43 fsd"
-      },
-      {
-        "json_id": "156823234234453506",
-        "title": "Селект 2",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "values": [
-          {
-            "title": "Первый пункт",
-            "selectName": "Первый пункт",
-            "dependencyFormulaItem": "_self_!== select1",
-            "cost": 103
-          },
-          {
-            "title": "второй пункт",
-            "selectName": "второй пункт",
-            "dependencyFormulaItem": "_self_!== select1",
-            "cost": 104
-          },
-          {
-            "title": "третий пункт",
-            "selectName": "третий пункт",
-            "dependencyFormulaItem": "_self_!== select1",
-            "cost": 105
-          }
-        ],
-        "prompt": "",
-        "label": "Селект 2",
-        "isColumn": false,
-        "selectedItem": 1,
-        "isNeedChoice": true,
-        "notEmpty": false,
-        "typeDisplayClass": "",
-        "template": "UiSelect",
-        "formulaProcessingLogic": "error",
-        "elementName": "select2"
-      },
-      {
-        "json_id": "156823453506",
-        "meta_id": "49242506",
-        "ver_id": "2422030",
-        "title": "Ремонт квартир - Сантехнические работы",
-        "modified": "1676284852",
-        "created": "1665113422",
-        "type_group_id": "2",
-        "label": "Заголовок",
-        "value": false,
-        "cost": "",
-        "isNeedChoice": false,
-        "isChecked": 1,
-        "typeDisplayClass": "base",
-        "elementName": "",
-        "classes": "",
-        "baseValue": "default",
-        "template": "UiCheckbox",
-        "formOutputMethod": "value",
-        "dependencyFormulaDisplay": "",
-        "excludeFromCalculations": false,
-        "formulaProcessingLogic": "error",
-        "buttonText": "Сантехнические работы",
-        "buttonTextChecked": "",
-        "isColumn": false,
-        "zeroValueDisplayIgnore": false,
-        "prompt": "",
-        "dependencyPrices": null,
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "behaviorImage": "cover",
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "parent": "0;54008706;"
-      },
-      {
-        "json_id": "65498107",
-        "meta_id": "49173306",
-        "ver_id": "2422030",
-        "title": "Input - для цветовых настроек",
-        "label": "Блок 1",
-        "value": "",
-        "placeholder": "",
-        "cost": "",
-        "unit": "м2",
-        "min": "",
-        "max": "",
-        "controls": true,
-        "step": "1",
-        "discreteStep": true,
-        "notEmpty": false,
-        "dataType": "onlyNumber",
-        "isCurrency": true,
-        "isColumn": true,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block1",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiInput",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "dependencyPrices": [
-          {
-            "cost": 2,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 20"
-          },
-          {
-            "cost": 3,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 22"
-          },
-          {
-            "cost": 10,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 25"
-          }
-        ],
-        "prompt": "подсказка"
-      },
-      {
-        "json_id": "184759306",
-        "meta_id": "59850506",
-        "ver_id": "2422030",
-        "title": "Зеркало - Картинка подцветки",
-        "modified": "1675417312",
-        "created": "1666759287",
-        "type_group_id": "60",
-        "label": "картинка 1",
-        "elementName": "Картинка",
-        "defaultImage": {
-          "image_id": "2639651106",
-          "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
-          "ver_id": 2422030,
-          "image_width": "1280",
-          "image_height": "1280",
-          "ext": "jpg"
-        },
-        "maxWidth": "300",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiImage",
-        "maxHeight": "300",
-        "dependencyImages": [
-          {
-            "title": "",
-            "label": "заголовок картинки",
-            "image": {
-              "image_id": "2639651306",
-              "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-              "ver_id": 2422030,
-              "image_width": "1280",
-              "image_height": "1280",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "Block8 === 3"
-          },
-          {
-            "title": 4,
-            "label": 4,
-            "image": {
-              "image_id": "2639651506",
-              "filename": "https://klike.net/uploads/posts/2021-06/1623669312_1.jpg",
-              "ver_id": 2422030,
-              "image_width": "1280",
-              "image_height": "1280",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "Block8 === 4"
-          }
-        ],
-        "prompt": "",
-        "parent": "0;59416706;"
-      },
-      {
-        "json_id": "65498907",
-        "meta_id": "49242506",
-        "ver_id": "2422030",
-        "title": "Checkbox - для цветовых настроек 1",
-        "type_group_id": "2",
-        "label": "Блок 2",
-        "buttonText": "Кнопка",
-        "buttonTextChecked": "Кнопка активная",
-        "cost": "100",
-        "value": false,
-        "isNeedChoice": 1,
-        "isChecked": false,
-        "isColumn": 1,
-        "typeDisplayClass": "base",
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block2",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "scrollIntoName": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": ""
-      },
-      {
-        "json_id": "65501107",
-        "meta_id": "49242506",
-        "ver_id": "2422030",
-        "title": "Checkbox  - для цветовых настроек 2",
-        "label": "Блок  3",
-        "buttonText": "кнопка",
-        "buttonTextChecked": "Кнопка активная",
-        "cost": "122",
-        "value": 1,
-        "isNeedChoice": 0,
-        "isChecked": 1,
-        "isColumn": 1,
-        "typeDisplayClass": "base",
-        "formOutputMethod": "no",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block3",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": [
-          {
-            "cost": 100,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "ползунок > 20"
-          },
-          {
-            "cost": 99,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "ползунок > 22"
-          },
-          {
-            "cost": 50,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "ползунок > 18"
-          }
-        ],
-        "prompt": "подсказка"
-      },
-      {
-        "json_id": "65501507",
-        "meta_id": "49242506",
-        "ver_id": "2422030",
-        "title": "Checkbox  - для цветовых настроек 3",
-        "label": "",
-        "buttonText": "Текст кнопки",
-        "buttonTextChecked": "Активная кнопка",
-        "cost": "34",
-        "baseValue": "default",
-        "isNeedChoice": false,
-        "isColumn": false,
-        "typeDisplayClass": "switcher-vertical",
-        "formOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block4",
-        "scrollIntoName": "Block8",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": "фыв"
-      },
-      {
-        "json_id": "65501707",
-        "meta_id": "49242506",
-        "ver_id": "2422030",
-        "title": "Checkbox - для цветовых настроек 4",
-        "label": "Блок 5",
-        "buttonText": "Мансарда",
-        "buttonTextChecked": "Мансарда 33",
-        "cost": "100",
-        "value": false,
-        "isNeedChoice": false,
-        "isChecked": false,
-        "isColumn": 1,
-        "typeDisplayClass": "button",
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block5",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": "фыв фыв&nbsp;",
-        "parent": "0;"
-      },
-      {
-        "json_id": "65503907",
-        "meta_id": "49253706",
-        "ver_id": "2422030",
-        "title": "Radio - для цветовых настроек",
-        "label": "Блок 6",
-        "selectedItem": "0",
-        "isColumn": true,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "typeDisplayClass": "base",
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block6",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRadio",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "leftSide"
-        },
-        "values": [
-          {
-            "title": "Пункт 1",
-            "radioName": "пункт 1",
-            "subradioName": "подзаголовок кнопки",
-            "cost": "",
-            "prompt": "фв фыв&nbsp;"
-          },
-          {
-            "title": "пункт 2",
-            "radioName": "пункт 1",
-            "subradioName": "подзаголовок кнопки",
-            "cost": 4
-          }
-        ],
-        "prompt": "",
-        "parent": "0;"
-      },
-      {
-        "json_id": "65505707",
-        "meta_id": "49258306",
-        "ver_id": "2422030",
-        "title": "Range - для цветовых настроек",
-        "type_group_id": "4",
-        "label": "Блок 7",
-        "value": "5",
-        "min": "3",
-        "max": "100",
-        "cost": "34",
-        "unit": "м2",
-        "step": "1",
-        "showSteps": 1,
-        "stepPrompt": "15",
-        "isNeedChoice": true,
-        "isColumn": false,
-        "notEmpty": true,
-        "showStaticValue": false,
-        "showDynamicValue": 1,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "ползунок",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRange",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "leftSide"
-        },
-        "dependencyPrices": [
-          {
-            "cost": 2,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 20"
-          },
-          {
-            "cost": 3,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 22"
-          },
-          {
-            "cost": 10,
-            "disabledFormula": 0,
-            "dependencyFormulaCost": "_self_ > 25"
-          }
-        ],
-        "prompt": "54353е",
-        "parent": "0;"
-      },
-      {
-        "json_id": "105504107",
-        "meta_id": "31890507",
-        "ver_id": "4867762",
-        "title": "Цвет",
-        "label": "Блок с картинкой",
-        "defaultImage": {
-          "image_id": "1460626107",
-          "filename": "https://klike.net/uploads/posts/2021-06/1623669312_1.jpg",
-          "ver_id": 4867762,
-          "image_width": "500",
-          "image_height": "500",
-          "ext": "jpg"
-        },
-        "maxWidth": "150",
-        "maxHeight": "150",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiImage",
-        "dependencyImages": [
-          {
-            "title": "Белый матовый",
-            "image": {
-              "image_id": "1460626507",
-              "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-              "ver_id": 4867762,
-              "image_width": "500",
-              "image_height": "500",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "ползунок > 2"
-          },
-          {
-            "title": "Белый матовый",
-            "image": {
-              "image_id": "1460626507",
-              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
-              "ver_id": 4867762,
-              "image_width": "500",
-              "image_height": "500",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "ползунок > 10"
-          },
-          {
-            "title": "Белый матовый",
-            "image": {
-              "image_id": "1460626507",
-              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
-              "ver_id": 4867762,
-              "image_width": "500",
-              "image_height": "500",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "ползунок > 30"
-          }
-        ],
-        "prompt": "",
-        "parent": "0;31890707;"
-      },
-      {
-        "json_id": "65506107",
-        "meta_id": "49558906",
-        "ver_id": "2422030",
-        "title": "Select - для цветовых настроек",
-        "label": "Блок 8",
-        "isColumn": false,
-        "selectedItem": 1,
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "formOutputMethod": "summ",
-        "resultOutputMethod": "summ",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "Block8",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "values": [
-          {
-            "title": "Название пункта:",
-            "selectName": "Пункт 1",
-            "cost": 32,
-            "prompt": "gdfgdfg"
-          },
-          {
-            "title": "Название",
-            "selectName": "Пункт 2",
-            "cost": 43
-          },
-          {
-            "title": "Пункт 3:",
-            "selectName": "Пункт 3",
-            "cost": 32,
-            "prompt": "gdfgdfg"
-          },
-          {
-            "title": "Пункт 4 йцу",
-            "selectName": "Пункт 4 йцу ",
-            "cost": 32,
-            "prompt": "gdfgdfg",
-            "extraValueForDependency": "йцу"
-          }
-        ],
-        "prompt": "",
-        "parent": "0;"
-      },
-      {
-        "json_id": "65506707",
-        "meta_id": "52409506",
-        "ver_id": "2422030",
-        "title": "Аккордеон - для цветовых настроек",
-        "label": "Блок 9",
-        "elementName": "Аккордеон",
-        "items": [
-          {
-            "json_id": "65506507",
-            "meta_id": "52495306",
-            "ver_id": "2422030",
-            "title": "Вкладка - Заголовок вкладки 1:",
-            "label": "Блок 10",
-            "sublabel": "Подзаголовок вкладки:",
-            "templates": [
-              {
-                "json_id": "243632706",
-                "meta_id": "59413906",
-                "ver_id": "2422030",
-                "title": "Окна Цвет",
-                "label": "Блок 11",
-                "isColumn": false,
-                "selectedItem": "9",
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "formOutputMethod": "value",
-                "resultOutputMethod": "value",
-                "excludeFromCalculations": false,
-                "elementName": "Block11.2",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiSelect",
-                "values": [
-                  {
-                    "title": "1",
-                    "selectName": "1",
-                    "cost": 1
-                  },
-                  {
-                    "title": "2",
-                    "selectName": "2",
-                    "cost": 2
-                  },
-                  {
-                    "title": "3",
-                    "selectName": "Block8 === 'йцу'",
-                    "cost": 3,
-                    "dependencyFormulaItem": "Block8 === 'йцу'"
-                  },
-                  {
-                    "title": "3",
-                    "selectName": "Block8 === 2 1",
-                    "cost": 4,
-                    "dependencyFormulaItem": "Block8 === 2"
-                  },
-                  {
-                    "title": "проверка на null",
-                    "selectName": "проверка на null",
-                    "cost": 4,
-                    "dependencyFormulaItem": "Block6 !== null"
-                  },
-                  {
-                    "title": "4",
-                    "selectName": "Block8 === 2 2",
-                    "cost": 5,
-                    "dependencyFormulaItem": "Block8 === 2",
-                    "dependencyPrices": [
-                      {
-                        "cost": 100,
-                        "dependencyFormulaCost": 0,
-                        "disabledFormula": "ползунок > 20"
-                      },
-                      {
-                        "cost": 99,
-                        "dependencyFormulaCost": 0,
-                        "disabledFormula": "ползунок > 22"
-                      },
-                      {
-                        "cost": 50,
-                        "dependencyFormulaCost": 0,
-                        "disabledFormula": "ползунок > 25"
-                      }
-                    ]
-                  }
-                ],
-                "prompt": "",
-                "parent": "0;52409506;52495306;"
-              },
-              {
-                "json_id": "fdsf343",
-                "meta_id": "49242506",
-                "ver_id": "2422030",
-                "title": "Скрытый чекбокс в дупликаторе",
-                "modified": "1676284852",
-                "created": "1665113422",
-                "type_group_id": "2",
-                "label": "",
-                "value": false,
-                "cost": "",
-                "isNeedChoice": false,
-                "isChecked": 1,
-                "typeDisplayClass": "base",
-                "elementName": "checkbox_111",
-                "classes": "",
-                "baseValue": "default",
-                "template": "UiCheckbox",
-                "formOutputMethod": "value",
-                "dependencyFormulaDisplay": "",
-                "excludeFromCalculations": false,
-                "formulaProcessingLogic": "error",
-                "buttonText": "Сантехнические работы",
-                "buttonTextChecked": "",
-                "isColumn": false,
-                "zeroValueDisplayIgnore": false,
-                "prompt": "",
-                "dependencyPrices": null,
-                "parent": "0;54008706;"
-              }
-            ],
-            "maxWidthSide": "100",
-            "prompt": "23423",
-            "location": "rightSide"
-          },
-          {
-            "json_id": "65534535306507",
-            "meta_id": "52495306",
-            "ver_id": "2422030",
-            "title": "Вкладка - Заголовок вкладки 1:",
-            "label": "Вкладка два от аккордеона",
-            "sublabel": "Подзаголовок вкладки 2",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689303707",
-                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "maxWidth": 60,
-              "maxHeight": 60,
-              "location": "rightSide"
-            },
-            "templates": [
-              {
-                "json_id": "fd345345sf343",
-                "meta_id": "49242506",
-                "ver_id": "2422030",
-                "title": "Скрытый чекбокс в дупликаторе",
-                "modified": "1676284852",
-                "created": "1665113422",
-                "type_group_id": "2",
-                "label": "",
-                "value": false,
-                "cost": "",
-                "isNeedChoice": false,
-                "isChecked": 1,
-                "typeDisplayClass": "base",
-                "elementName": "checkbox_222",
-                "classes": "",
-                "baseValue": "default",
-                "template": "UiCheckbox",
-                "formOutputMethod": "value",
-                "dependencyFormulaDisplay": "",
-                "excludeFromCalculations": false,
-                "formulaProcessingLogic": "error",
-                "buttonText": "Сантехнические работы",
-                "buttonTextChecked": "",
-                "isColumn": false,
-                "zeroValueDisplayIgnore": false,
-                "prompt": "",
-                "dependencyPrices": null,
-                "parent": "0;54008706;"
-              }
-            ],
-            "maxWidthSide": "100",
-            "prompt": "23423",
-            "location": "rightSide"
-          }
-        ],
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiAccordion",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "behaviorImage": "cover",
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "parent": "0;"
-      },
-      {
-        "json_id": "65513507",
-        "meta_id": "52593306",
-        "ver_id": "2422030",
-        "title": "Таб -  для цветовых настроек",
-        "label": "Блок 12",
-        "items": [
-          {
-            "json_id": "65513107",
-            "meta_id": "52593506",
-            "ver_id": "2422030",
-            "title": "Вкладка",
-            "label": "Блок, 13",
-            "sublabel": "Подзаголовок таба:",
-            "templates": [
-              {
-                "json_id": "180662506",
-                "meta_id": "49173306",
-                "ver_id": "2422030",
-                "title": "",
-                "label": "Блок 14",
-                "value": "",
-                "placeholder": "",
-                "cost": "",
-                "unit": "",
-                "min": "",
-                "max": "",
-                "controls": false,
-                "step": "1",
-                "isColumn": false,
-                "notEmpty": true,
-                "isCurrency": false,
-                "dataType": "onlyInteger",
-                "formOutputMethod": "no",
-                "resultOutputMethod": "value",
-                "excludeFromCalculations": false,
-                "elementName": "Block14",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiInput",
-                "discreteStep": false,
-                "formulaProcessingLogic": "zero",
-                "dependencyPrices": null,
-                "prompt": "",
-                "parent": "0;52593306;52593506;"
-              }
-            ],
-            "prompt": "ыфвф&nbsp;",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "689303707",
-                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "imageHover": {
-                "image_id": "689303507",
-                "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-                "ver_id": 2422030,
-                "image_width": "0",
-                "image_height": "0",
-                "ext": "svg"
-              },
-              "location": "leftSide"
-            },
-            "parent": "0;52593306;"
-          },
-          {
-            "json_id": "65513307",
-            "meta_id": "52593506",
-            "ver_id": "2422030",
-            "title": "Вкладка 2",
-            "label": "Блок 15",
-            "sublabel": "Название таба: 32232",
-            "templates": [
-              {
-                "json_id": "151614906",
-                "meta_id": "49173306",
-                "ver_id": "2422030",
-                "title": "input с начальным значением",
-                "label": "Блок 16",
-                "value": "55",
-                "cost": "",
-                "unit": "",
-                "min": "",
-                "max": "",
-                "formOutputMethod": "value",
-                "resultOutputMethod": "value",
-                "controls": false,
-                "step": "1",
-                "isColumn": false,
-                "notEmpty": false,
-                "dataType": "mixed",
-                "isCurrency": false,
-                "template": "UiInput",
-                "elementName": "Block15",
-                "customErrorPattern": "",
-                "customErrorText": "",
-                "notOnlyForCalculations": 1,
-                "dependencyFormulaDisplay": "",
-                "prompt": "",
-                "parent": "0;52593306;52593506;"
-              },
-              {
-                "json_id": "243498106",
-                "title": "Окна - Профильная система",
-                "label": "Блок 17",
-                "selectedItem": "2",
-                "isColumn": false,
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "typeDisplayClass": "",
-                "formOutputMethod": "value",
-                "resultOutputMethod": "no",
-                "excludeFromCalculations": false,
-                "elementName": "профильнаяСистема",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiRadio",
-                "onlyImage": false,
-                "maxWidth": "150",
-                "maxHeight": "150",
-                "values": [
-                  {
-                    "title": "Бюджет",
-                    "radioName": "Бюджет",
-                    "subradioName": "подзаголовок",
-                    "cost": 1000,
-                    "image": {
-                      "image_id": "3373825106",
-                      "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-                      "ver_id": 2422030,
-                      "image_width": "264",
-                      "image_height": "384",
-                      "ext": "png"
-                    },
-                    "prompt": "текст подсказки",
-                    "dependencyFormulaItem": "ползунок > 50"
-                  },
-                  {
-                    "title": "1",
-                    "radioName": "1",
-                    "cost": 3000,
-                    "dependencyFormulaItem": "ползунок > 51"
-                  },
-                  {
-                    "title": "2",
-                    "radioName": "2",
-                    "cost": 3500,
-                    "dependencyFormulaItem": "ползунок > 52"
-                  },
-                  {
-                    "title": "3",
-                    "radioName": "3",
-                    "cost": 3500,
-                    "dependencyFormulaItem": "ползунок > 53"
-                  },
-                  {
-                    "title": "4",
-                    "radioName": "4",
-                    "cost": 3500,
-                    "dependencyFormulaItem": "ползунок > 54"
-                  }
-                ],
-                "prompt": ""
-              }
-            ],
-            "prompt": "&nbsp;вы аы&nbsp;",
-            "iconSettings": null,
-            "dependencyFormulaDisplay": "Block11 === 2",
-            "backgroundImageSettings": null,
-            "parent": "0;52593306;"
-          }
-        ],
-        "maxWidthSide": "100",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiTab",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "behaviorImage": "cover",
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "rightSide"
-        },
-        "parent": "0;"
-      },
-      {
-        "json_id": "5267463232",
-        "title": "Системное поле тестирования зависимостей",
-        "cost": "1",
-        "elementName": "Block33System",
-        "formulaProcessingLogic": "error",
-        "template": "UiSystem",
-        "dependencyPrices": [
-          {
-            "title": "Значение 2",
-            "disabledFormula": 0,
-            "cost": 2,
-            "dependencyFormulaCost": "ползунок > 10"
-          },
-          {
-            "title": "Значение 3",
-            "disabledFormula": 0,
-            "cost": 3,
-            "dependencyFormulaCost": "ползунок > 20"
-          }
-        ]
-      },
-      {
-        "json_id": "65528307",
-        "meta_id": "59783106",
-        "ver_id": "2422030",
-        "title": "Картинка - Image:",
-        "type_group_id": "16",
-        "label": "Блок 21",
-        "defaultImage": {
-          "image_id": "1072882903",
-          "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-          "ver_id": 2422030,
-          "image_width": "1920",
-          "image_height": "1280",
-          "ext": "jpg"
-        },
-        "maxWidth": "150",
-        "maxHeight": "150",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiImage",
-        "dependencyImages": null,
-        "prompt": "",
-        "parent": "0;"
-      },
-      {
-        "json_id": "65537707",
-        "meta_id": "74117906",
-        "ver_id": "2422030",
-        "title": "",
-        "label": "Дупликатор 22",
-        "templates": [
-          {
-            "json_id": "6523506707",
-            "meta_id": "52409506",
-            "ver_id": "2422030",
-            "title": "Аккордеон",
-            "label": "Блок 40",
-            "elementName": "Блок 40",
-            "items": [
-              {
-                "json_id": "65502436507",
-                "meta_id": "5249542306",
-                "ver_id": "2422030",
-                "title": "Вкладка - Заголовок вкладки 1:",
-                "label": "Блок 41",
-                "sublabel": "Подзаголовок вкладки:",
-                "iconSettings": {
-                  "title": "",
-                  "image": {
-                    "image_id": "689303707",
-                    "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-                    "ver_id": 2422030,
-                    "image_width": "0",
-                    "image_height": "0",
-                    "ext": "svg"
-                  },
-                  "maxWidth": 60,
-                  "maxHeight": 60,
-                  "location": "leftSide"
-                },
-                "backgroundImageSettings": {
-                  "title": "",
-                  "image": {
-                    "image_id": "731690107",
-                    "filename": "https://azbyka.ru/wp-content/uploads/2016/07/priroda.jpg",
-                    "ver_id": 2422030,
-                    "image_width": "1219",
-                    "image_height": "775",
-                    "ext": "png"
-                  },
-                  "backgroundHorizontalPosition": "right",
-                  "backgroundVerticalPosition": "bottom",
-                  "backgroundRepeat": "no-repeat",
-                  "behaviorImage": "contain",
-                  "fixedSize": 1,
-                  "maxWidth": 540,
-                  "maxHeight": 320,
-                  "unitSize": "px",
-                  "isSubstrate": 1,
-                  "colorSubstrate": "#ffffff",
-                  "opacitySubstrate": 40
-                },
-                "templates": [
-                  {
-                    "json_id": "243632706",
-                    "meta_id": "59413906",
-                    "ver_id": "2422030",
-                    "title": "Окна Цвет",
-                    "label": "Блок 42",
-                    "isColumn": false,
-                    "selectedItem": "9",
-                    "isNeedChoice": false,
-                    "notEmpty": false,
-                    "formOutputMethod": "value",
-                    "resultOutputMethod": "value",
-                    "excludeFromCalculations": false,
-                    "elementName": "Block11",
-                    "formulaProcessingLogic": "error",
-                    "dependencyFormulaDisplay": "",
-                    "classes": "",
-                    "template": "UiSelect",
-                    "values": [
-                      {
-                        "title": "1",
-                        "selectName": "1",
-                        "cost": 1
-                      },
-                      {
-                        "title": "2",
-                        "selectName": "2",
-                        "cost": 2
-                      },
-                      {
-                        "title": "3",
-                        "selectName": "Block8 === 'йцу'",
-                        "cost": 3,
-                        "dependencyFormulaItem": "Block8 === 'йцу'"
-                      },
-                      {
-                        "title": "3",
-                        "selectName": "Block8 === 2 1",
-                        "cost": 4,
-                        "dependencyFormulaItem": "Block8 === 2"
-                      },
-                      {
-                        "title": "проверка на null",
-                        "selectName": "проверка на null",
-                        "cost": 4,
-                        "dependencyFormulaItem": "Block6 !== null"
-                      },
-                      {
-                        "title": "4",
-                        "selectName": "Block8 === 2 2",
-                        "cost": 5,
-                        "dependencyFormulaItem": "Block8 === 2",
-                        "dependencyPrices": [
-                          {
-                            "cost": 100,
-                            "dependencyFormulaCost": 0,
-                            "disabledFormula": "ползунок > 20"
-                          },
-                          {
-                            "cost": 99,
-                            "dependencyFormulaCost": 0,
-                            "disabledFormula": "ползунок > 22"
-                          },
-                          {
-                            "cost": 50,
-                            "dependencyFormulaCost": 0,
-                            "disabledFormula": "ползунок > 25"
-                          }
-                        ]
-                      }
-                    ],
-                    "prompt": "",
-                    "parent": "0;52409506;52495306;"
-                  },
-                  {
-                    "json_id": "fdsf42343",
-                    "meta_id": "49242506",
-                    "ver_id": "2422030",
-                    "title": "Скрытый чекбокс в дупликаторе",
-                    "modified": "1676284852",
-                    "created": "1665113422",
-                    "type_group_id": "2",
-                    "label": "",
-                    "value": false,
-                    "cost": "10",
-                    "isNeedChoice": false,
-                    "isChecked": 1,
-                    "typeDisplayClass": "base",
-                    "elementName": "Блок 43",
-                    "classes": "",
-                    "baseValue": "default",
-                    "template": "UiCheckbox",
-                    "formOutputMethod": "value",
-                    "dependencyFormulaDisplay": "",
-                    "excludeFromCalculations": false,
-                    "formulaProcessingLogic": "error",
-                    "buttonText": "Сантехнические работы",
-                    "buttonTextChecked": "",
-                    "isColumn": false,
-                    "zeroValueDisplayIgnore": false,
-                    "prompt": "",
-                    "dependencyPrices": null,
-                    "parent": "0;54008706;"
-                  }
-                ],
-                "maxWidthSide": "100",
-                "prompt": "23423",
-                "location": "rightSide"
-              }
-            ],
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiAccordion",
-            "parent": "0;"
-          },
-          {
-            "json_id": "65406307",
-            "meta_id": "49173306",
-            "ver_id": "2422030",
-            "title": "Input - заголовок",
-            "type_group_id": "1",
-            "label": "Блок 23",
-            "value": "",
-            "placeholder": "",
-            "cost": "10",
-            "unit": "",
-            "min": "",
-            "max": "",
-            "controls": true,
-            "step": "1",
-            "discreteStep": false,
-            "notEmpty": false,
-            "isCurrency": false,
-            "dataType": "onlyNumber",
-            "isColumn": false,
-            "formOutputMethod": "no",
-            "resultOutputMethod": "no",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "Block23",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiInput",
-            "dependencyPrices": null,
-            "prompt": "",
-            "parent": "0;74117906;"
-          },
-          {
-            "json_id": "65406423307",
-            "meta_id": "4923173306",
-            "ver_id": "242223030",
-            "title": "Input - заголовок 2",
-            "type_group_id": "1",
-            "label": "Блок 24",
-            "value": "",
-            "placeholder": "",
-            "cost": "1",
-            "unit": "",
-            "min": "",
-            "max": "",
-            "controls": true,
-            "step": "1",
-            "discreteStep": false,
-            "notEmpty": false,
-            "dataType": "onlyNumber",
-            "isCurrency": false,
-            "isColumn": false,
-            "formOutputMethod": "no",
-            "resultOutputMethod": "no",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "Block24",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiInput",
-            "dependencyPrices": null,
-            "prompt": "",
-            "parent": "0;74117906;"
-          },
-          {
-            "json_id": "63425501107",
-            "meta_id": "49242506",
-            "ver_id": "2422030",
-            "title": "Checkbox  - для цветовых настроек 2",
-            "label": "Блок  33",
-            "buttonText": "кнопка",
-            "buttonTextChecked": "Кнопка активная",
-            "cost": "122",
-            "value": 1,
-            "isNeedChoice": 0,
-            "isChecked": 0,
-            "isColumn": 1,
-            "typeDisplayClass": "base",
-            "formOutputMethod": "no",
-            "resultOutputMethod": "value",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "Block33",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiCheckbox",
-            "dependencyPrices": null,
-            "prompt": "подсказка"
-          },
-          {
-            "json_id": "5267564464343232",
-            "title": "Системное поле тестирования зависимостей",
-            "cost": "1",
-            "elementName": "system2",
-            "formulaProcessingLogic": "error",
-            "template": "UiSystem",
-            "formOutputMethod": "no",
-            "dependencyPrices": [
-              {
-                "title": "Значение 2",
-                "disabledFormula": 0,
-                "cost": 2,
-                "dependencyFormulaCost": "Block24 > 5"
-              },
-              {
-                "title": "Значение 3",
-                "disabledFormula": 0,
-                "cost": 3,
-                "dependencyFormulaCost": "Block24 > 18"
-              }
-            ]
-          }
-        ],
-        "buttonName": "Дублировать",
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "excludeFromCalculations": false,
-        "formulaProcessingLogic": "zero",
-        "formula": "Block23 * 5 + _otherSum_",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiDuplicator",
-        "elementName": "dup",
-        "prompt": "ываы аы",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "689303707",
-            "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-            "ver_id": 2422030,
-            "image_width": "0",
-            "image_height": "0",
-            "ext": "svg"
-          },
-          "maxWidth": 60,
-          "maxHeight": 60,
-          "location": "leftSide"
-        },
         "parent": "0;"
       }
     ]

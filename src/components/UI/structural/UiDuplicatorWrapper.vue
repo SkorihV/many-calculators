@@ -4,7 +4,7 @@
     v-if="mutationsInputData?.templates.length"
   >
     <icon-element-wrapper
-      :icon-settings="iconSettings"
+      :icon-settings="iconSettingsDuplicatorLabel"
       :alt="isExistLabel ? mutationsInputData.label : ''"
     >
       <template>
@@ -114,6 +114,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    iconSettingsDuplicatorLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "prompt",
       "formula",
@@ -123,7 +127,7 @@ export default {
       "dependencyFormulaDisplay",
       "elementName",
       "positionElement",
-      "iconSettings",
+
     ]),
   },
   mounted() {

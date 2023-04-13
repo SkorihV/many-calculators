@@ -2199,8 +2199,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-wrapper {
           width: 100%;
           .calc__wrapper-group-data {
-            padding-left: 20px;
-            padding-right: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
             margin: 0 0 10px 0;
             &:first-child {
               padding-top: 20px;
@@ -2416,6 +2416,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-wrapper {
           display: flex;
           margin-bottom: 8px;
+          margin-left: 10px;
         }
       }
       &-item {

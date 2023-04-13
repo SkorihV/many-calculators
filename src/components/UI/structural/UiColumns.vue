@@ -7,7 +7,7 @@
     :id="elementName"
   >
     <icon-element-wrapper
-      :icon-settings="iconSettings"
+      :icon-settings="iconSettingsColumnsLabel"
       :alt="isExistLabel ? label : ''"
       :is-exist-label="isExistLabel"
     >
@@ -48,7 +48,7 @@
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import ColumnElement from "@/components/UI/other/ColumnElement.vue";
+import ColumnElement from "@/components/UI/structural/ColumnElement.vue";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -85,13 +85,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    iconSettingsColumnsLabel: {
+      type: Object,
+      default: () => {}
+    },
     ...propsTemplate.getProps([
       "label",
       "elementName",
       "classes",
       "parentIsShow",
       "dependencyFormulaDisplay",
-      "iconSettings",
       "parentName",
     ]),
   },

@@ -7,10 +7,10 @@
   >
     <div
       class="calc__input-wrapper"
-      :class="[classes, { column: isColumn || isMakeElementColumn }]"
+      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
-        :icon-settings="iconSettings"
+        :icon-settings="iconSettingsInputLabel"
         :alt="isExistLabel ? label : ''"
         :isExistLabel="isExistLabel"
       >
@@ -23,7 +23,7 @@
       <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
         <div
           class="calc__input-buttons-minus"
-          :class="{ disabled: isDisabledMin }"
+          :class="{ 'disabled': isDisabledMin }"
           v-if="showControlsButton"
           @click="minus"
         >
@@ -41,9 +41,9 @@
           @focus="inputFocus = true"
           class="calc__input-item"
           :class="{
-            number: isOnlyNumber,
-            error: isErrorClass,
-            stretch: isStretch,
+            'number': isOnlyNumber,
+            'error': isErrorClass,
+            'stretch': isStretch,
           }"
           autocomplete="off"
           v-if="!fakeValueHidden"
@@ -57,9 +57,9 @@
             :value="resultValueDouble"
             class="calc__input-item currency"
             :class="{
-              number: isOnlyNumber,
-              error: isErrorClass,
-              stretch: isStretch,
+              'number': isOnlyNumber,
+              'error': isErrorClass,
+              'stretch': isStretch,
             }"
             autocomplete="off"
             :placeholder="inputPlaceholder"
@@ -67,7 +67,7 @@
         </template>
         <div
           class="calc__input-buttons-plus"
-          :class="{ disabled: isDisabledMax }"
+          :class="{ 'disabled': isDisabledMax }"
           v-if="showControlsButton"
           @click="plus"
         >
@@ -198,6 +198,10 @@ export default {
       type: String,
       default: "mixed",
     },
+    iconSettingsInputLabel: {
+      type: Object,
+      default: () => {},
+    },
     ...propsTemplate.getProps([
       "label",
       "notEmpty",
@@ -220,7 +224,6 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "iconSettings",
     ]),
   },
   mounted() {
@@ -643,7 +646,6 @@ export default {
       if (!this.initProcessingDependencyPrice || !this.dependencyPrices) {
         return this.updatedCostForOut(this.cost);
       }
-
       let { cost: newCost } = this.costAfterProcessingDependencyPrice(
         this.dependencyPrices,
         "dependencyFormulaCost"
