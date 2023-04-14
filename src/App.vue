@@ -213,6 +213,7 @@ export default {
         "dependency",
         "currentSelectedRadioButton",
         "changeAmountSelectList",
+        "changeValueDependenciesElements"
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
       methodWorksForm: "show",
@@ -229,7 +230,6 @@ export default {
       if (typeof data !== "object") {
         return null;
       }
-
       const { name, type, eventType } = data;
       if (eventType === "delete") {
         this.hiddenElementOnResults(name);
@@ -2778,9 +2778,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       background-position: right bottom;
       background-size: contain;
       z-index: -1;
-      &.result {
-        width: 100%;
-      }
       @media all and (max-width: 480px) {
         display: none;
       }

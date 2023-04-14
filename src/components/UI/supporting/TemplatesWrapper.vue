@@ -70,6 +70,7 @@
     :position-element="template?.position"
     :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
     :icon-settings-checkbox-label="template?.iconSettingsCheckboxLabel"
+    :cost-for-void="template?.costForVoid"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>

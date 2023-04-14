@@ -32,18 +32,30 @@
     </div>
     <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
   </div>
+  <dev-block
+    label="Блок с результатами"
+    :formula="resultOptions?.formulaDependencyForResultBlock"
+    :formula-variables="formulaOnDataVariables"
+    :is-visibility-from-dependency="isShowResultBlock"
+    hidden-cost
+    hidden-value
+  ></dev-block>
 </template>
 
 <script>
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
+import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 export default {
   name: "ResultBlockForOutput",
-  components: { BackgroundImageElement, SpinnerElement },
+  components: { BackgroundImageElement, SpinnerElement, DevBlock },
+  mixins: [MixinsUtilityServices],
   props: {
     resultOptions: {
       type: Object,
@@ -80,6 +92,7 @@ export default {
       "isExistGlobalErrorsValidationIgnoreHiddenElement",
       "checkInitEnabledSendForm",
       "checkAllowShowResultBlock",
+      "globalDependenciesList",
       "getTitleSum",
     ]),
     isShowResultBlockTitle() {
@@ -90,7 +103,7 @@ export default {
     },
     allowShowResultInOptions() {
       return this.resultOptions
-        ? this.resultOptions?.showResultDataForBlock
+        ? !this.resultOptions?.hiddenResultBlock && this.showResultBlockForDependency
         : false;
     },
     showSumma() {
@@ -221,6 +234,47 @@ export default {
     },
     textForSpinner() {
       return this.resultOptions?.textForSpinner;
+    },
+    showResultBlockForDependency() {
+      return this.isFormulaDisplayResultBlock ? this.isDisplayResultBlockFormulaDependency : true;
+    },
+    isFormulaDisplayResultBlock() {
+      return Boolean(this.resultOptions?.formulaDependencyForResultBlock?.length);
+    },
+    variablesInFormula() {
+      return this.isFormulaDisplayResultBlock
+        ? this.getArrayElementsFromFormula(
+          this.resultOptions.formulaDependencyForResultBlock
+        )
+        : [];
+    },
+    localDependencyListResultBlock() {
+      let listObject = {};
+      this.variablesInFormula.forEach((name) => {
+        if (this.globalDependenciesList[name]) {
+          listObject[name] = this.globalDependenciesList[name];
+        }
+      });
+      return listObject;
+    },
+    formulaOnDataVariables() {
+      return processingVariablesOnFormula(
+        this.variablesInFormula,
+        this.localDependencyListResultBlock
+      );
+    },
+    isDisplayResultBlockFormulaDependency() {
+      try {
+        return eval(this.formulaOnDataVariables);
+      } catch (e) {
+        if (this.devMode) {
+          console.warn(
+            "Рассчитываемая формула результирующего блока: ",
+            this.formulaOnDataVariables
+          );
+        }
+        return null;
+      }
     },
   },
 };

@@ -84,8 +84,6 @@ export const MixinLocalDependencyList = {
   computed: {
     ...mapState(useBaseStore, [
       "globalDependenciesList",
-      "isCanShowAllTooltips",
-      "devMode",
     ]),
   },
 };

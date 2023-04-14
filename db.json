@@ -1,29 +1,65 @@
 {
 
   "calculator-options": {
-    "formula": "_otherSum_",
+    "json_id": "144069707",
+    "title": "Калькулятор грузоперевозок 2",
+    "computedMethod": "formula",
+    "formula": "откуда * ( вес / 100 ) + _otherSum_",
     "methodBeginningCalculation": "useButton",
-    "currency": "руб",
-    "form": "7981901",
-    "devModeEnabled": 1,
-    "title": "Калькулятор фундамента ( конструктор )",
-    "computedMethod": "linear",
+    "form": "",
+    "methodWorksForm": "show",
     "tooltipOff": false,
-    "textAbove": "<p>Фундамент является основным элементом любого здания, и его качество и прочность непосредственно влияют на устойчивость и безопасность строения. Поэтому важно использовать калькулятор фундаментной плиты, чтобы гарантировать, что фундамент будет подходящим для вашего конкретного случая.<\\/p>\\n\\n<p>Оставьте заявку и мы поможем избежать ошибок и проблем,&nbsp;обеспечить долговечность, устойчивость&nbsp; и безопасность вашего здания на долгие годы.<\\/p>",
+    "devModeEnabled": 1,
+    "dependencyMainFormula": null,
     "resultOptions": {
-      "title": "Результаты расчета:",
-      "subtitle": "Расчет приблизительный, за точным расчетом обратитесь к нашему специалисту!",
+      "title": "ИТОГО:",
       "titleButton": "Рассчитать",
-      "titleSumma": "ИТОГО:",
-      "showResultDataForBlock": 1,
-      "signAfterDot":-2
+      "formulaDisplayButton": "откуда !== null &amp;&amp;  куда !== null &amp;&amp; вес &gt; 0",
+      "hiddenResultBlock": 0,
+      "formulaDependencyForResultBlock": "вес > 0",
+      "titleSumma": "Общая сумма составляет",
+      "hiddenSumma": 0,
+      "roundOffType": "ceil",
+      "signAfterDot": 0,
+      "currency": "руб.",
+      "textForSpinner": "Идет расчет...",
+      "timerForSpinner": 3
     },
-    "devMode": true
+    "textAbove": "",
+    "textAfter": "",
+    "parent": "0;"
   },
 
 
   "test-icons" : {
     "calculatorTemplates": [
+      {
+        "json_id": "148686907",
+        "title": "Параметр 1",
+        "label": "",
+        "buttonText": "Параметр 1",
+        "buttonTextChecked": "",
+        "costForVoid": "1500",
+        "cost": "2500",
+        "baseValue": "default",
+        "isNeedChoice": false,
+        "isColumn": false,
+        "typeDisplayClass": "button",
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "scrollIntoName": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsCheckboxLabel": null,
+        "parent": "0;42721107;"
+      },
       {
         "json_id": "148303507",
         "title": "Описание автомобиля",
@@ -1126,2072 +1162,727 @@
   ]
   },
 
-  "test-columns": {
-    "calculatorTemplates": [
-      {
-        "json_id": "1463gtr66307",
-        "title": "Текстовое поле - Input:",
-        "label": "Текстовое поле - Input:",
-        "value": "0",
-        "placeholder": "",
-        "cost": "",
-        "unit": "",
-        "min": "0",
-        "max": "10",
-        "controls": false,
-        "step": "1",
-        "discreteStep": false,
-        "dataType": "onlyNumber",
-        "notEmpty": false,
-        "isCurrency": false,
-        "isColumn": false,
-        "isStretch": false,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiInput",
-        "dependencyPrices": [],
-        "prompt": "",
-        "iconSettingsInputLabel": {
-          "title": "",
-          "image": {
-            "image_id": "1882366907",
-            "filename": "https://calculators-works.oml.ru/d/container.png",
-            "ver_id": 4601302,
-            "image_width": "128",
-            "image_height": "128",
-            "ext": "png"
-          },
-          "behaviorImage": "contain",
-          "location": "leftSide"
-        },
-        "parent": "0;"
-      },
-      {
-        "json_id": "138484307",
-        "title": "Системное поле",
-        "cost": "",
-        "showElement": "onlyText",
-        "label": "Заголовок на сайте",
-        "unit": "руб",
-        "formOutputMethod": "no",
-        "resultOutputMethod": "no",
-        "zeroValueDisplayIgnore": true,
-        "excludeFromCalculations": false,
-        "elementName": "системное25",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "template": "UiSystem",
-        "prompt": "текст подсказки",
-        "htmlText": "какой-то хтмл текст вот так вот да ",
-        "dependencyPrices": [
-          {
-            "title": "условие",
-            "cost": "55 + ad",
-            "dependencyFormulaCost": "откуда === 'москва'",
-            "htmlText": " текст со значением 55"
-          },
-          {
-            "title": "условие",
-            "cost": 10000,
-            "dependencyFormulaCost": "откуда === 'мо'",
-            "htmlText": "текст со значением 10000"
-          },
-          {
-            "title": "условие",
-            "cost": "",
-            "dependencyFormulaCost": "откуда === 'брянск'",
-            "htmlText": "текст со значением Брянск"
-          }
-        ],
-        "dependencyHtmlText": [
-          {
-            "title": "условие",
-            "dependencyFormulaHtmlText": "откуда === 'москва'",
-            "htmlText": " текст со значением 55"
-          },
-          {
-            "title": "условие",
-            "dependencyFormulaHtmlText": "откуда === 'воронеж'",
-            "htmlText": "текст со значением 10000"
-          },
-          {
-            "title": "условие",
-            "dependencyFormulaHtmlText": "откуда === 'владимир'",
-            "htmlText": "текст со значением Брянск"
-          }
-        ],
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "1750832707",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-            "ver_id": 4601302,
-            "image_width": "506",
-            "image_height": "513",
-            "ext": "png"
-          },
-          "maxWidth": 55,
-          "maxHeight": 66,
-          "behaviorImage": "cover",
-          "location": "leftSide"
-        },
-        "parent": "0;"
-      },
-      {
-        "json_id": "143721307",
-        "title": "35345",
-        "label": "",
-        "selectedItem": "1",
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "isColumn": false,
-        "isStretch": false,
-        "typeDisplayClass": "onlyImage",
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "globalMaxWidth": "200",
-        "globalMaxHeight": "200",
-        "template": "UiRadio",
-        "values": [
-          {
-            "title": "Элемент радио-кнопка - 543",
-            "radioName": 543,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1813162307",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "ver_id": 4601302,
-                "image_width": "308",
-                "image_height": "410",
-                "ext": "png"
-              },
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент радио-кнопка - 34635",
-            "radioName": 34635,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1813149707",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "ver_id": 4601302,
-                "image_width": "308",
-                "image_height": "410",
-                "ext": "jpg"
-              },
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            }
-          }
-        ],
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "143661707",
-        "meta_id": "31030707",
-        "ver_id": "4601302",
-        "title": "5",
-        "label": "5",
-        "selectedItem": "1",
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "isColumn": false,
-        "isStretch": false,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "globalMaxWidth": "",
-        "globalMaxHeight": "200",
-        "template": "UiSelect",
-        "values": [
-          {
-            "title": "Элемент списка - 5",
-            "selectName": 5,
-            "iconSettings": {
-              "title": "",
-              "maxWidth": 32,
-              "maxHeight": 32,
-              "image": {
-                "image_id": "1813162707",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "ver_id": 4601302,
-                "image_width": "308",
-                "image_height": "410",
-                "ext": "png"
-              },
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент списка - 6",
-            "selectName": 6,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1813162307",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "ver_id": 4601302,
-                "image_width": "308",
-                "image_height": "410",
-                "ext": "png"
-              },
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            }
-          },
-          {
-            "title": "Элемент списка - 8",
-            "selectName": 8,
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1813148507",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "ver_id": 4601302,
-                "image_width": "308",
-                "image_height": "410",
-                "ext": "png"
-              },
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            }
-          }
-        ],
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "139_______381907",
-        "title": "Добавить тюль?",
-        "label": "Добавить тюль?",
-        "buttonText": "Да",
-        "buttonTextChecked": "Нет",
-        "cost": "",
-        "baseValue": "notActive",
-        "isNeedChoice": false,
-        "isColumn": 1,
-        "typeDisplayClass": "switcher",
-        "formOutputMethod": "value",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "тюль",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "откуда !== null",
-        "scrollIntoName": "",
-        "classes": "",
-        "template": "UiCheckbox",
-        "dependencyPrices": null,
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;41285907;41286107;"
-      },
-      {
-        "json_id": "100886307",
-        "title": "Откуда",
-        "label": "Откуда",
-        "isColumn": false,
-        "selectedItem": "1",
-        "isNeedChoice": 1,
-        "notEmpty": 1,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "откуда",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "isStretch": 1,
-        "values": [
-          {
-            "title": "Элемент списка - Москва",
-            "selectName": "Москва",
-            "extraValueForDependency": "москва",
-            "dependencyPrices": [
-              {
-                "title": "Московская Область",
-                "cost": 100,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 186,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 526,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Московская Область",
-            "selectName": "Московская Область",
-            "extraValueForDependency": "мо",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 100,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 571,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 294,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 86,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 426,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Белгород",
-            "selectName": "Белгород",
-            "extraValueForDependency": "белгород",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 571,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 419,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 853,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 257,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Брянск",
-            "selectName": "Брянск",
-            "extraValueForDependency": "брянск",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 394,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 294,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 419,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 594,
-                "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 441,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Владимир",
-            "selectName": "Владимир",
-            "extraValueForDependency": "владимир",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 186,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 86,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 853,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 594,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 682,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_  !== куда"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "selectName": "Воронеж",
-            "extraValueForDependency": "воронеж",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 526,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 426,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 257,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 441,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 682,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда"
-          }
-        ],
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;30492307;35352507;35352707;"
-      },
-      {
-        "json_id": "100916907",
-        "title": "Куда",
-        "label": "Куда",
-        "isColumn": false,
-        "selectedItem": "1",
-        "isNeedChoice": 1,
-        "notEmpty": 1,
-        "formOutputMethod": "value",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": 1,
-        "excludeFromCalculations": 1,
-        "elementName": "куда",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "isStretch": 1,
-        "values": [
-          {
-            "title": "Элемент списка - Москва",
-            "selectName": "Москва",
-            "extraValueForDependency": "москва",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Московская Область",
-            "selectName": "Московская Область",
-            "extraValueForDependency": "мо",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Белгород",
-            "selectName": "Белгород",
-            "extraValueForDependency": "белгород",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Брянск",
-            "selectName": "Брянск",
-            "extraValueForDependency": "брянск",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Владимир",
-            "selectName": "Владимир",
-            "extraValueForDependency": "владимир",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "selectName": "Воронеж",
-            "extraValueForDependency": "воронеж",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          }
-        ],
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;30492307;35352507;35352707;"
-      },
-
-      {
-        "json_id": "13494sdf0707",
-        "title": "системное",
-        "cost": "0 + ползунок + 5",
-        "elementName": "системное",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "template": "UiSystem",
-        "dependencyPrices": [
-          {
-            "title": "условие",
-            "cost": "10 * ползунок",
-            "dependencyFormulaCost": "ползунок > 6"
-          },
-          {
-            "title": "условие",
-            "cost": 10000,
-            "dependencyFormulaCost": "ползунок > 20"
-          }
-        ],
-        "parent": "0;"
-      },
-      {
-        "json_id": "132gfd590907",
-        "title": "Дупликатор с иконкой",
-        "label": "Дупликатор с иконкой",
-        "templates": [
-          {
-            "json_id": "13494sdf0707",
-            "title": "системное2",
-            "cost": "0 + _otherSum_ + 55",
-            "elementName": "системное2",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "template": "UiSystem",
-            "dependencyPrices": [
-              {
-                "title": "условие",
-                "cost": "10 * ползунок",
-                "dependencyFormulaCost": "ползунок > 6"
-              },
-              {
-                "title": "условие",
-                "cost": 10000,
-                "dependencyFormulaCost": "ползунок > 20"
-              }
-            ],
-            "parent": "0;"
-          },
-          {
-            "json_id": "12452sdf38507",
-            "meta_id": "31030507",
-            "ver_id": "4601302",
-            "title": "тест 2",
-            "type_group_id": "9004",
-            "label": "тест2",
-            "value": "0",
-            "min": "0",
-            "max": "10000",
-            "cost": "1000",
-            "unit": "",
-            "step": "1",
-            "showSteps": false,
-            "stepPrompt": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
-            "showStaticValue": 1,
-            "showDynamicValue": 1,
-            "isColumn": false,
-            "formOutputMethod": "valueSumm",
-            "resultOutputMethod": "valueSumm",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "ползунок66",
-            "formulaProcessingLogic": "zero",
-            "classes": "",
-            "template": "UiRange",
-            "dependencyPrices": null,
-            "prompt": "",
-            "iconSettings": null,
-            "parent": "0;"
-          },
-          {
-            "json_id": "132587707",
-            "title": "иконка радио",
-            "label": "иконка радио",
-            "selectedItem": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
-            "isColumn": false,
-            "isStretch": false,
-            "typeDisplayClass": "column",
-            "formOutputMethod": "valueSumm",
-            "resultOutputMethod": "valueSumm",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "дубРадио",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "classes": "",
-            "template": "UiRadio",
-            "values": [
-              {
-                "title": "Элемент радио-кнопка - пункт радио",
-                "radioName": "пункт радио",
-                "cost": 100,
-                "iconSettings": {
-                  "title": "",
-                  "image": {
-                    "image_id": "1595471507",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                    "image_width": "500",
-                    "image_height": "500",
-                    "ext": "jpg"
-                  },
-                  "maxWidth": 48,
-                  "maxHeight": 48,
-                  "location": "leftSide"
-                }
-              },
-              {
-                "title": "Элемент радио-кнопка - второй пункт",
-                "radioName": "второй пункт",
-                "cost": 50,
-                "subradioName": "второй пункт",
-                "iconSettings": {
-                  "title": "",
-                  "image": {
-                    "image_id": "1595471907",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                    "image_width": "500",
-                    "image_height": "500",
-                    "ext": "jpg"
-                  },
-                  "location": "leftSide"
-                }
-              }
-            ],
-            "prompt": "",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "image_width": "512",
-                "image_height": "512",
-                "ext": "png"
-              },
-              "maxWidth": 48,
-              "maxHeight": 48,
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            },
-            "parent": "0;35854107;"
-          },
-          {
-            "json_id": "132588107",
-            "title": "иконка ползунок",
-            "label": "иконка ползунок",
-            "value": "0",
-            "min": "0",
-            "max": "100",
-            "cost": "5",
-            "unit": "",
-            "step": "1",
-            "showSteps": false,
-            "stepPrompt": "1",
-            "isNeedChoice": false,
-            "notEmpty": false,
-            "showStaticValue": false,
-            "showDynamicValue": false,
-            "isColumn": false,
-            "formOutputMethod": "valueSumm",
-            "resultOutputMethod": "valueSumm",
-            "zeroValueDisplayIgnore": false,
-            "excludeFromCalculations": false,
-            "elementName": "дубПолзунок",
-            "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
-            "classes": "дубПолзунок",
-            "template": "UiRange",
-            "dependencyPrices": null,
-            "prompt": "",
-            "iconSettings": {
-              "title": "",
-              "image": {
-                "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-                "image_width": "512",
-                "image_height": "512",
-                "ext": "png"
-              },
-              "maxWidth": 48,
-              "maxHeight": 48,
-              "behaviorImage": "contain",
-              "location": "leftSide"
-            },
-            "parent": "0;35854107;"
-          }
-        ],
-        "buttonName": "Дублировать",
-        "maximumDuple": "3",
-        "formOutputMethod": "onlyTitle",
-        "resultOutputMethod": "onlyTitle",
-        "excludeFromCalculations": false,
-        "elementName": "",
-        "formulaProcessingLogic": "zero",
-        "formula": "дубРадио + дубПолзунок + _otherSum_",
-        "dependencyMainFormula": [
-          {
-            "title": 2,
-            "dependencyFormula": "ползунок > 5",
-            "formula": "дубРадио + дубПолзунок + _otherSum_ + 55"
-          },
-          {
-            "title": 2,
-            "dependencyFormula": "дубПолзунок > 5",
-            "formula": "дубРадио + дубПолзунок + _otherSum_ + 1000"
-          }
-        ],
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiDuplicator",
-        "prompt": "",
-        "iconSettings": {
-          "title": "",
-          "image": {
-            "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
-            "image_width": "512",
-            "image_height": "512",
-            "ext": "png"
-          },
-          "maxWidth": 48,
-          "maxHeight": 48,
-          "behaviorImage": "contain",
-          "location": "leftSide"
-        },
-        "parent": "0;"
-      },
-      {
-        "json_id": "124525707",
-        "meta_id": "31030507",
-        "ver_id": "4601302",
-        "title": "тест",
-        "type_group_id": "9004",
-        "label": "тест",
-        "value": "0",
-        "min": "0",
-        "max": "100",
-        "cost": "1",
-        "unit": "",
-        "step": "1",
-        "showSteps": false,
-        "stepPrompt": "1",
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "showStaticValue": 1,
-        "showDynamicValue": 1,
-        "isColumn": false,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "ползунок",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "площадь > 0",
-        "classes": "",
-        "template": "UiRange",
-        "dependencyPrices": null,
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "124528507",
-        "meta_id": "31030507",
-        "ver_id": "4601302",
-        "title": "тест 2",
-        "type_group_id": "9004",
-        "label": "тест2",
-        "value": "0",
-        "min": "0",
-        "max": "100",
-        "cost": "1",
-        "unit": "",
-        "step": "1",
-        "showSteps": false,
-        "stepPrompt": "1",
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "showStaticValue": 1,
-        "showDynamicValue": 1,
-        "isColumn": false,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "valueSumm",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "ползунок2",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "ползунок &gt; 10",
-        "classes": "",
-        "template": "UiRange",
-        "dependencyPrices": null,
-        "prompt": "",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "116703455345232707",
-        "meta_id": "31621307",
-        "ver_id": "4865318",
-        "title": "Цвет потолка",
-        "created": "1679637148",
-        "type_group_id": "9005",
-        "label": "Цвет потолка",
-        "selectedItem": "1",
-        "isNeedChoice": false,
-        "notEmpty": false,
-        "isColumn": 1,
-        "formOutputMethod": "value",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": 1,
-        "excludeFromCalculations": 1,
-        "elementName": "цветПотолка",
-        "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "isStretch": 1,
-        "isSearch": true,
-        "values": [
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          },
-          {
-            "title": "Элемент списка - Белый",
-            "selectName": "Белый",
-            "prompt": "текст подсказки"
-          },
-          {
-            "title": "Элемент списка - Серый",
-            "selectName": "Серый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "Желтый"
-          },
-          {
-            "title": "Элемент списка - Желтый",
-            "selectName": "длинноеСловоОчень"
-          }
-        ],
-        "prompt": "Текстовая подсказка 132131",
-        "iconSettings": null,
-        "parent": "0;34349707;34349907;"
-      },
-      {
-        "json_id": "121862707",
-        "title": "Вид включение подсветки",
-        "label": "",
-        "defaultImage": {
-          "image_id": "1460627507",
-          "filename": "cvet2bel1_1.jpg",
-          "ver_id": 4867762,
-          "image_width": "1280",
-          "image_height": "1280",
-          "ext": "jpg"
-        },
-        "maxWidth": "150",
-        "maxHeight": "150",
-        "dependencyFormulaDisplay": "материал === 1 || материал === 2",
-        "classes": "",
-        "template": "UiImage",
-        "dependencyImages": [
-          {
-            "title": "",
-            "image": {
-              "image_id": "1460627907",
-              "filename": "https://klike.net/uploads/posts/2019-01/1547365376_1.jpg",
-              "ver_id": 4867762,
-              "image_width": "1280",
-              "image_height": "1280",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "включениеПодсветки === 3"
-          },
-          {
-            "title": "",
-            "image": {
-              "image_id": "1460627707",
-              "filename": "https://klike.net/uploads/posts/2021-06/1623684033_5.jpg",
-              "ver_id": 4867762,
-              "image_width": "1280",
-              "image_height": "1280",
-              "ext": "jpg"
-            },
-            "dependencyFormulaDisplay": "включениеПодсветки === 4"
-          }
-        ],
-        "prompt": "",
-        "parent": "0;35787307;35787507;"
-      },
-      {
-        "json_id": "116703707",
-        "meta_id": "34349707",
-        "ver_id": "4865318",
-        "title": "Основные параметры:",
-        "created": "2023-03-24 12:53:39",
-        "type_group_id": "9017",
-        "label": "Основные параметры:",
-        "columns": [
-          {
-            "json_id": "116702107",
-            "meta_id": "34349907",
-            "ver_id": "4865318",
-            "title": "Основные параметры: - 1",
-            "created": "1679637090",
-            "type_group_id": "9018",
-            "label": "Основные параметры: - 1",
-            "elementPosition": "horizontal",
-            "templates": [
-              {
-                "json_id": "105071107",
-                "meta_id": "31621307",
-                "ver_id": "4865318",
-                "title": "Тип материала:",
-                "created": "1679294609",
-                "type_group_id": "9005",
-                "label": "Тип материала:",
-                "isColumn": 1,
-                "selectedItem": "1",
-                "isNeedChoice": 1,
-                "notEmpty": 1,
-                "isSearch": 1,
-                "formOutputMethod": "valueSumm",
-                "resultOutputMethod": "value",
-                "zeroValueDisplayIgnore": false,
-                "excludeFromCalculations": false,
-                "elementName": "материал",
-                "formulaProcessingLogic": "zero",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiSelect",
-                "isStretch": false,
-                "values": [
-                  {
-                    "title": "Элемент списка - Ткань",
-                    "selectName": "Ткань",
-                    "cost": 500
-                  },
-                  {
-                    "title": "Элемент списка - Пленка",
-                    "selectName": "Пленка",
-                    "cost": 700
-                  },
-                  {
-                    "title": "Элемент списка - Пленка Китай Премиум",
-                    "selectName": "Пленка Китай Премиум",
-                    "cost": 1000
-                  },
-                  {
-                    "title": "Элемент списка - Пленка Китай Эконом",
-                    "selectName": "Пленка Китай Эконом",
-                    "cost": 300
-                  },
-                  {
-                    "title": "Элемент списка - Пленка Германия",
-                    "selectName": "Пленка Германия",
-                    "cost": 1500
-                  },
-                  {
-                    "title": "Элемент списка - Плёнка Россия",
-                    "selectName": "Плёнка Россия",
-                    "cost": 1000
-                  }
-                ],
-                "prompt": "",
-                "iconSettings": null,
-                "parent": "0;34349707;34349907;"
-              },
-              {
-                "json_id": "105071707",
-                "meta_id": "31620507",
-                "ver_id": "4865318",
-                "title": "Площадь",
-                "created": "1679294667",
-                "type_group_id": "9001",
-                "label": "Площадь",
-                "value": "0",
-                "placeholder": "",
-                "cost": "1",
-                "unit": "м2",
-                "min": "0",
-                "max": "250",
-                "controls": 0,
-                "step": "0.0053",
-                "discreteStep": false,
-                "dataType": "onlyNumber",
-                "notEmpty": 1,
-                "isCurrency": false,
-                "isColumn": 1,
-                "formOutputMethod": "value",
-                "resultOutputMethod": "value",
-                "zeroValueDisplayIgnore": false,
-                "excludeFromCalculations": false,
-                "elementName": "площадь",
-                "formulaProcessingLogic": "error",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiInput",
-                "isStretch": 1,
-                "dependencyPrices": null,
-                "prompt": "",
-                "iconSettings": null,
-                "parent": "0;34349707;34349907;"
-              }
-            ],
-            "maxWidth": "100",
-            "iconSettings": null,
-            "parent": "0;34349707;"
-          },
-          {
-            "json_id": "116702907",
-            "meta_id": "34349907",
-            "ver_id": "4865318",
-            "title": "Основные параметры: - 2",
-            "created": "1679637162",
-            "type_group_id": "9018",
-            "label": "Основные параметры: - 2",
-            "templates": [
-              {
-                "json_id": "116702707",
-                "meta_id": "31621307",
-                "ver_id": "4865318",
-                "title": "Цвет потолка",
-                "created": "1679637148",
-                "type_group_id": "9005",
-                "label": "Цвет потолка",
-                "selectedItem": "1",
-                "isNeedChoice": false,
-                "notEmpty": false,
-                "isColumn": 1,
-                "formOutputMethod": "value",
-                "resultOutputMethod": "value",
-                "zeroValueDisplayIgnore": 1,
-                "excludeFromCalculations": 1,
-                "elementName": "",
-                "formulaProcessingLogic": "zero",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiSelect",
-                "isStretch": 1,
-                "values": [
-                  {
-                    "title": "Элемент списка - Белый",
-                    "selectName": "Белый"
-                  },
-                  {
-                    "title": "Элемент списка - Серый",
-                    "selectName": "Серый"
-                  },
-                  {
-                    "title": "Элемент списка - Желтый",
-                    "selectName": "Желтый"
-                  }
-                ],
-                "prompt": "Текстовая подсказка",
-                "iconSettings": null,
-                "parent": "0;34349707;34349907;"
-              },
-              {
-                "json_id": "105085907",
-                "meta_id": "31620507",
-                "ver_id": "4865318",
-                "title": "Количество углов",
-                "created": "1679294816",
-                "type_group_id": "9001",
-                "label": "Количество углов",
-                "value": "4",
-                "placeholder": "",
-                "cost": "150",
-                "unit": "шт",
-                "min": "0",
-                "max": "50",
-                "controls": 1,
-                "step": "1",
-                "discreteStep": false,
-                "dataType": "onlyNumber",
-                "notEmpty": 1,
-                "isCurrency": false,
-                "isColumn": 1,
-                "formOutputMethod": "valueSumm",
-                "resultOutputMethod": "value",
-                "zeroValueDisplayIgnore": false,
-                "excludeFromCalculations": false,
-                "elementName": "",
-                "formulaProcessingLogic": "zero",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiInput",
-                "isStretch": 1,
-                "dependencyPrices": null,
-                "prompt": "",
-                "iconSettings": null,
-                "parent": "0;34349707;34349907;"
-              }
-            ],
-            "maxWidth": "25",
-            "iconSettings": null,
-            "parent": "0;34349707;"
-          },
-          {
-            "json_id": "116703507",
-            "meta_id": "34349907",
-            "ver_id": "4865318",
-            "title": "Основные параметры - 3",
-            "created": "1679637214",
-            "type_group_id": "9018",
-            "label": "",
-            "templates": [
-              {
-                "json_id": "116703307",
-                "meta_id": "31621707",
-                "ver_id": "4865318",
-                "title": "Картинка потолка",
-                "created": "1679637202",
-                "type_group_id": "9007",
-                "label": "Название картинки",
-                "defaultImage": {
-                  "image_id": "1445105307",
-                  "filename": "https://works-addon.21.oml.ru/d/bathhouse.svg",
-                  "ver_id": 4865318,
-                  "image_width": "1920",
-                  "image_height": "1920",
+  "test-calc": {
+    "calculatorTemplates":
+      [
+        {
+          "json_id": "146255107",
+          "title": "Тип",
+          "label": "",
+          "selectedItem": "1",
+          "isNeedChoice": false,
+          "notEmpty": false,
+          "isColumn": false,
+          "isStretch": 1,
+          "typeDisplayClass": "column",
+          "formOutputMethod": "value",
+          "resultOutputMethod": "value",
+          "zeroValueDisplayIgnore": false,
+          "excludeFromCalculations": false,
+          "elementName": "тип",
+          "formulaProcessingLogic": "zero",
+          "dependencyFormulaDisplay": "",
+          "classes": "",
+          "globalMaxWidth": "64",
+          "globalMaxHeight": "64",
+          "template": "UiRadio",
+          "values": [
+            {
+              "title": "Элемент радио-кнопка - Автомобиль",
+              "radioName": "Автомобиль",
+              "extraValueForDependency": "автомобиль",
+              "iconSettingsRadioItem": {
+                "title": "",
+                "image": {
+                  "image_id": "1882352907",
+                  "filename": "truck.png",
+                  "ver_id": 4935716,
+                  "image_width": "128",
+                  "image_height": "128",
                   "ext": "png"
                 },
-                "maxWidth": "150",
-                "maxHeight": "150",
-                "dependencyFormulaDisplay": "",
-                "classes": "",
-                "template": "UiImage",
-                "dependencyImages": null,
-                "prompt": "",
-                "parent": "0;34349707;34349907;"
+                "imageSelected": {
+                  "image_id": "1882352707",
+                  "filename": "truck_1.png",
+                  "ver_id": 4935716,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "behaviorImage": "contain",
+                "location": "leftSide"
               }
-            ],
-            "maxWidth": "25",
-            "iconSettings": null,
-            "parent": "0;34349707;"
-          }
-        ],
-        "dependencyFormulaDisplay": "",
-        "elementName": "",
-        "classes": "",
-        "template": "UiColumns",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "117026907",
-        "meta_id": "31622107",
-        "ver_id": "4865318",
-        "title": "Дополнительные опции:",
-        "created": "2023-03-24 13:55:05",
-        "type_group_id": "9012",
-        "label": "",
-        "items": [
-          {
-            "json_id": "117026707",
-            "meta_id": "31622307",
-            "ver_id": "4865318",
-            "title": "Дополнительные опции: - 1",
-            "created": "1679640900",
-            "type_group_id": "9013",
-            "label": "Дополнительные опции:",
-            "sublabel": "",
-            "templates": [
-              {
-                "json_id": "117026507",
-                "meta_id": "34349707",
-                "ver_id": "4865318",
-                "title": "Дополнительные опции: - колонки",
-                "created": "1679640895",
-                "type_group_id": "9017",
-                "label": "",
-                "columns": [
-                  {
-                    "json_id": "117025507",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 1",
-                    "created": "1679640858",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "105115107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество люстр",
-                        "created": "1679295028",
-                        "type_group_id": "9001",
-                        "label": "Количество люстр",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "500",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "10",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "В стоимость не входит приобретение самой люстры.",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
+            },
+            {
+              "title": "Элемент радио-кнопка - Контейнер",
+              "radioName": "Контейнер",
+              "extraValueForDependency": "контейнер",
+              "iconSettingsRadioItem": {
+                "title": "",
+                "image": {
+                  "image_id": "1882323507",
+                  "filename": "container.png",
+                  "ver_id": 4935716,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "imageSelected": {
+                  "image_id": "1882323307",
+                  "filename": "container_1.png",
+                  "ver_id": 4935716,
+                  "image_width": "128",
+                  "image_height": "128",
+                  "ext": "png"
+                },
+                "behaviorImage": "contain",
+                "location": "leftSide"
+              }
+            }
+          ],
+          "prompt": "",
+          "iconSettingsRadioLabel": null,
+          "parent": "0;"
+        },
+        {
+          "json_id": "146299307",
+          "title": "Базовые параметры (колонки)",
+          "label": "",
+          "columns": [
+            {
+              "json_id": "146298507",
+              "title": "1 колонка (базовые)",
+              "label": "",
+              "templates": [
+                {
+                  "json_id": "146311307",
+                  "title": "Откуда",
+                  "label": "Откуда",
+                  "selectedItem": "1",
+                  "isNeedChoice": 1,
+                  "notEmpty": 1,
+                  "isColumn": 1,
+                  "isStretch": 1,
+                  "formOutputMethod": "value",
+                  "resultOutputMethod": "value",
+                  "zeroValueDisplayIgnore": false,
+                  "excludeFromCalculations": false,
+                  "elementName": "откуда",
+                  "formulaProcessingLogic": "zero",
+                  "dependencyFormulaDisplay": "",
+                  "classes": "",
+                  "globalMaxWidth": "",
+                  "globalMaxHeight": "",
+                  "template": "UiSelect",
+                  "values": [
+                    {
+                      "title": "Элемент списка - Москва",
+                      "selectName": "Москва",
+                      "extraValueForDependency": "москва",
+                      "dependencyPrices": [
+                        {
+                          "title": "Белгород",
+                          "cost": 671,
+                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                        },
+                        {
+                          "title": "Брянск",
+                          "cost": 671,
+                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                        },
+                        {
+                          "title": "Владимир",
+                          "cost": 186,
+                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                        },
+                        {
+                          "title": "Воронеж",
+                          "cost": 526,
+                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                        }
+                      ],
+                      "dependencyFormulaItem": "_self_ !== куда"
+                    },
+                    {
+                      "title": "Элемент списка - Белгород",
+                      "selectName": "Белгород",
+                      "extraValueForDependency": "белгород",
+                      "dependencyPrices": [
+                        {
+                          "title": "Москва",
+                          "cost": 671,
+                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                        },
+                        {
+                          "title": "Брянск",
+                          "cost": 419,
+                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                        },
+                        {
+                          "title": "Владимир",
+                          "cost": 853,
+                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                        },
+                        {
+                          "title": "Воронеж",
+                          "cost": 257,
+                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                        }
+                      ],
+                      "dependencyFormulaItem": "_self_ !== куда"
+                    },
+                    {
+                      "title": "Элемент списка - Брянск",
+                      "selectName": "Брянск",
+                      "extraValueForDependency": "брянск",
+                      "dependencyPrices": [
+                        {
+                          "title": "Москва",
+                          "cost": 394,
+                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                        },
+                        {
+                          "title": "Белгород",
+                          "cost": 419,
+                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                        },
+                        {
+                          "title": "Владимир",
+                          "cost": 594,
+                          "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
+                        },
+                        {
+                          "title": "Воронеж",
+                          "cost": 441,
+                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                        }
+                      ],
+                      "dependencyFormulaItem": "_self_ !== куда"
+                    },
+                    {
+                      "title": "Элемент списка - Владимир",
+                      "selectName": "Владимир",
+                      "extraValueForDependency": "владимир",
+                      "dependencyPrices": [
+                        {
+                          "title": "Москва",
+                          "cost": 186,
+                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                        },
+                        {
+                          "title": "Белгород",
+                          "cost": 853,
+                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                        },
+                        {
+                          "title": "Брянск",
+                          "cost": 594,
+                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                        },
+                        {
+                          "title": "Воронеж",
+                          "cost": 682,
+                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                        }
+                      ],
+                      "dependencyFormulaItem": "_self_ !== куда"
+                    },
+                    {
+                      "title": "Элемент списка - Воронеж",
+                      "selectName": "Воронеж",
+                      "extraValueForDependency": "воронеж",
+                      "dependencyPrices": [
+                        {
+                          "title": "Москва",
+                          "cost": 526,
+                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                        },
+                        {
+                          "title": "Белгород",
+                          "cost": 257,
+                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                        },
+                        {
+                          "title": "Брянск",
+                          "cost": 441,
+                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                        },
+                        {
+                          "title": "Владимир",
+                          "cost": 682,
+                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                        }
+                      ],
+                      "dependencyFormulaItem": "_self_ !== куда"
+                    }
+                  ],
+                  "prompt": "",
+                  "iconSettingsSelectLabel": null,
+                  "parent": "0;42720707;42720907;"
+                }
+              ],
+              "maxWidth": "25",
+              "dependencyFormulaDisplay": "",
+              "elementPosition": "default",
+              "iconSettingsColumnsItemLabel": null,
+              "parent": "0;42720707;"
+            },
+            {
+              "json_id": "146312107",
+              "title": "2 колонка (базовые)",
+              "label": "",
+              "templates": [
+                {
+                  "json_id": "146311907",
+                  "title": "Куда",
+                  "label": "Куда",
+                  "selectedItem": "1",
+                  "isNeedChoice": 1,
+                  "notEmpty": 1,
+                  "isColumn": 1,
+                  "isStretch": 1,
+                  "formOutputMethod": "value",
+                  "resultOutputMethod": "value",
+                  "zeroValueDisplayIgnore": false,
+                  "excludeFromCalculations": false,
+                  "elementName": "куда",
+                  "formulaProcessingLogic": "zero",
+                  "dependencyFormulaDisplay": "",
+                  "classes": "",
+                  "globalMaxWidth": "",
+                  "globalMaxHeight": "",
+                  "template": "UiSelect",
+                  "values": [
+                    {
+                      "title": "Элемент списка - Москва",
+                      "selectName": "Москва",
+                      "extraValueForDependency": "москва",
+                      "dependencyFormulaItem": "_self_ !== откуда"
+                    },
+                    {
+                      "title": "Элемент списка - Белгород",
+                      "selectName": "Белгород",
+                      "extraValueForDependency": "белгород",
+                      "dependencyFormulaItem": "_self_ !== откуда"
+                    },
+                    {
+                      "title": "Элемент списка - Брянск",
+                      "selectName": "Брянск",
+                      "extraValueForDependency": "брянск",
+                      "dependencyFormulaItem": "_self_ !== откуда"
+                    },
+                    {
+                      "title": "Элемент списка - Владимир",
+                      "selectName": "Владимир",
+                      "extraValueForDependency": "владимир",
+                      "dependencyFormulaItem": "_self_ !== откуда"
+                    },
+                    {
+                      "title": "Элемент списка - Воронеж",
+                      "selectName": "Воронеж",
+                      "extraValueForDependency": "воронеж",
+                      "dependencyFormulaItem": "_self_ !== откуда"
+                    }
+                  ],
+                  "prompt": "",
+                  "iconSettingsSelectLabel": null,
+                  "parent": "0;42720707;42720907;"
+                }
+              ],
+              "maxWidth": "25",
+              "dependencyFormulaDisplay": "",
+              "elementPosition": "default",
+              "iconSettingsColumnsItemLabel": null,
+              "parent": "0;42720707;"
+            },
+            {
+              "json_id": "146320507",
+              "title": "3 колонка (базовое)",
+              "label": "",
+              "templates": [
+                {
+                  "json_id": "148371107",
+                  "title": "Вид контейнера",
+                  "label": "Вид контейнера",
+                  "selectedItem": "1",
+                  "isNeedChoice": false,
+                  "notEmpty": false,
+                  "isColumn": 1,
+                  "isStretch": 1,
+                  "formOutputMethod": "value",
+                  "resultOutputMethod": "value",
+                  "zeroValueDisplayIgnore": false,
+                  "excludeFromCalculations": false,
+                  "elementName": "типКонтейнера",
+                  "formulaProcessingLogic": "zero",
+                  "dependencyFormulaDisplay": "тип === &quot;контейнер&quot;",
+                  "classes": "",
+                  "globalMaxWidth": "",
+                  "globalMaxHeight": "",
+                  "template": "UiSelect",
+                  "values": [
+                    {
+                      "title": "Элемент списка - тип 1",
+                      "selectName": "тип 1"
+                    },
+                    {
+                      "title": "Элемент списка - тип 2",
+                      "selectName": "тип 2"
+                    },
+                    {
+                      "title": "Элемент списка - тип 3",
+                      "selectName": "тип 3"
+                    }
+                  ],
+                  "prompt": "",
+                  "iconSettingsSelectLabel": null,
+                  "parent": "0;42720707;42720907;"
+                },
+                {
+                  "json_id": "146320307",
+                  "title": "вес",
+                  "label": "Вес",
+                  "value": "0",
+                  "placeholder": "",
+                  "cost": "1",
+                  "unit": "кг",
+                  "min": "0",
+                  "max": "100000",
+                  "controls": false,
+                  "step": "1",
+                  "discreteStep": false,
+                  "dataType": "onlyNumber",
+                  "notEmpty": 1,
+                  "isCurrency": 1,
+                  "isColumn": 1,
+                  "isStretch": 1,
+                  "formOutputMethod": "value",
+                  "resultOutputMethod": "value",
+                  "zeroValueDisplayIgnore": false,
+                  "excludeFromCalculations": false,
+                  "elementName": "вес",
+                  "formulaProcessingLogic": "zero",
+                  "dependencyFormulaDisplay": "тип === &quot;автомобиль&quot;",
+                  "classes": "",
+                  "template": "UiInput",
+                  "dependencyPrices": null,
+                  "prompt": "",
+                  "iconSettingsInputLabel": null,
+                  "parent": "0;42720707;42720907;"
+                }
+              ],
+              "maxWidth": "20",
+              "dependencyFormulaDisplay": "",
+              "elementPosition": "default",
+              "iconSettingsColumnsItemLabel": null,
+              "parent": "0;42720707;"
+            },
+            {
+              "json_id": "148303707",
+              "title": "4 колонка (базовые)",
+              "label": "",
+              "templates": [
+                {
+                  "json_id": "148303107",
+                  "title": "Картинка",
+                  "label": "Автомобиль",
+                  "defaultImage": {
+                    "image_id": "1902714707",
+                    "filename": "do_1t.png",
+                    "ver_id": 4935716,
+                    "image_width": "427",
+                    "image_height": "190",
+                    "ext": "png"
                   },
-                  {
-                    "json_id": "117025707",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 2",
-                    "created": "1679640871",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "105116107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество светильников",
-                        "created": "1679295096",
-                        "type_group_id": "9001",
-                        "label": "Количество светильников",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "250",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "светильник",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": [
-                          {
-                            "title": "вариант 2",
-                            "cost": 350,
-                            "dependencyFormulaCost": "вариантСветильника === 2"
-                          },
-                          {
-                            "title": "вариант 3",
-                            "cost": 400,
-                            "dependencyFormulaCost": "вариантСветильника === 3"
-                          },
-                          {
-                            "title": "вариант 4",
-                            "cost": 550,
-                            "dependencyFormulaCost": "вариантСветильника === 4"
-                          }
-                        ],
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
+                  "maxWidth": "200",
+                  "maxHeight": "100",
+                  "dependencyFormulaDisplay": "вес &gt; 0 || типКонтейнера !== null",
+                  "classes": "",
+                  "template": "UiImage",
+                  "dependencyImages": [
+                    {
+                      "title": "вес &gt; 1000",
+                      "image": {
+                        "image_id": "1902714307",
+                        "filename": "do_15t.png",
+                        "ver_id": 4935716,
+                        "image_width": "495",
+                        "image_height": "245",
+                        "ext": "png"
                       },
-                      {
-                        "json_id": "105152907",
-                        "meta_id": "31621307",
-                        "ver_id": "4865318",
-                        "title": "Вариант светильника",
-                        "created": "1679295239",
-                        "type_group_id": "9005",
-                        "label": "Вариант светильника",
-                        "isColumn": 1,
-                        "selectedItem": "1",
-                        "isNeedChoice": false,
-                        "notEmpty": false,
-                        "formOutputMethod": "value",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": 1,
-                        "elementName": "вариантСветильника",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "светильник &gt; 0",
-                        "classes": "",
-                        "template": "UiSelect",
-                        "isStretch": 1,
-                        "values": [
-                          {
-                            "title": "Элемент списка - Вариант 1",
-                            "selectName": "Вариант 1"
-                          },
-                          {
-                            "title": "Элемент списка - Вариант 2",
-                            "selectName": "Вариант 2"
-                          },
-                          {
-                            "title": "Элемент списка - Вариант 3",
-                            "selectName": "Вариант 3"
-                          },
-                          {
-                            "title": "Элемент списка - Вариант 4",
-                            "selectName": "Вариант 4"
-                          }
-                        ],
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  },
-                  {
-                    "json_id": "117026307",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 3",
-                    "created": "1679640888",
-                    "type_group_id": "9018",
-                    "label": "234234",
-                    "templates": [
-                      {
-                        "json_id": "105138107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество труб",
-                        "created": "1679295131",
-                        "type_group_id": "9001",
-                        "label": "Количество труб",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "150",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  }
-                ],
-                "dependencyFormulaDisplay": "",
-                "elementName": "",
-                "classes": "",
-                "template": "UiColumns",
-                "iconSettings": null,
-                "parent": "0;31622107;31622307;"
-              }
-            ],
-            "maxWidthSide": "100",
-            "prompt": "Подсказка.",
-            "iconSettings": null,
-            "backgroundImageSettings": null,
-            "parent": "0;31622107;"
-          }
-        ],
-        "dependencyFormulaDisplay": "площадь &gt; 0",
-        "elementName": "",
-        "classes": "",
-        "template": "UiAccordion",
-        "iconSettings": null,
-        "parent": "0;"
-      },
-      {
-        "json_id": "100389707",
-        "meta_id": "30324907",
-        "ver_id": "4858595",
-        "title": "Фундамент - ширина",
-        "label": "Ширина",
-        "value": "1",
-        "min": "1",
-        "max": "15",
-        "cost": "1",
-        "unit": "м",
-        "step": "1",
-        "showSteps": 1,
-        "stepPrompt": "1",
-        "isNeedChoice": true,
-        "notEmpty": false,
-        "showStaticValue": 1,
-        "showDynamicValue": 0,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
-        "excludeFromCalculations": false,
-        "elementName": "ширина",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiRange",
-        "dependencyPrices": null,
-        "prompt": "",
-        "parent": "0;"
-      },
-      {
-        "json_id": "1170345326907",
-        "meta_id": "31622107",
-        "ver_id": "4865318",
-        "title": "Дополнительные опции:",
-        "created": "2023-03-24 13:55:05",
-        "type_group_id": "9012",
-        "label": "",
-        "items": [
-          {
-            "json_id": "117026345372307",
-            "meta_id": "31622307",
-            "ver_id": "4865318",
-            "title": "Дополнительные опции: - 1",
-            "created": "1679640900",
-            "type_group_id": "9013",
-            "label": "Дополнительные опции:",
-            "sublabel": "",
-            "templates": [
-              {
-                "json_id": "117026fdg4507",
-                "meta_id": "34349707",
-                "ver_id": "4865318",
-                "title": "Дополнительные опции: - колонки",
-                "created": "1679640895",
-                "type_group_id": "9017",
-                "label": "",
-                "columns": [
-                  {
-                    "json_id": "117035425507",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 1",
-                    "created": "1679640858",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "105354115107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество люстр",
-                        "created": "1679295028",
-                        "type_group_id": "9001",
-                        "label": "Количество люстр",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "500",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "10",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "В стоимость не входит приобретение самой люстры.",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  },
-                  {
-                    "json_id": "11702dggd5707",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 2",
-                    "created": "1679640871",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "1051dgd16107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество светильников",
-                        "created": "1679295096",
-                        "type_group_id": "9001",
-                        "label": "Количество светильников",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "250",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "светильник",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": [
-                          {
-                            "title": "вариант 2",
-                            "cost": 350,
-                            "dependencyFormulaCost": "вариантСветильника === 2"
-                          }
-                        ],
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  },
-                  {
-                    "json_id": "117dfgd026307",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 3",
-                    "created": "1679640888",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "10513dfgd8107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество труб",
-                        "created": "1679295131",
-                        "type_group_id": "9001",
-                        "label": "Количество труб",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "150",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  }
-                ],
-                "dependencyFormulaDisplay": "",
-                "elementName": "",
-                "classes": "",
-                "template": "UiColumns",
-                "iconSettings": null,
-                "parent": "0;31622107;31622307;"
-              }
-            ],
-            "maxWidthSide": "50",
-            "prompt": "Подсказка.",
-            "iconSettings": null,
-            "backgroundImageSettings": null,
-            "parent": "0;31622107;"
-          },
-          {
-            "json_id": "1170263543453707",
-            "meta_id": "31622307",
-            "ver_id": "4865318",
-            "title": "Дополнительные опции: - 1",
-            "created": "1679640900",
-            "type_group_id": "9013",
-            "label": "Дополнительные опции:",
-            "sublabel": "",
-            "templates": [
-              {
-                "json_id": "1170dgfg26507",
-                "meta_id": "34349707",
-                "ver_id": "4865318",
-                "title": "Дополнительные опции: - колонки",
-                "created": "1679640895",
-                "type_group_id": "9017",
-                "label": "",
-                "columns": [
-                  {
-                    "json_id": "11702dfg5507",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 1",
-                    "created": "1679640858",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "10511gdgf5107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество люстр",
-                        "created": "1679295028",
-                        "type_group_id": "9001",
-                        "label": "Количество люстр",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "500",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "10",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "В стоимость не входит приобретение самой люстры.",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  },
-                  {
-                    "json_id": "1170gdfg25707",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 2",
-                    "created": "1679640871",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "105gddge4116107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество светильников",
-                        "created": "1679295096",
-                        "type_group_id": "9001",
-                        "label": "Количество светильников",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "250",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "светильник",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": [
-                          {
-                            "title": "вариант 2",
-                            "cost": 350,
-                            "dependencyFormulaCost": "вариантСветильника === 2"
-                          }
-                        ],
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  },
-                  {
-                    "json_id": "11703453tg26307",
-                    "meta_id": "34349907",
-                    "ver_id": "4865318",
-                    "title": "Дополнительные опции - 3",
-                    "created": "1679640888",
-                    "type_group_id": "9018",
-                    "label": "",
-                    "templates": [
-                      {
-                        "json_id": "105135t38107",
-                        "meta_id": "31620507",
-                        "ver_id": "4865318",
-                        "title": "Количество труб",
-                        "created": "1679295131",
-                        "type_group_id": "9001",
-                        "label": "Количество труб",
-                        "value": "0",
-                        "placeholder": "",
-                        "cost": "150",
-                        "unit": "шт",
-                        "min": "0",
-                        "max": "50",
-                        "controls": 1,
-                        "step": "1",
-                        "discreteStep": false,
-                        "dataType": "onlyNumber",
-                        "notEmpty": false,
-                        "isCurrency": false,
-                        "isColumn": 1,
-                        "formOutputMethod": "valueSumm",
-                        "resultOutputMethod": "value",
-                        "zeroValueDisplayIgnore": 1,
-                        "excludeFromCalculations": false,
-                        "elementName": "",
-                        "formulaProcessingLogic": "zero",
-                        "dependencyFormulaDisplay": "",
-                        "classes": "",
-                        "template": "UiInput",
-                        "isStretch": 1,
-                        "dependencyPrices": null,
-                        "prompt": "",
-                        "iconSettings": null,
-                        "parent": "0;31622107;31622307;34349707;34349907;"
-                      }
-                    ],
-                    "maxWidth": "33",
-                    "iconSettings": null,
-                    "parent": "0;31622107;31622307;34349707;"
-                  }
-                ],
-                "dependencyFormulaDisplay": "",
-                "elementName": "",
-                "classes": "",
-                "template": "UiColumns",
-                "iconSettings": null,
-                "parent": "0;31622107;31622307;"
-              }
-            ],
-            "maxWidthSide": "80",
-            "prompt": "Подсказка.",
-            "iconSettings": null,
-            "backgroundImageSettings": null,
-            "parent": "0;31622107;"
-          }
-        ],
-        "dependencyFormulaDisplay": "",
-        "elementName": "",
-        "classes": "",
-        "template": "UiAccordion",
-        "iconSettings": null,
-        "parent": "0;"
-      }
-    ]
+                      "dependencyFormulaDisplay": "вес &gt; 1000"
+                    },
+                    {
+                      "title": "вес &gt; 1500",
+                      "image": {
+                        "image_id": "1902715107",
+                        "filename": "do_3t.png",
+                        "ver_id": 4935716,
+                        "image_width": "483",
+                        "image_height": "254",
+                        "ext": "png"
+                      },
+                      "dependencyFormulaDisplay": "вес &gt; 1500"
+                    },
+                    {
+                      "title": "вес &gt; 3000",
+                      "image": {
+                        "image_id": "1902715507",
+                        "filename": "do_5t.png",
+                        "ver_id": 4935716,
+                        "image_width": "647",
+                        "image_height": "240",
+                        "ext": "png"
+                      },
+                      "dependencyFormulaDisplay": "вес &gt; 3000"
+                    },
+                    {
+                      "title": "вес &gt; 5000",
+                      "image": {
+                        "image_id": "1902715907",
+                        "filename": "do_10t.png",
+                        "ver_id": 4935716,
+                        "image_width": "746",
+                        "image_height": "223",
+                        "ext": "png"
+                      },
+                      "dependencyFormulaDisplay": "вес &gt; 5000"
+                    },
+                    {
+                      "title": "вес &gt; 10000",
+                      "image": {
+                        "image_id": "1902715907",
+                        "filename": "do_10t.png",
+                        "ver_id": 4935716,
+                        "image_width": "746",
+                        "image_height": "223",
+                        "ext": "png"
+                      },
+                      "dependencyFormulaDisplay": "вес &gt; 10000"
+                    },
+                    {
+                      "title": "Контейнер",
+                      "label": "Контейнер",
+                      "image": {
+                        "image_id": "1903495707",
+                        "filename": "container_2.png",
+                        "ver_id": 4935716,
+                        "image_width": "64",
+                        "image_height": "64",
+                        "ext": "png"
+                      },
+                      "dependencyFormulaDisplay": "типКонтейнера !== null"
+                    }
+                  ],
+                  "prompt": "",
+                  "parent": "0;42720707;42720907;"
+                },
+                {
+                  "json_id": "148303507",
+                  "title": "Описание автомобиля",
+                  "label": "",
+                  "unit": "",
+                  "cost": "",
+                  "showElement": "onlyText",
+                  "formOutputMethod": "no",
+                  "resultOutputMethod": "no",
+                  "zeroValueDisplayIgnore": 1,
+                  "excludeFromCalculations": false,
+                  "elementName": "",
+                  "formulaProcessingLogic": "zero",
+                  "dependencyFormulaDisplay": "вес &gt; 0 || типКонтейнера !== null",
+                  "template": "UiSystem",
+                  "dependencyPrices": null,
+                  "prompt": "",
+                  "htmlText": "Небольшое описание по характеристикам автомобиля для 1т",
+                  "dependencyHtmlText": [
+                    {
+                      "title": "вес &gt; 1000",
+                      "htmlText": "Небольшое описание по характеристикам автомобиля для 1,5т",
+                      "dependencyFormulaHtmlText": "вес &gt; 1000"
+                    },
+                    {
+                      "title": "вес &gt; 1500",
+                      "htmlText": "Небольшое описание по характеристикам автомобиля для 3т",
+                      "dependencyFormulaHtmlText": "вес &gt; 1500"
+                    },
+                    {
+                      "title": "вес &gt; 3000",
+                      "htmlText": "Небольшое описание по характеристикам автомобиля для 5т",
+                      "dependencyFormulaHtmlText": "вес &gt; 3000"
+                    },
+                    {
+                      "title": "вес &gt; 5000",
+                      "htmlText": "Небольшое описание по характеристикам автомобиля для 10т",
+                      "dependencyFormulaHtmlText": "вес &gt; 5000"
+                    },
+                    {
+                      "title": "вес &gt; 10000",
+                      "htmlText": "Вес груза больше 10 000кг подразумевает разбиение его на две грузовые машины. Подобные грузоперевозки и выбор грузовых автомобилей прорабатываются индивидуально!&nbsp;",
+                      "dependencyFormulaHtmlText": "вес &gt; 10000"
+                    },
+                    {
+                      "title": "типКонтейнера = 1",
+                      "htmlText": "Небольшое описание типа контейнера первого вида",
+                      "dependencyFormulaHtmlText": "типКонтейнера === 1"
+                    },
+                    {
+                      "title": "типКонтейнера === 2",
+                      "htmlText": "Небольшое описание второго вида контейнера",
+                      "dependencyFormulaHtmlText": "типКонтейнера === 2"
+                    },
+                    {
+                      "title": "типКонтейнера === 3",
+                      "htmlText": "Небольшое описание третьего вида контейнера",
+                      "dependencyFormulaHtmlText": "типКонтейнера === 3"
+                    }
+                  ],
+                  "iconSettingsSystemLabel": null,
+                  "parent": "0;42720707;42720907;"
+                }
+              ],
+              "maxWidth": "30",
+              "dependencyFormulaDisplay": "",
+              "elementPosition": "default",
+              "iconSettingsColumnsItemLabel": null,
+              "parent": "0;42720707;"
+            }
+          ],
+          "dependencyFormulaDisplay": "",
+          "adaptationMethod": "last",
+          "elementName": "",
+          "classes": "",
+          "template": "UiColumns",
+          "iconSettingsColumnsLabel": null,
+          "parent": "0;"
+        },
+        {
+          "json_id": "148688107",
+          "title": "Дополнительные параметры",
+          "label": "Дополнительные параметры",
+          "labelSub": "",
+          "templates": [
+            {
+              "json_id": "148686907",
+              "title": "Параметр 1",
+              "label": "",
+              "buttonText": "Параметр 1",
+              "buttonTextChecked": "",
+              "costForVoid": "0",
+              "cost": "1500",
+              "baseValue": "default",
+              "isNeedChoice": false,
+              "isColumn": false,
+              "typeDisplayClass": "button",
+              "formOutputMethod": "value",
+              "resultOutputMethod": "value",
+              "zeroValueDisplayIgnore": 1,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "scrollIntoName": "",
+              "classes": "",
+              "template": "UiCheckbox",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsCheckboxLabel": null,
+              "parent": "0;42721107;"
+            },
+            {
+              "json_id": "148687307",
+              "title": "Параметр 2",
+              "label": "",
+              "buttonText": "Параметр 2",
+              "buttonTextChecked": "",
+              "costForVoid": "0",
+              "cost": "500",
+              "baseValue": "default",
+              "isNeedChoice": false,
+              "isColumn": false,
+              "typeDisplayClass": "button",
+              "formOutputMethod": "value",
+              "resultOutputMethod": "value",
+              "zeroValueDisplayIgnore": 1,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "scrollIntoName": "",
+              "classes": "",
+              "template": "UiCheckbox",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsCheckboxLabel": null,
+              "parent": "0;42721107;"
+            },
+            {
+              "json_id": "148687507",
+              "title": "Параметр 3",
+              "label": "",
+              "buttonText": "Параметр 3",
+              "buttonTextChecked": "",
+              "costForVoid": "0",
+              "cost": "700",
+              "baseValue": "default",
+              "isNeedChoice": false,
+              "isColumn": false,
+              "typeDisplayClass": "button",
+              "formOutputMethod": "value",
+              "resultOutputMethod": "value",
+              "zeroValueDisplayIgnore": 1,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "scrollIntoName": "",
+              "classes": "",
+              "template": "UiCheckbox",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsCheckboxLabel": null,
+              "parent": "0;42721107;"
+            },
+            {
+              "json_id": "148687707",
+              "title": "Параметр 4",
+              "label": "",
+              "buttonText": "Параметр 4",
+              "buttonTextChecked": "",
+              "costForVoid": "0",
+              "cost": "2000",
+              "baseValue": "default",
+              "isNeedChoice": false,
+              "isColumn": false,
+              "typeDisplayClass": "button",
+              "formOutputMethod": "value",
+              "resultOutputMethod": "value",
+              "zeroValueDisplayIgnore": 1,
+              "excludeFromCalculations": false,
+              "elementName": "",
+              "formulaProcessingLogic": "zero",
+              "dependencyFormulaDisplay": "",
+              "scrollIntoName": "",
+              "classes": "",
+              "template": "UiCheckbox",
+              "dependencyPrices": null,
+              "prompt": "",
+              "iconSettingsCheckboxLabel": null,
+              "parent": "0;42721107;"
+            }
+          ],
+          "dependencyFormulaDisplay": "",
+          "maxWidthSide": "100",
+          "visuallySeparateElement": 1,
+          "elementPosition": "horizontal",
+          "elementName": "",
+          "classes": "",
+          "template": "UiBlockSection",
+          "iconSettingsSectionLabel": null,
+          "backgroundImageSettings": null,
+          "parent": "0;"
+        }
+      ]
+
   }
 }
