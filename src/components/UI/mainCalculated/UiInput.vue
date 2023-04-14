@@ -34,7 +34,6 @@
           type="text"
           v-model="localInputBufferValue"
           :placeholder="inputPlaceholder"
-          @keydown.enter="trueTrueValue"
           @keydown.up="plus('key')"
           @keydown.down="minus('key')"
           @blur="inputFocus ? (inputFocus = false) : null"
@@ -46,25 +45,7 @@
             'stretch': isStretch,
           }"
           autocomplete="off"
-          v-if="!fakeValueHidden"
         />
-        <template v-if="fakeValueHidden">
-          <input
-            @click="showTrueValue"
-            @blur="inputFocus ? (inputFocus = false) : null"
-            @focus="inputFocus = true"
-            type="text"
-            :value="resultValueDouble"
-            class="calc__input-item currency"
-            :class="{
-              'number': isOnlyNumber,
-              'error': isErrorClass,
-              'stretch': isStretch,
-            }"
-            autocomplete="off"
-            :placeholder="inputPlaceholder"
-          />
-        </template>
         <div
           class="calc__input-buttons-plus"
           :class="{ 'disabled': isDisabledMax }"
@@ -239,17 +220,6 @@ export default {
     } else {
       this.changeValue("mounted");
     }
-
-    if (this.isCurrency && this.isOnlyNumber) {
-      window.addEventListener("click", (e) => {
-        if (
-          !this.$el.contains(e.target) &&
-          !e.target.classList.contains("calc__input-item")
-        ) {
-          this.fakeValueHidden = true;
-        }
-      });
-    }
   },
   data() {
     return {
@@ -258,7 +228,6 @@ export default {
       localInputBufferValue: null,
       localInputValue: null,
       nameTimer: null,
-      fakeValueHidden: Boolean(this.isCurrency && this.isOnlyNumber),
       isInvalid: false,
       canBeShownTooltip: false,
     };
@@ -267,8 +236,7 @@ export default {
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
-
-        this.localInputValue = parseFloat(this.localInputValue);
+        this.localInputValue = parseFloat(this.localInputValue.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
 
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
@@ -304,7 +272,7 @@ export default {
 
         if (this.onlyIntegerValue) {
           this.localInputValue = !this.valueIsNaN
-            ? parseFloat(this.localInputValue)
+            ? parseInt(this.localInputValue)
             : null;
         }
 
@@ -312,10 +280,8 @@ export default {
           this.localInputValue
         );
 
-        this.localInputValue = parseFloat(this.localInputValue.toFixed(5));
-
         if (!this.inputFocus) {
-          this.localInputBufferValue = this.localInputValue;
+          this.addLocalInputBufferValue(this.localInputValue);
         }
 
         return this.localInputValue;
@@ -401,22 +367,6 @@ export default {
     clearTimer(name) {
       if (name) clearTimeout(name);
     },
-    /**
-     * при включенной обработки сотых отображает инпут с настоящим значением при фокусе
-     */
-    showTrueValue() {
-      if (this.isCurrency) {
-        this.fakeValueHidden = false;
-        this.$nextTick(() => {
-          this.$refs.trueInput.focus();
-        });
-      }
-    },
-    trueTrueValue() {
-      if (this.isCurrency) {
-        this.fakeValueHidden = true;
-      }
-    },
     plus(payload) {
       if (!this.isOnlyNumber) {
         return false;
@@ -432,7 +382,7 @@ export default {
       }
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
-      this.localInputBufferValue = value;
+      this.addLocalInputBufferValue(value);
       if (payload !== "key") {
         this.changeValue("plus");
       }
@@ -451,7 +401,7 @@ export default {
       }
       value = this.updateValueAfterSignComma(value);
       this.localInputValue = value;
-      this.localInputBufferValue = value;
+      this.addLocalInputBufferValue(value);
       if (payload !== "key") {
         this.changeValue("minus");
       }
@@ -474,6 +424,13 @@ export default {
         ? parseFloat((cost * this.localInputValue).toFixed(5))
         : null;
     },
+    addLocalInputBufferValue(value){
+      if (this.isOnlyNumber && this.isCurrency) {
+        this.localInputBufferValue = value.toLocaleString('ru-RU', { useGrouping: true, maximumFractionDigits: 5 });
+      } else {
+        this.localInputBufferValue = value;
+      }
+    }
   },
   watch: {
     isVisibilityFromDependency() {
@@ -490,7 +447,12 @@ export default {
     },
     localInputBufferValue: {
       handler(newValue) {
-        this.localInputValue = newValue;
+        if (this.isOnlyNumber) {
+          this.localInputValue = parseFloat(newValue.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
+        } else {
+          this.localInputValue = newValue;
+        }
+
         clearTimeout(this.focusTimerName);
         this.focusTimerName = setTimeout(() => {
           if (this.inputFocus) {
@@ -555,11 +517,6 @@ export default {
         return this.localInputValue;
       }
     },
-    resultValueDouble() {
-      return this.localInputBufferValue?.toString().length
-        ? this.localInputBufferValue.toLocaleString("ru")
-        : "";
-    },
     valueIsNaN() {
       return isNaN(parseFloat(this.localInputValue));
     },
@@ -600,7 +557,6 @@ export default {
         ? `Максимальное значение ${this.localMax}`
         : null;
     },
-
     isErrorMin() {
       return (
         !this.valueIsNaN &&
