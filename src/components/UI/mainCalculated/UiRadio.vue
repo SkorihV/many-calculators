@@ -351,7 +351,8 @@ export default {
       if (!this.isRadioItemSelected) {
         return null;
       }
-      return this.currentSelectedRadioButton?.extraValueForDependency?.length
+      const isExistExtraValue = Boolean(this.currentSelectedRadioButton?.extraValueForDependency?.toString()?.length);
+      return isExistExtraValue
         ? this.currentSelectedRadioButton?.extraValueForDependency
         : this.currentIndexRadioButton;
     },

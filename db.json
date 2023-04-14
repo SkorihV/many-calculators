@@ -178,6 +178,69 @@
         "iconSettingsSelectLabel": null,
         "parent": "0;30492307;35352507;35352707;"
       },
+      {
+        "json_id": "100916907",
+        "title": "Откуда",
+        "label": "Откуда",
+        "isColumn": true,
+        "selectedItem": "1",
+        "isNeedChoice": 0,
+        "notEmpty": 0,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "откуда",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": false,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - Москва",
+            "selectName": "Москва",
+            "extraValueForDependency": "москва",
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Московская Область",
+            "selectName": "Московская Область",
+            "extraValueForDependency": "мо",
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Белгород",
+            "selectName": "Белгород",
+            "extraValueForDependency": "белгород",
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Брянск",
+            "selectName": "Брянск",
+            "extraValueForDependency": "брянск",
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Владимир",
+            "selectName": "Владимир",
+            "extraValueForDependency": "владимир",
+            "dependencyFormulaItem": "_self_ !== куда"
+          },
+          {
+            "title": "Элемент списка - Воронеж",
+            "selectName": "Воронеж",
+            "extraValueForDependency": "воронеж",
+            "dependencyFormulaItem": "_self_ !== куда"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": null,
+        "parent": "0;30492307;35352507;35352707;"
+      },
+
     {
       "json_id": "146367307",
       "title": "Дупликатор",

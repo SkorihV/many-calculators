@@ -499,8 +499,8 @@ export default {
       ) {
         return null;
       }
-
-      return this.currentOption?.extraValueForDependency?.length
+      const isExistExtraValue = Boolean(this.currentOption?.extraValueForDependency?.toString()?.length);
+      return isExistExtraValue
         ? this.currentOption?.extraValueForDependency
         : !isNaN(parseInt(this.currentOption?.value))
         ? this.currentOption?.value
@@ -522,7 +522,7 @@ export default {
      */
     selectValuesAfterProcessingDependency() {
       return this.mutationSelectValue
-        .map((selectItem, index) => {
+        .map((selectItem) => {
           const extraValueIsExist = Boolean(
             selectItem?.extraValueForDependency?.toString()?.length
           );
@@ -562,6 +562,7 @@ export default {
             formula,
             this.localDependencyList
           );
+
           let newDataIsShow;
           try {
             newDataIsShow = eval(formula);
@@ -572,7 +573,8 @@ export default {
             newDataIsShow = false;
           }
           selectItem.isShow = newDataIsShow;
-          if (!newDataIsShow && selectItem.value === this.currentOptionValue) {
+          const valueInDependency = Boolean(selectItem?.extraValueForDependency?.toString()?.length) ? selectItem?.extraValueForDependency : selectItem.value;
+          if (!newDataIsShow && valueInDependency === this.currentOptionValue) {
             this.resetSelectedValue();
           }
           return selectItem;

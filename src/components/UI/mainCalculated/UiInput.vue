@@ -236,7 +236,7 @@ export default {
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
-        this.localInputValue = parseFloat(this.localInputValue.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
+        this.localInputValue = parseFloat(this.localInputValue?.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
 
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
@@ -448,7 +448,7 @@ export default {
     localInputBufferValue: {
       handler(newValue) {
         if (this.isOnlyNumber) {
-          this.localInputValue = parseFloat(newValue.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
+          this.localInputValue = parseFloat(newValue?.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
         } else {
           this.localInputValue = newValue;
         }
