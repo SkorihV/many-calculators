@@ -420,7 +420,7 @@ export default {
       this.changeValueWitchTimer(this.localMin || 0);
     },
     updatedCostForOut(cost) {
-      return this.isOnlyNumber && this.checkedValueOnVoid(cost)
+      return this.isOnlyNumber && this.checkedValueOnVoid(cost) && !isNaN(parseFloat((cost * this.localInputValue).toFixed(5)))
         ? parseFloat((cost * this.localInputValue).toFixed(5))
         : null;
     },

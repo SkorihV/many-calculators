@@ -213,7 +213,8 @@ export default {
         "dependency",
         "currentSelectedRadioButton",
         "changeAmountSelectList",
-        "changeValueDependenciesElements"
+        "changeValueDependenciesElements",
+        "system"
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
       methodWorksForm: "show",
@@ -297,7 +298,7 @@ export default {
      * @param name
      */
     hiddenElementOnResults(name) {
-      if (name in this.getAllResultsElements) {
+      if (name in this.baseDataForCalculate) {
         this.tryModifiedResultElement({
           elementName: name,
           modifiedFieldName: "isShow",
@@ -503,7 +504,7 @@ export default {
      * @returns {{length}|unknown[]|*[]}
      */
     baseDataForCalculate() {
-      return Object.values(this.getAllResultsElements);
+      return Object.values(this.getAllResultsElements).filter(item => !Boolean(item?.isDuplicator));
     },
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.

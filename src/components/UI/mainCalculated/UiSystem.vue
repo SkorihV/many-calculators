@@ -216,7 +216,6 @@ export default {
       let formulaCostArr = this.getArrayElementsFromFormula(
         this.localCostFormula
       );
-
       let formulaCost = formulaCostArr?.map((item) => {
         const isReserveVariable = item === this.getNameReserveVariable;
         const isGlobalVariable = this.getResultElementOnName(item) !== null;
@@ -237,6 +236,7 @@ export default {
      * @returns {number|null|any}
      */
     localCost() {
+
       if (
         !this.isVisibilityFromDependency ||
         this.processingVariablesInFormula === null

@@ -149,6 +149,9 @@ export default {
   methods: {
     changeValue(data) {
       if (data?.name) {
+        const mutationData = data;
+        mutationData.isDuplicator = true;
+        this.tryAddResultElement(mutationData);
         this.localResultData[data.name] = data;
       }
       this.$emit("changedValue", {
@@ -211,7 +214,10 @@ export default {
         const propIsDependencyField =
           (prop === "dependencyFormulaDisplay" ||
             prop === "dependencyFormulaCost" ||
-            prop === "dependencyFormulaItem") &&
+            prop === "dependencyFormulaItem" ||
+              prop === "dependencyFormulaHtmlText" ||
+            prop === "cost"
+          ) &&
           object[prop].length;
         const propIsSecondField = prop === "labelSecond";
         const propIsLabelField = prop === "label";
@@ -303,6 +309,7 @@ export default {
       "getResultElementOnName",
       "devMode",
       "checkedIsStructureTemplate",
+      "tryAddResultElement"
     ]),
     /**
      *

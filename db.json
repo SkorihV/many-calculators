@@ -4,7 +4,7 @@
     "json_id": "144069707",
     "title": "Калькулятор грузоперевозок 2",
     "computedMethod": "formula",
-    "formula": "откуда * ( вес / 100 ) + _otherSum_",
+    "formula": "_otherSum_",
     "methodBeginningCalculation": "useButton",
     "form": "",
     "methodWorksForm": "show",
@@ -14,16 +14,16 @@
     "resultOptions": {
       "title": "ИТОГО:",
       "titleButton": "Рассчитать",
-      "formulaDisplayButton": "откуда !== null &amp;&amp;  куда !== null &amp;&amp; вес &gt; 0",
+      "formulaDisplayButton": "",
       "hiddenResultBlock": 0,
-      "formulaDependencyForResultBlock": "вес > 0",
+      "formulaDependencyForResultBlock": "",
       "titleSumma": "Общая сумма составляет",
       "hiddenSumma": 0,
       "roundOffType": "ceil",
       "signAfterDot": 0,
       "currency": "руб.",
       "textForSpinner": "Идет расчет...",
-      "timerForSpinner": 3
+      "timerForSpinner": 1
     },
     "textAbove": "",
     "textAfter": "",
@@ -1164,725 +1164,518 @@
 
   "test-calc": {
     "calculatorTemplates":
-      [
-        {
-          "json_id": "146255107",
-          "title": "Тип",
-          "label": "",
-          "selectedItem": "1",
-          "isNeedChoice": false,
-          "notEmpty": false,
-          "isColumn": false,
-          "isStretch": 1,
-          "typeDisplayClass": "column",
-          "formOutputMethod": "value",
-          "resultOutputMethod": "value",
-          "zeroValueDisplayIgnore": false,
-          "excludeFromCalculations": false,
-          "elementName": "тип",
-          "formulaProcessingLogic": "zero",
-          "dependencyFormulaDisplay": "",
-          "classes": "",
-          "globalMaxWidth": "64",
-          "globalMaxHeight": "64",
-          "template": "UiRadio",
-          "values": [
-            {
-              "title": "Элемент радио-кнопка - Автомобиль",
-              "radioName": "Автомобиль",
-              "extraValueForDependency": "автомобиль",
-              "iconSettingsRadioItem": {
-                "title": "",
-                "image": {
-                  "image_id": "1882352907",
-                  "filename": "truck.png",
-                  "ver_id": 4935716,
-                  "image_width": "128",
-                  "image_height": "128",
-                  "ext": "png"
-                },
-                "imageSelected": {
-                  "image_id": "1882352707",
-                  "filename": "truck_1.png",
-                  "ver_id": 4935716,
-                  "image_width": "128",
-                  "image_height": "128",
-                  "ext": "png"
-                },
-                "behaviorImage": "contain",
-                "location": "leftSide"
-              }
-            },
-            {
-              "title": "Элемент радио-кнопка - Контейнер",
-              "radioName": "Контейнер",
-              "extraValueForDependency": "контейнер",
-              "iconSettingsRadioItem": {
-                "title": "",
-                "image": {
-                  "image_id": "1882323507",
-                  "filename": "container.png",
-                  "ver_id": 4935716,
-                  "image_width": "128",
-                  "image_height": "128",
-                  "ext": "png"
-                },
-                "imageSelected": {
-                  "image_id": "1882323307",
-                  "filename": "container_1.png",
-                  "ver_id": 4935716,
-                  "image_width": "128",
-                  "image_height": "128",
-                  "ext": "png"
-                },
-                "behaviorImage": "contain",
-                "location": "leftSide"
-              }
-            }
-          ],
-          "prompt": "",
-          "iconSettingsRadioLabel": null,
-          "parent": "0;"
-        },
-        {
-          "json_id": "146299307",
-          "title": "Базовые параметры (колонки)",
-          "label": "",
-          "columns": [
-            {
-              "json_id": "146298507",
-              "title": "1 колонка (базовые)",
-              "label": "",
-              "templates": [
-                {
-                  "json_id": "146311307",
-                  "title": "Откуда",
-                  "label": "Откуда",
-                  "selectedItem": "1",
-                  "isNeedChoice": 1,
-                  "notEmpty": 1,
-                  "isColumn": 1,
-                  "isStretch": 1,
-                  "formOutputMethod": "value",
-                  "resultOutputMethod": "value",
-                  "zeroValueDisplayIgnore": false,
-                  "excludeFromCalculations": false,
-                  "elementName": "откуда",
-                  "formulaProcessingLogic": "zero",
-                  "dependencyFormulaDisplay": "",
-                  "classes": "",
-                  "globalMaxWidth": "",
-                  "globalMaxHeight": "",
-                  "template": "UiSelect",
-                  "values": [
-                    {
-                      "title": "Элемент списка - Москва",
-                      "selectName": "Москва",
-                      "extraValueForDependency": "москва",
-                      "dependencyPrices": [
-                        {
-                          "title": "Белгород",
-                          "cost": 671,
-                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-                        },
-                        {
-                          "title": "Брянск",
-                          "cost": 671,
-                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-                        },
-                        {
-                          "title": "Владимир",
-                          "cost": 186,
-                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-                        },
-                        {
-                          "title": "Воронеж",
-                          "cost": 526,
-                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-                        }
-                      ],
-                      "dependencyFormulaItem": "_self_ !== куда"
-                    },
-                    {
-                      "title": "Элемент списка - Белгород",
-                      "selectName": "Белгород",
-                      "extraValueForDependency": "белгород",
-                      "dependencyPrices": [
-                        {
-                          "title": "Москва",
-                          "cost": 671,
-                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
-                        },
-                        {
-                          "title": "Брянск",
-                          "cost": 419,
-                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-                        },
-                        {
-                          "title": "Владимир",
-                          "cost": 853,
-                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-                        },
-                        {
-                          "title": "Воронеж",
-                          "cost": 257,
-                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-                        }
-                      ],
-                      "dependencyFormulaItem": "_self_ !== куда"
-                    },
-                    {
-                      "title": "Элемент списка - Брянск",
-                      "selectName": "Брянск",
-                      "extraValueForDependency": "брянск",
-                      "dependencyPrices": [
-                        {
-                          "title": "Москва",
-                          "cost": 394,
-                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
-                        },
-                        {
-                          "title": "Белгород",
-                          "cost": 419,
-                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-                        },
-                        {
-                          "title": "Владимир",
-                          "cost": 594,
-                          "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
-                        },
-                        {
-                          "title": "Воронеж",
-                          "cost": 441,
-                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-                        }
-                      ],
-                      "dependencyFormulaItem": "_self_ !== куда"
-                    },
-                    {
-                      "title": "Элемент списка - Владимир",
-                      "selectName": "Владимир",
-                      "extraValueForDependency": "владимир",
-                      "dependencyPrices": [
-                        {
-                          "title": "Москва",
-                          "cost": 186,
-                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
-                        },
-                        {
-                          "title": "Белгород",
-                          "cost": 853,
-                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-                        },
-                        {
-                          "title": "Брянск",
-                          "cost": 594,
-                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-                        },
-                        {
-                          "title": "Воронеж",
-                          "cost": 682,
-                          "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-                        }
-                      ],
-                      "dependencyFormulaItem": "_self_ !== куда"
-                    },
-                    {
-                      "title": "Элемент списка - Воронеж",
-                      "selectName": "Воронеж",
-                      "extraValueForDependency": "воронеж",
-                      "dependencyPrices": [
-                        {
-                          "title": "Москва",
-                          "cost": 526,
-                          "dependencyFormulaCost": "куда === &quot;москва&quot;"
-                        },
-                        {
-                          "title": "Белгород",
-                          "cost": 257,
-                          "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-                        },
-                        {
-                          "title": "Брянск",
-                          "cost": 441,
-                          "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-                        },
-                        {
-                          "title": "Владимир",
-                          "cost": 682,
-                          "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-                        }
-                      ],
-                      "dependencyFormulaItem": "_self_ !== куда"
-                    }
-                  ],
-                  "prompt": "",
-                  "iconSettingsSelectLabel": null,
-                  "parent": "0;42720707;42720907;"
-                }
-              ],
-              "maxWidth": "25",
-              "dependencyFormulaDisplay": "",
-              "elementPosition": "default",
-              "iconSettingsColumnsItemLabel": null,
-              "parent": "0;42720707;"
-            },
-            {
-              "json_id": "146312107",
-              "title": "2 колонка (базовые)",
-              "label": "",
-              "templates": [
-                {
-                  "json_id": "146311907",
-                  "title": "Куда",
-                  "label": "Куда",
-                  "selectedItem": "1",
-                  "isNeedChoice": 1,
-                  "notEmpty": 1,
-                  "isColumn": 1,
-                  "isStretch": 1,
-                  "formOutputMethod": "value",
-                  "resultOutputMethod": "value",
-                  "zeroValueDisplayIgnore": false,
-                  "excludeFromCalculations": false,
-                  "elementName": "куда",
-                  "formulaProcessingLogic": "zero",
-                  "dependencyFormulaDisplay": "",
-                  "classes": "",
-                  "globalMaxWidth": "",
-                  "globalMaxHeight": "",
-                  "template": "UiSelect",
-                  "values": [
-                    {
-                      "title": "Элемент списка - Москва",
-                      "selectName": "Москва",
-                      "extraValueForDependency": "москва",
-                      "dependencyFormulaItem": "_self_ !== откуда"
-                    },
-                    {
-                      "title": "Элемент списка - Белгород",
-                      "selectName": "Белгород",
-                      "extraValueForDependency": "белгород",
-                      "dependencyFormulaItem": "_self_ !== откуда"
-                    },
-                    {
-                      "title": "Элемент списка - Брянск",
-                      "selectName": "Брянск",
-                      "extraValueForDependency": "брянск",
-                      "dependencyFormulaItem": "_self_ !== откуда"
-                    },
-                    {
-                      "title": "Элемент списка - Владимир",
-                      "selectName": "Владимир",
-                      "extraValueForDependency": "владимир",
-                      "dependencyFormulaItem": "_self_ !== откуда"
-                    },
-                    {
-                      "title": "Элемент списка - Воронеж",
-                      "selectName": "Воронеж",
-                      "extraValueForDependency": "воронеж",
-                      "dependencyFormulaItem": "_self_ !== откуда"
-                    }
-                  ],
-                  "prompt": "",
-                  "iconSettingsSelectLabel": null,
-                  "parent": "0;42720707;42720907;"
-                }
-              ],
-              "maxWidth": "25",
-              "dependencyFormulaDisplay": "",
-              "elementPosition": "default",
-              "iconSettingsColumnsItemLabel": null,
-              "parent": "0;42720707;"
-            },
-            {
-              "json_id": "146320507",
-              "title": "3 колонка (базовое)",
-              "label": "",
-              "templates": [
-                {
-                  "json_id": "148371107",
-                  "title": "Вид контейнера",
-                  "label": "Вид контейнера",
-                  "selectedItem": "1",
-                  "isNeedChoice": false,
-                  "notEmpty": false,
-                  "isColumn": 1,
-                  "isStretch": 1,
-                  "formOutputMethod": "value",
-                  "resultOutputMethod": "value",
-                  "zeroValueDisplayIgnore": false,
-                  "excludeFromCalculations": false,
-                  "elementName": "типКонтейнера",
-                  "formulaProcessingLogic": "zero",
-                  "dependencyFormulaDisplay": "тип === &quot;контейнер&quot;",
-                  "classes": "",
-                  "globalMaxWidth": "",
-                  "globalMaxHeight": "",
-                  "template": "UiSelect",
-                  "values": [
-                    {
-                      "title": "Элемент списка - тип 1",
-                      "selectName": "тип 1"
-                    },
-                    {
-                      "title": "Элемент списка - тип 2",
-                      "selectName": "тип 2"
-                    },
-                    {
-                      "title": "Элемент списка - тип 3",
-                      "selectName": "тип 3"
-                    }
-                  ],
-                  "prompt": "",
-                  "iconSettingsSelectLabel": null,
-                  "parent": "0;42720707;42720907;"
-                },
-                {
-                  "json_id": "146320307",
-                  "title": "вес",
-                  "label": "Вес",
-                  "value": "0",
-                  "placeholder": "",
-                  "cost": "1",
-                  "unit": "кг",
-                  "min": "0",
-                  "max": "100000",
-                  "controls": false,
-                  "step": "1",
-                  "discreteStep": false,
-                  "dataType": "onlyNumber",
-                  "notEmpty": 1,
-                  "isCurrency": 1,
-                  "isColumn": 1,
-                  "isStretch": 1,
-                  "formOutputMethod": "value",
-                  "resultOutputMethod": "value",
-                  "zeroValueDisplayIgnore": false,
-                  "excludeFromCalculations": false,
-                  "elementName": "вес",
-                  "formulaProcessingLogic": "zero",
-                  "dependencyFormulaDisplay": "тип === &quot;автомобиль&quot;",
-                  "classes": "",
-                  "template": "UiInput",
-                  "dependencyPrices": null,
-                  "prompt": "",
-                  "iconSettingsInputLabel": null,
-                  "parent": "0;42720707;42720907;"
-                }
-              ],
-              "maxWidth": "20",
-              "dependencyFormulaDisplay": "",
-              "elementPosition": "default",
-              "iconSettingsColumnsItemLabel": null,
-              "parent": "0;42720707;"
-            },
-            {
-              "json_id": "148303707",
-              "title": "4 колонка (базовые)",
-              "label": "",
-              "templates": [
-                {
-                  "json_id": "148303107",
-                  "title": "Картинка",
-                  "label": "Автомобиль",
-                  "defaultImage": {
-                    "image_id": "1902714707",
-                    "filename": "do_1t.png",
-                    "ver_id": 4935716,
-                    "image_width": "427",
-                    "image_height": "190",
-                    "ext": "png"
+    [
+      {
+        "json_id": "150405507",
+        "meta_id": "44509507",
+        "ver_id": "4948202",
+        "title": "Дупликатор",
+        "json": "{\"title\":\"Дупликатор\",\"label\":\"\",\"templates\":[\"150404107\",\"150451907\"],\"buttonName\":\"+ Еще одно окно\",\"maximumDuple\":\"10\",\"formOutputMethod\":\"summ\",\"resultOutputMethod\":\"summ\",\"excludeFromCalculations\":false,\"elementName\":\"\",\"formulaProcessingLogic\":\"zero\",\"formula\":\"_otherSum_\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"template\":\"UiDuplicator\"}",
+        "modified": "2023-04-14 15:42:51",
+        "created": "2023-04-14 15:19:52",
+        "json_large": "{\"prompt\":\"\",\"dependencyMainFormula\":null,\"iconSettingsDuplicatorLabel\":null}",
+        "type_group_id": "9016",
+        "label": "",
+        "templates": [
+          {
+            "json_id": "150404107",
+            "meta_id": "44509707",
+            "ver_id": "4948202",
+            "title": "колонки блок 1",
+            "json": "{\"title\":\"колонки блок 1\",\"label\":\"\",\"columns\":[\"150403907\",\"150409507\",\"150442907\",\"150447907\"],\"dependencyFormulaDisplay\":\"\",\"adaptationMethod\":\"last\",\"elementName\":\"\",\"classes\":\"\",\"template\":\"UiColumns\"}",
+            "modified": "1681461594",
+            "created": "1681460305",
+            "json_large": "{\"iconSettingsColumnsLabel\":null}",
+            "type_group_id": "9017",
+            "json_meta": "{\n    \"title\": {\n        \"name\": \"Системный заголовок - Колонки\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"label\": {\n        \"name\": \"Заголовок блока на сайте\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255\n    },\n    \"columns\": {\n        \"name\": \"Список колонок\",\n        \"type\": \"json_array\",\n        \"required\": true,\n        \"note\": \"<div style='color: red; font-size: 20px;'>Не больше 4!!!</div>\",\n        \"value\": 9018\n    },\n    \"dependencyFormulaDisplay\": {\n        \"type\": \"textarea\",\n        \"name\": \"Формула условия отображения элемента\"\n    },\n    \"iconSettingsColumnsLabel\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"note\": \"Для заголовка блока\",\n        \"value\": {\n            \"title\": {\n                \"required\": false,\n                \"type\": \"hidden\"\n            },\n            \"image\": {\n                \"name\": \"Иконка\",\n                \"type\": \"image2\",\n                \"required\": true\n            },\n            \"maxWidth\": {\n                \"name\": \"Максимальная ширина иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"maxHeight\": {\n                \"name\": \"Максимальная высота иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"behaviorImage\": {\n                \"name\": \"Поведение картинки в блоке (размер)\",\n                \"type\": \"select\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"contain\": \"Встраивать - contain\",\n                    \"cover\": \"Масштабировать - cover\"\n                }\n            },\n            \"location\": {\n                \"type\": \"select\",\n                \"name\": \"Расположение иконки\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"leftSide\": \"Слева\",\n                    \"rightSide\": \"Справа\"\n                }\n            }\n        }\n    },\n    \"adaptationMethod\": {\n    \t\"type\": \"select\",\n    \t\"name\":\"Принцип группировки колонок при адаптации\",\n    \t\"no_empty\": true,\n    \t\"options\": {\n    \t\t\"free\": \"[1][2][3][4] - без группировки\",\n    \t\t\"first\": \"[1,2][3][4] - две первых\",\n    \t\t\"center\": \"[1][2,3][4] - две центральных\",\n    \t\t\"last\": \"[1][2][3,4] - две крайних\"\n    \t},\n    \t\"note\":\"При адаптации НЕ парные колонки будут первыми уходить на другую строку.</ br> Если колонок меньше 4х, то это нужно учитывать при выборе.\"\n    },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента\",\n    \"type\": \"text\",\n    \"note\": \"Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнего подчеркивания.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n    \"classes\": {\n        \"type\": \"text\",\n        \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n        \"staff_only\": true,\n        \"maxlength\": 255,\n        \"size\": 50\n    },\n    \"template\": {\n        \"name\": \"Тип шаблона\",\n        \"type\": \"select\",\n        \"maxlength\": \"255\",\n        \"no_empty\": true,\n        \"options\": {\n            \"UiColumns\": \"Колонки\"\n        },\n        \"note\": \"Системное поле\"\n    }\n}",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "150403907",
+                "meta_id": "44509907",
+                "ver_id": "4948202",
+                "title": "1 колонка (1 блок)",
+                "json": "{\"title\":\"1 колонка (1 блок)\",\"label\":\"\",\"templates\":[\"150402907\",\"150403507\"],\"maxWidth\":\"25\",\"dependencyFormulaDisplay\":\"\",\"elementPosition\":\"default\"}",
+                "modified": "1681461477",
+                "created": "1681460301",
+                "json_large": "{\"iconSettingsColumnsItemLabel\":null}",
+                "type_group_id": "9018",
+                "json_meta": "{\n    \"title\": {\n        \"name\": \"Системный заголовок - Колонка\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"label\": {\n        \"name\": \"Заголовок колонки\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"templates\": {\n        \"type\": \"json_array\",\n        \"name\": \"Элементы колонки:\",\n        \"value\": \"9001,9002,9003,9004,9005,9006,9007\"\n    },\n    \"maxWidth\": {\n        \"type\": \"select\",\n        \"name\": \"Ширина колонки относительно рабочей области в %\",\n        \"note\": \"Общая ширина колонок блока не должна превышать 100%!\",\n        \"value\": 50,\n        \"no_empty\": true,\n        \"options\": {\n            \"10\": \"10%\",\n            \"15\": \"15%\",\n            \"20\": \"20%\",\n            \"25\": \"25%\",\n            \"30\": \"30%\",\n            \"33\": \"33%\",\n            \"35\": \"35%\",\n            \"40\": \"40%\",\n            \"45\": \"45%\",\n            \"50\": \"50%\",\n            \"55\": \"55%\",\n            \"60\": \"60%\",\n            \"65\": \"65%\",\n            \"70\": \"70%\"\n        }\n    },\n    \"dependencyFormulaDisplay\": {\n        \"type\": \"textarea\",\n        \"name\": \"Формула условия отображения колонки\"\n    },\n    \"elementPosition\": {\n    \t\"type\": \"select\",\n    \t\"name\":\"Расположение элементов внутри блока\",\n    \t\"no_empty\": true,\n    \t\"options\": {\n    \t\t\"default\": \"Вертикальное\",\n    \t\t\"horizontal\": \"Горизонтальное - с переносом на следующую строку\"\n    \t}\n    },\n    \"iconSettingsColumnsItemLabel\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"note\": \"Для заголовка колонки\",\n        \"value\": {\n            \"title\": {\n                \"required\": false,\n                \"type\": \"hidden\"\n            },\n            \"image\": {\n                \"name\": \"Иконка\",\n                \"type\": \"image2\",\n                \"required\": true\n            },\n            \"maxWidth\": {\n                \"name\": \"Максимальная ширина иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"maxHeight\": {\n                \"name\": \"Максимальная высота иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"behaviorImage\": {\n                \"name\": \"Поведение картинки в блоке (размер)\",\n                \"type\": \"select\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"contain\": \"Встраивать - contain\",\n                    \"cover\": \"Масштабировать - cover\"\n                }\n            },\n            \"location\": {\n                \"type\": \"select\",\n                \"name\": \"Расположение иконки\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"leftSide\": \"Слева\",\n                    \"rightSide\": \"Справа\"\n                }\n            }\n        }\n    }\n\n}",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "150402907",
+                    "meta_id": "44507307",
+                    "ver_id": "4948202",
+                    "title": "Ширина",
+                    "json": "{\"title\":\"Ширина\",\"label\":\"Ширина\",\"value\":\"0\",\"placeholder\":\"\",\"cost\":\"1\",\"unit\":\"мм\",\"min\":\"0\",\"max\":\"10000\",\"controls\":1,\"step\":\"100\",\"discreteStep\":false,\"dataType\":\"onlyNumber\",\"notEmpty\":1,\"isCurrency\":1,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"value\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"ширина\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"template\":\"UiInput\"}",
+                    "modified": "1681460243",
+                    "created": "1681460243",
+                    "json_large": "{\"dependencyPrices\":null,\"prompt\":\"\",\"iconSettingsInputLabel\":null}",
+                    "type_group_id": "9001",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Текстовое поле - Input\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"value\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"value\": 0,\n    \"name\": \"Начальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Только числа\"\n  },\n  \"placeholder\": {\n    \"name\": \"Подсказка внутри текстового поля (placeholder)\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50,\n    \"note\": \"Работает при отключенной опции 'Обязательно для заполнения'\"\n  },\n  \"cost\": {\n    \"name\": \"Стоимость за единицу по умолчанию\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Сработает при включенной опции - только числа.\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость за единицу\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при включенной опции - 'Только числа' и выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"unit\": {\n    \"type\": \"text\",\n    \"name\": \"Единица измерения\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"note\": \"Отображается после поля для заполнения\"\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"min\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 0,\n    \"name\": \"Минимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"max\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 10,\n    \"name\": \"Максимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"controls\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Включить элементы управления (+ , -):\"\n  },\n  \"step\": {\n    \"type\": \"text\",\n    \"name\": \"Шаг при нажатии на кнопки управления\",\n    \"size\": 10,\n    \"maxlength\": 10,\n    \"required\": true,\n    \"value\": 1,\n    \"validator\": \"^[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"discreteStep\": {\n    \"name\": \"Включить кратность шага для поля ввода:\",\n    \"type\": \"checkbox\",\n    \"note\": \"При ручном изменении значения в поле ввода, оно будет автоматически корректироваться</br> кратно значению указанному в поле 'Шаг'\"\n  },\n  \"dataType\": {\n  \t\"name\":\"Тип данных в поле\",\n  \t\"type\": \"radio\",\n  \t\"options\": {\n  \t\t\"mixed\":\"Смешанный\",\n  \t\t\"onlyNumber\": \"Только числа\",\n  \t\t\"onlyInteger\": \"Только целые числа\"\n  \t},\n  \t\"value\": \"onlyNumber\",\n  \t\"no_empty\": true,\n  \t\"note\": \"Смешанный - любой текст.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для заполнения:\"\n  },\n  \"isCurrency\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Разделять тысячные:\",\n    \"note\": \"При включенной опции - 'Только числа'\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по доступной ширине:\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  },\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"staff_only\": true,\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"iconSettingsInputLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"maxlength\": \"255\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiInput\": \"Строка\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Ширина",
+                    "value": "0",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "мм",
+                    "min": "0",
+                    "max": "10000",
+                    "controls": 1,
+                    "step": "100",
+                    "discreteStep": false,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": 1,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "ширина",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettingsInputLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
                   },
-                  "maxWidth": "200",
-                  "maxHeight": "100",
-                  "dependencyFormulaDisplay": "вес &gt; 0 || типКонтейнера !== null",
-                  "classes": "",
-                  "template": "UiImage",
-                  "dependencyImages": [
-                    {
-                      "title": "вес &gt; 1000",
-                      "image": {
-                        "image_id": "1902714307",
-                        "filename": "do_15t.png",
-                        "ver_id": 4935716,
-                        "image_width": "495",
-                        "image_height": "245",
-                        "ext": "png"
+                  {
+                    "json_id": "150403507",
+                    "meta_id": "44507307",
+                    "ver_id": "4948202",
+                    "title": "Высота",
+                    "json": "{\"title\":\"Высота\",\"label\":\"Высота\",\"value\":\"0\",\"placeholder\":\"\",\"cost\":\"1\",\"unit\":\"мм\",\"min\":\"0\",\"max\":\"10000\",\"controls\":1,\"step\":\"100\",\"discreteStep\":false,\"dataType\":\"onlyNumber\",\"notEmpty\":1,\"isCurrency\":1,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"value\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"ширина\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"template\":\"UiInput\"}",
+                    "modified": "1681460282",
+                    "created": "1681460282",
+                    "json_large": "{\"dependencyPrices\":null,\"prompt\":\"\",\"iconSettingsInputLabel\":null}",
+                    "type_group_id": "9001",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Текстовое поле - Input\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"value\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"value\": 0,\n    \"name\": \"Начальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Только числа\"\n  },\n  \"placeholder\": {\n    \"name\": \"Подсказка внутри текстового поля (placeholder)\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50,\n    \"note\": \"Работает при отключенной опции 'Обязательно для заполнения'\"\n  },\n  \"cost\": {\n    \"name\": \"Стоимость за единицу по умолчанию\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Сработает при включенной опции - только числа.\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость за единицу\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при включенной опции - 'Только числа' и выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"unit\": {\n    \"type\": \"text\",\n    \"name\": \"Единица измерения\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"note\": \"Отображается после поля для заполнения\"\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"min\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 0,\n    \"name\": \"Минимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"max\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 10,\n    \"name\": \"Максимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"controls\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Включить элементы управления (+ , -):\"\n  },\n  \"step\": {\n    \"type\": \"text\",\n    \"name\": \"Шаг при нажатии на кнопки управления\",\n    \"size\": 10,\n    \"maxlength\": 10,\n    \"required\": true,\n    \"value\": 1,\n    \"validator\": \"^[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"discreteStep\": {\n    \"name\": \"Включить кратность шага для поля ввода:\",\n    \"type\": \"checkbox\",\n    \"note\": \"При ручном изменении значения в поле ввода, оно будет автоматически корректироваться</br> кратно значению указанному в поле 'Шаг'\"\n  },\n  \"dataType\": {\n  \t\"name\":\"Тип данных в поле\",\n  \t\"type\": \"radio\",\n  \t\"options\": {\n  \t\t\"mixed\":\"Смешанный\",\n  \t\t\"onlyNumber\": \"Только числа\",\n  \t\t\"onlyInteger\": \"Только целые числа\"\n  \t},\n  \t\"value\": \"onlyNumber\",\n  \t\"no_empty\": true,\n  \t\"note\": \"Смешанный - любой текст.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для заполнения:\"\n  },\n  \"isCurrency\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Разделять тысячные:\",\n    \"note\": \"При включенной опции - 'Только числа'\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по доступной ширине:\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  },\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"staff_only\": true,\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"iconSettingsInputLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"maxlength\": \"255\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiInput\": \"Строка\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Высота",
+                    "value": "0",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "мм",
+                    "min": "0",
+                    "max": "10000",
+                    "controls": 1,
+                    "step": "100",
+                    "discreteStep": false,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": 1,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "высота",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettingsInputLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  }
+                ],
+                "maxWidth": "25",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;44509507;44509707;"
+              },
+              {
+                "json_id": "150409507",
+                "meta_id": "44509907",
+                "ver_id": "4948202",
+                "title": "2 колонка ( 1 блок)",
+                "json": "{\"title\":\"2 колонка ( 1 блок)\",\"label\":\"\",\"templates\":[\"150409307\",\"150424307\"],\"maxWidth\":\"25\",\"dependencyFormulaDisplay\":\"\",\"elementPosition\":\"default\"}",
+                "modified": "1681461482",
+                "created": "1681460641",
+                "json_large": "{\"iconSettingsColumnsItemLabel\":null}",
+                "type_group_id": "9018",
+                "json_meta": "{\n    \"title\": {\n        \"name\": \"Системный заголовок - Колонка\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"label\": {\n        \"name\": \"Заголовок колонки\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"templates\": {\n        \"type\": \"json_array\",\n        \"name\": \"Элементы колонки:\",\n        \"value\": \"9001,9002,9003,9004,9005,9006,9007\"\n    },\n    \"maxWidth\": {\n        \"type\": \"select\",\n        \"name\": \"Ширина колонки относительно рабочей области в %\",\n        \"note\": \"Общая ширина колонок блока не должна превышать 100%!\",\n        \"value\": 50,\n        \"no_empty\": true,\n        \"options\": {\n            \"10\": \"10%\",\n            \"15\": \"15%\",\n            \"20\": \"20%\",\n            \"25\": \"25%\",\n            \"30\": \"30%\",\n            \"33\": \"33%\",\n            \"35\": \"35%\",\n            \"40\": \"40%\",\n            \"45\": \"45%\",\n            \"50\": \"50%\",\n            \"55\": \"55%\",\n            \"60\": \"60%\",\n            \"65\": \"65%\",\n            \"70\": \"70%\"\n        }\n    },\n    \"dependencyFormulaDisplay\": {\n        \"type\": \"textarea\",\n        \"name\": \"Формула условия отображения колонки\"\n    },\n    \"elementPosition\": {\n    \t\"type\": \"select\",\n    \t\"name\":\"Расположение элементов внутри блока\",\n    \t\"no_empty\": true,\n    \t\"options\": {\n    \t\t\"default\": \"Вертикальное\",\n    \t\t\"horizontal\": \"Горизонтальное - с переносом на следующую строку\"\n    \t}\n    },\n    \"iconSettingsColumnsItemLabel\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"note\": \"Для заголовка колонки\",\n        \"value\": {\n            \"title\": {\n                \"required\": false,\n                \"type\": \"hidden\"\n            },\n            \"image\": {\n                \"name\": \"Иконка\",\n                \"type\": \"image2\",\n                \"required\": true\n            },\n            \"maxWidth\": {\n                \"name\": \"Максимальная ширина иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"maxHeight\": {\n                \"name\": \"Максимальная высота иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"behaviorImage\": {\n                \"name\": \"Поведение картинки в блоке (размер)\",\n                \"type\": \"select\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"contain\": \"Встраивать - contain\",\n                    \"cover\": \"Масштабировать - cover\"\n                }\n            },\n            \"location\": {\n                \"type\": \"select\",\n                \"name\": \"Расположение иконки\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"leftSide\": \"Слева\",\n                    \"rightSide\": \"Справа\"\n                }\n            }\n        }\n    }\n\n}",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "150409307",
+                    "meta_id": "44508107",
+                    "ver_id": "4948202",
+                    "title": "Тип сетки",
+                    "json": "{\"title\":\"Тип сетки\",\"label\":\"Тип сетки\",\"selectedItem\":\"1\",\"isNeedChoice\":1,\"notEmpty\":1,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"valueSumm\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"тип\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"globalMaxWidth\":\"\",\"globalMaxHeight\":\"\",\"template\":\"UiSelect\"}",
+                    "modified": "1681460639",
+                    "created": "1681460639",
+                    "json_large": "{\"values\":[{\"title\":\"Элемент списка - Рамочная сетка\",\"selectName\":\"Рамочная сетка\",\"extraValueForDependency\":550},{\"title\":\"Элемент списка - Сетка с крылом\",\"selectName\":\"Сетка с крылом\",\"extraValueForDependency\":440},{\"title\":\"Элемент списка - Внутренняя сетка\",\"selectName\":\"Внутренняя сетка\",\"extraValueForDependency\":670},{\"title\":\"Элемент списка - Раздвижная\",\"selectName\":\"Раздвижная\",\"extraValueForDependency\":970},{\"title\":\"Элемент списка - Дверная\",\"selectName\":\"Дверная\",\"cost\":970},{\"title\":\"Элемент списка - Перетяжка сетки\",\"selectName\":\"Перетяжка сетки\",\"extraValueForDependency\":300}],\"prompt\":\"\",\"iconSettingsSelectLabel\":null}",
+                    "type_group_id": "9005",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Выпадающий список - Select\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"name\": \"Заголовок блока\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"values\": {\n    \"type\": \"meta\",\n    \"name\": \"Список значений\",\n    \"required\": true,\n    \"value\": {\n    \t\"title\": {\n\t\t\t\"type\": \"generate\",\n\t\t\t\"value\": \"Элемент списка - {$selectName}\"\n    \t},\n      \"selectName\": {\n        \"type\": \"text\",\n        \"name\": \"Название пункта\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"required\": true\n      },\n      \"cost\": {\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"name\": \"Цена при выборе пункта\",\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Пустое значение приравнивается к нулю\"\n      },\n      \"extraValueForDependency\": {\n        \"type\": \"text\",\n        \"name\": \"Значение для использования в зависимостях\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n        \"note\": \"Если не заполнено, будет использоваться порядковый номер начиная с 1. </br> Значения в рамках одного списка должны быть уникальными! </br> Для ручного заполнения доступен алфавит, цифры и знаки подчеркивания.\"\n      },\n      \"dependencyPrices\": {\n        \"name\": \"Набор цен с условиями\",\n        \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n        \"type\": \"meta\",\n        \"value\": {\n          \"title\": {\n            \"type\": \"text\",\n            \"name\": \"Системное название\",\n            \"required\": false,\n            \"size\": 50,\n            \"maxlength\": 255,\n            \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n          },\n          \"cost\": {\n            \"name\": \"Цена пункта по условию\",\n            \"type\": \"text\",\n            \"size\": 50,\n            \"maxlength\": 50,\n            \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n            \"note\": \"Только числа. Сработает при выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n          },\n          \"dependencyFormulaCost\": {\n            \"type\": \"textarea\",\n            \"name\": \"Условие использования указанной цены\",\n            \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n            \"required\": true\n          },\n          \"disabledFormula\": {\n            \"type\": \"checkbox\",\n            \"value\": true,\n            \"no_empty\": true,\n            \"name\": \"Отключить проверку условия:\",\n            \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n          }\n        }\n      },\n      \"iconSettingsSelectItem\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"value\": {\n          \"title\": {\n            \"required\": false,\n            \"type\": \"hidden\"\n          },\n          \"image\": {\n            \"name\": \"Иконка\",\n            \"type\": \"image2\",\n            \"required\": true\n          },\n          \"imageHover\": {\n            \"name\": \"Альтернативная иконка при наведении\",\n            \"type\": \"image2\",\n            \"note\": \"Заполнять не обязательно\"\n          },\n          \"maxWidth\": {\n            \"name\": \"Максимальная ширина иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n          \"maxHeight\": {\n            \"name\": \"Максимальная высота иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n        \"behaviorImage\": {\n\t\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t\t    \"type\": \"select\",\n\t\t    \"no_empty\": true,\n\t\t    \"options\": {\n\t\t      \"contain\": \"Встраивать - contain\",\n\t\t      \"cover\": \"Масштабировать - cover\"\n\t\t    }\n\t\t  },\n          \"location\": {\n            \"type\": \"select\",\n            \"name\": \"Расположение иконки\",\n            \"no_empty\": true,\n            \"options\": {\n              \"leftSide\": \"Слева\",\n              \"rightSide\": \"Справа\"\n            }\n          }\n        }\n      },\n      \"prompt\": {\n        \"type\": \"html\",\n        \"name\": \"Текст подсказки\"\n      },\n      \"dependencyFormulaItem\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие отображения пункта в выпадающем списке.\",\n        \"note\": \"Пример: ИмяЭлемента > 10 && ИмяЭлемента < 30 && ( ИмяЭлемента === 'Дерево' || ИмяЭлемента === 'Сталь' ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>  self - значение текущего элемента списка. </br> </br>\"\n      }\n    }\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки\"\n  },\n  \"selectedItem\": {\n    \"type\": \"text\",\n    \"name\": \"Номер пункта выбранный по умолчанию\",\n    \"value\": 1,\n    \"required\": true,\n    \"validator\": \"^[0-9]?$\",\n    \"note\": \"Отсчет начинается с 1. Если не заполнено, то будет выбрано первое значение.\"\n  },\n  \"isNeedChoice\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отключен предвыбор:\",\n    \"note\": \"По умолчанию ничего не будет выбрано.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для выбора:\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по ширине:\",\n    \"note\": \"Актуально для отображения колонкой.\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  \t},\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"size\": 50,\n    \"maxlength\": \"255\",\n    \"staff_only\": true\n  },\n    \"iconSettingsSelectLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"globalMaxWidth\": {\n    \"name\": \"Максимальная ширина иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"globalMaxHeight\": {\n    \"name\": \"Максимальная высота иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n    \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiSelect\": \"Список\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Тип сетки",
+                    "selectedItem": "1",
+                    "isNeedChoice": 1,
+                    "notEmpty": 1,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "valueSumm",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "тип",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Рамочная сетка",
+                        "selectName": "Рамочная сетка",
+                        "extraValueForDependency": 550
                       },
-                      "dependencyFormulaDisplay": "вес &gt; 1000"
-                    },
-                    {
-                      "title": "вес &gt; 1500",
-                      "image": {
-                        "image_id": "1902715107",
-                        "filename": "do_3t.png",
-                        "ver_id": 4935716,
-                        "image_width": "483",
-                        "image_height": "254",
-                        "ext": "png"
+                      {
+                        "title": "Элемент списка - Сетка с крылом",
+                        "selectName": "Сетка с крылом",
+                        "extraValueForDependency": 440
                       },
-                      "dependencyFormulaDisplay": "вес &gt; 1500"
-                    },
-                    {
-                      "title": "вес &gt; 3000",
-                      "image": {
-                        "image_id": "1902715507",
-                        "filename": "do_5t.png",
-                        "ver_id": 4935716,
-                        "image_width": "647",
-                        "image_height": "240",
-                        "ext": "png"
+                      {
+                        "title": "Элемент списка - Внутренняя сетка",
+                        "selectName": "Внутренняя сетка",
+                        "extraValueForDependency": 670
                       },
-                      "dependencyFormulaDisplay": "вес &gt; 3000"
-                    },
-                    {
-                      "title": "вес &gt; 5000",
-                      "image": {
-                        "image_id": "1902715907",
-                        "filename": "do_10t.png",
-                        "ver_id": 4935716,
-                        "image_width": "746",
-                        "image_height": "223",
-                        "ext": "png"
+                      {
+                        "title": "Элемент списка - Раздвижная",
+                        "selectName": "Раздвижная",
+                        "extraValueForDependency": 970
                       },
-                      "dependencyFormulaDisplay": "вес &gt; 5000"
-                    },
-                    {
-                      "title": "вес &gt; 10000",
-                      "image": {
-                        "image_id": "1902715907",
-                        "filename": "do_10t.png",
-                        "ver_id": 4935716,
-                        "image_width": "746",
-                        "image_height": "223",
-                        "ext": "png"
+                      {
+                        "title": "Элемент списка - Дверная",
+                        "selectName": "Дверная",
+                        "cost": 970
                       },
-                      "dependencyFormulaDisplay": "вес &gt; 10000"
-                    },
-                    {
-                      "title": "Контейнер",
-                      "label": "Контейнер",
-                      "image": {
-                        "image_id": "1903495707",
-                        "filename": "container_2.png",
-                        "ver_id": 4935716,
-                        "image_width": "64",
-                        "image_height": "64",
-                        "ext": "png"
+                      {
+                        "title": "Элемент списка - Перетяжка сетки",
+                        "selectName": "Перетяжка сетки",
+                        "extraValueForDependency": 300
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettingsSelectLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  },
+                  {
+                    "json_id": "150424307",
+                    "meta_id": "44508107",
+                    "ver_id": "4948202",
+                    "title": "Полотно",
+                    "json": "{\"title\":\"Полотно\",\"label\":\"Полотно\",\"selectedItem\":\"1\",\"isNeedChoice\":false,\"notEmpty\":false,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"valueSumm\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"полотно\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"globalMaxWidth\":\"\",\"globalMaxHeight\":\"\",\"template\":\"UiSelect\"}",
+                    "modified": "1681461027",
+                    "created": "1681461027",
+                    "json_large": "{\"values\":[{\"title\":\"Элемент списка - Обычное\",\"selectName\":\"Обычное\"},{\"title\":\"Элемент списка - Антикошка\",\"selectName\":\"Антикошка\",\"cost\":600},{\"title\":\"Элемент списка - Антипыль\",\"selectName\":\"Антипыль\",\"cost\":600}],\"prompt\":\"\",\"iconSettingsSelectLabel\":null}",
+                    "type_group_id": "9005",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Выпадающий список - Select\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"name\": \"Заголовок блока\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"values\": {\n    \"type\": \"meta\",\n    \"name\": \"Список значений\",\n    \"required\": true,\n    \"value\": {\n    \t\"title\": {\n\t\t\t\"type\": \"generate\",\n\t\t\t\"value\": \"Элемент списка - {$selectName}\"\n    \t},\n      \"selectName\": {\n        \"type\": \"text\",\n        \"name\": \"Название пункта\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"required\": true\n      },\n      \"cost\": {\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"name\": \"Цена при выборе пункта\",\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Пустое значение приравнивается к нулю\"\n      },\n      \"extraValueForDependency\": {\n        \"type\": \"text\",\n        \"name\": \"Значение для использования в зависимостях\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n        \"note\": \"Если не заполнено, будет использоваться порядковый номер начиная с 1. </br> Значения в рамках одного списка должны быть уникальными! </br> Для ручного заполнения доступен алфавит, цифры и знаки подчеркивания.\"\n      },\n      \"dependencyPrices\": {\n        \"name\": \"Набор цен с условиями\",\n        \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n        \"type\": \"meta\",\n        \"value\": {\n          \"title\": {\n            \"type\": \"text\",\n            \"name\": \"Системное название\",\n            \"required\": false,\n            \"size\": 50,\n            \"maxlength\": 255,\n            \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n          },\n          \"cost\": {\n            \"name\": \"Цена пункта по условию\",\n            \"type\": \"text\",\n            \"size\": 50,\n            \"maxlength\": 50,\n            \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n            \"note\": \"Только числа. Сработает при выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n          },\n          \"dependencyFormulaCost\": {\n            \"type\": \"textarea\",\n            \"name\": \"Условие использования указанной цены\",\n            \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n            \"required\": true\n          },\n          \"disabledFormula\": {\n            \"type\": \"checkbox\",\n            \"value\": true,\n            \"no_empty\": true,\n            \"name\": \"Отключить проверку условия:\",\n            \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n          }\n        }\n      },\n      \"iconSettingsSelectItem\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"value\": {\n          \"title\": {\n            \"required\": false,\n            \"type\": \"hidden\"\n          },\n          \"image\": {\n            \"name\": \"Иконка\",\n            \"type\": \"image2\",\n            \"required\": true\n          },\n          \"imageHover\": {\n            \"name\": \"Альтернативная иконка при наведении\",\n            \"type\": \"image2\",\n            \"note\": \"Заполнять не обязательно\"\n          },\n          \"maxWidth\": {\n            \"name\": \"Максимальная ширина иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n          \"maxHeight\": {\n            \"name\": \"Максимальная высота иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n        \"behaviorImage\": {\n\t\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t\t    \"type\": \"select\",\n\t\t    \"no_empty\": true,\n\t\t    \"options\": {\n\t\t      \"contain\": \"Встраивать - contain\",\n\t\t      \"cover\": \"Масштабировать - cover\"\n\t\t    }\n\t\t  },\n          \"location\": {\n            \"type\": \"select\",\n            \"name\": \"Расположение иконки\",\n            \"no_empty\": true,\n            \"options\": {\n              \"leftSide\": \"Слева\",\n              \"rightSide\": \"Справа\"\n            }\n          }\n        }\n      },\n      \"prompt\": {\n        \"type\": \"html\",\n        \"name\": \"Текст подсказки\"\n      },\n      \"dependencyFormulaItem\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие отображения пункта в выпадающем списке.\",\n        \"note\": \"Пример: ИмяЭлемента > 10 && ИмяЭлемента < 30 && ( ИмяЭлемента === 'Дерево' || ИмяЭлемента === 'Сталь' ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>  self - значение текущего элемента списка. </br> </br>\"\n      }\n    }\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки\"\n  },\n  \"selectedItem\": {\n    \"type\": \"text\",\n    \"name\": \"Номер пункта выбранный по умолчанию\",\n    \"value\": 1,\n    \"required\": true,\n    \"validator\": \"^[0-9]?$\",\n    \"note\": \"Отсчет начинается с 1. Если не заполнено, то будет выбрано первое значение.\"\n  },\n  \"isNeedChoice\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отключен предвыбор:\",\n    \"note\": \"По умолчанию ничего не будет выбрано.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для выбора:\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по ширине:\",\n    \"note\": \"Актуально для отображения колонкой.\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  \t},\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"size\": 50,\n    \"maxlength\": \"255\",\n    \"staff_only\": true\n  },\n    \"iconSettingsSelectLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"globalMaxWidth\": {\n    \"name\": \"Максимальная ширина иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"globalMaxHeight\": {\n    \"name\": \"Максимальная высота иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n    \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiSelect\": \"Список\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Полотно",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "valueSumm",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "полотно",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Обычное",
+                        "selectName": "Обычное"
                       },
-                      "dependencyFormulaDisplay": "типКонтейнера !== null"
-                    }
-                  ],
-                  "prompt": "",
-                  "parent": "0;42720707;42720907;"
-                },
-                {
-                  "json_id": "148303507",
-                  "title": "Описание автомобиля",
-                  "label": "",
-                  "unit": "",
-                  "cost": "",
-                  "showElement": "onlyText",
-                  "formOutputMethod": "no",
-                  "resultOutputMethod": "no",
-                  "zeroValueDisplayIgnore": 1,
-                  "excludeFromCalculations": false,
-                  "elementName": "",
-                  "formulaProcessingLogic": "zero",
-                  "dependencyFormulaDisplay": "вес &gt; 0 || типКонтейнера !== null",
-                  "template": "UiSystem",
-                  "dependencyPrices": null,
-                  "prompt": "",
-                  "htmlText": "Небольшое описание по характеристикам автомобиля для 1т",
-                  "dependencyHtmlText": [
-                    {
-                      "title": "вес &gt; 1000",
-                      "htmlText": "Небольшое описание по характеристикам автомобиля для 1,5т",
-                      "dependencyFormulaHtmlText": "вес &gt; 1000"
-                    },
-                    {
-                      "title": "вес &gt; 1500",
-                      "htmlText": "Небольшое описание по характеристикам автомобиля для 3т",
-                      "dependencyFormulaHtmlText": "вес &gt; 1500"
-                    },
-                    {
-                      "title": "вес &gt; 3000",
-                      "htmlText": "Небольшое описание по характеристикам автомобиля для 5т",
-                      "dependencyFormulaHtmlText": "вес &gt; 3000"
-                    },
-                    {
-                      "title": "вес &gt; 5000",
-                      "htmlText": "Небольшое описание по характеристикам автомобиля для 10т",
-                      "dependencyFormulaHtmlText": "вес &gt; 5000"
-                    },
-                    {
-                      "title": "вес &gt; 10000",
-                      "htmlText": "Вес груза больше 10 000кг подразумевает разбиение его на две грузовые машины. Подобные грузоперевозки и выбор грузовых автомобилей прорабатываются индивидуально!&nbsp;",
-                      "dependencyFormulaHtmlText": "вес &gt; 10000"
-                    },
-                    {
-                      "title": "типКонтейнера = 1",
-                      "htmlText": "Небольшое описание типа контейнера первого вида",
-                      "dependencyFormulaHtmlText": "типКонтейнера === 1"
-                    },
-                    {
-                      "title": "типКонтейнера === 2",
-                      "htmlText": "Небольшое описание второго вида контейнера",
-                      "dependencyFormulaHtmlText": "типКонтейнера === 2"
-                    },
-                    {
-                      "title": "типКонтейнера === 3",
-                      "htmlText": "Небольшое описание третьего вида контейнера",
-                      "dependencyFormulaHtmlText": "типКонтейнера === 3"
-                    }
-                  ],
-                  "iconSettingsSystemLabel": null,
-                  "parent": "0;42720707;42720907;"
-                }
-              ],
-              "maxWidth": "30",
-              "dependencyFormulaDisplay": "",
-              "elementPosition": "default",
-              "iconSettingsColumnsItemLabel": null,
-              "parent": "0;42720707;"
-            }
-          ],
-          "dependencyFormulaDisplay": "",
-          "adaptationMethod": "last",
-          "elementName": "",
-          "classes": "",
-          "template": "UiColumns",
-          "iconSettingsColumnsLabel": null,
-          "parent": "0;"
-        },
-        {
-          "json_id": "148688107",
-          "title": "Дополнительные параметры",
-          "label": "Дополнительные параметры",
-          "labelSub": "",
-          "templates": [
-            {
-              "json_id": "148686907",
-              "title": "Параметр 1",
-              "label": "",
-              "buttonText": "Параметр 1",
-              "buttonTextChecked": "",
-              "costForVoid": "0",
-              "cost": "1500",
-              "baseValue": "default",
-              "isNeedChoice": false,
-              "isColumn": false,
-              "typeDisplayClass": "button",
-              "formOutputMethod": "value",
-              "resultOutputMethod": "value",
-              "zeroValueDisplayIgnore": 1,
-              "excludeFromCalculations": false,
-              "elementName": "",
-              "formulaProcessingLogic": "zero",
-              "dependencyFormulaDisplay": "",
-              "scrollIntoName": "",
-              "classes": "",
-              "template": "UiCheckbox",
-              "dependencyPrices": null,
-              "prompt": "",
-              "iconSettingsCheckboxLabel": null,
-              "parent": "0;42721107;"
-            },
-            {
-              "json_id": "148687307",
-              "title": "Параметр 2",
-              "label": "",
-              "buttonText": "Параметр 2",
-              "buttonTextChecked": "",
-              "costForVoid": "0",
-              "cost": "500",
-              "baseValue": "default",
-              "isNeedChoice": false,
-              "isColumn": false,
-              "typeDisplayClass": "button",
-              "formOutputMethod": "value",
-              "resultOutputMethod": "value",
-              "zeroValueDisplayIgnore": 1,
-              "excludeFromCalculations": false,
-              "elementName": "",
-              "formulaProcessingLogic": "zero",
-              "dependencyFormulaDisplay": "",
-              "scrollIntoName": "",
-              "classes": "",
-              "template": "UiCheckbox",
-              "dependencyPrices": null,
-              "prompt": "",
-              "iconSettingsCheckboxLabel": null,
-              "parent": "0;42721107;"
-            },
-            {
-              "json_id": "148687507",
-              "title": "Параметр 3",
-              "label": "",
-              "buttonText": "Параметр 3",
-              "buttonTextChecked": "",
-              "costForVoid": "0",
-              "cost": "700",
-              "baseValue": "default",
-              "isNeedChoice": false,
-              "isColumn": false,
-              "typeDisplayClass": "button",
-              "formOutputMethod": "value",
-              "resultOutputMethod": "value",
-              "zeroValueDisplayIgnore": 1,
-              "excludeFromCalculations": false,
-              "elementName": "",
-              "formulaProcessingLogic": "zero",
-              "dependencyFormulaDisplay": "",
-              "scrollIntoName": "",
-              "classes": "",
-              "template": "UiCheckbox",
-              "dependencyPrices": null,
-              "prompt": "",
-              "iconSettingsCheckboxLabel": null,
-              "parent": "0;42721107;"
-            },
-            {
-              "json_id": "148687707",
-              "title": "Параметр 4",
-              "label": "",
-              "buttonText": "Параметр 4",
-              "buttonTextChecked": "",
-              "costForVoid": "0",
-              "cost": "2000",
-              "baseValue": "default",
-              "isNeedChoice": false,
-              "isColumn": false,
-              "typeDisplayClass": "button",
-              "formOutputMethod": "value",
-              "resultOutputMethod": "value",
-              "zeroValueDisplayIgnore": 1,
-              "excludeFromCalculations": false,
-              "elementName": "",
-              "formulaProcessingLogic": "zero",
-              "dependencyFormulaDisplay": "",
-              "scrollIntoName": "",
-              "classes": "",
-              "template": "UiCheckbox",
-              "dependencyPrices": null,
-              "prompt": "",
-              "iconSettingsCheckboxLabel": null,
-              "parent": "0;42721107;"
-            }
-          ],
-          "dependencyFormulaDisplay": "",
-          "maxWidthSide": "100",
-          "visuallySeparateElement": 1,
-          "elementPosition": "horizontal",
-          "elementName": "",
-          "classes": "",
-          "template": "UiBlockSection",
-          "iconSettingsSectionLabel": null,
-          "backgroundImageSettings": null,
-          "parent": "0;"
-        }
-      ]
+                      {
+                        "title": "Элемент списка - Антикошка",
+                        "selectName": "Антикошка",
+                        "cost": 600
+                      },
+                      {
+                        "title": "Элемент списка - Антипыль",
+                        "selectName": "Антипыль",
+                        "cost": 600
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettingsSelectLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  }
+                ],
+                "maxWidth": "25",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;44509507;44509707;"
+              },
+              {
+                "json_id": "150442907",
+                "meta_id": "44509907",
+                "ver_id": "4948202",
+                "title": "3 колонка (блок 1)",
+                "json": "{\"title\":\"3 колонка (блок 1)\",\"label\":\"\",\"templates\":[\"150442707\",\"150443707\"],\"maxWidth\":\"25\",\"dependencyFormulaDisplay\":\"\",\"elementPosition\":\"default\"}",
+                "modified": "1681461486",
+                "created": "1681461388",
+                "json_large": "{\"iconSettingsColumnsItemLabel\":null}",
+                "type_group_id": "9018",
+                "json_meta": "{\n    \"title\": {\n        \"name\": \"Системный заголовок - Колонка\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"label\": {\n        \"name\": \"Заголовок колонки\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"templates\": {\n        \"type\": \"json_array\",\n        \"name\": \"Элементы колонки:\",\n        \"value\": \"9001,9002,9003,9004,9005,9006,9007\"\n    },\n    \"maxWidth\": {\n        \"type\": \"select\",\n        \"name\": \"Ширина колонки относительно рабочей области в %\",\n        \"note\": \"Общая ширина колонок блока не должна превышать 100%!\",\n        \"value\": 50,\n        \"no_empty\": true,\n        \"options\": {\n            \"10\": \"10%\",\n            \"15\": \"15%\",\n            \"20\": \"20%\",\n            \"25\": \"25%\",\n            \"30\": \"30%\",\n            \"33\": \"33%\",\n            \"35\": \"35%\",\n            \"40\": \"40%\",\n            \"45\": \"45%\",\n            \"50\": \"50%\",\n            \"55\": \"55%\",\n            \"60\": \"60%\",\n            \"65\": \"65%\",\n            \"70\": \"70%\"\n        }\n    },\n    \"dependencyFormulaDisplay\": {\n        \"type\": \"textarea\",\n        \"name\": \"Формула условия отображения колонки\"\n    },\n    \"elementPosition\": {\n    \t\"type\": \"select\",\n    \t\"name\":\"Расположение элементов внутри блока\",\n    \t\"no_empty\": true,\n    \t\"options\": {\n    \t\t\"default\": \"Вертикальное\",\n    \t\t\"horizontal\": \"Горизонтальное - с переносом на следующую строку\"\n    \t}\n    },\n    \"iconSettingsColumnsItemLabel\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"note\": \"Для заголовка колонки\",\n        \"value\": {\n            \"title\": {\n                \"required\": false,\n                \"type\": \"hidden\"\n            },\n            \"image\": {\n                \"name\": \"Иконка\",\n                \"type\": \"image2\",\n                \"required\": true\n            },\n            \"maxWidth\": {\n                \"name\": \"Максимальная ширина иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"maxHeight\": {\n                \"name\": \"Максимальная высота иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"behaviorImage\": {\n                \"name\": \"Поведение картинки в блоке (размер)\",\n                \"type\": \"select\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"contain\": \"Встраивать - contain\",\n                    \"cover\": \"Масштабировать - cover\"\n                }\n            },\n            \"location\": {\n                \"type\": \"select\",\n                \"name\": \"Расположение иконки\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"leftSide\": \"Слева\",\n                    \"rightSide\": \"Справа\"\n                }\n            }\n        }\n    }\n\n}",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "150442707",
+                    "meta_id": "44508107",
+                    "ver_id": "4948202",
+                    "title": "Цвет",
+                    "json": "{\"title\":\"Цвет\",\"label\":\"Цвет рамки\",\"selectedItem\":\"1\",\"isNeedChoice\":false,\"notEmpty\":false,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"valueSumm\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"цвет\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"globalMaxWidth\":\"\",\"globalMaxHeight\":\"\",\"template\":\"UiSelect\"}",
+                    "modified": "1681461639",
+                    "created": "1681461379",
+                    "json_large": "{\"values\":[{\"title\":\"Элемент списка - Белая\",\"selectName\":\"Белая\"},{\"title\":\"Элемент списка - Коричневая\",\"selectName\":\"Коричневая\",\"cost\":20}],\"prompt\":\"\",\"iconSettingsSelectLabel\":null}",
+                    "type_group_id": "9005",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Выпадающий список - Select\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"name\": \"Заголовок блока\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"values\": {\n    \"type\": \"meta\",\n    \"name\": \"Список значений\",\n    \"required\": true,\n    \"value\": {\n    \t\"title\": {\n\t\t\t\"type\": \"generate\",\n\t\t\t\"value\": \"Элемент списка - {$selectName}\"\n    \t},\n      \"selectName\": {\n        \"type\": \"text\",\n        \"name\": \"Название пункта\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"required\": true\n      },\n      \"cost\": {\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"name\": \"Цена при выборе пункта\",\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Пустое значение приравнивается к нулю\"\n      },\n      \"extraValueForDependency\": {\n        \"type\": \"text\",\n        \"name\": \"Значение для использования в зависимостях\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n        \"note\": \"Если не заполнено, будет использоваться порядковый номер начиная с 1. </br> Значения в рамках одного списка должны быть уникальными! </br> Для ручного заполнения доступен алфавит, цифры и знаки подчеркивания.\"\n      },\n      \"dependencyPrices\": {\n        \"name\": \"Набор цен с условиями\",\n        \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n        \"type\": \"meta\",\n        \"value\": {\n          \"title\": {\n            \"type\": \"text\",\n            \"name\": \"Системное название\",\n            \"required\": false,\n            \"size\": 50,\n            \"maxlength\": 255,\n            \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n          },\n          \"cost\": {\n            \"name\": \"Цена пункта по условию\",\n            \"type\": \"text\",\n            \"size\": 50,\n            \"maxlength\": 50,\n            \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n            \"note\": \"Только числа. Сработает при выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n          },\n          \"dependencyFormulaCost\": {\n            \"type\": \"textarea\",\n            \"name\": \"Условие использования указанной цены\",\n            \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n            \"required\": true\n          },\n          \"disabledFormula\": {\n            \"type\": \"checkbox\",\n            \"value\": true,\n            \"no_empty\": true,\n            \"name\": \"Отключить проверку условия:\",\n            \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n          }\n        }\n      },\n      \"iconSettingsSelectItem\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"value\": {\n          \"title\": {\n            \"required\": false,\n            \"type\": \"hidden\"\n          },\n          \"image\": {\n            \"name\": \"Иконка\",\n            \"type\": \"image2\",\n            \"required\": true\n          },\n          \"imageHover\": {\n            \"name\": \"Альтернативная иконка при наведении\",\n            \"type\": \"image2\",\n            \"note\": \"Заполнять не обязательно\"\n          },\n          \"maxWidth\": {\n            \"name\": \"Максимальная ширина иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n          \"maxHeight\": {\n            \"name\": \"Максимальная высота иконки в px\",\n            \"type\": \"text\",\n            \"value\": 32,\n            \"validator\": \"^[0-9]*$\",\n            \"note\": \"Только целые числа.\"\n          },\n        \"behaviorImage\": {\n\t\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t\t    \"type\": \"select\",\n\t\t    \"no_empty\": true,\n\t\t    \"options\": {\n\t\t      \"contain\": \"Встраивать - contain\",\n\t\t      \"cover\": \"Масштабировать - cover\"\n\t\t    }\n\t\t  },\n          \"location\": {\n            \"type\": \"select\",\n            \"name\": \"Расположение иконки\",\n            \"no_empty\": true,\n            \"options\": {\n              \"leftSide\": \"Слева\",\n              \"rightSide\": \"Справа\"\n            }\n          }\n        }\n      },\n      \"prompt\": {\n        \"type\": \"html\",\n        \"name\": \"Текст подсказки\"\n      },\n      \"dependencyFormulaItem\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие отображения пункта в выпадающем списке.\",\n        \"note\": \"Пример: ИмяЭлемента > 10 && ИмяЭлемента < 30 && ( ИмяЭлемента === 'Дерево' || ИмяЭлемента === 'Сталь' ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>  self - значение текущего элемента списка. </br> </br>\"\n      }\n    }\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки\"\n  },\n  \"selectedItem\": {\n    \"type\": \"text\",\n    \"name\": \"Номер пункта выбранный по умолчанию\",\n    \"value\": 1,\n    \"required\": true,\n    \"validator\": \"^[0-9]?$\",\n    \"note\": \"Отсчет начинается с 1. Если не заполнено, то будет выбрано первое значение.\"\n  },\n  \"isNeedChoice\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отключен предвыбор:\",\n    \"note\": \"По умолчанию ничего не будет выбрано.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для выбора:\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по ширине:\",\n    \"note\": \"Актуально для отображения колонкой.\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  \t},\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"size\": 50,\n    \"maxlength\": \"255\",\n    \"staff_only\": true\n  },\n    \"iconSettingsSelectLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"globalMaxWidth\": {\n    \"name\": \"Максимальная ширина иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"globalMaxHeight\": {\n    \"name\": \"Максимальная высота иконки в пункте списка\",\n    \"type\": \"text\",\n    \"validator\": \"^[0-9]*$\",\n    \"note\": \"Только целые числа. Общая настройка для всех элементов списка. </br> Перебивается локальной настройкой.\"\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiSelect\": \"Список\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Цвет рамки",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "valueSumm",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "цвет",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Белая",
+                        "selectName": "Белая"
+                      },
+                      {
+                        "title": "Элемент списка - Коричневая",
+                        "selectName": "Коричневая",
+                        "cost": 20
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettingsSelectLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  },
+                  {
+                    "json_id": "150443707",
+                    "meta_id": "44507307",
+                    "ver_id": "4948202",
+                    "title": "количество",
+                    "json": "{\"title\":\"количество\",\"label\":\"Количество\",\"value\":\"0\",\"placeholder\":\"\",\"cost\":\"1\",\"unit\":\"шт\",\"min\":\"0\",\"max\":\"10\",\"controls\":1,\"step\":\"1\",\"discreteStep\":false,\"dataType\":\"onlyNumber\",\"notEmpty\":1,\"isCurrency\":false,\"isColumn\":1,\"isStretch\":1,\"formOutputMethod\":\"valueSumm\",\"resultOutputMethod\":\"value\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"количество\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"template\":\"UiInput\"}",
+                    "modified": "1681461704",
+                    "created": "1681461441",
+                    "json_large": "{\"dependencyPrices\":null,\"prompt\":\"\",\"iconSettingsInputLabel\":null}",
+                    "type_group_id": "9001",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Текстовое поле - Input\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"value\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"value\": 0,\n    \"name\": \"Начальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Только числа\"\n  },\n  \"placeholder\": {\n    \"name\": \"Подсказка внутри текстового поля (placeholder)\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50,\n    \"note\": \"Работает при отключенной опции 'Обязательно для заполнения'\"\n  },\n  \"cost\": {\n    \"name\": \"Стоимость за единицу по умолчанию\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Сработает при включенной опции - только числа.\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость за единицу\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при включенной опции - 'Только числа' и выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"unit\": {\n    \"type\": \"text\",\n    \"name\": \"Единица измерения\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"note\": \"Отображается после поля для заполнения\"\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"min\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 0,\n    \"name\": \"Минимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"max\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 10,\n    \"name\": \"Максимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"controls\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Включить элементы управления (+ , -):\"\n  },\n  \"step\": {\n    \"type\": \"text\",\n    \"name\": \"Шаг при нажатии на кнопки управления\",\n    \"size\": 10,\n    \"maxlength\": 10,\n    \"required\": true,\n    \"value\": 1,\n    \"validator\": \"^[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"discreteStep\": {\n    \"name\": \"Включить кратность шага для поля ввода:\",\n    \"type\": \"checkbox\",\n    \"note\": \"При ручном изменении значения в поле ввода, оно будет автоматически корректироваться</br> кратно значению указанному в поле 'Шаг'\"\n  },\n  \"dataType\": {\n  \t\"name\":\"Тип данных в поле\",\n  \t\"type\": \"radio\",\n  \t\"options\": {\n  \t\t\"mixed\":\"Смешанный\",\n  \t\t\"onlyNumber\": \"Только числа\",\n  \t\t\"onlyInteger\": \"Только целые числа\"\n  \t},\n  \t\"value\": \"onlyNumber\",\n  \t\"no_empty\": true,\n  \t\"note\": \"Смешанный - любой текст.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для заполнения:\"\n  },\n  \"isCurrency\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Разделять тысячные:\",\n    \"note\": \"При включенной опции - 'Только числа'\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по доступной ширине:\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  },\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"staff_only\": true,\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"iconSettingsInputLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"maxlength\": \"255\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiInput\": \"Строка\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "Количество",
+                    "value": "0",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "шт",
+                    "min": "0",
+                    "max": "10",
+                    "controls": 1,
+                    "step": "1",
+                    "discreteStep": false,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "количество",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettingsInputLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  }
+                ],
+                "maxWidth": "25",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;44509507;44509707;"
+              },
+              {
+                "json_id": "150447907",
+                "meta_id": "44509907",
+                "ver_id": "4948202",
+                "title": "4 колонка",
+                "json": "{\"title\":\"4 колонка\",\"label\":\"\",\"templates\":[\"150447507\"],\"maxWidth\":\"25\",\"dependencyFormulaDisplay\":\"\",\"elementPosition\":\"default\"}",
+                "modified": "1681461590",
+                "created": "1681461590",
+                "json_large": "{\"iconSettingsColumnsItemLabel\":null}",
+                "type_group_id": "9018",
+                "json_meta": "{\n    \"title\": {\n        \"name\": \"Системный заголовок - Колонка\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"label\": {\n        \"name\": \"Заголовок колонки\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n    },\n    \"templates\": {\n        \"type\": \"json_array\",\n        \"name\": \"Элементы колонки:\",\n        \"value\": \"9001,9002,9003,9004,9005,9006,9007\"\n    },\n    \"maxWidth\": {\n        \"type\": \"select\",\n        \"name\": \"Ширина колонки относительно рабочей области в %\",\n        \"note\": \"Общая ширина колонок блока не должна превышать 100%!\",\n        \"value\": 50,\n        \"no_empty\": true,\n        \"options\": {\n            \"10\": \"10%\",\n            \"15\": \"15%\",\n            \"20\": \"20%\",\n            \"25\": \"25%\",\n            \"30\": \"30%\",\n            \"33\": \"33%\",\n            \"35\": \"35%\",\n            \"40\": \"40%\",\n            \"45\": \"45%\",\n            \"50\": \"50%\",\n            \"55\": \"55%\",\n            \"60\": \"60%\",\n            \"65\": \"65%\",\n            \"70\": \"70%\"\n        }\n    },\n    \"dependencyFormulaDisplay\": {\n        \"type\": \"textarea\",\n        \"name\": \"Формула условия отображения колонки\"\n    },\n    \"elementPosition\": {\n    \t\"type\": \"select\",\n    \t\"name\":\"Расположение элементов внутри блока\",\n    \t\"no_empty\": true,\n    \t\"options\": {\n    \t\t\"default\": \"Вертикальное\",\n    \t\t\"horizontal\": \"Горизонтальное - с переносом на следующую строку\"\n    \t}\n    },\n    \"iconSettingsColumnsItemLabel\": {\n        \"type\": \"meta\",\n        \"name\": \"Настройки иконки\",\n        \"single\": true,\n        \"note\": \"Для заголовка колонки\",\n        \"value\": {\n            \"title\": {\n                \"required\": false,\n                \"type\": \"hidden\"\n            },\n            \"image\": {\n                \"name\": \"Иконка\",\n                \"type\": \"image2\",\n                \"required\": true\n            },\n            \"maxWidth\": {\n                \"name\": \"Максимальная ширина иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"maxHeight\": {\n                \"name\": \"Максимальная высота иконки в px\",\n                \"type\": \"text\",\n                \"value\": 32,\n                \"validator\": \"^[0-9]*$\",\n                \"note\": \"Только целые числа.\"\n            },\n            \"behaviorImage\": {\n                \"name\": \"Поведение картинки в блоке (размер)\",\n                \"type\": \"select\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"contain\": \"Встраивать - contain\",\n                    \"cover\": \"Масштабировать - cover\"\n                }\n            },\n            \"location\": {\n                \"type\": \"select\",\n                \"name\": \"Расположение иконки\",\n                \"no_empty\": true,\n                \"options\": {\n                    \"leftSide\": \"Слева\",\n                    \"rightSide\": \"Справа\"\n                }\n            }\n        }\n    }\n\n}",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "150447507",
+                    "meta_id": "44507507",
+                    "ver_id": "4948202",
+                    "title": "Монтаж",
+                    "json": "{\"title\":\"Монтаж\",\"label\":\"\",\"buttonText\":\"Монтаж\",\"buttonTextChecked\":\"\",\"costForVoid\":\"0\",\"cost\":\"400\",\"baseValue\":\"default\",\"isNeedChoice\":false,\"isColumn\":1,\"typeDisplayClass\":\"switcher\",\"formOutputMethod\":\"valueSumm\",\"resultOutputMethod\":\"value\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"монтаж\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"scrollIntoName\":\"\",\"classes\":\"\",\"template\":\"UiCheckbox\"}",
+                    "modified": "1681461682",
+                    "created": "1681461564",
+                    "json_large": "{\"dependencyPrices\":null,\"prompt\":\"\",\"iconSettingsCheckboxLabel\":null}",
+                    "type_group_id": "9002",
+                    "json_meta": "{\n  \"title\": {\n    \"name\": \"Галочка - Сheckbox\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"buttonText\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Текст при НЕ активной галочке\",\n    \"required\": true,\n    \"size\": 50\n  },\n  \"buttonTextChecked\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Текст при активной галочке\",\n    \"size\": 50,\n    \"note\" : \"Если не заполнено, то будет всегда отображаться текст кнопки не активной галочке.\"\n  },\n  \"costForVoid\": {\n    \"name\": \"Стоимость при отключенной галочке\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"value\": 0,\n    \"maxlength\": 50,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"cost\": {\n    \"name\": \"Стоимость при включенной галочке\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость при включенной галочке с условием\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"baseValue\": {\n  \t\"type\": \"radio\",\n  \t\"name\": \"Начальное состояние\",\n  \t\"options\" : {\n  \t\t\"default\" : \"Не активна\",\n  \t\t\"active\": \"Активна\",\n  \t\t\"selected\" : \"Постоянно активна\",\n  \t\t\"notActive\": \"Невозможно активировать\"\n  \t},\n  \t\"no_empty\": true,\n  \t\"value\": \"default\"\n  },\n  \"isNeedChoice\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для заполнения:\",\n    \"note\": \"При включенной опции галочку нужно будет обязательно активировать.</ br> Иначе выдаст ошибку.\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"value\": false,\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"typeDisplayClass\": {\n    \"type\": \"select\",\n    \"name\": \"Тип отображения\",\n    \"options\": {\n      \"base\": \"Стандартная галочка\",\n      \"switcher\": \"Переключатель горизонтальный\",\n      \"switcher-vertical\": \"Переключатель вертикальный\",\n      \"button\": \"Кнопка\"\n    },\n    \"no_empty\": true\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  \t},\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнего подчеркивания.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"scrollIntoName\": {\n    \"name\": \"ИмяЭлемента для скролла к нему\",\n    \"type\": \"text\",\n    \"note\": \"При активации галочки, будет происходить плавная прокрутка до указанного элемент ( если он существует )</br> Имя может состоять из букв, цифр и нижнего подчеркивания.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список кастомных классов для обертки компонента ( через пробел )\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"staff_only\": true\n  },\n  \"iconSettingsCheckboxLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiCheckbox\": \"Галочка\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
+                    "label": "",
+                    "buttonText": "Монтаж",
+                    "buttonTextChecked": "",
+                    "costForVoid": "0",
+                    "cost": "400",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": 1,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "монтаж",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettingsCheckboxLabel": null,
+                    "parent": "0;44509507;44509707;44509907;"
+                  }
+                ],
+                "maxWidth": "25",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;44509507;44509707;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "adaptationMethod": "last",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettingsColumnsLabel": null,
+            "parent": "0;44509507;"
+          },
+          {
+            "json_id": "150451907",
+            "title": "площадь в м2",
+            "label": "",
+            "unit": "",
+            "cost": "(ширина * высота) / 1000 + ширина2 + _otherSum_",
+            "showElement": "show",
+            "formOutputMethod": "no",
+            "resultOutputMethod": "no",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "площадь",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "template": "UiSystem",
+            "dependencyPrices": [
+              {
+                "title": 1222,
+                "cost": "50 + ширина",
+                "dependencyFormulaCost": "ширина &gt; 50"
+              }
+            ],
+            "prompt": "",
+            "htmlText": "",
+            "dependencyHtmlText":
+            [
+              {
+                "title": 222222,
+                "htmlText": "asd asd asd&nbsp;",
+                "dependencyFormulaHtmlText": "ширина &gt; 50"
+              }
+            ],
+            "iconSettingsSystemLabel": null,
+            "parent": "0;44509507;"
+          }
+        ],
+        "buttonName": "+ Еще одно окно",
+        "maximumDuple": "10",
+        "formOutputMethod": "summ",
+        "resultOutputMethod": "summ",
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "formula": "_otherSum_",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiDuplicator",
+        "prompt": "",
+        "dependencyMainFormula": null,
+        "iconSettingsDuplicatorLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "150402442907",
+        "meta_id": "44507307",
+        "ver_id": "4948202",
+        "title": "Ширина 2",
+        "label": "Ширина 2",
+        "value": "0",
+        "placeholder": "",
+        "cost": "1",
+        "unit": "мм",
+        "min": "0",
+        "max": "10000",
+        "controls": 1,
+        "step": "100",
+        "discreteStep": false,
+        "dataType": "onlyNumber",
+        "notEmpty": 1,
+        "isCurrency": 1,
+        "isColumn": 1,
+        "isStretch": 1,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "ширина2",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsInputLabel": null,
+        "parent": "0;44509507;44509707;44509907;"
+      }
+    ]
 
   }
 }

@@ -214,6 +214,7 @@ export const useBaseStore = defineStore("base", {
         formulaProcessingLogic,
         position,
         zeroValueDisplayIgnore,
+        isDuplicator
       } = dataResultItem;
 
       this.globalResultsElements[name] = {
@@ -233,6 +234,7 @@ export const useBaseStore = defineStore("base", {
         formulaProcessingLogic,
         position,
         zeroValueDisplayIgnore,
+        isDuplicator: isDuplicator ? isDuplicator : false,
       };
     },
     /**
