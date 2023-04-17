@@ -1,10 +1,10 @@
 {
 
   "calculator-options": {
-    "json_id": "144069707",
-    "title": "Калькулятор грузоперевозок 2",
-    "computedMethod": "formula",
-    "formula": "_otherSum_",
+    "json_id": "150399707",
+    "title": "Калькулятор москитных сеток",
+    "computedMethod": "no",
+    "formula": "",
     "methodBeginningCalculation": "useButton",
     "form": "",
     "methodWorksForm": "show",
@@ -14,16 +14,11 @@
     "resultOptions": {
       "title": "ИТОГО:",
       "titleButton": "Рассчитать",
-      "formulaDisplayButton": "",
-      "hiddenResultBlock": 0,
-      "formulaDependencyForResultBlock": "",
       "titleSumma": "Общая сумма составляет",
-      "hiddenSumma": 0,
       "roundOffType": "ceil",
-      "signAfterDot": 0,
       "currency": "руб.",
       "textForSpinner": "Идет расчет...",
-      "timerForSpinner": 1
+      "signAfterDot": -2
     },
     "textAbove": "",
     "textAfter": "",
@@ -1169,6 +1164,7 @@
         "json_id": "150405507",
         "title": "Дупликатор",
         "label": "",
+        "unit":"asdasd",
         "templates": [
           {
             "json_id": "150404107",

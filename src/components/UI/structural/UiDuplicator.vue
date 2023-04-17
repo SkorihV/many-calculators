@@ -21,6 +21,7 @@
         :show-duplicate-button="countElementsDuple < maximumDuple"
         :icon-settings-duplicator-label="originData?.iconSettingsDuplicatorLabel"
         :prompt="originData?.prompt"
+        :unit="originData?.unit"
         @duplicate="duplicate"
         @deleteDuplicator="deleteDuplicator"
         @changedValue="changeValue"
@@ -53,7 +54,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 
-import { getNameElementsRecursive } from "@/servises/UtilityServices";
+import { decimalAdjust, getNameElementsRecursive } from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
@@ -85,6 +86,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
+      "unit"
     ]),
   },
   data() {
@@ -146,12 +148,19 @@ export default {
         this.localCost = null;
         return false;
       }
-      this.localCost = 0;
-      this.returnsLocalResultsElements.forEach((item) => {
+
+      let resultCost = this.returnsLocalResultsElements.reduce((result, item) => {
         if (item.cost !== null) {
-          this.localCost += parseFloat(item.cost);
+          return result + parseFloat(item.cost);
         }
-      });
+        return result;
+      }, 0);
+      resultCost = decimalAdjust(
+        resultCost,
+        this.getSignAfterDot,
+        this.getRoundOffType
+      );
+      this.localCost = resultCost;
     },
     emitChangeValue(eventType) {
       this.$emit("changedValue", {
@@ -164,7 +173,7 @@ export default {
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
         resultOutputMethod: this.duplicateTemplate.resultOutputMethod,
         eventType: eventType,
-        unit: "",
+        unit: this.unit?.length ? this.unit : '',
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
         insertedTemplates: this.returnsLocalResultsElements,
@@ -192,7 +201,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["tryAddDependencyElement"]),
+    ...mapState(useBaseStore, ["tryAddDependencyElement", "getSignAfterDot", "getRoundOffType"]),
     returnsLocalResultsElements() {
       return Object.values(this.localResultsElements).sort(
         (itemA, itemB) => itemA?.position - itemB?.position

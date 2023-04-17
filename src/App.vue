@@ -27,6 +27,7 @@
           :template-name="template.template"
           :position-element="template?.position"
           :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+          :unit="template?.unit"
           :parent-is-show="true"
           @changedValue="changeValue"
         />
@@ -608,44 +609,18 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                if (
-                  parseResultValueObjectItem(
-                    duplicator,
-                    "formOutputMethod",
-                    this.getCurrency
-                  )?.length
-                ) {
-                  result += "<div class='calc__result-block-delimiter'></div>";
-                  result +=
-                    "<div class='calc__result-block-field-wrapper'>" +
-                    parseResultValueObjectItem(
-                      duplicator,
-                      "formOutputMethod",
-                      this.getCurrency
-                    ) +
-                    "</div>";
+                const resultValueObjectItem = parseResultValueObjectItem(duplicator,"formOutputMethod", duplicator?.unit);
+                if (resultValueObjectItem?.length) {
+                  result += resultValueObjectItem;
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
-                    if (
-                      parseResultValueObjectItem(
-                        templateInDuplicator,
-                        "formOutputMethod",
-                        this.getCurrency
-                      )?.length
-                    ) {
-                      result +=
-                        "<div class='calc__result-block-field-wrapper'>" +
-                        parseResultValueObjectItem(
-                          templateInDuplicator,
-                          "formOutputMethod",
-                          this.getCurrency
-                        ) +
-                        "</div>";
+                    const resultValueObjectItemInDuplicator = parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency);
+                    if (resultValueObjectItemInDuplicator?.length) {
+                      result += resultValueObjectItemInDuplicator;
                     }
                   }
                 );
-                result += "<div class='calc__result-block-delimiter'></div>";
               }
             });
           }
@@ -656,10 +631,7 @@ export default {
             this.getCurrency
           );
           if (data.length) {
-            result +=
-              "<div class='calc__result-block-field-wrapper'> " +
-              data +
-              "</div>";
+            result += data;
           }
         }
       });
@@ -720,17 +692,9 @@ export default {
       } else {
         result +=
           "\n" +
-          "<div class='calc__result-block-field-summ'>" +
-          "<div class='calc__result-block-field-summ-title'>" +
           this.getTitleSum +
-          "</div>" +
-          "<div class='calc__result-block-field-summ-cost'> " +
           this.finalSummaForOutput +
-          "</div>" +
-          "<div class='calc__result-block-field-summ-currency'> " +
-          this.getCurrency +
-          "</div>" +
-          "</div>";
+          this.getCurrency;
       }
       return result;
     },
@@ -966,17 +930,17 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 0 0 $c_base_error_color;
   }
 
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 10px $c_base_error_bg;
   }
 
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    box-shadow: 0 0 0 0 $c_base_error_bg;
   }
 }
 
@@ -2483,8 +2447,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       color: $c_decor_text_default;
       cursor: pointer;
       &.isError {
-        background: red;
-        color: white;
+        background: $c_base_error_color;
+        color: $c_base_error_bg;
         &.close {
           animation: pulse 2s infinite;
         }

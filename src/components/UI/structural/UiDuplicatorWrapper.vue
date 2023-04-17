@@ -79,7 +79,7 @@ import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import { decimalAdjust, processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
@@ -127,7 +127,7 @@ export default {
       "dependencyFormulaDisplay",
       "elementName",
       "positionElement",
-
+      "unit",
     ]),
   },
   mounted() {
@@ -164,7 +164,7 @@ export default {
         formOutputMethod: this.mutationsInputData?.formOutputMethod,
         resultOutputMethod: this.mutationsInputData?.resultOutputMethod,
         eventType: data.eventType,
-        unit: "",
+        unit: this.unit?.length ? this.unit : '',
         isShow: this.parentIsShow,
         excludeFromCalculations:
           this.mutationsInputData.excludeFromCalculations,
@@ -304,7 +304,9 @@ export default {
       "getResultElementOnName",
       "devMode",
       "checkedIsStructureTemplate",
-      "tryAddResultElement"
+      "tryAddResultElement",
+      "getSignAfterDot",
+      "getRoundOffType",
     ]),
     /**
      *
@@ -545,12 +547,16 @@ export default {
       if (localCostIsNull) {
         return null;
       }
-
       try {
         const result = eval(this.compileFormulaWitchData);
-        const formulaIsComputed = typeof result === "number";
+        const formulaIsComputed = typeof result === "number" && !isNaN(result);
         if (formulaIsComputed) {
-          return result;
+
+          return decimalAdjust(
+            result,
+            this.getSignAfterDot,
+            this.getRoundOffType
+          );
         } else {
           throw new Error();
         }

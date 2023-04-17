@@ -133,39 +133,22 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                if (
-                  parseResultValueObjectItem(
-                    duplicator,
-                    "resultOutputMethod",
-                    this.getCurrency
-                  )?.length
-                ) {
+                const resultValueObjectItem = parseResultValueObjectItem(duplicator,"resultOutputMethod", duplicator?.unit);
+
+                if (resultValueObjectItem?.length) {
                   result += "<div class='calc__result-block-delimiter'></div>";
                   result +=
                     "<div class='calc__result-block-field-wrapper'>" +
-                    parseResultValueObjectItem(
-                      duplicator,
-                      "resultOutputMethod",
-                      this.getCurrency
-                    ) +
+                    resultValueObjectItem +
                     "</div>";
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
-                    if (
-                      parseResultValueObjectItem(
-                        templateInDuplicator,
-                        "resultOutputMethod",
-                        this.getCurrency
-                      )?.length
-                    ) {
+                    const resultValueObjectItemInDuplicator = parseResultValueObjectItem(templateInDuplicator, "resultOutputMethod", this.getCurrency);
+                    if (resultValueObjectItemInDuplicator?.length) {
                       result +=
                         "<div class='calc__result-block-field-wrapper'>" +
-                        parseResultValueObjectItem(
-                          templateInDuplicator,
-                          "resultOutputMethod",
-                          this.getCurrency
-                        ) +
+                        resultValueObjectItemInDuplicator +
                         "</div>";
                     }
                   }
@@ -175,20 +158,15 @@ export default {
             });
           }
         } else {
-          if (
-            parseResultValueObjectItem(
-              item,
-              "resultOutputMethod",
-              this.getCurrency
-            )?.length
-          ) {
+          const data = parseResultValueObjectItem(
+            item,
+            "formOutputMethod",
+            this.getCurrency
+          );
+          if (data?.length) {
             result +=
               "<div class='calc__result-block-field-wrapper'> " +
-              parseResultValueObjectItem(
-                item,
-                "resultOutputMethod",
-                this.getCurrency
-              ) +
+              data +
               "</div>";
           }
         }
