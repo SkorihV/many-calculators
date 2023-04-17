@@ -96,8 +96,8 @@ export default {
     TemplatesWrapper,
     TemplatesWrapperColumn,
   },
-  emits: ["changedValue"],
   mixins: [MixinCurrentWidthElement],
+  emits: ["changedValue"],
   props: {
     accordionItem: {
       type: Object,

@@ -251,7 +251,6 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapper",
-  emits: ["changedValue"],
   components: {
     UiRange,
     UiInput,
@@ -262,6 +261,7 @@ export default {
     UiImage,
     UiSystem,
   },
+  emits: ["changedValue"],
   props: {
     ...propsTemplate.getProps([
       "template",

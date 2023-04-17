@@ -59,16 +59,6 @@ export default {
   components: { TemplatesWrapper, DevBlock, IconElementWrapper, ColumnElement },
   mixins: [MixinsForProcessingFormula],
   emits: ["changedValue"],
-  mounted() {
-    this.updatedCurrentWidth();
-    window.addEventListener("resize", () => {
-      this.updatedCurrentWidth();
-    });
-
-    this.columnList.forEach((item) => {
-      this.stateColumns.push({ maxWidth: item.maxWidth });
-    });
-  },
   props: {
     columnList: {
       type: Array,
@@ -97,6 +87,16 @@ export default {
       "dependencyFormulaDisplay",
       "parentName",
     ]),
+  },
+  mounted() {
+    this.updatedCurrentWidth();
+    window.addEventListener("resize", () => {
+      this.updatedCurrentWidth();
+    });
+
+    this.columnList.forEach((item) => {
+      this.stateColumns.push({ maxWidth: item.maxWidth });
+    });
   },
   data() {
     return {

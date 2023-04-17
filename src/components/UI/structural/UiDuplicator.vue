@@ -58,8 +58,8 @@ import { getNameElementsRecursive } from "@/servises/UtilityServices";
 export default {
   name: "UiDuplicator",
   components: { UiDuplicatorWrapper, devBlock, UiPrompt },
-  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
+  emits: ["changedValue"],
   props: {
     duplicateTemplate: {
       type: Object,
@@ -87,13 +87,6 @@ export default {
       "zeroValueDisplayIgnore",
     ]),
   },
-  mounted() {
-    this.originData = JSON.parse(JSON.stringify(this.duplicateTemplate));
-    this.localTemplates.push(
-      JSON.parse(JSON.stringify(this.duplicateTemplate))
-    );
-    this.changeValue({ eventType: "mounted" });
-  },
   data() {
     return {
       originData: {},
@@ -101,6 +94,13 @@ export default {
       localTemplates: [],
       localCost: 0,
     };
+  },
+  mounted() {
+    this.originData = JSON.parse(JSON.stringify(this.duplicateTemplate));
+    this.localTemplates.push(
+      JSON.parse(JSON.stringify(this.duplicateTemplate))
+    );
+    this.changeValue({ eventType: "mounted" });
   },
   methods: {
     changeValid() {

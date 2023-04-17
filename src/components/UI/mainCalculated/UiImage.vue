@@ -49,17 +49,6 @@ export default {
   name: "UiImage",
   components: { UiPrompt, devBlock },
   mixins: [MixinsForProcessingFormula, MixinsGeneralItemData],
-  created() {
-    this.tryToggleElementIsMounted(this.elementName, false);
-  },
-  mounted() {
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.elementName, true);
-    }, 200);
-  },
-  unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.elementName)
-  },
   props: {
     defaultImage: {
       type: Object,
@@ -82,6 +71,17 @@ export default {
       "parentIsShow",
       "dependencyFormulaDisplay",
     ]),
+  },
+  created() {
+    this.tryToggleElementIsMounted(this.elementName, false);
+  },
+  mounted() {
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.elementName, true);
+    }, 200);
+  },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.elementName)
   },
   methods: {
     changeValue() {

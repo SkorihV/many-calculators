@@ -36,13 +36,13 @@ export default {
   name: "ResultButtonForComputed",
   components: { IconElementWrapper, devBlock },
   mixins: [MixinsUtilityServices],
+  emits: ["checkEnabledResultButton"],
   props: {
     resultOptions: {
       type: Object,
       default: () => {},
     },
   },
-  emits: ["checkEnabledResultButton"],
   data() {
     return {
       isHoverButton: false,

@@ -84,7 +84,6 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
   name: "UiDuplicatorWrapper",
-  emits: ["changedValue", "duplicate", "deleteDuplicator"],
   components: {
     devBlock,
     TemplatesWrapper,
@@ -93,6 +92,7 @@ export default {
     IconElementWrapper,
   },
   mixins: [MixinsUtilityServices, MixinLocalDependencyList],
+  emits: ["changedValue", "duplicate", "deleteDuplicator"],
   props: {
     duplicatorData: {
       type: Object,

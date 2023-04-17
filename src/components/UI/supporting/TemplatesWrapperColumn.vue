@@ -25,10 +25,10 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapper",
-  emits: ["changedValue"],
   components: {
     UiColumns,
   },
+  emits: ["changedValue"],
   props: {
     changeStateParent: {
       type: Boolean,

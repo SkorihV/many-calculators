@@ -112,29 +112,6 @@ export default {
     MixinDisplaySpinner,
   ],
   components: { UiPrompt, UiTooltip, IconElementWrapper, devBlock },
-  mounted() {
-    this.localElementName = this.checkedValueOnVoid(this.elementName)
-      ? this.elementName
-      : Math.random().toString();
-
-    this.originRadioList = JSON.parse(JSON.stringify(this.radioValues)).map(
-      (item, index) => {
-        item.index = index + 1;
-        return item;
-      }
-    );
-
-    if (!this.isErrorEmpty && !this.isNeedChoice) {
-      this.currentIndexRadioButton = parseInt(this.selectedItem);
-    }
-
-    setTimeout(() => {
-      this.changeValue("mounted");
-    }, 100);
-  },
-  unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
-  },
   props: {
     radioValues: {
       type: Array,
@@ -186,6 +163,29 @@ export default {
       "globalMaxWidth",
       "globalMaxHeight",
     ]),
+  },
+  mounted() {
+    this.localElementName = this.checkedValueOnVoid(this.elementName)
+      ? this.elementName
+      : Math.random().toString();
+
+    this.originRadioList = JSON.parse(JSON.stringify(this.radioValues)).map(
+      (item, index) => {
+        item.index = index + 1;
+        return item;
+      }
+    );
+
+    if (!this.isErrorEmpty && !this.isNeedChoice) {
+      this.currentIndexRadioButton = parseInt(this.selectedItem);
+    }
+
+    setTimeout(() => {
+      this.changeValue("mounted");
+    }, 100);
+  },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
   },
   data() {
     return {

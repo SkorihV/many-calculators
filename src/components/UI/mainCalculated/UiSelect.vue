@@ -141,29 +141,6 @@ export default {
     MixinDisplaySpinner,
   ],
   components: { IconElementWrapper, UiTooltip, UiPrompt, devBlock },
-  mounted() {
-    this.localSelectValues = this.selectValues;
-    if (this.needMockValue) {
-      this.localSelectValues.unshift(this.mockOption);
-      this.initSelectMockData();
-    } else {
-      this.initSelectData();
-    }
-
-    window.addEventListener("click", (e) => {
-      if (!this.$el.contains(e.target)) {
-        this.close();
-      }
-    });
-
-    setTimeout(() => {
-      this.tryToggleElementIsMounted(this.localElementName, true);
-      this.updatedWidthSelect();
-    }, 200);
-  },
-  unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
-  },
   props: {
     selectValues: {
       type: Array,
@@ -211,6 +188,29 @@ export default {
       "globalMaxWidth",
       "globalMaxHeight",
     ]),
+  },
+  mounted() {
+    this.localSelectValues = this.selectValues;
+    if (this.needMockValue) {
+      this.localSelectValues.unshift(this.mockOption);
+      this.initSelectMockData();
+    } else {
+      this.initSelectData();
+    }
+
+    window.addEventListener("click", (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.close();
+      }
+    });
+
+    setTimeout(() => {
+      this.tryToggleElementIsMounted(this.localElementName, true);
+      this.updatedWidthSelect();
+    }, 200);
+  },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
   },
   data() {
     return {

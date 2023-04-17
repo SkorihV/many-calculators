@@ -113,8 +113,8 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 export default {
   name: "UiTab",
   components: { IconElementWrapper, UiTooltip, UiPrompt, UiTabItem, devBlock },
-  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula],
+  emits: ["changedValue"],
   props: {
     tabData: {
       type: Object,

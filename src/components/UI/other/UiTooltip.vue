@@ -21,15 +21,6 @@ import { mapState } from "pinia";
 
 export default {
   name: "UiTooltip",
-  mounted() {
-    this.checkPosition();
-    window.addEventListener("resize", () => {
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        this.checkPosition();
-      }, 500);
-    });
-  },
   props: {
     /**
      * Текст ошибки
@@ -54,6 +45,15 @@ export default {
     localCanBeShown: {
       type: Boolean,
     },
+  },
+  mounted() {
+    this.checkPosition();
+    window.addEventListener("resize", () => {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        this.checkPosition();
+      }, 500);
+    });
   },
   data() {
     return {

@@ -59,12 +59,12 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {
   name: "TemplatesWrapperStructural",
-  emits: ["changedValue"],
   components: {
     UiTab,
     UiAccordion,
     UiBlockSection,
   },
+  emits: ["changedValue"],
   props: {
     ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
   },

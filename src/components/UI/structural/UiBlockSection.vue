@@ -90,8 +90,8 @@ export default {
     IconElementWrapper,
     TemplatesWrapperColumn,
   },
-  emits: ["changedValue"],
   mixins: [MixinsForProcessingFormula, MixinCurrentWidthElement],
+  emits: ["changedValue"],
   props: {
     templatesData: {
       type: Array,
