@@ -265,15 +265,6 @@ export const useBaseStore = defineStore("base", {
       };
     },
     /**
-     * удалить элемент зависимости из общего массива данных по имени
-     * @param elementName
-     */
-    tryDeleteDependencyElementOnName(elementName) {
-      if (this.dataListForDependencies.hasOwnProperty(elementName)) {
-        delete this.dataListForDependencies[elementName];
-      }
-    },
-    /**
      * разрешить отображение подсказок с ошибками
      */
     showAllTooltipsOn() {
@@ -307,5 +298,44 @@ export const useBaseStore = defineStore("base", {
     setInputOptions(inputOptions) {
       this.inputOptions = inputOptions;
     },
+    /**
+     *
+     * @param elementName
+     */
+    tryDeleteAllDataOnStoreForElementName(elementName) {
+      if (Array.isArray(elementName)) {
+        elementName.forEach(name => {
+          this.deleteElementInDependencyList(name);
+          this.deleteElementInResultsList(name);
+          this.deleteElementInMountedList(name);
+          this.deleteElementInValidationsErrorsList(name);
+        });
+      } else {
+        this.deleteElementInDependencyList(elementName);
+        this.deleteElementInResultsList(elementName);
+        this.deleteElementInMountedList(elementName);
+        this.deleteElementInValidationsErrorsList(elementName);
+      }
+    },
+    deleteElementInDependencyList(elementName) {
+      if (elementName in this.dataListForDependencies) {
+        delete this.dataListForDependencies[elementName];
+      }
+    },
+    deleteElementInResultsList(elementName) {
+      if (elementName in this.globalResultsElements) {
+        delete this.globalResultsElements[elementName];
+      }
+    },
+    deleteElementInMountedList(elementName) {
+      if (elementName in this.elementsIsMounted) {
+        delete this.elementsIsMounted[elementName];
+      }
+    },
+    deleteElementInValidationsErrorsList(elementName) {
+      if (elementName in this.validationsErrorsList) {
+        delete this.validationsErrorsList[elementName];
+      }
+    }
   },
 });

@@ -107,6 +107,9 @@ export default {
   mounted() {
     this.changeValue("mounted");
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   methods: {
     changeValue(eventType = "system") {
       this.$emit("changedValue", {
@@ -169,6 +172,7 @@ export default {
       "checkValidationDataAndToggle",
       "getResultElementOnName",
       "listGlobalsVariables",
+      "tryDeleteAllDataOnStoreForElementName"
     ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -236,7 +240,6 @@ export default {
      * @returns {number|null|any}
      */
     localCost() {
-
       if (
         !this.isVisibilityFromDependency ||
         this.processingVariablesInFormula === null
@@ -244,7 +247,11 @@ export default {
         return null;
       }
       try {
-        return eval(this.processingVariablesInFormula);
+        if (!isNaN(eval(this.processingVariablesInFormula))) {
+          return eval(this.processingVariablesInFormula);
+        } else {
+          return null;
+        }
       } catch (e) {
         console.error(
           "Системное поле, обработка формулы стоимости: ",

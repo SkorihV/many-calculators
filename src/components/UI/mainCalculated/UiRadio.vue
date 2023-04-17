@@ -132,6 +132,9 @@ export default {
       this.changeValue("mounted");
     }, 100);
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   props: {
     radioValues: {
       type: Array,

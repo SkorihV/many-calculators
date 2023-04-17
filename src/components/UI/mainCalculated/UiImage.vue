@@ -57,6 +57,9 @@ export default {
       this.tryToggleElementIsMounted(this.elementName, true);
     }, 200);
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.elementName)
+  },
   props: {
     defaultImage: {
       type: Object,
@@ -93,6 +96,7 @@ export default {
       "devMode",
       "getImageDir",
       "tryToggleElementIsMounted",
+      "tryDeleteAllDataOnStoreForElementName"
     ]),
     urlIsExist() {
       return Boolean(this.localDataForDisplay?.url?.length);

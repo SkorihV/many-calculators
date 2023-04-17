@@ -182,9 +182,6 @@ export default {
       this.$emit("duplicate", returnData);
     },
     deleteDuplicate() {
-      this.mutationsInputData?.templates.map((item) => {
-        this.tryDeleteDependencyElementOnName(item.elementName);
-      });
       this.$emit("deleteDuplicator", this.duplicatorData.elementName);
     },
     /**
@@ -303,8 +300,6 @@ export default {
   },
   computed: {
     ...mapState(useBaseStore, [
-      "tryDeleteDependencyElementOnName",
-      "getAllResultsElements",
       "getNameReserveVariable",
       "getResultElementOnName",
       "devMode",

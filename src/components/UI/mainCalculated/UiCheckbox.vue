@@ -187,6 +187,9 @@ export default {
     }
     this.changeValue("mounted");
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   data() {
     return {
       currentLocalTextButton: "",
@@ -295,6 +298,7 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
+      "tryDeleteAllDataOnStoreForElementName"
     ]),
     /**
      *

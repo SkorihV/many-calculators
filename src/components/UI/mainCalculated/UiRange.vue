@@ -226,6 +226,9 @@ export default {
       }
     }, 500);
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   data() {
     return {
       elementWidth: 0,
@@ -400,6 +403,7 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);

@@ -161,6 +161,9 @@ export default {
       this.updatedWidthSelect();
     }, 200);
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   props: {
     selectValues: {
       type: Array,
@@ -415,6 +418,7 @@ export default {
       "getImageDir",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     isExistLabel() {
       return Boolean(this.label?.toString().length);

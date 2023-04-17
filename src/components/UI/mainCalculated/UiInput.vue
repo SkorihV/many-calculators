@@ -221,6 +221,9 @@ export default {
       this.changeValue("mounted");
     }
   },
+  unmounted() {
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+  },
   data() {
     return {
       inputFocus: false,
@@ -470,6 +473,7 @@ export default {
       "devMode",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
+      "tryDeleteAllDataOnStoreForElementName"
     ]),
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);
