@@ -16,7 +16,11 @@
           type="checkbox"
         />
       </label>
-      <div class="calc__error-toggle" @click="displayAlert = !displayAlert">
+      <div
+        class="calc__error-toggle"
+        @click="displayAlert = !displayAlert"
+        :class="{ 'isError': isExistError, 'close': !displayAlert }"
+      >
         X
       </div>
     </div>
@@ -38,7 +42,7 @@
           </div>
         </template>
 
-        <template v-if="Object.keys(recurringTemplateNames).length">
+        <template v-if="isExistDoubleNames">
           <div class="calc__error-label">Дубли имен:</div>
           <div
             class="calc__error-item"
@@ -55,9 +59,9 @@
           <p class="calc__error-alert">Имена должны быть уникальными!</p>
         </template>
 
-        <template v-if="notExistNamesInDisplayFormula.length">
+        <template v-if="isExistNamesIsDisplayFormula">
           <div class="calc__error-label">
-            Не существующие имена в формулах на отображение Заголовок / Имя:
+            Не существующие имена в формулах на отображение: Заголовок / Имя
           </div>
           <div
             class="calc__error-item"
@@ -75,9 +79,9 @@
           </p>
         </template>
 
-        <template v-if="notExistNamesInComputedFormula.length">
+        <template v-if="isExistNamesInComputedFormula">
           <div class="calc__error-label">
-            Не существующие имена в формулах на расчет Заголовок / Имя:
+            Не существующие имена в формулах на расчет: Заголовок / Имя
           </div>
           <div
             class="calc__error-item"
@@ -484,6 +488,18 @@ export default {
       }
       return resultRecurring;
     },
+    isExistDoubleNames() {
+      return Boolean(Object.keys(this.recurringTemplateNames).length);
+    },
+    isExistNamesIsDisplayFormula () {
+      return Boolean(this.notExistNamesInDisplayFormula.length);
+    },
+    isExistNamesInComputedFormula() {
+      return Boolean(this.notExistNamesInComputedFormula.length)
+    },
+    isExistError() {
+      return this.isExistDoubleNames || this.isExistNamesIsDisplayFormula || this.isExistNamesInComputedFormula
+    }
   },
 };
 </script>

@@ -963,6 +963,23 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   }
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2465,6 +2482,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       border: $c_decor_border_width solid $c_decor_border_color;
       color: $c_decor_text_default;
       cursor: pointer;
+      &.isError {
+        background: red;
+        color: white;
+        &.close {
+          animation: pulse 2s infinite;
+        }
+      }
     }
     &-checkbox {
       &-label {

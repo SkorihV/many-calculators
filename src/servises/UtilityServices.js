@@ -65,17 +65,25 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
 const processingArrayOnFormulaProcessingLogic = function (dataList) {
   let resultList = [];
   let localDataList = dataList;
+
   for (let i = 0; i < localDataList.length; i++) {
     const currentItemList = localDataList[i];
+
     const isProcessingLogic =
       currentItemList?.formulaProcessingLogic?.length &&
       currentItemList?.cost === null;
     const isItemObject = typeof currentItemList === "object";
     const isExistCost = typeof currentItemList?.cost === "number";
+
     const error = "ОшибкаЗаполнения";
+
+    const isNulData = currentItemList === null;
+    const errorNull = "ЭлементаСТакимИменемНеСуществует";
 
     if (!isItemObject) {
       resultList.push(currentItemList);
+    } else if (isNulData) {
+      resultList.push(errorNull);
     } else if (isItemObject && isProcessingLogic) {
       if (currentItemList.formulaProcessingLogic === "error") {
         resultList.push(error);
