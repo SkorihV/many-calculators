@@ -212,12 +212,8 @@ export default {
 
     this.updateWidthElement();
 
-    window.addEventListener("resize", () => {
-      this.updateWidthElement();
-    });
-    document.addEventListener("DOMContentLoaded", () => {
-      this.updateWidthElement();
-    });
+    window.addEventListener("resize", this.resizeUpdateWidthElement);
+    document.addEventListener("DOMContentLoaded", this.contentLoadedUpdateWidthElement);
 
     let timer = setInterval(() => {
       if (this.$refs?.thisElementInputRange?.offsetWidth || this.elementWidth) {
@@ -227,6 +223,8 @@ export default {
     }, 500);
   },
   unmounted() {
+    window.removeEventListener('resize', this.resizeUpdateWidthElement);
+    document.removeEventListener('DOMContentLoaded', this.contentLoadedUpdateWidthElement);
     this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
   },
   data() {
@@ -362,6 +360,12 @@ export default {
         this.elementWidth = this.$refs?.thisElementInputRange?.offsetWidth;
       }
     },
+    resizeUpdateWidthElement() {
+      this.updateWidthElement();
+    },
+    contentLoadedUpdateWidthElement() {
+      this.updateWidthElement();
+    }
   },
   watch: {
     /**

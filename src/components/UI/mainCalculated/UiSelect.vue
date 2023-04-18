@@ -198,11 +198,7 @@ export default {
       this.initSelectData();
     }
 
-    window.addEventListener("click", (e) => {
-      if (!this.$el.contains(e.target)) {
-        this.close();
-      }
-    });
+    window.addEventListener("click", this.clickClose);
 
     setTimeout(() => {
       this.tryToggleElementIsMounted(this.localElementName, true);
@@ -210,6 +206,7 @@ export default {
     }, 200);
   },
   unmounted() {
+    window.removeEventListener("click", this.clickClose);
     this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
   },
   data() {
@@ -376,6 +373,11 @@ export default {
         }
       }, 100);
     },
+    clickClose(e) {
+      if (!this.$el.contains(e.target)) {
+        this.close();
+      }
+    }
   },
   watch: {
     isOpen(newValue) {

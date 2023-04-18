@@ -40,7 +40,7 @@ export default {
     },
     /**
      *  Инициализирует возможность показа как таковую
-     *  параметр зависит не от наличия ошибок в компоненте, а от сторонних параметров.
+     *  параметер зависит не от наличия ошибок в компоненте, а от сторонних параметров.
      */
     localCanBeShown: {
       type: Boolean,
@@ -48,12 +48,10 @@ export default {
   },
   mounted() {
     this.checkPosition();
-    window.addEventListener("resize", () => {
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        this.checkPosition();
-      }, 500);
-    });
+    window.addEventListener("resize", this.resize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.resize);
   },
   data() {
     return {
@@ -86,6 +84,12 @@ export default {
         }
       }, 10);
     },
+    resize() {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        this.checkPosition();
+      }, 500);
+    }
   },
   watch: {
     /**

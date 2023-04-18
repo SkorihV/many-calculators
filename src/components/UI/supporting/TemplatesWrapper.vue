@@ -78,7 +78,7 @@
     </template>
   </ui-checkbox>
 
-  <UiRadio
+  <ui-radio
     v-else-if="template.template === 'UiRadio'"
     :label="template?.label"
     :is-column="template?.isColumn"
@@ -112,7 +112,7 @@
     <template v-slot:prompt>
       <ui-prompt :prompt-text="template.prompt" />
     </template>
-  </UiRadio>
+  </ui-radio>
 
   <ui-range
     v-else-if="template.template === 'UiRange'"
@@ -239,6 +239,7 @@
 </template>
 
 <script>
+
 import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
 import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
 import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";

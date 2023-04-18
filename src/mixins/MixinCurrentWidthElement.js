@@ -10,9 +10,10 @@ export const MixinCurrentWidthElement = {
       stepInterval++;
     }, 500);
 
-    window.addEventListener("resize", () => {
-      this.updatedCurrentWidth();
-    });
+    window.addEventListener("resize", this.resizeWidth);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.resizeWidth)
   },
   data() {
     return {
@@ -29,6 +30,9 @@ export const MixinCurrentWidthElement = {
         });
       }
     },
+    resizeWidth() {
+      this.updatedCurrentWidth();
+    }
   },
   watch: {
     parentIsShow: {

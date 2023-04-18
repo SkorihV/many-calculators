@@ -90,13 +90,14 @@ export default {
   },
   mounted() {
     this.updatedCurrentWidth();
-    window.addEventListener("resize", () => {
-      this.updatedCurrentWidth();
-    });
+    window.addEventListener("resize", this.resize);
 
     this.columnList.forEach((item) => {
       this.stateColumns.push({ maxWidth: item.maxWidth });
     });
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.resize);
   },
   data() {
     return {
@@ -122,6 +123,9 @@ export default {
         clearInterval(this.timerName);
       }
     },
+    resize() {
+      this.updatedCurrentWidth();
+    }
   },
   watch: {
     parentIsShow: {
