@@ -76,14 +76,12 @@ export const MixinsForProcessingFormula = {
     },
   },
   watch: {
-    // /**
-    //  * Отправить команду на удаление элемента из общих данных при его скрытии
-    //  */
-    // isVisibilityFromDependency() {
-    //   if (this.isCanShowAllTooltips) {    //
-    //     this.changeValue("dependency");
-    //   }
-    // },
+    /**
+     * Сообщить всем компонентам, что один из них изменил видимость
+     */
+    isVisibilityFromDependency() {
+      this.initSomeElementChangedSelfVisibilityState();
+    },
     // /**
     //  *
     //  * @param newValue
@@ -98,6 +96,7 @@ export const MixinsForProcessingFormula = {
     ...mapState(useBaseStore, [
       "globalDependenciesList",
       "isCanShowAllTooltips",
+      "initSomeElementChangedSelfVisibilityState",
       "devMode",
     ]),
     /**

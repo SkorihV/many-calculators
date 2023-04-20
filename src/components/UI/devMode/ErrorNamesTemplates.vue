@@ -344,7 +344,7 @@ export default {
       );
       this.getNeedleDataInTemplates(
         this.templates,
-        ["formula", "dependencyFormulaCost"],
+        ["formula", "dependencyFormulaCost", 'cost'],
         "listComputedFormula",
         "formula"
       );

@@ -549,9 +549,8 @@ export default {
       }
       try {
         const result = eval(this.compileFormulaWitchData);
-        const formulaIsComputed = typeof result === "number" && !isNaN(result);
+        const formulaIsComputed = typeof result === "number" && !isNaN(result) && isFinite(result);
         if (formulaIsComputed) {
-
           return decimalAdjust(
             result,
             this.getSignAfterDot,

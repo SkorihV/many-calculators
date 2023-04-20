@@ -23,6 +23,7 @@ export const useBaseStore = defineStore("base", {
       methodBeginningCalculation: "no",
       initEnabledSendForm: false,
       allowShowResultBlock: false,
+      someElementChangedSelfVisibilityState: 0
     };
   },
   getters: {
@@ -195,6 +196,9 @@ export const useBaseStore = defineStore("base", {
         ? inputOptions?.resultOptions?.titleSumma
         : "";
     },
+    getSomeElementChangedSelfVisibilityState({someElementChangedSelfVisibilityState}) {
+      return someElementChangedSelfVisibilityState;
+    }
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -336,6 +340,9 @@ export const useBaseStore = defineStore("base", {
       if (elementName in this.validationsErrorsList) {
         delete this.validationsErrorsList[elementName];
       }
+    },
+    initSomeElementChangedSelfVisibilityState() {
+      this.someElementChangedSelfVisibilityState = this.someElementChangedSelfVisibilityState +1;
     }
   },
 });

@@ -48,7 +48,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import { processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import { decimalAdjust, processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -84,6 +84,14 @@ export default {
     iconSettingsSystemLabel: {
       type: Object,
       default: () => {},
+    },
+    roundOffType: {
+      type: String,
+      default: 'round'
+    },
+    signAfterDot: {
+      type: Number,
+      default: -2
     },
     ...propsTemplate.getProps([
       "elementName",
@@ -247,8 +255,9 @@ export default {
         return null;
       }
       try {
-        if (!isNaN(eval(this.processingVariablesInFormula))) {
-          return eval(this.processingVariablesInFormula);
+        const resultNumber = eval(this.processingVariablesInFormula);
+        if (!isNaN(resultNumber) && isFinite(resultNumber)) {
+          return decimalAdjust(resultNumber, this.signAfterDot, this.roundOffType);
         } else {
           return null;
         }

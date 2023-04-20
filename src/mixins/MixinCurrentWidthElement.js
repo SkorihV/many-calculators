@@ -24,10 +24,8 @@ export const MixinCurrentWidthElement = {
   methods: {
     updatedCurrentWidth() {
       if (this.$refs?.parent && this.$refs.parent?.offsetWidth !== 0) {
-        this.$nextTick(() => {
           this.currentWidthElement = this.$refs.parent.offsetWidth;
           clearInterval(this.timerName);
-        });
       }
     },
     resizeWidth() {

@@ -1,13 +1,13 @@
 <template>
   <div
     ref="parent"
-    class="calc__wrapper-group-data"
+    class="calc__wrapper-group-data isRange"
     :id="elementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
     <div
       class="calc__range-wrapper"
-      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
+      :class="[classes, { 'column': isColumn || isMakeElementColumn, 'static': isStaticValue }]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsRangeLabel"
@@ -51,6 +51,7 @@
           <div
             v-if="isStaticValue"
             :style="{ left: positionStaticResultValue }"
+            ref="static"
             class="calc__range-current-static"
           >
             {{ resultValue }}
@@ -236,6 +237,8 @@ export default {
       updateValueTimer: null,
       canBeShownTooltip: false,
       timerNameForLocalValue: null,
+      minimalWidthStaticElement: 15,
+      staticElementWidth: this.minimalWidthStaticElement
     };
   },
   methods: {
@@ -257,6 +260,7 @@ export default {
       this.changeValue("changeValueStep");
     },
     tryChangeValue(e) {
+      this.staticElementWidth = this.$refs.static ? this.$refs.static?.offsetWidth : this.minimalWidthStaticElement;
       clearTimeout(this.timerNameForLocalValue);
       this.resultValue = this.checkValidValueReturnNumber(e.target.value);
       this.timerNameForLocalValue = setTimeout(() => {
@@ -383,7 +387,7 @@ export default {
       handler(newValue, oldValue) {
         if (newValue) {
           setTimeout(() => {
-            this.elementWidth = this.$refs.thisElementInputRange.offsetWidth;
+            this.elementWidth = this.$refs?.thisElementInputRange?.offsetWidth;
           }, 500);
         }
         this.changeValue("dependency");
@@ -400,6 +404,12 @@ export default {
         this.dynamicValue = newValue;
       }
     },
+    getSomeElementChangedSelfVisibilityState() {
+      this.updatedCurrentWidth();
+      setTimeout(()=> {
+        this.updateWidthElement();
+      }, 10)
+    }
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -408,6 +418,7 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
       "tryDeleteAllDataOnStoreForElementName",
+      "getSomeElementChangedSelfVisibilityState",
     ]),
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);
@@ -498,19 +509,19 @@ export default {
       if (this.resultValue === null) {
         return null;
       }
-      const width = this.elementWidth - 25;
+      const width = this.elementWidth - this.staticElementWidth / 2 - 10;
 
       let newPosition =
         (this.resultValue - this.localMin) / (this.localMax - this.localMin);
 
       if (newPosition < 0) {
-        newPosition = 0;
-      } else if (newPosition > 1) {
+        newPosition = 5;
+      }else if (newPosition >= 1) {
         newPosition = width;
       } else {
-        newPosition = width * newPosition;
+        newPosition = width * newPosition - this.staticElementWidth / 10;
       }
-      return newPosition.toFixed(4) + "px";
+      return newPosition + "px";
     },
     amountSteps() {
       return (this.localMax - this.localMin) / this.localStepPrompt;

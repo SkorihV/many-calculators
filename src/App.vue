@@ -29,6 +29,8 @@
           :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
           :unit="template?.unit"
           :parent-is-show="true"
+          :round-off-type="template?.roundOffType"
+          :sign-after-dot="template?.signAfterDot"
           @changedValue="changeValue"
         />
         <templates-wrapper-column
@@ -119,11 +121,13 @@ import {
 
 import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
 
 export default {
   name: "TheBasicCalculatorConstructor",
   mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   components: {
+    UiSystem,
     TemplatesWrapperStructural,
     TemplatesWrapperColumn,
     TemplatesWrapper,
@@ -580,7 +584,12 @@ export default {
      */
     combinedFormulaDataTogether() {
       try {
-        return eval(this.resultTextForComputed);
+        const resultNumber = eval(this.resultTextForComputed);
+        if (!isNaN(resultNumber) && isFinite(resultNumber)) {
+          return resultNumber;
+        } else {
+          return null;
+        }
       } catch (e) {
         if (this.devMode) {
           console.warn("Рассчитываемая формула: ", this.resultTextForComputed);
@@ -1127,6 +1136,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex-direction: column;
         align-items: flex-start;
       }
+      &.static {
+        min-height: 80px;
+      }
     }
     &-label {
       &-text {
@@ -1306,6 +1318,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         font-size: 14px;
         line-height: 16px;
         top: 15px;
+        padding: 5px;
         &:hover {
           color: $c_element_text_hover;
           background-color: $c_element_bg_color_hover;
@@ -2367,6 +2380,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         > .calc__wrapper-group-data {
           width: auto;
           flex: 0 1 auto;
+          &.isRange {
+            flex: 1 1 auto;
+          }
         }
       }
     }

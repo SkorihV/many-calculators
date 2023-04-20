@@ -73,6 +73,14 @@ export default {
         return !isNaN(Number(value));
       },
     },
+    roundOffType: {
+      type: String,
+      default: 'round'
+    },
+    signAfterDot: {
+      type: Number,
+      default: -2
+    },
     ...propsTemplate.getProps([
       "formOutputMethod",
       "resultOutputMethod",
@@ -157,8 +165,8 @@ export default {
       }, 0);
       resultCost = decimalAdjust(
         resultCost,
-        this.getSignAfterDot,
-        this.getRoundOffType
+        this.signAfterDot,
+        this.roundOffType
       );
       this.localCost = resultCost;
     },

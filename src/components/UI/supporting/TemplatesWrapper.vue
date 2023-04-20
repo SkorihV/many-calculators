@@ -230,6 +230,8 @@
     :icon-settings-system-label="template?.iconSettingsSystemLabel"
     :unit="template?.unit"
     :html-text="template?.htmlText"
+    :round-off-type="template?.roundOffType"
+    :sign-after-dot="template?.signAfterDot"
     @changedValue="changeValue"
   >
     <template v-slot:prompt>
