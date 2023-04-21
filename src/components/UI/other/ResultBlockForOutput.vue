@@ -160,7 +160,7 @@ export default {
         } else {
           const data = parseResultValueObjectItem(
             item,
-            "formOutputMethod",
+            "resultOutputMethod",
             this.getCurrency
           );
           if (data?.length) {
