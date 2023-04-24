@@ -1165,16 +1165,11 @@
         "meta_id": "30324707",
         "ver_id": "4858595",
         "title": "Тип строения:",
-        "json": "{\"title\":\"Тип строения:\",\"label\":\"Тип строения:\",\"selectedItem\":\"1\",\"isColumn\":1,\"isNeedChoice\":false,\"notEmpty\":1,\"typeDisplayClass\":\"buttons\",\"formOutputMethod\":\"value\",\"resultOutputMethod\":\"value\",\"zeroValueDisplayIgnore\":false,\"excludeFromCalculations\":false,\"elementName\":\"строение\",\"formulaProcessingLogic\":\"zero\",\"dependencyFormulaDisplay\":\"\",\"classes\":\"\",\"template\":\"UiRadio\",\"isStretch\":false,\"globalMaxWidth\":\"50\",\"globalMaxHeight\":\"50\"}",
-        "modified": "2023-04-21 17:52:57",
-        "created": "2023-03-16 14:54:00",
-        "json_large": "{\"values\":[{\"title\":\"Элемент радио-кнопка - Баня\",\"radioName\":\"Баня\",\"subradioName\":\"Срок возведения от 3х дней\",\"cost\":2001,\"iconSettingsRadioItem\":{\"title\":\"\",\"image\":{\"image_id\":\"1387887907\",\"filename\":\"bathhouse.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"imageSelected\":{\"image_id\":\"1387888107\",\"filename\":\"bathhouse1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"behaviorImage\":\"contain\",\"location\":\"leftSide\"}},{\"title\":\"Элемент радио-кнопка - Дом\",\"radioName\":\"Дом\",\"subradioName\":\"Срок возведения от 6 месяцев\",\"cost\":6000,\"iconSettingsRadioItem\":{\"title\":\"\",\"image\":{\"image_id\":\"1387888307\",\"filename\":\"house.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"imageSelected\":{\"image_id\":\"1387888507\",\"filename\":\"house1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"behaviorImage\":\"contain\",\"location\":\"leftSide\"}},{\"title\":\"Элемент радио-кнопка - Забор\",\"radioName\":\"Забор\",\"subradioName\":\"Справимся за 2 дня\",\"cost\":100,\"extraValueForDependency\":\"забор\",\"iconSettingsRadioItem\":{\"title\":\"\",\"image\":{\"image_id\":\"1387890507\",\"filename\":\"fence2_1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"imageSelected\":{\"image_id\":\"1387890307\",\"filename\":\"fence3_1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"behaviorImage\":\"contain\",\"location\":\"leftSide\"}},{\"title\":\"Элемент радио-кнопка - Пирс \\/ Причал\",\"radioName\":\"Пирс \\/ Причал\",\"subradioName\":\"Срок возведения от 10х дней\",\"cost\":700,\"extraValueForDependency\":\"пирс\",\"iconSettingsRadioItem\":{\"title\":\"\",\"image\":{\"image_id\":\"1387889307\",\"filename\":\"pier.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"imageSelected\":{\"image_id\":\"1387889107\",\"filename\":\"pier1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"behaviorImage\":\"contain\",\"location\":\"leftSide\"}},{\"title\":\"Элемент радио-кнопка - Пристрой\",\"radioName\":\"Пристрой\",\"cost\":700,\"extraValueForDependency\":\"пристрой\",\"iconSettingsRadioItem\":{\"title\":\"\",\"image\":{\"image_id\":\"1387889707\",\"filename\":\"barn.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"imageSelected\":{\"image_id\":\"1387889507\",\"filename\":\"barn1.svg\",\"ver_id\":4858595,\"image_width\":\"0\",\"image_height\":\"0\",\"ext\":\"svg\"},\"behaviorImage\":\"contain\",\"location\":\"leftSide\"}}],\"prompt\":\"\",\"iconSettingsRadioLabel\":null}",
-        "type_group_id": "9003",
         "label": "Тип строения:",
         "selectedItem": "1",
         "isColumn": 1,
-        "isNeedChoice": false,
-        "notEmpty": 1,
+        "isNeedChoice": true,
+        "notEmpty": true,
         "typeDisplayClass": "buttons",
         "formOutputMethod": "value",
         "resultOutputMethod": "value",
@@ -1651,6 +1646,931 @@
           }
         ],
         "dependencyFormulaDisplay": "",
+        "adaptationMethod": "free",
+        "elementName": "",
+        "classes": "",
+        "template": "UiColumns",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "128507507",
+        "title": "Дом",
+        "label": "Дом",
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "isColumn": 1,
+        "isStretch": 1,
+        "typeDisplayClass": "buttons",
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": 1,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - Панельный",
+            "radioName": "Панельный"
+          },
+          {
+            "title": "Элемент радио-кнопка - Кирпичный",
+            "radioName": "Кирпичный"
+          },
+          {
+            "title": "Элемент радио-кнопка - Частный",
+            "radioName": "Частный"
+          }
+        ],
+        "prompt": "",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "122365907",
+        "title": "Окно - дупликатор.",
+        "label": "Окно",
+        "templates": [
+          {
+            "json_id": "122365707",
+            "title": "окна - Тип застекления радио",
+            "label": "",
+            "selectedItem": "1",
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "isColumn": 1,
+            "typeDisplayClass": "onlyImage",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "типОкна",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "70",
+            "globalMaxHeight": "70",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Одинарное",
+                "radioName": "Одинарное",
+                "cost": 4000,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598251707",
+                    "filename": "g1668.png",
+                    "ver_id": 4894475,
+                    "image_width": "264",
+                    "image_height": "384",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - Двойное",
+                "radioName": "Двойное",
+                "cost": 4500,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598251907",
+                    "filename": "g1688.png",
+                    "ver_id": 4894475,
+                    "image_width": "384",
+                    "image_height": "384",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                },
+                "prompt": "Здесь может быть небольшая подсказка для клиента."
+              },
+              {
+                "title": "Элемент радио-кнопка - Тройное",
+                "radioName": "Тройное",
+                "cost": 5500,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598250507",
+                    "filename": "g1515.png",
+                    "ver_id": 4894475,
+                    "image_width": "384",
+                    "image_height": "300",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - Тройное с форточкой",
+                "radioName": "Тройное с форточкой",
+                "cost": 5500,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598250707",
+                    "filename": "g1538.png",
+                    "ver_id": 4894475,
+                    "image_width": "384",
+                    "image_height": "300",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - Панорама с дверью",
+                "radioName": "Панорама с дверью",
+                "cost": 6000,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598251107",
+                    "filename": "g1564.png",
+                    "ver_id": 4894475,
+                    "image_width": "384",
+                    "image_height": "300",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - Двойное с дверью",
+                "radioName": "Двойное с дверью",
+                "cost": 7000,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598250907",
+                    "filename": "g1550.png",
+                    "ver_id": 4894475,
+                    "image_width": "384",
+                    "image_height": "300",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              },
+              {
+                "title": "Элемент радио-кнопка - Окно с аркой",
+                "radioName": "Окно с аркой",
+                "cost": 5000,
+                "iconSettingsRadioItem": {
+                  "title": "",
+                  "image": {
+                    "image_id": "1598252707",
+                    "filename": "g1851.png",
+                    "ver_id": 4894475,
+                    "image_width": "264",
+                    "image_height": "384",
+                    "ext": "png"
+                  },
+                  "behaviorImage": "contain",
+                  "location": "leftSide"
+                }
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;35958307;"
+          },
+          {
+            "json_id": "122582907",
+            "title": "Первый блок",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "122581707",
+                "title": "параметры конструкции - 1",
+                "label": "Параметры конструкции:",
+                "templates": [
+                  {
+                    "json_id": "122391507",
+                    "title": "Стеклопакет",
+                    "label": "Стеклопакет",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "стеклопакет",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Двухкамерный",
+                        "selectName": "Двухкамерный",
+                        "cost": 452
+                      },
+                      {
+                        "title": "Элемент списка - Однокамерный",
+                        "selectName": "Однокамерный",
+                        "cost": 125
+                      },
+                      {
+                        "title": "Элемент списка - Энергосберегающий",
+                        "selectName": "Энергосберегающий",
+                        "cost": 542
+                      }
+                    ],
+                    "prompt": "<p>Здесь может быть небольшая подсказка для клиента.</p>",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122411707",
+                    "title": "Цвет окна",
+                    "label": "Цвет окна",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "цвет",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Белый",
+                        "selectName": "Белый",
+                        "cost": 263
+                      },
+                      {
+                        "title": "Элемент списка - Черный",
+                        "selectName": "Черный",
+                        "cost": 500
+                      },
+                      {
+                        "title": "Элемент списка - Цветной",
+                        "selectName": "Цветной",
+                        "cost": 1000
+                      },
+                      {
+                        "title": "Элемент списка - Текстура",
+                        "selectName": "Текстура",
+                        "cost": 1200
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              },
+              {
+                "json_id": "122582707",
+                "title": "параметры конструкции - 2",
+                "label": "Механизм открытия:",
+                "templates": [
+                  {
+                    "json_id": "122436707",
+                    "title": "Вид механизма - 1",
+                    "label": "1 створка",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Глухое",
+                        "selectName": "Глухое"
+                      },
+                      {
+                        "title": "Элемент списка - Откидное",
+                        "selectName": "Откидное",
+                        "cost": 300,
+                        "dependencyFormulaItem": "типОкна === 1 || типОкна === 3 || типОкна === 6"
+                      },
+                      {
+                        "title": "Элемент списка - Поворотное",
+                        "selectName": "Поворотное",
+                        "cost": 600,
+                        "prompt": "<p>Здесь может быть небольшая подсказка для клиента.</p>",
+                        "dependencyFormulaItem": "типОкна === 1 || типОкна === 3 || типОкна === 6"
+                      },
+                      {
+                        "title": "Элемент списка - Поворотно-откидное",
+                        "selectName": "Поворотно-откидное",
+                        "cost": 750,
+                        "dependencyFormulaItem": "типОкна === 1 || типОкна === 3 || типОкна === 6"
+                      }
+                    ],
+                    "prompt": "<p>Здесь может быть небольшая подсказка для клиента.</p>",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122437507",
+                    "title": "Вид механизма - 2",
+                    "label": "2 створка",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "типОкна !== 1 &amp;&amp; типОкна !== 7",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Глухое",
+                        "selectName": "Глухое"
+                      },
+                      {
+                        "title": "Элемент списка - Откидное",
+                        "selectName": "Откидное",
+                        "cost": 300
+                      },
+                      {
+                        "title": "Элемент списка - Поворотное",
+                        "selectName": "Поворотное",
+                        "cost": 600
+                      },
+                      {
+                        "title": "Элемент списка - Поворотно-откидное",
+                        "selectName": "Поворотно-откидное",
+                        "cost": 700
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122449707",
+                    "title": "Вид механизме - 3",
+                    "label": "3 створка",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "типОкна === 3 || типОкна === 4 || типОкна === 6",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Глухое",
+                        "selectName": "Глухое"
+                      },
+                      {
+                        "title": "Элемент списка - Откидное",
+                        "selectName": "Откидное",
+                        "cost": 300
+                      },
+                      {
+                        "title": "Элемент списка - Поворотное",
+                        "selectName": "Поворотное",
+                        "cost": 600
+                      },
+                      {
+                        "title": "Элемент списка - Поворотно-откидное",
+                        "selectName": "Поворотно-откидное",
+                        "cost": 700
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "типОкна !== null",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettings": null,
+            "parent": "0;35958307;"
+          },
+          {
+            "json_id": "123803707",
+            "title": "Второй блок - габариты окна",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "123803307",
+                "title": "второй блок - 1",
+                "label": "Габариты:",
+                "templates": [
+                  {
+                    "json_id": "122371907",
+                    "title": "Высота",
+                    "label": "Высота",
+                    "value": "1460",
+                    "placeholder": "3000",
+                    "cost": "1",
+                    "unit": "мм",
+                    "min": "1460",
+                    "max": "4000",
+                    "controls": false,
+                    "step": "1",
+                    "discreteStep": false,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "высота",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122369707",
+                    "title": "Ширина",
+                    "label": "Ширина",
+                    "value": "1300",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "мм",
+                    "min": "1300",
+                    "max": "4000",
+                    "controls": false,
+                    "step": "1",
+                    "discreteStep": false,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": false,
+                    "isStretch": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "ширина",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              },
+              {
+                "json_id": "123803507",
+                "title": "второй блок - 2",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "122367507",
+                    "title": "Окна - картинка окна",
+                    "label": "",
+                    "defaultImage": {
+                      "image_id": "1598251707",
+                      "filename": "g1668.png",
+                      "ver_id": 4894475,
+                      "image_width": "264",
+                      "image_height": "384",
+                      "ext": "png"
+                    },
+                    "maxWidth": "300",
+                    "maxHeight": "300",
+                    "dependencyFormulaDisplay": "типОкна !== null",
+                    "classes": "",
+                    "template": "UiImage",
+                    "dependencyImages": [
+                      {
+                        "title": "двойное",
+                        "image": {
+                          "image_id": "1598251907",
+                          "filename": "g1688.png",
+                          "ver_id": 4894475,
+                          "image_width": "384",
+                          "image_height": "384",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 2"
+                      },
+                      {
+                        "title": "Тройное",
+                        "image": {
+                          "image_id": "1598250507",
+                          "filename": "g1515.png",
+                          "ver_id": 4894475,
+                          "image_width": "384",
+                          "image_height": "300",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 3"
+                      },
+                      {
+                        "title": "тройное с форточкой",
+                        "image": {
+                          "image_id": "1598250707",
+                          "filename": "g1538.png",
+                          "ver_id": 4894475,
+                          "image_width": "384",
+                          "image_height": "300",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 4"
+                      },
+                      {
+                        "title": "панорама с дверью",
+                        "image": {
+                          "image_id": "1598251107",
+                          "filename": "g1564.png",
+                          "ver_id": 4894475,
+                          "image_width": "384",
+                          "image_height": "300",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 5"
+                      },
+                      {
+                        "title": "Двойное с дверью",
+                        "image": {
+                          "image_id": "1598250907",
+                          "filename": "g1550.png",
+                          "ver_id": 4894475,
+                          "image_width": "384",
+                          "image_height": "300",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 6"
+                      },
+                      {
+                        "title": "Окно с аркой",
+                        "image": {
+                          "image_id": "1598252707",
+                          "filename": "g1851.png",
+                          "ver_id": 4894475,
+                          "image_width": "264",
+                          "image_height": "384",
+                          "ext": "png"
+                        },
+                        "dependencyFormulaDisplay": "типОкна === 7"
+                      }
+                    ],
+                    "prompt": "",
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "типОкна !== null",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettings": null,
+            "parent": "0;35958307;"
+          },
+          {
+            "json_id": "124145507",
+            "title": "Дополнительная комплектация",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "124276307",
+                "title": "Дополнительная комплектация",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "124055707",
+                    "title": "Дополнительная комплектация - (кнопка)",
+                    "label": "",
+                    "buttonText": "Дополнительная комплектация",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "button",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "дополнительнаяКомплектация",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              },
+              {
+                "json_id": "124145107",
+                "title": "доп комплект - 1",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "128547307",
+                    "title": "Откосы",
+                    "label": "Откосы",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "typeDisplayClass": "buttons",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiRadio",
+                    "values": [
+                      {
+                        "title": "Элемент радио-кнопка - Не требуется",
+                        "radioName": "Не требуется"
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Сэндвич панель",
+                        "radioName": "Сэндвич панель"
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Стеновая панель",
+                        "radioName": "Стеновая панель"
+                      }
+                    ],
+                    "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "128545507",
+                    "title": "Отлив",
+                    "label": "Отлив",
+                    "selectedItem": "1",
+                    "isNeedChoice": false,
+                    "notEmpty": false,
+                    "isColumn": 1,
+                    "isStretch": 1,
+                    "typeDisplayClass": "buttons",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiRadio",
+                    "values": [
+                      {
+                        "title": "Элемент радио-кнопка - Не требуется",
+                        "radioName": "Не требуется"
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Оцинкованный",
+                        "radioName": "Оцинкованный"
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Белый полимер",
+                        "radioName": "Белый полимер"
+                      }
+                    ],
+                    "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122450907",
+                    "title": "Подоконник",
+                    "label": "",
+                    "buttonText": "Подоконник",
+                    "buttonTextChecked": "",
+                    "cost": "2500",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  },
+                  {
+                    "json_id": "122453307",
+                    "title": "Москитная сетка",
+                    "label": "",
+                    "buttonText": "Москитная сетка",
+                    "buttonTextChecked": "",
+                    "cost": "1000",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                    "iconSettings": null,
+                    "parent": "0;35958307;35958507;35958707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "дополнительнаяКомплектация === true",
+                "iconSettings": null,
+                "parent": "0;35958307;35958507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "типОкна !== null",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettings": null,
+            "parent": "0;35958307;"
+          }
+        ],
+        "buttonName": "Добавить окно +",
+        "maximumDuple": "5",
+        "formOutputMethod": "summ",
+        "resultOutputMethod": "onlyTitle",
+        "excludeFromCalculations": false,
+        "elementName": "дупликаторОкно",
+        "formulaProcessingLogic": "zero",
+        "formula": "_otherSum_",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiDuplicator",
+        "unit": "руб.",
+        "prompt": "<p>Здесь может быть небольшая подсказка для клиента.</p>",
+        "dependencyMainFormula": null,
+        "iconSettingsDuplicatorLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "122558107",
+        "title": "Опции",
+        "label": "",
+        "columns": [
+          {
+            "json_id": "122557307",
+            "title": "Опции - 1",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "122556507",
+                "title": "Доставка",
+                "label": "",
+                "buttonText": "Доставка",
+                "buttonTextChecked": "",
+                "cost": "1100",
+                "baseValue": "default",
+                "isNeedChoice": false,
+                "isColumn": false,
+                "typeDisplayClass": "switcher",
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "scrollIntoName": "",
+                "classes": "",
+                "template": "UiCheckbox",
+                "dependencyPrices": null,
+                "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                "iconSettings": null,
+                "parent": "0;35958507;35958707;"
+              },
+              {
+                "json_id": "122556307",
+                "title": "Монтаж",
+                "label": "",
+                "buttonText": "Монтаж",
+                "buttonTextChecked": "",
+                "cost": "1500",
+                "baseValue": "default",
+                "isNeedChoice": false,
+                "isColumn": false,
+                "typeDisplayClass": "switcher",
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "scrollIntoName": "",
+                "classes": "",
+                "template": "UiCheckbox",
+                "dependencyPrices": null,
+                "prompt": "Здесь может быть небольшая подсказка для клиента.",
+                "iconSettings": null,
+                "parent": "0;35958507;35958707;"
+              }
+            ],
+            "maxWidth": "50",
+            "dependencyFormulaDisplay": "",
+            "iconSettings": null,
+            "parent": "0;35958507;"
+          }
+        ],
+        "dependencyFormulaDisplay": "дупликаторОкно &gt; 0",
         "adaptationMethod": "free",
         "elementName": "",
         "classes": "",

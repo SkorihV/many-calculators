@@ -28,6 +28,16 @@
         </div>
       </icon-element-wrapper>
       <div class="calc__radio-wrapper-buttons">
+        <div class="calc__radio-label-button"
+             :class="{'error': isErrorClass}"
+             @click="resetChoice"
+             v-if="isNeedChoice">
+          <div class="calc__radio-text-wrapper">
+            <div class="calc__radio-text">
+              <div class="calc__radio-name">&#8635;</div>
+            </div>
+          </div>
+         </div>
         <template v-for="radio in radioListOnOut" :key="radio.index">
           <div
             class="calc__radio-label-button"
@@ -269,6 +279,9 @@ export default {
         type: "radio",
       });
     },
+    resetChoice() {
+      this.currentIndexRadioButton = null;
+    }
   },
   watch: {
     currentSelectedRadioButton: {

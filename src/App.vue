@@ -701,8 +701,8 @@ export default {
       } else {
         result +=
           "\n" +
-          this.getTitleSum +
-          this.finalSummaForOutput +
+          this.getTitleSum + " " +
+          this.finalSummaForOutput + " " +
           this.getCurrency;
       }
       return result;
@@ -1006,6 +1006,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     background-color: $c_base_button_bg;
     color: $c_base_button_text_color;
     border: $c_base_button_border_width solid $c_base_button_border;
+    border-radius: $c_base_button_border_radius;
     align-self: center;
     display: flex;
     gap: 20px;
@@ -1015,11 +1016,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     line-height: 23px;
     text-transform: uppercase;
     cursor: pointer;
-    @include style-decor-border-radius;
     &:hover {
-      background-color: $c_decor_bg_color_selected;
-      color: $c_decor_text_selected;
-      border-color: $c_decor_border_color_selected;
+      background-color: $c_base_button_bg_hover;
+      color: $c_base_button_text_color_hover;
+      border-color: $c_base_button_border_hover;
     }
     @media all and (max-width: 480px) {
       padding: 11px 50px;
