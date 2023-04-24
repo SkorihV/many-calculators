@@ -31,7 +31,7 @@
         <div class="calc__radio-label-button"
              :class="{'error': isErrorClass}"
              @click="resetChoice"
-             v-if="isNeedChoice">
+             v-if="isNeedChoice === 'existValueAndReset'">
           <div class="calc__radio-text-wrapper">
             <div class="calc__radio-text">
               <div class="calc__radio-name">&#8635;</div>
@@ -152,9 +152,20 @@ export default {
       type: Object,
       default: () => {},
     },
+    /**
+     * 1) base
+     * 2) existValue
+     * 3) existValueAndReset
+     */
+    isNeedChoice: {
+      type: String,
+      validator(value) {
+        return value === 'base' || value === 'existValue' || value === 'existValueAndReset';
+      },
+      default: 'base'
+    },
     ...propsTemplate.getProps([
       "isColumn",
-      "isNeedChoice",
       "formOutputMethod",
       "resultOutputMethod",
       "dependencyFormulaDisplay",
@@ -186,7 +197,7 @@ export default {
       }
     );
 
-    if (!this.isErrorEmpty && !this.isNeedChoice) {
+    if (!this.localIsNeedChoice) {
       this.currentIndexRadioButton = parseInt(this.selectedItem);
     }
 
@@ -297,7 +308,7 @@ export default {
     isVisibilityFromDependency: {
       handler(newValue) {
         if (newValue) {
-          if (!this.isErrorEmpty && !this.isNeedChoice) {
+          if (!this.localIsNeedChoice) {
             this.currentIndexRadioButton = parseInt(this.selectedItem);
           }
         } else {
@@ -314,7 +325,7 @@ export default {
             this.currentIndexRadioButton !== null &&
             !this.isShowRadioItemOnIndex(this.currentIndexRadioButton)
           ) {
-            if (!this.isErrorEmpty && !this.isNeedChoice) {
+            if (!this.localIsNeedChoice) {
               this.currentIndexRadioButton = parseInt(this.selectedItem);
             } else {
               this.currentIndexRadioButton = null;
@@ -333,6 +344,9 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
+    localIsNeedChoice() {
+      return this.isNeedChoice !== 'base';
+    },
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);
     },

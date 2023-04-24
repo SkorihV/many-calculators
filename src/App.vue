@@ -986,8 +986,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     margin: 10px;
     &-group-data {
       display: flex;
-      margin: 0 10px 10px;
-      width: calc(100% - 20px);
+      padding: 0 10px 10px;
+      width: 100%;
       position: relative;
       flex-direction: column;
     }
@@ -2709,6 +2709,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       border: 1px dotted gray;
       margin-bottom: 10px;
       background-color: #fff;
+      width: 100%;
     }
     &-element {
       color: #000;
