@@ -28,16 +28,6 @@
         </div>
       </icon-element-wrapper>
       <div class="calc__radio-wrapper-buttons">
-        <div class="calc__radio-label-button"
-             :class="{'error': isErrorClass}"
-             @click="resetChoice"
-             v-if="isNeedChoice === 'existValueAndReset'">
-          <div class="calc__radio-text-wrapper">
-            <div class="calc__radio-text">
-              <div class="calc__radio-name">&#8635;</div>
-            </div>
-          </div>
-         </div>
         <template v-for="radio in radioListOnOut" :key="radio.index">
           <div
             class="calc__radio-label-button"
@@ -152,20 +142,16 @@ export default {
       type: Object,
       default: () => {},
     },
-    /**
-     * 1) base
-     * 2) existValue
-     * 3) existValueAndReset
-     */
-    isNeedChoice: {
-      type: String,
+    notReset: {
+      type: Boolean,
       validator(value) {
-        return value === 'base' || value === 'existValue' || value === 'existValueAndReset';
+        return value === false || value === true || value === 0 || value === 1;
       },
-      default: 'base'
+      default: false
     },
     ...propsTemplate.getProps([
       "isColumn",
+      "isNeedChoice",
       "formOutputMethod",
       "resultOutputMethod",
       "dependencyFormulaDisplay",
@@ -197,7 +183,7 @@ export default {
       }
     );
 
-    if (!this.localIsNeedChoice) {
+    if (!this.isNeedChoice) {
       this.currentIndexRadioButton = parseInt(this.selectedItem);
     }
 
@@ -238,7 +224,12 @@ export default {
       return value?.length !== 0 && value !== undefined && value !== null;
     },
     selectedCurrentRadio(index) {
-      this.currentIndexRadioButton = index;
+      if (!this.notReset && this.currentIndexRadioButton === index) {
+        this.currentIndexRadioButton = null;
+      } else {
+        this.currentIndexRadioButton = index;
+      }
+
       this.changeValue();
     },
     changeValue(eventType = "click") {
@@ -290,9 +281,6 @@ export default {
         type: "radio",
       });
     },
-    resetChoice() {
-      this.currentIndexRadioButton = null;
-    }
   },
   watch: {
     currentSelectedRadioButton: {
@@ -308,7 +296,7 @@ export default {
     isVisibilityFromDependency: {
       handler(newValue) {
         if (newValue) {
-          if (!this.localIsNeedChoice) {
+          if (!this.isNeedChoice) {
             this.currentIndexRadioButton = parseInt(this.selectedItem);
           }
         } else {
@@ -325,7 +313,7 @@ export default {
             this.currentIndexRadioButton !== null &&
             !this.isShowRadioItemOnIndex(this.currentIndexRadioButton)
           ) {
-            if (!this.localIsNeedChoice) {
+            if (!this.isNeedChoice) {
               this.currentIndexRadioButton = parseInt(this.selectedItem);
             } else {
               this.currentIndexRadioButton = null;
@@ -344,9 +332,6 @@ export default {
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
     ]),
-    localIsNeedChoice() {
-      return this.isNeedChoice !== 'base';
-    },
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);
     },

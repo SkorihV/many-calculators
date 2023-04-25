@@ -84,6 +84,7 @@
     :is-column="template?.isColumn"
     :radio-values="template?.values"
     :not-empty="template?.notEmpty"
+    :not-reset="template?.notReset"
     :selected-item="template?.selectedItem"
     :is-need-choice="template?.isNeedChoice"
     :type-display-class="template?.typeDisplayClass"
