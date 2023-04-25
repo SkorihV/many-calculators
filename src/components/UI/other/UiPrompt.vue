@@ -66,7 +66,7 @@ export default {
     getTopForCalcWrapper() {
       this.topCalcWrapper =
         document
-          .querySelector("#app-base-constructor-calculator")
+          .querySelector("#App_calc")
           .getBoundingClientRect().top + window.pageYOffset;
     },
     getTopBtnPrompt() {

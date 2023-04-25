@@ -1,6 +1,7 @@
 <template>
   <div
     class="calc__wrapper-group-data"
+    :class="{'indent': isVisualSeparate}"
     v-show="showSection"
     :id="elementName"
     ref="parent"

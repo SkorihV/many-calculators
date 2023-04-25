@@ -1,6 +1,5 @@
 <template>
-  <div id="app-base-constructor-calculator" v-show="appIsMounted">
-    <div class="calc calc__wrapper" id="custom-stile">
+    <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted">
       <template v-for="(template, index) in calculatorTemplates" :key="index">
         <templates-wrapper-structural
           v-if="checkedIsStructureTemplate(template?.template)"
@@ -77,16 +76,16 @@
       />
       <div id="prompt-text-element"></div>
     </div>
-    <teleport v-if="allowTeleport" to="#teleport">
+    <teleport v-if="allowTeleport && appIsMounted" to="#teleport">
       {{ finalTextForOutputForTeleport }}
     </teleport>
     <dev-block
+      v-if="appIsMounted"
       :formula="mainFormulaResult"
       :formula-variables="resultTextForComputed"
       :local-cost="finalSummaForOutput"
       hidden-value
     />
-  </div>
   <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
 
@@ -983,13 +982,16 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 10px;
     &-group-data {
       display: flex;
-      padding: 0 10px 10px;
       width: 100%;
+      padding-bottom: 10px;
       position: relative;
       flex-direction: column;
+      &.indent {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
     }
   }
   &__error-block {
@@ -2114,7 +2116,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 19px 6px 21px 20px;
+        padding: 20px 10px 20px 10px;
         min-height: 60px;
         background-color: $c_decor_bg_color;
         border: $c_decor_border_width solid $c_decor_border_color;
@@ -2190,14 +2192,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         border-top-color: transparent;
         position: relative;
         margin-bottom: 8px;
+        padding-right: 10px;
+        padding-left: 10px;
         @include transition;
         &-wrapper {
           width: 100%;
           .calc__wrapper-group-data {
-            padding-left: 10px;
-            padding-right: 10px;
-            margin: 0 0 10px 0;
-            &:first-child {
+             &:first-child {
               padding-top: 20px;
             }
             &:last-child {
@@ -2314,7 +2315,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 20px 0;
+        padding: 20px 10px;
         margin-bottom: 10px;
         position: relative;
       }
@@ -2414,7 +2415,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &-wrapper {
           display: flex;
           margin-bottom: 8px;
-          margin-left: 10px;
         }
       }
       &-item {
@@ -2622,6 +2622,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-right {
         display: flex;
         width: 50%;
+        max-width: 50%;
         white-space: pre-wrap;
         @media all and (max-width: 768px) {
           width: 100%;
