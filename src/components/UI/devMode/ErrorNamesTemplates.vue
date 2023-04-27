@@ -1,8 +1,7 @@
 <template>
   <div
     class="calc__error-wrapper"
-    v-if="isShow"
-    :class="{ 'isShow': isShow }"
+    :class="{ 'isShow': devMode }"
     v-cloak
   >
     <div class="calc__error-control-wrapper">
@@ -50,10 +49,10 @@
             :key="key"
           >
             <div class="calc__error-item-name">
-              Имя элемента '{{ key }}' обнаружено у следующих элементов:
+              Название '{{ key }}' обнаружено у следующих элементов:
             </div>
             <div class="calc__error-item-name" v-for="label in error">
-              {{ label?.length ? label : "Отсутствует" }}
+              {{ label?.length ? label : "Название не задано" }}
             </div>
           </div>
           <p class="calc__error-alert">Имена должны быть уникальными!</p>
@@ -69,9 +68,9 @@
             :key="key"
           >
             <div class="calc__error-item-name">
-              Имя элемента: '{{
-                error?.label?.length ? error?.label : "Отсутствует"
-              }}' Имя элемента: '{{ error.name }}' - не существует.
+              У элемента: '{{
+                error?.label?.length ? error?.label : "Название не задано"
+              }}' в формуле указано имя: <b>'{{ error.name }}'</b>> - не существует.
             </div>
           </div>
           <p class="calc__error-alert">
@@ -89,9 +88,9 @@
             :key="key"
           >
             <div class="calc__error-item-name">
-              Имя элемента: '{{
-                error?.label?.length ? error?.label : "Отсутствует"
-              }}' Имя элемента: '{{ error.name }}' - не существует.
+              У элемента: '{{
+                error?.label?.length ? error?.label : "Название не задано"
+              }}' в формуле указано имя: <b>'{{ error.name }}'</b> - не существует.
             </div>
           </div>
           <p class="calc__error-alert">
@@ -146,13 +145,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    initTemplate: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
-    },
     formula: {
       type: String,
       default: null,
@@ -161,7 +153,6 @@ export default {
   mounted() {
     setTimeout(() => {
       this.processingAllTemplatesOnData();
-      this.checkInShowing();
     }, 2000);
     console.warn(
       "Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов."
@@ -209,7 +200,6 @@ export default {
         "empty",
         "null",
       ],
-      isShow: false,
       localShowInsideElementStatus: false,
       spec: Object.entries({
         "&gt;": ">",
@@ -383,7 +373,7 @@ export default {
       //разбиваем формулу на массив отдельных данных
       formula = formula
         ?.split(
-          /([A-Za-zА-Яа-яЁё0-9_"']*)(\)|\(|>=|<=|<|>|\}|\{|!==|===|&&|\|\||\+|-|\/|\*)*/g
+          /([A-Za-zА-Яа-яЁё0-9_.,"']*)(\)|\(|>=|<=|<|>|\}|\{|!==|===|&&|\|\||\+|-|\/|\*)*/g
         )
         ?.map((item) => {
           //удаляем пробелы по краям
@@ -401,19 +391,6 @@ export default {
         );
       return formula;
     },
-
-    /**
-     *
-     */
-    checkInShowing() {
-      this.isShow = Boolean(
-        (Object.keys(this.recurringTemplateNames)?.length ||
-          this.notExistNamesInComputedFormula?.length ||
-          this.notExistNamesInDisplayFormula?.length ||
-          this.usedArrayNamesInElements.size) &&
-          this.initTemplate
-      );
-    },
   },
   watch: {
     localShowInsideElementStatus(newValue) {
@@ -421,7 +398,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["tryToggleShowInsideElementStatus"]),
+    ...mapState(useBaseStore, ["tryToggleShowInsideElementStatus", "devMode"]),
     /**
      * не существующие имена в формулах отвечающих за отображение элементов
      * @returns {*[]}

@@ -1,54 +1,57 @@
 <template>
-  <div
-    class="calc__dev-block-wrapper"
-    v-if="devMode && showInsideElementStatus"
-  >
-    <div class="calc__dev-block-element" v-if="label?.length">
-      Заголовок элемента: {{ label }}
-    </div>
+  <template v-if="showInsideElementStatus">
+    <button class="calc__dev-block-button" v-if="showInsideElementStatus" @click="isShowInnerData = !isShowInnerData">{{isShowInnerData ? "Скрыть" : "Отобразить"}} внутреннее состояние: {{label}}</button>
     <div
-      class="calc__dev-block-element calc__dev-block-element-name"
-      v-if="elementName?.length"
+      class="calc__dev-block-wrapper"
+      v-if="isShowInnerData"
     >
-      Имя элемента: {{ elementName }}
-    </div>
+      <div class="calc__dev-block-element" v-if="label?.length">
+        Заголовок элемента: {{ label }}
+      </div>
+      <div
+        class="calc__dev-block-element calc__dev-block-element-name"
+        v-if="elementName?.length"
+      >
+        Имя элемента: {{ elementName }}
+      </div>
 
-    <div
-      class="calc__dev-block-element"
-      v-if="dependencyFormulaDisplay?.length"
-    >
-      Формула зависимости отображения: {{ dependencyFormulaDisplay }}
-    </div>
-    <div class="calc__dev-block-element" v-if="parsingFormulaVariables?.length">
-      Формула зависимости отображения после обработки:
-      {{ parsingFormulaVariables }}
-    </div>
-    <div class="calc__dev-block-element" v-if="formula?.length">
-      Формула расчета: {{ formula }}
-    </div>
-    <div class="calc__dev-block-element" v-if="formulaVariables?.length">
-      Формула расчета после обработки: {{ formulaVariables }}
-    </div>
+      <div
+        class="calc__dev-block-element"
+        v-if="dependencyFormulaDisplay?.length"
+      >
+        Формула зависимости отображения: {{ dependencyFormulaDisplay }}
+      </div>
+      <div class="calc__dev-block-element" v-if="parsingFormulaVariables?.length">
+        Формула зависимости отображения после обработки:
+        {{ parsingFormulaVariables }}
+      </div>
+      <div class="calc__dev-block-element" v-if="formula?.length">
+        Формула расчета: {{ formula }}
+      </div>
+      <div class="calc__dev-block-element" v-if="formulaVariables?.length">
+        Формула расчета после обработки: {{ formulaVariables }}
+      </div>
 
-    <div
-      class="calc__dev-block-element calc__dev-block-element-value"
-      v-if="!hiddenValue"
-    >
-      Значение элемента: {{ value === null ? "null" : value }}
+      <div
+        class="calc__dev-block-element calc__dev-block-element-value"
+        v-if="!hiddenValue"
+      >
+        Значение элемента: {{ value === null ? "null" : value }}
+      </div>
+      <div
+        class="calc__dev-block-element calc__dev-block-element-show"
+        v-if="isVisibilityFromDependency !== null"
+      >
+        Элемент виден: {{ isVisibilityFromDependency }}
+      </div>
+      <div
+        class="calc__dev-block-element calc__dev-block-element-cost"
+        v-if="!hiddenCost"
+      >
+        Текущая стоимость: {{ localCost === null ? "null" : localCost }}
+      </div>
     </div>
-    <div
-      class="calc__dev-block-element calc__dev-block-element-show"
-      v-if="isVisibilityFromDependency !== null"
-    >
-      Элемент виден: {{ isVisibilityFromDependency }}
-    </div>
-    <div
-      class="calc__dev-block-element calc__dev-block-element-cost"
-      v-if="!hiddenCost"
-    >
-      Текущая стоимость: {{ localCost === null ? "null" : localCost }}
-    </div>
-  </div>
+  </template>
 </template>
 
 <script>
@@ -99,10 +102,12 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isShowInnerData: false
+    };
   },
   computed: {
-    ...mapState(useBaseStore, ["devMode", "showInsideElementStatus"]),
+    ...mapState(useBaseStore, ["showInsideElementStatus"]),
   },
 };
 </script>

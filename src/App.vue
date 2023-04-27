@@ -71,7 +71,6 @@
       <error-names-templates
         v-if="devMode"
         :templates="calculatorTemplates"
-        :init-template="devMode"
         :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
       />
       <div id="prompt-text-element"></div>
@@ -123,7 +122,7 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
 
 export default {
-  name: "TheBasicCalculatorConstructor",
+  name: "ConstructorCalculator",
   mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   components: {
     UiSystem,
@@ -149,7 +148,7 @@ export default {
       await fetch(localPathData)
         .then((response) => response.json())
         .then((data) => {
-          this.inputData = data;
+          this.inputTemplates = data;
         });
       await fetch(localPathOptions)
         .then((response) => response.json())
@@ -158,11 +157,14 @@ export default {
         });
     } else {
       try {
-        this.inputData.calculatorTemplates = JSON.parse(
+        this.inputTemplates.calculatorTemplates = JSON.parse(
           JSON.stringify(window?.calculatorTemplates)
         );
       } catch (e) {
-        this.inputData.calculatorTemplates = [];
+        this.inputTemplates.calculatorTemplates = [];
+        console.error(
+          "Ошибка при получении списка шаблонов калькулятора" + e.message
+        );
       }
 
       try {
@@ -176,7 +178,7 @@ export default {
         this.inputOptions = {};
       }
     }
-    this.calculatorTemplates = initUpdatingPositionData(this.inputData);
+    this.calculatorTemplates = initUpdatingPositionData(this.inputTemplates);
 
     this.isUseFormula = this.inputOptions?.computedMethod === "formula";
     this.displayResultData = this.inputOptions?.computedMethod !== "no";
@@ -205,7 +207,7 @@ export default {
   },
   data() {
     return {
-      inputData: {}, // внешние данные с шаблонами элементов калькулятора
+      inputTemplates: {}, // внешние данные с шаблонами элементов калькулятора
       inputOptions: {}, // внешние данные с общими настройками калькулятора
       calculatorTemplates: [], // список шаблонов элементов
       isUseFormula: false, // использовать формулу
@@ -333,7 +335,7 @@ export default {
       }
     },
     findForm() {
-      const form = document.querySelector(".calc__form-for-result");
+      const form = document.querySelector("#calc__form-for-result");
       this.formElement = form ? form : null;
     },
     findSubmitForm() {
@@ -977,7 +979,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     display: flex;
     flex-direction: column;
   }
-
+  &__wrapper_old_lp {
+    max-width: 1138px;
+    margin: 0 auto;
+  }
   &__wrapper {
     display: flex;
     flex-direction: column;
@@ -2196,6 +2201,8 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding-left: 10px;
         @include transition;
         &-wrapper {
+          display: flex;
+          flex-direction: column;
           width: 100%;
           .calc__wrapper-group-data {
              &:first-child {
@@ -2422,6 +2429,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         flex: 1 0 auto;
         flex-direction: column;
         width: 100%;
+        padding: 0 10px;
+        &:first-child {
+          padding-left: 0;
+        }
+        &:last-child {
+          padding-right: 0;
+        }
       }
       &-elements {
         &-wrapper {
@@ -2488,7 +2502,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       position: fixed;
       right: 0;
       flex-direction: column;
-      bottom: 0;
+      bottom: 50px;
       margin: 10px;
       background-color: $c_decor_bg_color;
       padding: 10px;
@@ -2628,12 +2642,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           width: 100%;
         }
       }
-      //&-value {
-      //  font-weight: bold;
-      //}
-      //&-cost {
-      //  font-weight: bold;
-      //}
       &-summ {
         @include style-title-main;
         margin: 20px 0;
@@ -2655,10 +2663,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
   //-------------Элемент дупликатора-----------------
   &__duplicator {
-    width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
     margin-bottom: 5px;
     &-wrapper {
       position: relative;
@@ -2707,10 +2714,19 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       flex-direction: column;
       align-items: flex-start;
       padding: 10px;
-      border: 1px dotted gray;
+      border: 2px dashed gray;
       margin-bottom: 10px;
-      background-color: #fff;
       width: 100%;
+      background: repeating-linear-gradient(-60deg, #bebdbd3d 0, #bebdbd3d 1px, transparent 1px, transparent 15px);
+      background-color: #fff;
+    }
+    &-button {
+      cursor: pointer;
+      align-self: flex-end;
+      margin: 10px 0;
+      padding: 5px 10px;
+      border: 1px dashed gray;
+      background: white;
     }
     &-element {
       color: #000;
@@ -2913,12 +2929,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
     label {
       color: $c_base_title;
-      display: flex;
-      flex-direction: column;
-      align-items: self-start;
-      gap: 8px;
     }
-    input {
+    li {
+      list-style: none;
+    }
+    input[type="text"], input[type="email"], input[type="tel"] {
       @include style-decor-border-radius;
       outline: none;
       border-width: 2px;

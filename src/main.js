@@ -1,8 +1,8 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import App from "./App.vue";
+import ConstructorCalculator from "./App.vue";
 
-const AppCalc = createApp(App);
+const AppCalc = createApp(ConstructorCalculator);
 
 AppCalc.config.unwrapInjectedRef = true;
 AppCalc.use(createPinia());

@@ -1,15 +1,15 @@
 /**
  * у всех элементов калькулятора добавляем порядковый номер.
- * @param inputData
+ * @param inputTemplates
  * @returns {*[]}
  */
-const initUpdatingPositionData = function (inputData) {
+const initUpdatingPositionData = function (inputTemplates) {
   const calculatorTemplatesWitchPositions = [];
-  const templatesInExist = Boolean(inputData?.calculatorTemplates?.length);
+  const templatesInExist = Boolean(inputTemplates?.calculatorTemplates?.length);
   if (templatesInExist) {
     let templatesPositionIndex = 0;
 
-    inputData.calculatorTemplates.forEach((item) => {
+    inputTemplates.calculatorTemplates.forEach((item) => {
       let currentMainItem = item;
       const currentMainTemplateName = currentMainItem?.template;
 
