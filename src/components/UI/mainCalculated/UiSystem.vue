@@ -90,7 +90,7 @@ export default {
       default: 'round'
     },
     signAfterDot: {
-      type: Number,
+      type: [Number, String],
       default: -2
     },
     ...propsTemplate.getProps([
@@ -176,6 +176,7 @@ export default {
   },
   computed: {
     ...mapState(useBaseStore, [
+      "devMode",
       "tryAddDependencyElement",
       "checkValidationDataAndToggle",
       "getResultElementOnName",
@@ -262,10 +263,12 @@ export default {
           return null;
         }
       } catch (e) {
-        console.error(
-          "Системное поле, обработка формулы стоимости: ",
-          this.processingVariablesInFormula
-        );
+        if(this.devMode) {
+          console.error(
+            "Системное поле, обработка формулы стоимости: ",
+            this.processingVariablesInFormula
+          );
+        }
         return null;
       }
     },

@@ -1161,6 +1161,1208 @@
     "calculatorTemplates":
     [
       {
+        "json_id": "102422307",
+        "meta_id": "31023307",
+        "ver_id": "4863246",
+        "title": "Шаг 1. Данные объекта",
+        "label": "Шаг 1. Данные объекта",
+        "labelSub": "Укажите параметры помещения",
+        "dependencyFormulaDisplay": "",
+        "visuallySeparateElement": 1,
+        "elementName": "",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "102418907",
+            "meta_id": "31022507",
+            "ver_id": "4863246",
+            "title": "площадь",
+            "label": "Площадь",
+            "value": "1",
+            "min": "0",
+            "max": "150",
+            "cost": "1",
+            "unit": "м2",
+            "step": "1",
+            "showSteps": false,
+            "stepPrompt": "1",
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "showStaticValue": 1,
+            "showDynamicValue": 1,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "площадь",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRange",
+            "isColumn": 1,
+            "dependencyPrices": null,
+            "prompt": "",
+            "iconSettings": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102420907",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Тип помещения",
+            "label": "Тип помещения",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "типПомещения",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Новостройка",
+                "radioName": "Новостройка",
+                "cost": 50
+              },
+              {
+                "title": "Элемент радио-кнопка - Вторичка",
+                "radioName": "Вторичка",
+                "cost": 70
+              },
+              {
+                "title": "Элемент радио-кнопка - Дом",
+                "radioName": "Дом",
+                "cost": 100
+              },
+              {
+                "title": "Элемент радио-кнопка - Коммерческий объект",
+                "radioName": "Коммерческий объект",
+                "cost": 150
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102422107",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Количество комнат",
+            "label": "Количество комнат",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "количествоКомнат",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - 1",
+                "radioName": 1,
+                "cost": 1
+              },
+              {
+                "title": "Элемент радио-кнопка - 2",
+                "radioName": 2,
+                "cost": 2
+              },
+              {
+                "title": "Элемент радио-кнопка - 3",
+                "radioName": 3,
+                "cost": 3
+              },
+              {
+                "title": "Элемент радио-кнопка - 4",
+                "radioName": 4,
+                "cost": 4
+              },
+              {
+                "title": "Элемент радио-кнопка - 5",
+                "radioName": 5,
+                "cost": 5
+              },
+              {
+                "title": "Элемент радио-кнопка - 6",
+                "radioName": 6,
+                "cost": 5
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          }
+        ],
+        "maxWidthSide": "70",
+        "backgroundImageSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1415813907",
+            "filename": "img01.png",
+            "ver_id": 4863246,
+            "image_width": "613",
+            "image_height": "452",
+            "ext": "png"
+          },
+          "backgroundHorizontalPosition": "right",
+          "backgroundVerticalPosition": "bottom",
+          "backgroundRepeat": "no-repeat",
+          "behaviorImage": "contain",
+          "unitSize": "px",
+          "opacitySubstrate": 5
+        },
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "102424507",
+        "meta_id": "31023307",
+        "ver_id": "4863246",
+        "title": "Шаг 2: Тип ремонта",
+        "label": "Шаг 2: Тип ремонта",
+        "labelSub": "Выберите свой вариант ремонта объекта",
+        "dependencyFormulaDisplay": "площадь !== null &amp;&amp; типПомещения !== null &amp;&amp; количествоКомнат !== null",
+        "visuallySeparateElement": 1,
+        "elementName": "",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "102425107",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Тип ремонта",
+            "label": "Тип ремонта",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "типРемонта",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Капитальный",
+                "radioName": "Капитальный",
+                "cost": 1.5
+              },
+              {
+                "title": "Элемент радио-кнопка - Дизайнерский",
+                "radioName": "Дизайнерский",
+                "cost": 2
+              },
+              {
+                "title": "Элемент радио-кнопка - Косметический",
+                "radioName": "Косметический",
+                "cost": 1
+              }
+            ],
+            "prompt": "Текст подсказки",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102429507",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Пол",
+            "label": "Пол",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "пол",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Ламинат",
+                "radioName": "Ламинат",
+                "cost": 1000
+              },
+              {
+                "title": "Элемент радио-кнопка - Паркетная доска",
+                "radioName": "Паркетная доска",
+                "cost": 2000
+              },
+              {
+                "title": "Элемент радио-кнопка - Ковролин",
+                "radioName": "Ковролин",
+                "cost": 3000
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102754507",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Плинтуса",
+            "label": "Монтаж плинтуса",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "плинтус",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "пол !== null",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "notReset": 1,
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Нет",
+                "radioName": "Нет"
+              },
+              {
+                "title": "Элемент радио-кнопка - Монтаж плинтуса деревянного/мдф",
+                "radioName": "Монтаж плинтуса деревянного/мдф",
+                "cost": 150
+              },
+              {
+                "title": "Элемент радио-кнопка - Монтаж плинтуса пластикового",
+                "radioName": "Монтаж плинтуса пластикового",
+                "cost": 110
+              },
+              {
+                "title": "Элемент радио-кнопка - Монтаж плинтуса фигурного увеличенного",
+                "radioName": "Монтаж плинтуса фигурного увеличенного",
+                "cost": 350
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102753307",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Работы по ламинату:",
+            "label": "Работы по ламинату:",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "работаПоЛаминату",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "пол === 1",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Настил ламината",
+                "radioName": "Настил ламината",
+                "cost": 380
+              },
+              {
+                "title": "Элемент радио-кнопка - Настил ламината по диагонали",
+                "radioName": "Настил ламината по диагонали",
+                "cost": 380
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102430507",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Стены",
+            "label": "Стены",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "стены",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Обои",
+                "radioName": "Обои",
+                "cost": 500
+              },
+              {
+                "title": "Элемент радио-кнопка - Окраска",
+                "radioName": "Окраска",
+                "cost": 800
+              },
+              {
+                "title": "Элемент радио-кнопка - Декоративная штукатурка",
+                "radioName": "Декоративная штукатурка",
+                "cost": 1000
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102450507",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Потолок",
+            "label": "Потолок",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": true,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "потолок",
+            "formulaProcessingLogic": "error",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Натяжной",
+                "radioName": "Натяжной",
+                "cost": 690
+              },
+              {
+                "title": "Элемент радио-кнопка - Гипсокартон",
+                "radioName": "Гипсокартон",
+                "cost": 950
+              },
+              {
+                "title": "Элемент радио-кнопка - Окраска",
+                "radioName": "Окраска",
+                "cost": 120
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102474707",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Зачистка от старой краски",
+            "label": "",
+            "buttonText": "Зачистка от старой краски",
+            "buttonTextChecked": "",
+            "cost": "160",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "засичтка",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "потолок === 3",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102475107",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Штукатурка потолка по маякам",
+            "label": "",
+            "buttonText": "Штукатурка потолка по маякам",
+            "buttonTextChecked": "",
+            "cost": "550",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "мояки",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "потолок === 3",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102475507",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Шпатлевка потолка под покраску",
+            "label": "",
+            "buttonText": "Шпатлевка потолка под покраску",
+            "buttonTextChecked": "",
+            "cost": "380",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "шпаклевка",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "потолок === 3",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102475707",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Установка маяков по уровню",
+            "label": "",
+            "buttonText": "Установка маяков по уровню",
+            "buttonTextChecked": "",
+            "cost": "50",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "установкаМояков",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "потолок === 3",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102475907",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Шлифовка потолка",
+            "label": "",
+            "buttonText": "Шлифовка потолка",
+            "buttonTextChecked": "",
+            "cost": "120",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "шлифовкаПотолка",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "потолок === 3",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "iconSettings": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102453107",
+            "meta_id": "31022107",
+            "ver_id": "4863246",
+            "title": "Дизайн интерьера",
+            "label": "",
+            "buttonText": "Дизайн интерьера",
+            "buttonTextChecked": "",
+            "cost": "5000",
+            "baseValue": "default",
+            "isNeedChoice": false,
+            "isColumn": false,
+            "typeDisplayClass": "switcher",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "дизайн",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "scrollIntoName": "",
+            "classes": "",
+            "template": "UiCheckbox",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;31023307;"
+          }
+        ],
+        "maxWidthSide": "70",
+        "elementPosition": "default",
+        "backgroundImageSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1415813707",
+            "filename": "img02.png",
+            "ver_id": 4863246,
+            "image_width": "550",
+            "image_height": "768",
+            "ext": "png"
+          },
+          "backgroundHorizontalPosition": "right",
+          "backgroundVerticalPosition": "bottom",
+          "backgroundRepeat": "no-repeat",
+          "behaviorImage": "contain",
+          "maxWidth": 550,
+          "maxHeight": 550,
+          "unitSize": "px",
+          "opacitySubstrate": 5
+        },
+        "iconSettingsSectionLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "102714507",
+        "meta_id": "31023307",
+        "ver_id": "4863246",
+        "title": "Шаг 3: Доп опции",
+        "label": "Шаг 3: Доп опции",
+        "labelSub": "Дополнительные услуги, оказываемые нашей бригадой",
+        "dependencyFormulaDisplay": "типРемонта !== null &amp;&amp; пол !== null &amp;&amp; стены !== null &amp;&amp; потолок !== null",
+        "visuallySeparateElement": 1,
+        "elementName": "",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "102711307",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Вызов дизайнера на дом",
+            "label": "Вызов дизайнера на дом",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "дизайнерНаДом",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "notReset": 1,
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Да",
+                "radioName": "Да",
+                "cost": 1000
+              },
+              {
+                "title": "Элемент радио-кнопка - Нет",
+                "radioName": "Нет"
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102713307",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Вывоз мусора",
+            "label": "Вывоз мусора",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "мусор",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "notReset": 1,
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Да",
+                "radioName": "Да",
+                "cost": 2000
+              },
+              {
+                "title": "Элемент радио-кнопка - Нет",
+                "radioName": "Нет"
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          },
+          {
+            "json_id": "102714107",
+            "meta_id": "31022307",
+            "ver_id": "4863246",
+            "title": "Клининг",
+            "label": "Клининг",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "клининг",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": false,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "notReset": 1,
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - Да",
+                "radioName": "Да",
+                "cost": 5000
+              },
+              {
+                "title": "Элемент радио-кнопка - Нет",
+                "radioName": "Нет"
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;31023307;"
+          }
+        ],
+        "maxWidthSide": "70",
+        "backgroundImageSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1415813507",
+            "filename": "img03.png",
+            "ver_id": 4863246,
+            "image_width": "628",
+            "image_height": "435",
+            "ext": "png"
+          },
+          "backgroundHorizontalPosition": "right",
+          "backgroundVerticalPosition": "bottom",
+          "backgroundRepeat": "no-repeat",
+          "behaviorImage": "contain",
+          "unitSize": "px",
+          "opacitySubstrate": 5
+        },
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "100361707",
+        "title": "Тип строения:",
+        "label": "Тип строения:",
+        "selectedItem": "1",
+        "isColumn": 1,
+        "isNeedChoice": true,
+        "notEmpty": 1,
+        "typeDisplayClass": "buttons",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "строение",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "isStretch": false,
+        "globalMaxWidth": "50",
+        "globalMaxHeight": "50",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - Баня",
+            "radioName": "Баня",
+            "subradioName": "Срок возведения от 3х дней",
+            "cost": 2001,
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1387887907",
+                "filename": "bathhouse.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageSelected": {
+                "image_id": "1387888107",
+                "filename": "bathhouse1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - Дом",
+            "radioName": "Дом",
+            "subradioName": "Срок возведения от 6 месяцев",
+            "cost": 6000,
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1387888307",
+                "filename": "house.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageSelected": {
+                "image_id": "1387888507",
+                "filename": "house1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - Забор",
+            "radioName": "Забор",
+            "subradioName": "Справимся за 2 дня",
+            "cost": 100,
+            "extraValueForDependency": "забор",
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1387890507",
+                "filename": "fence2_1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageSelected": {
+                "image_id": "1387890307",
+                "filename": "fence3_1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - Пирс / Причал",
+            "radioName": "Пирс / Причал",
+            "subradioName": "Срок возведения от 10х дней",
+            "cost": 700,
+            "extraValueForDependency": "пирс",
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1387889307",
+                "filename": "pier.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageSelected": {
+                "image_id": "1387889107",
+                "filename": "pier1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - Пристрой",
+            "radioName": "Пристрой",
+            "cost": 700,
+            "extraValueForDependency": "пристрой",
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1387889707",
+                "filename": "barn.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "imageSelected": {
+                "image_id": "1387889507",
+                "filename": "barn1.svg",
+                "ver_id": 4858595,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          }
+        ],
+        "prompt": "",
+        "iconSettingsRadioLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "119859707",
+        "title": "Колонки: материал стен +  Этажность + мансарда",
+        "label": "",
+        "columns": [
+          {
+            "json_id": "120086907",
+            "title": "колонка 1",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "100364707",
+                "title": "Материал стен:",
+                "label": "Материал стен:",
+                "selectedItem": "1",
+                "isColumn": 1,
+                "isNeedChoice": true,
+                "notEmpty": 1,
+                "typeDisplayClass": "buttons",
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "материал",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiRadio",
+                "isStretch": false,
+                "globalMaxWidth": "",
+                "globalMaxHeight": "",
+                "values": [
+                  {
+                    "title": "Элемент радио-кнопка - Sip-панель",
+                    "radioName": "Sip-панель",
+                    "cost": 10
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Брус/Бревно",
+                    "radioName": "Брус/Бревно",
+                    "cost": 15
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Пеноблок",
+                    "radioName": "Пеноблок",
+                    "cost": 20
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Кирпич",
+                    "radioName": "Кирпич",
+                    "cost": 30
+                  }
+                ],
+                "prompt": "Небольшая подсказка о сути данного параметра",
+                "iconSettingsRadioLabel": null,
+                "parent": "0;35193507;35193707;"
+              }
+            ],
+            "maxWidth": "50",
+            "dependencyFormulaDisplay": "",
+            "iconSettings": null,
+            "parent": "0;35193507;"
+          },
+          {
+            "json_id": "119859107",
+            "title": "Колонки - 2",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "100365307",
+                "title": "Фундамент Этажность",
+                "label": "Этажность",
+                "value": "1",
+                "min": "1",
+                "max": "5",
+                "cost": "1",
+                "unit": "",
+                "step": "1",
+                "showSteps": 1,
+                "stepPrompt": "1",
+                "isNeedChoice": false,
+                "notEmpty": 1,
+                "showStaticValue": false,
+                "showDynamicValue": 1,
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "этажность",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiRange",
+                "isColumn": 1,
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettings": null,
+                "parent": "0;35193507;35193707;"
+              }
+            ],
+            "maxWidth": "40",
+            "dependencyFormulaDisplay": "строение !== &quot;забор&quot; &amp;&amp; строение !== &quot;пирс&quot;",
+            "iconSettings": null,
+            "parent": "0;35193507;"
+          },
+          {
+            "json_id": "119859307",
+            "title": "Колонки - 3",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "100368507",
+                "title": "Фундамент - Мансарда",
+                "label": "Мансарда",
+                "buttonText": "Нет",
+                "buttonTextChecked": "Есть",
+                "cost": "400",
+                "baseValue": "default",
+                "isNeedChoice": false,
+                "isColumn": 1,
+                "typeDisplayClass": "button",
+                "formOutputMethod": "value",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": 1,
+                "excludeFromCalculations": false,
+                "elementName": "мансарда",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "строение !== &quot;пирс&quot; &amp;&amp; строение !== &quot;пристрой&quot; &amp;&amp; строение !== &quot;забор&quot;",
+                "scrollIntoName": "",
+                "classes": "",
+                "template": "UiCheckbox",
+                "dependencyPrices": null,
+                "prompt": "",
+                "parent": "0;35193507;35193707;"
+              }
+            ],
+            "maxWidth": "10",
+            "iconSettings": null,
+            "parent": "0;35193507;"
+          }
+        ],
+        "dependencyFormulaDisplay": "",
+        "adaptationMethod": "center",
+        "elementName": "",
+        "classes": "",
+        "template": "UiColumns",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "120088307",
+        "title": "Колонки: длинна + ширина",
+        "label": "",
+        "columns": [
+          {
+            "json_id": "120087707",
+            "title": "Колонка 1 длинна",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "100369107",
+                "title": "Фундамент - длинна",
+                "label": "Длинна",
+                "value": "1",
+                "min": "1",
+                "max": "15",
+                "cost": "1",
+                "unit": "м",
+                "step": "1",
+                "showSteps": 1,
+                "stepPrompt": "1",
+                "isNeedChoice": false,
+                "notEmpty": 1,
+                "showStaticValue": false,
+                "showDynamicValue": 1,
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "длинна",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiRange",
+                "isColumn": 1,
+                "dependencyPrices": null,
+                "prompt": "Небольшая подсказка.",
+                "iconSettings": null,
+                "parent": "0;35193507;35193707;"
+              }
+            ],
+            "maxWidth": "50",
+            "iconSettings": null,
+            "parent": "0;35193507;"
+          },
+          {
+            "json_id": "120088107",
+            "title": "Колонка 2 - ширина",
+            "label": "",
+            "templates": [
+              {
+                "json_id": "100389707",
+                "title": "Фундамент - ширина",
+                "label": "Ширина",
+                "value": "1",
+                "min": "1",
+                "max": "15",
+                "cost": "1",
+                "unit": "м",
+                "step": "1",
+                "showSteps": 1,
+                "stepPrompt": "1",
+                "isNeedChoice": false,
+                "notEmpty": false,
+                "showStaticValue": false,
+                "showDynamicValue": 1,
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "ширина",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiRange",
+                "isColumn": 1,
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettings": null,
+                "parent": "0;35193507;35193707;"
+              }
+            ],
+            "maxWidth": "50",
+            "iconSettings": null,
+            "parent": "0;35193507;"
+          }
+        ],
+        "dependencyFormulaDisplay": "",
+        "adaptationMethod": "free",
+        "elementName": "",
+        "classes": "",
+        "template": "UiColumns",
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
         "json_id": "138716307",
         "meta_id": "41126507",
         "ver_id": "4926576",

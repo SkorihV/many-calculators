@@ -78,7 +78,7 @@ export default {
       default: 'round'
     },
     signAfterDot: {
-      type: Number,
+      type: [Number, String],
       default: -2
     },
     ...propsTemplate.getProps([

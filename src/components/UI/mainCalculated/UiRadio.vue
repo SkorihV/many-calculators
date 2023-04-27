@@ -143,7 +143,7 @@ export default {
       default: () => {},
     },
     notReset: {
-      type: Boolean,
+      type: [Boolean, Number],
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },

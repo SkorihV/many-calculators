@@ -1,96 +1,96 @@
 <template>
-  <div
-    ref="parent"
-    class="calc__wrapper-group-data isRange"
-    :id="elementName"
-    v-if="rangeValue !== null && isVisibilityFromDependency"
-  >
     <div
-      class="calc__range-wrapper"
-      :class="[classes, { 'column': isColumn || isMakeElementColumn, 'static': isStaticValue }]"
+      ref="parent"
+      class="calc__wrapper-group-data isRange"
+      :id="elementName"
+      v-if="rangeValue !== null && isVisibilityFromDependency"
     >
-      <icon-element-wrapper
-        :icon-settings="iconSettingsRangeLabel"
-        :alt="isExistLabel ? label : ''"
-        :isExistLabel="isExistLabel"
+      <div
+        class="calc__range-wrapper"
+        :class="[classes, { 'column': isColumn || isMakeElementColumn, 'static': isStaticValue }]"
       >
-        <div class="calc__range-label-text" v-if="isExistLabel">
-          {{ label }}
-          <div class="empty-block" v-if="notEmpty">*</div>
-          <slot name="prompt"></slot>
-        </div>
-      </icon-element-wrapper>
-      <div class="calc__range-item-wrapper">
-        <div class="calc__range-item-left-side">
-          <input
-            ref="thisElementInputRange"
-            class="calc__range-item"
-            :class="{ 'isError': isClassError }"
-            type="range"
-            :min="localMin"
-            :max="localMax"
-            :step="localStep"
-            :value="resultValue"
-            @input="tryChangeValue"
-            :name="localElementName"
-          />
-          <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
+        <icon-element-wrapper
+          :icon-settings="iconSettingsRangeLabel"
+          :alt="isExistLabel ? label : ''"
+          :isExistLabel="isExistLabel"
+        >
+          <div class="calc__range-label-text" v-if="isExistLabel">
+            {{ label }}
+            <div class="empty-block" v-if="notEmpty">*</div>
+            <slot name="prompt"></slot>
+          </div>
+        </icon-element-wrapper>
+        <div class="calc__range-item-wrapper">
+          <div class="calc__range-item-left-side">
+            <input
+              ref="thisElementInputRange"
+              class="calc__range-item"
+              :class="{ 'isError': isClassError }"
+              type="range"
+              :min="localMin"
+              :max="localMax"
+              :step="localStep"
+              :value="resultValue"
+              @input="tryChangeValue"
+              :name="localElementName"
+            />
+            <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
+              <div
+                class="calc__range-steps-item"
+                @click="changeValueStep(step)"
+                v-for="(step, inx) in returnSteps"
+                :style="{ left: pointsForStepsLine[inx] + 'px' }"
+                :key="inx"
+                :class="{
+                  'calc__range-steps-item_selected': step === resultValue,
+                }"
+              >
+                <div class="calc__range-steps-item-value">{{ step }}</div>
+              </div>
+            </div>
             <div
-              class="calc__range-steps-item"
-              @click="changeValueStep(step)"
-              v-for="(step, inx) in returnSteps"
-              :style="{ left: pointsForStepsLine[inx] + 'px' }"
-              :key="inx"
-              :class="{
-                'calc__range-steps-item_selected': step === resultValue,
-              }"
+              v-if="isStaticValue"
+              :style="{ left: positionStaticResultValue }"
+              ref="static"
+              class="calc__range-current-static"
             >
-              <div class="calc__range-steps-item-value">{{ step }}</div>
+              {{ resultValue }}
             </div>
           </div>
           <div
-            v-if="isStaticValue"
-            :style="{ left: positionStaticResultValue }"
-            ref="static"
-            class="calc__range-current-static"
+            class="calc__range-current-wrapper"
+            v-if="showDynamicValue || unit?.length"
           >
-            {{ resultValue }}
+            <input
+              class="calc__range-current-dynamic"
+              :class="{ 'isError': isClassError }"
+              v-if="showDynamicValue"
+              type="text"
+              v-model="dynamicValue"
+              @keydown.up="plus"
+              @keydown.down="minus"
+            />
+            <div class="calc__range-unit" v-if="unit?.length">
+              {{ unit }}
+            </div>
           </div>
         </div>
-        <div
-          class="calc__range-current-wrapper"
-          v-if="showDynamicValue || unit?.length"
-        >
-          <input
-            class="calc__range-current-dynamic"
-            :class="{ 'isError': isClassError }"
-            v-if="showDynamicValue"
-            type="text"
-            v-model="dynamicValue"
-            @keydown.up="plus"
-            @keydown.down="minus"
-          />
-          <div class="calc__range-unit" v-if="unit?.length">
-            {{ unit }}
-          </div>
-        </div>
+        <ui-tooltip
+          :is-show="isErrorEmpty"
+          :tooltip-text="textErrorNotEmpty"
+          :local-can-be-shown="localCanBeShownTooltip || isCanShowAllTooltips"
+        />
       </div>
-      <ui-tooltip
-        :is-show="isErrorEmpty"
-        :tooltip-text="textErrorNotEmpty"
-        :local-can-be-shown="localCanBeShownTooltip || isCanShowAllTooltips"
-      />
     </div>
-  </div>
-  <dev-block
-    :label="label"
-    :element-name="localElementName"
-    :value="isVisibilityFromDependency ? resultValue : null"
-    :local-cost="localCost"
-    :is-visibility-from-dependency="isVisibilityFromDependency"
-    :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
-  />
+    <dev-block
+      :label="label"
+      :element-name="localElementName"
+      :value="isVisibilityFromDependency ? resultValue : null"
+      :local-cost="localCost"
+      :is-visibility-from-dependency="isVisibilityFromDependency"
+      :dependency-formula-display="dependencyFormulaDisplay"
+      :parsing-formula-variables="formulaAfterProcessingVariables"
+    />
 </template>
 
 <script>

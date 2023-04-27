@@ -937,6 +937,28 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   }
 }
 
+@mixin style-horizontal-elements {
+    flex-direction: row;
+    flex-wrap: wrap;
+    > .calc__template-main-wrapper {
+      width: auto;
+      flex: 0 1 auto;
+      &.isRange {
+        flex: 1 1 auto;
+      }
+    }
+
+    > .calc__template-main-wrapper {
+      padding: 0 10px;
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+}
+
 @keyframes pulse {
   0% {
     transform: scale(0.95);
@@ -982,6 +1004,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
   &__wrapper_old_lp {
     max-width: 1138px;
     margin: 0 auto;
+  }
+
+  &__template-main-wrapper,
+  &__template-main-wrapper_structural {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
   &__wrapper {
     display: flex;
@@ -2382,16 +2411,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       width: 100%;
 
       &.horizontal {
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        > .calc__wrapper-group-data {
-          width: auto;
-          flex: 0 1 auto;
-          &.isRange {
-            flex: 1 1 auto;
-          }
-        }
+        @include style-horizontal-elements;
       }
     }
   }
@@ -2444,13 +2464,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           width: 100%;
           flex: 1 1 auto;
           &.horizontal {
-            flex-direction: row;
-            flex-wrap: wrap;
-
-            > .calc__wrapper-group-data {
-              width: auto;
-              flex: 0 1 auto;
-            }
+            @include style-horizontal-elements;
           }
         }
       }
@@ -2601,6 +2615,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &-sub {
         @include style-label-sub;
         margin-bottom: 10px;
+        line-height: normal;
       }
     }
     &-data {
@@ -2709,13 +2724,18 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
   }
   &__dev-block {
+    &-main-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
     &-wrapper {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       padding: 10px;
       border: 2px dashed gray;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       width: 100%;
       background: repeating-linear-gradient(-60deg, #bebdbd3d 0, #bebdbd3d 1px, transparent 1px, transparent 15px);
       background-color: #fff;

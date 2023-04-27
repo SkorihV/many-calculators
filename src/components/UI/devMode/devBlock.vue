@@ -1,5 +1,5 @@
 <template>
-  <template v-if="showInsideElementStatus">
+  <div class="calc__dev-block-main-wrapper" v-if="showInsideElementStatus">
     <button class="calc__dev-block-button" v-if="showInsideElementStatus" @click="isShowInnerData = !isShowInnerData">{{isShowInnerData ? "Скрыть" : "Отобразить"}} внутреннее состояние: {{label}}</button>
     <div
       class="calc__dev-block-wrapper"
@@ -51,7 +51,7 @@
         Текущая стоимость: {{ localCost === null ? "null" : localCost }}
       </div>
     </div>
-  </template>
+  </div>
 </template>
 
 <script>
