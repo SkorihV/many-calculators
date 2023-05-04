@@ -222,7 +222,7 @@ export default {
     }
   },
   unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
     return {

@@ -192,7 +192,7 @@ export default {
     }, 100);
   },
   unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
     return {

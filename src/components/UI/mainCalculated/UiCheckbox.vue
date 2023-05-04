@@ -17,6 +17,7 @@
         <div class="calc__checkbox-label-text" v-if="isExistLabel">
           {{ label }}
           <div class="empty-block" v-if="isNeedChoice">*</div>
+          <slot name="prompt" v-if="isExistLabel"></slot>
         </div>
       </icon-element-wrapper>
       <div @click="inputLocalValue" class="calc__checkbox-control-wrapper">
@@ -47,10 +48,10 @@
             <template v-if="isBase">
               {{ currentLocalTextButton }}
             </template>
-            <div class="empty-block" v-if="!label?.length && isNeedChoice">
+            <div class="empty-block" v-if="!isExistLabel && isNeedChoice">
               *
             </div>
-            <slot name="prompt"></slot>
+            <slot name="prompt" v-if="!isExistLabel"></slot>
           </div>
           <div
             class="calc__checkbox-control-element"
@@ -188,7 +189,7 @@ export default {
     this.changeValue("mounted");
   },
   unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
     return {

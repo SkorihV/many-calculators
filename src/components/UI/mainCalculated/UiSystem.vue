@@ -116,7 +116,7 @@ export default {
     this.changeValue("mounted");
   },
   unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   methods: {
     changeValue(eventType = "system") {

@@ -93,7 +93,7 @@ export default {
     window.addEventListener("resize", this.resize);
 
     this.columnList.forEach((item) => {
-      this.stateColumns.push({ maxWidth: item.maxWidth });
+       this.stateColumns.push({ maxWidth: item.maxWidth });
     });
   },
   unmounted() {
@@ -152,7 +152,7 @@ export default {
     },
     currentWidthElement: {
       handler(width) {
-        if (width > 880) {
+        if (width > 850) {
           this.stateColumns = Object.values(this.stateColumns).map(
             (item, index) => {
               item.maxWidth = this.columnList[index].maxWidth;
@@ -161,7 +161,7 @@ export default {
           );
         }
 
-        if (width <= 880) {
+        if (width <= 850) {
           if (this.countColumns === 4) {
             if (["free", "first", "center"].includes(this.adaptationMethod)) {
               this.stateColumns[0].maxWidth = 33;

@@ -1480,6 +1480,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         justify-content: space-between;
         text-align: start;
         position: relative;
+        @media all and (max-width: 360px) {
+          padding: 10px 50px 10px 10px;
+        }
         &:hover {
           border-color: $c_element_border_color_hover;
           background-color: $c_element_bg_color_hover;
@@ -1488,7 +1491,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
             border-color: $c_element_text_hover;
           }
         }
-
         .calc__select-arrow {
           width: 10px;
           height: 10px;
@@ -1652,6 +1654,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       @media all and (max-width: 480px) {
         padding: 11px 15px;
       }
+      @media all and (max-width: 360px) {
+        flex: 1 1 100%;
+      }
       &.onlyImage {
         padding: 10px;
       }
@@ -1786,7 +1791,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         align-items: center;
         position: relative;
         @media all and (max-width: 480px) {
-          padding: 10px 15px;
+          padding: 10px 35px 10px 15px;
         }
         @include style-decor-border-radius;
         &:hover {
@@ -2299,6 +2304,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         @media all and (max-width: 480px) {
           padding: 10px 15px;
         }
+        @media all and (max-width: 360px) {
+          flex: 1 1 100%;
+        }
         &:hover {
           background-color: $c_decor_bg_color_hover;
           border-color: $c_decor_border_color_hover;
@@ -2456,6 +2464,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         &:last-child {
           padding-right: 0;
         }
+        @media all and (max-width: 460px) {
+          padding: 0;
+       }
       }
       &-elements {
         &-wrapper {
@@ -2635,6 +2646,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         padding: 4px 0;
         @media all and (max-width: 768px) {
           flex-direction: column;
+          margin-bottom: 10px;
         }
         &:hover {
           background-color: $c_decor_bg_color_hover;

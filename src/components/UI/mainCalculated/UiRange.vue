@@ -212,21 +212,29 @@ export default {
     }
 
     this.updateWidthElement();
+    this.updateStaticElementWidth();
 
     window.addEventListener("resize", this.resizeUpdateWidthElement);
     document.addEventListener("DOMContentLoaded", this.contentLoadedUpdateWidthElement);
 
-    let timer = setInterval(() => {
+    let timerElementInputRange = setInterval(() => {
       if (this.$refs?.thisElementInputRange?.offsetWidth || this.elementWidth) {
         this.updateWidthElement();
-        clearInterval(timer);
+        clearInterval(timerElementInputRange);
+      }
+    }, 500);
+
+    let timerStatic = setInterval(() => {
+      if (this.$refs?.static?.offsetWidth) {
+        this.updateStaticElementWidth();
+        clearInterval(timerStatic);
       }
     }, 500);
   },
   unmounted() {
     window.removeEventListener('resize', this.resizeUpdateWidthElement);
     document.removeEventListener('DOMContentLoaded', this.contentLoadedUpdateWidthElement);
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
     return {
@@ -257,18 +265,20 @@ export default {
     },
     changeValueStep(step) {
       this.resultValue = this.checkValidValueReturnNumber(step);
+      this.updateStaticElementWidth();
       this.changeValue("changeValueStep");
     },
     tryChangeValue(e) {
-      this.staticElementWidth = this.$refs.static ? this.$refs.static?.offsetWidth : this.minimalWidthStaticElement;
       clearTimeout(this.timerNameForLocalValue);
       this.resultValue = this.checkValidValueReturnNumber(e.target.value);
+      this.updateStaticElementWidth();
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue();
       }, 500);
     },
     changeDynamicValue() {
       this.resultValue = this.dynamicValue;
+      this.updateStaticElementWidth();
       clearTimeout(this.timerNameForLocalValue);
       this.timerNameForLocalValue = setTimeout(() => {
         this.changeValue("changeDynamicValue");
@@ -364,12 +374,15 @@ export default {
         this.elementWidth = this.$refs?.thisElementInputRange?.offsetWidth;
       }
     },
+    updateStaticElementWidth() {
+      this.staticElementWidth = this.$refs.static ? this.$refs.static?.offsetWidth : this.minimalWidthStaticElement;
+    },
     resizeUpdateWidthElement() {
       this.updateWidthElement();
     },
     contentLoadedUpdateWidthElement() {
       this.updateWidthElement();
-    }
+    },
   },
   watch: {
     /**

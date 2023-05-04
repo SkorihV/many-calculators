@@ -207,7 +207,7 @@ export default {
   },
   unmounted() {
     window.removeEventListener("click", this.clickClose);
-    this.tryDeleteAllDataOnStoreForElementName(this.localElementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
     return {

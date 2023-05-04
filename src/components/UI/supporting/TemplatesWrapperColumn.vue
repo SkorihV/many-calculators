@@ -1,22 +1,24 @@
 <template>
-  <ui-columns
-    v-if="template?.template === 'UiColumns'"
-    :column-list="template?.columns"
-    :label="template?.label"
-    :classes="template?.classes"
-    :dependency-formula-display="template?.dependencyFormulaDisplay"
-    :parent-is-show="parentIsShow"
-    :icon-settings-columns-label="template?.iconSettingsColumnsLabel"
-    :changed-state-parent="changeStateParent"
-    :element-name="
-      template?.elementName?.length
-        ? template?.elementName
-        : template?.json_id || 'UiColumns' + index
-    "
-    :adaptation-method="template?.adaptationMethod"
-    :parent-name="parentName"
-    @changedValue="changeValue"
-  ></ui-columns>
+  <div class="calc__template-main-wrapper_structural">
+    <ui-columns
+      v-if="template?.template === 'UiColumns'"
+      :column-list="template?.columns"
+      :label="template?.label"
+      :classes="template?.classes"
+      :dependency-formula-display="template?.dependencyFormulaDisplay"
+      :parent-is-show="parentIsShow"
+      :icon-settings-columns-label="template?.iconSettingsColumnsLabel"
+      :changed-state-parent="changeStateParent"
+      :element-name="
+        template?.elementName?.length
+          ? template?.elementName
+          : template?.json_id || 'UiColumns' + index
+      "
+      :adaptation-method="template?.adaptationMethod"
+      :parent-name="parentName"
+      @changedValue="changeValue"
+    ></ui-columns>
+  </div>
 </template>
 
 <script>

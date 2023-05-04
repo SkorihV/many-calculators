@@ -81,7 +81,7 @@ export default {
     }, 200);
   },
   unmounted() {
-    this.tryDeleteAllDataOnStoreForElementName(this.elementName)
+    this.tryDeleteAllDataOnStoreForElementName(this.elementName);
   },
   methods: {
     changeValue() {
