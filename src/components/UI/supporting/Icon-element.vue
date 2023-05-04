@@ -1,26 +1,32 @@
 <template>
   <div class="calc__icon-wrapper" :style="[width, height]">
-    <img
-      class="calc__icon_normal"
-      :style="[behaviorImage]"
-      v-if="showIcon"
-      :src="urlIcon"
-      :alt="alt"
-    />
-    <img
-      class="calc__icon_hover"
-      :style="[behaviorImage]"
-      v-if="showHoverIcon"
-      :src="urlIconHover"
-      :alt="alt"
-    />
-    <img
-      class="calc__icon_selected"
-      :style="[behaviorImage]"
-      v-if="showSelectedIcon"
-      :src="urlIconSelected"
-      :alt="alt"
-    />
+    <template v-if="isIconFilenameExist">
+      <img
+        class="calc__icon_normal"
+        :style="[behaviorImage]"
+        v-show="showIcon"
+        :src="urlIcon"
+        :alt="alt"
+      />
+    </template>
+    <template v-if="isIconHoverFilenameExist">
+      <img
+        class="calc__icon_hover"
+        :style="[behaviorImage]"
+        v-show="showHoverIcon"
+        :src="urlIconHover"
+        :alt="alt"
+      />
+    </template>
+    <template v-if="isIconSelectedFilenameExist">
+      <img
+        class="calc__icon_selected"
+        :style="[behaviorImage]"
+        v-show="showSelectedIcon"
+        :src="urlIconSelected"
+        :alt="alt"
+      />
+    </template>
   </div>
 </template>
 
@@ -88,26 +94,28 @@ export default {
       return !this.showHoverIcon && !this.showSelectedIcon;
     },
     showHoverIcon() {
-      return (
-        Boolean(this.iconSettings?.imageHover?.filename) &&
-        this.isParentHover &&
-        !this.isParentSelected
-      );
+      return this.isParentHover && !this.isParentSelected;
     },
     showSelectedIcon() {
-      return (
-        Boolean(this.iconSettings?.imageSelected?.filename) &&
-        this.isParentSelected
-      );
+      return this.isParentSelected;
+    },
+    isIconFilenameExist() {
+      return Boolean(this.iconSettings?.image?.filename);
     },
     urlIcon() {
-      return this.imageDir + this.iconSettings?.image?.filename;
+      return this.imageDir + this.iconSettings.image?.filename;
+    },
+    isIconHoverFilenameExist() {
+      return Boolean(this.iconSettings?.imageHover?.filename);
     },
     urlIconHover() {
-      return this.imageDir + this.iconSettings?.imageHover?.filename;
+      return this.imageDir + this.iconSettings.imageHover?.filename;
+    },
+    isIconSelectedFilenameExist() {
+      return Boolean(this.iconSettings?.imageSelected?.filename);
     },
     urlIconSelected() {
-      return this.imageDir + this.iconSettings?.imageSelected?.filename;
+      return this.imageDir + this.iconSettings.imageSelected?.filename;
     },
   },
 };

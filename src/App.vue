@@ -2617,6 +2617,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         margin-bottom: 10px;
         gap: 8px;
         border-bottom: 1px dashed $c_decor_text_default;
+        z-index: 1;
       }
       &-main {
         @include style-title-main;
@@ -2637,6 +2638,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 10px 0;
       margin: 10px 0;
       width: 100%;
+      z-index: 1;
     }
 
     &-field {
@@ -2832,16 +2834,20 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       background-repeat: no-repeat;
       background-position: right bottom;
       background-size: contain;
-      z-index: -1;
       @media all and (max-width: 480px) {
         display: none;
       }
       @include style-decor-border-radius;
-    }
-    &-img {
-      object-fit: contain;
-      width: 100%;
-      height: auto;
+
+      &-limit {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      &-img {
+        width: 100%;
+        height: 100%;
+      }
     }
     &-substrate {
       width: 100%;

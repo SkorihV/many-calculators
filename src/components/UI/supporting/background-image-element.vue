@@ -1,9 +1,12 @@
 <template>
   <div
     class="calc__background-image-wrapper"
-    v-if="isBackgroundImage"
-    :style="[...styleBackground]"
+    v-if="isBackgroundImage && styleBackgroundImageUrl"
+
   >
+    <div class="calc__background-image-wrapper-limit" :style="[styleLimitWrapperImageSize, styleLimitWrapperImagePosition]">
+      <div class="calc__background-image-wrapper-img" :style="[...styleBackground]"></div>
+    </div>
     <div
       v-if="isSubstrate"
       :style="[colorSubstrate, opacitySubstrate]"
@@ -31,7 +34,7 @@ export default {
     return {
       maxWidth: this.imageSettingsData?.maxWidth || 250,
       maxHeight: this.imageSettingsData?.maxHeight || 250,
-      currentImageUrl: null,
+      currentImageUrl: this.baseUrlImage,
     };
   },
   methods: {
@@ -105,16 +108,43 @@ export default {
         ";"
       );
     },
-    styleBackgroundBehaviorImage() {
-      let size = this.imageSettingsData?.fixedSize
-        ? this.maxWidth +
-          this.imageSettingsData?.unitSize +
-          " " +
-          this.maxHeight +
-          this.imageSettingsData?.unitSize
-        : this.imageSettingsData?.behaviorImage;
+    styleLimitWrapperImagePosition() {
+      let result = '';
 
-      return "background-size:" + size + ";";
+      if (this.imageSettingsData?.backgroundVerticalPosition === "top") {
+        result += "top: 0;";
+      } else if (this.imageSettingsData?.backgroundVerticalPosition === "bottom") {
+        result +=  "bottom: 0;";
+      } else if (this.imageSettingsData?.backgroundVerticalPosition === "center") {
+        result +=  "top: 50%; transform: translateY(-50%);"
+      }
+
+
+      if (this.imageSettingsData?.backgroundHorizontalPosition === "left") {
+        result +=  "left: 0;";
+      } else if (this.imageSettingsData?.backgroundHorizontalPosition === "right") {
+        result +=  "right: 0;";
+      } else if (this.imageSettingsData?.backgroundHorizontalPosition === "center") {
+        result +=  "left: 50%; transform: translateX(-50%);"
+      }
+
+      if (this.imageSettingsData?.backgroundHorizontalPosition === "center" && this.imageSettingsData?.backgroundVerticalPosition === "center") {
+        result = "left: 50%; top: 50%; transform:translate(-50%, -50%);"
+      }
+
+      return result;
+      },
+    styleBackgroundSize() {
+      return `background-size: ${this.imageSettingsData?.behaviorImage}`
+    },
+    styleLimitWrapperImageSize() {
+      if ( !this.imageSettingsData?.fixedSize) {
+        return null;
+      }
+      const width = `max-width: ${this.maxWidth}${this.imageSettingsData?.unitSize}`;
+      const height = `max-height: ${this.maxHeight}${this.imageSettingsData?.unitSize}`;
+
+      return [width, height]
     },
     styleBackground() {
       if (this.isBackgroundImage) {
@@ -122,18 +152,21 @@ export default {
           this.styleBackgroundImageUrl,
           this.styleBackgroundRepeat,
           this.styleBackgroundPosition,
-          this.styleBackgroundBehaviorImage,
+          this.styleBackgroundSize
         ];
       }
       return [];
     },
-    urlImageAfterProcessingDependency() {
-      let currentUrl = this.imageSettingsData?.image?.filename.length
+    baseUrlImage() {
+      return this.imageSettingsData?.image?.filename.length
         ? this.imageSettingsData?.image?.filename
-        : false;
+        : null;
+    },
+    urlImageAfterProcessingDependency() {
       if (!this.imageSettingsData?.dependencyImages?.length) {
-        return currentUrl;
+        return this.baseUrlImage;
       }
+      let newCurrentUrl = null;
       this.imageSettingsData.dependencyImages.forEach((imageItem) => {
         if (
           imageItem.dependencyFormulaDisplay?.length &&
@@ -150,7 +183,7 @@ export default {
 
           try {
             if (eval(formula)) {
-              currentUrl = imageItem.image.filename;
+              newCurrentUrl = imageItem.image.filename;
             }
           } catch (e) {
             if (this.devMode) {
@@ -159,7 +192,7 @@ export default {
           }
         }
       });
-      return currentUrl;
+      return newCurrentUrl ? newCurrentUrl : this.baseUrlImage;
     },
   },
 };
