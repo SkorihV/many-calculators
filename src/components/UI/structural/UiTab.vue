@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/UiTabItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";

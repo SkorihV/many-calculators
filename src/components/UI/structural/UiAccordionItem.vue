@@ -76,7 +76,7 @@
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";

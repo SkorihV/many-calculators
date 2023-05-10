@@ -8,7 +8,7 @@
     "methodBeginningCalculation": "useButton",
     "form": "",
     "methodWorksForm": "show",
-    "tooltipOff": true,
+    "tooltipOff": false,
     "devModeEnabled": 1,
     "dependencyMainFormula": null,
     "resultOptions": {
