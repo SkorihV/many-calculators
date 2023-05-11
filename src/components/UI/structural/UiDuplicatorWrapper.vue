@@ -72,7 +72,7 @@ import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 

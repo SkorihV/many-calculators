@@ -53,7 +53,7 @@ import { decimalAdjust, processingArrayOnFormulaProcessingLogic } from "@/servis
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 export default {

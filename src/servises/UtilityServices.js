@@ -203,15 +203,9 @@ const decimalAdjust = function (value, exp = 0, type = "round") {
   return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
 };
 
-const getParent = (instance) => {
-  if ( instance?.proxy.$parent?.$el) {
-    return instance.proxy.$parent.$el
-  }
-  return null;
-}
+
 
 export {
-  getParent,
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
   parsingDataInFormulaOnSum,

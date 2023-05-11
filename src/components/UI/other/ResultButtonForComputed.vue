@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";

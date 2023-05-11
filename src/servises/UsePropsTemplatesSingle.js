@@ -1,3 +1,5 @@
+import { isBoolean, isNotNaN } from "@/validators";
+
 /**
  *
  */
@@ -188,9 +190,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
   /**
@@ -200,9 +200,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
 
@@ -217,9 +215,7 @@ class Props {
     return {
       type: [Number, String],
       default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN
     };
   }
   /**
@@ -242,9 +238,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
 
@@ -252,9 +246,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
 
@@ -265,9 +257,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
   /**
@@ -297,9 +287,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
 
@@ -314,9 +302,7 @@ class Props {
     return {
       type: [Number, String],
       default: 0,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN
     };
   }
 
@@ -324,9 +310,7 @@ class Props {
     return {
       type: [Number, String],
       default: 10,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN
     };
   }
 
@@ -352,9 +336,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: true,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean
     };
   }
   baseValue() {

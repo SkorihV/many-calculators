@@ -47,7 +47,7 @@
 
 <script>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import ColumnElement from "@/components/UI/structural/ColumnElement.vue";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 

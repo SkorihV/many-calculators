@@ -129,7 +129,7 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 
 export default {
   name: "UiSelect",

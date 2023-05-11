@@ -1,14 +1,13 @@
 <script setup>
-import {isBoolean} from "@/servises/validators";
-import { defineProps, onMounted, ref, watch, computed, getCurrentInstance } from "vue";
-import {useBaseStore} from "@/store/piniaStore"
-import { storeToRefs } from "pinia";
-import { useEventListener } from "@/servises/useEventsListener";
-import { getParent } from "@/servises/UtilityServices";
+import { defineProps, onMounted, ref, watch, computed } from "vue";
 
-const store = useBaseStore();
-const { isCanShowAllTooltips, isTooltipOn } = storeToRefs(store);
-const instance = getCurrentInstance();
+import {isBoolean} from "@/validators";
+import { useEventListener } from "@/composables/useEventsListener";
+import { getParent } from "@/composables/useInstance";
+import { getBaseStoreFields } from "@/composables/useBaseStore";
+
+
+const { isCanShowAllTooltips, isTooltipOn } = getBaseStoreFields();
 const props = defineProps( {
   /**
    * Текст ошибки
@@ -42,7 +41,7 @@ function checkPosition() {
   setTimeout(() => {
     if (tooltip.value) {
       classPosition.value = null;
-      const parent = getParent(instance);
+      const parent = getParent();
       if (!parent || parent.nodeType === 3) {
         return false;
       }
@@ -61,8 +60,6 @@ function checkPosition() {
     }
   }, 10);
 }
-
-
 
 const resizeTimer = ref(null);
 function resize() {

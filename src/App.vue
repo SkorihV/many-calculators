@@ -106,7 +106,7 @@ import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
-import localData from "@/servises/localData";
+import { IS_LOCAL, LOCAL_PATH_DATA, LOCAL_PATH_OPTIONS } from "@/constants/localData";
 
 import {
   parseResultValueObjectItem,
@@ -137,20 +137,14 @@ export default {
     devBlock,
   },
   async mounted() {
-    let isLocal = false;
-    if (typeof localData !== "undefined") {
-      isLocal = localData?.isLocal ? localData?.isLocal : false;
-    }
 
-    if (isLocal) {
-      const localPathData = localData?.localPathData;
-      const localPathOptions = localData?.localPathOptions;
-      await fetch(localPathData)
+    if (IS_LOCAL) {
+      await fetch(LOCAL_PATH_DATA)
         .then((response) => response.json())
         .then((data) => {
           this.inputTemplates = data;
         });
-      await fetch(localPathOptions)
+      await fetch(LOCAL_PATH_OPTIONS)
         .then((response) => response.json())
         .then((data) => {
           this.inputOptions = data;

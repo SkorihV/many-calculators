@@ -84,7 +84,7 @@ import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 
 export default {
   name: "UiAccordionItem",
