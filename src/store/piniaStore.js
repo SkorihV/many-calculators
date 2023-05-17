@@ -343,6 +343,17 @@ export const useBaseStore = defineStore("base", {
     },
     initSomeElementChangedSelfVisibilityState() {
       this.someElementChangedSelfVisibilityState = this.someElementChangedSelfVisibilityState +1;
+    },
+    /**
+     *
+     * @param nameItemList
+     * @returns {boolean}
+     */
+    isElementDependency(nameItemList = null) {
+      if (!nameItemList) {
+        return false;
+      }
+      return nameItemList in this.globalDependenciesList;
     }
   },
 });

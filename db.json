@@ -18,7 +18,41 @@
       "roundOffType": "ceil",
       "currency": "руб.",
       "textForSpinner": "Идет расчет...",
-      "signAfterDot": -2
+      "signAfterDot": -2,
+      "backgroundImageSettings": {
+        "title": "",
+        "image": {
+          "image_id": "1595369507",
+          "filename": "http://testing.calculators-works.oml.ru/d/img03.png",
+          "ver_id": 4848407,
+          "image_width": "1341",
+          "image_height": "1068",
+          "ext": "png"
+        },
+        "dependencyImages": [
+          {
+            "title": "ползунок2 &gt; 10",
+            "image": {
+              "image_id": "1595369107",
+              "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+              "ver_id": 4848407,
+              "image_width": "1920",
+              "image_height": "1260",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "ползунок2 &gt; 10"
+          }
+        ],
+        "backgroundHorizontalPosition": "right",
+        "backgroundVerticalPosition": "bottom",
+        "backgroundRepeat": "no-repeat",
+        "behaviorImage": "contain",
+        "fixedSize": 0,
+        "maxWidth": 300,
+        "maxHeight": 300,
+        "unitSize": "px",
+        "opacitySubstrate": 5
+      }
     },
     "textAbove": "",
     "textAfter": "",
@@ -1341,7 +1375,7 @@
           "maxWidth": 50,
           "maxHeight": 50,
           "behaviorImage": "contain",
-          "location": "leftSide",
+          "location": "leftSide"
         },
         "parent": "0;"
       },
@@ -1964,7 +1998,7 @@
                 "parent": "0;35854707;35854307;"
               }
             ],
-            "dependencyFormulaDisplay": "",
+            "dependencyFormulaDisplay": "ползунок2 > 15",
             "adaptationMethod": "free",
             "elementName": "",
             "classes": "",

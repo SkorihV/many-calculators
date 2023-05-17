@@ -1,8 +1,8 @@
-import {getBaseStoreFields} from "@/composables/useBaseStore";
+import {getBaseStoreGetters} from "@/composables/useBaseStore";
 import { unref } from "vue";
 
 export function useUtilityServices() {
-  const {getSpecSymbols, getNameReserveVariable} = getBaseStoreFields();
+  const {getSpecSymbols} = getBaseStoreGetters();
   /**
    * получить из формулы массив элементов
    * @param formula

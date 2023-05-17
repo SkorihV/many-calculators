@@ -1,7 +1,7 @@
 import {getCurrentInstance} from "vue";
-const instance = getCurrentInstance();
 
 export const getParent = () => {
+  const instance = getCurrentInstance();
   if ( instance?.proxy.$parent?.$el) {
     return instance.proxy.$parent.$el
   }

@@ -1,5 +1,5 @@
 import { unref } from "vue";
-import {getBaseStoreFields} from "@/composables/useBaseStore";
+import {getBaseStoreGetters} from "@/composables/useBaseStore";
 
 
 /**
@@ -9,7 +9,7 @@ import {getBaseStoreFields} from "@/composables/useBaseStore";
  * @returns {{cost, name: (*|null), isShow: boolean}}
  */
 const getProxyFreeVariables = (value, name = null) => {
-  const {getNameReserveVariable} = getBaseStoreFields();
+  const {getNameReserveVariable} = getBaseStoreGetters();
   value = unref(value);
   name = unref(name);
   return new Proxy(

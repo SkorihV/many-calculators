@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import UiColumns from "@/components/UI/structural/UiColumns.vue";
+import UiColumns from "@/components/UI/structural/c_UiColumns.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 export default {

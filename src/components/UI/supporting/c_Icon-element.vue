@@ -2,9 +2,9 @@
 import { computed, defineProps, ref } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
-import { getBaseStoreFields } from "@/composables/useBaseStore";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
-const {getImageDir} = getBaseStoreFields();
+const {getImageDir} = getBaseStoreGetters();
 const props = defineProps({
   iconSettings: {
       type: Object,

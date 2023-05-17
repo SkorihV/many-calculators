@@ -1,3 +1,5 @@
+import { unref } from "vue";
+
 /**
  * Обработать строку формулы зависимости и получает из нее данные
  * и получить строку со значениями
@@ -6,6 +8,8 @@
  * @returns {*|null}
  */
 const processingVariablesOnFormula = function (formula, localDependencyList) {
+  localDependencyList = unref(localDependencyList);
+  formula = unref(formula);
   if (!formula) {
     return null;
   }

@@ -48,7 +48,7 @@ import { mapState } from "pinia";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 
-import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";

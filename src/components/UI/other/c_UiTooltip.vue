@@ -4,10 +4,10 @@ import { defineProps, onMounted, ref, watch, computed } from "vue";
 import {isBoolean} from "@/validators";
 import { useEventListener } from "@/composables/useEventsListener";
 import { getParent } from "@/composables/useInstance";
-import { getBaseStoreFields } from "@/composables/useBaseStore";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
 
-const { isCanShowAllTooltips, isTooltipOn } = getBaseStoreFields();
+const { isCanShowAllTooltips, isTooltipOn } = getBaseStoreGetters();
 const props = defineProps( {
   /**
    * Текст ошибки

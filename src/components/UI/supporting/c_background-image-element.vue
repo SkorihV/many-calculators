@@ -2,11 +2,11 @@
 import { computed, defineProps, ref, watch } from "vue";
 
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import { getBaseStoreFields } from "@/composables/useBaseStore";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import { useUtilityServices } from "@/composables/useUtilityServices";
 
-const {getImageDir, devMode} = getBaseStoreFields();
+const {getImageDir, devMode} = getBaseStoreGetters();
 const {constructLocalListElementDependencyInFormula, localDependencyList} = useLocalDependencyList();
 const {getArrayElementsFromFormula} = useUtilityServices();
 
@@ -50,9 +50,6 @@ function getImageAndUpdated(url) {
     console.error("Картина по адресу " + img.src + " не была загружены");
   });
 }
-
-
-
 
 
 const isBackgroundImage = computed(() => {
@@ -181,7 +178,7 @@ const urlImageAfterProcessingDependency = computed(() => {
     return newCurrentUrl ? newCurrentUrl : baseUrlImage.value;
   })
 
-watch(()=> urlImageAfterProcessingDependency.value, (newUrl, oldUrl)=> {
+watch(urlImageAfterProcessingDependency, (newUrl, oldUrl)=> {
   if (newUrl !== oldUrl && Boolean(newUrl)) {
     getImageAndUpdated(getImageDir.value + newUrl);
   }
@@ -191,11 +188,6 @@ watch(()=> urlImageAfterProcessingDependency.value, (newUrl, oldUrl)=> {
 
 
 <template>
-  <pre>
-  {{urlImageAfterProcessingDependency}}
-    {{localDependencyList}}
-
-  </pre>
   <div
     class="calc__background-image-wrapper"
     v-if="isBackgroundImage && styleBackgroundImageUrl"
