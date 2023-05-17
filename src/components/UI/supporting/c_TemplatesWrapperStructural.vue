@@ -1,3 +1,19 @@
+<script setup>
+import UiTab from "@/components/UI/structural/UiTab.vue";
+import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
+import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
+const emits = defineEmits(["changedValue"])
+const props = defineProps({
+    ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
+  })
+
+const changeValue = (data) =>  {
+      emits("changedValue", data);
+    }
+</script>
+
 <template>
   <div class="calc__template-main-wrapper_structural">
     <ui-accordion
@@ -52,30 +68,3 @@
     />
   </div>
 </template>
-
-<script>
-import UiTab from "@/components/UI/structural/UiTab.vue";
-import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
-import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-
-export default {
-  name: "TemplatesWrapperStructural",
-  components: {
-    UiTab,
-    UiAccordion,
-    UiBlockSection,
-  },
-  emits: ["changedValue"],
-  props: {
-    ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
-  },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
-};
-</script>
-
-<style scoped></style>

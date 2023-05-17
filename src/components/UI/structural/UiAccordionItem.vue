@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";

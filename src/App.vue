@@ -89,10 +89,10 @@
 </template>
 
 <script>
-import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/UiDuplicator.vue";
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";

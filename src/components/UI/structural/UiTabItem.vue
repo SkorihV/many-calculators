@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 

@@ -68,8 +68,8 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";

@@ -1,3 +1,32 @@
+<script setup>
+
+import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
+import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
+import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";
+import UiRadio from "@/components/UI/mainCalculated/UiRadio.vue";
+import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox.vue";
+import UiImage from "@/components/UI/mainCalculated/UiImage.vue";
+import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
+const emits = defineEmits(["changedValue"])
+const props = defineProps({
+  ...propsTemplate.getProps([
+    "template",
+    "index",
+    "parentIsShow",
+    "parentName",
+  ]),
+})
+
+const changeValue = (data) => {
+  emits("changedValue", data);
+}
+
+</script>
+
+
 <template>
   <div class="calc__template-main-wrapper"
   :class="{'isRange' : template.template === 'UiRange'}">
@@ -243,46 +272,3 @@
     </ui-system>
   </div>
 </template>
-
-<script>
-
-import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
-import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
-import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";
-import UiRadio from "@/components/UI/mainCalculated/UiRadio.vue";
-import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox.vue";
-import UiImage from "@/components/UI/mainCalculated/UiImage.vue";
-import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
-import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-
-export default {
-  name: "TemplatesWrapper",
-  components: {
-    UiRange,
-    UiInput,
-    UiSelect,
-    UiRadio,
-    UiCheckbox,
-    UiPrompt,
-    UiImage,
-    UiSystem,
-  },
-  emits: ["changedValue"],
-  props: {
-    ...propsTemplate.getProps([
-      "template",
-      "index",
-      "parentIsShow",
-      "parentName",
-    ]),
-  },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
-};
-</script>
-
-<style scoped></style>

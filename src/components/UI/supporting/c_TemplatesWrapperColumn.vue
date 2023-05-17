@@ -1,3 +1,30 @@
+<script setup>
+import UiColumns from "@/components/UI/structural/c_UiColumns.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
+
+
+
+
+const emits = defineEmits(["changedValue"]);
+const props = defineProps({
+    changeStateParent: {
+      type: Boolean,
+      default: false,
+    },
+    ...propsTemplate.getProps([
+      "template",
+      "index",
+      "parentIsShow",
+      "parentName",
+    ]),
+  })
+
+const changeValue = (data) => {
+      emits("changedValue", data);
+    }
+</script>
+
 <template>
   <div class="calc__template-main-wrapper_structural">
     <ui-columns
@@ -20,35 +47,3 @@
     ></ui-columns>
   </div>
 </template>
-
-<script>
-import UiColumns from "@/components/UI/structural/c_UiColumns.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-
-export default {
-  name: "TemplatesWrapper",
-  components: {
-    UiColumns,
-  },
-  emits: ["changedValue"],
-  props: {
-    changeStateParent: {
-      type: Boolean,
-      default: false,
-    },
-    ...propsTemplate.getProps([
-      "template",
-      "index",
-      "parentIsShow",
-      "parentName",
-    ]),
-  },
-  methods: {
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-  },
-};
-</script>
-
-<style scoped></style>

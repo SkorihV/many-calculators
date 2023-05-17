@@ -68,10 +68,10 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";

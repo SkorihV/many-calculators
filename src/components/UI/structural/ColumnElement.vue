@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
