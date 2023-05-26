@@ -1,28 +1,9 @@
 import { useBaseStore } from "@/store/piniaStore";
 import { storeToRefs } from "pinia";
-import { reactive, ref } from "vue";
 
 export function getBaseStoreGetters(fieldsList = null) {
   const store = useBaseStore();
-  if (fieldsList === null) {
-    return storeToRefs(store);
-  } else if (Array.isArray(fieldsList)) {
-    let returnList = reactive({});
-    fieldsList.forEach((field) => {
-      if (field in store) {
-        returnList[field] = store[field];
-      } else {
-        returnList[field] = null;
-      }
-    });
-    return returnList;
-  } else if (typeof fieldsList === "string") {
-    if (fieldsList in store) {
-      return ref(store[fieldsList]);
-    }
-    return null;
-  }
-  return null;
+  return storeToRefs(store);
 }
 
 /**

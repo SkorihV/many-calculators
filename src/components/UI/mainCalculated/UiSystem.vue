@@ -47,7 +47,7 @@ import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula"
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,

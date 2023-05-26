@@ -99,7 +99,7 @@ import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/c_ResultButtonForComputed.vue";
 
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";

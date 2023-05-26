@@ -1,6 +1,6 @@
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import {computed, ref, watch} from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";

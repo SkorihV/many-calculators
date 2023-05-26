@@ -102,7 +102,7 @@
 import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/UiTabItem.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 
 import { useBaseStore } from "@/store/piniaStore";

@@ -1,3 +1,55 @@
+<script setup>
+import {getBaseStoreGetters} from "@/composables/useBaseStore";
+import {ref} from "vue";
+
+const {showInsideElementStatus} = getBaseStoreGetters('showInsideElementStatus')
+
+const props = defineProps({
+  value: {},
+  label: {
+    type: String,
+    default: null,
+  },
+  elementName: {
+    type: String,
+    default: null,
+  },
+  dependencyFormulaDisplay: {
+    type: [String, Boolean],
+    default: null,
+  },
+  parsingFormulaVariables: {
+    type: [String, Boolean],
+    default: null,
+  },
+  isVisibilityFromDependency: {
+    type: Boolean,
+    default: null,
+  },
+  localCost: {
+    type: Number,
+    default: null,
+  },
+  hiddenCost: {
+    type: Boolean,
+    default: false,
+  },
+  hiddenValue: {
+    type: Boolean,
+    default: false,
+  },
+  formula: {
+    default: null,
+  },
+  formulaVariables: {
+    default: null,
+  },
+})
+const isShowInnerData = ref(false)
+
+</script>
+
+
 <template>
   <div class="calc__dev-block-main-wrapper" v-if="showInsideElementStatus">
     <button
@@ -60,63 +112,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
-
-export default {
-  name: "devBlock",
-  props: {
-    value: {},
-    label: {
-      type: String,
-      default: null,
-    },
-    elementName: {
-      type: String,
-      default: null,
-    },
-    dependencyFormulaDisplay: {
-      type: [String, Boolean],
-      default: null,
-    },
-    parsingFormulaVariables: {
-      type: [String, Boolean],
-      default: null,
-    },
-    isVisibilityFromDependency: {
-      type: Boolean,
-      default: null,
-    },
-    localCost: {
-      type: Number,
-      default: null,
-    },
-    hiddenCost: {
-      type: Boolean,
-      default: false,
-    },
-    hiddenValue: {
-      type: Boolean,
-      default: false,
-    },
-    formula: {
-      default: null,
-    },
-    formulaVariables: {
-      default: null,
-    },
-  },
-  data() {
-    return {
-      isShowInnerData: false,
-    };
-  },
-  computed: {
-    ...mapState(useBaseStore, ["showInsideElementStatus"]),
-  },
-};
-</script>
-
-<style scoped></style>

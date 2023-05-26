@@ -1,7 +1,7 @@
 <script setup>
 import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
 import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
-import DevBlock from "@/components/UI/devMode/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
 import {computed, ref, watch} from "vue";
 
 import { getBaseStoreGetters } from "@/composables/useBaseStore";

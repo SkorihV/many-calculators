@@ -47,7 +47,7 @@
 
 <script>
 import UiDuplicatorWrapper from "@/components/UI/structural/UiDuplicatorWrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
