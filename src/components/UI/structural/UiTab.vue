@@ -20,8 +20,8 @@
           <div
             class="calc__tab-item-label"
             :class="{
-              'isOpen': shownIdTab === idx,
-              'isError': checkIsShowError(
+              isOpen: shownIdTab === idx,
+              isError: checkIsShowError(
                 elementName + item?.json_id + '_' + idx ||
                   elementName + 'tabItem' + '_' + idx,
                 idx
@@ -133,7 +133,7 @@ export default {
       "classes",
       "elementName",
       "parentIsShow",
-      "dependencyFormulaDisplay"
+      "dependencyFormulaDisplay",
     ]),
   },
   data() {

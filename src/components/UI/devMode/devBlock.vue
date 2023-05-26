@@ -1,10 +1,14 @@
 <template>
   <div class="calc__dev-block-main-wrapper" v-if="showInsideElementStatus">
-    <button class="calc__dev-block-button" v-if="showInsideElementStatus" @click="isShowInnerData = !isShowInnerData">{{isShowInnerData ? "Скрыть" : "Отобразить"}} внутреннее состояние: {{label}}</button>
-    <div
-      class="calc__dev-block-wrapper"
-      v-if="isShowInnerData"
+    <button
+      class="calc__dev-block-button"
+      v-if="showInsideElementStatus"
+      @click="isShowInnerData = !isShowInnerData"
     >
+      {{ isShowInnerData ? "Скрыть" : "Отобразить" }} внутреннее состояние:
+      {{ label }}
+    </button>
+    <div class="calc__dev-block-wrapper" v-if="isShowInnerData">
       <div class="calc__dev-block-element" v-if="label?.length">
         Заголовок элемента: {{ label }}
       </div>
@@ -21,7 +25,10 @@
       >
         Формула зависимости отображения: {{ dependencyFormulaDisplay }}
       </div>
-      <div class="calc__dev-block-element" v-if="parsingFormulaVariables?.length">
+      <div
+        class="calc__dev-block-element"
+        v-if="parsingFormulaVariables?.length"
+      >
         Формула зависимости отображения после обработки:
         {{ parsingFormulaVariables }}
       </div>
@@ -103,7 +110,7 @@ export default {
   },
   data() {
     return {
-      isShowInnerData: false
+      isShowInnerData: false,
     };
   },
   computed: {

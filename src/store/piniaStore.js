@@ -23,7 +23,7 @@ export const useBaseStore = defineStore("base", {
       methodBeginningCalculation: "no",
       initEnabledSendForm: false,
       allowShowResultBlock: false,
-      someElementChangedSelfVisibilityState: 0
+      someElementChangedSelfVisibilityState: 0,
     };
   },
   getters: {
@@ -196,9 +196,11 @@ export const useBaseStore = defineStore("base", {
         ? inputOptions?.resultOptions?.titleSumma
         : "";
     },
-    getSomeElementChangedSelfVisibilityState({someElementChangedSelfVisibilityState}) {
+    getSomeElementChangedSelfVisibilityState({
+      someElementChangedSelfVisibilityState,
+    }) {
       return someElementChangedSelfVisibilityState;
-    }
+    },
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -218,7 +220,7 @@ export const useBaseStore = defineStore("base", {
         formulaProcessingLogic,
         position,
         zeroValueDisplayIgnore,
-        isDuplicator
+        isDuplicator,
       } = dataResultItem;
 
       this.globalResultsElements[name] = {
@@ -308,7 +310,7 @@ export const useBaseStore = defineStore("base", {
      */
     tryDeleteAllDataOnStoreForElementName(elementName) {
       if (Array.isArray(elementName)) {
-        elementName.forEach(name => {
+        elementName.forEach((name) => {
           this.deleteElementInDependencyList(name);
           this.deleteElementInResultsList(name);
           this.deleteElementInMountedList(name);
@@ -342,7 +344,8 @@ export const useBaseStore = defineStore("base", {
       }
     },
     initSomeElementChangedSelfVisibilityState() {
-      this.someElementChangedSelfVisibilityState = this.someElementChangedSelfVisibilityState +1;
+      this.someElementChangedSelfVisibilityState =
+        this.someElementChangedSelfVisibilityState + 1;
     },
     /**
      *
@@ -354,6 +357,6 @@ export const useBaseStore = defineStore("base", {
         return false;
       }
       return nameItemList in this.globalDependenciesList;
-    }
+    },
   },
 });

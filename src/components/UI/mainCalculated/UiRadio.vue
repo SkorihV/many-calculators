@@ -9,9 +9,9 @@
       class="calc__radio-wrapper"
       :class="[
         {
-          'column': isColumn || isMakeElementColumn,
-          'onlyImage': onlyImage,
-          'base': isBase,
+          column: isColumn || isMakeElementColumn,
+          onlyImage: onlyImage,
+          base: isBase,
         },
         classes,
       ]"
@@ -33,11 +33,11 @@
             class="calc__radio-label-button"
             :id="localElementName + '_' + radio.index"
             :class="{
-              'checked': currentIndexRadioButton === radio.index,
-              'error': isErrorClass,
-              'onlyImage': onlyImage,
-              'isShowPrompt': Boolean(radio?.prompt?.length),
-              'stretch': isStretch,
+              checked: currentIndexRadioButton === radio.index,
+              error: isErrorClass,
+              onlyImage: onlyImage,
+              isShowPrompt: Boolean(radio?.prompt?.length),
+              stretch: isStretch,
             }"
             @click="selectedCurrentRadio(radio.index)"
             @mouseover="hoverElementIndex = radio.index"
@@ -147,7 +147,7 @@ export default {
       validator(value) {
         return value === false || value === true || value === 0 || value === 1;
       },
-      default: false
+      default: false,
     },
     ...propsTemplate.getProps([
       "isColumn",
@@ -366,7 +366,10 @@ export default {
       if (!this.isRadioItemSelected) {
         return null;
       }
-      const isExistExtraValue = Boolean(this.currentSelectedRadioButton?.extraValueForDependency?.toString()?.length);
+      const isExistExtraValue = Boolean(
+        this.currentSelectedRadioButton?.extraValueForDependency?.toString()
+          ?.length
+      );
       return isExistExtraValue
         ? this.currentSelectedRadioButton?.extraValueForDependency
         : this.currentIndexRadioButton;

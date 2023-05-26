@@ -1,14 +1,13 @@
 <script setup>
 import { defineProps, onMounted, ref, watch, computed } from "vue";
 
-import {isBoolean} from "@/validators";
+import { isBoolean } from "@/validators";
 import { useEventListener } from "@/composables/useEventsListener";
 import { getParent } from "@/composables/useInstance";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
-
 const { isCanShowAllTooltips, isTooltipOn } = getBaseStoreGetters();
-const props = defineProps( {
+const props = defineProps({
   /**
    * Текст ошибки
    */
@@ -32,8 +31,8 @@ const props = defineProps( {
   },
 });
 
-onMounted(checkPosition)
-useEventListener(window,"resize",resize)
+onMounted(checkPosition);
+useEventListener(window, "resize", resize);
 
 const classPosition = ref(null);
 const tooltip = ref(null);
@@ -53,10 +52,10 @@ function checkPosition() {
         parentWidth > 400
           ? ""
           : docWidth - parentRightSide < 150
-            ? "isLeft"
-            : parentLeftSide < 150
-              ? "isRight"
-              : "";
+          ? "isLeft"
+          : parentLeftSide < 150
+          ? "isRight"
+          : "";
     }
   }, 10);
 }
@@ -72,23 +71,24 @@ function resize() {
 /**
  * Обновить позицию подсказки после инициализации отображения
  */
-watch(() => props.isShow, checkPosition)
+watch(() => props.isShow, checkPosition);
 
 const canBeShown = computed(() => {
   return isCanShowAllTooltips.value || props.localCanBeShown;
-})
+});
 
 const showTooltip = computed(() => {
-  return props.isShow && props.tooltipText?.length && canBeShown.value && isTooltipOn.value;
-})
+  return (
+    props.isShow &&
+    props.tooltipText?.length &&
+    canBeShown.value &&
+    isTooltipOn.value
+  );
+});
 </script>
 
 <template>
-  <transition
-    name="tooltip-transition"
-    v-cloak
-    v-show="showTooltip"
-  >
+  <transition name="tooltip-transition" v-cloak v-show="showTooltip">
     <div
       class="calc__tooltip calc__tooltip-wrapper"
       ref="tooltip"

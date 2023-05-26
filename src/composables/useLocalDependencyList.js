@@ -1,9 +1,12 @@
-import { getBaseStoreGetters, getBaseStoreAction } from "@/composables/useBaseStore";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 import { ref, reactive, watch, isReactive, onMounted } from "vue";
 
 export function useLocalDependencyList() {
   const { globalDependenciesList } = getBaseStoreGetters();
-  const isElementDependency = getBaseStoreAction('isElementDependency');
+  const isElementDependency = getBaseStoreAction("isElementDependency");
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
 
@@ -13,10 +16,7 @@ export function useLocalDependencyList() {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula.forEach((name) => {
-      if (
-        isElementDependency(name) &&
-        !existLocalElementDependency(name)
-      ) {
+      if (isElementDependency(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
     });
@@ -36,7 +36,8 @@ export function useLocalDependencyList() {
     localDependencyList[name] = globalDependenciesList.value[name];
   };
 
-  watch(globalDependenciesList,
+  watch(
+    globalDependenciesList,
     (newValue) => {
       let isUpdated = false;
       for (let key in newValue) {
@@ -55,13 +56,13 @@ export function useLocalDependencyList() {
       // if (isUpdated && this.changeValue) {
       //   this.changeValue("changeValueDependenciesElements");
       // }
-
     },
-    {deep: true}
-    );
+    { deep: true }
+  );
 
-  watch(() => localDependencyList,
-    (newValue, oldValue)=> {
+  watch(
+    () => localDependencyList,
+    (newValue, oldValue) => {
       let isUpdated = false;
       Object.entries(newValue).forEach(([key, data]) => {
         if (data.value !== oldValue[key].value) {
@@ -69,12 +70,12 @@ export function useLocalDependencyList() {
         }
       });
     },
-    {deep: true}
+    { deep: true }
   );
 
   return {
     countUpdatedDependency,
     localDependencyList,
-    constructLocalListElementDependencyInFormula
-  }
+    constructLocalListElementDependencyInFormula,
+  };
 }

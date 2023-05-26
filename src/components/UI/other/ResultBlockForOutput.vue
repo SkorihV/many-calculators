@@ -8,7 +8,7 @@
   <div
     class="calc__result-block-wrapper"
     :class="{
-      'isVisualSeparate': resultOptions?.visuallySeparateElement,
+      isVisualSeparate: resultOptions?.visuallySeparateElement,
     }"
     v-if="isShowResultBlock && !isNeedSpinner"
   >
@@ -103,7 +103,8 @@ export default {
     },
     allowShowResultInOptions() {
       return this.resultOptions
-        ? !this.resultOptions?.hiddenResultBlock && this.showResultBlockForDependency
+        ? !this.resultOptions?.hiddenResultBlock &&
+            this.showResultBlockForDependency
         : false;
     },
     showSumma() {
@@ -133,7 +134,11 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                const resultValueObjectItem = parseResultValueObjectItem(duplicator,"resultOutputMethod", duplicator?.unit);
+                const resultValueObjectItem = parseResultValueObjectItem(
+                  duplicator,
+                  "resultOutputMethod",
+                  duplicator?.unit
+                );
 
                 if (resultValueObjectItem?.length) {
                   result += "<div class='calc__result-block-delimiter'></div>";
@@ -144,7 +149,12 @@ export default {
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
-                    const resultValueObjectItemInDuplicator = parseResultValueObjectItem(templateInDuplicator, "resultOutputMethod", this.getCurrency);
+                    const resultValueObjectItemInDuplicator =
+                      parseResultValueObjectItem(
+                        templateInDuplicator,
+                        "resultOutputMethod",
+                        this.getCurrency
+                      );
                     if (resultValueObjectItemInDuplicator?.length) {
                       result +=
                         "<div class='calc__result-block-field-wrapper'>" +
@@ -214,16 +224,20 @@ export default {
       return this.resultOptions?.textForSpinner;
     },
     showResultBlockForDependency() {
-      return this.isFormulaDisplayResultBlock ? this.isDisplayResultBlockFormulaDependency : true;
+      return this.isFormulaDisplayResultBlock
+        ? this.isDisplayResultBlockFormulaDependency
+        : true;
     },
     isFormulaDisplayResultBlock() {
-      return Boolean(this.resultOptions?.formulaDependencyForResultBlock?.length);
+      return Boolean(
+        this.resultOptions?.formulaDependencyForResultBlock?.length
+      );
     },
     variablesInFormula() {
       return this.isFormulaDisplayResultBlock
         ? this.getArrayElementsFromFormula(
-          this.resultOptions.formulaDependencyForResultBlock
-        )
+            this.resultOptions.formulaDependencyForResultBlock
+          )
         : [];
     },
     localDependencyListResultBlock() {

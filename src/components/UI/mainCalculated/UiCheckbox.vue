@@ -7,7 +7,7 @@
   >
     <div
       class="calc__checkbox-wrapper"
-      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsCheckboxLabel"
@@ -299,7 +299,7 @@ export default {
       "checkValidationDataAndToggle",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
-      "tryDeleteAllDataOnStoreForElementName"
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     /**
      *

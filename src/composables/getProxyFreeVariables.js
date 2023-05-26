@@ -1,6 +1,5 @@
 import { unref } from "vue";
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
-
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
 /**
  * Системная переменная объединяющая в себе сумму всех не используемых в формуле переменных
@@ -9,7 +8,7 @@ import {getBaseStoreGetters} from "@/composables/useBaseStore";
  * @returns {{cost, name: (*|null), isShow: boolean}}
  */
 const getProxyFreeVariables = (value, name = null) => {
-  const {getNameReserveVariable} = getBaseStoreGetters();
+  const { getNameReserveVariable } = getBaseStoreGetters();
   value = unref(value);
   name = unref(name);
   return new Proxy(
@@ -24,4 +23,4 @@ const getProxyFreeVariables = (value, name = null) => {
       },
     }
   );
-}
+};

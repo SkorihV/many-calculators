@@ -1,96 +1,99 @@
 <template>
+  <div
+    ref="parent"
+    class="calc__wrapper-group-data isRange"
+    :id="elementName"
+    v-if="rangeValue !== null && isVisibilityFromDependency"
+  >
     <div
-      ref="parent"
-      class="calc__wrapper-group-data isRange"
-      :id="elementName"
-      v-if="rangeValue !== null && isVisibilityFromDependency"
+      class="calc__range-wrapper"
+      :class="[
+        classes,
+        { column: isColumn || isMakeElementColumn, static: isStaticValue },
+      ]"
     >
-      <div
-        class="calc__range-wrapper"
-        :class="[classes, { 'column': isColumn || isMakeElementColumn, 'static': isStaticValue }]"
+      <icon-element-wrapper
+        :icon-settings="iconSettingsRangeLabel"
+        :alt="isExistLabel ? label : ''"
+        :isExistLabel="isExistLabel"
       >
-        <icon-element-wrapper
-          :icon-settings="iconSettingsRangeLabel"
-          :alt="isExistLabel ? label : ''"
-          :isExistLabel="isExistLabel"
-        >
-          <div class="calc__range-label-text" v-if="isExistLabel">
-            {{ label }}
-            <div class="empty-block" v-if="notEmpty">*</div>
-            <slot name="prompt"></slot>
-          </div>
-        </icon-element-wrapper>
-        <div class="calc__range-item-wrapper">
-          <div class="calc__range-item-left-side">
-            <input
-              ref="thisElementInputRange"
-              class="calc__range-item"
-              :class="{ 'isError': isClassError }"
-              type="range"
-              :min="localMin"
-              :max="localMax"
-              :step="localStep"
-              :value="resultValue"
-              @input="tryChangeValue"
-              :name="localElementName"
-            />
-            <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
-              <div
-                class="calc__range-steps-item"
-                @click="changeValueStep(step)"
-                v-for="(step, inx) in returnSteps"
-                :style="{ left: pointsForStepsLine[inx] + 'px' }"
-                :key="inx"
-                :class="{
-                  'calc__range-steps-item_selected': step === resultValue,
-                }"
-              >
-                <div class="calc__range-steps-item-value">{{ step }}</div>
-              </div>
-            </div>
+        <div class="calc__range-label-text" v-if="isExistLabel">
+          {{ label }}
+          <div class="empty-block" v-if="notEmpty">*</div>
+          <slot name="prompt"></slot>
+        </div>
+      </icon-element-wrapper>
+      <div class="calc__range-item-wrapper">
+        <div class="calc__range-item-left-side">
+          <input
+            ref="thisElementInputRange"
+            class="calc__range-item"
+            :class="{ isError: isClassError }"
+            type="range"
+            :min="localMin"
+            :max="localMax"
+            :step="localStep"
+            :value="resultValue"
+            @input="tryChangeValue"
+            :name="localElementName"
+          />
+          <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
             <div
-              v-if="isStaticValue"
-              :style="{ left: positionStaticResultValue }"
-              ref="static"
-              class="calc__range-current-static"
+              class="calc__range-steps-item"
+              @click="changeValueStep(step)"
+              v-for="(step, inx) in returnSteps"
+              :style="{ left: pointsForStepsLine[inx] + 'px' }"
+              :key="inx"
+              :class="{
+                'calc__range-steps-item_selected': step === resultValue,
+              }"
             >
-              {{ resultValue }}
+              <div class="calc__range-steps-item-value">{{ step }}</div>
             </div>
           </div>
           <div
-            class="calc__range-current-wrapper"
-            v-if="showDynamicValue || unit?.length"
+            v-if="isStaticValue"
+            :style="{ left: positionStaticResultValue }"
+            ref="static"
+            class="calc__range-current-static"
           >
-            <input
-              class="calc__range-current-dynamic"
-              :class="{ 'isError': isClassError }"
-              v-if="showDynamicValue"
-              type="text"
-              v-model="dynamicValue"
-              @keydown.up="plus"
-              @keydown.down="minus"
-            />
-            <div class="calc__range-unit" v-if="unit?.length">
-              {{ unit }}
-            </div>
+            {{ resultValue }}
           </div>
         </div>
-        <ui-tooltip
-          :is-show="isErrorEmpty"
-          :tooltip-text="textErrorNotEmpty"
-          :local-can-be-shown="localCanBeShownTooltip || isCanShowAllTooltips"
-        />
+        <div
+          class="calc__range-current-wrapper"
+          v-if="showDynamicValue || unit?.length"
+        >
+          <input
+            class="calc__range-current-dynamic"
+            :class="{ isError: isClassError }"
+            v-if="showDynamicValue"
+            type="text"
+            v-model="dynamicValue"
+            @keydown.up="plus"
+            @keydown.down="minus"
+          />
+          <div class="calc__range-unit" v-if="unit?.length">
+            {{ unit }}
+          </div>
+        </div>
       </div>
+      <ui-tooltip
+        :is-show="isErrorEmpty"
+        :tooltip-text="textErrorNotEmpty"
+        :local-can-be-shown="localCanBeShownTooltip || isCanShowAllTooltips"
+      />
     </div>
-    <dev-block
-      :label="label"
-      :element-name="localElementName"
-      :value="isVisibilityFromDependency ? resultValue : null"
-      :local-cost="localCost"
-      :is-visibility-from-dependency="isVisibilityFromDependency"
-      :dependency-formula-display="dependencyFormulaDisplay"
-      :parsing-formula-variables="formulaAfterProcessingVariables"
-    />
+  </div>
+  <dev-block
+    :label="label"
+    :element-name="localElementName"
+    :value="isVisibilityFromDependency ? resultValue : null"
+    :local-cost="localCost"
+    :is-visibility-from-dependency="isVisibilityFromDependency"
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
+  />
 </template>
 
 <script>
@@ -215,7 +218,10 @@ export default {
     this.updateStaticElementWidth();
 
     window.addEventListener("resize", this.resizeUpdateWidthElement);
-    document.addEventListener("DOMContentLoaded", this.contentLoadedUpdateWidthElement);
+    document.addEventListener(
+      "DOMContentLoaded",
+      this.contentLoadedUpdateWidthElement
+    );
 
     let timerElementInputRange = setInterval(() => {
       if (this.$refs?.thisElementInputRange?.offsetWidth || this.elementWidth) {
@@ -232,8 +238,11 @@ export default {
     }, 500);
   },
   unmounted() {
-    window.removeEventListener('resize', this.resizeUpdateWidthElement);
-    document.removeEventListener('DOMContentLoaded', this.contentLoadedUpdateWidthElement);
+    window.removeEventListener("resize", this.resizeUpdateWidthElement);
+    document.removeEventListener(
+      "DOMContentLoaded",
+      this.contentLoadedUpdateWidthElement
+    );
     this.tryDeleteAllDataOnStoreForElementName(this.localElementName);
   },
   data() {
@@ -246,7 +255,7 @@ export default {
       canBeShownTooltip: false,
       timerNameForLocalValue: null,
       minimalWidthStaticElement: 15,
-      staticElementWidth: this.minimalWidthStaticElement
+      staticElementWidth: this.minimalWidthStaticElement,
     };
   },
   methods: {
@@ -375,7 +384,9 @@ export default {
       }
     },
     updateStaticElementWidth() {
-      this.staticElementWidth = this.$refs.static ? this.$refs.static?.offsetWidth : this.minimalWidthStaticElement;
+      this.staticElementWidth = this.$refs.static
+        ? this.$refs.static?.offsetWidth
+        : this.minimalWidthStaticElement;
     },
     resizeUpdateWidthElement() {
       this.updateWidthElement();
@@ -419,10 +430,10 @@ export default {
     },
     getSomeElementChangedSelfVisibilityState() {
       this.updatedCurrentWidth();
-      setTimeout(()=> {
+      setTimeout(() => {
         this.updateWidthElement();
-      }, 10)
-    }
+      }, 10);
+    },
   },
   computed: {
     ...mapState(useBaseStore, [
@@ -529,7 +540,7 @@ export default {
 
       if (newPosition < 0) {
         newPosition = 5;
-      }else if (newPosition >= 1) {
+      } else if (newPosition >= 1) {
         newPosition = width;
       } else {
         newPosition = width * newPosition - this.staticElementWidth / 10;

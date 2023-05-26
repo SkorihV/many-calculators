@@ -96,7 +96,7 @@ export default {
       "devMode",
       "getImageDir",
       "tryToggleElementIsMounted",
-      "tryDeleteAllDataOnStoreForElementName"
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     urlIsExist() {
       return Boolean(this.localDataForDisplay?.url?.length);

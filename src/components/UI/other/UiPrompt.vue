@@ -65,9 +65,8 @@ export default {
     },
     getTopForCalcWrapper() {
       this.topCalcWrapper =
-        document
-          .querySelector("#App_calc")
-          .getBoundingClientRect().top + window.pageYOffset;
+        document.querySelector("#App_calc").getBoundingClientRect().top +
+        window.pageYOffset;
     },
     getTopBtnPrompt() {
       this.topBtnPrompt = this.$refs.promptBtn.getBoundingClientRect().top;

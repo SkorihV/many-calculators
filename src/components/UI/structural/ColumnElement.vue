@@ -12,7 +12,7 @@
   </div>
   <div
     class="calc__columns-column-elements-wrapper"
-    :class="{ 'horizontal': isHorizontal }"
+    :class="{ horizontal: isHorizontal }"
   >
     <templates-wrapper
       v-for="(template, index_in) in column?.templates"

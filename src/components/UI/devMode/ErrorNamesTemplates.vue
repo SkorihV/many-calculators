@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="calc__error-wrapper"
-    :class="{ 'isShow': devMode }"
-    v-cloak
-  >
+  <div class="calc__error-wrapper" :class="{ isShow: devMode }" v-cloak>
     <div class="calc__error-control-wrapper">
       <label class="calc__error-checkbox-label" v-if="displayAlert">
         <span class="calc__error-checkbox-text">
@@ -18,7 +14,7 @@
       <div
         class="calc__error-toggle"
         @click="displayAlert = !displayAlert"
-        :class="{ 'isError': isExistError, 'close': !displayAlert }"
+        :class="{ isError: isExistError, close: !displayAlert }"
       >
         X
       </div>
@@ -70,7 +66,8 @@
             <div class="calc__error-item-name">
               У элемента: '{{
                 error?.label?.length ? error?.label : "Название не задано"
-              }}' в формуле указано имя: <b>'{{ error.name }}'</b>> - не существует.
+              }}' в формуле указано имя: <b>'{{ error.name }}'</b>> - не
+              существует.
             </div>
           </div>
           <p class="calc__error-alert">
@@ -90,7 +87,8 @@
             <div class="calc__error-item-name">
               У элемента: '{{
                 error?.label?.length ? error?.label : "Название не задано"
-              }}' в формуле указано имя: <b>'{{ error.name }}'</b> - не существует.
+              }}' в формуле указано имя: <b>'{{ error.name }}'</b> - не
+              существует.
             </div>
           </div>
           <p class="calc__error-alert">
@@ -334,7 +332,7 @@ export default {
       );
       this.getNeedleDataInTemplates(
         this.templates,
-        ["formula", "dependencyFormulaCost", 'cost'],
+        ["formula", "dependencyFormulaCost", "cost"],
         "listComputedFormula",
         "formula"
       );
@@ -468,15 +466,19 @@ export default {
     isExistDoubleNames() {
       return Boolean(Object.keys(this.recurringTemplateNames).length);
     },
-    isExistNamesIsDisplayFormula () {
+    isExistNamesIsDisplayFormula() {
       return Boolean(this.notExistNamesInDisplayFormula.length);
     },
     isExistNamesInComputedFormula() {
-      return Boolean(this.notExistNamesInComputedFormula.length)
+      return Boolean(this.notExistNamesInComputedFormula.length);
     },
     isExistError() {
-      return this.isExistDoubleNames || this.isExistNamesIsDisplayFormula || this.isExistNamesInComputedFormula
-    }
+      return (
+        this.isExistDoubleNames ||
+        this.isExistNamesIsDisplayFormula ||
+        this.isExistNamesInComputedFormula
+      );
+    },
   },
 };
 </script>

@@ -8,7 +8,7 @@
     <div
       class="calc__select-wrapper"
       :class="[
-        { 'column': isColumn || isMakeElementColumn, 'open': isOpen },
+        { column: isColumn || isMakeElementColumn, open: isOpen },
         classes,
       ]"
     >
@@ -28,7 +28,7 @@
           class="calc__select-change-wrapper"
           ref="changeElement"
           :style="[maxWidthForChangeElement]"
-          :class="{ 'error': isErrorClass, 'stretch': isStretch }"
+          :class="{ error: isErrorClass, stretch: isStretch }"
         >
           <div
             v-if="currentOption"
@@ -54,7 +54,7 @@
           </div>
           <div
             class="calc__select-option-wrapper"
-            :class="{ 'stretch': isStretch }"
+            :class="{ stretch: isStretch }"
             :style="[maxWidthForOptionList]"
             ref="optionList"
             v-show="isOpen"
@@ -377,7 +377,7 @@ export default {
       if (!this.$el.contains(e.target)) {
         this.close();
       }
-    }
+    },
   },
   watch: {
     isOpen(newValue) {
@@ -505,7 +505,9 @@ export default {
       ) {
         return null;
       }
-      const isExistExtraValue = Boolean(this.currentOption?.extraValueForDependency?.toString()?.length);
+      const isExistExtraValue = Boolean(
+        this.currentOption?.extraValueForDependency?.toString()?.length
+      );
       return isExistExtraValue
         ? this.currentOption?.extraValueForDependency
         : !isNaN(parseInt(this.currentOption?.value))
@@ -579,7 +581,11 @@ export default {
             newDataIsShow = false;
           }
           selectItem.isShow = newDataIsShow;
-          const valueInDependency = Boolean(selectItem?.extraValueForDependency?.toString()?.length) ? selectItem?.extraValueForDependency : selectItem.value;
+          const valueInDependency = Boolean(
+            selectItem?.extraValueForDependency?.toString()?.length
+          )
+            ? selectItem?.extraValueForDependency
+            : selectItem.value;
           if (!newDataIsShow && valueInDependency === this.currentOptionValue) {
             this.resetSelectedValue();
           }

@@ -1,5 +1,4 @@
 {
-
   "calculator-options": {
     "json_id": "150399707",
     "title": "Калькулятор москитных сеток",
@@ -59,8 +58,7 @@
     "parent": "0;"
   },
 
-
-  "test-icons" : {
+  "test-icons": {
     "calculatorTemplates": [
       {
         "json_id": "148686907",
@@ -71,7 +69,7 @@
         "costForVoid": "1500",
         "cost": "2500",
         "baseValue": "default",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "isColumn": false,
         "typeDisplayClass": "button",
         "formOutputMethod": "value",
@@ -106,7 +104,7 @@
         "template": "UiSystem",
         "prompt": "",
         "htmlText": "Небольшой текст для описания автомобиля",
-        "dependencyPrices":null,
+        "dependencyPrices": null,
         "dependencyHtmlText": [
           {
             "title": "вес &gt; 1000",
@@ -193,7 +191,7 @@
         "label": "Куда",
         "isColumn": true,
         "selectedItem": "1",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "notEmpty": 1,
         "formOutputMethod": "value",
         "resultOutputMethod": "value",
@@ -249,7 +247,7 @@
         "label": "Откуда",
         "isColumn": true,
         "selectedItem": "1",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "notEmpty": 0,
         "formOutputMethod": "value",
         "resultOutputMethod": "value",
@@ -536,7 +534,7 @@
         "costForVoid": "0",
         "cost": "",
         "baseValue": "default",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "isColumn": false,
         "typeDisplayClass": "base",
         "formOutputMethod": "valueSumm",
@@ -571,7 +569,7 @@
         "title": "радио",
         "label": "радио",
         "selectedItem": "1",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "notEmpty": false,
         "isColumn": false,
         "isStretch": false,
@@ -683,7 +681,7 @@
         "step": "1",
         "showSteps": false,
         "stepPrompt": "1",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "notEmpty": false,
         "showStaticValue": false,
         "showDynamicValue": false,
@@ -719,7 +717,7 @@
         "title": "селект",
         "label": "селект",
         "selectedItem": "1",
-        "isNeedChoice":true,
+        "isNeedChoice": true,
         "notEmpty": false,
         "isColumn": false,
         "isStretch": false,
@@ -1192,8 +1190,7 @@
   },
 
   "test-calc": {
-    "calculatorTemplates":
-    [
+    "calculatorTemplates": [
       {
         "json_id": "177972907",
         "meta_id": "35851907",

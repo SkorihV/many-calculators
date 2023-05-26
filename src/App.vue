@@ -1,90 +1,90 @@
 <template>
-    <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted">
-      <template v-for="(template, index) in calculatorTemplates" :key="index">
-        <templates-wrapper-structural
-          v-if="checkedIsStructureTemplate(template?.template)"
-          :parent-is-show="true"
-          :template="template"
-          :index="index"
-          @changedValue="changeValue"
-        />
-        <ui-duplicator
-          v-else-if="template.template === 'UiDuplicator'"
-          :label="template?.label"
-          :element-name="
-            template?.elementName?.length
-              ? template?.elementName
-              : template?.json_id || 'UiDuplicator' + index
-          "
-          :classes="template?.classes"
-          :dependency-formula-display="template?.dependencyFormulaDisplay"
-          :form-output-method="template?.formOutputMethod"
-          :exclude-from-calculations="template?.excludeFromCalculations"
-          :duplicate-template="template"
-          :maximum-duple="template?.maximumDuple"
-          :formula-processing-logic="template?.formulaProcessingLogic"
-          :template-name="template.template"
-          :position-element="template?.position"
-          :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
-          :unit="template?.unit"
-          :parent-is-show="true"
-          :round-off-type="template?.roundOffType"
-          :sign-after-dot="template?.signAfterDot"
-          @changedValue="changeValue"
-        />
-        <templates-wrapper-column
-          v-if="template?.template === 'UiColumns'"
-          :parent-is-show="true"
-          :template="template"
-          :index="index"
-          :parent-name="'calc__app'"
-          @changedValue="changeValue"
-        />
-        <templates-wrapper
-          v-else
-          :parent-is-show="true"
-          :template="template"
-          :index="index"
-          @changedValue="changeValue"
-        />
-      </template>
-      <div v-if="showErrorTextBlock" class="calc__error-block">
-        Заполните, пожалуйста, все обязательные поля.
-      </div>
-      <div
-        v-if="!showErrorTextBlock && showErrorSummaBlock"
-        class="calc__error-block"
-      >
-        Не все поля участвующие в расчете были заполнены.
-      </div>
-      <result-button-for-computed
-        :resultOptions="inputOptions?.resultOptions"
-        @checkEnabledResultButton="checkEnabledResultButton"
+  <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted">
+    <template v-for="(template, index) in calculatorTemplates" :key="index">
+      <templates-wrapper-structural
+        v-if="checkedIsStructureTemplate(template?.template)"
+        :parent-is-show="true"
+        :template="template"
+        :index="index"
+        @changedValue="changeValue"
       />
-
-      <result-block-for-output
-        v-if="inputOptions?.resultOptions"
-        :result-options="inputOptions?.resultOptions"
-        :dataForResult="sortPositionDataForOutput"
-        :final-summa-for-output="finalSummaForOutput"
+      <ui-duplicator
+        v-else-if="template.template === 'UiDuplicator'"
+        :label="template?.label"
+        :element-name="
+          template?.elementName?.length
+            ? template?.elementName
+            : template?.json_id || 'UiDuplicator' + index
+        "
+        :classes="template?.classes"
+        :dependency-formula-display="template?.dependencyFormulaDisplay"
+        :form-output-method="template?.formOutputMethod"
+        :exclude-from-calculations="template?.excludeFromCalculations"
+        :duplicate-template="template"
+        :maximum-duple="template?.maximumDuple"
+        :formula-processing-logic="template?.formulaProcessingLogic"
+        :template-name="template.template"
+        :position-element="template?.position"
+        :zero-value-display-ignore="template?.zeroValueDisplayIgnore"
+        :unit="template?.unit"
+        :parent-is-show="true"
+        :round-off-type="template?.roundOffType"
+        :sign-after-dot="template?.signAfterDot"
+        @changedValue="changeValue"
       />
-      <error-names-templates
-        v-if="devMode"
-        :templates="calculatorTemplates"
-        :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
+      <templates-wrapper-column
+        v-if="template?.template === 'UiColumns'"
+        :parent-is-show="true"
+        :template="template"
+        :index="index"
+        :parent-name="'calc__app'"
+        @changedValue="changeValue"
       />
-      <div id="prompt-text-element"></div>
+      <templates-wrapper
+        v-else
+        :parent-is-show="true"
+        :template="template"
+        :index="index"
+        @changedValue="changeValue"
+      />
+    </template>
+    <div v-if="showErrorTextBlock" class="calc__error-block">
+      Заполните, пожалуйста, все обязательные поля.
     </div>
-    <teleport v-if="allowTeleport && appIsMounted" to="#teleport">
-      {{ finalTextForOutputForTeleport }}
-    </teleport>
-    <dev-block
-      v-if="appIsMounted"
-      :formula="mainFormulaResult"
-      :formula-variables="resultTextForComputed"
-      :local-cost="finalSummaForOutput"
-      hidden-value
+    <div
+      v-if="!showErrorTextBlock && showErrorSummaBlock"
+      class="calc__error-block"
+    >
+      Не все поля участвующие в расчете были заполнены.
+    </div>
+    <result-button-for-computed
+      :resultOptions="inputOptions?.resultOptions"
+      @checkEnabledResultButton="checkEnabledResultButton"
     />
+
+    <result-block-for-output
+      v-if="inputOptions?.resultOptions"
+      :result-options="inputOptions?.resultOptions"
+      :dataForResult="sortPositionDataForOutput"
+      :final-summa-for-output="finalSummaForOutput"
+    />
+    <error-names-templates
+      v-if="devMode"
+      :templates="calculatorTemplates"
+      :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
+    />
+    <div id="prompt-text-element"></div>
+  </div>
+  <teleport v-if="allowTeleport && appIsMounted" to="#teleport">
+    {{ finalTextForOutputForTeleport }}
+  </teleport>
+  <dev-block
+    v-if="appIsMounted"
+    :formula="mainFormulaResult"
+    :formula-variables="resultTextForComputed"
+    :local-cost="finalSummaForOutput"
+    hidden-value
+  />
   <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
 
@@ -96,7 +96,7 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrappe
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
-import ResultBlockForOutput from "@/components/UI/other/ResultBlockForOutput.vue";
+import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 
 import devBlock from "@/components/UI/devMode/devBlock.vue";
@@ -106,7 +106,11 @@ import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 
-import { IS_LOCAL, LOCAL_PATH_DATA, LOCAL_PATH_OPTIONS } from "@/constants/localData";
+import {
+  IS_LOCAL,
+  LOCAL_PATH_DATA,
+  LOCAL_PATH_OPTIONS,
+} from "@/constants/localData";
 
 import {
   parseResultValueObjectItem,
@@ -137,7 +141,6 @@ export default {
     devBlock,
   },
   async mounted() {
-
     if (IS_LOCAL) {
       await fetch(LOCAL_PATH_DATA)
         .then((response) => response.json())
@@ -214,7 +217,7 @@ export default {
         "currentSelectedRadioButton",
         "changeAmountSelectList",
         "changeValueDependenciesElements",
-        "system"
+        "system",
       ], // События при которых не должно срабатывать отображение ошибок
       isHoverButtonResult: false,
       methodWorksForm: "show",
@@ -504,7 +507,9 @@ export default {
      * @returns {{length}|unknown[]|*[]}
      */
     baseDataForCalculate() {
-      return Object.values(this.getAllResultsElements).filter(item => !Boolean(item?.isDuplicator));
+      return Object.values(this.getAllResultsElements).filter(
+        (item) => !Boolean(item?.isDuplicator)
+      );
     },
     /**
      * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -613,13 +618,22 @@ export default {
           if (item?.insertedTemplates?.length && item.isShow) {
             item?.insertedTemplates.forEach((duplicator) => {
               if (duplicator?.insertedTemplates?.length) {
-                const resultValueObjectItem = parseResultValueObjectItem(duplicator,"formOutputMethod", duplicator?.unit);
+                const resultValueObjectItem = parseResultValueObjectItem(
+                  duplicator,
+                  "formOutputMethod",
+                  duplicator?.unit
+                );
                 if (resultValueObjectItem?.length) {
                   result += resultValueObjectItem;
                 }
                 duplicator?.insertedTemplates.forEach(
                   (templateInDuplicator) => {
-                    const resultValueObjectItemInDuplicator = parseResultValueObjectItem(templateInDuplicator, "formOutputMethod", this.getCurrency);
+                    const resultValueObjectItemInDuplicator =
+                      parseResultValueObjectItem(
+                        templateInDuplicator,
+                        "formOutputMethod",
+                        this.getCurrency
+                      );
                     if (resultValueObjectItemInDuplicator?.length) {
                       result += resultValueObjectItemInDuplicator;
                     }
@@ -696,8 +710,10 @@ export default {
       } else {
         result +=
           "\n" +
-          this.getTitleSum + " " +
-          this.finalSummaForOutput + " " +
+          this.getTitleSum +
+          " " +
+          this.finalSummaForOutput +
+          " " +
           this.getCurrency;
       }
       return result;
@@ -932,25 +948,25 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 }
 
 @mixin style-horizontal-elements {
-    flex-direction: row;
-    flex-wrap: wrap;
-    > .calc__template-main-wrapper {
-      width: auto;
-      flex: 0 1 auto;
-      &.isRange {
-        flex: 1 1 auto;
-      }
+  flex-direction: row;
+  flex-wrap: wrap;
+  > .calc__template-main-wrapper {
+    width: auto;
+    flex: 0 1 auto;
+    &.isRange {
+      flex: 1 1 auto;
     }
+  }
 
-    > .calc__template-main-wrapper {
-      padding: 0 10px;
-      &:first-child {
-        padding-left: 0;
-      }
-      &:last-child {
-        padding-right: 0;
-      }
+  > .calc__template-main-wrapper {
+    padding: 0 10px;
+    &:first-child {
+      padding-left: 0;
     }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
 }
 
 @keyframes pulse {
@@ -2233,7 +2249,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           flex-direction: column;
           width: 100%;
           .calc__wrapper-group-data {
-             &:first-child {
+            &:first-child {
               padding-top: 20px;
             }
             &:last-child {
@@ -2460,7 +2476,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         }
         @media all and (max-width: 460px) {
           padding: 0;
-       }
+        }
       }
       &-elements {
         &-wrapper {
@@ -2745,7 +2761,13 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       border: 2px dashed gray;
       margin-bottom: 20px;
       width: 100%;
-      background: repeating-linear-gradient(-60deg, #bebdbd3d 0, #bebdbd3d 1px, transparent 1px, transparent 15px);
+      background: repeating-linear-gradient(
+        -60deg,
+        #bebdbd3d 0,
+        #bebdbd3d 1px,
+        transparent 1px,
+        transparent 15px
+      );
       background-color: #fff;
     }
     &-button {
@@ -2965,7 +2987,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     li {
       list-style: none;
     }
-    input[type="text"], input[type="email"], input[type="tel"] {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"] {
       @include style-decor-border-radius;
       outline: none;
       border-width: 2px;

@@ -129,7 +129,10 @@ const parsingDataInFormulaOnSum = function (dataListVariables) {
 const getSummaFreeVariablesInFormula = function (dataList) {
   return dataList.reduce((sum, item) => {
     const isAllowSummingCost =
-      item?.cost !== null && !item.excludeFromCalculations && item.isShow && !Boolean(item?.isDuplicator);
+      item?.cost !== null &&
+      !item.excludeFromCalculations &&
+      item.isShow &&
+      !Boolean(item?.isDuplicator);
 
     if (isAllowSummingCost) {
       sum += parseFloat(item.cost);
@@ -202,8 +205,6 @@ const decimalAdjust = function (value, exp = 0, type = "round") {
   value = value.toString().split("e");
   return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
 };
-
-
 
 export {
   parseResultValueObjectItem,

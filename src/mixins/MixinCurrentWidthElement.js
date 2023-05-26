@@ -13,7 +13,7 @@ export const MixinCurrentWidthElement = {
     window.addEventListener("resize", this.resizeWidth);
   },
   unmounted() {
-    window.removeEventListener('resize', this.resizeWidth)
+    window.removeEventListener("resize", this.resizeWidth);
   },
   data() {
     return {
@@ -24,13 +24,13 @@ export const MixinCurrentWidthElement = {
   methods: {
     updatedCurrentWidth() {
       if (this.$refs?.parent && this.$refs.parent?.offsetWidth !== 0) {
-          this.currentWidthElement = this.$refs.parent.offsetWidth;
-          clearInterval(this.timerName);
+        this.currentWidthElement = this.$refs.parent.offsetWidth;
+        clearInterval(this.timerName);
       }
     },
     resizeWidth() {
       this.updatedCurrentWidth();
-    }
+    },
   },
   watch: {
     parentIsShow: {

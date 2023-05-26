@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed} from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   promptText: {
@@ -8,7 +8,7 @@ const props = defineProps({
   classes: {
     type: String,
   },
-})
+});
 
 const isShow = ref(false);
 const promptBtn = ref(null);
@@ -24,14 +24,13 @@ const hiddenPromptWrapper = computed(() => {
 const topPopupWrapper = computed(() => {
   const btn = promptBtn.value?.getBoundingClientRect();
   const btnCoordTop =
-      topBtnPrompt.value -
-      topCalcWrapper.value +
-      window.pageYOffset +
-      5 +
-      btn.height;
+    topBtnPrompt.value -
+    topCalcWrapper.value +
+    window.pageYOffset +
+    5 +
+    btn.height;
   return `top: ${btnCoordTop}px;`;
 });
-
 
 function show() {
   clearTimeout(timerName.value);
@@ -44,17 +43,13 @@ function hidden() {
 }
 function getTopForCalcWrapper() {
   topCalcWrapper.value =
-      document
-          .querySelector("#App_calc")
-          .getBoundingClientRect().top + window.pageYOffset;
+    document.querySelector("#App_calc").getBoundingClientRect().top +
+    window.pageYOffset;
 }
 function getTopBtnPrompt() {
   topBtnPrompt.value = promptBtn.value?.getBoundingClientRect().top;
 }
-
-
 </script>
-
 
 <template>
   <div

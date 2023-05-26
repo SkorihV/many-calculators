@@ -79,7 +79,10 @@ import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { decimalAdjust, processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import {
+  decimalAdjust,
+  processingArrayOnFormulaProcessingLogic,
+} from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 export default {
@@ -164,7 +167,7 @@ export default {
         formOutputMethod: this.mutationsInputData?.formOutputMethod,
         resultOutputMethod: this.mutationsInputData?.resultOutputMethod,
         eventType: data.eventType,
-        unit: this.unit?.length ? this.unit : '',
+        unit: this.unit?.length ? this.unit : "",
         isShow: this.parentIsShow,
         excludeFromCalculations:
           this.mutationsInputData.excludeFromCalculations,
@@ -212,9 +215,8 @@ export default {
           (prop === "dependencyFormulaDisplay" ||
             prop === "dependencyFormulaCost" ||
             prop === "dependencyFormulaItem" ||
-              prop === "dependencyFormulaHtmlText" ||
-            prop === "cost"
-          ) &&
+            prop === "dependencyFormulaHtmlText" ||
+            prop === "cost") &&
           object[prop].length;
         const propIsSecondField = prop === "labelSecond";
         const propIsLabelField = prop === "label";
@@ -549,7 +551,8 @@ export default {
       }
       try {
         const result = eval(this.compileFormulaWitchData);
-        const formulaIsComputed = typeof result === "number" && !isNaN(result) && isFinite(result);
+        const formulaIsComputed =
+          typeof result === "number" && !isNaN(result) && isFinite(result);
         if (formulaIsComputed) {
           return decimalAdjust(
             result,

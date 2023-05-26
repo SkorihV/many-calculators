@@ -1,5 +1,4 @@
 <script setup>
-
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import ColumnElement from "@/components/UI/structural/ColumnElement.vue";
@@ -7,12 +6,12 @@ import ColumnElement from "@/components/UI/structural/ColumnElement.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
 import { computed, onMounted, reactive, ref, unref, watch } from "vue";
-import {getParent} from "@/composables/useInstance";
+import { getParent } from "@/composables/useInstance";
 
-import {useProcessingFormula} from "@/composables/useProcessingFormula"
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 
 const props = defineProps({
   columnList: {
@@ -32,11 +31,11 @@ const props = defineProps({
   },
   iconSettingsColumnsLabel: {
     type: Object,
-    default: () => {}
+    default: () => {},
   },
   classes: {
     type: String,
-    default: ''
+    default: "",
   },
   ...propsTemplate.getProps([
     "label",
@@ -46,31 +45,34 @@ const props = defineProps({
     "dependencyFormulaDisplay",
     "parentName",
   ]),
-})
+});
 
 const maximumColumns = 4;
 const currentWidthElement = ref(null);
 const stateColumns = ref([]);
 const timerName = ref(null);
 
-const {constructLocalListElementDependencyInFormula, localDependencyList} = useLocalDependencyList();
+const { constructLocalListElementDependencyInFormula, localDependencyList } =
+  useLocalDependencyList();
 
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(reactive({
-  parentIsShow: props.parentIsShow,
-  dependencyFormulaDisplay: props.dependencyFormulaDisplay,
-  constructLocalListElementDependencyInFormula,
-  localDependencyList: localDependencyList
-}));
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
+    reactive({
+      parentIsShow: props.parentIsShow,
+      dependencyFormulaDisplay: props.dependencyFormulaDisplay,
+      constructLocalListElementDependencyInFormula,
+      localDependencyList: localDependencyList,
+    })
+  );
 
-
-useEventListener(window, 'resize', resize);
+useEventListener(window, "resize", resize);
 onMounted(() => {
   updatedCurrentWidth();
 
   props.columnList.forEach((item) => {
     stateColumns.value.push({ maxWidth: item.maxWidth });
   });
-})
+});
 
 function changeValue(data) {
   emits("changedValue", data);
@@ -92,8 +94,8 @@ function resize() {
   updatedCurrentWidth();
 }
 
-
-watch(() => props.parentIsShow,
+watch(
+  () => props.parentIsShow,
   () => {
     let step = 0;
     timerName.value = setInterval(() => {
@@ -102,10 +104,12 @@ watch(() => props.parentIsShow,
         clearInterval(timerName.value);
       }
     }, 500);
-  })
+  }
+);
 
-watch(()=> props.changedStateParent,
-  ()=> {
+watch(
+  () => props.changedStateParent,
+  () => {
     let step = 0;
     timerName.value = setInterval(() => {
       updatedCurrentWidth();
@@ -113,108 +117,102 @@ watch(()=> props.changedStateParent,
         clearInterval(timerName.value);
       }
     }, 100);
-  })
-
+  }
+);
 
 const columnListBeforeLimiting = computed(() => {
-  return props.columnList?.filter(
-    (column, index) => index < maximumColumns
-  )
-})
+  return props.columnList?.filter((column, index) => index < maximumColumns);
+});
 const countColumns = computed(() => {
   return columnListBeforeLimiting.value?.length;
-})
+});
 
-watch(currentWidthElement,
-  (width) => {
-    if (width > 850) {
-      stateColumns.value = Object.values(stateColumns.value).map(
-        (item, index) => {
-          item.maxWidth = props.columnList[index].maxWidth;
-          return item;
-        }
-      );
-    }
-    const methodName = props.adaptationMethod;
-
-    if (width <= 850) {
-      if (countColumns.value === 4) {
-        if (["free", "first", "center"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 33;
-          stateColumns.value[1].maxWidth = 33;
-          stateColumns.value[2].maxWidth = 33;
-          stateColumns.value[3].maxWidth = 100;
-        } else if (["last"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 50;
-          stateColumns.value[1].maxWidth = 50;
-          stateColumns.value[2].maxWidth = 50;
-          stateColumns.value[3].maxWidth = 50;
-        }
+watch(currentWidthElement, (width) => {
+  if (width > 850) {
+    stateColumns.value = Object.values(stateColumns.value).map(
+      (item, index) => {
+        item.maxWidth = props.columnList[index].maxWidth;
+        return item;
       }
+    );
+  }
+  const methodName = props.adaptationMethod;
 
-      if (countColumns.value === 3 || countColumns.value === 2) {
-        stateColumns.value = Object.values(stateColumns.value).map((item) => {
-          item.maxWidth = countColumns.value === 3 ? 33 : 50;
-          return item;
-        });
-      }
-    }
-
-    if (width <= 700) {
-      if (countColumns.value === 4) {
-        if (["free", "first", "last"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 50;
-          stateColumns.value[1].maxWidth = 50;
-          stateColumns.value[2].maxWidth = 50;
-          stateColumns.value[3].maxWidth = 50;
-        } else if (["center"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 100;
-          stateColumns.value[1].maxWidth = 50;
-          stateColumns.value[2].maxWidth = 50;
-          stateColumns.value[3].maxWidth = 100;
-        }
-      }
-
-      if (countColumns.value === 3) {
-        if (["free", "first"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 50;
-          stateColumns.value[1].maxWidth = 50;
-          stateColumns.value[2].maxWidth = 100;
-        } else if (["center", "last"].includes(methodName)) {
-          stateColumns.value[0].maxWidth = 100;
-          stateColumns.value[1].maxWidth = 50;
-          stateColumns.value[2].maxWidth = 50;
-        }
-      }
-
-      if (countColumns.value === 2) {
+  if (width <= 850) {
+    if (countColumns.value === 4) {
+      if (["free", "first", "center"].includes(methodName)) {
+        stateColumns.value[0].maxWidth = 33;
+        stateColumns.value[1].maxWidth = 33;
+        stateColumns.value[2].maxWidth = 33;
+        stateColumns.value[3].maxWidth = 100;
+      } else if (["last"].includes(methodName)) {
         stateColumns.value[0].maxWidth = 50;
         stateColumns.value[1].maxWidth = 50;
+        stateColumns.value[2].maxWidth = 50;
+        stateColumns.value[3].maxWidth = 50;
       }
     }
-    if (width <= 440) {
+
+    if (countColumns.value === 3 || countColumns.value === 2) {
       stateColumns.value = Object.values(stateColumns.value).map((item) => {
-        item.maxWidth = 100;
+        item.maxWidth = countColumns.value === 3 ? 33 : 50;
         return item;
       });
     }
-  })
+  }
+
+  if (width <= 700) {
+    if (countColumns.value === 4) {
+      if (["free", "first", "last"].includes(methodName)) {
+        stateColumns.value[0].maxWidth = 50;
+        stateColumns.value[1].maxWidth = 50;
+        stateColumns.value[2].maxWidth = 50;
+        stateColumns.value[3].maxWidth = 50;
+      } else if (["center"].includes(methodName)) {
+        stateColumns.value[0].maxWidth = 100;
+        stateColumns.value[1].maxWidth = 50;
+        stateColumns.value[2].maxWidth = 50;
+        stateColumns.value[3].maxWidth = 100;
+      }
+    }
+
+    if (countColumns.value === 3) {
+      if (["free", "first"].includes(methodName)) {
+        stateColumns.value[0].maxWidth = 50;
+        stateColumns.value[1].maxWidth = 50;
+        stateColumns.value[2].maxWidth = 100;
+      } else if (["center", "last"].includes(methodName)) {
+        stateColumns.value[0].maxWidth = 100;
+        stateColumns.value[1].maxWidth = 50;
+        stateColumns.value[2].maxWidth = 50;
+      }
+    }
+
+    if (countColumns.value === 2) {
+      stateColumns.value[0].maxWidth = 50;
+      stateColumns.value[1].maxWidth = 50;
+    }
+  }
+  if (width <= 440) {
+    stateColumns.value = Object.values(stateColumns.value).map((item) => {
+      item.maxWidth = 100;
+      return item;
+    });
+  }
+});
 
 const showElementColumns = computed(() => {
   return Boolean(
     unref(isVisibilityFromDependency) &&
-    props.parentIsShow &&
-    unref(countColumns)
-  )
-})
+      props.parentIsShow &&
+      unref(countColumns)
+  );
+});
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
-
-
+});
 </script>
-
 
 <template>
   <div
@@ -262,6 +260,5 @@ const isExistLabel = computed(() => {
     hidden-value
   />
 </template>
-
 
 <style scoped></style>

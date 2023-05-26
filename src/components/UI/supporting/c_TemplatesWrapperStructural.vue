@@ -4,14 +4,14 @@ import UiAccordion from "@/components/UI/structural/UiAccordion.vue";
 import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
-    ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
-  })
+  ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
+});
 
-const changeValue = (data) =>  {
-      emits("changedValue", data);
-    }
+const changeValue = (data) => {
+  emits("changedValue", data);
+};
 </script>
 
 <template>

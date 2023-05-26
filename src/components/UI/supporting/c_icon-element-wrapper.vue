@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed} from 'vue';
+import { defineProps, computed } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import IconElement from "@/components/UI/supporting/c_Icon-element.vue";
 
@@ -24,29 +24,25 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  ...propsTemplate.getProps([
-    "isColumn",
-    "globalMaxWidth",
-    "globalMaxHeight",
-  ]),
-})
+  ...propsTemplate.getProps(["isColumn", "globalMaxWidth", "globalMaxHeight"]),
+});
 
 const isImage = computed(() => {
   return Boolean(props.iconSettings?.image?.filename);
-})
+});
 const showLeftIcon = computed(() => {
   return isImage.value && props.iconSettings?.location === "leftSide";
-})
+});
 const showRightIcon = computed(() => {
   return isImage.value && props.iconSettings?.location === "rightSide";
-})
+});
 </script>
 
 <template>
   <div
     class="calc__icon-element-label-wrapper"
     v-if="isExistLabel || isImage"
-    :class="{ 'column': isColumn }"
+    :class="{ column: isColumn }"
   >
     <icon-element
       v-if="showLeftIcon"

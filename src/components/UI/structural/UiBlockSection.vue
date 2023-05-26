@@ -1,14 +1,14 @@
 <template>
   <div
     class="calc__wrapper-group-data"
-    :class="{'indent': isVisualSeparate}"
+    :class="{ indent: isVisualSeparate }"
     v-show="showSection"
     :id="elementName"
     ref="parent"
   >
     <div
       class="calc__block-section-wrapper"
-      :class="[classes, { 'isVisualSeparate': isVisualSeparate }]"
+      :class="[classes, { isVisualSeparate: isVisualSeparate }]"
     >
       <background-image-element
         v-if="backgroundImageSettings"
@@ -33,7 +33,7 @@
       <div
         class="calc__block-section-content-wrapper"
         :style="{ maxWidth: maxWidth }"
-        :class="{ 'horizontal': isHorizontal }"
+        :class="{ horizontal: isHorizontal }"
       >
         <template v-for="(item, inx) in templatesData" :key="inx">
           <templates-wrapper-column

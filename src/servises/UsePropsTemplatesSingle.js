@@ -190,7 +190,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
   /**
@@ -200,7 +200,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
 
@@ -215,7 +215,7 @@ class Props {
     return {
       type: [Number, String],
       default: null,
-      validator: isNotNaN
+      validator: isNotNaN,
     };
   }
   /**
@@ -238,7 +238,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
 
@@ -246,7 +246,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
 
@@ -257,7 +257,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
   /**
@@ -287,7 +287,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
 
@@ -302,7 +302,7 @@ class Props {
     return {
       type: [Number, String],
       default: 0,
-      validator: isNotNaN
+      validator: isNotNaN,
     };
   }
 
@@ -310,7 +310,7 @@ class Props {
     return {
       type: [Number, String],
       default: 10,
-      validator: isNotNaN
+      validator: isNotNaN,
     };
   }
 
@@ -336,7 +336,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: true,
-      validator: isBoolean
+      validator: isBoolean,
     };
   }
   baseValue() {

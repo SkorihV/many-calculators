@@ -31,10 +31,10 @@ export const MixinsGeneralItemData = {
     isDependencyPriceExist() {
       return Boolean(
         this.dependencyPrices &&
-        this.dependencyPrices?.filter(
-          (item) =>
-            !item?.disabledFormula && item?.dependencyFormulaCost?.length
-        )
+          this.dependencyPrices?.filter(
+            (item) =>
+              !item?.disabledFormula && item?.dependencyFormulaCost?.length
+          )
       );
     },
     /**

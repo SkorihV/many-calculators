@@ -1,8 +1,8 @@
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { unref } from "vue";
 
 export function useUtilityServices() {
-  const {getSpecSymbols} = getBaseStoreGetters();
+  const { getSpecSymbols } = getBaseStoreGetters();
   /**
    * получить из формулы массив элементов
    * @param formula
@@ -11,7 +11,7 @@ export function useUtilityServices() {
   const getArrayElementsFromFormula = (formula) => {
     let localFormula = handleSpecSymbolsInFormula(unref(formula));
     return getArrayOnFormulaElements(localFormula);
-  }
+  };
 
   /**
    * преобразовывает полученные спецсимволы в обычные
@@ -26,7 +26,7 @@ export function useUtilityServices() {
         ?.replaceAll(specItem[0], specItem[1]);
     });
     return localFormula;
-  }
+  };
 
   /**
    * преобразовывает формулу в массив
@@ -52,9 +52,9 @@ export function useUtilityServices() {
       return nextItem;
     });
     return formulaInOut;
-  }
+  };
   return {
     getArrayElementsFromFormula,
-    handleSpecSymbolsInFormula
-  }
+    handleSpecSymbolsInFormula,
+  };
 }

@@ -2,27 +2,23 @@
 import UiColumns from "@/components/UI/structural/c_UiColumns.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
-
-
-
-
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
-    changeStateParent: {
-      type: Boolean,
-      default: false,
-    },
-    ...propsTemplate.getProps([
-      "template",
-      "index",
-      "parentIsShow",
-      "parentName",
-    ]),
-  })
+  changeStateParent: {
+    type: Boolean,
+    default: false,
+  },
+  ...propsTemplate.getProps([
+    "template",
+    "index",
+    "parentIsShow",
+    "parentName",
+  ]),
+});
 
 const changeValue = (data) => {
-      emits("changedValue", data);
-    }
+  emits("changedValue", data);
+};
 </script>
 
 <template>

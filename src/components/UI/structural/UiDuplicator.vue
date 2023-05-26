@@ -19,7 +19,9 @@
         :origin-variables="originVariablesInDuplicator"
         :position-element="idx"
         :show-duplicate-button="countElementsDuple < maximumDuple"
-        :icon-settings-duplicator-label="originData?.iconSettingsDuplicatorLabel"
+        :icon-settings-duplicator-label="
+          originData?.iconSettingsDuplicatorLabel
+        "
         :prompt="originData?.prompt"
         :unit="originData?.unit"
         @duplicate="duplicate"
@@ -54,7 +56,10 @@ import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";
 
-import { decimalAdjust, getNameElementsRecursive } from "@/servises/UtilityServices";
+import {
+  decimalAdjust,
+  getNameElementsRecursive,
+} from "@/servises/UtilityServices";
 
 export default {
   name: "UiDuplicator",
@@ -75,11 +80,11 @@ export default {
     },
     roundOffType: {
       type: String,
-      default: 'round'
+      default: "round",
     },
     signAfterDot: {
       type: [Number, String],
-      default: -2
+      default: -2,
     },
     ...propsTemplate.getProps([
       "formOutputMethod",
@@ -94,7 +99,7 @@ export default {
       "parentIsShow",
       "positionElement",
       "zeroValueDisplayIgnore",
-      "unit"
+      "unit",
     ]),
   },
   data() {
@@ -157,12 +162,15 @@ export default {
         return false;
       }
 
-      let resultCost = this.returnsLocalResultsElements.reduce((result, item) => {
-        if (item.cost !== null) {
-          return result + parseFloat(item.cost);
-        }
-        return result;
-      }, 0);
+      let resultCost = this.returnsLocalResultsElements.reduce(
+        (result, item) => {
+          if (item.cost !== null) {
+            return result + parseFloat(item.cost);
+          }
+          return result;
+        },
+        0
+      );
       resultCost = decimalAdjust(
         resultCost,
         this.signAfterDot,
@@ -181,7 +189,7 @@ export default {
         formOutputMethod: this.duplicateTemplate.formOutputMethod,
         resultOutputMethod: this.duplicateTemplate.resultOutputMethod,
         eventType: eventType,
-        unit: this.unit?.length ? this.unit : '',
+        unit: this.unit?.length ? this.unit : "",
         isShow: this.isVisibilityFromDependency,
         excludeFromCalculations: this.duplicateTemplate.excludeFromCalculations,
         insertedTemplates: this.returnsLocalResultsElements,
@@ -209,7 +217,11 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["tryAddDependencyElement", "getSignAfterDot", "getRoundOffType"]),
+    ...mapState(useBaseStore, [
+      "tryAddDependencyElement",
+      "getSignAfterDot",
+      "getRoundOffType",
+    ]),
     returnsLocalResultsElements() {
       return Object.values(this.localResultsElements).sort(
         (itemA, itemB) => itemA?.position - itemB?.position

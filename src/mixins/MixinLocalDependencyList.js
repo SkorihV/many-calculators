@@ -82,8 +82,6 @@ export const MixinLocalDependencyList = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, [
-      "globalDependenciesList",
-    ]),
+    ...mapState(useBaseStore, ["globalDependenciesList"]),
   },
 };

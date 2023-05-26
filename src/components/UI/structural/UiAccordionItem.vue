@@ -4,7 +4,7 @@
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"
-    :class="{ 'open': isOpen, 'error': isShowError && !isOpen }"
+    :class="{ open: isOpen, error: isShowError && !isOpen }"
     @mouseover="hoverElement = true"
     @mouseleave="hoverElement = false"
   >

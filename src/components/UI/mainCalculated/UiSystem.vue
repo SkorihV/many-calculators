@@ -5,7 +5,7 @@
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
   >
-    <div class="calc__system-wrapper" :class="{ 'column': isMakeElementColumn }">
+    <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
       <div class="calc__system-label-wrapper" v-if="!onlyText">
         <icon-element-wrapper
           :icon-settings="iconSettingsSystemLabel"
@@ -48,7 +48,10 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import devBlock from "@/components/UI/devMode/devBlock.vue";
-import { decimalAdjust, processingArrayOnFormulaProcessingLogic } from "@/servises/UtilityServices";
+import {
+  decimalAdjust,
+  processingArrayOnFormulaProcessingLogic,
+} from "@/servises/UtilityServices";
 
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
@@ -87,11 +90,11 @@ export default {
     },
     roundOffType: {
       type: String,
-      default: 'round'
+      default: "round",
     },
     signAfterDot: {
       type: [Number, String],
-      default: -2
+      default: -2,
     },
     ...propsTemplate.getProps([
       "elementName",
@@ -181,7 +184,7 @@ export default {
       "checkValidationDataAndToggle",
       "getResultElementOnName",
       "listGlobalsVariables",
-      "tryDeleteAllDataOnStoreForElementName"
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     localElementName() {
       return this.checkedValueOnVoid(this.elementName)
@@ -258,12 +261,16 @@ export default {
       try {
         const resultNumber = eval(this.processingVariablesInFormula);
         if (!isNaN(resultNumber) && isFinite(resultNumber)) {
-          return decimalAdjust(resultNumber, this.signAfterDot, this.roundOffType);
+          return decimalAdjust(
+            resultNumber,
+            this.signAfterDot,
+            this.roundOffType
+          );
         } else {
           return null;
         }
       } catch (e) {
-        if(this.devMode) {
+        if (this.devMode) {
           console.error(
             "Системное поле, обработка формулы стоимости: ",
             this.processingVariablesInFormula
@@ -310,7 +317,7 @@ export default {
       );
     },
     allowProcessingDependencyHtmlText() {
-      return ( this.dependencyHtmlText?.length );
+      return this.dependencyHtmlText?.length;
     },
   },
 };

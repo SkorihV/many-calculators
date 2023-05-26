@@ -7,7 +7,7 @@
   >
     <div
       class="calc__input-wrapper"
-      :class="[classes, { 'column': isColumn || isMakeElementColumn }]"
+      :class="[classes, { column: isColumn || isMakeElementColumn }]"
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsInputLabel"
@@ -23,7 +23,7 @@
       <div class="calc__input-wrapper-data" :class="{ stretch: isStretch }">
         <div
           class="calc__input-buttons-minus"
-          :class="{ 'disabled': isDisabledMin }"
+          :class="{ disabled: isDisabledMin }"
           v-if="showControlsButton"
           @click="minus"
         >
@@ -40,15 +40,15 @@
           @focus="inputFocus = true"
           class="calc__input-item"
           :class="{
-            'number': isOnlyNumber,
-            'error': isErrorClass,
-            'stretch': isStretch,
+            number: isOnlyNumber,
+            error: isErrorClass,
+            stretch: isStretch,
           }"
           autocomplete="off"
         />
         <div
           class="calc__input-buttons-plus"
-          :class="{ 'disabled': isDisabledMax }"
+          :class="{ disabled: isDisabledMax }"
           v-if="showControlsButton"
           @click="plus"
         >
@@ -239,7 +239,12 @@ export default {
     resultWitchNumberValid() {
       try {
         this.clearTimer(this.nameTimer);
-        this.localInputValue = parseFloat(this.localInputValue?.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
+        this.localInputValue = parseFloat(
+          this.localInputValue
+            ?.toString()
+            .replaceAll(/\s/g, "")
+            .replaceAll(/,/g, ".")
+        );
 
         if (
           this.localInputValue?.toString().slice(-1) === "." ||
@@ -423,17 +428,22 @@ export default {
       this.changeValueWitchTimer(this.localMin || 0);
     },
     updatedCostForOut(cost) {
-      return this.isOnlyNumber && this.checkedValueOnVoid(cost) && !isNaN(parseFloat((cost * this.localInputValue).toFixed(5)))
+      return this.isOnlyNumber &&
+        this.checkedValueOnVoid(cost) &&
+        !isNaN(parseFloat((cost * this.localInputValue).toFixed(5)))
         ? parseFloat((cost * this.localInputValue).toFixed(5))
         : null;
     },
-    addLocalInputBufferValue(value){
+    addLocalInputBufferValue(value) {
       if (this.isOnlyNumber && this.isCurrency) {
-        this.localInputBufferValue = value.toLocaleString('ru-RU', { useGrouping: true, maximumFractionDigits: 5 });
+        this.localInputBufferValue = value.toLocaleString("ru-RU", {
+          useGrouping: true,
+          maximumFractionDigits: 5,
+        });
       } else {
         this.localInputBufferValue = value;
       }
-    }
+    },
   },
   watch: {
     isVisibilityFromDependency() {
@@ -451,7 +461,9 @@ export default {
     localInputBufferValue: {
       handler(newValue) {
         if (this.isOnlyNumber) {
-          this.localInputValue = parseFloat(newValue?.toString().replaceAll(/\s/g,'').replaceAll(/,/g,'.'));
+          this.localInputValue = parseFloat(
+            newValue?.toString().replaceAll(/\s/g, "").replaceAll(/,/g, ".")
+          );
         } else {
           this.localInputValue = newValue;
         }
@@ -473,7 +485,7 @@ export default {
       "devMode",
       "isCanShowAllTooltips",
       "tryToggleElementIsMounted",
-      "tryDeleteAllDataOnStoreForElementName"
+      "tryDeleteAllDataOnStoreForElementName",
     ]),
     isExistLabel() {
       return Boolean(this.label?.toString()?.length);

@@ -9,7 +9,7 @@ import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
 import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   ...propsTemplate.getProps([
     "template",
@@ -17,18 +17,18 @@ const props = defineProps({
     "parentIsShow",
     "parentName",
   ]),
-})
+});
 
 const changeValue = (data) => {
   emits("changedValue", data);
-}
-
+};
 </script>
 
-
 <template>
-  <div class="calc__template-main-wrapper"
-  :class="{'isRange' : template.template === 'UiRange'}">
+  <div
+    class="calc__template-main-wrapper"
+    :class="{ isRange: template.template === 'UiRange' }"
+  >
     <ui-input
       v-if="template.template === 'UiInput'"
       :min="template?.min"

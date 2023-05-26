@@ -77,7 +77,7 @@ export default {
     },
     iconSettingsColumnsLabel: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     ...propsTemplate.getProps([
       "label",
@@ -93,11 +93,11 @@ export default {
     window.addEventListener("resize", this.resize);
 
     this.columnList.forEach((item) => {
-       this.stateColumns.push({ maxWidth: item.maxWidth });
+      this.stateColumns.push({ maxWidth: item.maxWidth });
     });
   },
   unmounted() {
-    window.removeEventListener('resize', this.resize);
+    window.removeEventListener("resize", this.resize);
   },
   data() {
     return {
@@ -125,7 +125,7 @@ export default {
     },
     resize() {
       this.updatedCurrentWidth();
-    }
+    },
   },
   watch: {
     parentIsShow: {

@@ -1,20 +1,29 @@
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 import { computed, reactive, toRef, unref, watch } from "vue";
-import { useUtilityServices } from "@/composables/useUtilityServices"
-
+import { useUtilityServices } from "@/composables/useUtilityServices";
 
 export function useProcessingFormula(dataObject) {
-  const dependencyFormulaDisplay = toRef(dataObject, 'dependencyFormulaDisplay');
-  const parentIsShow = toRef(dataObject, 'parentIsShow');
+  const dependencyFormulaDisplay = toRef(
+    dataObject,
+    "dependencyFormulaDisplay"
+  );
+  const parentIsShow = toRef(dataObject, "parentIsShow");
   const localDependencyList = reactive(dataObject.localDependencyList);
-  const constructLocalListElementDependencyInFormula = toRef(dataObject, 'constructLocalListElementDependencyInFormula');
+  const constructLocalListElementDependencyInFormula = toRef(
+    dataObject,
+    "constructLocalListElementDependencyInFormula"
+  );
 
-  const { devMode} = getBaseStoreGetters();
-  const initSomeElementChangedSelfVisibilityState = getBaseStoreAction('initSomeElementChangedSelfVisibilityState');
-  const {getArrayElementsFromFormula} = useUtilityServices();
+  const { devMode } = getBaseStoreGetters();
+  const initSomeElementChangedSelfVisibilityState = getBaseStoreAction(
+    "initSomeElementChangedSelfVisibilityState"
+  );
+  const { getArrayElementsFromFormula } = useUtilityServices();
 
   /**
    *
@@ -23,20 +32,23 @@ export function useProcessingFormula(dataObject) {
    */
   const checkedValueOnVoid = (value) => {
     return value?.length !== 0 && value !== undefined && value !== null;
-  }
+  };
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
    * @param dataObject
    * @returns {*|{item: null, cost: null}}
    */
   const costAfterProcessingDependencyPrice = (dataObject) => {
-    let dependencyArrayItems = toRef(dataObject, 'dependencyArrayItems');
-    let formulaFieldName = toRef(dataObject, 'formulaFieldName');
-    let templateName = toRef(dataObject, 'templateName');
-    let localInputValue = toRef(dataObject, 'localInputValue');
-    let resultValue = toRef(dataObject, 'resultValue');
+    let dependencyArrayItems = toRef(dataObject, "dependencyArrayItems");
+    let formulaFieldName = toRef(dataObject, "formulaFieldName");
+    let templateName = toRef(dataObject, "templateName");
+    let localInputValue = toRef(dataObject, "localInputValue");
+    let resultValue = toRef(dataObject, "resultValue");
 
-    if (dependencyArrayItems.value === null || formulaFieldName.value === undefined) {
+    if (
+      dependencyArrayItems.value === null ||
+      formulaFieldName.value === undefined
+    ) {
       return { item: null, cost: null };
     }
 
@@ -50,9 +62,7 @@ export function useProcessingFormula(dataObject) {
           return resultReduce;
         }
 
-        let formula = getArrayElementsFromFormula(
-          item[formulaFieldName].value
-        );
+        let formula = getArrayElementsFromFormula(item[formulaFieldName].value);
 
         if (templateName.value === "UiInput") {
           formula = formula.map((item) =>
@@ -66,10 +76,7 @@ export function useProcessingFormula(dataObject) {
         }
 
         constructLocalListElementDependencyInFormula.value(formula);
-        formula = processingVariablesOnFormula(
-          formula,
-          localDependencyList
-        );
+        formula = processingVariablesOnFormula(formula, localDependencyList);
 
         try {
           if (eval(formula)) {
@@ -86,33 +93,30 @@ export function useProcessingFormula(dataObject) {
       { item: null, cost: null }
     );
     return result;
-  }
+  };
 
   /**
    * Отобразить поле
    * @returns {boolean}
    */
-  const isDependencyElementVisibility = computed(()=> {
+  const isDependencyElementVisibility = computed(() => {
     return Boolean(dependencyFormulaDisplay.value?.length);
-  })
+  });
 
   /**
    * Преобразовать строку формулы в массив переменных со знаками
    * @returns {string|boolean}
    */
   const parsingFormulaVariables = computed(() => {
-
     if (!isDependencyElementVisibility.value) {
       return false;
     }
 
-    let formula = getArrayElementsFromFormula(
-      dependencyFormulaDisplay.value
-    );
+    let formula = getArrayElementsFromFormula(dependencyFormulaDisplay.value);
 
     constructLocalListElementDependencyInFormula.value(formula);
     return formula;
-  })
+  });
 
   /**
    * Формула после замены переменных на их значения
@@ -123,14 +127,14 @@ export function useProcessingFormula(dataObject) {
       parsingFormulaVariables,
       localDependencyList
     );
-  })
+  });
 
   /**
    * Отобразить текущий элемент
    * @returns {boolean|any}
    */
   const isVisibilityFromDependency = computed(() => {
-      if (isDependencyElementVisibility.value && parentIsShow.value) {
+    if (isDependencyElementVisibility.value && parentIsShow.value) {
       try {
         return eval(formulaAfterProcessingVariables?.value);
       } catch (e) {
@@ -141,16 +145,15 @@ export function useProcessingFormula(dataObject) {
       }
     }
     return parentIsShow.value;
-  })
-  watch(isVisibilityFromDependency, ()=> {
-    initSomeElementChangedSelfVisibilityState()
-  })
+  });
+  watch(isVisibilityFromDependency, () => {
+    initSomeElementChangedSelfVisibilityState();
+  });
 
   return {
     isVisibilityFromDependency,
     checkedValueOnVoid,
     costAfterProcessingDependencyPrice,
-    formulaAfterProcessingVariables
-  }
+    formulaAfterProcessingVariables,
+  };
 }
-
