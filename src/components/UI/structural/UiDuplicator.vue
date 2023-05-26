@@ -49,7 +49,7 @@ import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 
 import { mapState } from "pinia";
 import { useBaseStore } from "@/store/piniaStore";

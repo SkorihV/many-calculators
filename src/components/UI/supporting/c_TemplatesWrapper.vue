@@ -1,5 +1,4 @@
 <script setup>
-
 import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
 import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
 import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";
@@ -7,7 +6,7 @@ import UiRadio from "@/components/UI/mainCalculated/UiRadio.vue";
 import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox.vue";
 import UiImage from "@/components/UI/mainCalculated/UiImage.vue";
 import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
-import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"])

@@ -54,7 +54,7 @@ import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 
 export default {
   name: "UiSystem",
