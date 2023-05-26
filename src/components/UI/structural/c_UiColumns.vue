@@ -1,11 +1,11 @@
 <script setup>
 import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-import ColumnElement from "@/components/UI/structural/ColumnElement.vue";
+import ColumnElement from "@/components/UI/structural/c_ColumnElement.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
-import { computed, onMounted, reactive, ref, unref, watch } from "vue";
+import {computed, onMounted, reactive, ref, toRef, unref, watch} from "vue";
 import { getParent } from "@/composables/useInstance";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -58,8 +58,8 @@ const { constructLocalListElementDependencyInFormula, localDependencyList } =
 const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
   useProcessingFormula(
     reactive({
-      parentIsShow: props.parentIsShow,
-      dependencyFormulaDisplay: props.dependencyFormulaDisplay,
+      parentIsShow: toRef(props, "parentIsShow"),
+      formula: toRef(props, "dependencyFormulaDisplay"),
       constructLocalListElementDependencyInFormula,
       localDependencyList: localDependencyList,
     })

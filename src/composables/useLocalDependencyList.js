@@ -15,7 +15,7 @@ export function useLocalDependencyList() {
    * @param formula
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
-    formula.forEach((name) => {
+    formula?.forEach((name) => {
       if (isElementDependency(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }

@@ -1772,7 +1772,7 @@
             "modified": "1682664991",
             "created": "1682664991",
             "type_group_id": "9017",
-            "label": "Блок колонки для секции",
+            "label": "Блок колонки для секции 1111111111",
             "columns": [
               {
                 "json_id": "178218307",
@@ -1855,7 +1855,7 @@
                   }
                 ],
                 "maxWidth": "30",
-                "dependencyFormulaDisplay": "",
+                "dependencyFormulaDisplay": "ипут2 > 10",
                 "elementPosition": "default",
                 "iconSettingsColumnsItemLabel": {
                   "title": "",

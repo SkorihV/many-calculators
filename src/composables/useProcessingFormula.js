@@ -4,16 +4,16 @@ import {
   getBaseStoreGetters,
   getBaseStoreAction,
 } from "@/composables/useBaseStore";
-import { computed, reactive, toRef, unref, watch } from "vue";
+import {computed, isReactive, reactive, toRef, unref, watch} from "vue";
 import { useUtilityServices } from "@/composables/useUtilityServices";
 
 export function useProcessingFormula(dataObject) {
   const dependencyFormulaDisplay = toRef(
     dataObject,
-    "dependencyFormulaDisplay"
+    "formula"
   );
   const parentIsShow = toRef(dataObject, "parentIsShow");
-  const localDependencyList = reactive(dataObject.localDependencyList);
+  const localDependencyList = dataObject.localDependencyList;
   const constructLocalListElementDependencyInFormula = toRef(
     dataObject,
     "constructLocalListElementDependencyInFormula"
@@ -136,6 +136,7 @@ export function useProcessingFormula(dataObject) {
   const isVisibilityFromDependency = computed(() => {
     if (isDependencyElementVisibility.value && parentIsShow.value) {
       try {
+
         return eval(formulaAfterProcessingVariables?.value);
       } catch (e) {
         if (devMode.value) {
