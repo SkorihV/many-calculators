@@ -16,8 +16,7 @@
       "titleSumma": "Общая сумма составляет",
       "roundOffType": "ceil",
       "currency": "руб.",
-      "timerForSpinner": 4,
-      "isNeedSpinner": true,
+      "timerForSpinner": 0,
       "textForSpinner": "Идет расчет...",
       "signAfterDot": -2,
       "backgroundImageSettings": {
