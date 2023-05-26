@@ -95,7 +95,7 @@ import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue"
 import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
-import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
+import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 

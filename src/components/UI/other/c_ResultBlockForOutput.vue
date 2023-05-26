@@ -1,6 +1,6 @@
 <script setup>
 import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
-import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
+import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
 import DevBlock from "@/components/UI/devMode/devBlock.vue";
 import {computed, ref, watch} from "vue";
 
@@ -38,9 +38,6 @@ const isNeedSpinner = ref(false);
 function spinnerIsFinished() {
   isNeedSpinner.value = false;
 }
-
-
-
 
 const isShowResultBlockTitle = computed(() => Boolean(props.resultOptions?.title?.length));
 const isShowResultBlockSubtitle = computed(() => Boolean(props.resultOptions?.subtitle?.length));
