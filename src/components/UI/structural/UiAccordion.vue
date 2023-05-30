@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import UiAccordionItem from "@/components/UI/structural/UiAccordionItem.vue";
+import UiAccordionItem from "@/components/UI/structural/c_UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";

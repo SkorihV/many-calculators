@@ -2277,7 +2277,7 @@
             "parent": "0;35853307;"
           }
         ],
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "ползунок2 > 5",
         "elementName": "",
         "classes": "",
         "template": "UiAccordion",
