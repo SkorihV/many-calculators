@@ -79,7 +79,7 @@ import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
-import UiColumns from "@/components/UI/structural/UiColumns.vue";
+import UiColumns from "@/components/UI/structural/column/c_UiColumns.vue";
 
 export default {
   name: "UiBlockSection",

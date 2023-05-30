@@ -1,5 +1,5 @@
 <script setup>
-import UiColumns from "@/components/UI/structural/c_UiColumns.vue";
+import UiColumns from "@/components/UI/structural/column/c_UiColumns.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"]);

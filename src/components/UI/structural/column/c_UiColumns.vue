@@ -1,7 +1,7 @@
 <script setup>
 import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-import ColumnElement from "@/components/UI/structural/c_ColumnElement.vue";
+import ColumnElement from "@/components/UI/structural/column/c_ColumnElement.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
