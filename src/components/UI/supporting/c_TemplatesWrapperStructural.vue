@@ -1,5 +1,5 @@
 <script setup>
-import UiTab from "@/components/UI/structural/UiTab.vue";
+import UiTab from "@/components/UI/structural/c_UiTab.vue";
 import UiAccordion from "@/components/UI/structural/c_UiAccordion.vue";
 import UiBlockSection from "@/components/UI/structural/UiBlockSection.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";

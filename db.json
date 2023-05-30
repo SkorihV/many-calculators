@@ -2442,7 +2442,7 @@
                 "excludeFromCalculations": false,
                 "elementName": "",
                 "formulaProcessingLogic": "zero",
-                "dependencyFormulaDisplay": "",
+                "dependencyFormulaDisplay": "ползунок2 > 15",
                 "scrollIntoName": "",
                 "classes": "",
                 "template": "UiCheckbox",
@@ -2498,7 +2498,7 @@
             "parent": "0;35853707;"
           }
         ],
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "ползунок2 > 13",
         "elementName": "",
         "classes": "",
         "template": "UiTab",

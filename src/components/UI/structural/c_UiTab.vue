@@ -1,3 +1,84 @@
+<script setup>
+import {computed, reactive, ref, toRef} from "vue";
+import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
+import UiTabItem from "@/components/UI/structural/c_UiTabItem.vue";
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import {getBaseStoreGetters} from "@/composables/useBaseStore";
+import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import {useProcessingFormula} from "@/composables/useProcessingFormula";
+
+
+const emits = defineEmits(["changedValue"])
+const props = defineProps({
+  tabData: {
+    type: Object,
+    default: () => {},
+  },
+  maxWidth: {
+    type: [String, Number],
+    default: 100,
+  },
+  iconSettingsTabsLabel: {
+    type: Object,
+    default: () => {},
+  },
+  ...propsTemplate.getProps([
+    "label",
+    "classes",
+    "elementName",
+    "parentIsShow",
+    "dependencyFormulaDisplay",
+  ]),
+})
+const {isCanShowAllTooltips, isValidationShowOnParentName, isValidationErrorOnParentName} = getBaseStoreGetters();
+const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
+const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+    reactive({
+      parentIsShow: toRef(props, "parentIsShow"),
+      formula: toRef(props, "dependencyFormulaDisplay"),
+      constructLocalListElementDependencyInFormula,
+      localDependencyList: localDependencyList,
+    })
+)
+
+const shownIdTab = ref(null)
+const hoverElementIndex = ref(null)
+
+function openItem(index) {
+  shownIdTab.value = index;
+}
+function changeValue(data) {
+  emits("changedValue", data);
+}
+function checkIsShowError(parentName, key) {
+  const isError = isValidationErrorOnParentName.value(parentName);
+  return key !== shownIdTab.value && isError && isCanShowAllTooltips.value;
+}
+
+
+const showBlock = computed(() => {
+  let result = [];
+  if (props.tabData?.items.length) {
+    result = props.tabData?.items.map((item) => {
+      if (item?.templates?.length) {
+        return Boolean(item.templates.length);
+      }
+      return false;
+    });
+  }
+  return result.some((item) => item);
+})
+const isExistLabel = computed(() => {
+  return Boolean(props.label?.toString()?.length);
+})
+
+
+
+</script>
+
 <template>
   <div
     class="calc__wrapper-group-data"
@@ -97,87 +178,3 @@
     hidden-cost
   />
 </template>
-
-<script>
-import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
-import UiTabItem from "@/components/UI/structural/c_UiTabItem.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import { MixinsForProcessingFormula } from "@/mixins/MixinsForProcessingFormula";
-
-import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-
-export default {
-  name: "UiTab",
-  components: { IconElementWrapper, UiTooltip, UiPrompt, UiTabItem, devBlock },
-  mixins: [MixinsForProcessingFormula],
-  emits: ["changedValue"],
-  props: {
-    tabData: {
-      type: Object,
-      default: () => {},
-    },
-    maxWidth: {
-      type: [String, Number],
-      default: 100,
-    },
-    iconSettingsTabsLabel: {
-      type: Object,
-      default: () => {},
-    },
-    ...propsTemplate.getProps([
-      "label",
-      "classes",
-      "elementName",
-      "parentIsShow",
-      "dependencyFormulaDisplay",
-    ]),
-  },
-  data() {
-    return {
-      itemOpenId: null,
-      errorsElements: {},
-      visibilityListTabs: new Map(),
-      shownIdTab: null,
-      hoverElementIndex: null,
-    };
-  },
-  methods: {
-    openItem(index) {
-      this.shownIdTab = index;
-    },
-    changeValue(data) {
-      this.$emit("changedValue", data);
-    },
-    checkIsShowError(parentName, key) {
-      const isError = this.isValidationErrorOnParentName(parentName);
-      return key !== this.shownIdTab && isError && this.isCanShowAllTooltips;
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "isCanShowAllTooltips",
-      "isValidationShowOnParentName",
-      "isValidationErrorOnParentName",
-    ]),
-    showBlock() {
-      let result = [];
-      if (this.tabData?.items.length) {
-        result = this.tabData?.items.map((item) => {
-          if (item?.templates?.length) {
-            return Boolean(item.templates.length);
-          }
-          return false;
-        });
-      }
-      return result.some((item) => item);
-    },
-    isExistLabel() {
-      return Boolean(this.label?.toString()?.length);
-    },
-  },
-};
-</script>
