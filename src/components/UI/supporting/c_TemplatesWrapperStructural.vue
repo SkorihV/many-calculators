@@ -1,7 +1,7 @@
 <script setup>
 import UiTab from "@/components/UI/structural/tab/c_UiTab.vue";
 import UiAccordion from "@/components/UI/structural/accordion/c_UiAccordion.vue";
-import UiBlockSection from "@/components/UI/structural/section/UiBlockSection.vue";
+import UiBlockSection from "@/components/UI/structural/section/c_UiBlockSection.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"]);
