@@ -7,7 +7,7 @@ import { getBaseStoreGetters } from "@/composables/useBaseStore";
  * @param name
  * @returns {{cost, name: (*|null), isShow: boolean}}
  */
-const getProxyFreeVariables = (value, name = null) => {
+export const getProxyFreeVariables = (value, name = null) => {
   const { getNameReserveVariable } = getBaseStoreGetters();
   value = unref(value);
   name = unref(name);

@@ -26,14 +26,6 @@ export function useProcessingFormula(dataObject) {
   const { getArrayElementsFromFormula } = useUtilityServices();
 
   /**
-   *
-   * @param value
-   * @returns {boolean}
-   */
-  const checkedValueOnVoid = (value) => {
-    return value?.length !== 0 && value !== undefined && value !== null;
-  };
-  /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
    * @param dataObject
    * @returns {*|{item: null, cost: null}}
@@ -153,7 +145,6 @@ export function useProcessingFormula(dataObject) {
 
   return {
     isVisibilityFromDependency,
-    checkedValueOnVoid,
     costAfterProcessingDependencyPrice,
     formulaAfterProcessingVariables,
   };

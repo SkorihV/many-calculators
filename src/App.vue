@@ -123,13 +123,11 @@ import {
 
 import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import UiSystem from "@/components/UI/mainCalculated/UiSystem.vue";
 
 export default {
   name: "ConstructorCalculator",
   mixins: [MixinsUtilityServices, MixinLocalDependencyList],
   components: {
-    UiSystem,
     TemplatesWrapperStructural,
     TemplatesWrapperColumn,
     TemplatesWrapper,
