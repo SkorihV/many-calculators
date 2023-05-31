@@ -1,6 +1,5 @@
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import {checkedValueOnVoid} from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -80,7 +79,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterPro
       localDependencyList: localDependencyList
     })
 )
-const {initProcessingDependencyPrice} = useGeneralItemData(toRef(props, 'parentIsShow'), changeValid, toRef(props, 'dependencyPrices'))
+const {initProcessingDependencyPrice} = useGeneralItemData(toRef(props, 'parentIsShow'), toRef(props, 'dependencyPrices'), changeValue, changeValid, )
 const {getArrayElementsFromFormula} = useUtilityServices()
 
 const {currentWidthElement} = getCurrentWidthElement(props.parentIsShow)
@@ -107,9 +106,11 @@ const localCostFormula = computed(() => {
   if (!allowProcessingDependencyPrices.value) {
     return props.cost;
   }
-  const { cost: formulaCost } = costAfterProcessingDependencyPrice.value(
-      props.dependencyPrices,
-      "dependencyFormulaCost"
+  const { cost: formulaCost } = costAfterProcessingDependencyPrice(
+      reactive({
+        dependencyArrayItems: toRef(props, 'dependencyPrices'),
+        formulaFieldName:  "dependencyFormulaCost"
+      })
   );
 
   if (formulaCost !== null) {

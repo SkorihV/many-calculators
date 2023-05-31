@@ -2750,7 +2750,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       display: flex;
       flex-direction: column;
       width: 100%;
-      z-index: 100;
+      z-index: 90;
     }
     &-wrapper {
       display: flex;

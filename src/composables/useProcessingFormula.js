@@ -6,6 +6,7 @@ import {
 } from "@/composables/useBaseStore";
 import {computed, isReactive, reactive, toRef, unref, watch} from "vue";
 import { useUtilityServices } from "@/composables/useUtilityServices";
+import {processingArrayOnFormulaProcessingLogic} from "@/servises/UtilityServices";
 
 export function useProcessingFormula(dataObject) {
   const dependencyFormulaDisplay = toRef(
@@ -32,14 +33,14 @@ export function useProcessingFormula(dataObject) {
    */
   const costAfterProcessingDependencyPrice = (dataObject) => {
     let dependencyArrayItems = toRef(dataObject, "dependencyArrayItems");
-    let formulaFieldName = toRef(dataObject, "formulaFieldName");
+    let formulaFieldName = dataObject?.formulaFieldName;
     let templateName = toRef(dataObject, "templateName");
     let localInputValue = toRef(dataObject, "localInputValue");
     let resultValue = toRef(dataObject, "resultValue");
 
     if (
-      dependencyArrayItems.value === null ||
-      formulaFieldName.value === undefined
+      !dependencyArrayItems.value ||
+      !formulaFieldName
     ) {
       return { item: null, cost: null };
     }
@@ -48,13 +49,14 @@ export function useProcessingFormula(dataObject) {
       (resultReduce, item) => {
         const notExistFormula =
           item?.disabledFormula ||
-          typeof item[formulaFieldName].value === "undefined" ||
-          !Boolean(item[formulaFieldName].value.toString().length);
+          typeof item[formulaFieldName] === "undefined" ||
+          !Boolean(item[formulaFieldName].toString().length);
+
         if (notExistFormula) {
           return resultReduce;
         }
 
-        let formula = getArrayElementsFromFormula(item[formulaFieldName].value);
+        let formula = getArrayElementsFromFormula(item[formulaFieldName]);
 
         if (templateName.value === "UiInput") {
           formula = formula.map((item) =>

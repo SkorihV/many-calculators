@@ -8,9 +8,8 @@ import {computed, watch} from "vue";
  * @param dependencyPrices
  * @returns {{initProcessingDependencyPrice: ComputedRef<boolean>}}
  */
-export const useGeneralItemData = (parentIsShow, changeValid, dependencyPrices) => {
+export const useGeneralItemData = (parentIsShow, dependencyPrices, changeValue, changeValid) => {
   const {isCanShowAllTooltips} = getBaseStoreGetters()
-
   /**
    * При глобальном включении возможности отображать подсказки - отправить состояние элемента
    */
