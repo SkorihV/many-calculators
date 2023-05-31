@@ -813,7 +813,7 @@
         "label": "картинка",
         "defaultImage": {
           "image_id": "1813162707",
-          "filename": "696bf430-4706-4af1-868c-9e58f438833f.png",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
           "ver_id": 4601302,
           "image_width": "308",
           "image_height": "410",
@@ -1193,6 +1193,40 @@
   "test-calc": {
     "calculatorTemplates": [
       {
+        "json_id": "147715342107",
+        "title": "картинка",
+        "label": "картинка",
+        "defaultImage": {
+          "image_id": "1813162707",
+          "filename": "https://calculators-works.oml.ru/d/container.png",
+          "ver_id": 4601302,
+          "image_width": "308",
+          "image_height": "410",
+          "ext": "png"
+        },
+        "maxWidth": "150",
+        "maxHeight": "150",
+        "dependencyFormulaDisplay": "инпут1 > 2",
+        "classes": "",
+        "template": "UiImage",
+        "dependencyImages": [
+          {
+            "title": "инпут1 > 10",
+            "image": {
+              "image_id": "1595369107",
+              "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+              "ver_id": 4848407,
+              "image_width": "1920",
+              "image_height": "1260",
+              "ext": "jpg"
+            },
+            "dependencyFormulaDisplay": "инпут1 &gt; 10"
+          }
+        ],
+        "prompt": "",
+        "parent": "0;"
+      },
+      {
         "json_id": "177972907",
         "meta_id": "35851907",
         "ver_id": "4848407",
@@ -1208,7 +1242,7 @@
         "min": "0",
         "max": "100",
         "controls": 1,
-        "step": "10",
+        "step": "1",
         "discreteStep": 1,
         "dataType": "onlyNumber",
         "notEmpty": false,

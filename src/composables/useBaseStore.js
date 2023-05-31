@@ -1,7 +1,7 @@
 import { useBaseStore } from "@/store/piniaStore";
 import { storeToRefs } from "pinia";
 
-export function getBaseStoreGetters(fieldsList = null) {
+export function getBaseStoreGetters() {
   const store = useBaseStore();
   return storeToRefs(store);
 }
