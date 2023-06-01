@@ -32,11 +32,13 @@ export function useProcessingFormula(dataObject) {
    * @returns {*|{item: null, cost: null}}
    */
   const costAfterProcessingDependencyPrice = (dataObject) => {
-    let dependencyArrayItems = toRef(dataObject, "dependencyArrayItems");
-    let formulaFieldName = dataObject?.formulaFieldName;
-    let templateName = toRef(dataObject, "templateName");
-    let localInputValue = toRef(dataObject, "localInputValue");
-    let resultValue = toRef(dataObject, "resultValue");
+    const dependencyArrayItems = toRef(dataObject, "dependencyArrayItems");
+    const formulaFieldName = dataObject?.formulaFieldName;
+    const templateName = toRef(dataObject, "templateName");
+    const value = toRef(dataObject, "value");
+
+    // let localInputValue = toRef(dataObject, "localInputValue");
+    // let resultValue = toRef(dataObject, "resultValue");
 
     if (
       !dependencyArrayItems.value ||
@@ -58,14 +60,9 @@ export function useProcessingFormula(dataObject) {
 
         let formula = getArrayElementsFromFormula(item[formulaFieldName]);
 
-        if (templateName.value === "UiInput") {
+        if (templateName.value === "UiInput" || templateName.value === "UiRange") {
           formula = formula.map((item) =>
-            item.toLowerCase() === "_self_" ? localInputValue.value : item
-          );
-        }
-        if (templateName.value === "UiRange") {
-          formula = formula.map((item) =>
-            item.toLowerCase() === "_self_" ? resultValue.value : item
+            item.toLowerCase() === "_self_" ? value.value : item
           );
         }
 

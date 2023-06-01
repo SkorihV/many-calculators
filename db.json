@@ -1323,7 +1323,7 @@
         "excludeFromCalculations": false,
         "elementName": "радио1",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "инпут1 > 3",
         "classes": "",
         "globalMaxWidth": "",
         "globalMaxHeight": "",
@@ -1346,7 +1346,19 @@
               },
               "behaviorImage": "contain",
               "location": "leftSide"
-            }
+            },
+            "dependencyPrices": [
+              {
+                "title": "цена 1",
+                "cost": 50,
+                "dependencyFormulaCost": "инпут1 &gt; 5"
+              },
+              {
+                "title": "цена 2",
+                "cost": 150,
+                "dependencyFormulaCost": "инпут1 &gt; 20"
+              }
+            ]
           },
           {
             "title": "Элемент радио-кнопка - второе значение с очень длинным названием",
@@ -1508,7 +1520,7 @@
         "modified": "2023-04-28 12:43:21",
         "created": "2023-04-28 12:43:21",
         "type_group_id": "9006",
-        "label": "Системное поле без обертки",
+        "label": "Системное поле без обертки 11111111111111",
         "unit": "шт",
         "cost": "инпут1 + 53",
         "showElement": "show",
@@ -1516,7 +1528,7 @@
         "resultOutputMethod": "value",
         "zeroValueDisplayIgnore": 1,
         "excludeFromCalculations": false,
-        "elementName": "",
+        "elementName": "системноеПоле123",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "инпут1 > 19",
         "template": "UiSystem",

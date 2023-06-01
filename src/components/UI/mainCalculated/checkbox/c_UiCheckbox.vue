@@ -10,7 +10,9 @@ import {computed, onMounted, onUnmounted, reactive, ref, toRef, watch, nextTick}
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {checkedValueOnVoid} from "@/servises/UtilityServices"
-import {useGeneralItemData} from "@/composables/useGeneralItemData";
+
+import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
+import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
 
 
 const emits = defineEmits(["changedValue"])
@@ -91,10 +93,12 @@ const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAf
       constructLocalListElementDependencyInFormula
     })
 )
-const {initProcessingDependencyPrice} = useGeneralItemData(toRef(props, 'parentIsShow'), toRef(props, 'dependencyPrices'),  changeValue, changeValid)
-
-
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 useDisplaySpinner(props.elementName)
+
+const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
+
+
 onMounted(() => {
   checkboxValue.value = props.baseValue === "active";
   isChecked.value = props.baseValue === "selected";

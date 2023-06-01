@@ -8,6 +8,7 @@ import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 import {useUtilityServices} from "@/composables/useUtilityServices"
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
+import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 
 
 
@@ -38,6 +39,7 @@ const props = defineProps({
 const {devMode, getImageDir} = getBaseStoreGetters();
 const {tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryToggleElementIsMounted"])
 const {getArrayElementsFromFormula} = useUtilityServices();
+useDisplaySpinner(props.elementName)
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
     reactive({

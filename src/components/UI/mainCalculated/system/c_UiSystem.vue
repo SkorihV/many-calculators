@@ -7,7 +7,6 @@ import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStor
 
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useGeneralItemData} from "@/composables/useGeneralItemData";
 import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
@@ -18,6 +17,9 @@ import {
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
 import {computed, onUnmounted, reactive, toRef, watch} from "vue";
+import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
+import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
+import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 
 const {devMode, getResultElementOnName, getNameReserveVariable} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle'])
@@ -79,7 +81,10 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterPro
       localDependencyList: localDependencyList
     })
 )
-const {initProcessingDependencyPrice} = useGeneralItemData(toRef(props, 'parentIsShow'), toRef(props, 'dependencyPrices'), changeValue, changeValid, )
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
+useDisplaySpinner(props.elementName)
+const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
+
 const {getArrayElementsFromFormula} = useUtilityServices()
 
 const {currentWidthElement} = getCurrentWidthElement(props.parentIsShow)
