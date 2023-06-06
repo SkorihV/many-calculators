@@ -1,5 +1,5 @@
 <script setup>
-import {computed, reactive, toRef} from "vue";
+import { computed, reactive, ref, toRef } from "vue";
 import UiAccordionItem from "@/components/UI/structural/accordion/c_UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
@@ -30,6 +30,7 @@ const props = defineProps({
     "dependencyFormulaDisplay",
   ]),
 })
+const parent = ref(null)
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(

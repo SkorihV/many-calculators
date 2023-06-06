@@ -33,6 +33,8 @@ const props = defineProps({
     "dependencyFormulaDisplay",
   ]),
 })
+const parent = ref(null)
+
 const {isCanShowAllTooltips, isValidationShowOnParentName, isValidationErrorOnParentName} = getBaseStoreGetters();
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(

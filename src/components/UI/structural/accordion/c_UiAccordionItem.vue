@@ -29,10 +29,10 @@ const props = defineProps({
   ...propsTemplate.getProps(["elementName", "parentIsShow"]),
 })
 
+const parentRef = ref(null)
 const isOpen = ref(false)
 const hoverElement = ref(null)
-const { currentWidthElement } = getCurrentWidthElement(props.parentIsShow)
-
+const {currentWidthElement} = getCurrentWidthElement(toRef(props, "parentIsShow"), parentRef)
 
 function changeValue(data) {
   emits('changedValue', data)
@@ -93,7 +93,7 @@ const maxWidth = computed(() => {
 
 <template>
   <div
-    ref="parent"
+    ref="parentRef"
     class="calc__accordion-item-label"
     @click="isOpen = !isOpen"
     v-show="isShowAccordionItem"

@@ -10,10 +10,12 @@ import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
 import {useUtilityServices} from "@/composables/useUtilityServices";
+import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 import {onMounted, onUnmounted, reactive, ref, toRef, watch, computed} from "vue";
 import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { getParent } from "@/composables/useInstance";
 
 const emits = defineEmits(["changedValue"])
 const props = defineProps({
@@ -84,6 +86,8 @@ const originRadioList = ref([])
 const canBeShownTooltip = ref(false)
 const hoverElementIndex = ref(null)
 
+const parentRef = ref(null)
+
 const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryAddDependencyElement", "checkValidationDataAndToggle"])
 const {getArrayElementsFromFormula} = useUtilityServices()
@@ -100,6 +104,7 @@ const {formulaAfterProcessingVariables, isVisibilityFromDependency, costAfterPro
 
 useDisplaySpinner(props.elementName)
 useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid)
+const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 
 onMounted(() => {
   localElementName.value = checkedValueOnVoid(props.elementName)
@@ -132,6 +137,8 @@ onUnmounted(() => {
 const isExistLabel = computed(() => {
     return Boolean(props.label?.toString()?.length);
   })
+const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
+
 
 const currentSelectedRadioButton = computed(() => {
   return currentIndexRadioButton.value === null
@@ -365,7 +372,7 @@ function tryPassDependency() {
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
     :id="elementName"
-    ref="parent"
+    ref="parentRef"
   >
     <div
       class="calc__radio-wrapper"

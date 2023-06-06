@@ -10,6 +10,7 @@ import {computed, onMounted, onUnmounted, reactive, ref, toRef, watch, nextTick}
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {checkedValueOnVoid} from "@/servises/UtilityServices"
+import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
@@ -80,6 +81,7 @@ const canBeShownTooltip = ref(false)
 const isChecked = ref(false) // активирована
 const notActive = ref(false) // невозможно активировать
 const checkboxValue = ref(false) // начальное значение
+const parentRef = ref(null)
 
 const {isCanShowAllTooltips} = getBaseStoreGetters()
 const {checkValidationDataAndToggle, tryAddDependencyElement, tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryAddDependencyElement", "checkValidationDataAndToggle", "tryToggleElementIsMounted",
@@ -95,6 +97,12 @@ const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAf
 )
 useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 useDisplaySpinner(props.elementName)
+
+const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+const isExistLabel = computed(() => {
+  return Boolean(props.label.toString()?.length);
+})
+const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
 
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
 
@@ -122,9 +130,6 @@ const localElementName = computed(() => {
     return checkedValueOnVoid(props.elementName)
         ? props.elementName
         : Math.random().toString();
-  })
-const isExistLabel = computed(() => {
-    return Boolean(props.label.toString()?.length);
   })
 const checkboxType = computed(() => {
   return props.typeDisplayClass ? props.typeDisplayClass : "base";
@@ -291,7 +296,7 @@ onUnmounted(() => {
     class="calc__wrapper-group-data"
     v-if="isVisibilityFromDependency"
     :id="elementName"
-    ref="parent"
+    ref="parentRef"
   >
     <div
       class="calc__checkbox-wrapper"

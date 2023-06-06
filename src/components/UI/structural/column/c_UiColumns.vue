@@ -51,6 +51,7 @@ const maximumColumns = 4;
 const currentWidthElement = ref(null);
 const stateColumns = ref([]);
 const timerName = ref(null);
+const parent = ref(null)
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();

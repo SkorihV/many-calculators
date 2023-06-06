@@ -1441,7 +1441,7 @@
         "selectedItem": "1",
         "isNeedChoice": 1,
         "notEmpty": false,
-        "isColumn": 1,
+        "isColumn": 0,
         "isStretch": 1,
         "formOutputMethod": "valueSumm",
         "resultOutputMethod": "valueSumm",
@@ -1449,7 +1449,7 @@
         "excludeFromCalculations": false,
         "elementName": "селект1",
         "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "инпут1 > 1",
         "classes": "",
         "globalMaxWidth": "55",
         "globalMaxHeight": "55",
@@ -1473,7 +1473,19 @@
               "maxHeight": 33,
               "behaviorImage": "contain",
               "location": "leftSide"
-            }
+            },
+            "dependencyPrices" : [
+              {
+                "title": 1,
+                "cost": 20,
+                "dependencyFormulaCost": "инпут1 &gt; 15"
+              },
+              {
+                "title": 2,
+                "cost": 190,
+                "dependencyFormulaCost": "инпут1 &gt; 50"
+              }
+            ]
           },
           {
             "title": "Элемент списка - второе значение ",
@@ -1492,6 +1504,11 @@
               "behaviorImage": "contain",
               "location": "leftSide"
             }
+          },
+          {
+            "title": "Элемент списка - Тест отображения",
+            "selectName": "Тест отображения",
+            "dependencyFormulaItem": "инпут1 &gt; 50"
           }
         ],
         "prompt": "",
@@ -1791,7 +1808,7 @@
             "excludeFromCalculations": false,
             "elementName": "селект2",
             "formulaProcessingLogic": "zero",
-            "dependencyFormulaDisplay": "",
+            "dependencyFormulaDisplay": "инпут1 > 55",
             "classes": "",
             "globalMaxWidth": "",
             "globalMaxHeight": "",
@@ -1800,7 +1817,8 @@
               {
                 "title": "Элемент списка - Селект для блока секции 1",
                 "selectName": "Селект для блока секции 1",
-                "cost": 34
+                "cost": 34,
+                "prompt": "asdasd as "
               },
               {
                 "title": "Элемент списка - Селект для блока секции 2",
@@ -1965,7 +1983,8 @@
                       {
                         "title": "Элемент радио-кнопка - 1",
                         "radioName": 1,
-                        "cost": 1
+                        "cost": 1,
+                        "prompt": "asd asd as"
                       },
                       {
                         "title": "Элемент радио-кнопка - 2",
@@ -1974,8 +1993,7 @@
                       },
                       {
                         "title": "Элемент радио-кнопка - 3",
-                        "radioName": 3,
-                        "cost": 3
+                        "radioName": 3
                       }
                     ],
                     "prompt": "",
@@ -2057,7 +2075,7 @@
             "parent": "0;35854707;"
           }
         ],
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "селект1 === 3",
         "maxWidthSide": "100",
         "visuallySeparateElement": 1,
         "elementPosition": "default",

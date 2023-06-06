@@ -1,16 +1,16 @@
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import {getParent} from "@/composables/useInstance";
 
-export const getCurrentWidthElement = (parentIsShow) => {
+export const getCurrentWidthElement = (elementIsShow, parentRef) => {
   const currentWidthElement = ref( 980)
   const timerName = ref(null)
-  const parent = getParent()
+
 
   onMounted(() => {
     let stepInterval = 0;
     timerName.value = setInterval(() => {
       updatedCurrentWidth();
-      if (stepInterval > 10) {
+      if (stepInterval > 3) {
         clearInterval(timerName.value);
       }
 
@@ -27,13 +27,13 @@ export const getCurrentWidthElement = (parentIsShow) => {
     updatedCurrentWidth();
   }
   function updatedCurrentWidth() {
-    if (parent?.value && parent?.value?.offsetWidth !== 0) {
-      currentWidthElement.value = parent?.value.offsetWidth;
+    if (parentRef?.value && parentRef?.value?.offsetWidth !== 0) {
+      currentWidthElement.value = parentRef?.value.offsetWidth;
       clearInterval(timerName.value);
     }
   }
 
-  watch(() => parentIsShow, (newValue) => {
+  watch(() => elementIsShow.value, (newValue) => {
     if (newValue) {
       let stepInterval = 0;
       timerName.value = setInterval(() => {
@@ -54,7 +54,7 @@ export const getCurrentWidthElement = (parentIsShow) => {
 export const getIsMakeElementColumn = (currentWidthElement, isExistLabel) => {
   const isMakeElementColumn = computed(() => {
     return (
-        (currentWidthElement.value <= 350 && isExistLabel.value) ||
+        (currentWidthElement?.value <= 350 && isExistLabel.value) ||
         currentWidthElement.value <= 220
     );
   })

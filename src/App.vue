@@ -1,5 +1,5 @@
 <template>
-  <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted">
+  <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted" ref="parentRef">
     <template v-for="(template, index) in calculatorTemplates" :key="index">
       <templates-wrapper-structural
         v-if="checkedIsStructureTemplate(template?.template)"
@@ -2386,6 +2386,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         display: flex;
         flex: 1 1 100%;
         border-bottom: 1px dashed $c_decor_border_color;
+        z-index: 1;
       }
       &_text {
         display: flex;

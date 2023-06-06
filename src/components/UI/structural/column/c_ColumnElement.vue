@@ -2,7 +2,7 @@
 import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {computed, reactive, toRef} from "vue";
+import { computed, reactive, ref, toRef } from "vue";
 import {useProcessingFormula} from "@/composables/useProcessingFormula"
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 
@@ -24,6 +24,8 @@ const props = defineProps({
     "elementPosition",
   ]),
 })
+
+const parentRef = ref(null)
 
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
@@ -58,7 +60,7 @@ const isHorizontal = computed(() => {
 </script>
 
 <template>
-  <div class="calc__columns-column-label-wrapper" ref="parent">
+  <div class="calc__columns-column-label-wrapper" ref="parentRef">
     <icon-element-wrapper
       :icon-settings="column.iconSettingsColumnsItemLabel"
       :alt="isExistLabel ? column.label : ''"

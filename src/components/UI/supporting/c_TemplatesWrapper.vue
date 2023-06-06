@@ -1,7 +1,7 @@
 <script setup>
 import UiRange from "@/components/UI/mainCalculated/UiRange.vue";
 import UiInput from "@/components/UI/mainCalculated/UiInput.vue";
-import UiSelect from "@/components/UI/mainCalculated/UiSelect.vue";
+import UiSelect from "@/components/UI/mainCalculated/UiSelect/c_UiSelect.vue";
 import UiRadio from "@/components/UI/mainCalculated/radio/c_UiRadio.vue";
 import UiCheckbox from "@/components/UI/mainCalculated/checkbox/c_UiCheckbox.vue";
 import UiImage from "@/components/UI/mainCalculated/image/c_UiImage.vue";

@@ -9,7 +9,8 @@ import {getBaseStoreGetters} from "@/composables/useBaseStore";
 import {getCurrentWidthElement} from "@/composables/useWidthElement";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {computed, reactive, toRef} from "vue";
+import { computed, reactive, ref, toRef } from "vue";
+import { getParent } from "@/composables/useInstance";
 
 const {devMode} = getBaseStoreGetters();
 
@@ -39,8 +40,8 @@ const props = defineProps({
     "elementPosition",
   ]),
 })
+const parentRef = ref(null)
 
-const {currentWidthElement} = getCurrentWidthElement()
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
     reactive({
@@ -74,6 +75,8 @@ const showSection = computed(() => {
       isVisibilityFromDependency.value
   );
 })
+const {currentWidthElement} = getCurrentWidthElement(showSection, parentRef)
+
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600 ? props.maxWidthSide + "%" : "100%";
 })
@@ -90,7 +93,7 @@ const isHorizontal = computed(() => {
     :class="{ indent: isVisualSeparate }"
     v-show="showSection"
     :id="elementName"
-    ref="parent"
+    ref="parentRef"
   >
     <div
       class="calc__block-section-wrapper"

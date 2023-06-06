@@ -16,10 +16,11 @@ import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
-import {computed, onUnmounted, reactive, toRef, watch} from "vue";
+import { computed, onUnmounted, reactive, ref, toRef, watch } from "vue";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
+
 
 const {devMode, getResultElementOnName, getNameReserveVariable} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle'])
@@ -71,6 +72,7 @@ const props = defineProps({
     "unit",
   ]),
 })
+const parentRef = ref(null)
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
@@ -87,7 +89,7 @@ const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(p
 
 const {getArrayElementsFromFormula} = useUtilityServices()
 
-const {currentWidthElement} = getCurrentWidthElement(props.parentIsShow)
+const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
@@ -300,7 +302,7 @@ onUnmounted(() => {
 <template>
   <div
     class="calc__wrapper-group-data"
-    ref="parent"
+    ref="parentRef"
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
   >
