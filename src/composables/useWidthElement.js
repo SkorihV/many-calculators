@@ -1,11 +1,11 @@
-import {computed, onMounted, onUnmounted, ref, watch} from "vue";
-import {getParent} from "@/composables/useInstance";
+import {computed, onMounted, ref, watch} from "vue";
+import {useEventListener} from "@/composables/useEventsListener";
 
 export const getCurrentWidthElement = (elementIsShow, parentRef) => {
   const currentWidthElement = ref( 980)
   const timerName = ref(null)
 
-
+  useEventListener(window, 'resize', resizeWidth)
   onMounted(() => {
     let stepInterval = 0;
     timerName.value = setInterval(() => {
@@ -16,12 +16,8 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
 
       stepInterval++;
     }, 500);
+  })
 
-    window.addEventListener("resize", resizeWidth);
-  })
-  onUnmounted(() => {
-    window.removeEventListener("resize", resizeWidth);
-  })
 
   function resizeWidth() {
     updatedCurrentWidth();
@@ -47,7 +43,8 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
   })
 
   return {
-    currentWidthElement
+    currentWidthElement,
+    updatedCurrentWidth
   }
 }
 

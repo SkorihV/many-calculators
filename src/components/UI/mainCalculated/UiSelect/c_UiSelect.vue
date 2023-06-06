@@ -14,6 +14,7 @@ import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 
 
 const emits = defineEmits(['changedValue'])
@@ -104,6 +105,7 @@ const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAf
   })
 )
 
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 
 

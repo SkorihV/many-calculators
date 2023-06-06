@@ -15,7 +15,6 @@ import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useW
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 import {onMounted, onUnmounted, reactive, ref, toRef, watch, computed} from "vue";
 import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
-import { getParent } from "@/composables/useInstance";
 
 const emits = defineEmits(["changedValue"])
 const props = defineProps({
@@ -118,7 +117,7 @@ onMounted(() => {
       }
   );
 
-  if (!props.isNeedChoice) {
+  if (!props.isNeedChoice && isVisibilityFromDependency.value) {
     currentIndexRadioButton.value = parseInt(props.selectedItem);
   }
 
@@ -258,13 +257,19 @@ const radioListOnOut = computed(() => {
   })
 
 
-watch(currentSelectedRadioButton, (newValue, oldValue) => {
+watch(() => currentSelectedRadioButton.value, (newValue, oldValue) => {
   if (newValue?.index !== oldValue?.index) {
     setTimeout(() => {
       changeValue("currentSelectedRadioButton");
     }, 10);
   }
 }, {deep: true})
+
+watch(localCost, () => {
+  setTimeout(() => {
+    changeValue("currentSelectedRadioButton");
+  }, 10);
+})
 
 watch(isVisibilityFromDependency, (newValue) => {
   if (newValue) {

@@ -1394,8 +1394,8 @@
         "cost": "22",
         "unit": "м2",
         "step": "1",
-        "showSteps": false,
-        "stepPrompt": "1",
+        "showSteps": true,
+        "stepPrompt": 10,
         "isNeedChoice": 1,
         "notEmpty": false,
         "showStaticValue": 1,
@@ -1407,10 +1407,21 @@
         "excludeFromCalculations": false,
         "elementName": "ползунок1",
         "formulaProcessingLogic": "zero",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "инпут1 > 1",
         "classes": "",
         "template": "UiRange",
-        "dependencyPrices": null,
+        "dependencyPrices":  [
+          {
+            "title": 1,
+            "cost": 20,
+            "dependencyFormulaCost": "инпут1 &gt; 15"
+          },
+          {
+            "title": 2,
+            "cost": 190,
+            "dependencyFormulaCost": "инпут1 &gt; 50"
+          }
+        ],
         "prompt": "ползунок без обертокползунок без обертокползунок без обертокползунок без оберток",
         "iconSettingsRangeLabel": {
           "title": "",
@@ -1993,7 +2004,14 @@
                       },
                       {
                         "title": "Элемент радио-кнопка - 3",
-                        "radioName": 3
+                        "radioName": 3,
+                        "dependencyFormulaItem": "ползунок2 > 10",
+                        "dependencyPrices" : [
+                          {
+                            "cost": 50,
+                            "dependencyFormulaCost": "ползунок2 > 20"
+                          }
+                        ]
                       }
                     ],
                     "prompt": "",
@@ -2066,7 +2084,7 @@
                 "parent": "0;35854707;35854307;"
               }
             ],
-            "dependencyFormulaDisplay": "ползунок2 > 15",
+            "dependencyFormulaDisplay": "ползунок2 > 5",
             "adaptationMethod": "free",
             "elementName": "",
             "classes": "",
