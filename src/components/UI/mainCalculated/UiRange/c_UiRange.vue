@@ -204,7 +204,7 @@ const isClassError = computed(() => {
       );
     })
     /**
-     * Возвращает цену подходящую условию, если моле отображается
+     * Возвращает цену подходящую условию, если поле отображается
      * Если не одна цена не подходит, то возвращается стандартная
      * @returns {Number|String|*}
      */const localCost = computed(() => {
@@ -212,7 +212,7 @@ const isClassError = computed(() => {
         return null;
       }
 
-      if (!initProcessingDependencyPrice || !props.dependencyPrices) {
+      if (!initProcessingDependencyPrice.value || !props.dependencyPrices) {
         return updatedCostForOut(props.cost);
       }
 
