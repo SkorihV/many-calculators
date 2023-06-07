@@ -90,7 +90,7 @@
 
 <script>
 import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
-import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
+import UiDuplicator from "@/components/UI/structural/duplicator/c_UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 
