@@ -1,3 +1,675 @@
+<script setup>
+import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
+import UiDuplicator from "@/components/UI/structural/duplicator/c_UiDuplicator.vue";
+import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
+
+import ErrorNamesTemplates from "@/components/UI/devMode/c_ErrorNamesTemplates.vue";
+import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
+import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
+import ResultButtonForComputed from "@/components/UI/other/c_ResultButtonForComputed.vue";
+
+import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+
+import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import {useUtilityServices} from "@/composables/useUtilityServices";
+import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
+import { onMounted, ref, watch, computed } from "vue";
+
+import {
+  IS_LOCAL,
+  LOCAL_PATH_DATA,
+  LOCAL_PATH_OPTIONS,
+} from "@/constants/localData";
+
+import {
+  parseResultValueObjectItem,
+  processingArrayOnFormulaProcessingLogic,
+  parsingDataInFormulaOnSum,
+  getSummaFreeVariablesInFormula,
+  getListVariablesMissedInFormula,
+  decimalAdjust,
+} from "@/servises/UtilityServices.js";
+
+import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+
+import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore"
+
+const {isCanShowAllTooltips,
+  isExistGlobalErrorsValidationIgnoreHiddenElement,
+  getNameReserveVariable,
+  getAllResultsElements,
+  devMode,
+  showInsideElementStatus,
+  appIsMounted,
+  getCurrency,
+  methodBeginningCalculationIsAutomatic,
+  methodBeginningCalculationIsButton,
+  checkInitEnabledSendForm,
+  checkAllowShowResultBlock,
+  checkedIsStructureTemplate,
+  getSignAfterDot,
+  getRoundOffType,
+  getTitleSum
+} = getBaseStoreGetters()
+const {showAllTooltipsOn, tryAddResultElement, tryModifiedResultElement, tryToggleDevMode,
+  setTooltipOn, setInitEnabledSendForm, setAllowShowResultBlock,
+  tryAddDependencyElement, setInputOptions} = getBaseStoreAction([
+  'showAllTooltipsOn', 'tryAddResultElement', 'tryModifiedResultElement',
+'tryToggleDevMode', 'setTooltipOn', 'setInitEnabledSendForm', 'setAllowShowResultBlock', 'tryAddDependencyElement', 'setInputOptions'
+])
+
+
+
+const eventNotShowTooltips = [
+  "delete",
+  "mounted",
+  "timer",
+  "dependency",
+  "currentSelectedRadioButton",
+  "changeAmountSelectList",
+  "changeValueDependenciesElements",
+  "system",
+]  // События при которых не должно срабатывать отображение ошибок
+
+
+const inputTemplates = ref( {}) // внешние данные с шаблонами элементов калькулятора
+const inputOptions = ref( {}) // внешние данные с общими настройками калькулятора
+const calculatorTemplates = ref( []) // список шаблонов элементов
+const isUseFormula = ref( false) // использовать формулу
+const displayResultData = ref( false) // включить работу формул и вывод данных
+const methodWorksForm = ref( "show")
+const formElement = ref( null)
+const teleportField = ref( null)
+const submitResult = ref( null)
+const eventSubmittingFormAdded = ref( null)
+const intervalName = ref( null)
+const existFormulaForHiddenResultButton = ref( false)
+
+
+const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const {getArrayElementsFromFormula} = useUtilityServices()
+
+
+const isExistDependencyMainFormula = computed(() => {
+  return Boolean(inputOptions.value?.dependencyMainFormula?.length);
+})
+const mainFormulaResult = computed(() => {
+  if (!isExistDependencyMainFormula.value) {
+    return inputOptions.value?.formula?.length
+      ? inputOptions.value?.formula
+      : "";
+  }
+  const formulaAfterDependency =
+    inputOptions.value.dependencyMainFormula?.reduce(
+      (resultFormula, item) => {
+        let dependencyFormula = getArrayElementsFromFormula(
+          item.dependencyFormula
+        );
+        constructLocalListElementDependencyInFormula(
+          dependencyFormula
+        );
+        dependencyFormula = processingVariablesOnFormula(
+          dependencyFormula,
+          localDependencyList
+        );
+
+        const formulaIsExist = Boolean(item?.formula?.length);
+        try {
+          if (eval(dependencyFormula) && formulaIsExist) {
+            resultFormula = item.formula;
+          }
+        } catch (e) {
+          if (devMode.value) {
+            console.error(
+              "Формула зависимости для смены главной формулы: " + e.message
+            );
+          }
+        }
+        return resultFormula;
+      },
+      ""
+    );
+
+  const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
+  if (isFormulaAfterDependency) {
+    return formulaAfterDependency;
+  }
+
+  return inputOptions.value?.formula?.length
+    ? inputOptions.value?.formula
+    : "";
+})
+const mainFormulaIsExist = computed(() => {
+    return Boolean(mainFormulaResult.value?.length);
+  })
+
+  /**
+   * Данные которые подходят для вывода или расчета
+   * @returns {{length}|unknown[]|*[]}
+   */
+const baseDataForCalculate = computed(() => {
+    return Object.values(getAllResultsElements.value).filter(
+      (item) => !Boolean(item?.isDuplicator)
+    );
+  })
+  /**
+   * Разбиваем полученную формулу на массив с переменными и знаками.
+   * Избавляемся от пустых элементов.
+   * @returns {*[]|*}
+   */
+const variablesInFormula = computed(() => {
+    if (mainFormulaIsExist.value) {
+      return getArrayElementsFromFormula(mainFormulaResult.value);
+    }
+    return [];
+  })
+  /**
+   * Список переменных не используемых в формуле
+   * @returns {[]}
+   */
+const freeVariablesOutsideFormula = computed(() => {
+    return getListVariablesMissedInFormula(
+      baseDataForCalculate.value,
+      variablesInFormula.value
+    );
+  })
+  /**
+   * сумма всех не используемых в формуле переменных
+   * @returns {*}
+   */
+const summaFreeVariables = computed(() => {
+    return getSummaFreeVariablesInFormula(freeVariablesOutsideFormula.value);
+  })
+  /**
+   * Список переменных из формулы вместе с данными
+   * @returns {*}
+   */
+const dataListVariablesOnFormula = computed(() => {
+    return variablesInFormula.value?.map((item) => {
+      if (item === getNameReserveVariable.value) {
+        tryPassDependency(
+          "_otherSum_",
+          summaFreeVariables.value,
+          Boolean(summaFreeVariables.value !== null),
+          summaFreeVariables.value,
+          "_otherSum_"
+        );
+        return getProxyFreeVariables(summaFreeVariables.value);
+      } else {
+        const data = baseDataForCalculate.value.filter(
+          (itemInner) => itemInner.name === item
+        );
+        return data.length ? data[0] : item;
+      }
+    });
+  })
+  /**
+   * Отдает формулу с подставленными значениями
+   * @returns {*}
+   */
+const resultTextForComputed = computed(() => {
+    const resultString = parsingDataInFormulaOnSum(
+      processingArrayOnFormulaProcessingLogic(dataListVariablesOnFormula.value)
+    );
+    return resultString?.replace(
+      /[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g,
+      ""
+    );
+  })
+  /**
+   *  рассчитываем формулу через eval
+   * @returns {boolean|any}
+   */
+const combinedFormulaDataTogether = computed(() => {
+    try {
+      const resultNumber = eval(resultTextForComputed.value);
+      if (!isNaN(resultNumber) && isFinite(resultNumber)) {
+        return resultNumber;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (devMode.value) {
+        console.warn("Рассчитываемая формула: ", resultTextForComputed.value);
+      }
+      return null;
+    }
+  })
+  /**
+   * Данные нужные только для вывода в форму
+   * @returns {*[]}
+   */
+const sortPositionDataForOutput = computed(() => {
+    return baseDataForCalculate.value.sort(
+      (itemA, itemB) => itemA.position - itemB.position
+    );
+  })
+  /**
+   * Текст со всеми полями которые должны отображаться в форме
+   * @returns {string}
+   */
+const resultTextDataForForm = computed(() => {
+    let result = "";
+    sortPositionDataForOutput.value.forEach((item) => {
+      if (item.type === "duplicator") {
+        if (item?.insertedTemplates?.length && item.isShow) {
+          item?.insertedTemplates.forEach((duplicator) => {
+            if (duplicator?.insertedTemplates?.length) {
+              const resultValueObjectItem = parseResultValueObjectItem(
+                duplicator,
+                "formOutputMethod",
+                duplicator?.unit
+              );
+              if (resultValueObjectItem?.length) {
+                result += resultValueObjectItem;
+              }
+              duplicator?.insertedTemplates.forEach(
+                (templateInDuplicator) => {
+                  const resultValueObjectItemInDuplicator =
+                    parseResultValueObjectItem(
+                      templateInDuplicator,
+                      "formOutputMethod",
+                      getCurrency.value
+                    );
+                  if (resultValueObjectItemInDuplicator?.length) {
+                    result += resultValueObjectItemInDuplicator;
+                  }
+                }
+              );
+            }
+          });
+        }
+      } else {
+        const data = parseResultValueObjectItem(
+          item,
+          "formOutputMethod",
+          getCurrency.value
+        );
+        if (data.length) {
+          result += data;
+        }
+      }
+    });
+    return result;
+  })
+  /**
+   * Общая сумма расчета
+   * @returns {*|boolean}
+   */
+const finalSummaForOutput = computed(() => {
+    if (
+      !displayResultData.value ||
+      isExistGlobalErrorsValidationIgnoreHiddenElement.value
+    ) {
+      tryPassDependency("_globalSum_", null, false, null, "App_calc");
+      return null;
+    }
+    let resultSum = null;
+    if (isUseFormula.value && mainFormulaIsExist.value) {
+      resultSum = combinedFormulaDataTogether.value;
+    } else {
+      resultSum = baseDataForCalculate.value.reduce((sum, item) => {
+        if (item.cost !== null && !item.excludeFromCalculations) {
+          return sum + parseFloat(item.cost);
+        }
+        return sum + 0;
+      }, 0);
+    }
+    resultSum = decimalAdjust(
+      resultSum,
+      getSignAfterDot.value,
+      getRoundOffType.value
+    );
+
+    tryPassDependency(
+      "_globalSum_",
+      resultSum,
+      Boolean(resultSum !== null),
+      resultSum,
+      "App_calc"
+    );
+
+    return resultSum;
+  })
+  /**
+   * Текст для вывода в форму
+   * @returns {string}
+   */
+const finalTextForOutput = computed(() => {
+    let result = resultTextDataForForm.value;
+    if (finalSummaForOutput.value === null) {
+      return result;
+    }
+
+    if (finalSummaForOutput.value === false) {
+      result += "Есть ошибка в расчетах!";
+    } else {
+      result +=
+        "\n" +
+        getTitleSum.value +
+        " " +
+        finalSummaForOutput.value +
+        " " +
+        getCurrency.value;
+    }
+    return result;
+  })
+const finalTextForOutputForTeleport = computed(() => {
+    return finalTextForOutput.value.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
+  })
+  /**
+   * Отобразить блок с текстом о наличии ошибок,
+   * если ошибки есть и глобально разрешено их отображение
+   * @returns {false|boolean}
+   */
+const showErrorTextBlock = computed(() => {
+    return Boolean(
+      isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+      isCanShowAllTooltips.value
+    );
+  })
+const showErrorSummaBlock = computed(() => {
+  return Boolean(
+    (finalSummaForOutput.value === null ||
+      finalSummaForOutput.value === false) &&
+    isCanShowAllTooltips.value &&
+    displayResultData.value
+  );
+})
+const isEnabledSendForm = computed(() => {
+    return (
+      checkInitEnabledSendForm.value &&
+      finalTextForOutput.value?.length &&
+      !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+      !showErrorSummaBlock.value
+    );
+  })
+  /**
+   * Отправить данные в форму если нет ошибок валидации и разрешена отправка
+   * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
+   */
+const allowTeleport = computed(() => {
+    return Boolean(
+      submitResult.value &&
+      !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+      checkInitEnabledSendForm.value
+    );
+  })
+
+const showFormIsAllow = computed(() => {
+    if (formElement.value === false || methodWorksForm.value === "hidden") {
+      return false;
+    }
+
+    if (methodWorksForm.value === "show") {
+      return true;
+    }
+
+    return Boolean(
+      !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+      checkInitEnabledSendForm.value &&
+      checkAllowShowResultBlock.value
+    );
+  })
+
+
+
+
+
+
+watch(isExistGlobalErrorsValidationIgnoreHiddenElement, () => {
+      checkEnabledResultButton();
+    })
+watch(showFormIsAllow, (newValue) => {
+        if (newValue) {
+          showForm();
+        } else {
+          hiddenForm();
+        }
+    })
+watch(showInsideElementStatus, () => {
+      toggleTextAreaResultForDevMode();
+    })
+watch(showErrorSummaBlock, (newValue) => {
+        if (newValue) {
+          setAllowShowResultBlock(false);
+        }
+    })
+
+function changeValue(data) {
+      if (typeof data !== "object") {
+        return null;
+      }
+      const { name, type, eventType } = data;
+      if (eventType === "delete") {
+        hiddenElementOnResults(name);
+        checkEnabledResultButton();
+        return false;
+      }
+      tryAddResultElement(data);
+
+      if (type === "duplicator") {
+        tryModifiedResultElement({
+          elementName: name,
+          modifiedFieldName: "insertedTemplates",
+          newData: data.insertedTemplates,
+        });
+      }
+
+      if (
+        !eventNotShowTooltips.includes(eventType) &&
+        methodBeginningCalculationIsAutomatic.value
+      ) {
+        showAllTooltipsOn();
+        setAllowShowResultBlock(true);
+      }
+      if (
+        !eventNotShowTooltips.includes(eventType) &&
+        existFormulaForHiddenResultButton.value &&
+        methodBeginningCalculationIsButton.value
+      ) {
+        showAllTooltipsOn();
+      }
+
+      checkEnabledResultButton();
+    }
+/**
+ * Разрешаем отправку формы
+ */
+function checkEnabledResultButton() {
+  if (!formElement.value) {
+    findForm();
+  }
+  if (!submitResult.value) {
+    findSubmitForm();
+  }
+  setReadOnlyForTeleportField();
+
+  if (submitResult.value && !eventSubmittingFormAdded.value) {
+    setEventOnSubmit();
+  }
+
+  if (showFormIsAllow.value) {
+    showForm();
+  }
+
+  if (isEnabledSendForm.value && submitResult.value) {
+    submitResult.value.disabled = false;
+    submitResult.value.style.opacity = 1;
+  } else if (!isEnabledSendForm.value && submitResult.value) {
+    submitResult.value.disabled = true;
+    submitResult.value.style.opacity = 0.5;
+  }
+}
+
+/**
+ * Скрыть поле с данными
+ * @param name
+ */
+function hiddenElementOnResults(name) {
+  if (name in baseDataForCalculate.value) {
+    tryModifiedResultElement({
+      elementName: name,
+      modifiedFieldName: "isShow",
+      newData: false,
+    });
+  }
+}
+function showForm() {
+      if (!formElement.value) {
+        return false;
+      }
+      if (
+        Number(inputOptions.value?.resultOptions?.timerForSpinner) > 0 &&
+        methodWorksForm.value !== "show"
+      ) {
+        setTimeout(() => {
+          if (showFormIsAllow.value) {
+            formElement.value.style.display = "block";
+          }
+        }, inputOptions.value?.resultOptions?.timerForSpinner * 1000);
+      } else {
+        formElement.value.style.display = "block";
+      }
+    }
+function hiddenForm() {
+      if (formElement.value) {
+        formElement.value.style.display = "none";
+      }
+    }
+function findForm() {
+      const form = document.querySelector("#calc__form-for-result");
+      formElement.value = form ? form : null;
+    }
+function findSubmitForm() {
+      if (formElement.value) {
+        const submit = formElement.value.querySelector("button[type=submit]");
+        submitResult.value = submit ? submit : null;
+      }
+    }
+function findTeleportField() {
+      if (formElement.value) {
+        const teleportField = formElement.value.querySelector("#teleport");
+        teleportField.value = teleportField ? teleportField : null;
+      }
+    }
+function setReadOnlyForTeleportField() {
+      if (teleportField.value) {
+        findTeleportField();
+      }
+      if (teleportField.value) {
+        teleportField.value.readOnly = true;
+      }
+    }
+function setEventOnSubmit() {
+      if (!intervalName.value) {
+        submitResult.value.addEventListener("click", () => {
+          let counter = 0;
+          intervalName.value = setInterval(() => {
+            formElement.value = null;
+            submitResult.value = null;
+            eventSubmittingFormAdded.value = false;
+            checkEnabledResultButton();
+            counter++;
+            if (counter > 5) {
+              clearInterval(intervalName.value);
+            }
+          }, 1000);
+        });
+      }
+      eventSubmittingFormAdded.value = true;
+    }
+function toggleTextAreaResultForDevMode() {
+      if (showInsideElementStatus.value) {
+        if (teleportField.value) {
+          findTeleportField();
+        }
+        if (teleportField.value) {
+          teleportField.value.style.display = "block";
+        }
+      }
+      if (!showInsideElementStatus.value && teleportField.value) {
+        teleportField.value.style.display = "none";
+      }
+    }
+function tryPassDependency(name, value, isShow, displayValue, type) {
+      tryAddDependencyElement({
+        name,
+        value,
+        isShow,
+        displayValue,
+        type,
+      });
+    }
+
+onMounted(async () => {
+  if (IS_LOCAL) {
+    await fetch(LOCAL_PATH_DATA)
+      .then((response) => response.json())
+      .then((data) => {
+        inputTemplates.value = data;
+      });
+    await fetch(LOCAL_PATH_OPTIONS)
+      .then((response) => response.json())
+      .then((data) => {
+        inputOptions.value = data;
+      });
+  } else {
+    try {
+      inputTemplates.value.calculatorTemplates = JSON.parse(
+        JSON.stringify(window?.calculatorTemplates)
+      );
+    } catch (e) {
+      inputTemplates.value.calculatorTemplates = [];
+      console.error(
+        "Ошибка при получении списка шаблонов калькулятора" + e.message
+      );
+    }
+
+    try {
+      inputOptions.value = JSON.parse(
+        JSON.stringify(window?.calculatorOptions)
+      );
+    } catch (e) {
+      console.error(
+        "Ошибка при получении настроек калькулятора " + e.message
+      );
+      inputOptions.value = {};
+    }
+  }
+  calculatorTemplates.value = initUpdatingPositionData(inputTemplates.value);
+
+  isUseFormula.value = inputOptions.value?.computedMethod === "formula";
+  displayResultData.value = inputOptions.value?.computedMethod !== "no";
+  methodWorksForm.value = inputOptions.value?.methodWorksForm
+    ? inputOptions.value.methodWorksForm
+    : "show";
+  existFormulaForHiddenResultButton.value = Boolean(
+    inputOptions.value?.resultOptions?.formulaDisplayButton?.length
+  );
+
+  setInputOptions(inputOptions.value);
+  findForm();
+  findTeleportField();
+  findSubmitForm();
+
+  if (showFormIsAllow.value) {
+    showForm();
+  }
+
+  setInitEnabledSendForm(methodBeginningCalculationIsAutomatic.value);
+  tryToggleDevMode(Boolean(inputOptions.value?.devModeEnabled));
+  setTooltipOn(inputOptions.value);
+
+  // delete window?.calculatorTemplates;
+  // delete window?.calculatorOptions;
+})
+
+
+</script>
+
 <template>
   <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted" ref="parentRef">
     <template v-for="(template, index) in calculatorTemplates" :key="index">
@@ -88,694 +760,7 @@
   <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
 
-<script>
-import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
-import UiDuplicator from "@/components/UI/structural/duplicator/c_UiDuplicator.vue";
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
 
-import ErrorNamesTemplates from "@/components/UI/devMode/c_ErrorNamesTemplates.vue";
-import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
-import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
-import ResultButtonForComputed from "@/components/UI/other/c_ResultButtonForComputed.vue";
-
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-
-import { MixinsUtilityServices } from "@/mixins/MixinsUtilityServices";
-import { MixinLocalDependencyList } from "@/mixins/MixinLocalDependencyList";
-import { useBaseStore } from "@/store/piniaStore";
-import { mapState } from "pinia";
-
-import {
-  IS_LOCAL,
-  LOCAL_PATH_DATA,
-  LOCAL_PATH_OPTIONS,
-} from "@/constants/localData";
-
-import {
-  parseResultValueObjectItem,
-  processingArrayOnFormulaProcessingLogic,
-  parsingDataInFormulaOnSum,
-  getSummaFreeVariablesInFormula,
-  getListVariablesMissedInFormula,
-  decimalAdjust,
-} from "@/servises/UtilityServices.js";
-
-import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
-import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-
-export default {
-  name: "ConstructorCalculator",
-  mixins: [MixinsUtilityServices, MixinLocalDependencyList],
-  components: {
-    TemplatesWrapperStructural,
-    TemplatesWrapperColumn,
-    TemplatesWrapper,
-    ResultButtonForComputed,
-    ResultBlockForOutput,
-    SpinnerElement,
-    UiDuplicator,
-    ErrorNamesTemplates,
-    devBlock,
-  },
-  async mounted() {
-    if (IS_LOCAL) {
-      await fetch(LOCAL_PATH_DATA)
-        .then((response) => response.json())
-        .then((data) => {
-          this.inputTemplates = data;
-        });
-      await fetch(LOCAL_PATH_OPTIONS)
-        .then((response) => response.json())
-        .then((data) => {
-          this.inputOptions = data;
-        });
-    } else {
-      try {
-        this.inputTemplates.calculatorTemplates = JSON.parse(
-          JSON.stringify(window?.calculatorTemplates)
-        );
-      } catch (e) {
-        this.inputTemplates.calculatorTemplates = [];
-        console.error(
-          "Ошибка при получении списка шаблонов калькулятора" + e.message
-        );
-      }
-
-      try {
-        this.inputOptions = JSON.parse(
-          JSON.stringify(window?.calculatorOptions)
-        );
-      } catch (e) {
-        console.error(
-          "Ошибка при получении настроек калькулятора " + e.message
-        );
-        this.inputOptions = {};
-      }
-    }
-    this.calculatorTemplates = initUpdatingPositionData(this.inputTemplates);
-
-    this.isUseFormula = this.inputOptions?.computedMethod === "formula";
-    this.displayResultData = this.inputOptions?.computedMethod !== "no";
-    this.methodWorksForm = this.inputOptions?.methodWorksForm
-      ? this.inputOptions.methodWorksForm
-      : "show";
-    this.existFormulaForHiddenResultButton = Boolean(
-      this.inputOptions?.resultOptions?.formulaDisplayButton?.length
-    );
-
-    this.setInputOptions(this.inputOptions);
-    this.findForm();
-    this.findTeleportField();
-    this.findSubmitForm();
-
-    if (this.showFormIsAllow) {
-      this.showForm();
-    }
-
-    this.setInitEnabledSendForm(this.methodBeginningCalculationIsAutomatic);
-    this.tryToggleDevMode(Boolean(this.inputOptions?.devModeEnabled));
-    this.setTooltipOn(this.inputOptions);
-
-    delete window?.calculatorTemplates;
-    delete window?.calculatorOptions;
-  },
-  data() {
-    return {
-      inputTemplates: {}, // внешние данные с шаблонами элементов калькулятора
-      inputOptions: {}, // внешние данные с общими настройками калькулятора
-      calculatorTemplates: [], // список шаблонов элементов
-      isUseFormula: false, // использовать формулу
-      displayResultData: false, // включить работу формул и вывод данных
-      eventNotShowTooltips: [
-        "delete",
-        "mounted",
-        "timer",
-        "dependency",
-        "currentSelectedRadioButton",
-        "changeAmountSelectList",
-        "changeValueDependenciesElements",
-        "system",
-      ], // События при которых не должно срабатывать отображение ошибок
-      isHoverButtonResult: false,
-      methodWorksForm: "show",
-      formElement: null,
-      teleportField: null,
-      submitResult: null,
-      eventSubmittingFormAdded: null,
-      intervalName: null,
-      existFormulaForHiddenResultButton: false,
-    };
-  },
-  methods: {
-    changeValue(data) {
-      if (typeof data !== "object") {
-        return null;
-      }
-      const { name, type, eventType } = data;
-      if (eventType === "delete") {
-        this.hiddenElementOnResults(name);
-        this.checkEnabledResultButton();
-        return false;
-      }
-      this.tryAddResultElement(data);
-
-      if (type === "duplicator") {
-        this.tryModifiedResultElement({
-          elementName: name,
-          modifiedFieldName: "insertedTemplates",
-          newData: data.insertedTemplates,
-        });
-      }
-
-      if (
-        !this.eventNotShowTooltips.includes(eventType) &&
-        this.methodBeginningCalculationIsAutomatic
-      ) {
-        this.showAllTooltipsOn();
-        this.setAllowShowResultBlock(true);
-      }
-      if (
-        !this.eventNotShowTooltips.includes(eventType) &&
-        this.existFormulaForHiddenResultButton &&
-        this.methodBeginningCalculationIsButton
-      ) {
-        this.showAllTooltipsOn();
-      }
-
-      this.checkEnabledResultButton();
-    },
-    /**
-     * Разрешаем отправку формы
-     */
-    checkEnabledResultButton() {
-      if (!this.formElement) {
-        this.findForm();
-      }
-      if (!this.submitResult) {
-        this.findSubmitForm();
-      }
-      this.setReadOnlyForTeleportField();
-
-      if (this.submitResult && !this.eventSubmittingFormAdded) {
-        this.setEventOnSubmit();
-      }
-
-      if (this.showFormIsAllow) {
-        this.showForm();
-      }
-
-      if (this.isEnabledSendForm && this.submitResult) {
-        this.submitResult.disabled = false;
-        this.submitResult.style.opacity = 1;
-      } else if (!this.isEnabledSendForm && this.submitResult) {
-        this.submitResult.disabled = true;
-        this.submitResult.style.opacity = 0.5;
-      }
-    },
-
-    /**
-     * Скрыть поле с данными
-     * @param name
-     */
-    hiddenElementOnResults(name) {
-      if (name in this.baseDataForCalculate) {
-        this.tryModifiedResultElement({
-          elementName: name,
-          modifiedFieldName: "isShow",
-          newData: false,
-        });
-      }
-    },
-    showForm() {
-      if (!this.formElement) {
-        return false;
-      }
-      if (
-        Number(this.inputOptions?.resultOptions?.timerForSpinner) > 0 &&
-        this.methodWorksForm !== "show"
-      ) {
-        setTimeout(() => {
-          if (this.showFormIsAllow) {
-            this.formElement.style.display = "block";
-          }
-        }, this.inputOptions?.resultOptions?.timerForSpinner * 1000);
-      } else {
-        this.formElement.style.display = "block";
-      }
-    },
-    hiddenForm() {
-      if (this.formElement) {
-        this.formElement.style.display = "none";
-      }
-    },
-    findForm() {
-      const form = document.querySelector("#calc__form-for-result");
-      this.formElement = form ? form : null;
-    },
-    findSubmitForm() {
-      if (this.formElement) {
-        const submit = this.formElement.querySelector("button[type=submit]");
-        this.submitResult = submit ? submit : null;
-      }
-    },
-    findTeleportField() {
-      if (this.formElement) {
-        const teleportField = this.formElement.querySelector("#teleport");
-        this.teleportField = teleportField ? teleportField : null;
-      }
-    },
-    setReadOnlyForTeleportField() {
-      if (this.teleportField) {
-        this.findTeleportField();
-      }
-      if (this.teleportField) {
-        this.teleportField.readOnly = true;
-      }
-    },
-    setEventOnSubmit() {
-      if (!this.intervalName) {
-        this.submitResult.addEventListener("click", () => {
-          let counter = 0;
-          this.intervalName = setInterval(() => {
-            this.formElement = null;
-            this.submitResult = null;
-            this.eventSubmittingFormAdded = false;
-            this.checkEnabledResultButton();
-            counter++;
-            if (counter > 5) {
-              clearInterval(this.intervalName);
-            }
-          }, 1000);
-        });
-      }
-      this.eventSubmittingFormAdded = true;
-    },
-    toggleTextAreaResultForDevMode() {
-      if (this.showInsideElementStatus) {
-        if (this.teleportField) {
-          this.findTeleportField();
-        }
-        if (this.teleportField) {
-          this.teleportField.style.display = "block";
-        }
-      }
-      if (!this.showInsideElementStatus && this.teleportField) {
-        this.teleportField.style.display = "none";
-      }
-    },
-    tryPassDependency(name, value, isShow, displayValue, type) {
-      this.tryAddDependencyElement({
-        name,
-        value,
-        isShow,
-        displayValue,
-        type,
-      });
-    },
-  },
-  watch: {
-    isExistGlobalErrorsValidationIgnoreHiddenElement() {
-      this.checkEnabledResultButton();
-    },
-    showFormIsAllow: {
-      handler(newValue) {
-        if (newValue) {
-          this.showForm();
-        } else {
-          this.hiddenForm();
-        }
-      },
-    },
-    showInsideElementStatus() {
-      this.toggleTextAreaResultForDevMode();
-    },
-    showErrorSummaBlock: {
-      handler(newValue) {
-        if (newValue) {
-          this.setAllowShowResultBlock(false);
-        }
-      },
-    },
-  },
-  computed: {
-    ...mapState(useBaseStore, [
-      "showAllTooltipsOn",
-      "tryAddResultElement",
-      "tryModifiedResultElement",
-      "tryToggleDevMode",
-      "isCanShowAllTooltips",
-      "isExistGlobalErrorsValidationIgnoreHiddenElement",
-      "globalDependenciesList",
-      "getNameReserveVariable",
-      "getAllResultsElements",
-      "devMode",
-      "showInsideElementStatus",
-      "getImageDir",
-      "appIsMounted",
-      "setTooltipOn",
-      "getCurrency",
-      "methodBeginningCalculationIsAutomatic",
-      "methodBeginningCalculationIsButton",
-      "setInitEnabledSendForm",
-      "checkInitEnabledSendForm",
-      "setAllowShowResultBlock",
-      "checkAllowShowResultBlock",
-      "checkedIsStructureTemplate",
-      "tryAddDependencyElement",
-      "getSignAfterDot",
-      "getRoundOffType",
-      "setInputOptions",
-      "getTitleSum",
-    ]),
-    mainFormulaIsExist() {
-      return Boolean(this.mainFormulaResult?.length);
-    },
-    mainFormulaResult() {
-      if (!this.isExistDependencyMainFormula) {
-        return this.inputOptions?.formula?.length
-          ? this.inputOptions?.formula
-          : "";
-      }
-      const formulaAfterDependency =
-        this.inputOptions.dependencyMainFormula?.reduce(
-          (resultFormula, item) => {
-            let dependencyFormula = this.getArrayElementsFromFormula(
-              item.dependencyFormula
-            );
-            this.constructLocalListElementDependencyInFormula(
-              dependencyFormula
-            );
-            dependencyFormula = processingVariablesOnFormula(
-              dependencyFormula,
-              this.localDependencyList
-            );
-
-            const formulaIsExist = Boolean(item?.formula?.length);
-            try {
-              if (eval(dependencyFormula) && formulaIsExist) {
-                resultFormula = item.formula;
-              }
-            } catch (e) {
-              if (this.devMode) {
-                console.error(
-                  "Формула зависимости для смены главной формулы: " + e.message
-                );
-              }
-            }
-            return resultFormula;
-          },
-          ""
-        );
-
-      const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
-      if (isFormulaAfterDependency) {
-        return formulaAfterDependency;
-      }
-
-      return this.inputOptions?.formula?.length
-        ? this.inputOptions?.formula
-        : "";
-    },
-    isExistDependencyMainFormula() {
-      return Boolean(this.inputOptions?.dependencyMainFormula?.length);
-    },
-    /**
-     * Данные которые подходят для вывода или расчета
-     * @returns {{length}|unknown[]|*[]}
-     */
-    baseDataForCalculate() {
-      return Object.values(this.getAllResultsElements).filter(
-        (item) => !Boolean(item?.isDuplicator)
-      );
-    },
-    /**
-     * Разбиваем полученную формулу на массив с переменными и знаками.
-     * Избавляемся от пустых элементов.
-     * @returns {*[]|*}
-     */
-    variablesInFormula() {
-      if (this.mainFormulaIsExist) {
-        return this.getArrayElementsFromFormula(this.mainFormulaResult);
-      }
-      return [];
-    },
-    /**
-     * Список переменных не используемых в формуле
-     * @returns {[]}
-     */
-    freeVariablesOutsideFormula() {
-      return getListVariablesMissedInFormula(
-        this.baseDataForCalculate,
-        this.variablesInFormula
-      );
-    },
-
-    /**
-     * сумма всех не используемых в формуле переменных
-     * @returns {*}
-     */
-    summaFreeVariables() {
-      return getSummaFreeVariablesInFormula(this.freeVariablesOutsideFormula);
-    },
-    /**
-     * Список переменных из формулы вместе с данными
-     * @returns {*}
-     */
-    dataListVariablesOnFormula() {
-      return this.variablesInFormula?.map((item) => {
-        if (item === this.getNameReserveVariable) {
-          this.tryPassDependency(
-            "_otherSum_",
-            this.summaFreeVariables,
-            Boolean(this.summaFreeVariables !== null),
-            this.summaFreeVariables,
-            "_otherSum_"
-          );
-          return this.getProxyFreeVariables(this.summaFreeVariables);
-        } else {
-          const data = this.baseDataForCalculate.filter(
-            (itemInner) => itemInner.name === item
-          );
-          return data.length ? data[0] : item;
-        }
-      });
-    },
-
-    /**
-     * Отдает формулу с подставленными значениями
-     * @returns {*}
-     */
-    resultTextForComputed() {
-      const resultString = parsingDataInFormulaOnSum(
-        processingArrayOnFormulaProcessingLogic(this.dataListVariablesOnFormula)
-      );
-      return resultString?.replace(
-        /[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g,
-        ""
-      );
-    },
-
-    /**
-     *  рассчитываем формулу через eval
-     * @returns {boolean|any}
-     */
-    combinedFormulaDataTogether() {
-      try {
-        const resultNumber = eval(this.resultTextForComputed);
-        if (!isNaN(resultNumber) && isFinite(resultNumber)) {
-          return resultNumber;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        if (this.devMode) {
-          console.warn("Рассчитываемая формула: ", this.resultTextForComputed);
-        }
-        return null;
-      }
-    },
-
-    /**
-     * Данные нужные только для вывода в форму
-     * @returns {*[]}
-     */
-    sortPositionDataForOutput() {
-      return this.baseDataForCalculate.sort(
-        (itemA, itemB) => itemA.position - itemB.position
-      );
-    },
-    /**
-     * Текст со всеми полями которые должны отображаться в форме
-     * @returns {string}
-     */
-    resultTextDataForForm() {
-      let result = "";
-      this.sortPositionDataForOutput.forEach((item) => {
-        if (item.type === "duplicator") {
-          if (item?.insertedTemplates?.length && item.isShow) {
-            item?.insertedTemplates.forEach((duplicator) => {
-              if (duplicator?.insertedTemplates?.length) {
-                const resultValueObjectItem = parseResultValueObjectItem(
-                  duplicator,
-                  "formOutputMethod",
-                  duplicator?.unit
-                );
-                if (resultValueObjectItem?.length) {
-                  result += resultValueObjectItem;
-                }
-                duplicator?.insertedTemplates.forEach(
-                  (templateInDuplicator) => {
-                    const resultValueObjectItemInDuplicator =
-                      parseResultValueObjectItem(
-                        templateInDuplicator,
-                        "formOutputMethod",
-                        this.getCurrency
-                      );
-                    if (resultValueObjectItemInDuplicator?.length) {
-                      result += resultValueObjectItemInDuplicator;
-                    }
-                  }
-                );
-              }
-            });
-          }
-        } else {
-          const data = parseResultValueObjectItem(
-            item,
-            "formOutputMethod",
-            this.getCurrency
-          );
-          if (data.length) {
-            result += data;
-          }
-        }
-      });
-      return result;
-    },
-
-    /**
-     * Общая сумма расчета
-     * @returns {*|boolean}
-     */
-    finalSummaForOutput() {
-      if (
-        !this.displayResultData ||
-        this.isExistGlobalErrorsValidationIgnoreHiddenElement
-      ) {
-        this.tryPassDependency("_globalSum_", null, false, null, "App_calc");
-        return null;
-      }
-      let resultSum = null;
-      if (this.isUseFormula && this.mainFormulaIsExist) {
-        resultSum = this.combinedFormulaDataTogether;
-      } else {
-        resultSum = this.baseDataForCalculate.reduce((sum, item) => {
-          if (item.cost !== null && !item.excludeFromCalculations) {
-            return sum + parseFloat(item.cost);
-          }
-          return sum + 0;
-        }, 0);
-      }
-      resultSum = decimalAdjust(
-        resultSum,
-        this.getSignAfterDot,
-        this.getRoundOffType
-      );
-
-      this.tryPassDependency(
-        "_globalSum_",
-        resultSum,
-        Boolean(resultSum !== null),
-        resultSum,
-        "App_calc"
-      );
-
-      return resultSum;
-    },
-    /**
-     * Текст для вывода в форму
-     * @returns {string}
-     */
-    finalTextForOutput() {
-      let result = this.resultTextDataForForm;
-      if (this.finalSummaForOutput === null) {
-        return result;
-      }
-
-      if (this.finalSummaForOutput === false) {
-        result += "Есть ошибка в расчетах!";
-      } else {
-        result +=
-          "\n" +
-          this.getTitleSum +
-          " " +
-          this.finalSummaForOutput +
-          " " +
-          this.getCurrency;
-      }
-      return result;
-    },
-
-    finalTextForOutputForTeleport() {
-      return this.finalTextForOutput.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
-    },
-    /**
-     * Отобразить блок с текстом о наличии ошибок,
-     * если ошибки есть и глобально разрешено их отображение
-     * @returns {false|boolean}
-     */
-    showErrorTextBlock() {
-      return Boolean(
-        this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-          this.isCanShowAllTooltips
-      );
-    },
-    isEnabledSendForm() {
-      return (
-        this.checkInitEnabledSendForm &&
-        this.finalTextForOutput?.length &&
-        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-        !this.showErrorSummaBlock
-      );
-    },
-    /**
-     * Отправить данные в форму если нет ошибок валидации и разрешена отправка
-     * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
-     */
-    allowTeleport() {
-      return Boolean(
-        this.submitResult &&
-          !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-          this.checkInitEnabledSendForm
-      );
-    },
-    showErrorSummaBlock() {
-      return Boolean(
-        (this.finalSummaForOutput === null ||
-          this.finalSummaForOutput === false) &&
-          this.isCanShowAllTooltips &&
-          this.displayResultData
-      );
-    },
-    showFormIsAllow() {
-      if (this.formElement === false || this.methodWorksForm === "hidden") {
-        return false;
-      }
-
-      if (this.methodWorksForm === "show") {
-        return true;
-      }
-
-      return Boolean(
-        !this.isExistGlobalErrorsValidationIgnoreHiddenElement &&
-          this.checkInitEnabledSendForm &&
-          this.checkAllowShowResultBlock
-      );
-    },
-  },
-};
-</script>
 
 <style lang="scss">
 //$c_base_title                   : var(--c_base_title);
