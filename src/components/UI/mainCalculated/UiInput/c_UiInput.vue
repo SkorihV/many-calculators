@@ -294,8 +294,8 @@ const localCost = computed(() => {
         reactive({
           dependencyArrayItems: toRef(props, 'dependencyPrices'),
           formulaFieldName:  "dependencyFormulaCost",
-          templateName: "UiRange",
-          value: resultValue.value
+          templateName: "UiInput",
+          value: localInputValue.value
         })
       );
       if (newCost !== null) {
