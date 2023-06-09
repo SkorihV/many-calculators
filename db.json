@@ -1389,7 +1389,7 @@
         "step": "1",
         "showSteps": true,
         "stepPrompt": 10,
-        "isNeedChoice": 1,
+        "isNeedChoice": false,
         "notEmpty": false,
         "showStaticValue": 1,
         "showDynamicValue": 1,

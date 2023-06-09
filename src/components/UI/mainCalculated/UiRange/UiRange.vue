@@ -2,6 +2,8 @@
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
+import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { onMounted, onUnmounted, ref, watch, computed, reactive, toRef } from "vue";
 import {useEventListener} from "@/composables/useEventsListener";
@@ -13,9 +15,6 @@ import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useW
 import {checkedValueOnVoid} from '@/servises/UtilityServices'
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-
-
-
 
 const {isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState} = getBaseStoreGetters()
 const {tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, tryDeleteAllDataOnStoreForElementName} = getBaseStoreAction(['tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'tryDeleteAllDataOnStoreForElementName',])
@@ -49,7 +48,6 @@ const props = defineProps({
     },
   },
   /**
-   *
    * Шаг деления в ленте
    */
   stepPrompt: {
@@ -60,7 +58,6 @@ const props = defineProps({
     },
   },
   /**
-   *
    *     Отобразить текущее значение статичное
    */
   showStaticValue: {
@@ -109,22 +106,18 @@ const props = defineProps({
   ]),
 })
 
-
 const thisElementInputRangeRef = ref(null)
 const staticRef = ref(null)
 const parentRef = ref(null)
 
-
 const elementWidth = ref( 0);
 const resultValue = ref( null);
-const dynamicValue = ref( null);
 const textErrorNotEmpty = ref( "Обязательное поле.");
 const updateValueTimer = ref( null);
 const canBeShownTooltip = ref( false);
 const timerNameForLocalValue = ref( null);
 const minimalWidthStaticElement = ref( 15);
 const staticElementWidth = ref( minimalWidthStaticElement.value);
-
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
@@ -157,40 +150,13 @@ const localMax = computed(() => {
 const localStep = computed(() => {
       return checkedValueOnVoid(props.step) ? parseFloat(props.step) : 1;
     })
-const localStepPrompt = computed(() => {
-      return checkedValueOnVoid(props.stepPrompt)
-        ? parseFloat(props.stepPrompt)
-        : 1;
-    })
+
 const localElementName = computed(() => {
       return checkedValueOnVoid(props.elementName)
         ? props.elementName
         : Math.random().toString();
     })
-const isHidePromptSteps = computed(() => {
-  return (
-    !props.showSteps &&
-    !localMin.value &&
-    !localMax.value &&
-    localStepPrompt.value < 1
-  );
-})
 
-const returnSteps = computed(() => {
-      let steps = [];
-
-      if (isHidePromptSteps.value) {
-        return steps;
-      }
-      for (
-        let i = localMin.value;
-        i <= localMax.value;
-        i += localStepPrompt.value
-      ) {
-        steps.push(i);
-      }
-      return steps;
-    })
 const isErrorEmpty = computed(() => {
       return props.notEmpty && resultValue.value === null;
     })
@@ -249,31 +215,6 @@ const positionStaticResultValue = computed(() => {
       }
       return newPosition + "px";
     })
-const amountSteps = computed(() => {
-      return (localMax.value - localMin.value) / localStepPrompt.value;
-    })
-const pointsForStepsLine = computed(() => {
-      const rightShiftElementWidth = 21;
-      const firstPointPosition = 12;
-      let points = [];
-      const width = elementWidth.value - rightShiftElementWidth;
-
-      points.push(firstPointPosition);
-      let i = 1;
-      for (i; i <= amountSteps.value; i++) {
-        const percent =
-          (localStepPrompt.value * i) / (localMax.value - localMin.value);
-        let position = 0;
-        if (returnSteps.value[i].toString().length === 1) {
-          position = width * percent + 11;
-        } else {
-          position = width * percent + 10;
-        }
-
-        points.push(position.toFixed(4));
-      }
-      return points;
-    })
 const isStaticValue = computed(() => {
       return (
         props.showStaticValue &&
@@ -282,13 +223,6 @@ const isStaticValue = computed(() => {
         positionStaticResultValue.value !== null
       );
     })
-const isShowStepLine = computed(() => {
-      return props.showSteps && elementWidth.value > 220;
-    })
-
-
-
-
 
 /**
  * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
@@ -309,16 +243,9 @@ watch(isVisibilityFromDependency, (newValue) => {
         changeValue("dependency");
 
     })
-watch(dynamicValue, (newValue) => {
-      dynamicValue.value = checkValidValueReturnNumber(newValue);
-      if (resultValue.value !== dynamicValue.value) {
-        changeDynamicValue();
-      }
-    })
-watch(resultValue, (newValue) => {
-      if (newValue !== dynamicValue.value) {
-        dynamicValue.value = newValue;
-      }
+
+watch(resultValue, () => {
+      tryChangeValue();
     })
 watch(getSomeElementChangedSelfVisibilityState, () => {
       updatedCurrentWidth();
@@ -327,14 +254,10 @@ watch(getSomeElementChangedSelfVisibilityState, () => {
       }, 10);
     })
 
-
-
-
 function initBaseData(eventType = "mounted") {
       let timer = setInterval(() => {
         if (checkedValueOnVoid(props.rangeValue)) {
           resultValue.value = parseFloat(props.rangeValue);
-          dynamicValue.value = parseFloat(props.rangeValue);
           changeValue(eventType);
           clearInterval(timer);
         }
@@ -343,25 +266,12 @@ function initBaseData(eventType = "mounted") {
         clearInterval(timer);
       }, 10000);
     }
-function changeValueStep(step) {
-      resultValue.value = checkValidValueReturnNumber(step);
-      updateStaticElementWidth();
-      changeValue("changeValueStep");
-    }
 function tryChangeValue(e) {
       clearTimeout(timerNameForLocalValue.value);
-      resultValue.value = checkValidValueReturnNumber(e.target.value);
+      resultValue.value = checkValidValueReturnNumber(resultValue.value);
       updateStaticElementWidth();
       timerNameForLocalValue.value = setTimeout(() => {
         changeValue();
-      }, 500);
-    }
-function changeDynamicValue() {
-      resultValue.value = dynamicValue.value;
-      updateStaticElementWidth();
-      clearTimeout(timerNameForLocalValue.value);
-      timerNameForLocalValue.value = setTimeout(() => {
-        changeValue("changeDynamicValue");
       }, 500);
     }
 function checkValidValueReturnNumber(checkedValue) {
@@ -438,13 +348,13 @@ function updatedCostForOut(cost) {
         : null;
     }
 function plus() {
-      dynamicValue.value = checkValidValueReturnNumber(
-        dynamicValue.value + localStep.value
+      resultValue.value = checkValidValueReturnNumber(
+        resultValue.value + localStep.value
       );
     }
 function minus() {
-      dynamicValue.value = checkValidValueReturnNumber(
-        dynamicValue.value - localStep.value
+  resultValue.value = checkValidValueReturnNumber(
+    resultValue.value - localStep.value
       );
     }
 function updateWidthElement() {
@@ -459,17 +369,10 @@ function updateStaticElementWidth() {
         ? staticRef.value?.offsetWidth
         : minimalWidthStaticElement.value;
     }
-function resizeUpdateWidthElement() {
-      updateWidthElement();
-    }
-function contentLoadedUpdateWidthElement() {
-      updateWidthElement();
-    }
 
 
-
-useEventListener(window, "resize", resizeUpdateWidthElement)
-useEventListener(document, "DOMContentLoaded", contentLoadedUpdateWidthElement)
+useEventListener(window, "resize", updateWidthElement)
+useEventListener(document, "DOMContentLoaded", updateWidthElement)
 
 onMounted(() => {
   if (!props.isNeedChoice) {
@@ -539,24 +442,17 @@ onUnmounted(() => {
             :min="localMin"
             :max="localMax"
             :step="localStep"
-            :value="resultValue"
-            @input="tryChangeValue"
+            v-model="resultValue"
             :name="localElementName"
           />
-          <div v-if="isShowStepLine" class="calc__range-steps-wrapper">
-            <div
-              class="calc__range-steps-item"
-              @click="changeValueStep(step)"
-              v-for="(step, inx) in returnSteps"
-              :style="{ left: pointsForStepsLine[inx] + 'px' }"
-              :key="inx"
-              :class="{
-                'calc__range-steps-item_selected': step === resultValue,
-              }"
-            >
-              <div class="calc__range-steps-item-value">{{ step }}</div>
-            </div>
-          </div>
+          <step-line
+            :local-max="localMax"
+            :local-min="localMin"
+            :step-prompt="stepPrompt"
+            :show-steps="showSteps"
+            :element-width="elementWidth"
+            v-model:modelValue="resultValue"
+          />
           <div
             v-if="isStaticValue"
             :style="{ left: positionStaticResultValue }"
@@ -575,7 +471,7 @@ onUnmounted(() => {
             :class="{ isError: isClassError }"
             v-if="showDynamicValue"
             type="text"
-            v-model="dynamicValue"
+            v-model="resultValue"
             @keydown.up="plus"
             @keydown.down="minus"
           />
