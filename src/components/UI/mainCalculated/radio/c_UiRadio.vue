@@ -102,7 +102,7 @@ const {formulaAfterProcessingVariables, isVisibilityFromDependency, costAfterPro
 )
 
 useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid)
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 
 onMounted(() => {

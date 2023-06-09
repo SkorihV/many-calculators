@@ -23,6 +23,7 @@ export const useReportInitialStatusForElement = (parentIsShow, changeValue, chan
      */
     watch(() => parentIsShow.value, (newValue) => {
         if (newValue) {
+            console.log(1);
             changeValue("global");
         } else {
             changeValue("delete");

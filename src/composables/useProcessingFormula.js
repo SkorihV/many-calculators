@@ -4,9 +4,8 @@ import {
   getBaseStoreGetters,
   getBaseStoreAction,
 } from "@/composables/useBaseStore";
-import {computed, isReactive, reactive, toRef, unref, watch} from "vue";
+import {computed, toRef, watch} from "vue";
 import { useUtilityServices } from "@/composables/useUtilityServices";
-import {processingArrayOnFormulaProcessingLogic} from "@/servises/UtilityServices";
 
 export function useProcessingFormula(dataObject) {
   const dependencyFormulaDisplay = toRef(

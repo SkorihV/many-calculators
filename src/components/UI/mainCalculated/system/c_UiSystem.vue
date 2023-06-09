@@ -16,7 +16,7 @@ import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
-import { computed, onUnmounted, reactive, ref, toRef, watch } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref, toRef, watch } from "vue";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -83,6 +83,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterPro
       localDependencyList: localDependencyList
     })
 )
+
 useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 useDisplaySpinner(props.elementName)
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
@@ -291,7 +292,9 @@ function tryPassDependency() {
     type: "system",
   });
 }
-
+onMounted(() => {
+  changeValue("mounted");
+})
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
 })

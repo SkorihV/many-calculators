@@ -6,7 +6,7 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrappe
 
 import ErrorNamesTemplates from "@/components/UI/devMode/c_ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
-import ResultBlockForOutput from "@/components/UI/other/c_ResultBlockForOutput.vue";
+import ResultBlockForOutput from "@/components/UI/other/ResultBlock/c_ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/c_ResultButtonForComputed.vue";
 
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
@@ -730,6 +730,7 @@ onMounted(async () => {
       Не все поля участвующие в расчете были заполнены.
     </div>
     <result-button-for-computed
+      v-if="inputOptions?.resultOptions"
       :resultOptions="inputOptions?.resultOptions"
       @checkEnabledResultButton="checkEnabledResultButton"
     />
@@ -2745,7 +2746,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 10px;
       border: 2px dashed gray;
       margin-bottom: 20px;
-      width: 100%;
       background: repeating-linear-gradient(
         -60deg,
         #bebdbd3d 0,

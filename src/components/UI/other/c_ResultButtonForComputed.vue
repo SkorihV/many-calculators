@@ -1,10 +1,11 @@
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import {computed, ref, watch} from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
-import {useUtilityServices} from "@/composables/useUtilityServices"
+import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
+import {useProcessingFormula} from "@/composables/useProcessingFormula";
+
 
 const {
   methodBeginningCalculationIsButton,
@@ -15,7 +16,7 @@ const {
 } = getBaseStoreGetters()
 
 const {setAllowShowResultBlock, setInitEnabledSendForm, showAllTooltipsOn} = getBaseStoreAction(['setAllowShowResultBlock', 'setInitEnabledSendForm', 'showAllTooltipsOn'])
-const {getArrayElementsFromFormula} = useUtilityServices()
+
 
 const emits = defineEmits(['checkEnabledResultButton'])
 const props = defineProps({
@@ -26,6 +27,16 @@ const props = defineProps({
 })
 
 const isHoverButton = ref(false)
+
+const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+  reactive({
+    localDependencyList: localDependencyList,
+    constructLocalListElementDependencyInFormula,
+    formula: props.resultOptions?.formulaDisplayButton,
+    parentIsShow: true
+  })
+)
 
 
 function calculateResult() {
@@ -45,55 +56,15 @@ watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
 
 const showResultBtn = computed(() => methodBeginningCalculationIsButton.value)
 
-const formulaOnDataVariables = computed(() => {
-  return processingVariablesOnFormula(
-      variablesInFormula.value,
-      localDependencyList.value
-  );
-})
-/**
- *  рассчитываем формулу через eval
- * @returns {boolean|any}
- */
-const isDisplayButtonOnFormulaDependency = computed(() => {
-  try {
-    return eval(formulaOnDataVariables.value);
-  } catch (e) {
-    if (devMode.value) {
-      console.warn(
-          "Рассчитываемая формула кнопки: ",
-          formulaOnDataVariables.value
-      );
-    }
-    return null;
-  }
-})
+const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
+
 const showButtonOnDependency = computed(() =>  !isFormulaDisplayButton.value
     ? true
-    : isDisplayButtonOnFormulaDependency.value
+    : isVisibilityFromDependency.value
 )
 
 const showBtn = computed(() => showResultBtn.value && showButtonOnDependency.value && !checkAllowShowResultBlock.value)
 
-
-const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
-
-
-const variablesInFormula = computed(() => isFormulaDisplayButton.value
-    ? getArrayElementsFromFormula(
-        props.resultOptions?.formulaDisplayButton
-    )
-    : [])
-
-const localDependencyList = computed(() =>{
-    let listObject = {};
-    variablesInFormula.value.forEach((name) => {
-      if (globalDependenciesList.value[name]) {
-        listObject[name] = this.globalDependenciesList[name];
-      }
-    });
-    return listObject;
-})
 </script>
 
 <template>
@@ -115,8 +86,9 @@ const localDependencyList = computed(() =>{
   <dev-block
     v-if="showResultBtn"
     :label="resultOptions?.titleButton ?? 'Рассчитать'"
+    :is-visibility-from-dependency="showBtn"
     :dependency-formula-display="resultOptions?.formulaDisplayButton"
-    :parsing-formula-variables="formulaOnDataVariables"
+    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-value
     hidden-cost
   />

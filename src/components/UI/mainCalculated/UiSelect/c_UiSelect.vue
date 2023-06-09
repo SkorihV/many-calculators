@@ -332,6 +332,11 @@ watch(isVisibilityFromDependency, (newValue, oldValue) => {
   }
 })
 
+
+watch(localCost, () => {
+  changeValue('dependency')
+}, {deep: true})
+
 watch(() => currentOption, (newValue) => {
   if (newValue.value?.isShow === false) {
     initSelect();
@@ -403,8 +408,8 @@ function changeSelect(item, inx, eventType = "click") {
 }
 function changeValue(eventType = "click") {
     emits("changedValue", {
-      value: currentOptionValue,
-      displayValue: currentOptionDisplayValue,
+      value: currentOptionValue.value,
+      displayValue: currentOptionDisplayValue.value,
       index: currentIndexOption.value,
       name: localElementName.value,
       type: "select",

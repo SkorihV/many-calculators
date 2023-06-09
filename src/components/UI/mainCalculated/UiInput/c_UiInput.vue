@@ -143,7 +143,7 @@ const canBeShownTooltip = ref(false)
 
 
 useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid)
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 const {getArrayElementsFromFormula} = useUtilityServices()
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
