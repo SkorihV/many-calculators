@@ -6,11 +6,13 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
-import {computed, onMounted, onUnmounted, reactive, ref, toRef, watch, nextTick} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref, toRef, watch} from "vue";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {checkedValueOnVoid} from "@/servises/UtilityServices"
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
+import goScrollToElement from "@/components/UI/mainCalculated/UiCheckbox/goScrollToElement";
+import {useIsCheckedType} from "@/components/UI/mainCalculated/UiCheckbox/useIsCheckedType";
 
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
@@ -103,9 +105,8 @@ const isExistLabel = computed(() => {
   return Boolean(props.label.toString()?.length);
 })
 const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
-
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
-
+const {isBase, isButton, isSwitcher, isSwitcherVertical} = useIsCheckedType(props.typeDisplayClass)
 
 onMounted(() => {
   checkboxValue.value = props.baseValue === "active";
@@ -125,27 +126,12 @@ onMounted(() => {
   changeValue("mounted");
 })
 
-
 const localElementName = computed(() => {
     return checkedValueOnVoid(props.elementName)
         ? props.elementName
         : Math.random().toString();
   })
-const checkboxType = computed(() => {
-  return props.typeDisplayClass ? props.typeDisplayClass : "base";
-})
-const isButton = computed(() => {
-  return checkboxType.value === "button";
-})
-const isSwitcher = computed(() => {
-    return checkboxType.value === "switcher";
-  })
-const isBase = computed(() => {
-    return checkboxType.value === "base";
-  })
-const isSwitcherVertical = computed(() => {
-  return checkboxType.value === "switcher-vertical";
-})
+
 const isErrorEmpty = computed(() => {
     return Boolean(props.isNeedChoice && !isLocalChecked.value);
 })
@@ -191,37 +177,33 @@ const localCost = computed(() => {
           : null;
 })
 
-
-
-
-watch(() => isVisibilityFromDependency, (value) => {
+watch(isVisibilityFromDependency, (value) => {
   if (value) {
-    isLocalChecked.value= !props.isNeedChoice
+    isLocalChecked.value = !props.isNeedChoice
         ? Boolean(checkboxValue.value || isChecked.value)
         : null;
   } else {
-    isLocalChecked.value= null;
+    isLocalChecked.value = null;
   }
   changeValue("dependency");
 })
-
 
 function inputLocalValue() {
   if (notActive.value) {
     return null;
   }
   if (!isChecked.value) {
-    isLocalChecked.value= !isLocalChecked.value;
+    isLocalChecked.value = !isLocalChecked.value;
   }
   currentLocalTextButton.value =
-      isLocalChecked.value&& props.buttonTextChecked?.length
+      isLocalChecked.value && props.buttonTextChecked?.length
           ? props.buttonTextChecked
           : props.buttonText;
   changeValue("click");
 }
 function changeValue(eventType = "click") {
   emits("changedValue", {
-    value: isVisibilityFromDependency ? isLocalChecked.value: null,
+    value: isVisibilityFromDependency.value ? isLocalChecked.value: null,
     displayValue: isLocalChecked.value? "Да" : "Нет",
     name: localElementName.value,
     type: "UiCheckbox",
@@ -232,7 +214,7 @@ function changeValue(eventType = "click") {
     resultOutputMethod:
         props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
-    isShow: isVisibilityFromDependency,
+    isShow: isVisibilityFromDependency.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
@@ -240,20 +222,20 @@ function changeValue(eventType = "click") {
   });
   tryPassDependency();
   changeValid(eventType);
-  if (isLocalChecked.value&& props.scrollIntoName) {
-    goToElementScroll();
+  if (isLocalChecked.value && props.scrollIntoName) {
+    goScrollToElement(props.scrollIntoName);
   }
 }
 function changeValid(eventType) {
   checkValidationDataAndToggle({
-    error: isVisibilityFromDependency
+    error: isVisibilityFromDependency.value
         ? isErrorEmpty.value
-        : isVisibilityFromDependency,
+        : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "UiCheckbox",
     label: props.label,
     eventType,
-    isShow: isVisibilityFromDependency,
+    isShow: isVisibilityFromDependency.value,
     parentName: props.parentName,
   });
   if (eventType !== "mounted") {
@@ -263,27 +245,12 @@ function changeValid(eventType) {
 function tryPassDependency() {
   tryAddDependencyElement({
     name: localElementName.value,
-    value: isVisibilityFromDependency ? isLocalChecked.value: null,
-    isShow: isVisibilityFromDependency,
+    value: isVisibilityFromDependency.value ? isLocalChecked.value: null,
+    isShow: isVisibilityFromDependency.value,
     displayValue: currentLocalTextButton.value,
     type: "UiCheckbox",
   });
 }
-function goToElementScroll() {
-  nextTick(() => {
-    const elementToScroll = document.querySelector(
-        "#" + [props].scrollIntoName
-    );
-    if (Boolean(elementToScroll)) {
-      elementToScroll.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "start",
-      });
-    }
-  });
-}
-
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);

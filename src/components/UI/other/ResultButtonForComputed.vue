@@ -6,7 +6,6 @@ import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStor
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 
-
 const {
   methodBeginningCalculationIsButton,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
@@ -16,7 +15,6 @@ const {
 } = getBaseStoreGetters()
 
 const {setAllowShowResultBlock, setInitEnabledSendForm, showAllTooltipsOn} = getBaseStoreAction(['setAllowShowResultBlock', 'setInitEnabledSendForm', 'showAllTooltipsOn'])
-
 
 const emits = defineEmits(['checkEnabledResultButton'])
 const props = defineProps({
@@ -55,9 +53,7 @@ watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
 
 
 const showResultBtn = computed(() => methodBeginningCalculationIsButton.value)
-
 const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
-
 const showButtonOnDependency = computed(() =>  !isFormulaDisplayButton.value
     ? true
     : isVisibilityFromDependency.value
