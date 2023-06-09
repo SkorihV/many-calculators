@@ -1,9 +1,9 @@
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { ref, onMounted, watch, computed, reactive, toRef } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";

@@ -1,5 +1,5 @@
 <script setup>
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 import { computed, reactive, ref, watch } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";

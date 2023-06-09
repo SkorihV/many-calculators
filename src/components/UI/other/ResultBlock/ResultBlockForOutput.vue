@@ -1,6 +1,6 @@
 <script setup>
-import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
-import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";

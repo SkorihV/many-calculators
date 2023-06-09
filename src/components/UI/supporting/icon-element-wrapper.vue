@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, computed } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import IconElement from "@/components/UI/supporting/c_Icon-element.vue";
+import IconElement from "@/components/UI/supporting/Icon-element.vue";
 
 const props = defineProps({
   iconSettings: {

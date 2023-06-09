@@ -1,13 +1,13 @@
 <script setup>
-import TemplatesWrapperStructural from "@/components/UI/supporting/c_TemplatesWrapperStructural.vue";
-import UiDuplicator from "@/components/UI/structural/duplicator/c_UiDuplicator.vue";
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 
 import ErrorNamesTemplates from "@/components/UI/devMode/c_ErrorNamesTemplates.vue";
-import SpinnerElement from "@/components/UI/other/c_Spinner-element.vue";
-import ResultBlockForOutput from "@/components/UI/other/ResultBlock/c_ResultBlockForOutput.vue";
-import ResultButtonForComputed from "@/components/UI/other/c_ResultButtonForComputed.vue";
+import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
+import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlockForOutput.vue";
+import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
 
@@ -2562,7 +2562,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     }
   }
 
-  //----------Элемент image--------------
+  //----------Элемент UiImage--------------
   &__image {
     &-wrapper {
       @include style-element-main-wrapper;

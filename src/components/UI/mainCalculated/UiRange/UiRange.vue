@@ -1,7 +1,7 @@
 <script setup>
-import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import iconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { onMounted, onUnmounted, ref, watch, computed, reactive, toRef } from "vue";
 import {useEventListener} from "@/composables/useEventsListener";

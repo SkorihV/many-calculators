@@ -1,8 +1,8 @@
 <script setup>
-import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { onMounted, reactive, ref, onUnmounted, watch, nextTick, computed, toRef, getCurrentInstance } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";

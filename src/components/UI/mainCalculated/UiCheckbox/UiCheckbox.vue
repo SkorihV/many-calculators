@@ -1,7 +1,7 @@
 <script setup>
-import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -224,7 +224,7 @@ function changeValue(eventType = "click") {
     value: isVisibilityFromDependency ? isLocalChecked.value: null,
     displayValue: isLocalChecked.value? "Да" : "Нет",
     name: localElementName.value,
-    type: "checkbox",
+    type: "UiCheckbox",
     label: props.label || props.buttonText,
     cost: localCost.value,
     formOutputMethod:
@@ -250,7 +250,7 @@ function changeValid(eventType) {
         ? isErrorEmpty.value
         : isVisibilityFromDependency,
     name: localElementName.value,
-    type: "checkbox",
+    type: "UiCheckbox",
     label: props.label,
     eventType,
     isShow: isVisibilityFromDependency,
@@ -266,7 +266,7 @@ function tryPassDependency() {
     value: isVisibilityFromDependency ? isLocalChecked.value: null,
     isShow: isVisibilityFromDependency,
     displayValue: currentLocalTextButton.value,
-    type: "checkbox",
+    type: "UiCheckbox",
   });
 }
 function goToElementScroll() {

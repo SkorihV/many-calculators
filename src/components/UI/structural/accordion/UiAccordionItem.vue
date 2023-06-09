@@ -1,10 +1,10 @@
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
-import UiTooltip from "@/components/UI/other/c_UiTooltip.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
-import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import {computed, ref, toRef} from "vue";

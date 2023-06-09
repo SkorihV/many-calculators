@@ -1,6 +1,6 @@
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { computed, reactive, ref, toRef } from "vue";
 import {useProcessingFormula} from "@/composables/useProcessingFormula"

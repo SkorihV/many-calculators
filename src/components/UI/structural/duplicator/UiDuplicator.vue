@@ -1,7 +1,7 @@
 <script setup>
-import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/c_UiDuplicatorWrapper.vue";
+import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorWrapper.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";

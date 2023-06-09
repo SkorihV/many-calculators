@@ -1,7 +1,7 @@
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/c_TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/c_TemplatesWrapperColumn.vue";
-import BackgroundImageElement from "@/components/UI/supporting/c_background-image-element.vue";
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
 import { computed, ref } from "vue";
 import {getCurrentWidthElement} from "@/composables/useWidthElement";

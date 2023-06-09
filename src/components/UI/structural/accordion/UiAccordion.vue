@@ -1,8 +1,8 @@
 <script setup>
 import { computed, reactive, ref, toRef } from "vue";
-import UiAccordionItem from "@/components/UI/structural/accordion/c_UiAccordionItem.vue";
+import UiAccordionItem from "@/components/UI/structural/accordion/UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/c_devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/c_icon-element-wrapper.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";

@@ -1,12 +1,12 @@
 <script setup>
-import UiRange from "@/components/UI/mainCalculated/UiRange/c_UiRange.vue";
-import UiInput from "@/components/UI/mainCalculated/UiInput/c_UiInput.vue";
-import UiSelect from "@/components/UI/mainCalculated/UiSelect/c_UiSelect.vue";
-import UiRadio from "@/components/UI/mainCalculated/radio/c_UiRadio.vue";
-import UiCheckbox from "@/components/UI/mainCalculated/checkbox/c_UiCheckbox.vue";
-import UiImage from "@/components/UI/mainCalculated/image/c_UiImage.vue";
-import UiSystem from "@/components/UI/mainCalculated/system/c_UiSystem.vue";
-import UiPrompt from "@/components/UI/other/c_UiPrompt.vue";
+import UiRange from "@/components/UI/mainCalculated/UiRange/UiRange.vue";
+import UiInput from "@/components/UI/mainCalculated/UiInput/UiInput.vue";
+import UiSelect from "@/components/UI/mainCalculated/UiSelect/UiSelect.vue";
+import UiRadio from "@/components/UI/mainCalculated/UiRadio/UiRadio.vue";
+import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox/UiCheckbox.vue";
+import UiImage from "@/components/UI/mainCalculated/UiImage/UiImage.vue";
+import UiSystem from "@/components/UI/mainCalculated/UiSystem/UiSystem.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"]);
