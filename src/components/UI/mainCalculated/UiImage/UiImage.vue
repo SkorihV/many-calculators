@@ -10,8 +10,6 @@ import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 
-
-
 const props = defineProps({
   defaultImage: {
     type: Object,
@@ -35,6 +33,8 @@ const props = defineProps({
     "dependencyFormulaDisplay",
   ]),
 })
+const width = "max-width:" + props.maxWidth + "px";
+const height = "max-height:" + props.maxHeight + "px";
 
 const {devMode, getImageDir} = getBaseStoreGetters();
 const {tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryToggleElementIsMounted"])
@@ -65,24 +65,20 @@ onUnmounted(() => {
 })
 
 
-function changeValue() {
-  return null;
-}
-function changeValid() {
-  return null;
-}
+const url = computed(() => {
+  return Boolean(props.defaultImage?.filename?.length)
+    ? getImageDir.value + props.defaultImage?.filename
+    : "";
+})
 
-
+const isExistDependencyImages = Boolean(props.dependencyImages?.length)
 const localDataForDisplay = computed(() => {
-  let url = Boolean(props.defaultImage?.filename?.length)
-      ? getImageDir.value + props.defaultImage?.filename
-      : "";
   let dataForOut = {
     label: props.label,
-    url: url,
+    url: url.value,
     prompt: props.prompt,
   };
-  if (!props.dependencyImages?.length) {
+  if (!isExistDependencyImages) {
     return dataForOut;
   }
   props.dependencyImages.forEach((imageItem) => {
@@ -102,15 +98,10 @@ const localDataForDisplay = computed(() => {
       const currentUrlIsExist = Boolean(imageItem?.image?.filename.length);
       try {
         if (eval(formula) && currentUrlIsExist) {
-          dataForOut = {
-            label: imageItem.label?.toString().length
-                ? imageItem.label
-                : props.label,
-            url: getImageDir.value + imageItem.image.filename,
-            prompt: imageItem?.prompt?.length
-                ? imageItem.prompt
-                : props.prompt,
-          };
+          const label = imageItem.label?.toString().length ? imageItem.label : props.label;
+          const url = getImageDir.value + imageItem.image.filename;
+          const prompt = imageItem?.prompt?.length ? imageItem.prompt : props.prompt;
+          dataForOut = {label, url, prompt, };
         }
       } catch (e) {
         if (devMode.value) {
@@ -124,12 +115,6 @@ const localDataForDisplay = computed(() => {
 
 const urlIsExist = computed(() => {
     return Boolean(localDataForDisplay.value?.url?.length);
-  })
-const width = computed(() => {
-    return "max-width:" + props.maxWidth + "px";
-  })
-const height = computed(() =>{
-    return "max-height:" + props.maxHeight + "px";
   })
 
 </script>
