@@ -54,12 +54,8 @@ const behaviorImage = computed(() => {
   return "object-fit:" + behaviorImage + ";";
 });
 
-const showHoverIcon = computed(() => {
-  return props.isParentHover && !props.isParentSelected;
-});
-const showSelectedIcon = computed(() => {
-  return props.isParentSelected;
-});
+
+
 const showIcon = computed(() => {
   return !showHoverIcon.value && !showSelectedIcon.value;
 });
@@ -73,11 +69,17 @@ const urlIcon = computed(() => {
 const isIconHoverFilenameExist = computed(() => {
   return Boolean(props.iconSettings?.imageHover?.filename);
 });
+const showHoverIcon = computed(() => {
+  return props.isParentHover && !props.isParentSelected && isIconHoverFilenameExist.value;
+});
 const urlIconHover = computed(() => {
   return imageDir.value + props.iconSettings.imageHover?.filename;
 });
 const isIconSelectedFilenameExist = computed(() => {
   return Boolean(props.iconSettings?.imageSelected?.filename);
+});
+const showSelectedIcon = computed(() => {
+  return props.isParentSelected && isIconSelectedFilenameExist.value;
 });
 const urlIconSelected = computed(() => {
   return imageDir.value + props.iconSettings.imageSelected?.filename;
