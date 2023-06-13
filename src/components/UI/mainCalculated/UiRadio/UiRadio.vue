@@ -1,7 +1,7 @@
 <script setup>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";

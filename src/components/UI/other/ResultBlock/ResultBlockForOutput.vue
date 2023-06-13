@@ -1,7 +1,7 @@
 <script setup>
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
-import DevBlock from "@/components/UI/devMode/c_devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
 import { computed, reactive, ref, watch } from "vue";

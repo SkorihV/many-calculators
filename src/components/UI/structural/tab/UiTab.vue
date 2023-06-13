@@ -3,7 +3,7 @@ import {computed, reactive, ref, toRef} from "vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/tab/UiTabItem.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreGetters} from "@/composables/useBaseStore";

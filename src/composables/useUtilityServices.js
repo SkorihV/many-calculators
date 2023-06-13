@@ -1,8 +1,13 @@
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { unref } from "vue";
+import {
+  REGEXP_QUOTES_AND_SPACE_AND_WORD,
+  REGEXP_QUOTES_AND_WORD,
+  REGEXP_SPACES_IN_AROUND,
+  REGEXP_VARIABLE_SIGN_NUMBERS
+} from "@/constants/regexp";
+import { processingArrayOnFormulaProcessingLogic, replaceSpecSymbols } from "@/servises/UtilityServices";
 
 export function useUtilityServices() {
-  const { getSpecSymbols } = getBaseStoreGetters();
   /**
    * получить из формулы массив элементов
    * @param formula
@@ -19,13 +24,7 @@ export function useUtilityServices() {
    * @returns {*}
    */
   const handleSpecSymbolsInFormula = (formula) => {
-    let localFormula = formula;
-    getSpecSymbols.value?.forEach((specItem) => {
-      localFormula = localFormula
-        ?.toString()
-        ?.replaceAll(specItem[0], specItem[1]);
-    });
-    return localFormula;
+    return replaceSpecSymbols(formula);
   };
 
   /**
@@ -36,18 +35,17 @@ export function useUtilityServices() {
   const getArrayOnFormulaElements = (formula) => {
     let formulaInOut = unref(formula)
       ?.split(
-        // /([A-Za-zА-Яа-яЁё0-9-_]*)|(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)+)/g
-        /([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9]*(\.[0-9])*)/g
+          REGEXP_VARIABLE_SIGN_NUMBERS
       )
       .filter((item) => item?.trim()?.length);
 
     formulaInOut = formulaInOut?.map((item) => {
       //удаляем пробелы по краям
-      let nextItem = item?.replace(/^\s*|\s*$/g, "");
+      let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
       // если по краям есть кавычки, то удаляем пробелы между
       // кавычками и текстом в середине, не трогая пробелы внутри текста
-      if (nextItem.match(/^('|").*('|")$/)) {
-        nextItem = "'" + nextItem?.replace(/^('|")\s*|\s*('|")$/g, "") + "'";
+      if (nextItem.match(REGEXP_QUOTES_AND_WORD)) {
+        nextItem = "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
       }
       return nextItem;
     });

@@ -1,6 +1,6 @@
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -14,6 +14,7 @@ import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 import { onMounted, onUnmounted, reactive, ref, toRef, watch, computed, nextTick } from "vue";
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
+import { REGEXP_SPACES } from "@/constants/regexp";
 
 const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
 const {tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, tryDeleteAllDataOnStoreForElementName} = getBaseStoreAction(['tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'tryDeleteAllDataOnStoreForElementName'])
@@ -330,7 +331,7 @@ watch(inputFocus, (isFocus) => {
 watch(localInputBufferValue, (newValue) => {
     if (isOnlyNumber.value) {
       localInputValue.value = parseFloat(
-        newValue?.toString().replaceAll(/\s/g, "").replaceAll(/,/g, ".")
+        newValue?.toString().replaceAll(REGEXP_SPACES, "").replaceAll(/,/g, ".")
       );
     } else {
       localInputValue.value = newValue;

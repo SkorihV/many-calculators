@@ -1,7 +1,7 @@
 <script setup>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
@@ -17,6 +17,7 @@ import {
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import { REGEXP_STRING_SPLIT_FORMULA } from "@/constants/regexp";
 
 
 const {devMode, checkedIsStructureTemplate, getNameReserveVariable, getResultElementOnName,} = getBaseStoreGetters()
@@ -65,10 +66,9 @@ const props = defineProps({
 const counterDuplicate = ref(0)
 const localResultData = ref({})
 const mutationsInputData = ref(null)
-const regExpStringSplitFormula =  /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|(^[0-9]+(\.[0-9]+)?)/
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAfterProcessingVariables} = useProcessingFormula(  reactive({
+const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(  reactive({
   localDependencyList: localDependencyList,
   constructLocalListElementDependencyInFormula,
   formula: toRef(props,"dependencyFormulaDisplay"),
@@ -134,13 +134,6 @@ const mainFormulaResult = computed(() => {
   return props.formula?.length ? props.formula : "";
 })
 /**
- *
- * @returns {boolean}
- */
-const mainFormulaIsExist = computed(() => {
-  return Boolean(mainFormulaResult.value?.length);
-})
-/**
  * Разбиваем полученную формулу на массив с переменными и знаками.
  * Избавляемся от пустых элементов.
  * @returns {*}
@@ -156,7 +149,7 @@ const listGlobalsVariables = computed(() => {
   return variablesInFormula.value.filter(
     (item) =>
       !props.originVariables.includes(item) &&
-      !Boolean(item?.match(regExpStringSplitFormula)) &&
+      !Boolean(item?.match(REGEXP_STRING_SPLIT_FORMULA)) &&
       item !== getNameReserveVariable.value
   );
 })
@@ -509,7 +502,7 @@ function  addIndexIndexInFormulaElements(formulaString, index) {
  * @param item
  * @returns {boolean}
  */function  isLocalVariable(item) {
-  const isFound = !Boolean(item.match(regExpStringSplitFormula));
+  const isFound = !Boolean(item.match(REGEXP_STRING_SPLIT_FORMULA));
   const isFoundVariableInOriginVariables =
     props.originVariables.includes(item);
   return isFound && isFoundVariableInOriginVariables;

@@ -1,9 +1,21 @@
 <script setup>
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
 import {computed, onMounted, reactive, ref, watch} from "vue";
+import {
+  REGEXP_ELEMENT_VALUE_AS_WORLD,
+  REGEXP_SIGN, REGEXP_SPACES_IN_AROUND,
+  REGEXP_VARIABLE_SIGN_NUMBERS
+} from "@/constants/regexp";
+import { EXCEPTION_VARIABLES_IN_FORMULA, LIST_BANNED_ELEMENTS_NAME } from "@/constants/localData";
+
+
+import {useUtilityServices} from "@/composables/useUtilityServices";
+import {replaceSpecSymbols} from "@/servises/UtilityServices"
+
 
 const tryToggleShowInsideElementStatus = getBaseStoreAction('tryToggleShowInsideElementStatus')
 const {devMode} = getBaseStoreGetters();
+const {getArrayElementsFromFormula} = useUtilityServices()
 
 const props = defineProps({
   templates: {
@@ -30,49 +42,9 @@ const usedArrayNamesInElements = reactive(new Set()) //список исполь
 const listExistElementNames = ref([]) // Список всех имен элементов которые могут участвовать в расчетах
 const listDisplayFormula = ref([]) //список всех формул отвечающих за отображение
 const listComputedFormula = ref([]) //Список всех формул отвечающих за расчет
-const listBannedElementsName = [
-  "_otherSum_",
-  "_globalSum_",
-  "_self_",
-  "true",
-  "false",
-  "empty",
-  "null",
-]
 const displayAlert = ref(false);
-const exceptionVariablesFormula = [
-  "-",
-  "+",
-  "/",
-  "*",
-  "(",
-  ")",
-  "!==",
-  "!=",
-  "=",
-  ">=",
-  "<=",
-  "<",
-  ">",
-  "==",
-  "===",
-  "||",
-  "&&",
-  "_otherSum_",
-  "_self_",
-  "_globalSum_",
-  "true",
-  "false",
-  "empty",
-  "null",
-]
 const localShowInsideElementStatus = ref(false)
-const spec = Object.entries({
-  "&gt;": ">",
-  "&lt;": "<",
-  "&amp;": "&",
-  "&quot;": '"',
-})
+
 
 
 /**
@@ -235,28 +207,27 @@ function processingAllTemplatesOnData() {
  * @returns {*}
  */
 function processingFormulaSpecialsSymbols(formula) {
-  spec.forEach((specItem) => {
-    formula = formula?.replaceAll(specItem[0], specItem[1]);
-  });
-  //разбиваем формулу на массив отдельных данных
-  formula = formula
+  // разбиваем формулу на массив отдельных данных
+
+  formula = replaceSpecSymbols(formula)
       ?.split(
-          /([A-Za-zА-Яа-яЁё0-9_.,"']*)(\)|\(|>=|<=|<|>|\}|\{|!==|===|&&|\|\||\+|-|\/|\*)*/g
+        REGEXP_VARIABLE_SIGN_NUMBERS
       )
       ?.map((item) => {
         //удаляем пробелы по краям
-        let nextItem = item?.replace(/^\s*|\s*$/g, "");
+        let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
         // если по краям есть кавычки, то удаляем пробелы между
         // кавычками и текстом в середине, не трогая пробелы внутри текста
-        if (item?.match(/(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)/)) {
-          item = "";
+        if (item?.match(REGEXP_SIGN)) {
+          nextItem = "";
         }
-        return item;
+        return nextItem;
       })
       .filter(
           (item) =>
-              item?.trim()?.length && !item.match(/^('|"|[0-9])\s*|\s*('|")$/g)
+            item?.trim()?.length && !item.match(REGEXP_ELEMENT_VALUE_AS_WORLD)
       );
+
   return formula;
 }
 
@@ -275,7 +246,7 @@ const notExistNamesInDisplayFormula = computed(() => {
     item.displayFormula.forEach((name) => {
       if (
           !usedArrayNamesInElements.has(name) &&
-          !exceptionVariablesFormula.includes(name)
+          !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -297,7 +268,7 @@ const notExistNamesInComputedFormula = computed(() => {
     item?.formula.forEach((name) => {
       if (
           !usedArrayNamesInElements.has(name) &&
-          !exceptionVariablesFormula.includes(name)
+          !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -458,7 +429,7 @@ const isExistError = computed(() => {
         <template
           v-if="
             listExistElementNames.filter((item) =>
-              listBannedElementsName.includes(item.elementName)
+              LIST_BANNED_ELEMENTS_NAME.includes(item.elementName)
             ).length
           "
         >
@@ -469,7 +440,7 @@ const isExistError = computed(() => {
           <div
             class="calc__error-item"
             v-for="(data, key) in listExistElementNames.filter((item) =>
-              listBannedElementsName.includes(item.elementName)
+              LIST_BANNED_ELEMENTS_NAME.includes(item.elementName)
             )"
             :key="key"
           >

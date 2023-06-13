@@ -7,14 +7,8 @@ export const useBaseStore = defineStore("base", {
       dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
-      reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не учавствующих в формуле
+      reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не участвующих в формуле
       nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
-      specSymbols: Object.entries({
-        "&gt;": ">",
-        "&lt;": "<",
-        "&amp;": "&",
-        "&quot;": '"',
-      }),
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
       devModeEnabled: false,
       showInsideElementStatusData: false,
@@ -161,7 +155,6 @@ export const useBaseStore = defineStore("base", {
      */
     getNameReserveVariable: ({ reserveVariableForOtherSumma }) =>
       reserveVariableForOtherSumma,
-    getSpecSymbols: ({ specSymbols }) => specSymbols,
     devMode: ({ devModeEnabled }) => devModeEnabled,
     showInsideElementStatus: ({ showInsideElementStatusData }) =>
       showInsideElementStatusData,

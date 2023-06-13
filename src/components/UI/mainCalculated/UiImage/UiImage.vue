@@ -1,6 +1,6 @@
 <script setup>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {computed, reactive, onBeforeMount, onMounted, onUnmounted, toRef} from "vue";
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";

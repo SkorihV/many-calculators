@@ -1,6 +1,6 @@
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
 import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";

@@ -4,12 +4,13 @@ import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 
-import ErrorNamesTemplates from "@/components/UI/devMode/c_ErrorNamesTemplates.vue";
+import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlockForOutput.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 
-import devBlock from "@/components/UI/devMode/c_devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+
 
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useUtilityServices} from "@/composables/useUtilityServices";
@@ -35,6 +36,7 @@ import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore"
+import { REGEXP_HTML_TAG } from "@/constants/regexp";
 
 const {isCanShowAllTooltips,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
@@ -210,12 +212,8 @@ const dataListVariablesOnFormula = computed(() => {
    * @returns {*}
    */
 const resultTextForComputed = computed(() => {
-    const resultString = parsingDataInFormulaOnSum(
+    return parsingDataInFormulaOnSum(
       processingArrayOnFormulaProcessingLogic(dataListVariablesOnFormula.value)
-    );
-    return resultString?.replace(
-      /[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g,
-      ""
     );
   })
   /**
@@ -357,7 +355,7 @@ const finalTextForOutput = computed(() => {
     return result;
   })
 const finalTextForOutputForTeleport = computed(() => {
-    return finalTextForOutput.value.replaceAll(/<\/?[a-z][^>]*(>|$)/gi, "");
+    return finalTextForOutput.value.replaceAll(REGEXP_HTML_TAG, "");
   })
   /**
    * Отобразить блок с текстом о наличии ошибок,
@@ -551,8 +549,8 @@ function findSubmitForm() {
     }
 function findTeleportField() {
       if (formElement.value) {
-        const teleportField = formElement.value.querySelector("#teleport");
-        teleportField.value = teleportField ? teleportField : null;
+        const field = formElement.value.querySelector("#teleport");
+        teleportField.value = field ? field : null;
       }
     }
 function setReadOnlyForTeleportField() {

@@ -1,3 +1,5 @@
+import { SPEC_SYMBOLS } from "@/constants/localData";
+
 const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
   let currentValue =
@@ -215,6 +217,13 @@ const checkedValueOnVoid = (value) => {
   return value?.length !== 0 && value !== undefined && value !== null;
 };
 
+const replaceSpecSymbols = (formula) => {
+  SPEC_SYMBOLS.forEach((specItem) => {
+    formula = formula?.replaceAll(specItem[0], specItem[1]);
+  });
+  return formula;
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -223,5 +232,6 @@ export {
   getListVariablesMissedInFormula,
   getNameElementsRecursive,
   decimalAdjust,
-  checkedValueOnVoid
+  checkedValueOnVoid,
+  replaceSpecSymbols
 };
