@@ -1,4 +1,5 @@
 <script setup>
+import sliderButton from  "@/components/UI/supporting/sliderButton.vue"
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import {
