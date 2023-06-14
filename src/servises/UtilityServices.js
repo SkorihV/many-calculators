@@ -1,4 +1,11 @@
-import { SPEC_SYMBOLS } from "@/constants/localData";
+import { LIST_BANNED_ELEMENTS_NAME, SPEC_SYMBOLS } from "@/constants/localData";
+import {
+  REGEXP_NUMBERS,
+  REGEXP_QUOTES_AND_SPACE_AND_WORD,
+  REGEXP_QUOTES_AND_WORD, REGEXP_SIGN,
+  REGEXP_SPACES_IN_AROUND, REGEXP_VARIABLE,
+  REGEXP_VARIABLE_SIGN_NUMBERS
+} from "@/constants/regexp";
 
 const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
@@ -224,6 +231,44 @@ const replaceSpecSymbols = (formula) => {
   return formula;
 }
 
+
+/**
+ * преобразовывает формулу в массив
+ * @param formula
+ * @returns {*}
+ */
+const getArrayOnFormula = (formula) => {
+  let formulaInOut = formula
+    ?.split(
+      REGEXP_VARIABLE_SIGN_NUMBERS
+    )
+    .filter((item) => item?.trim()?.length);
+
+  formulaInOut = formulaInOut?.map((item) => {
+    //удаляем пробелы по краям
+    let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
+    // если по краям есть кавычки, то удаляем пробелы между
+    // кавычками и текстом в середине, не трогая пробелы внутри текста
+    if (nextItem.match(REGEXP_QUOTES_AND_WORD)) {
+      nextItem = "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
+    }
+    return nextItem;
+  });
+  return formulaInOut;
+};
+
+/**
+ * получить из формулы массив элементов
+ * @param formula
+ * @returns {*}
+ */
+const getArrayElementsFromFormula = (formula) => {
+  return getArrayOnFormula(replaceSpecSymbols(formula));
+};
+
+
+
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -233,5 +278,7 @@ export {
   getNameElementsRecursive,
   decimalAdjust,
   checkedValueOnVoid,
-  replaceSpecSymbols
+  replaceSpecSymbols,
+  getArrayElementsFromFormula,
+  getArrayOnFormula
 };

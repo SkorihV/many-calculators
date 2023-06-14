@@ -1,5 +1,9 @@
+<script>
+const typeElement = "Columns";
+</script>
+
 <script setup>
-import DevBlock from "@/components/UI/devMode/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import ColumnElement from "@/components/UI/structural/column/ColumnElement.vue";
 
@@ -252,7 +256,8 @@ const isExistLabel = computed(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="showElementColumns"
     :dependency-formula-display="dependencyFormulaDisplay"

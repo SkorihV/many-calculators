@@ -1,11 +1,14 @@
+<script>
+const typeElement = "UiImage";
+</script>
+
 <script setup>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {computed, reactive, onBeforeMount, onMounted, onUnmounted, toRef} from "vue";
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
 import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
-import {useUtilityServices} from "@/composables/useUtilityServices"
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -38,7 +41,7 @@ const height = "max-height:" + props.maxHeight + "px";
 
 const {devMode, getImageDir} = getBaseStoreGetters();
 const {tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryToggleElementIsMounted"])
-const {getArrayElementsFromFormula} = useUtilityServices();
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 useDisplaySpinner(props.elementName)
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
@@ -148,7 +151,8 @@ const urlIsExist = computed(() => {
   <dev-block
     hidden-value
     hidden-cost
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"

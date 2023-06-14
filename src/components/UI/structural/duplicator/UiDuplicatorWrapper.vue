@@ -1,7 +1,11 @@
+<script>
+const typeElement = "DuplicatorMain";
+</script>
+
 <script setup>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
@@ -10,7 +14,6 @@ import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStor
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables";
 import {
   decimalAdjust,
@@ -74,7 +77,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
   formula: toRef(props,"dependencyFormulaDisplay"),
   parentIsShow: toRef(props, "parentIsShow")
 }))
-const {getArrayElementsFromFormula} = useUtilityServices()
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 /**
  *
@@ -501,7 +504,8 @@ function  addIndexIndexInFormulaElements(formulaString, index) {
  *
  * @param item
  * @returns {boolean}
- */function  isLocalVariable(item) {
+ */
+function  isLocalVariable(item) {
   const isFound = !Boolean(item.match(REGEXP_STRING_SPLIT_FORMULA));
   const isFoundVariableInOriginVariables =
     props.originVariables.includes(item);
@@ -581,6 +585,7 @@ onMounted(() => {
     </button>
   </div>
   <dev-block
+    :type-element="typeElement"
     :element-name="mutationsInputData?.elementName"
     :local-cost="localCost"
     :formula="mainFormulaResult"

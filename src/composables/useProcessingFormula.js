@@ -5,7 +5,8 @@ import {
   getBaseStoreAction,
 } from "@/composables/useBaseStore";
 import {computed, toRef, watch} from "vue";
-import { useUtilityServices } from "@/composables/useUtilityServices";
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+
 
 export function useProcessingFormula(dataObject) {
   const dependencyFormulaDisplay = toRef(
@@ -23,7 +24,7 @@ export function useProcessingFormula(dataObject) {
   const initSomeElementChangedSelfVisibilityState = getBaseStoreAction(
     "initSomeElementChangedSelfVisibilityState"
   );
-  const { getArrayElementsFromFormula } = useUtilityServices();
+
 
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null

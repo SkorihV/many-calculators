@@ -66,6 +66,11 @@ export const useBaseStore = defineStore("base", {
       ({ globalResultsElements }) =>
       (name) =>
         globalResultsElements[name] ? globalResultsElements[name] : null,
+
+    getDependencyElementOnName:
+      ({ dataListForDependencies }) =>
+      (name) =>
+        dataListForDependencies[name] ? dataListForDependencies[name] : null,
     /**
      * Массив со всеми зависимостями и значениями
      * @param state
@@ -350,6 +355,17 @@ export const useBaseStore = defineStore("base", {
         return false;
       }
       return nameItemList in this.globalDependenciesList;
+    },
+    /**
+     *
+     * @param nameItemList
+     * @returns {boolean}
+     */
+    isElementResult(nameItemList = null) {
+      if (!nameItemList) {
+        return false;
+      }
+      return nameItemList in this.globalResultsElements;
     },
   },
 });

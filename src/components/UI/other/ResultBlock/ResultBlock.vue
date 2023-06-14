@@ -1,7 +1,12 @@
+<script>
+const typeElement = "ResultBlock";
+const label = "Блок с результатами";
+</script>
+
 <script setup>
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
-import DevBlock from "@/components/UI/devMode/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
 import { computed, reactive, ref, watch } from "vue";
@@ -98,12 +103,13 @@ const textForSpinner = props.resultOptions?.textForSpinner
     <result-block-data :data="dataForResult" :sum="finalSummaForOutput"/>
   </div>
   <dev-block
-    label="Блок с результатами"
+    :label="label"
+    :type-element="typeElement"
     :formula="resultOptions?.formulaDependencyForResultBlock"
     :formula-variables="formulaAfterProcessingVariables"
     :is-visibility-from-dependency="isShowResultBlock"
     hidden-cost
     hidden-value
-  ></dev-block>
+  />
 </template>
 

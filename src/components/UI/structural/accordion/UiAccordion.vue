@@ -1,9 +1,13 @@
+<script>
+const typeElement = "AccordionItem";
+</script>
+
 <script setup>
 import { computed, reactive, ref, toRef } from "vue";
 import UiAccordionItem from "@/components/UI/structural/accordion/UiAccordionItem.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import DevBlock from "@/components/UI/devMode/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
@@ -98,7 +102,8 @@ const isExistLabel = computed(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"

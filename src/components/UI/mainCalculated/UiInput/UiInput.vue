@@ -1,6 +1,10 @@
+<script>
+const typeElement = "UiInput";
+</script>
+
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -10,7 +14,6 @@ import {checkedValueOnVoid} from "@/servises/UtilityServices"
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 import { onMounted, onUnmounted, reactive, ref, toRef, watch, computed, nextTick } from "vue";
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
@@ -145,7 +148,7 @@ const canBeShownTooltip = ref(false)
 
 useDisplaySpinner(props.elementName)
 useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
-const {getArrayElementsFromFormula} = useUtilityServices()
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {formulaAfterProcessingVariables, isVisibilityFromDependency, costAfterProcessingDependencyPrice} = useProcessingFormula(
@@ -556,8 +559,6 @@ function addLocalInputBufferValue(value) {
       }
     }
 
-
-
 onMounted(() => {
   if (isOnlyNumber.value && localMin.value > Number(props.inputValue)) {
     localInputValue.value = localMin.value;
@@ -574,10 +575,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
-
 })
-
-
 </script>
 
 
@@ -647,7 +645,8 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || localElementName"
+    :type-element="typeElement"
     :element-name="localElementName"
     :value="resultValue"
     :local-cost="localCost"

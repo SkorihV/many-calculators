@@ -1,6 +1,10 @@
+<script>
+const typeElement = "ResultButton";
+</script>
+
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { computed, reactive, ref, watch } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
@@ -51,7 +55,6 @@ watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
   }
 })
 
-
 const showResultBtn = computed(() => methodBeginningCalculationIsButton.value)
 const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
 const showButtonOnDependency = computed(() =>  !isFormulaDisplayButton.value
@@ -82,10 +85,12 @@ const showBtn = computed(() => showResultBtn.value && showButtonOnDependency.val
   <dev-block
     v-if="showResultBtn"
     :label="resultOptions?.titleButton ?? 'Рассчитать'"
+    :type-element="typeElement"
     :is-visibility-from-dependency="showBtn"
     :dependency-formula-display="resultOptions?.formulaDisplayButton"
     :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-value
     hidden-cost
+
   />
 </template>

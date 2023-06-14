@@ -1,6 +1,10 @@
+<script>
+const typeElement = "UiRange";
+</script>
+
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
 import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
@@ -488,7 +492,8 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || localElementName"
+    :type-element="typeElement"
     :element-name="localElementName"
     :value="isVisibilityFromDependency ? resultValue : null"
     :local-cost="localCost"

@@ -1,13 +1,16 @@
+<script>
+const typeElement = "UiSystem";
+</script>
+
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import {checkedValueOnVoid} from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 
@@ -88,7 +91,7 @@ useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, cha
 useDisplaySpinner(props.elementName)
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
 
-const {getArrayElementsFromFormula} = useUtilityServices()
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 const isExistLabel = computed(() => {
@@ -334,7 +337,8 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || localElementName"
+    :type-element="typeElement"
     :element-name="localElementName"
     :value="localCost"
     :local-cost="localCost"

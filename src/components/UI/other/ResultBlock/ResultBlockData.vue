@@ -4,7 +4,6 @@ import {parseResultValueObjectItem} from "@/servises/UtilityServices";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 
-
 const {getCurrency, getTitleSum} = getBaseStoreGetters();
 
 const props = defineProps({
@@ -19,7 +18,6 @@ const props = defineProps({
 })
 
 const {isShowSumma} = useIsChecks(props.resultOptions)
-
 
 /**
  * Текст со всеми полями которые должны отображаться в блоке

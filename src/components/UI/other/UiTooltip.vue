@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, onMounted, ref, watch, computed } from "vue";
 
-import { isBoolean } from "@/validators";
+import { isBoolean } from "@/validators/validators";
 import { useEventListener } from "@/composables/useEventsListener";
 import { getParent } from "@/composables/useInstance";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";

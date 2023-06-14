@@ -1,5 +1,4 @@
 <script setup>
-import sliderButton from  "@/components/UI/supporting/sliderButton.vue"
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import {
@@ -9,14 +8,11 @@ import {
 } from "@/constants/regexp";
 import { EXCEPTION_VARIABLES_IN_FORMULA, LIST_BANNED_ELEMENTS_NAME } from "@/constants/localData";
 
-
-import {useUtilityServices} from "@/composables/useUtilityServices";
 import {replaceSpecSymbols} from "@/servises/UtilityServices"
 
-
 const tryToggleShowInsideElementStatus = getBaseStoreAction('tryToggleShowInsideElementStatus')
-const {devMode} = getBaseStoreGetters();
-const {getArrayElementsFromFormula} = useUtilityServices()
+const {devMode} = getBaseStoreGetters()
+
 
 const props = defineProps({
   templates: {
@@ -38,14 +34,12 @@ onMounted(() => {
   );
 })
 
-
 const usedArrayNamesInElements = reactive(new Set()) //список используемых имен для создания зависимостей
 const listExistElementNames = ref([]) // Список всех имен элементов которые могут участвовать в расчетах
 const listDisplayFormula = ref([]) //список всех формул отвечающих за отображение
 const listComputedFormula = ref([]) //Список всех формул отвечающих за расчет
 const displayAlert = ref(false);
 const localShowInsideElementStatus = ref(false)
-
 
 
 /**

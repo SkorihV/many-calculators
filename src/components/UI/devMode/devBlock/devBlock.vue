@@ -1,6 +1,8 @@
 <script setup>
 import {getBaseStoreGetters} from "@/composables/useBaseStore";
-import {ref} from "vue";
+import { computed, ref } from "vue";
+import {replaceSpecSymbols} from "@/servises/UtilityServices"
+import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue"
 
 const {showInsideElementStatus} = getBaseStoreGetters('showInsideElementStatus')
 
@@ -44,8 +46,17 @@ const props = defineProps({
   formulaVariables: {
     default: null,
   },
+  typeElement: {
+    default: null,
+    type:String
+  }
 })
 const isShowInnerData = ref(false)
+
+const localFormula = computed(() => {
+  return replaceSpecSymbols(props.formula)
+})
+
 
 </script>
 
@@ -57,7 +68,8 @@ const isShowInnerData = ref(false)
       v-if="showInsideElementStatus"
       @click="isShowInnerData = !isShowInnerData"
     >
-      {{ isShowInnerData ? "Скрыть" : "Отобразить" }} внутреннее состояние:
+      {{typeElement}}
+      {{ isShowInnerData ? "скрыть" : "отобразить" }} :
       {{ label }}
     </button>
     <div class="calc__dev-block-wrapper" v-if="isShowInnerData">
@@ -71,25 +83,18 @@ const isShowInnerData = ref(false)
         Имя элемента: {{ elementName }}
       </div>
 
-      <div
-        class="calc__dev-block-element"
+      <dev-formula-block-wrapper
         v-if="dependencyFormulaDisplay?.length"
-      >
-        Формула зависимости отображения: {{ dependencyFormulaDisplay }}
-      </div>
-      <div
-        class="calc__dev-block-element"
-        v-if="parsingFormulaVariables?.length"
-      >
-        Формула зависимости отображения после обработки:
-        {{ parsingFormulaVariables }}
-      </div>
-      <div class="calc__dev-block-element" v-if="formula?.length">
-        Формула расчета: {{ formula }}
-      </div>
-      <div class="calc__dev-block-element" v-if="formulaVariables?.length">
-        Формула расчета после обработки: {{ formulaVariables }}
-      </div>
+        :formula="dependencyFormulaDisplay"
+        is-dependency
+        label="Формула на отображение:"
+      />
+      <dev-formula-block-wrapper
+        v-if="localFormula?.length"
+        :formula="localFormula"
+        is-result
+        label="Формула расчета:"
+      />
 
       <div
         class="calc__dev-block-element calc__dev-block-element-value"

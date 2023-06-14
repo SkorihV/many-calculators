@@ -1,6 +1,12 @@
+<script>
+const typeElement = "UiCheckbox";
+const textErrorNotEmpty = "Обязательное поле.";
+</script>
+
+
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -78,7 +84,6 @@ const props = defineProps({
 
 const currentLocalTextButton = ref("")
 const isLocalChecked = ref(null)
-const textErrorNotEmpty = ref("Обязательное поле.")
 const canBeShownTooltip = ref(false)
 const isChecked = ref(false) // активирована
 const notActive = ref(false) // невозможно активировать
@@ -341,7 +346,8 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || localElementName"
+    :type-element="typeElement"
     :element-name="localElementName"
     :value="isLocalChecked"
     :local-cost="localCost"

@@ -1,3 +1,9 @@
+<script>
+const typeElement = "ResultButton";
+const label = "Основная формула расчета";
+</script>
+
+
 <script setup>
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
@@ -6,16 +12,18 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperC
 
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
-import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlockForOutput.vue";
+import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 
 
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useUtilityServices} from "@/composables/useUtilityServices";
+
 import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
 import { onMounted, ref, watch, computed } from "vue";
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+
 
 import {
   IS_LOCAL,
@@ -91,7 +99,7 @@ const existFormulaForHiddenResultButton = ref( false)
 
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {getArrayElementsFromFormula} = useUtilityServices()
+
 
 
 const isExistDependencyMainFormula = computed(() => {
@@ -751,6 +759,8 @@ onMounted(async () => {
   </teleport>
   <dev-block
     v-if="appIsMounted"
+    :label="label"
+    :type-element="typeElement"
     :formula="mainFormulaResult"
     :formula-variables="resultTextForComputed"
     :local-cost="finalSummaForOutput"
@@ -758,8 +768,6 @@ onMounted(async () => {
   />
   <spinner-element :init-show="!appIsMounted"></spinner-element>
 </template>
-
-
 
 <style lang="scss">
 //$c_base_title                   : var(--c_base_title);
@@ -2777,6 +2785,32 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
       &-cost {
         background-color: yellow;
+      }
+    }
+
+    &-item {
+      padding: 3px;
+      &-is-variable {
+        border-radius: 3px;
+        border: 1px solid gray;
+      }
+
+      &-not-exist {
+        background: red;
+        color:white;
+      }
+      &-is-hidden {
+        background: yellow;
+      }
+
+      &-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+      }
+      &-label {
+
       }
     }
   }

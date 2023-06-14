@@ -1,7 +1,11 @@
+<script>
+const typeElement = "UiRadio";
+</script>
+
 <script setup>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
@@ -9,7 +13,6 @@ import {checkedValueOnVoid} from "@/servises/UtilityServices"
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-import {useUtilityServices} from "@/composables/useUtilityServices";
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
@@ -89,7 +92,7 @@ const parentRef = ref(null)
 
 const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryAddDependencyElement", "checkValidationDataAndToggle"])
-const {getArrayElementsFromFormula} = useUtilityServices()
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {formulaAfterProcessingVariables, isVisibilityFromDependency, costAfterProcessingDependencyPrice} = useProcessingFormula(
@@ -451,7 +454,8 @@ function tryPassDependency() {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || localElementName"
+    :type-element="typeElement"
     :element-name="localElementName"
     :value="selectedValueInRadio"
     :local-cost="localCost"

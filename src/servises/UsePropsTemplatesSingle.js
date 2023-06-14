@@ -1,4 +1,4 @@
-import { isBoolean, isNotNaN } from "@/validators";
+import { isBoolean, isNotNaN } from "@/validators/validators";
 
 /**
  *

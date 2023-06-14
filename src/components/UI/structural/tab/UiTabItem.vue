@@ -45,8 +45,6 @@ const maxWidth = computed(() => {
       ? props.tabItem?.maxWidthSide + "%"
       : "100%";
 })
-
-
 </script>
 
 <template>

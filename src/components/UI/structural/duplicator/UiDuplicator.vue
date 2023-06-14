@@ -1,6 +1,10 @@
+<script>
+const typeElement = "DuplicatorItem";
+</script>
+
 <script setup>
 import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorWrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
@@ -248,7 +252,8 @@ onMounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :dependency-formula-display="dependencyFormulaDisplay"
     :parsing-formula-variables="formulaAfterProcessingVariables"
     :element-name="elementName"

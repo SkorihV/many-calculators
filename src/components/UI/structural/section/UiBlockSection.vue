@@ -1,7 +1,11 @@
+<script>
+const typeElement = "BlockSection";
+</script>
+
 <script setup>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -146,7 +150,8 @@ const isHorizontal = computed(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="showSection"
     :dependency-formula-display="dependencyFormulaDisplay"

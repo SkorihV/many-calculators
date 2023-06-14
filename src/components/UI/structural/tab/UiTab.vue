@@ -1,15 +1,18 @@
+<script>
+const typeElement = "Tab";
+</script>
+
 <script setup>
 import {computed, reactive, ref, toRef} from "vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/tab/UiTabItem.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {getBaseStoreGetters} from "@/composables/useBaseStore";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
-
 
 const emits = defineEmits(["changedValue"])
 const props = defineProps({
@@ -60,7 +63,6 @@ function checkIsShowError(parentName, key) {
   return key !== shownIdTab.value && isError && isCanShowAllTooltips.value;
 }
 
-
 const showBlock = computed(() => {
   let result = [];
   if (props.tabData?.items.length) {
@@ -76,9 +78,6 @@ const showBlock = computed(() => {
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
-
-
-
 </script>
 
 <template>
@@ -172,7 +171,8 @@ const isExistLabel = computed(() => {
     </div>
   </div>
   <dev-block
-    :label="label"
+    :label="label || elementName"
+    :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"

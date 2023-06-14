@@ -1,14 +1,17 @@
+<script>
+const typeElement = "UiSelect";
+</script>
+
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { onMounted, reactive, ref, onUnmounted, watch, nextTick, computed, toRef, getCurrentInstance } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import {useEventListener} from "@/composables/useEventsListener";
-import {useUtilityServices} from "@/composables/useUtilityServices"
 import {checkedValueOnVoid} from "@/servises/UtilityServices"
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
@@ -92,7 +95,7 @@ const parentRef = ref(null)
 const selectRef = ref(null)
 
 
-const {getArrayElementsFromFormula} = useUtilityServices()
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, isElementDependency} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'isElementDependency'])
 const {localDependencyList, constructLocalListElementDependencyInFormula, } = useLocalDependencyList()
@@ -630,7 +633,8 @@ onUnmounted(() => {
       />
     </div>
     <dev-block
-      :label="label"
+      :label="label || localElementName"
+      :type-element="typeElement"
       :element-name="localElementName"
       :value="currentOptionValue"
       :local-cost="localCost"

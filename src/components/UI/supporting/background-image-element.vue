@@ -4,12 +4,11 @@ import { computed, defineProps, ref, watch } from "vue";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import { useUtilityServices } from "@/composables/useUtilityServices";
 
 const { getImageDir, devMode } = getBaseStoreGetters();
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
-const { getArrayElementsFromFormula } = useUtilityServices();
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 const props = defineProps({
   imageSettingsData: {
