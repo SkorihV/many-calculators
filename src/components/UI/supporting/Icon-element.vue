@@ -91,13 +91,13 @@ export default {
       return "object-fit:" + behaviorImage + ";";
     },
     showIcon() {
-      return !this.showHoverIcon && !this.showSelectedIcon;
+      return this.isIconFilenameExist && !this.showHoverIcon && !this.showSelectedIcon;
     },
     showHoverIcon() {
-      return this.isParentHover && !this.isParentSelected;
+      return this.isIconHoverFilenameExist && this.isParentHover && !this.showSelectedIcon;
     },
     showSelectedIcon() {
-      return this.isParentSelected;
+      return this.isParentSelected && this.isIconSelectedFilenameExist;
     },
     isIconFilenameExist() {
       return Boolean(this.iconSettings?.image?.filename);
