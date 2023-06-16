@@ -6,7 +6,7 @@ import {
   REGEXP_SIGN, REGEXP_SPACES_IN_AROUND,
   REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
-import { EXCEPTION_VARIABLES_IN_FORMULA, LIST_BANNED_ELEMENTS_NAME } from "@/constants/localData";
+import { EXCEPTION_VARIABLES_IN_FORMULA, LIST_BANNED_ELEMENTS_NAME } from "@/constants/variables";
 
 import {replaceSpecSymbols} from "@/servises/UtilityServices"
 

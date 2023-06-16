@@ -1,9 +1,9 @@
 <script>
-const typeElement = "DuplicatorItem";
+const typeElement = "DuplicatorMain";
 </script>
 
 <script setup>
-import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorWrapper.vue";
+import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
@@ -255,7 +255,6 @@ onMounted(() => {
     :label="label || elementName"
     :type-element="typeElement"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     :element-name="elementName"
     :local-cost="localCost"
     :value="localCost"

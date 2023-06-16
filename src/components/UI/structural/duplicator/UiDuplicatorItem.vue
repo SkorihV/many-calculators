@@ -1,5 +1,5 @@
 <script>
-const typeElement = "DuplicatorMain";
+const typeElement = "DuplicatorItem";
 </script>
 
 <script setup>
@@ -20,10 +20,10 @@ import {
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import { REGEXP_STRING_SPLIT_FORMULA } from "@/constants/regexp";
+import { REGEXP_NUMBERS, REGEXP_SIGN, REGEXP_STRING_SPLIT_FORMULA, REGEXP_VARIABLE } from "@/constants/regexp";
 
 
-const {devMode, checkedIsStructureTemplate, getNameReserveVariable, getResultElementOnName,} = getBaseStoreGetters()
+const {devMode, checkedIsStructureTemplate, getResultElementOnName,} = getBaseStoreGetters()
 const {tryAddResultElement} = getBaseStoreAction(['tryAddResultElement'])
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"])
@@ -71,13 +71,14 @@ const localResultData = ref({})
 const mutationsInputData = ref(null)
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(  reactive({
+const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula( reactive({
   localDependencyList: localDependencyList,
   constructLocalListElementDependencyInFormula,
   formula: toRef(props,"dependencyFormulaDisplay"),
   parentIsShow: toRef(props, "parentIsShow")
 }))
 import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 
 /**
  *
@@ -88,7 +89,7 @@ const isExistDependencyMainFormula = computed(() => {
 })
 /**
  *
- * @returns {*|{length}|T|(function(): {default: string, type: String | StringConstructor})|string}
+ * @type {ComputedRef<unknown>}
  */
 const mainFormulaResult = computed(() => {
   if (!isExistDependencyMainFormula.value) {
@@ -153,7 +154,7 @@ const listGlobalsVariables = computed(() => {
     (item) =>
       !props.originVariables.includes(item) &&
       !Boolean(item?.match(REGEXP_STRING_SPLIT_FORMULA)) &&
-      item !== getNameReserveVariable.value
+      item !== NAME_RESERVED_VARIABLE_SUM
   );
 })
 /**
@@ -165,6 +166,9 @@ const listLocalVariablesUsedInFormula = computed(() => {
     isLocalVariable(item)
   );
 })
+
+
+
 /**
  * Список локальных переменных используемых в формуле c префиксом
  * @returns {*}
@@ -202,7 +206,7 @@ const dataFreeVariablesOutsideFormula = computed(() => {
  * Сумма всех элементов не вошедших в формулу
  * @returns {unknown}
  */
-const resultSummaDataFriVariablesOutsideFormula = computed(() => {
+const resultSummaDataFreeVariablesOutsideFormula = computed(() => {
   return dataFreeVariablesOutsideFormula.value?.reduce(
     (reduceSumma, item) => {
       const isAllowedSummation =
@@ -236,12 +240,12 @@ const attachIndexForFormulaElements = computed(() => {
  */
 const dataListVariablesOnFormula = computed(() => {
   return attachIndexForFormulaElements.value?.map((item) => {
-    const isReserveVariable = item === getNameReserveVariable.value;
+    const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = listGlobalsVariables.value.includes(item);
 
     if (isReserveVariable) {
       return getProxyFreeVariables(
-        resultSummaDataFriVariablesOutsideFormula.value
+        resultSummaDataFreeVariablesOutsideFormula.value
       );
     } else if (isGlobalVariable) {
       return getResultElementOnName.value(item);
@@ -267,14 +271,14 @@ const mutationFormulaResult = computed(() => {
  */
 const compileFormulaWitchData = computed(() => {
   if (!variablesInFormula.value.length) {
-    return resultSummaDataFriVariablesOutsideFormula.value;
+    return resultSummaDataFreeVariablesOutsideFormula.value;
   }
   return processingArrayOnFormulaProcessingLogic(
     dataListVariablesOnFormula.value
   )
     .map((item) => {
       const nameIsNotExist = !item?.name?.length;
-      const isReserveVariable = item?.name === getNameReserveVariable.value;
+      const isReserveVariable = item?.name === NAME_RESERVED_VARIABLE_SUM;
       const isAllowReturnLocalCost =
         listLocalVariablesUsedInFormulaForPrefix.value.includes(item.name) &&
         localResultData.value[item.name]?.isShow &&
@@ -505,11 +509,11 @@ function  addIndexIndexInFormulaElements(formulaString, index) {
  * @param item
  * @returns {boolean}
  */
-function  isLocalVariable(item) {
-  const isFound = !Boolean(item.match(REGEXP_STRING_SPLIT_FORMULA));
-  const isFoundVariableInOriginVariables =
-    props.originVariables.includes(item);
-  return isFound && isFoundVariableInOriginVariables;
+function isLocalVariable(item) {
+  const isVariable = Boolean(item.match(REGEXP_VARIABLE))
+  const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM))
+
+  return isVariable || isSpecVariable;
 }
 
 
@@ -584,6 +588,7 @@ onMounted(() => {
       X
     </button>
   </div>
+  {{mainFormulaResult}}
   <dev-block
     :type-element="typeElement"
     :element-name="mutationsInputData?.elementName"

@@ -7,7 +7,6 @@ export const useBaseStore = defineStore("base", {
       dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
-      reserveVariableForOtherSumma: "_otherSum_", // зарезервированная переменная в которую попадают сумма всех полей не участвующих в формуле
       nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
       globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
       devModeEnabled: false,
@@ -153,13 +152,7 @@ export const useBaseStore = defineStore("base", {
       Boolean(
         Object.values(validationsErrorsList).filter((item) => item.error).length
       ),
-    /**
-     * название спецпеременной служащей для суммирования в себе всех значений
-     * @param state
-     * @returns {string}
-     */
-    getNameReserveVariable: ({ reserveVariableForOtherSumma }) =>
-      reserveVariableForOtherSumma,
+
     devMode: ({ devModeEnabled }) => devModeEnabled,
     showInsideElementStatus: ({ showInsideElementStatusData }) =>
       showInsideElementStatusData,
@@ -259,13 +252,14 @@ export const useBaseStore = defineStore("base", {
      * @param displayValue
      * @param type
      */
-    tryAddDependencyElement({ name, value, isShow, displayValue, type }) {
+    tryAddDependencyElement({ name, value, isShow, displayValue, type, cost = null }) {
       this.dataListForDependencies[name] = {
         name,
         value,
         isShow,
         displayValue,
         type,
+        cost
       };
     },
     /**
@@ -367,5 +361,12 @@ export const useBaseStore = defineStore("base", {
       }
       return nameItemList in this.globalResultsElements;
     },
+    isShowElement(elementName) {
+      const item = this.getResultElementOnName(elementName);
+      if (item !== null) {
+        return item.isShow
+      }
+      return null;
+    }
   },
 });

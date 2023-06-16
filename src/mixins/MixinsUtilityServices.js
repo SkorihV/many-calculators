@@ -1,5 +1,6 @@
 import { useBaseStore } from "@/store/piniaStore";
 import { mapState } from "pinia";
+import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 export const MixinsUtilityServices = {
   methods: {
     /**
@@ -57,7 +58,7 @@ export const MixinsUtilityServices = {
     getProxyFreeVariables(value, name = null) {
       return new Proxy(
         {
-          name: name === null ? this.getNameReserveVariable : name,
+          name: name === null ? NAME_RESERVED_VARIABLE_SUM : name,
           cost: value,
           isShow: Boolean(value),
         },
@@ -70,6 +71,6 @@ export const MixinsUtilityServices = {
     },
   },
   computed: {
-    ...mapState(useBaseStore, ["getSpecSymbols", "getNameReserveVariable"]),
+    ...mapState(useBaseStore, ["getSpecSymbols"]),
   },
 };

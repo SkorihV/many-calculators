@@ -1,12 +1,18 @@
+<script>
+const typeElement = "Column";
+</script>
+
+
 <script setup>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { computed, reactive, ref, toRef } from "vue";
 import {useProcessingFormula} from "@/composables/useProcessingFormula"
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 
-const emits =defineEmits(['changedValue'])
+const emits = defineEmits(['changedValue'])
 const props = defineProps({
   idColumn: {
     type: Number,
@@ -84,4 +90,13 @@ const isHorizontal = computed(() => {
       @changedValue="changeValue"
     />
   </div>
+  <dev-block
+    :dependency-formula-display="dependencyFormulaDisplay"
+    :label="column.label"
+    hidden-cost
+    hidden-value
+    :is-visibility-from-dependency="showColumn"
+    :type-element="typeElement"
+    :element-name="parentName"
+  />
 </template>

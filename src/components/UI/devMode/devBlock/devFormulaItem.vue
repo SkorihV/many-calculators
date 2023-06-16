@@ -3,13 +3,16 @@
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import { computed } from "vue";
 import { isSpecSymbol, isVariable } from "@/validators/validators";
+import {checkLogicAndReturnValue} from "@/servises/UtilityServices"
+import goScrollToElement from "@/composables/goScrollToElement";
 
 const {getResultElementOnName, getDependencyElementOnName} = getBaseStoreGetters()
-const {isElementDependency, isElementResult} = getBaseStoreAction(['isElementDependency', 'isElementResult'])
+const {isElementDependency, isElementResult, isShowElement} = getBaseStoreAction(['isElementDependency', 'isElementResult', 'isShowElement'])
+
 
 const props = defineProps({
   formulaItem: {
-    type: String,
+    type: [String, Object],
     default: null
   },
   isDependency: {
@@ -19,43 +22,75 @@ const props = defineProps({
   isResult: {
     type: Boolean,
     default: false
-  }
+  },
+  showValue: {
+    type: Boolean,
+    default: false
+  },
+  showCost: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const localIsVariable = computed(() => {
-  return isVariable(props.formulaItem)
+  if ( typeof props.formulaItem === 'object') {
+    return isVariable(props.formulaItem.name)
+  } else {
+    return isVariable(props.formulaItem)
+
+  }
 })
 
-const localFormulaItem = computed(() => {
-  const data = props.formulaItem;
-  if (localIsVariable.value) {
-    if (props.isDependency && isElementDependency(data)) {
-      return getDependencyElementOnName.value(data)
-    } else if (props.isResult && isElementResult(data)) {
-      return getResultElementOnName.value(data)
+const itemDependencyData = computed(() => {
+  const formula = props.formulaItem;
+  if (localIsVariable.value && props.isDependency && isElementDependency(formula)) {
+    return getDependencyElementOnName.value(formula)
+  }
+  return formula
+})
+
+const itemResultData = computed(() => {
+  const formula = props.formulaItem;
+  if (localIsVariable.value && props.isResult && isElementResult(formula)) {
+    return getResultElementOnName.value(formula)
+  }
+  return formula
+})
+
+
+const itemValue = computed(() => {
+  if (props.isDependency) {
+    if (itemDependencyData.value?.value !== undefined) {
+
+      return itemDependencyData.value.value === null ? 'null' : itemDependencyData.value.value
     }
-    return data;
+    return itemDependencyData?.value
+  } else if (props.isResult) {
+    if (itemResultData.value?.value !== undefined) {
+      return itemResultData.value.value === null ? 'null' : itemResultData.value.value
+    }
+    return itemResultData?.value
   }
-  return data
 })
 
-const localFormulaItemData = computed(() => {
-  if (localFormulaItem.value?.value !== undefined) {
-    return localFormulaItem.value.value === null ? 'null' : localFormulaItem.value.value
+const itemCost = computed(() => {
+  if (!props.isResult) {return null;}
+  if (itemResultData.value?.cost !== undefined) {
+    return checkLogicAndReturnValue(itemResultData.value) === null ? 'null' : checkLogicAndReturnValue(itemResultData.value)
   }
-  return localFormulaItem.value.replaceAll(/"|'/g, '')
+  return itemResultData?.value
 })
 
-const isHiddenElement = computed(() => {
-  if (localIsVariable.value) {
-    return !localFormulaItem.value.isShow
+const localName = computed(() => {
+  if (props.isDependency) {
+    return typeof itemDependencyData.value === 'object' ? itemDependencyData.value?.name + " : " : null;
+  } else if (props.isResult) {
+    return typeof itemResultData.value === 'object' ? itemResultData.value?.name + " : " : null
   }
-
-  return false;
 })
 
 const isExist = computed(() => {
-
   if (!localIsVariable.value) {
     return true
   }
@@ -63,8 +98,12 @@ const isExist = computed(() => {
   return isElementDependency(props.formulaItem) || isElementResult(props.formulaItem)
 })
 
+const isHiddenElement = computed(() => {
+    return localIsVariable.value && isShowElement(props.formulaItem) !== null && isExist.value ? !isShowElement(props.formulaItem) : false;
+})
+
 const title = computed(() => {
-  if (isHiddenElement.value) {
+  if (isHiddenElement?.value && isExist.value) {
     return "Элемент скрыт"
   }
 
@@ -77,12 +116,18 @@ const title = computed(() => {
 
 const classes = computed(() => {
   return [
-    localIsVariable.value ? 'calc__dev-block-item-is-variable' : "" ,
-    isHiddenElement.value ? 'calc__dev-block-item-is-hidden': "",
-    !isExist.value ? 'calc__dev-block-item-not-exist': ""
+    localIsVariable.value ? 'is-variable' : "" ,
+    isHiddenElement.value ? 'is-hidden': "",
+    !isExist.value ? 'is-not-exist': "",
+    !isHiddenElement.value && isExist.value && localIsVariable.value ? 'is-pointer': ""
   ]
 })
 
+function goToElement() {
+  if (!isHiddenElement.value && localIsVariable.value) {
+    goScrollToElement(props.formulaItem)
+  }
+}
 
 </script>
 
@@ -91,7 +136,15 @@ const classes = computed(() => {
     class="calc__dev-block-item"
     :title="title"
     :class="[...classes]"
-  >{{localIsVariable ? formulaItem + " : " : null}}{{localFormulaItemData}}</div>
+    @click="goToElement"
+  >
+    <template v-if="showValue">
+      {{  localName }}{{ itemValue }}
+    </template>
+    <template v-if="showCost && isResult">
+      {{localName}}{{itemCost}}
+    </template>
+    </div>
 </template>
 
 <style scoped>

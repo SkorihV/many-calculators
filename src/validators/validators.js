@@ -1,5 +1,9 @@
 import { REGEXP_NUMBERS, REGEXP_QUOTES_AND_SPACE_AND_WORD, REGEXP_SIGN, REGEXP_VARIABLE } from "@/constants/regexp";
-import { LIST_BANNED_ELEMENTS_NAME } from "@/constants/localData";
+import {
+  LIST_BANNED_ELEMENTS_NAME,
+  NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  NAME_RESERVED_VARIABLE_SUM
+} from "@/constants/variables";
 
 export const isBoolean = (value) => {
   return value === false || value === true || value === 0 || value === 1;
@@ -31,5 +35,9 @@ export const isNotNull = (data) => {
 }
 
 export const isSpecSymbol = (data) => {
-  return ["true","false",].includes(data)
+  return [...LIST_BANNED_ELEMENTS_NAME].includes(data)
+}
+
+export const IS_SPEC_VARIABLES = (variable) => {
+  return [NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM].includes(variable)
 }

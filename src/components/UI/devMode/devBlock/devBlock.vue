@@ -74,13 +74,13 @@ const localFormula = computed(() => {
     </button>
     <div class="calc__dev-block-wrapper" v-if="isShowInnerData">
       <div class="calc__dev-block-element" v-if="label?.length">
-        Заголовок элемента: {{ label }}
+        Заголовок: {{ label }}
       </div>
       <div
         class="calc__dev-block-element calc__dev-block-element-name"
         v-if="elementName?.length"
       >
-        Имя элемента: {{ elementName }}
+        Имя: {{ elementName }}
       </div>
 
       <dev-formula-block-wrapper
@@ -100,19 +100,19 @@ const localFormula = computed(() => {
         class="calc__dev-block-element calc__dev-block-element-value"
         v-if="!hiddenValue"
       >
-        Значение элемента: {{ value === null ? "null" : value }}
+        Значение: {{ value === null ? "null" : value }}
       </div>
       <div
         class="calc__dev-block-element calc__dev-block-element-show"
         v-if="isVisibilityFromDependency !== null"
       >
-        Элемент виден: {{ isVisibilityFromDependency }}
+        Виден: {{ isVisibilityFromDependency }}
       </div>
       <div
         class="calc__dev-block-element calc__dev-block-element-cost"
         v-if="!hiddenCost"
       >
-        Текущая стоимость: {{ localCost === null ? "null" : localCost }}
+        Стоимость: {{ localCost === null ? "null" : localCost }}
       </div>
     </div>
   </div>

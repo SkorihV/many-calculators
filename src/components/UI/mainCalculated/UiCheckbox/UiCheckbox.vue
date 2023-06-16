@@ -17,7 +17,7 @@ import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {checkedValueOnVoid} from "@/servises/UtilityServices"
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
-import goScrollToElement from "@/components/UI/mainCalculated/UiCheckbox/goScrollToElement";
+import goScrollToElement from "@/composables/goScrollToElement";
 import {useIsCheckedType} from "@/components/UI/mainCalculated/UiCheckbox/useIsCheckedType";
 
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";

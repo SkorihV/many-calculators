@@ -25,7 +25,7 @@ import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingD
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 
 
-const {devMode, getResultElementOnName, getNameReserveVariable} = getBaseStoreGetters()
+const {devMode, getResultElementOnName} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle'])
 
 const emits = defineEmits(['changedValue'])
@@ -92,6 +92,7 @@ useDisplaySpinner(props.elementName)
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
 
 import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 const isExistLabel = computed(() => {
@@ -152,7 +153,7 @@ const processingVariablesInFormula = computed(() => {
       localCostFormula.value
   );
   let formulaCost = formulaCostArr?.map((item) => {
-    const isReserveVariable = item === getNameReserveVariable.value;
+    const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = getResultElementOnName.value(item) !== null;
 
     if (isReserveVariable) {

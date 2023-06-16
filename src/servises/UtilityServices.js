@@ -1,9 +1,12 @@
-import { LIST_BANNED_ELEMENTS_NAME, SPEC_SYMBOLS } from "@/constants/localData";
 import {
-  REGEXP_NUMBERS,
+  SPEC_SYMBOLS,
+  ERROR_PADDING,
+  ERROR_ELEMENT_IS_NOT_EXIST
+} from "@/constants/variables";
+import {
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
-  REGEXP_QUOTES_AND_WORD, REGEXP_SIGN,
-  REGEXP_SPACES_IN_AROUND, REGEXP_VARIABLE,
+  REGEXP_QUOTES_AND_WORD,
+  REGEXP_SPACES_IN_AROUND,
   REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
 
@@ -78,35 +81,55 @@ const processingArrayOnFormulaProcessingLogic = function (dataList) {
   for (let i = 0; i < localDataList.length; i++) {
     const currentItemList = localDataList[i];
 
-    const isProcessingLogic =
-      currentItemList?.formulaProcessingLogic?.length &&
-      currentItemList?.cost === null;
-    const isItemObject = typeof currentItemList === "object";
-    const isExistCost = typeof currentItemList?.cost === "number";
+    const isNullData = currentItemList === null;
 
-    const error = "ОшибкаЗаполнения";
-
-    const isNulData = currentItemList === null;
-    const errorNull = "ЭлементаСТакимИменемНеСуществует";
-
-    if (!isItemObject) {
+    if (!isItemObject(currentItemList)) {
       resultList.push(currentItemList);
-    } else if (isNulData) {
-      resultList.push(errorNull);
-    } else if (isItemObject && isProcessingLogic) {
-      if (currentItemList.formulaProcessingLogic === "error") {
-        resultList.push(error);
-      } else if (currentItemList.formulaProcessingLogic === "zero") {
-        resultList.push(0);
+    } else if (isNullData) {
+      resultList.push(ERROR_ELEMENT_IS_NOT_EXIST);
+    } else if (isItemObject(currentItemList)) {
+      const pushValue = checkLogicAndReturnValue(currentItemList)
+      if (pushValue !== null) {
+        resultList.push(pushValue);
       }
-    } else if (isItemObject && isExistCost) {
-      resultList.push(currentItemList.cost);
     } else {
       resultList.push(currentItemList);
     }
   }
   return resultList;
 };
+
+const isLogicDataExist = (item) => {
+  return Boolean(item?.formulaProcessingLogic?.length)
+
+}
+const isCostNull = (item) => {
+  return item?.cost === null;
+}
+const isItemObject = (item) => {
+  return typeof item === "object";
+}
+const isCostExist = (item) => {
+  return typeof item?.cost === "number";
+}
+/**
+ *
+ * @param item
+ * @returns {number|null|string}
+ */
+const checkLogicAndReturnValue = (item) => {
+  if (isLogicDataExist(item) && isCostNull(item)) {
+    if (item.formulaProcessingLogic === "error") {
+      return ERROR_PADDING;
+    } else if (item.formulaProcessingLogic === "zero") {
+      return 0;
+    }
+  }
+  if (isCostExist(item)) {
+    return item.cost
+  }
+  return null;
+}
 
 /**
  * Обрабатываем массив данных и получаем сумму всех значений из item.cost
@@ -135,7 +158,7 @@ const parsingDataInFormulaOnSum = function (dataListVariables) {
  * @param dataList
  * @returns {*}
  */
-const getSummaFreeVariablesInFormula = function (dataList) {
+const getSummaVariablesInFormula = function (dataList) {
   return dataList.reduce((sum, item) => {
     const isAllowSummingCost =
       item?.cost !== null &&
@@ -273,12 +296,13 @@ export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
   parsingDataInFormulaOnSum,
-  getSummaFreeVariablesInFormula,
+  getSummaVariablesInFormula,
   getListVariablesMissedInFormula,
   getNameElementsRecursive,
   decimalAdjust,
   checkedValueOnVoid,
   replaceSpecSymbols,
   getArrayElementsFromFormula,
-  getArrayOnFormula
+  getArrayOnFormula,
+  checkLogicAndReturnValue
 };

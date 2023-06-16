@@ -9,18 +9,16 @@ import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrap
 import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-
 import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
-
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-
 
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 
 import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
+import {useGetOtherGlobalSum} from "@/composables/useGetOtherGlobalSum";
 import { onMounted, ref, watch, computed } from "vue";
 import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
@@ -35,7 +33,7 @@ import {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
   parsingDataInFormulaOnSum,
-  getSummaFreeVariablesInFormula,
+  getSummaVariablesInFormula,
   getListVariablesMissedInFormula,
   decimalAdjust,
 } from "@/servises/UtilityServices.js";
@@ -45,11 +43,10 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore"
 import { REGEXP_HTML_TAG } from "@/constants/regexp";
+import { NAME_RESERVED_VARIABLE_GLOBAL_SUM, NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 
 const {isCanShowAllTooltips,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
-  getNameReserveVariable,
-  getAllResultsElements,
   devMode,
   showInsideElementStatus,
   appIsMounted,
@@ -155,56 +152,61 @@ const mainFormulaIsExist = computed(() => {
     return Boolean(mainFormulaResult.value?.length);
   })
 
-  /**
-   * Данные которые подходят для вывода или расчета
-   * @returns {{length}|unknown[]|*[]}
-   */
-const baseDataForCalculate = computed(() => {
-    return Object.values(getAllResultsElements.value).filter(
-      (item) => !Boolean(item?.isDuplicator)
-    );
-  })
-  /**
-   * Разбиваем полученную формулу на массив с переменными и знаками.
-   * Избавляемся от пустых элементов.
-   * @returns {*[]|*}
-   */
-const variablesInFormula = computed(() => {
-    if (mainFormulaIsExist.value) {
-      return getArrayElementsFromFormula(mainFormulaResult.value);
-    }
-    return [];
-  })
-  /**
-   * Список переменных не используемых в формуле
-   * @returns {[]}
-   */
-const freeVariablesOutsideFormula = computed(() => {
-    return getListVariablesMissedInFormula(
-      baseDataForCalculate.value,
-      variablesInFormula.value
-    );
-  })
-  /**
-   * сумма всех не используемых в формуле переменных
-   * @returns {*}
-   */
-const summaFreeVariables = computed(() => {
-    return getSummaFreeVariablesInFormula(freeVariablesOutsideFormula.value);
-  })
+//   /**
+//    * Данные которые подходят для вывода или расчета
+//    * @returns {{length}|unknown[]|*[]}
+//    */
+// const baseDataForCalculate = computed(() => {
+//     return Object.values(getAllResultsElements.value).filter(
+//       (item) => !Boolean(item?.isDuplicator)
+//     );
+//   })
+
+const {variablesInFormula, summaFreeVariables, baseDataForCalculate } = useGetOtherGlobalSum(mainFormulaResult)
+
+
+//   /**
+//    * Разбиваем полученную формулу на массив с переменными и знаками.
+//    * Избавляемся от пустых элементов.
+//    * @returns {*[]|*}
+//    */
+// const variablesInFormula = computed(() => {
+//     if (mainFormulaIsExist.value) {
+//       return getArrayElementsFromFormula(mainFormulaResult.value);
+//     }
+//     return [];
+//   })
+//   /**
+//    * Список переменных не используемых в формуле
+//    * @returns {[]}
+//    */
+// const freeVariablesOutsideFormula = computed(() => {
+//     return getListVariablesMissedInFormula(
+//       baseDataForCalculate.value,
+//       variablesInFormula.value
+//     );
+//   })
+//   /**
+//    * сумма всех не используемых в формуле переменных
+//    * @returns {*}
+//    */
+// const summaFreeVariables = computed(() => {
+//     return getSummaFreeVariablesInFormula(freeVariablesOutsideFormula.value);
+//   })
   /**
    * Список переменных из формулы вместе с данными
    * @returns {*}
    */
 const dataListVariablesOnFormula = computed(() => {
     return variablesInFormula.value?.map((item) => {
-      if (item === getNameReserveVariable.value) {
+      if (item === NAME_RESERVED_VARIABLE_SUM) {
         tryPassDependency(
-          "_otherSum_",
+          NAME_RESERVED_VARIABLE_SUM,
           summaFreeVariables.value,
           Boolean(summaFreeVariables.value !== null),
           summaFreeVariables.value,
-          "_otherSum_"
+          NAME_RESERVED_VARIABLE_SUM,
+          summaFreeVariables.value
         );
         return getProxyFreeVariables(summaFreeVariables.value);
       } else {
@@ -309,7 +311,7 @@ const finalSummaForOutput = computed(() => {
       !displayResultData.value ||
       isExistGlobalErrorsValidationIgnoreHiddenElement.value
     ) {
-      tryPassDependency("_globalSum_", null, false, null, "App_calc");
+      tryPassDependency(NAME_RESERVED_VARIABLE_GLOBAL_SUM, null, false, null, "App_calc");
       return null;
     }
     let resultSum = null;
@@ -334,7 +336,8 @@ const finalSummaForOutput = computed(() => {
       resultSum,
       Boolean(resultSum !== null),
       resultSum,
-      "App_calc"
+      "App_calc",
+      resultSum
     );
 
     return resultSum;
@@ -600,13 +603,14 @@ function toggleTextAreaResultForDevMode() {
         teleportField.value.style.display = "none";
       }
     }
-function tryPassDependency(name, value, isShow, displayValue, type) {
+function tryPassDependency(name, value, isShow, displayValue, type, cost = null) {
       tryAddDependencyElement({
         name,
         value,
         isShow,
         displayValue,
         type,
+        cost
       });
     }
 
@@ -2781,36 +2785,34 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         color: white;
       }
       &-show {
-        background-color: orange;
+        background-color: yellow;
       }
       &-cost {
-        background-color: yellow;
+        background-color: orange;
       }
     }
 
     &-item {
       padding: 3px;
-      &-is-variable {
+      &.is-variable {
         border-radius: 3px;
         border: 1px solid gray;
       }
-
-      &-not-exist {
+      &.is-not-exist {
         background: red;
         color:white;
       }
-      &-is-hidden {
+      &.is-hidden {
         background: yellow;
       }
-
       &-wrapper {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 5px;
+        margin: 5px 0;
       }
-      &-label {
-
+      &.is-pointer {
+        cursor:pointer;
       }
     }
   }

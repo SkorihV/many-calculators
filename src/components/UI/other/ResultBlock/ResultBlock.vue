@@ -23,6 +23,7 @@ const {
   globalDependenciesList,
 } = getBaseStoreGetters();
 
+
 const props = defineProps({
   resultOptions: {
     type: Object,
@@ -105,7 +106,7 @@ const textForSpinner = props.resultOptions?.textForSpinner
   <dev-block
     :label="label"
     :type-element="typeElement"
-    :formula="resultOptions?.formulaDependencyForResultBlock"
+    :dependency-formula-display="resultOptions?.formulaDependencyForResultBlock"
     :formula-variables="formulaAfterProcessingVariables"
     :is-visibility-from-dependency="isShowResultBlock"
     hidden-cost
