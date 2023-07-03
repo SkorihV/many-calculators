@@ -2,22 +2,34 @@ import { computed } from "vue";
 import {
   getArrayElementsFromFormula,
   getListVariablesMissedInFormula,
-  getSummaVariablesInFormula
+  getSummaVariablesInFormula,
+  getListVariablesUsedInFormula
 } from "@/servises/UtilityServices";
 
 import {getBaseStoreGetters} from "@/composables/useBaseStore";
 
-
-export function useGetOtherGlobalSum(formula) {
+/**
+ *
+ * @param formula
+ * @param viewDuplicator - искать только в элементах дупликатора
+ * @param parentName - отфильтровывать элементы по указанному родителю ( для дупликатора )
+ * @returns {{summaFreeVariables: ComputedRef<*>, variablesInFormula: ComputedRef<unknown>, baseDataForCalculate: ComputedRef<unknown[]>}}
+ */
+export function useGetOtherGlobalSum(formula = [], viewDuplicator = false, parentName = null) {
   const { getAllResultsElements} = getBaseStoreGetters()
-
   /**
    * Данные которые подходят для вывода или расчета
    * @returns {{length}|unknown[]|*[]}
    */
   const baseDataForCalculate = computed(() => {
     return Object.values(getAllResultsElements.value).filter(
-      (item) => !Boolean(item?.isDuplicator)
+      (item) => {
+        if (!viewDuplicator) {
+          return !Boolean(item?.isDuplicator)
+        } else {
+          return Boolean(item?.isDuplicator) && item.parentName === parentName
+        }
+      }
     );
   })
   /**
@@ -26,7 +38,7 @@ export function useGetOtherGlobalSum(formula) {
    * @returns {*[]|*}
    */
   const variablesInFormula = computed(() => {
-    if (formula.value) {
+    if (formula?.value) {
       return getArrayElementsFromFormula(formula.value);
     }
     return [];
@@ -43,6 +55,13 @@ export function useGetOtherGlobalSum(formula) {
     );
   })
 
+  const usedVariablesOutsideFormula = computed( () => {
+    return getListVariablesUsedInFormula(
+      baseDataForCalculate.value,
+      variablesInFormula.value
+    );
+  })
+
   /**
    * сумма всех не используемых в формуле переменных
    * @returns {*}
@@ -52,8 +71,10 @@ export function useGetOtherGlobalSum(formula) {
   })
 
   return {
+    freeVariablesOutsideFormula,
     summaFreeVariables,
     variablesInFormula,
     baseDataForCalculate,
+    usedVariablesOutsideFormula
   }
 }

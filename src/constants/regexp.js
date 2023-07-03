@@ -2,7 +2,8 @@ export const REGEXP_HTML_TAG = /<\/?[a-z][^>]*(>|$)/gi;
 
 export const REGEXP_VARIABLE =/^[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё0-9_]*$/;
 export const REGEXP_SIGN = /^(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)$/;
-export const REGEXP_NUMBERS = /([0-9]*(\\.[0-9])*)/
+export const REGEXP_NUMBERS = /\b[-+]?(?![A-Za-zА-Яа-яЁё0-9])\d+(\.\d*)?\b/g
+// export const REGEXP_NUMBERS = /([0-9]*(\\.[0-9])*)/
 
 export const REGEXP_VARIABLE_SIGN_NUMBERS = /([A-Za-zА-Яа-яЁё0-9_.,"']*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9]*(\.[0-9])*)/g
 

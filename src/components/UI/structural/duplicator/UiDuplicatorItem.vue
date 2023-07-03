@@ -9,7 +9,7 @@ import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-import { ref, onMounted, watch, computed, reactive, toRef } from "vue";
+import { ref, onMounted, watch, computed, reactive, toRef, onUnmounted } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
@@ -21,10 +21,13 @@ import {
 } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { REGEXP_NUMBERS, REGEXP_SIGN, REGEXP_STRING_SPLIT_FORMULA, REGEXP_VARIABLE } from "@/constants/regexp";
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum"
 
 
 const {devMode, checkedIsStructureTemplate, getResultElementOnName,} = getBaseStoreGetters()
-const {tryAddResultElement} = getBaseStoreAction(['tryAddResultElement'])
+const {tryAddResultElement, tryAddDependencyElement, deleteElementInDependencyList, isElementResult} = getBaseStoreAction(['tryAddResultElement', 'tryAddDependencyElement', 'deleteElementInDependencyList', "isElementResult"])
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"])
 const props = defineProps({
@@ -69,6 +72,9 @@ const props = defineProps({
 const counterDuplicate = ref(0)
 const localResultData = ref({})
 const mutationsInputData = ref(null)
+const localParentName = props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
+const LOCAL_NAME_RESERVED_VARIABLE_SUM = NAME_RESERVED_VARIABLE_SUM + "_" + props.index;
+
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula( reactive({
@@ -77,8 +83,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
   formula: toRef(props,"dependencyFormulaDisplay"),
   parentIsShow: toRef(props, "parentIsShow")
 }))
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
-import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+
 
 /**
  *
@@ -145,18 +150,29 @@ const mainFormulaResult = computed(() => {
 const variablesInFormula = computed(() => {
   return getArrayElementsFromFormula(mainFormulaResult.value);
 })
+
+const variablesInFormulaExcludeSigns = computed(() => {
+  return variablesInFormula.value.filter( item => {
+    const isNumber = Boolean(item?.match(REGEXP_NUMBERS))
+    const isSign = Boolean(item?.match(REGEXP_SIGN))
+    return !isNumber && !isSign
+  })
+})
+
 /**
  * Список переменных в формуле из глобального окружения
  * @returns {*}
  */
 const listGlobalsVariables = computed(() => {
-  return variablesInFormula.value.filter(
-    (item) =>
-      !props.originVariables.includes(item) &&
-      !Boolean(item?.match(REGEXP_STRING_SPLIT_FORMULA)) &&
-      item !== NAME_RESERVED_VARIABLE_SUM
+  return variablesInFormulaExcludeSigns.value.filter(
+    (item) => {
+      return !props.originVariables.includes(item) &&
+        item !== NAME_RESERVED_VARIABLE_SUM && item !== LOCAL_NAME_RESERVED_VARIABLE_SUM
+    }
+
   );
 })
+
 /**
  * Список локальных переменных используемых в формуле
  * @returns {*}
@@ -169,57 +185,40 @@ const listLocalVariablesUsedInFormula = computed(() => {
 
 
 
-/**
- * Список локальных переменных используемых в формуле c префиксом
- * @returns {*}
- */
-const listLocalVariablesUsedInFormulaForPrefix = computed(() => {
-  return assignThePrefixArrayItems(
-    listLocalVariablesUsedInFormula.value
-  );
-})
-/**
- * Список локальных переменных не используемых в формуле
- * @returns {*[]}
- */
-const arrayFreeVariablesOutsideFormula = computed(() => {
-  let variablesListUnusedInFormula = props.originVariables.filter(
-    (item) => !listLocalVariablesUsedInFormula.value.includes(item)
-  );
+// /**
+//  * Список локальных переменных используемых в формуле c префиксом
+//  * @returns {*}
+//  */
+// const listLocalVariablesUsedInFormulaForPrefix = computed(() => {
+//   return assignThePrefixArrayItems(
+//     listLocalVariablesUsedInFormula.value
+//   );
+// })
+// /**
+//  * Список локальных переменных не используемых в формуле
+//  * @returns {*[]}
+//  */
+// const arrayFreeVariablesOutsideFormula = computed(() => {
+//   let variablesListUnusedInFormula = props.originVariables.filter(
+//     (item) => !listLocalVariablesUsedInFormula.value.includes(item)
+//   );
+//
+//   return assignThePrefixArrayItems(variablesListUnusedInFormula);
+// })
+// /**
+//  * Список переменных не используемых в формуле
+//  * @returns {[]}
+//  */
+// const dataFreeVariablesOutsideFormula = computed(() => {
+//   let localData = [];
+//   arrayFreeVariablesOutsideFormula.value.forEach((elementName) => {
+//     if (localResultData.value[elementName]) {
+//       localData.push(localResultData.value[elementName]);
+//     }
+//   });
+//   return localData;
+// })
 
-  return assignThePrefixArrayItems(variablesListUnusedInFormula);
-})
-/**
- * Список переменных не используемых в формуле
- * @returns {[]}
- */
-const dataFreeVariablesOutsideFormula = computed(() => {
-  let localData = [];
-  arrayFreeVariablesOutsideFormula.value.forEach((elementName) => {
-    if (localResultData.value[elementName]) {
-      localData.push(localResultData.value[elementName]);
-    }
-  });
-  return localData;
-})
-/**
- * Сумма всех элементов не вошедших в формулу
- * @returns {unknown}
- */
-const resultSummaDataFreeVariablesOutsideFormula = computed(() => {
-  return dataFreeVariablesOutsideFormula.value?.reduce(
-    (reduceSumma, item) => {
-      const isAllowedSummation =
-        item.cost !== null && !item.excludeFromCalculations && item.isShow;
-
-      if (isAllowedSummation) {
-        return reduceSumma + parseFloat(item.cost);
-      }
-      return reduceSumma + 0;
-    },
-    0
-  );
-})
 
 /**
  * в формулу добавляем префиксы для переменных дупликатора
@@ -234,18 +233,59 @@ const attachIndexForFormulaElements = computed(() => {
   });
 })
 
+
+
+/**
+ * конечная формула после обработки в виде строки с переменными
+ * @returns {*}
+ */
+const mutationFormulaResult = computed(() => {
+  return attachIndexForFormulaElements.value.join(" ");
+})
+
+
+const {
+  summaFreeVariables,
+  usedVariablesOutsideFormula,
+  freeVariablesOutsideFormula
+} = useGetOtherGlobalSum(mutationFormulaResult, true, localParentName )
+
+/**
+ * Сумма всех элементов не вошедших в формулу
+ * @returns {unknown}
+ */
+const resultSummaDataFreeVariablesOutsideFormula = computed(() => {
+  return freeVariablesOutsideFormula.value?.reduce(
+    (reduceSumma, item) => {
+      const isAllowedSummation =
+        item.cost !== null && !item.excludeFromCalculations && item.isShow;
+
+      if (isAllowedSummation) {
+        return reduceSumma + parseFloat(item.cost);
+      }
+      return reduceSumma + 0;
+    },
+    0
+  );
+})
+
+
+
+
 /**
  * Список переменных из формулы вместе с данными
  * @returns {*}
  */
 const dataListVariablesOnFormula = computed(() => {
   return attachIndexForFormulaElements.value?.map((item) => {
-    const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
+    const isReserveVariable = item === LOCAL_NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = listGlobalsVariables.value.includes(item);
 
     if (isReserveVariable) {
       return getProxyFreeVariables(
-        resultSummaDataFreeVariablesOutsideFormula.value
+        summaFreeVariables.value,
+        summaFreeVariables.value,
+        LOCAL_NAME_RESERVED_VARIABLE_SUM
       );
     } else if (isGlobalVariable) {
       return getResultElementOnName.value(item);
@@ -258,20 +298,15 @@ const dataListVariablesOnFormula = computed(() => {
   });
 })
 
-/**
- * конечная формула после обработки в виде строки с переменными
- * @returns {*}
- */
-const mutationFormulaResult = computed(() => {
-  return attachIndexForFormulaElements.value.join(" ");
-})
+
+
 /**
  * формула со всеми конечными данными и обработанными переменными
  * @returns {*}
  */
 const compileFormulaWitchData = computed(() => {
   if (!variablesInFormula.value.length) {
-    return resultSummaDataFreeVariablesOutsideFormula.value;
+    return summaFreeVariables.value;
   }
   return processingArrayOnFormulaProcessingLogic(
     dataListVariablesOnFormula.value
@@ -280,7 +315,7 @@ const compileFormulaWitchData = computed(() => {
       const nameIsNotExist = !item?.name?.length;
       const isReserveVariable = item?.name === NAME_RESERVED_VARIABLE_SUM;
       const isAllowReturnLocalCost =
-        listLocalVariablesUsedInFormulaForPrefix.value.includes(item.name) &&
+        usedVariablesOutsideFormula.value.includes(item.name) &&
         localResultData.value[item.name]?.isShow &&
         !item.excludeFromCalculations;
       const isAllowReturnGlobalCost =
@@ -372,11 +407,27 @@ watch(localCost, (newValue, oldValue) => {
   }
 })
 
+watch(summaFreeVariables, (newValue) => {
+    tryAddDependencyElement({
+        name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
+        value: newValue,
+        isShow: Boolean(newValue !== null),
+        displayValue: newValue,
+        type: "duplicatorItem",
+        cost: newValue
+      }
+    );
+    // return getProxyFreeVariables(summaFreeVariables.value);
+}, {
+  immediate: true
+})
+
 
 function changeValue(data) {
       if (data?.name) {
         const mutationData = data;
         mutationData.isDuplicator = true;
+        mutationData.parentName = localParentName;
         tryAddResultElement(mutationData);
         localResultData.value[data.name] = data;
       }
@@ -417,8 +468,7 @@ function deleteDuplicate() {
  */
 function updateInputData(data, index) {
   let mutationsData = JSON.parse(JSON.stringify(data));
-
-  mutationsData.parentDuplicator = props.parentName;
+  mutationsData.parentDuplicator = localParentName;
   mutationsData.isDuplicate = true;
   mutationsData.formula = mutationFormulaResult.value;
   mutationsData.index = props.index + index;
@@ -512,8 +562,9 @@ function  addIndexIndexInFormulaElements(formulaString, index) {
 function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE))
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM))
+  const isGlobalVariable = isElementResult(item)
 
-  return isVariable || isSpecVariable;
+  return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
 
 
@@ -523,6 +574,10 @@ onMounted(() => {
   } else {
     mutationsInputData.value = updateInputData(props.duplicatorData, 0);
   }
+})
+
+onUnmounted(() => {
+  deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index)
 })
 
 
@@ -588,12 +643,16 @@ onMounted(() => {
       X
     </button>
   </div>
-  {{mainFormulaResult}}
+  <pre>
+    {{localCost}}
+    {{mainFormulaResult}}
+    {{compileFormulaWitchData}}
+  </pre>
   <dev-block
     :type-element="typeElement"
     :element-name="mutationsInputData?.elementName"
     :local-cost="localCost"
-    :formula="mainFormulaResult"
+    :formula="mutationFormulaResult"
     :formula-variables="compileFormulaWitchData"
     hidden-value
   />

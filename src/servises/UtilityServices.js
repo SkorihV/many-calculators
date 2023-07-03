@@ -163,8 +163,7 @@ const getSummaVariablesInFormula = function (dataList) {
     const isAllowSummingCost =
       item?.cost !== null &&
       !item.excludeFromCalculations &&
-      item.isShow &&
-      !Boolean(item?.isDuplicator);
+      item.isShow
 
     if (isAllowSummingCost) {
       sum += parseFloat(item.cost);
@@ -184,13 +183,30 @@ const getListVariablesMissedInFormula = function (dataList, variablesList) {
   return dataList
     ?.filter((dataOnCalcComponent) => {
       const isFormula = variablesList.some(
-        (varOnFormula) => varOnFormula === dataOnCalcComponent.name
+        (varOnFormula) => {
+          return varOnFormula === dataOnCalcComponent.name;
+        }
       );
       return !isFormula;
     })
-    .filter((item) => {
-      return item;
-    });
+};
+
+/**
+ * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных используемых в формуле
+ * @param dataList
+ * @param variablesList
+ * @returns {*}
+ */
+const getListVariablesUsedInFormula = function (dataList, variablesList) {
+  return dataList
+    ?.filter((dataOnCalcComponent) => {
+      const isFormula = variablesList.some(
+        (varOnFormula) => {
+          return varOnFormula === dataOnCalcComponent.name;
+        }
+      );
+      return isFormula;
+    })
 };
 
 /**
@@ -304,5 +320,6 @@ export {
   replaceSpecSymbols,
   getArrayElementsFromFormula,
   getArrayOnFormula,
-  checkLogicAndReturnValue
+  checkLogicAndReturnValue,
+  getListVariablesUsedInFormula
 };

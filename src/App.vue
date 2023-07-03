@@ -193,6 +193,20 @@ const {variablesInFormula, summaFreeVariables, baseDataForCalculate } = useGetOt
 // const summaFreeVariables = computed(() => {
 //     return getSummaFreeVariablesInFormula(freeVariablesOutsideFormula.value);
 //   })
+
+watch(summaFreeVariables, () => {
+  tryPassDependency(
+    NAME_RESERVED_VARIABLE_SUM,
+    summaFreeVariables.value,
+    Boolean(summaFreeVariables.value !== null),
+    summaFreeVariables.value,
+    NAME_RESERVED_VARIABLE_SUM,
+    summaFreeVariables.value
+  );
+},{
+  immediate: true
+})
+
   /**
    * Список переменных из формулы вместе с данными
    * @returns {*}
@@ -200,14 +214,6 @@ const {variablesInFormula, summaFreeVariables, baseDataForCalculate } = useGetOt
 const dataListVariablesOnFormula = computed(() => {
     return variablesInFormula.value?.map((item) => {
       if (item === NAME_RESERVED_VARIABLE_SUM) {
-        tryPassDependency(
-          NAME_RESERVED_VARIABLE_SUM,
-          summaFreeVariables.value,
-          Boolean(summaFreeVariables.value !== null),
-          summaFreeVariables.value,
-          NAME_RESERVED_VARIABLE_SUM,
-          summaFreeVariables.value
-        );
         return getProxyFreeVariables(summaFreeVariables.value);
       } else {
         const data = baseDataForCalculate.value.filter(

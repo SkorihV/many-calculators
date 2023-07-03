@@ -13,9 +13,9 @@ export const getProxyFreeVariables = (value, cost = null, name = null) => {
   name = unref(name);
   return new Proxy(
     {
-      name: name === null ? NAME_RESERVED_VARIABLE_SUM : name,
-      cost: cost !== null ? cost : value,
       value: value,
+      cost: cost !== null ? cost : value,
+      name: name === null ? NAME_RESERVED_VARIABLE_SUM : name,
       isShow: Boolean(value),
     },
     {
