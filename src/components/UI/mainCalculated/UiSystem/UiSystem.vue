@@ -218,7 +218,7 @@ const currentHtmlText = computed(() => {
     if (!allowProcessingDependencyHtmlText.value) {
       return props.htmlText;
     }
-    const { item } = costAfterProcessingDependencyPrice.value(
+    const { item } = costAfterProcessingDependencyPrice(
         props.dependencyHtmlText,
         "dependencyFormulaHtmlText"
     );

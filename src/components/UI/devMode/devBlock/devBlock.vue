@@ -56,8 +56,6 @@ const isShowInnerData = ref(false)
 const localFormula = computed(() => {
   return replaceSpecSymbols(props.formula)
 })
-
-
 </script>
 
 

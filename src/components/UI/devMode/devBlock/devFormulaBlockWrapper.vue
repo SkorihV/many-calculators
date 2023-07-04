@@ -44,17 +44,22 @@ const localFormulaArray = computed(() => {
   return getArrayOnFormula(localFormula.value)
 })
 
-const isExistOtherSum = computed(() => {
-  return localFormulaArray.value.includes(NAME_RESERVED_VARIABLE_SUM)
-})
+// const isExistOtherSum = computed(() => {
+//   return localFormula.value.match(NAME_RESERVED_VARIABLE_SUM) !== null
+// })
 
 const formulaArrayInOut = computed(() => {
-  if (isExistOtherSum.value) {
-    const otherSum = getDependencyElementOnName.value(NAME_RESERVED_VARIABLE_SUM)
-   return localFormulaArray.value.map(item => item !== NAME_RESERVED_VARIABLE_SUM ? item : otherSum)
-  }
-  return localFormulaArray.value
+    return localFormulaArray.value.map(item => {
+         if (isExistOtherSum(item)) {
+           return getDependencyElementOnName.value(item)
+         }
+          return item
+      })
 })
+
+function isExistOtherSum(variable) {
+  return variable.match(NAME_RESERVED_VARIABLE_SUM) !== null
+}
 
 </script>
 

@@ -174,53 +174,6 @@ const listGlobalsVariables = computed(() => {
 })
 
 /**
- * Список локальных переменных используемых в формуле
- * @returns {*}
- */
-const listLocalVariablesUsedInFormula = computed(() => {
-  return variablesInFormula.value.filter((item) =>
-    isLocalVariable(item)
-  );
-})
-
-
-
-// /**
-//  * Список локальных переменных используемых в формуле c префиксом
-//  * @returns {*}
-//  */
-// const listLocalVariablesUsedInFormulaForPrefix = computed(() => {
-//   return assignThePrefixArrayItems(
-//     listLocalVariablesUsedInFormula.value
-//   );
-// })
-// /**
-//  * Список локальных переменных не используемых в формуле
-//  * @returns {*[]}
-//  */
-// const arrayFreeVariablesOutsideFormula = computed(() => {
-//   let variablesListUnusedInFormula = props.originVariables.filter(
-//     (item) => !listLocalVariablesUsedInFormula.value.includes(item)
-//   );
-//
-//   return assignThePrefixArrayItems(variablesListUnusedInFormula);
-// })
-// /**
-//  * Список переменных не используемых в формуле
-//  * @returns {[]}
-//  */
-// const dataFreeVariablesOutsideFormula = computed(() => {
-//   let localData = [];
-//   arrayFreeVariablesOutsideFormula.value.forEach((elementName) => {
-//     if (localResultData.value[elementName]) {
-//       localData.push(localResultData.value[elementName]);
-//     }
-//   });
-//   return localData;
-// })
-
-
-/**
  * в формулу добавляем префиксы для переменных дупликатора
  * @returns {*}
  */
@@ -232,8 +185,6 @@ const attachIndexForFormulaElements = computed(() => {
     return item;
   });
 })
-
-
 
 /**
  * конечная формула после обработки в виде строки с переменными
@@ -249,27 +200,6 @@ const {
   usedVariablesOutsideFormula,
   freeVariablesOutsideFormula
 } = useGetOtherGlobalSum(mutationFormulaResult, true, localParentName )
-
-/**
- * Сумма всех элементов не вошедших в формулу
- * @returns {unknown}
- */
-const resultSummaDataFreeVariablesOutsideFormula = computed(() => {
-  return freeVariablesOutsideFormula.value?.reduce(
-    (reduceSumma, item) => {
-      const isAllowedSummation =
-        item.cost !== null && !item.excludeFromCalculations && item.isShow;
-
-      if (isAllowedSummation) {
-        return reduceSumma + parseFloat(item.cost);
-      }
-      return reduceSumma + 0;
-    },
-    0
-  );
-})
-
-
 
 
 /**
@@ -643,17 +573,11 @@ onUnmounted(() => {
       X
     </button>
   </div>
-  <pre>
-    {{localCost}}
-    {{mainFormulaResult}}
-    {{compileFormulaWitchData}}
-  </pre>
   <dev-block
     :type-element="typeElement"
     :element-name="mutationsInputData?.elementName"
     :local-cost="localCost"
     :formula="mutationFormulaResult"
-    :formula-variables="compileFormulaWitchData"
     hidden-value
   />
 </template>

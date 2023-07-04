@@ -1,5 +1,5 @@
 <script>
-const typeElement = "ResultButton";
+const typeElement = "Main App Calc";
 const label = "Основная формула расчета";
 </script>
 

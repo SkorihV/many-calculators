@@ -257,7 +257,11 @@ function tryPassDependency() {
   });
 }
 
+
+
+
 onUnmounted(() => {
+  console.log(tryDeleteAllDataOnStoreForElementName);
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
 })
 
