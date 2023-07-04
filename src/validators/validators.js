@@ -1,8 +1,13 @@
-import { REGEXP_NUMBERS, REGEXP_QUOTES_AND_SPACE_AND_WORD, REGEXP_SIGN, REGEXP_VARIABLE } from "@/constants/regexp";
+import {
+  REGEXP_NUMBERS,
+  REGEXP_QUOTES_AND_SPACE_AND_WORD,
+  REGEXP_SIGN,
+  REGEXP_VARIABLE,
+} from "@/constants/regexp";
 import {
   LIST_BANNED_ELEMENTS_NAME,
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
-  NAME_RESERVED_VARIABLE_SUM
+  NAME_RESERVED_VARIABLE_SUM,
 } from "@/constants/variables";
 
 export const isBoolean = (value) => {
@@ -14,29 +19,38 @@ export const isNotNaN = (value) => {
 };
 
 export const isSign = (sign) => {
-  return sign.toString().trim().match(REGEXP_SIGN) !== null
-}
+  return sign.toString().trim().match(REGEXP_SIGN) !== null;
+};
 
 export const isNumber = (number) => {
-  return number.toString().trim().match(REGEXP_NUMBERS) !== null
-}
+  return number.toString().trim().match(REGEXP_NUMBERS) !== null;
+};
 
 export const isVariable = (variable) => {
-  return variable.toString().trim().match(REGEXP_VARIABLE) !== null && isNotNull(variable) && !isSpecSymbol(variable)
-}
+  return (
+    variable.toString().trim().match(REGEXP_VARIABLE) !== null &&
+    isNotNull(variable) &&
+    !isSpecSymbol(variable)
+  );
+};
 
 export const isValueOnElement = (text) => {
-  return text.toString().trim().match(REGEXP_QUOTES_AND_SPACE_AND_WORD) !== null
-}
+  return (
+    text.toString().trim().match(REGEXP_QUOTES_AND_SPACE_AND_WORD) !== null
+  );
+};
 
 export const isNotNull = (data) => {
-  return data?.toString().trim() !== "null" && data !== null
-}
+  return data?.toString().trim() !== "null" && data !== null;
+};
 
 export const isSpecSymbol = (data) => {
-  return [...LIST_BANNED_ELEMENTS_NAME].includes(data)
-}
+  return [...LIST_BANNED_ELEMENTS_NAME].includes(data);
+};
 
 export const IS_SPEC_VARIABLES = (variable) => {
-  return [NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM].includes(variable)
-}
+  return [
+    NAME_RESERVED_VARIABLE_SUM,
+    NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  ].includes(variable);
+};

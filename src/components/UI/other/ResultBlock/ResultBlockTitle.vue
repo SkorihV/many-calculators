@@ -4,12 +4,13 @@ import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {}
-  }
-})
+    default: () => {},
+  },
+});
 
-const {isShowResultBlockSubtitle,isShowResultBlockTitle} = useIsChecks(props.data)
-
+const { isShowResultBlockSubtitle, isShowResultBlockTitle } = useIsChecks(
+  props.data
+);
 </script>
 
 <template>

@@ -77,8 +77,8 @@
     "textAfter": "",
     "parent": "0;"
   },
-  "test-duplicator" : {
-    "calculatorTemplates" : [
+  "test-duplicator": {
+    "calculatorTemplates": [
       {
         "json_id": "298833307",
         "meta_id": "35854107",
@@ -1666,7 +1666,7 @@
         "dependencyFormulaDisplay": "инпут1 > 1",
         "classes": "",
         "template": "UiRange",
-        "dependencyPrices":  [
+        "dependencyPrices": [
           {
             "title": 1,
             "cost": 20,
@@ -1757,7 +1757,7 @@
               "behaviorImage": "contain",
               "location": "leftSide"
             },
-            "dependencyPrices" : [
+            "dependencyPrices": [
               {
                 "title": 1,
                 "cost": 20,
@@ -1896,12 +1896,12 @@
             "dependencyFormulaDisplay": "инпут1 > 60",
             "classes": "",
             "template": "UiInput",
-            "dependencyPrices":    [
+            "dependencyPrices": [
               {
                 "cost": 50,
                 "dependencyFormulaCost": "инпут1 > 61"
               }
-            ]                      ,
+            ],
             "prompt": "Инпут для блока секцииИнпут для блока секцииИнпут для блока секции",
             "iconSettingsInputLabel": null,
             "parent": "0;35854707;"
@@ -2283,7 +2283,7 @@
                         "title": "Элемент радио-кнопка - 3",
                         "radioName": 3,
                         "dependencyFormulaItem": "ползунок2 > 10",
-                        "dependencyPrices" : [
+                        "dependencyPrices": [
                           {
                             "cost": 50,
                             "dependencyFormulaCost": "ползунок2 > 20"
@@ -2888,7 +2888,7 @@
   },
 
   "test-test": {
-    "calculatorTemplates" : [
+    "calculatorTemplates": [
       {
         "json_id": "147715107",
         "title": "картинка",

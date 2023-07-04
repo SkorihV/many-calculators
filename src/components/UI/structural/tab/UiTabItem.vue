@@ -2,11 +2,11 @@
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { computed, ref } from "vue";
-import {getCurrentWidthElement} from "@/composables/useWidthElement";
+import { getCurrentWidthElement } from "@/composables/useWidthElement";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   tabItem: {
     type: Object,
@@ -24,9 +24,9 @@ const props = defineProps({
     default: null,
   },
   ...propsTemplate.getProps(["elementName", "parentIsShow"]),
-})
+});
 
-const parentRef = ref(null)
+const parentRef = ref(null);
 
 function changeValue(data) {
   emits("changedValue", data);
@@ -34,23 +34,27 @@ function changeValue(data) {
 
 const isShowItem = computed(() => {
   return props.tabItemId === props.shownIdTab;
-})
+});
 
-const {currentWidthElement} = getCurrentWidthElement(isShowItem, parentRef)
+const { currentWidthElement } = getCurrentWidthElement(isShowItem, parentRef);
 
 const itemName = computed(() => {
   return props.tabName + "_" + props.elementName;
-})
+});
 
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600
-      ? props.tabItem?.maxWidthSide + "%"
-      : "100%";
-})
+    ? props.tabItem?.maxWidthSide + "%"
+    : "100%";
+});
 </script>
 
 <template>
-  <div class="calc__tab-item-content-wrapper" v-show="isShowItem" ref="parentRef">
+  <div
+    class="calc__tab-item-content-wrapper"
+    v-show="isShowItem"
+    ref="parentRef"
+  >
     <background-image-element
       v-if="tabItem?.backgroundImageSettings"
       :image-settings-data="tabItem?.backgroundImageSettings"

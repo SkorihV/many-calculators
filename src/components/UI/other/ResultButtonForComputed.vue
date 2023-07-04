@@ -6,40 +6,50 @@ const typeElement = "ResultButton";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { computed, reactive, ref, watch } from "vue";
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
 const {
   methodBeginningCalculationIsButton,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
   checkAllowShowResultBlock,
   globalDependenciesList,
-  devMode
-} = getBaseStoreGetters()
+  devMode,
+} = getBaseStoreGetters();
 
-const {setAllowShowResultBlock, setInitEnabledSendForm, showAllTooltipsOn} = getBaseStoreAction(['setAllowShowResultBlock', 'setInitEnabledSendForm', 'showAllTooltipsOn'])
+const { setAllowShowResultBlock, setInitEnabledSendForm, showAllTooltipsOn } =
+  getBaseStoreAction([
+    "setAllowShowResultBlock",
+    "setInitEnabledSendForm",
+    "showAllTooltipsOn",
+  ]);
 
-const emits = defineEmits(['checkEnabledResultButton'])
+const emits = defineEmits(["checkEnabledResultButton"]);
 const props = defineProps({
-    resultOptions: {
-      type: Object,
-      default: () => {},
-    }
-})
+  resultOptions: {
+    type: Object,
+    default: () => {},
+  },
+});
 
-const isHoverButton = ref(false)
+const isHoverButton = ref(false);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
 
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
-  reactive({
-    localDependencyList: localDependencyList,
-    constructLocalListElementDependencyInFormula,
-    formula: props.resultOptions?.formulaDisplayButton,
-    parentIsShow: true
-  })
-)
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
+    reactive({
+      localDependencyList: localDependencyList,
+      constructLocalListElementDependencyInFormula,
+      formula: props.resultOptions?.formulaDisplayButton,
+      parentIsShow: true,
+    })
+  );
 
 function calculateResult() {
   showAllTooltipsOn();
@@ -53,19 +63,24 @@ watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
     setInitEnabledSendForm(false);
     setAllowShowResultBlock(false);
   }
-})
+});
 
-const showResultBtn = computed(() => methodBeginningCalculationIsButton.value)
+const showResultBtn = computed(() => methodBeginningCalculationIsButton.value);
 
-const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
+const isFormulaDisplayButton = computed(() =>
+  Boolean(props.resultOptions?.formulaDisplayButton?.length)
+);
 
-const showButtonOnDependency = computed(() =>  !isFormulaDisplayButton.value
-    ? true
-    : isVisibilityFromDependency.value
-)
+const showButtonOnDependency = computed(() =>
+  !isFormulaDisplayButton.value ? true : isVisibilityFromDependency.value
+);
 
-const showBtn = computed(() => showResultBtn.value && showButtonOnDependency.value && !checkAllowShowResultBlock.value)
-
+const showBtn = computed(
+  () =>
+    showResultBtn.value &&
+    showButtonOnDependency.value &&
+    !checkAllowShowResultBlock.value
+);
 </script>
 
 <template>
@@ -92,6 +107,5 @@ const showBtn = computed(() => showResultBtn.value && showButtonOnDependency.val
     :dependency-formula-display="resultOptions?.formulaDisplayButton"
     hidden-value
     hidden-cost
-
   />
 </template>

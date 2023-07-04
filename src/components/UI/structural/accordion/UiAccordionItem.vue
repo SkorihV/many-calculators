@@ -6,14 +6,15 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-import {propsTemplate} from "@/servises/UsePropsTemplatesSingle";
-import {computed, ref, toRef} from "vue";
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
-import {getCurrentWidthElement} from "@/composables/useWidthElement";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import { computed, ref, toRef } from "vue";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
+import { getCurrentWidthElement } from "@/composables/useWidthElement";
 
-const { isCanShowAllTooltips, getValidationListOnParentName, getImageDir } = getBaseStoreGetters();
+const { isCanShowAllTooltips, getValidationListOnParentName, getImageDir } =
+  getBaseStoreGetters();
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   accordionItem: {
     type: Object,
@@ -27,15 +28,18 @@ const props = defineProps({
     type: Number,
   },
   ...propsTemplate.getProps(["elementName", "parentIsShow"]),
-})
+});
 
-const parentRef = ref(null)
-const isOpen = ref(false)
-const hoverElement = ref(null)
-const {currentWidthElement} = getCurrentWidthElement(toRef(props, "parentIsShow"), parentRef)
+const parentRef = ref(null);
+const isOpen = ref(false);
+const hoverElement = ref(null);
+const { currentWidthElement } = getCurrentWidthElement(
+  toRef(props, "parentIsShow"),
+  parentRef
+);
 
 function changeValue(data) {
-  emits('changedValue', data)
+  emits("changedValue", data);
 }
 
 /**
@@ -44,13 +48,13 @@ function changeValue(data) {
  */
 const localListValidationError = computed(() => {
   return getValidationListOnParentName.value(props.elementName);
-})
+});
 
 const isShowError = computed(() => {
   return localListValidationError.value.some(
-      (item) => item.error && item.isShow && isCanShowAllTooltips.value
+    (item) => item.error && item.isShow && isCanShowAllTooltips.value
   );
-})
+});
 
 /**
  *
@@ -58,37 +62,34 @@ const isShowError = computed(() => {
  */
 const currentChildrenItem = computed(() => {
   return props.accordionItem?.templates.length
-      ? props.accordionItem?.templates.length
-      : 0;
-})
+    ? props.accordionItem?.templates.length
+    : 0;
+});
 
 /**
  *
  * @returns {*}
  */
 const currentHiddenItem = computed(() => {
-  return localListValidationError.value?.filter((item) => !item.isShow)
-      .length;
-})
+  return localListValidationError.value?.filter((item) => !item.isShow).length;
+});
 
 const isShowAccordionItem = computed(() => {
   return currentChildrenItem.value !== currentHiddenItem.value;
-})
+});
 
 const itemIdName = computed(() => {
   return (
-      props.accordionName + "_" + props.elementName + "_" + props.accordionItemId
+    props.accordionName + "_" + props.elementName + "_" + props.accordionItemId
   );
-})
+});
 
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600
-      ? `${props.accordionItem?.maxWidthSide}%`
-      : "100%";
-})
-
+    ? `${props.accordionItem?.maxWidthSide}%`
+    : "100%";
+});
 </script>
-
 
 <template>
   <div

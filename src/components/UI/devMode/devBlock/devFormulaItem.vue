@@ -1,129 +1,165 @@
 <script setup>
-
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 import { computed } from "vue";
 import { isVariable } from "@/validators/validators";
-import {checkLogicAndReturnValue} from "@/servises/UtilityServices"
+import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
 import goScrollToElement from "@/composables/goScrollToElement";
 
-const {getResultElementOnName, getDependencyElementOnName} = getBaseStoreGetters()
-const {isElementDependency, isElementResult, isShowElement, setNameHighlightElement} = getBaseStoreAction(['isElementDependency', 'isElementResult', 'isShowElement', "setNameHighlightElement"])
+const { getResultElementOnName, getDependencyElementOnName } =
+  getBaseStoreGetters();
+const {
+  isElementDependency,
+  isElementResult,
+  isShowElement,
+  setNameHighlightElement,
+} = getBaseStoreAction([
+  "isElementDependency",
+  "isElementResult",
+  "isShowElement",
+  "setNameHighlightElement",
+]);
 
 const props = defineProps({
   formulaItem: {
     type: [String, Object],
-    default: null
+    default: null,
   },
   isDependency: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isResult: {
     type: Boolean,
-    default: false
+    default: false,
   },
   showValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   showCost: {
     type: Boolean,
-    default: false
+    default: false,
   },
-})
+});
 
 const localIsVariable = computed(() => {
-  if ( typeof props.formulaItem === 'object') {
-    return isVariable(props.formulaItem.name)
+  if (typeof props.formulaItem === "object") {
+    return isVariable(props.formulaItem.name);
   } else {
-    return isVariable(props.formulaItem)
+    return isVariable(props.formulaItem);
   }
-})
+});
 
 const itemDependencyData = computed(() => {
   const formula = props.formulaItem;
-  if (localIsVariable.value && props.isDependency && isElementDependency(formula)) {
-    return getDependencyElementOnName.value(formula)
+  if (
+    localIsVariable.value &&
+    props.isDependency &&
+    isElementDependency(formula)
+  ) {
+    return getDependencyElementOnName.value(formula);
   }
-  return formula
-})
+  return formula;
+});
 
 const itemResultData = computed(() => {
   const formula = props.formulaItem;
   if (localIsVariable.value && props.isResult && isElementResult(formula)) {
-    return getResultElementOnName.value(formula)
+    return getResultElementOnName.value(formula);
   }
-  return formula
-})
+  return formula;
+});
 
 const itemValue = computed(() => {
   if (props.isDependency) {
     if (itemDependencyData.value?.value !== undefined) {
-      return itemDependencyData.value.value === null ? 'null' : itemDependencyData.value.value
+      return itemDependencyData.value.value === null
+        ? "null"
+        : itemDependencyData.value.value;
     }
-    return itemDependencyData?.value
+    return itemDependencyData?.value;
   } else if (props.isResult) {
     if (itemResultData.value?.value !== undefined) {
-      return itemResultData.value.value === null ? 'null' : itemResultData.value.value
+      return itemResultData.value.value === null
+        ? "null"
+        : itemResultData.value.value;
     }
-    return itemResultData?.value
+    return itemResultData?.value;
   }
-})
+});
 
 const itemCost = computed(() => {
-  if (!props.isResult) {return null;}
-  if (itemResultData.value?.cost !== undefined) {
-    return checkLogicAndReturnValue(itemResultData.value) === null ? 'null' : checkLogicAndReturnValue(itemResultData.value)
+  if (!props.isResult) {
+    return null;
   }
-  return itemResultData?.value
-})
+  if (itemResultData.value?.cost !== undefined) {
+    return checkLogicAndReturnValue(itemResultData.value) === null
+      ? "null"
+      : checkLogicAndReturnValue(itemResultData.value);
+  }
+  return itemResultData?.value;
+});
 
 const localName = computed(() => {
   if (props.isDependency) {
-    return typeof itemDependencyData.value === 'object' ? itemDependencyData.value?.name + " : " : null;
+    return typeof itemDependencyData.value === "object"
+      ? itemDependencyData.value?.name + " : "
+      : null;
   } else if (props.isResult) {
-    return typeof itemResultData.value === 'object' ? itemResultData.value?.name + " : " : null
+    return typeof itemResultData.value === "object"
+      ? itemResultData.value?.name + " : "
+      : null;
   }
-})
+});
 
 const isExist = computed(() => {
   if (!localIsVariable.value) {
-    return true
+    return true;
   }
-  return isElementDependency(props.formulaItem) || isElementResult(props.formulaItem)
-})
+  return (
+    isElementDependency(props.formulaItem) || isElementResult(props.formulaItem)
+  );
+});
 
 const isHiddenElement = computed(() => {
-    return localIsVariable.value && isShowElement(props.formulaItem) !== null && isExist.value ? !isShowElement(props.formulaItem) : false;
-})
+  return localIsVariable.value &&
+    isShowElement(props.formulaItem) !== null &&
+    isExist.value
+    ? !isShowElement(props.formulaItem)
+    : false;
+});
 
 const title = computed(() => {
   if (isHiddenElement?.value && isExist.value) {
-    return "Элемент скрыт"
+    return "Элемент скрыт";
   }
   if (!isExist.value) {
-    return "Элемент не существует"
+    return "Элемент не существует";
   }
   return null;
-})
+});
 
 const classes = computed(() => {
   return [
-    localIsVariable.value ? 'is-variable' : "" ,
-    isHiddenElement.value ? 'is-hidden': "",
-    !isExist.value ? 'is-not-exist': "",
-    !isHiddenElement.value && isExist.value && localIsVariable.value ? 'is-pointer': ""
-  ]
-})
+    localIsVariable.value ? "is-variable" : "",
+    isHiddenElement.value ? "is-hidden" : "",
+    !isExist.value ? "is-not-exist" : "",
+    !isHiddenElement.value && isExist.value && localIsVariable.value
+      ? "is-pointer"
+      : "",
+  ];
+});
 function goToElement() {
   if (!isHiddenElement.value && localIsVariable.value) {
-    goScrollToElement(props.formulaItem, 'center');
+    goScrollToElement(props.formulaItem, "center");
     if (localIsVariable.value) {
-      setNameHighlightElement(props.formulaItem)
+      setNameHighlightElement(props.formulaItem);
     }
   }
 }
-
 </script>
 
 <template>
@@ -133,15 +169,11 @@ function goToElement() {
     :class="[...classes]"
     @click="goToElement"
   >
-    <template v-if="showValue">
-      {{  localName }}{{ itemValue }}
-    </template>
+    <template v-if="showValue"> {{ localName }}{{ itemValue }} </template>
     <template v-if="showCost && isResult">
-      {{localName}}{{itemCost}}
+      {{ localName }}{{ itemCost }}
     </template>
-    </div>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -17,7 +17,7 @@ export const useBaseStore = defineStore("base", {
       initEnabledSendForm: false,
       allowShowResultBlock: false,
       someElementChangedSelfVisibilityState: 0,
-      nameHighlightElement: null
+      nameHighlightElement: null,
     };
   },
   getters: {
@@ -193,9 +193,9 @@ export const useBaseStore = defineStore("base", {
     }) {
       return someElementChangedSelfVisibilityState;
     },
-    getNameHighlightElement({nameHighlightElement}) {
+    getNameHighlightElement({ nameHighlightElement }) {
       return nameHighlightElement;
-    }
+    },
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -216,7 +216,7 @@ export const useBaseStore = defineStore("base", {
         position,
         zeroValueDisplayIgnore,
         isDuplicator,
-        parentName
+        parentName,
       } = dataResultItem;
 
       this.globalResultsElements[name] = {
@@ -258,14 +258,21 @@ export const useBaseStore = defineStore("base", {
      * @param displayValue
      * @param type
      */
-    tryAddDependencyElement({ name, value, isShow, displayValue, type, cost = null }) {
+    tryAddDependencyElement({
+      name,
+      value,
+      isShow,
+      displayValue,
+      type,
+      cost = null,
+    }) {
       this.dataListForDependencies[name] = {
         name,
         value,
         isShow,
         displayValue,
         type,
-        cost
+        cost,
       };
     },
     /**
@@ -370,7 +377,7 @@ export const useBaseStore = defineStore("base", {
     isShowElement(elementName) {
       const item = this.getResultElementOnName(elementName);
       if (item !== null) {
-        return item.isShow
+        return item.isShow;
       }
       return null;
     },
@@ -378,7 +385,7 @@ export const useBaseStore = defineStore("base", {
       this.nameHighlightElement = elementName;
       setTimeout(() => {
         this.nameHighlightElement = null;
-      }, 2000)
-    }
+      }, 2000);
+    },
   },
 });

@@ -8,18 +8,32 @@ import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
-import {checkedValueOnVoid} from "@/servises/UtilityServices"
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
+import {
+  getBaseStoreAction,
+  getBaseStoreGetters,
+} from "@/composables/useBaseStore";
+import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
+import {
+  getCurrentWidthElement,
+  getIsMakeElementColumn,
+} from "@/composables/useWidthElement";
 
-import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
-import {onMounted, onUnmounted, reactive, ref, toRef, watch, computed} from "vue";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
+import {
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  computed,
+} from "vue";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   radioValues: {
     type: Array,
@@ -78,46 +92,66 @@ const props = defineProps({
     "globalMaxWidth",
     "globalMaxHeight",
   ]),
-})
+});
 
-const currentIndexRadioButton = ref(null)
-const textErrorNotEmpty = ref("Обязательное поле.")
-const localElementName = ref(null)
-const bufferRadioListOnOut = ref([])
-const originRadioList = ref([])
-const canBeShownTooltip = ref(false)
-const hoverElementIndex = ref(null)
-const parentRef = ref(null)
+const currentIndexRadioButton = ref(null);
+const textErrorNotEmpty = ref("Обязательное поле.");
+const localElementName = ref(null);
+const bufferRadioListOnOut = ref([]);
+const originRadioList = ref([]);
+const canBeShownTooltip = ref(false);
+const hoverElementIndex = ref(null);
+const parentRef = ref(null);
 
-const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
-const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryAddDependencyElement", "checkValidationDataAndToggle"])
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+const { devMode, isCanShowAllTooltips } = getBaseStoreGetters();
+const {
+  tryDeleteAllDataOnStoreForElementName,
+  tryAddDependencyElement,
+  checkValidationDataAndToggle,
+} = getBaseStoreAction([
+  "tryDeleteAllDataOnStoreForElementName",
+  "tryAddDependencyElement",
+  "checkValidationDataAndToggle",
+]);
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {formulaAfterProcessingVariables, isVisibilityFromDependency, costAfterProcessingDependencyPrice} = useProcessingFormula(
-    reactive({
-      localDependencyList: localDependencyList,
-      constructLocalListElementDependencyInFormula,
-      formula: toRef(props,"dependencyFormulaDisplay"),
-      parentIsShow: toRef(props, "parentIsShow")
-    })
-)
-const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const {
+  formulaAfterProcessingVariables,
+  isVisibilityFromDependency,
+  costAfterProcessingDependencyPrice,
+} = useProcessingFormula(
+  reactive({
+    localDependencyList: localDependencyList,
+    constructLocalListElementDependencyInFormula,
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
+  })
+);
+const { currentWidthElement } = getCurrentWidthElement(
+  isVisibilityFromDependency,
+  parentRef
+);
 
-useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
+useDisplaySpinner(props.elementName);
+useReportInitialStatusForElement(
+  toRef(props, "parentIsShow"),
+  changeValue,
+  changeValid
+);
 
 onMounted(() => {
   localElementName.value = checkedValueOnVoid(props.elementName)
-      ? props.elementName
-      : Math.random().toString();
+    ? props.elementName
+    : Math.random().toString();
 
   originRadioList.value = JSON.parse(JSON.stringify(props.radioValues)).map(
-      (item, index) => {
-        item.index = index + 1;
-        return item;
-      }
+    (item, index) => {
+      item.index = index + 1;
+      return item;
+    }
   );
 
   if (!props.isNeedChoice && isVisibilityFromDependency.value) {
@@ -127,205 +161,216 @@ onMounted(() => {
   setTimeout(() => {
     changeValue("mounted");
   }, 100);
-})
+});
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
-})
+});
 
-const {isHighlightElement} = useHighlightElement(localElementName)
+const { isHighlightElement } = useHighlightElement(localElementName);
 
 const isExistLabel = computed(() => {
-    return Boolean(props.label?.toString()?.length);
-  })
+  return Boolean(props.label?.toString()?.length);
+});
 
-const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
+const { isMakeElementColumn } = getIsMakeElementColumn(
+  currentWidthElement,
+  isExistLabel
+);
 
 const currentSelectedRadioButton = computed(() => {
   return currentIndexRadioButton.value === null
-      ? null
-      : getRadioItemForIndex(currentIndexRadioButton.value);
-})
+    ? null
+    : getRadioItemForIndex(currentIndexRadioButton.value);
+});
 
 const isRadioItemSelected = computed(() => {
-    return currentSelectedRadioButton.value !== null;
-  })
+  return currentSelectedRadioButton.value !== null;
+});
 
 const isBase = computed(() => {
-    return props.typeDisplayClass === "base";
-  })
+  return props.typeDisplayClass === "base";
+});
 
 const onlyImage = computed(() => {
-    return props.typeDisplayClass === "onlyImage";
-  })
+  return props.typeDisplayClass === "onlyImage";
+});
 
-const  isColumnType = computed(() => {
-    return props.typeDisplayClass === "column";
-  })
+const isColumnType = computed(() => {
+  return props.typeDisplayClass === "column";
+});
 
 const isErrorEmpty = computed(() => {
   return props.notEmpty && !isRadioItemSelected.value;
-})
+});
 
 const isErrorClass = computed(() => {
-    return (
-        isCanShowAllTooltips.value &&
-        isErrorEmpty.value &&
-        isVisibilityFromDependency.value
-    );
-  })
+  return (
+    isCanShowAllTooltips.value &&
+    isErrorEmpty.value &&
+    isVisibilityFromDependency.value
+  );
+});
 
 const localCost = computed(() => {
-    return isRadioItemSelected.value
-        ? currentSelectedRadioButton.value?.cost
-        : null;
-  })
+  return isRadioItemSelected.value
+    ? currentSelectedRadioButton.value?.cost
+    : null;
+});
 
 const selectedValueInRadio = computed(() => {
-    if (!isRadioItemSelected.value) {
-      return null;
-    }
-    const isExistExtraValue = Boolean(
-        currentSelectedRadioButton.value?.extraValueForDependency?.toString()
-            ?.length
-    );
-    return isExistExtraValue
-        ? currentSelectedRadioButton.value?.extraValueForDependency
-        : currentIndexRadioButton.value;
-  })
+  if (!isRadioItemSelected.value) {
+    return null;
+  }
+  const isExistExtraValue = Boolean(
+    currentSelectedRadioButton.value?.extraValueForDependency?.toString()
+      ?.length
+  );
+  return isExistExtraValue
+    ? currentSelectedRadioButton.value?.extraValueForDependency
+    : currentIndexRadioButton.value;
+});
 
 const valueForDisplayRadioElement = computed(() => {
-    return isRadioItemSelected.value
-        ? currentSelectedRadioButton.value?.radioName
-        : null;
-  })
+  return isRadioItemSelected.value
+    ? currentSelectedRadioButton.value?.radioName
+    : null;
+});
 
 const radioListAfterCheckDependency = computed(() => {
-    return originRadioList.value?.map((radio) => {
-      if (radio?.dependencyFormulaItem?.length) {
-        let formula = getArrayElementsFromFormula(
-            radio.dependencyFormulaItem
-        );
-        constructLocalListElementDependencyInFormula(formula);
-        formula = processingVariablesOnFormula(
-            formula,
-            localDependencyList
-        );
-        try {
-          radio.isShow = eval(formula);
-        } catch (e) {
-          if (devMode.value) {
-            console.error(e.message, formula);
-          }
-          radio.isShow = false;
+  return originRadioList.value?.map((radio) => {
+    if (radio?.dependencyFormulaItem?.length) {
+      let formula = getArrayElementsFromFormula(radio.dependencyFormulaItem);
+      constructLocalListElementDependencyInFormula(formula);
+      formula = processingVariablesOnFormula(formula, localDependencyList);
+      try {
+        radio.isShow = eval(formula);
+      } catch (e) {
+        if (devMode.value) {
+          console.error(e.message, formula);
         }
-      } else {
-        radio.isShow = true;
+        radio.isShow = false;
       }
-      return radio;
-    });
-  })
+    } else {
+      radio.isShow = true;
+    }
+    return radio;
+  });
+});
 
 const amountVisibleItemsCurrentRadioList = computed(() => {
-    return bufferRadioListOnOut.value?.filter((item) => item?.isShow);
-  })
+  return bufferRadioListOnOut.value?.filter((item) => item?.isShow);
+});
 
 const amountVisibleItemsRadioListAfterCheckDependency = computed(() => {
-    return radioListAfterCheckDependency.value?.filter((item) => item.isShow);
-  })
+  return radioListAfterCheckDependency.value?.filter((item) => item.isShow);
+});
 
 const isAmountVisibleItemsRadioListChanged = computed(() => {
-    return (
-        amountVisibleItemsCurrentRadioList.value !==
-        amountVisibleItemsRadioListAfterCheckDependency.value
-    );
-  })
+  return (
+    amountVisibleItemsCurrentRadioList.value !==
+    amountVisibleItemsRadioListAfterCheckDependency.value
+  );
+});
 
 const radioListAfterCheckVisibility = computed(() => {
-    if (isAmountVisibleItemsRadioListChanged.value) {
-      bufferRadioListOnOut.value = radioListAfterCheckDependency.value;
-    }
-    return bufferRadioListOnOut.value.filter((item) => item.isShow);
-  })
+  if (isAmountVisibleItemsRadioListChanged.value) {
+    bufferRadioListOnOut.value = radioListAfterCheckDependency.value;
+  }
+  return bufferRadioListOnOut.value.filter((item) => item.isShow);
+});
 
 const radioListAfterCheckedCostElements = computed(() => {
-    return radioListAfterCheckVisibility.value?.map((item, index) => {
-      if (item?.dependencyPrices?.length) {
-        let { cost: newCost } = costAfterProcessingDependencyPrice(
-            reactive({
-              dependencyArrayItems: item?.dependencyPrices,
-              formulaFieldName:  "dependencyFormulaCost"
-            })
-        );
+  return radioListAfterCheckVisibility.value?.map((item, index) => {
+    if (item?.dependencyPrices?.length) {
+      let { cost: newCost } = costAfterProcessingDependencyPrice(
+        reactive({
+          dependencyArrayItems: item?.dependencyPrices,
+          formulaFieldName: "dependencyFormulaCost",
+        })
+      );
 
-        if (newCost !== null) {
-          item.cost = newCost;
-        } else {
-          item.cost = props.radioValues[index].cost;
-        }
+      if (newCost !== null) {
+        item.cost = newCost;
+      } else {
+        item.cost = props.radioValues[index].cost;
       }
-      item.cost = item?.cost ? item?.cost : null;
-      return item;
-    });
-  })
+    }
+    item.cost = item?.cost ? item?.cost : null;
+    return item;
+  });
+});
 
 const radioListOnOut = computed(() => {
-    return radioListAfterCheckedCostElements.value;
-  })
+  return radioListAfterCheckedCostElements.value;
+});
 
-watch(() => currentSelectedRadioButton.value, (newValue, oldValue) => {
-  if (newValue?.index !== oldValue?.index) {
-    setTimeout(() => {
-      changeValue("currentSelectedRadioButton");
-    }, 10);
-  }
-}, {deep: true})
+watch(
+  () => currentSelectedRadioButton.value,
+  (newValue, oldValue) => {
+    if (newValue?.index !== oldValue?.index) {
+      setTimeout(() => {
+        changeValue("currentSelectedRadioButton");
+      }, 10);
+    }
+  },
+  { deep: true }
+);
 
 watch(localCost, () => {
   setTimeout(() => {
     changeValue("currentSelectedRadioButton");
   }, 10);
-})
+});
 
-watch(isVisibilityFromDependency, (newValue) => {
-  if (newValue) {
-    if (!props.isNeedChoice) {
-      currentIndexRadioButton.value = parseInt(props.selectedItem);
-    }
-  } else {
-    currentIndexRadioButton.value = null;
-  }
-  changeValue("dependency");
-},{deep: true})
-
-watch(isAmountVisibleItemsRadioListChanged, (newValue) => {
-  if (isVisibilityFromDependency.value && newValue) {
-    if (
-        currentIndexRadioButton.value !== null &&
-        !isShowRadioItemOnIndex(currentIndexRadioButton.value)
-    ) {
+watch(
+  isVisibilityFromDependency,
+  (newValue) => {
+    if (newValue) {
       if (!props.isNeedChoice) {
         currentIndexRadioButton.value = parseInt(props.selectedItem);
-      } else {
-        currentIndexRadioButton.value = null;
+      }
+    } else {
+      currentIndexRadioButton.value = null;
+    }
+    changeValue("dependency");
+  },
+  { deep: true }
+);
+
+watch(
+  isAmountVisibleItemsRadioListChanged,
+  (newValue) => {
+    if (isVisibilityFromDependency.value && newValue) {
+      if (
+        currentIndexRadioButton.value !== null &&
+        !isShowRadioItemOnIndex(currentIndexRadioButton.value)
+      ) {
+        if (!props.isNeedChoice) {
+          currentIndexRadioButton.value = parseInt(props.selectedItem);
+        } else {
+          currentIndexRadioButton.value = null;
+        }
       }
     }
-  }
-}, {deep: true})
+  },
+  { deep: true }
+);
 
 function getRadioItemForIndex(index) {
   if (isShowRadioItemOnIndex(index)) {
     return radioListOnOut.value?.filter(
-        (item) => item.isShow && item.index === index
+      (item) => item.isShow && item.index === index
     )[0];
   }
   return null;
 }
 
 function isShowRadioItemOnIndex(index) {
-  return Boolean(radioListOnOut.value?.filter(
-      (item) => item.isShow && item.index === index
-  )?.length);
+  return Boolean(
+    radioListOnOut.value?.filter((item) => item.isShow && item.index === index)
+      ?.length
+  );
 }
 
 function selectedCurrentRadio(index) {
@@ -346,9 +391,9 @@ function changeValue(eventType = "click") {
     cost: localCost.value,
     label: props.label,
     formOutputMethod:
-        props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+      props.formOutputMethod !== "no" ? props.formOutputMethod : null,
     resultOutputMethod:
-        props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
+      props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
     eventType,
@@ -365,8 +410,8 @@ function changeValue(eventType = "click") {
 function changeValid(eventType) {
   checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
-        ? isErrorEmpty.value
-        : isVisibilityFromDependency.value,
+      ? isErrorEmpty.value
+      : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "radio",
     label: props.label,
@@ -388,13 +433,12 @@ function tryPassDependency() {
     type: "radio",
   });
 }
-
 </script>
 
 <template>
   <div
     class="calc__wrapper-group-data"
-    :class="{'is-highlight':isHighlightElement}"
+    :class="{ 'is-highlight': isHighlightElement }"
     v-if="isVisibilityFromDependency"
     :id="localElementName"
     ref="parentRef"

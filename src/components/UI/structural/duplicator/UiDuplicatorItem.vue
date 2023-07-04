@@ -9,27 +9,52 @@ import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-import { ref, onMounted, watch, computed, reactive, toRef, onUnmounted } from "vue";
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
+import {
+  ref,
+  onMounted,
+  watch,
+  computed,
+  reactive,
+  toRef,
+  onUnmounted,
+} from "vue";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import { REGEXP_NUMBERS, REGEXP_SIGN, REGEXP_VARIABLE } from "@/constants/regexp";
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import {
+  REGEXP_NUMBERS,
+  REGEXP_SIGN,
+  REGEXP_VARIABLE,
+} from "@/constants/regexp";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
-import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum"
+import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 
+const { devMode, checkedIsStructureTemplate, getResultElementOnName } =
+  getBaseStoreGetters();
+const {
+  tryAddResultElement,
+  tryAddDependencyElement,
+  deleteElementInDependencyList,
+  isElementResult,
+} = getBaseStoreAction([
+  "tryAddResultElement",
+  "tryAddDependencyElement",
+  "deleteElementInDependencyList",
+  "isElementResult",
+]);
 
-const {devMode, checkedIsStructureTemplate, getResultElementOnName,} = getBaseStoreGetters()
-const {tryAddResultElement, tryAddDependencyElement, deleteElementInDependencyList, isElementResult} = getBaseStoreAction(['tryAddResultElement', 'tryAddDependencyElement', 'deleteElementInDependencyList', "isElementResult"])
-
-const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"])
+const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"]);
 const props = defineProps({
   duplicatorData: {
     type: Object,
@@ -66,21 +91,27 @@ const props = defineProps({
     "positionElement",
     "unit",
   ]),
-})
+});
 
-const counterDuplicate = ref(0)
-const localResultData = ref({})
-const mutationsInputData = ref(null)
-const localParentName = props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
-const LOCAL_NAME_RESERVED_VARIABLE_SUM = NAME_RESERVED_VARIABLE_SUM + "_" + props.index;
+const counterDuplicate = ref(0);
+const localResultData = ref({});
+const mutationsInputData = ref(null);
+const localParentName =
+  props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
+const LOCAL_NAME_RESERVED_VARIABLE_SUM =
+  NAME_RESERVED_VARIABLE_SUM + "_" + props.index;
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula( reactive({
-  localDependencyList: localDependencyList,
-  constructLocalListElementDependencyInFormula,
-  formula: toRef(props,"dependencyFormulaDisplay"),
-  parentIsShow: toRef(props, "parentIsShow")
-}))
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
+    reactive({
+      localDependencyList: localDependencyList,
+      constructLocalListElementDependencyInFormula,
+      formula: toRef(props, "dependencyFormulaDisplay"),
+      parentIsShow: toRef(props, "parentIsShow"),
+    })
+  );
 
 /**
  *
@@ -88,7 +119,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
  */
 const isExistDependencyMainFormula = computed(() => {
   return Boolean(props.originData?.dependencyMainFormula?.length);
-})
+});
 
 /**
  *
@@ -98,8 +129,8 @@ const mainFormulaResult = computed(() => {
   if (!isExistDependencyMainFormula.value) {
     return props.formula?.length ? props.formula : "";
   }
-  const formulaAfterDependency =
-    props.originData.dependencyMainFormula?.reduce((resultFormula, item) => {
+  const formulaAfterDependency = props.originData.dependencyMainFormula?.reduce(
+    (resultFormula, item) => {
       let dependencyFormula = getArrayElementsFromFormula(
         item.dependencyFormula
       );
@@ -126,12 +157,14 @@ const mainFormulaResult = computed(() => {
         if (devMode.value) {
           console.error(
             "Формула зависимости для смены главной формулы дупликатора: " +
-            e.message
+              e.message
           );
         }
       }
       return resultFormula;
-    }, "");
+    },
+    ""
+  );
 
   const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
   if (isFormulaAfterDependency) {
@@ -139,7 +172,7 @@ const mainFormulaResult = computed(() => {
   }
 
   return props.formula?.length ? props.formula : "";
-})
+});
 
 /**
  * Разбиваем полученную формулу на массив с переменными и знаками.
@@ -148,29 +181,29 @@ const mainFormulaResult = computed(() => {
  */
 const variablesInFormula = computed(() => {
   return getArrayElementsFromFormula(mainFormulaResult.value);
-})
+});
 
 const variablesInFormulaExcludeSigns = computed(() => {
-  return variablesInFormula.value.filter( item => {
-    const isNumber = Boolean(item?.match(REGEXP_NUMBERS))
-    const isSign = Boolean(item?.match(REGEXP_SIGN))
-    return !isNumber && !isSign
-  })
-})
+  return variablesInFormula.value.filter((item) => {
+    const isNumber = Boolean(item?.match(REGEXP_NUMBERS));
+    const isSign = Boolean(item?.match(REGEXP_SIGN));
+    return !isNumber && !isSign;
+  });
+});
 
 /**
  * Список переменных в формуле из глобального окружения
  * @returns {*}
  */
 const listGlobalsVariables = computed(() => {
-  return variablesInFormulaExcludeSigns.value.filter(
-    (item) => {
-      return !props.originVariables.includes(item) &&
-        item !== NAME_RESERVED_VARIABLE_SUM && item !== LOCAL_NAME_RESERVED_VARIABLE_SUM
-    }
-
-  );
-})
+  return variablesInFormulaExcludeSigns.value.filter((item) => {
+    return (
+      !props.originVariables.includes(item) &&
+      item !== NAME_RESERVED_VARIABLE_SUM &&
+      item !== LOCAL_NAME_RESERVED_VARIABLE_SUM
+    );
+  });
+});
 
 /**
  * в формулу добавляем префиксы для переменных дупликатора
@@ -183,7 +216,7 @@ const attachIndexForFormulaElements = computed(() => {
     }
     return item;
   });
-})
+});
 
 /**
  * конечная формула после обработки в виде строки с переменными
@@ -191,13 +224,10 @@ const attachIndexForFormulaElements = computed(() => {
  */
 const mutationFormulaResult = computed(() => {
   return attachIndexForFormulaElements.value.join(" ");
-})
+});
 
-const {
-  summaFreeVariables,
-  usedVariablesOutsideFormula,
-} = useGetOtherGlobalSum(mutationFormulaResult, true, localParentName )
-
+const { summaFreeVariables, usedVariablesOutsideFormula } =
+  useGetOtherGlobalSum(mutationFormulaResult, true, localParentName);
 
 /**
  * Список переменных из формулы вместе с данными
@@ -223,7 +253,7 @@ const dataListVariablesOnFormula = computed(() => {
       return data.length ? data[0] : item;
     }
   });
-})
+});
 
 /**
  * формула со всеми конечными данными и обработанными переменными
@@ -262,7 +292,7 @@ const compileFormulaWitchData = computed(() => {
     })
     .join(" ")
     ?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, "");
-})
+});
 
 /**
  *
@@ -281,11 +311,7 @@ const localCost = computed(() => {
     const formulaIsComputed =
       typeof result === "number" && !isNaN(result) && isFinite(result);
     if (formulaIsComputed) {
-      return decimalAdjust(
-        result,
-        props.signAfterDot,
-        props.roundOffType
-      );
+      return decimalAdjust(result, props.signAfterDot, props.roundOffType);
     } else {
       throw new Error();
     }
@@ -298,7 +324,7 @@ const localCost = computed(() => {
     }
     return null;
   }
-})
+});
 
 /**
  *
@@ -308,7 +334,7 @@ const returnsLocalResultData = computed(() => {
   return Object.values(localResultData.value).sort(
     (itemA, itemB) => itemA.position - itemB.position
   );
-})
+});
 
 /**
  *
@@ -316,16 +342,12 @@ const returnsLocalResultData = computed(() => {
  */
 const isExistLabel = computed(() => {
   return Boolean(mutationsInputData.value?.label?.toString()?.length);
-})
+});
 
 const buttonDupleTitle = computed(() => {
-  const inputTitleIsExist = Boolean(
-    props.duplicatorData?.buttonName?.length
-  );
-  return inputTitleIsExist
-    ? props.duplicatorData?.buttonName
-    : "Дублировать";
-})
+  const inputTitleIsExist = Boolean(props.duplicatorData?.buttonName?.length);
+  return inputTitleIsExist ? props.duplicatorData?.buttonName : "Дублировать";
+});
 
 watch(localCost, (newValue, oldValue) => {
   if (newValue !== oldValue) {
@@ -333,62 +355,61 @@ watch(localCost, (newValue, oldValue) => {
     data.eventType = "dependencyCost";
     changeValue(data);
   }
-})
+});
 
-watch(summaFreeVariables, (newValue) => {
+watch(
+  summaFreeVariables,
+  (newValue) => {
     tryAddDependencyElement({
-        name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
-        value: newValue,
-        isShow: Boolean(newValue !== null),
-        displayValue: newValue,
-        type: "duplicatorItem",
-        cost: newValue
-      }
-    );
-}, {
-  immediate: true
-})
+      name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
+      value: newValue,
+      isShow: Boolean(newValue !== null),
+      displayValue: newValue,
+      type: "duplicatorItem",
+      cost: newValue,
+    });
+  },
+  {
+    immediate: true,
+  }
+);
 
 function changeValue(data) {
-      if (data?.name) {
-        const mutationData = data;
-        mutationData.isDuplicator = true;
-        mutationData.parentName = localParentName;
-        tryAddResultElement(mutationData);
-        localResultData.value[data.name] = data;
-      }
-      emits("changedValue", {
-        name: mutationsInputData.value.elementName,
-        type: "duplicator",
-        label: mutationsInputData.value.label,
-        cost: localCost.value,
-        value: null,
-        displayValue: localCost.value,
-        formOutputMethod: mutationsInputData.value?.formOutputMethod,
-        resultOutputMethod: mutationsInputData.value?.resultOutputMethod,
-        eventType: data.eventType,
-        unit: props.unit?.length ? props.unit : "",
-        isShow: props.parentIsShow,
-        excludeFromCalculations:
-        mutationsInputData.value.excludeFromCalculations,
-        insertedTemplates: returnsLocalResultData.value,
-        position: props.positionElement,
-        formulaProcessingLogic: props.originData?.formulaProcessingLogic,
-      });
-    }
+  if (data?.name) {
+    const mutationData = data;
+    mutationData.isDuplicator = true;
+    mutationData.parentName = localParentName;
+    tryAddResultElement(mutationData);
+    localResultData.value[data.name] = data;
+  }
+  emits("changedValue", {
+    name: mutationsInputData.value.elementName,
+    type: "duplicator",
+    label: mutationsInputData.value.label,
+    cost: localCost.value,
+    value: null,
+    displayValue: localCost.value,
+    formOutputMethod: mutationsInputData.value?.formOutputMethod,
+    resultOutputMethod: mutationsInputData.value?.resultOutputMethod,
+    eventType: data.eventType,
+    unit: props.unit?.length ? props.unit : "",
+    isShow: props.parentIsShow,
+    excludeFromCalculations: mutationsInputData.value.excludeFromCalculations,
+    insertedTemplates: returnsLocalResultData.value,
+    position: props.positionElement,
+    formulaProcessingLogic: props.originData?.formulaProcessingLogic,
+  });
+}
 
 function tryDuplicate() {
-      counterDuplicate.value++;
-      const returnData = updateInputData(
-        props.originData,
-        counterDuplicate.value
-      );
-      emits("duplicate", returnData);
-    }
+  counterDuplicate.value++;
+  const returnData = updateInputData(props.originData, counterDuplicate.value);
+  emits("duplicate", returnData);
+}
 
 function deleteDuplicate() {
-      emits("deleteDuplicator", props.duplicatorData.elementName);
-    }
+  emits("deleteDuplicator", props.duplicatorData.elementName);
+}
 
 /**
  * @param data
@@ -442,10 +463,9 @@ function updateIndexElementsInDuple(object, index) {
           ? object[prop] + " ( " + index + " )"
           : object[prop];
     } else if (propIsDependencyField) {
-      object[prop] = addIndexIndexInFormulaElements(
-        object[prop],
-        index
-      ).join("");
+      object[prop] = addIndexIndexInFormulaElements(object[prop], index).join(
+        ""
+      );
     }
   }
   return object;
@@ -457,11 +477,11 @@ function updateIndexElementsInDuple(object, index) {
  * @returns {string}
  */
 function updateNameItem(item, index) {
-      item.elementName = item?.elementName?.length
-        ? item?.elementName + "_" + index
-        : item?.json_id + "_" + index;
-      return item.elementName;
-    }
+  item.elementName = item?.elementName?.length
+    ? item?.elementName + "_" + index
+    : item?.json_id + "_" + index;
+  return item.elementName;
+}
 
 /**
  * в формулу добавляем префиксы для переменных дупликатора
@@ -469,7 +489,7 @@ function updateNameItem(item, index) {
  * @param index
  * @returns {*}
  */
-function  addIndexIndexInFormulaElements(formulaString, index) {
+function addIndexIndexInFormulaElements(formulaString, index) {
   return getArrayElementsFromFormula(formulaString).map((item) => {
     if (isLocalVariable(item)) {
       item = item + "_" + index;
@@ -484,9 +504,9 @@ function  addIndexIndexInFormulaElements(formulaString, index) {
  * @returns {boolean}
  */
 function isLocalVariable(item) {
-  const isVariable = Boolean(item.match(REGEXP_VARIABLE))
-  const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM))
-  const isGlobalVariable = isElementResult(item)
+  const isVariable = Boolean(item.match(REGEXP_VARIABLE));
+  const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
+  const isGlobalVariable = isElementResult(item);
 
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
@@ -497,12 +517,11 @@ onMounted(() => {
   } else {
     mutationsInputData.value = updateInputData(props.duplicatorData, 0);
   }
-})
+});
 
 onUnmounted(() => {
-  deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index)
-})
-
+  deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
+});
 </script>
 
 <template>

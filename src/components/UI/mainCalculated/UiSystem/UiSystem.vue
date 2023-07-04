@@ -5,33 +5,54 @@ const typeElement = "UiSystem";
 <script setup>
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import {checkedValueOnVoid} from "@/servises/UtilityServices";
+import { checkedValueOnVoid } from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
-import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
-
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
+import {
+  getCurrentWidthElement,
+  getIsMakeElementColumn,
+} from "@/composables/useWidthElement";
 
 import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
-import { computed, onMounted, onUnmounted, reactive, ref, toRef, watch } from "vue";
-import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
-import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+} from "vue";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
+import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 
-const {devMode, getResultElementOnName} = getBaseStoreGetters()
-const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle'])
+const { devMode, getResultElementOnName } = getBaseStoreGetters();
+const {
+  tryDeleteAllDataOnStoreForElementName,
+  tryAddDependencyElement,
+  checkValidationDataAndToggle,
+} = getBaseStoreAction([
+  "tryDeleteAllDataOnStoreForElementName",
+  "tryAddDependencyElement",
+  "checkValidationDataAndToggle",
+]);
 
-const emits = defineEmits(['changedValue'])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   cost: {
     type: [Number, String],
@@ -77,38 +98,53 @@ const props = defineProps({
     "htmlText",
     "unit",
   ]),
-})
-const parentRef = ref(null)
+});
+const parentRef = ref(null);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
-    reactive({
-      formula: toRef(props, 'dependencyFormulaDisplay'),
-      parentIsShow: toRef(props, 'parentIsShow'),
-      constructLocalListElementDependencyInFormula,
-      localDependencyList: localDependencyList
-    })
-)
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const {
+  isVisibilityFromDependency,
+  formulaAfterProcessingVariables,
+  costAfterProcessingDependencyPrice,
+} = useProcessingFormula(
+  reactive({
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
+    constructLocalListElementDependencyInFormula,
+    localDependencyList: localDependencyList,
+  })
+);
 
-useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
-useDisplaySpinner(props.elementName)
-const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
+useReportInitialStatusForElement(
+  toRef(props, "parentIsShow"),
+  changeValue,
+  changeValid
+);
+useDisplaySpinner(props.elementName);
+const { initProcessingDependencyPrice } = useInitProcessingDependencyPrice(
+  toRef(props, "dependencyPrices")
+);
 
-
-
-const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+const { currentWidthElement } = getCurrentWidthElement(
+  isVisibilityFromDependency,
+  parentRef
+);
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
+});
 
-const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement,isExistLabel)
+const { isMakeElementColumn } = getIsMakeElementColumn(
+  currentWidthElement,
+  isExistLabel
+);
 
 const localElementName = computed(() => {
   return checkedValueOnVoid(props.elementName)
-      ? props.elementName
-      : "Math.random().toString()";
-})
-const {isHighlightElement} = useHighlightElement(localElementName)
+    ? props.elementName
+    : "Math.random().toString()";
+});
+const { isHighlightElement } = useHighlightElement(localElementName);
 /**
  * Возвращает формулу цены без данных
  * @returns {number|*|number|string|null}
@@ -121,10 +157,10 @@ const localCostFormula = computed(() => {
     return props.cost;
   }
   const { cost: formulaCost } = costAfterProcessingDependencyPrice(
-      reactive({
-        dependencyArrayItems: toRef(props, 'dependencyPrices'),
-        formulaFieldName:  "dependencyFormulaCost"
-      })
+    reactive({
+      dependencyArrayItems: toRef(props, "dependencyPrices"),
+      formulaFieldName: "dependencyFormulaCost",
+    })
   );
 
   if (formulaCost !== null) {
@@ -132,7 +168,7 @@ const localCostFormula = computed(() => {
   }
 
   return props.cost;
-})
+});
 
 /**
  * возвращает цену или формулу цены из собранных данных
@@ -140,8 +176,8 @@ const localCostFormula = computed(() => {
  */
 const processingVariablesInFormula = computed(() => {
   if (
-      !isVisibilityFromDependency.value ||
-      !localCostFormula.value?.toString()?.length
+    !isVisibilityFromDependency.value ||
+    !localCostFormula.value?.toString()?.length
   ) {
     return null;
   }
@@ -151,9 +187,7 @@ const processingVariablesInFormula = computed(() => {
     return cost;
   }
 
-  let formulaCostArr = getArrayElementsFromFormula(
-      localCostFormula.value
-  );
+  let formulaCostArr = getArrayElementsFromFormula(localCostFormula.value);
   let formulaCost = formulaCostArr?.map((item) => {
     const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = getResultElementOnName.value(item) !== null;
@@ -167,7 +201,7 @@ const processingVariablesInFormula = computed(() => {
     }
   });
   return processingArrayOnFormulaProcessingLogic(formulaCost).join(" ");
-})
+});
 
 /**
  *
@@ -175,8 +209,8 @@ const processingVariablesInFormula = computed(() => {
  */
 const localCost = computed(() => {
   if (
-      !isVisibilityFromDependency.value ||
-      processingVariablesInFormula.value === null
+    !isVisibilityFromDependency.value ||
+    processingVariablesInFormula.value === null
   ) {
     return null;
   }
@@ -185,9 +219,9 @@ const localCost = computed(() => {
     const resultNumber = eval(processingVariablesInFormula.value);
     if (!isNaN(resultNumber) && isFinite(resultNumber)) {
       return decimalAdjust(
-          resultNumber,
-          props.signAfterDot,
-          props.roundOffType
+        resultNumber,
+        props.signAfterDot,
+        props.roundOffType
       );
     } else {
       return null;
@@ -195,65 +229,64 @@ const localCost = computed(() => {
   } catch (e) {
     if (devMode.value) {
       console.error(
-          "Системное поле, обработка формулы стоимости: ",
-          processingVariablesInFormula.value
+        "Системное поле, обработка формулы стоимости: ",
+        processingVariablesInFormula.value
       );
     }
     return null;
   }
-})
+});
 
 const isExistLocalCost = computed(() => {
   return localCost.value !== null && props.showElement !== "notValue";
-})
+});
 const isExistUnit = computed(() => {
   return Boolean(props.unit?.toString()?.length);
-})
+});
 const onlyText = computed(() => {
   return props.showElement === "onlyText";
-})
+});
 
 const allowProcessingDependencyHtmlText = computed(() => {
   return props.dependencyHtmlText?.length;
-})
+});
 const currentHtmlText = computed(() => {
-    if (!allowProcessingDependencyHtmlText.value) {
-      return props.htmlText;
-    }
-    const { item } = costAfterProcessingDependencyPrice(
-        props.dependencyHtmlText,
-        "dependencyFormulaHtmlText"
-    );
-    const textIsExist = Boolean(item?.htmlText?.length);
-    if (textIsExist) {
-      return item.htmlText;
-    }
+  if (!allowProcessingDependencyHtmlText.value) {
     return props.htmlText;
-  })
+  }
+  const { item } = costAfterProcessingDependencyPrice(
+    props.dependencyHtmlText,
+    "dependencyFormulaHtmlText"
+  );
+  const textIsExist = Boolean(item?.htmlText?.length);
+  if (textIsExist) {
+    return item.htmlText;
+  }
+  return props.htmlText;
+});
 const isExistCurrentHtmlText = computed(() => {
-    return Boolean(currentHtmlText.value?.toString()?.length);
-  })
+  return Boolean(currentHtmlText.value?.toString()?.length);
+});
 const isShowElement = computed(() => {
-    return props.showElement !== "no";
-  })
+  return props.showElement !== "no";
+});
 const allowProcessingDependencyPrices = computed(() => {
-    return (
-        initProcessingDependencyPrice.value && props.dependencyPrices?.length
-    );
-  })
+  return initProcessingDependencyPrice.value && props.dependencyPrices?.length;
+});
 
-watch(localCost,
-    (newValue, oldValue) => {
-          if (newValue !== oldValue) {
-            changeValue();
-          }
-        },
-    {deep:true}
-)
+watch(
+  localCost,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      changeValue();
+    }
+  },
+  { deep: true }
+);
 
 watch(isVisibilityFromDependency, () => {
   changeValue("dependency");
-})
+});
 
 function changeValue(eventType = "system") {
   emits("changedValue", {
@@ -301,12 +334,11 @@ function tryPassDependency() {
 
 onMounted(() => {
   changeValue("mounted");
-})
+});
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
-})
-
+});
 </script>
 
 <template>
@@ -315,7 +347,7 @@ onUnmounted(() => {
     ref="parentRef"
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
-    :class="{'is-highlight':isHighlightElement}"
+    :class="{ 'is-highlight': isHighlightElement }"
   >
     <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
       <div class="calc__system-label-wrapper" v-if="!onlyText">

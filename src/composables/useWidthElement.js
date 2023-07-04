@@ -1,11 +1,11 @@
-import {computed, onMounted, ref, watch} from "vue";
-import {useEventListener} from "@/composables/useEventsListener";
+import { computed, onMounted, ref, watch } from "vue";
+import { useEventListener } from "@/composables/useEventsListener";
 
 export const getCurrentWidthElement = (elementIsShow, parentRef) => {
-  const currentWidthElement = ref( 980)
-  const timerName = ref(null)
+  const currentWidthElement = ref(980);
+  const timerName = ref(null);
 
-  useEventListener(window, 'resize', resizeWidth)
+  useEventListener(window, "resize", resizeWidth);
   onMounted(() => {
     let stepInterval = 0;
     timerName.value = setInterval(() => {
@@ -16,7 +16,7 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
 
       stepInterval++;
     }, 500);
-  })
+  });
 
   function resizeWidth() {
     updatedCurrentWidth();
@@ -28,35 +28,36 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
     }
   }
 
-  watch(() => elementIsShow.value, (newValue) => {
-    if (newValue) {
-      let stepInterval = 0;
-      timerName.value = setInterval(() => {
-        updatedCurrentWidth();
-        if (stepInterval > 10) {
-          clearInterval(timerName.value);
-        }
-        stepInterval++;
-      }, 500);
+  watch(
+    () => elementIsShow.value,
+    (newValue) => {
+      if (newValue) {
+        let stepInterval = 0;
+        timerName.value = setInterval(() => {
+          updatedCurrentWidth();
+          if (stepInterval > 10) {
+            clearInterval(timerName.value);
+          }
+          stepInterval++;
+        }, 500);
+      }
     }
-  })
+  );
 
   return {
     currentWidthElement,
-    updatedCurrentWidth
-  }
-}
+    updatedCurrentWidth,
+  };
+};
 
 export const getIsMakeElementColumn = (currentWidthElement, isExistLabel) => {
   const isMakeElementColumn = computed(() => {
     return (
-        (currentWidthElement?.value <= 350 && isExistLabel.value) ||
-        currentWidthElement.value <= 220
+      (currentWidthElement?.value <= 350 && isExistLabel.value) ||
+      currentWidthElement.value <= 220
     );
-  })
+  });
   return {
-    isMakeElementColumn
-  }
-}
-
-
+    isMakeElementColumn,
+  };
+};

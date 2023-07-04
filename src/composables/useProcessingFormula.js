@@ -4,14 +4,11 @@ import {
   getBaseStoreGetters,
   getBaseStoreAction,
 } from "@/composables/useBaseStore";
-import {computed, toRef, watch} from "vue";
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { computed, toRef, watch } from "vue";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 export function useProcessingFormula(dataObject) {
-  const dependencyFormulaDisplay = toRef(
-    dataObject,
-    "formula"
-  );
+  const dependencyFormulaDisplay = toRef(dataObject, "formula");
   const parentIsShow = toRef(dataObject, "parentIsShow");
   const localDependencyList = dataObject.localDependencyList;
   const constructLocalListElementDependencyInFormula = toRef(
@@ -23,7 +20,6 @@ export function useProcessingFormula(dataObject) {
   const initSomeElementChangedSelfVisibilityState = getBaseStoreAction(
     "initSomeElementChangedSelfVisibilityState"
   );
-
 
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -39,10 +35,7 @@ export function useProcessingFormula(dataObject) {
     // let localInputValue = toRef(dataObject, "localInputValue");
     // let resultValue = toRef(dataObject, "resultValue");
 
-    if (
-      !dependencyArrayItems.value ||
-      !formulaFieldName
-    ) {
+    if (!dependencyArrayItems.value || !formulaFieldName) {
       return { item: null, cost: null };
     }
 
@@ -59,7 +52,10 @@ export function useProcessingFormula(dataObject) {
 
         let formula = getArrayElementsFromFormula(item[formulaFieldName]);
 
-        if (templateName.value === "UiInput" || templateName.value === "UiRange") {
+        if (
+          templateName.value === "UiInput" ||
+          templateName.value === "UiRange"
+        ) {
           formula = formula.map((item) =>
             item.toLowerCase() === "_self_" ? value.value : item
           );
@@ -126,7 +122,6 @@ export function useProcessingFormula(dataObject) {
   const isVisibilityFromDependency = computed(() => {
     if (isDependencyElementVisibility.value && parentIsShow.value) {
       try {
-
         return eval(formulaAfterProcessingVariables?.value);
       } catch (e) {
         if (devMode.value) {

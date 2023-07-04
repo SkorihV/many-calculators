@@ -1,10 +1,12 @@
 <script setup>
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { computed, ref } from "vue";
-import {replaceSpecSymbols} from "@/servises/UtilityServices"
-import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue"
+import { replaceSpecSymbols } from "@/servises/UtilityServices";
+import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue";
 
-const {showInsideElementStatus} = getBaseStoreGetters('showInsideElementStatus')
+const { showInsideElementStatus } = getBaseStoreGetters(
+  "showInsideElementStatus"
+);
 
 const props = defineProps({
   value: {},
@@ -41,16 +43,15 @@ const props = defineProps({
   },
   typeElement: {
     default: null,
-    type:String
-  }
-})
-const isShowInnerData = ref(false)
+    type: String,
+  },
+});
+const isShowInnerData = ref(false);
 
 const localFormula = computed(() => {
-  return replaceSpecSymbols(props.formula)
-})
+  return replaceSpecSymbols(props.formula);
+});
 </script>
-
 
 <template>
   <div class="calc__dev-block-main-wrapper" v-if="showInsideElementStatus">
@@ -59,7 +60,7 @@ const localFormula = computed(() => {
       v-if="showInsideElementStatus"
       @click="isShowInnerData = !isShowInnerData"
     >
-      {{typeElement}}
+      {{ typeElement }}
       {{ isShowInnerData ? "скрыть" : "отобразить" }} :
       {{ label }}
     </button>

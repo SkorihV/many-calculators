@@ -9,16 +9,15 @@ import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
-import {getCurrentWidthElement} from "@/composables/useWidthElement";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
+import { getCurrentWidthElement } from "@/composables/useWidthElement";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { computed, reactive, ref, toRef } from "vue";
 
+const { devMode } = getBaseStoreGetters();
 
-const {devMode} = getBaseStoreGetters();
-
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   templatesData: {
     type: Array,
@@ -43,18 +42,20 @@ const props = defineProps({
     "maxWidthSide",
     "elementPosition",
   ]),
-})
-const parentRef = ref(null)
+});
+const parentRef = ref(null);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
     reactive({
-      parentIsShow: toRef(props, 'parentIsShow'),
-      formula: toRef(props, 'dependencyFormulaDisplay'),
+      parentIsShow: toRef(props, "parentIsShow"),
+      formula: toRef(props, "dependencyFormulaDisplay"),
       localDependencyList: localDependencyList,
-      constructLocalListElementDependencyInFormula
+      constructLocalListElementDependencyInFormula,
     })
-)
+  );
 
 function changeValue(data) {
   emits("changedValue", data);
@@ -62,40 +63,38 @@ function changeValue(data) {
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
+});
 
 const isExistTemplatesData = computed(() => {
   return Boolean(props.templatesData.length);
-})
+});
 
 const isExistLabelSub = computed(() => {
   return Boolean(props.labelSub?.length);
-})
+});
 
 const isVisualSeparate = computed(() => {
   return Boolean(props.visualSeparate);
-})
+});
 
 const showSection = computed(() => {
   return Boolean(
-      isExistTemplatesData.value &&
+    isExistTemplatesData.value &&
       props.parentIsShow &&
       isVisibilityFromDependency.value
   );
-})
+});
 
-const {currentWidthElement} = getCurrentWidthElement(showSection, parentRef)
+const { currentWidthElement } = getCurrentWidthElement(showSection, parentRef);
 
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600 ? props.maxWidthSide + "%" : "100%";
-})
+});
 
 const isHorizontal = computed(() => {
   return props.elementPosition === "horizontal";
-})
-
+});
 </script>
-
 
 <template>
   <div

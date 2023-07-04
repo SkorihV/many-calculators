@@ -38,7 +38,6 @@ const showLeftIcon = computed(() => {
 const showRightIcon = computed(() => {
   return isImage.value && props.iconSettings?.location === "rightSide";
 });
-
 </script>
 
 <template>

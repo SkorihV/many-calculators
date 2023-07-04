@@ -59,7 +59,9 @@ const isIconFilenameExist = computed(() => {
 });
 
 const showIcon = computed(() => {
-  return isIconFilenameExist.value && !showHoverIcon.value && !showSelectedIcon.value;
+  return (
+    isIconFilenameExist.value && !showHoverIcon.value && !showSelectedIcon.value
+  );
 });
 
 const urlIcon = computed(() => {
@@ -71,7 +73,11 @@ const isIconHoverFilenameExist = computed(() => {
 });
 
 const showHoverIcon = computed(() => {
-  return props.isParentHover && !showSelectedIcon.value && isIconHoverFilenameExist.value;
+  return (
+    props.isParentHover &&
+    !showSelectedIcon.value &&
+    isIconHoverFilenameExist.value
+  );
 });
 
 const urlIconHover = computed(() => {
@@ -89,7 +95,6 @@ const showSelectedIcon = computed(() => {
 const urlIconSelected = computed(() => {
   return imageDir.value + props.iconSettings.imageSelected?.filename;
 });
-
 </script>
 
 <template>

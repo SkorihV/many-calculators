@@ -11,8 +11,8 @@ import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
 import { computed, reactive, ref, watch } from "vue";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
 const {
   isExistGlobalErrorsValidationIgnoreHiddenElement,
@@ -37,47 +37,54 @@ const props = defineProps({
 });
 const isNeedSpinner = ref(false);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
 
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
-  reactive({
-    localDependencyList,
-    constructLocalListElementDependencyInFormula,
-    parentIsShow: true,
-    formula: props.resultOptions?.formulaDependencyForResultBlock
-  })
-)
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
+    reactive({
+      localDependencyList,
+      constructLocalListElementDependencyInFormula,
+      parentIsShow: true,
+      formula: props.resultOptions?.formulaDependencyForResultBlock,
+    })
+  );
 
-const isFormulaDisplayResultBlock = computed(() => Boolean(
-  props.resultOptions?.formulaDependencyForResultBlock?.length))
+const isFormulaDisplayResultBlock = computed(() =>
+  Boolean(props.resultOptions?.formulaDependencyForResultBlock?.length)
+);
 
-const showResultBlockForDependency = computed(() => isFormulaDisplayResultBlock.value
-  ? isVisibilityFromDependency.value
-  : true)
+const showResultBlockForDependency = computed(() =>
+  isFormulaDisplayResultBlock.value ? isVisibilityFromDependency.value : true
+);
 
-const allowShowResultInOptions = computed(() => props.resultOptions
+const allowShowResultInOptions = computed(() =>
+  props.resultOptions
     ? !props.resultOptions?.hiddenResultBlock &&
-    showResultBlockForDependency.value
-    : false)
+      showResultBlockForDependency.value
+    : false
+);
 
 /**
  * Добавить данные в форму если нет ошибок валидации
  * @returns {boolean}
  */
-const isShowResultBlock = computed(() => !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+const isShowResultBlock = computed(
+  () =>
+    !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
     checkInitEnabledSendForm.value &&
     allowShowResultInOptions.value &&
-    checkAllowShowResultBlock.value);
+    checkAllowShowResultBlock.value
+);
 
 watch(isShowResultBlock, (newValue) => {
   isNeedSpinner.value =
-      Boolean(props.resultOptions?.timerForSpinner) && newValue;
+    Boolean(props.resultOptions?.timerForSpinner) && newValue;
 });
 
-const spinnerIsFinished = () => isNeedSpinner.value = false;
-const timeForSpinner = Number(props.resultOptions?.timerForSpinner)
-const textForSpinner = props.resultOptions?.textForSpinner
-
+const spinnerIsFinished = () => (isNeedSpinner.value = false);
+const timeForSpinner = Number(props.resultOptions?.timerForSpinner);
+const textForSpinner = props.resultOptions?.textForSpinner;
 </script>
 
 <template>
@@ -99,8 +106,8 @@ const textForSpinner = props.resultOptions?.textForSpinner
       v-if="resultOptions?.backgroundImageSettings"
       :image-settings-data="resultOptions?.backgroundImageSettings"
     />
-    <result-block-title :data="resultOptions"/>
-    <result-block-data :data="dataForResult" :sum="finalSummaForOutput"/>
+    <result-block-title :data="resultOptions" />
+    <result-block-data :data="dataForResult" :sum="finalSummaForOutput" />
   </div>
   <dev-block
     :label="label"
@@ -111,4 +118,3 @@ const textForSpinner = props.resultOptions?.textForSpinner
     hidden-value
   />
 </template>
-

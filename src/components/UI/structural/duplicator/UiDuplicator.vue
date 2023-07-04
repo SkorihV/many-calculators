@@ -7,9 +7,12 @@ import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplica
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import {
+  getBaseStoreAction,
+  getBaseStoreGetters,
+} from "@/composables/useBaseStore";
 
 import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -20,9 +23,11 @@ import {
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 
-const {tryAddDependencyElement} = getBaseStoreAction(['tryAddDependencyElement'])
+const { tryAddDependencyElement } = getBaseStoreAction([
+  "tryAddDependencyElement",
+]);
 
-const emits = defineEmits(['changedValue'])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   duplicateTemplate: {
     type: Object,
@@ -58,137 +63,139 @@ const props = defineProps({
     "zeroValueDisplayIgnore",
     "unit",
   ]),
-})
+});
 
-let originData = ref({})
-const localResultsElements = reactive({})
-const localTemplates = ref([])
-const localCost = ref(0)
+let originData = ref({});
+const localResultsElements = reactive({});
+const localTemplates = ref([]);
+const localCost = ref(0);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const {
+  isVisibilityFromDependency,
+  formulaAfterProcessingVariables,
+  costAfterProcessingDependencyPrice,
+} = useProcessingFormula(
   reactive({
     localDependencyList: localDependencyList,
     constructLocalListElementDependencyInFormula,
-    formula: toRef(props,"dependencyFormulaDisplay"),
-    parentIsShow: toRef(props, "parentIsShow")
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
   })
-)
+);
 
-useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid)
+useDisplaySpinner(props.elementName);
+useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid);
 
 const returnsLocalResultsElements = computed(() => {
-      return Object.values(localResultsElements).sort(
-        (itemA, itemB) => itemA?.position - itemB?.position
-      );
-    })
+  return Object.values(localResultsElements).sort(
+    (itemA, itemB) => itemA?.position - itemB?.position
+  );
+});
 
 const originVariablesInDuplicator = computed(() => {
-      let result = getNameElementsRecursive(originData.value?.templates);
-      return result.filter((item) => item?.length > 0);
-    })
+  let result = getNameElementsRecursive(originData.value?.templates);
+  return result.filter((item) => item?.length > 0);
+});
 
 const countElementsDuple = computed(() => {
-      return localTemplates.value?.length ? localTemplates.value?.length : 0;
-    })
+  return localTemplates.value?.length ? localTemplates.value?.length : 0;
+});
 
 const IsExistPrompt = computed(() => {
-      return Boolean(originData.value.prompt?.length);
-    })
+  return Boolean(originData.value.prompt?.length);
+});
 
 watch(isVisibilityFromDependency, (newValue) => {
   if (newValue === false) {
     emitChangeValue("deleteDuplicate");
   }
-})
+});
 
 function changeValid() {
-      return null;
-    }
+  return null;
+}
 
 function changeValue(data) {
-      if (data === "dependency") {
-        data = { eventType: "dependency" };
-      }
-      if (typeof data !== "object") {
-        return false;
-      }
-      if (data?.name) {
-        localResultsElements[data.name] = data;
-      }
-      updateLocalCost();
-      emitChangeValue(data.eventType);
-    }
+  if (data === "dependency") {
+    data = { eventType: "dependency" };
+  }
+  if (typeof data !== "object") {
+    return false;
+  }
+  if (data?.name) {
+    localResultsElements[data.name] = data;
+  }
+  updateLocalCost();
+  emitChangeValue(data.eventType);
+}
 
 function duplicate(duplicateElement) {
-      localTemplates.value.push(duplicateElement);
-    }
+  localTemplates.value.push(duplicateElement);
+}
 
 function deleteDuplicator(elementName) {
-      let index = localTemplates.value.findIndex(
-        (item) => item.elementName === elementName
-      );
-      localTemplates.value.splice(index, 1);
+  let index = localTemplates.value.findIndex(
+    (item) => item.elementName === elementName
+  );
+  localTemplates.value.splice(index, 1);
 
-      delete localResultsElements[elementName];
-      updateLocalCost();
-      emitChangeValue("deleteDuplicate");
-    }
+  delete localResultsElements[elementName];
+  updateLocalCost();
+  emitChangeValue("deleteDuplicate");
+}
 function updateLocalCost() {
-      if (!isVisibilityFromDependency.value) {
-        localCost.value = null;
-        return false;
-      }
+  if (!isVisibilityFromDependency.value) {
+    localCost.value = null;
+    return false;
+  }
 
-      let resultCost = returnsLocalResultsElements.value.reduce(
-        (result, item) => {
-          if (item.cost !== null) {
-            return result + parseFloat(item.cost);
-          }
-          return result;
-        },
-        0
-      );
-      resultCost = decimalAdjust(
-        resultCost,
-        props.signAfterDot,
-        props.roundOffType
-      );
-      localCost.value = resultCost;
+  let resultCost = returnsLocalResultsElements.value.reduce((result, item) => {
+    if (item.cost !== null) {
+      return result + parseFloat(item.cost);
     }
+    return result;
+  }, 0);
+  resultCost = decimalAdjust(
+    resultCost,
+    props.signAfterDot,
+    props.roundOffType
+  );
+  localCost.value = resultCost;
+}
 
 function emitChangeValue(eventType) {
-      emits("changedValue", {
-        name: props.elementName,
-        type: "duplicator",
-        label: props.duplicateTemplate.label,
-        cost: localCost.value,
-        value: localCost.value,
-        displayValue: localCost.value,
-        formOutputMethod: props.duplicateTemplate.formOutputMethod,
-        resultOutputMethod: props.duplicateTemplate.resultOutputMethod,
-        eventType: eventType,
-        unit: props.unit?.length ? props.unit : "",
-        isShow: isVisibilityFromDependency.value,
-        excludeFromCalculations: props.duplicateTemplate.excludeFromCalculations,
-        insertedTemplates: returnsLocalResultsElements.value,
-        formulaProcessingLogic: props.formulaProcessingLogic,
-        position: props.positionElement,
-        zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
-      });
-      tryPassDependency();
-    }
+  emits("changedValue", {
+    name: props.elementName,
+    type: "duplicator",
+    label: props.duplicateTemplate.label,
+    cost: localCost.value,
+    value: localCost.value,
+    displayValue: localCost.value,
+    formOutputMethod: props.duplicateTemplate.formOutputMethod,
+    resultOutputMethod: props.duplicateTemplate.resultOutputMethod,
+    eventType: eventType,
+    unit: props.unit?.length ? props.unit : "",
+    isShow: isVisibilityFromDependency.value,
+    excludeFromCalculations: props.duplicateTemplate.excludeFromCalculations,
+    insertedTemplates: returnsLocalResultsElements.value,
+    formulaProcessingLogic: props.formulaProcessingLogic,
+    position: props.positionElement,
+    zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
+  });
+  tryPassDependency();
+}
 
 function tryPassDependency() {
-      tryAddDependencyElement({
-        name: props.elementName,
-        value: localCost.value,
-        isShow: isVisibilityFromDependency.value,
-        displayValue: localCost.value,
-        type: "duplicator",
-      });
-    }
+  tryAddDependencyElement({
+    name: props.elementName,
+    value: localCost.value,
+    isShow: isVisibilityFromDependency.value,
+    displayValue: localCost.value,
+    type: "duplicator",
+  });
+}
 
 onMounted(() => {
   originData.value = JSON.parse(JSON.stringify(props.duplicateTemplate));
@@ -196,8 +203,7 @@ onMounted(() => {
     JSON.parse(JSON.stringify(props.duplicateTemplate))
   );
   changeValue({ eventType: "mounted" });
-})
-
+});
 </script>
 
 <template>

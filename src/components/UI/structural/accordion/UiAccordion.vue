@@ -9,10 +9,10 @@ import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   accordionData: {
     type: Object,
@@ -33,18 +33,20 @@ const props = defineProps({
     "parentIsShow",
     "dependencyFormulaDisplay",
   ]),
-})
-const parent = ref(null)
+});
+const parent = ref(null);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
     reactive({
-      parentIsShow: toRef(props, 'parentIsShow'),
+      parentIsShow: toRef(props, "parentIsShow"),
       formula: toRef(props, "dependencyFormulaDisplay"),
       constructLocalListElementDependencyInFormula,
       localDependencyList: localDependencyList,
     })
-)
+  );
 function changeValue(data) {
   emits("changedValue", data);
 }
@@ -60,12 +62,11 @@ const showBlock = computed(() => {
     });
   }
   return result.some((item) => item);
-})
+});
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
-
+});
 </script>
 
 <template>

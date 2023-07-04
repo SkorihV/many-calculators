@@ -1,10 +1,10 @@
 <script setup>
-import {computed} from 'vue'
-import {parseResultValueObjectItem} from "@/servises/UtilityServices";
+import { computed } from "vue";
+import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 
-const {getCurrency, getTitleSum} = getBaseStoreGetters();
+const { getCurrency, getTitleSum } = getBaseStoreGetters();
 
 const props = defineProps({
   data: {
@@ -15,9 +15,9 @@ const props = defineProps({
     type: [Number, Boolean],
     default: null,
   },
-})
+});
 
-const {isShowSuma} = useIsChecks(props.resultOptions)
+const { isShowSuma } = useIsChecks(props.resultOptions);
 
 /**
  * Текст со всеми полями которые должны отображаться в блоке
@@ -43,22 +43,20 @@ const resultTextDataForResultBlock = computed(() => {
                 resultValueObjectItem +
                 "</div>";
             }
-            duplicator?.insertedTemplates.forEach(
-              (templateInDuplicator) => {
-                const resultValueObjectItemInDuplicator =
-                  parseResultValueObjectItem(
-                    templateInDuplicator,
-                    "resultOutputMethod",
-                    getCurrency.value
-                  );
-                if (resultValueObjectItemInDuplicator?.length) {
-                  result +=
-                    "<div class='calc__result-block-field-wrapper'>" +
-                    resultValueObjectItemInDuplicator +
-                    "</div>";
-                }
+            duplicator?.insertedTemplates.forEach((templateInDuplicator) => {
+              const resultValueObjectItemInDuplicator =
+                parseResultValueObjectItem(
+                  templateInDuplicator,
+                  "resultOutputMethod",
+                  getCurrency.value
+                );
+              if (resultValueObjectItemInDuplicator?.length) {
+                result +=
+                  "<div class='calc__result-block-field-wrapper'>" +
+                  resultValueObjectItemInDuplicator +
+                  "</div>";
               }
-            );
+            });
             result += "<div class='calc__result-block-delimiter'></div>";
           }
         });
@@ -71,24 +69,19 @@ const resultTextDataForResultBlock = computed(() => {
       );
       if (data?.length) {
         result +=
-          "<div class='calc__result-block-field-wrapper'> " +
-          data +
-          "</div>";
+          "<div class='calc__result-block-field-wrapper'> " + data + "</div>";
       }
     }
   });
   return result;
-})
+});
 /**
  * Текст для вывода в форму
  * @returns {string}
  */
 const finalTextForOutput = computed(() => {
   let result = resultTextDataForResultBlock.value;
-  if (
-    props.sum === null ||
-    props.sum === false
-  ) {
+  if (props.sum === null || props.sum === false) {
     return result;
   }
 
@@ -111,7 +104,7 @@ const finalTextForOutput = computed(() => {
       "</div>";
   }
   return result;
-})
+});
 </script>
 
 <template>

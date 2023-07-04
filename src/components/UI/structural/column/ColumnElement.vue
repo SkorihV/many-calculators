@@ -8,10 +8,10 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { computed, reactive, ref, toRef } from "vue";
-import {useProcessingFormula} from "@/composables/useProcessingFormula"
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
-const emits = defineEmits(['changedValue'])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   idColumn: {
     type: Number,
@@ -28,39 +28,37 @@ const props = defineProps({
     "dependencyFormulaDisplay",
     "elementPosition",
   ]),
-})
+});
 
-const parentRef = ref(null)
+const parentRef = ref(null);
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
-    useLocalDependencyList();
+  useLocalDependencyList();
 
-const { isVisibilityFromDependency } =
-    useProcessingFormula(
-        reactive({
-          parentIsShow: toRef(props, 'parentIsShow'),
-          formula: toRef(props, "dependencyFormulaDisplay"),
-          constructLocalListElementDependencyInFormula,
-          localDependencyList: localDependencyList,
-        })
-    );
+const { isVisibilityFromDependency } = useProcessingFormula(
+  reactive({
+    parentIsShow: toRef(props, "parentIsShow"),
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    constructLocalListElementDependencyInFormula,
+    localDependencyList: localDependencyList,
+  })
+);
 
 function changeValue(data) {
   emits("changedValue", data);
 }
 
 const isExistLabel = computed(() => {
-      return Boolean(props.column?.label?.toString()?.length);
-    })
+  return Boolean(props.column?.label?.toString()?.length);
+});
 
-const showColumn = computed(() =>  {
-      return Boolean(isVisibilityFromDependency.value && props.parentIsShow);
-    })
+const showColumn = computed(() => {
+  return Boolean(isVisibilityFromDependency.value && props.parentIsShow);
+});
 
 const isHorizontal = computed(() => {
   return props.elementPosition === "horizontal";
-})
-
+});
 </script>
 
 <template>

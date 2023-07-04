@@ -9,7 +9,7 @@ import ColumnElement from "@/components/UI/structural/column/ColumnElement.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
-import {computed, onMounted, reactive, ref, toRef, unref, watch} from "vue";
+import { computed, onMounted, reactive, ref, toRef, unref, watch } from "vue";
 import { getParent } from "@/composables/useInstance";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -54,7 +54,7 @@ const maximumColumns = 4;
 const currentWidthElement = ref(null);
 const stateColumns = ref([]);
 const timerName = ref(null);
-const parent = ref(null)
+const parent = ref(null);
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
@@ -211,14 +211,11 @@ watch(currentWidthElement, (width) => {
 
 const showElementColumns = computed(() => {
   return Boolean(
-    isVisibilityFromDependency.value &&
-      props.parentIsShow &&
-      countColumns.value
+    isVisibilityFromDependency.value && props.parentIsShow && countColumns.value
   );
 });
 
 const isExistLabel = computed(() => Boolean(props.label?.toString()?.length));
-
 </script>
 
 <template>

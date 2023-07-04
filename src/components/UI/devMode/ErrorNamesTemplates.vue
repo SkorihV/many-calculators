@@ -1,18 +1,26 @@
 <script setup>
-import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {
+  getBaseStoreAction,
+  getBaseStoreGetters,
+} from "@/composables/useBaseStore";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import {
   REGEXP_ELEMENT_VALUE_AS_WORLD,
-  REGEXP_SIGN, REGEXP_SPACES_IN_AROUND,
-  REGEXP_VARIABLE_SIGN_NUMBERS
+  REGEXP_SIGN,
+  REGEXP_SPACES_IN_AROUND,
+  REGEXP_VARIABLE_SIGN_NUMBERS,
 } from "@/constants/regexp";
-import { EXCEPTION_VARIABLES_IN_FORMULA, LIST_BANNED_ELEMENTS_NAME } from "@/constants/variables";
+import {
+  EXCEPTION_VARIABLES_IN_FORMULA,
+  LIST_BANNED_ELEMENTS_NAME,
+} from "@/constants/variables";
 
-import {replaceSpecSymbols} from "@/servises/UtilityServices"
+import { replaceSpecSymbols } from "@/servises/UtilityServices";
 
-const tryToggleShowInsideElementStatus = getBaseStoreAction('tryToggleShowInsideElementStatus')
-const {devMode} = getBaseStoreGetters()
-
+const tryToggleShowInsideElementStatus = getBaseStoreAction(
+  "tryToggleShowInsideElementStatus"
+);
+const { devMode } = getBaseStoreGetters();
 
 const props = defineProps({
   templates: {
@@ -23,24 +31,23 @@ const props = defineProps({
     type: String,
     default: null,
   },
-})
+});
 
 onMounted(() => {
   setTimeout(() => {
     processingAllTemplatesOnData();
   }, 2000);
   console.warn(
-      "Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов."
+    "Включен режим отладки с демонстрацией ошибок и внутренних состояний элементов."
   );
-})
+});
 
-const usedArrayNamesInElements = reactive(new Set()) //список используемых имен для создания зависимостей
-const listExistElementNames = ref([]) // Список всех имен элементов которые могут участвовать в расчетах
-const listDisplayFormula = ref([]) //список всех формул отвечающих за отображение
-const listComputedFormula = ref([]) //Список всех формул отвечающих за расчет
+const usedArrayNamesInElements = reactive(new Set()); //список используемых имен для создания зависимостей
+const listExistElementNames = ref([]); // Список всех имен элементов которые могут участвовать в расчетах
+const listDisplayFormula = ref([]); //список всех формул отвечающих за отображение
+const listComputedFormula = ref([]); //Список всех формул отвечающих за расчет
 const displayAlert = ref(false);
-const localShowInsideElementStatus = ref(false)
-
+const localShowInsideElementStatus = ref(false);
 
 /**
  * рекурсивно обходим все шаблоны и получаем нужный массив данных
@@ -53,11 +60,11 @@ const localShowInsideElementStatus = ref(false)
  * @returns {boolean}
  */
 function getNeedleDataInTemplates(
-    template,
-    desiredField,
-    accumulatorVariable,
-    nameFieldOnResult,
-    label = null
+  template,
+  desiredField,
+  accumulatorVariable,
+  nameFieldOnResult,
+  label = null
 ) {
   if (template?.label) {
     label = template.label;
@@ -66,39 +73,39 @@ function getNeedleDataInTemplates(
   if (Array.isArray(desiredField)) {
     desiredField?.forEach((field) => {
       isExistField(template, field)
-          ? accumulatorVariable.value.push({
+        ? accumulatorVariable.value.push({
             label: template?.label ? template?.label : label ? label : null,
             [nameFieldOnResult]: template[field],
           })
-          : false;
+        : false;
     });
   } else {
     isExistField(template, desiredField)
-        ? accumulatorVariable.value.push({
+      ? accumulatorVariable.value.push({
           label: template?.label ? template?.label : label ? label : null,
           [nameFieldOnResult]: template[desiredField],
         })
-        : false;
+      : false;
   }
 
   for (let prop in template) {
     if (isDataObject(template[prop])) {
       getNeedleDataInTemplates(
-          template[prop],
+        template[prop],
+        desiredField,
+        accumulatorVariable,
+        nameFieldOnResult,
+        label
+      );
+    } else if (isDataArray(template[prop])) {
+      template[prop].forEach((item) =>
+        getNeedleDataInTemplates(
+          item,
           desiredField,
           accumulatorVariable,
           nameFieldOnResult,
           label
-      );
-    } else if (isDataArray(template[prop])) {
-      template[prop].forEach((item) =>
-          getNeedleDataInTemplates(
-              item,
-              desiredField,
-              accumulatorVariable,
-              nameFieldOnResult,
-              label
-          )
+        )
       );
     }
   }
@@ -120,10 +127,10 @@ function isExistField(template, field) {
  */
 function isDataObject(data) {
   return (
-      typeof data === "object" &&
-      !Array.isArray(data) &&
-      data !== null &&
-      data !== "undefined"
+    typeof data === "object" &&
+    !Array.isArray(data) &&
+    data !== null &&
+    data !== "undefined"
   );
 }
 
@@ -134,10 +141,7 @@ function isDataObject(data) {
  */
 function isDataArray(data) {
   return (
-      Array.isArray(data) &&
-      data?.length &&
-      data !== null &&
-      data !== "undefined"
+    Array.isArray(data) && data?.length && data !== null && data !== "undefined"
   );
 }
 
@@ -157,23 +161,23 @@ function processingAllTemplatesOnData() {
   ];
 
   getNeedleDataInTemplates(
-      props.templates,
-      "elementName",
-      listExistElementNames,
-      "elementName"
+    props.templates,
+    "elementName",
+    listExistElementNames,
+    "elementName"
   );
 
   getNeedleDataInTemplates(
-      props.templates,
-      listFieldsInFormula,
-      listDisplayFormula,
-      "displayFormula"
+    props.templates,
+    listFieldsInFormula,
+    listDisplayFormula,
+    "displayFormula"
   );
   getNeedleDataInTemplates(
-      props.templates,
-      ["formula", "dependencyFormulaCost", "cost"],
-      listComputedFormula,
-      "formula"
+    props.templates,
+    ["formula", "dependencyFormulaCost", "cost"],
+    listComputedFormula,
+    "formula"
   );
 
   if (props.formula?.length) {
@@ -184,9 +188,7 @@ function processingAllTemplatesOnData() {
   }
 
   listDisplayFormula.value = listDisplayFormula.value.map((item) => {
-    item.displayFormula = processingFormulaSpecialsSymbols(
-        item.displayFormula
-    );
+    item.displayFormula = processingFormulaSpecialsSymbols(item.displayFormula);
     return item;
   });
   listComputedFormula.value = listComputedFormula.value.map((item) => {
@@ -194,7 +196,7 @@ function processingAllTemplatesOnData() {
     return item;
   });
   listExistElementNames.value.forEach((item) =>
-      usedArrayNamesInElements.add(item.elementName)
+    usedArrayNamesInElements.add(item.elementName)
   );
 }
 
@@ -207,30 +209,28 @@ function processingFormulaSpecialsSymbols(formula) {
   // разбиваем формулу на массив отдельных данных
 
   formula = replaceSpecSymbols(formula)
-      ?.split(
-        REGEXP_VARIABLE_SIGN_NUMBERS
-      )
-      ?.map((item) => {
-        //удаляем пробелы по краям
-        let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
-        // если по краям есть кавычки, то удаляем пробелы между
-        // кавычками и текстом в середине, не трогая пробелы внутри текста
-        if (item?.match(REGEXP_SIGN)) {
-          nextItem = "";
-        }
-        return nextItem;
-      })
-      .filter(
-          (item) =>
-            item?.trim()?.length && !item.match(REGEXP_ELEMENT_VALUE_AS_WORLD)
-      );
+    ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
+    ?.map((item) => {
+      //удаляем пробелы по краям
+      let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
+      // если по краям есть кавычки, то удаляем пробелы между
+      // кавычками и текстом в середине, не трогая пробелы внутри текста
+      if (item?.match(REGEXP_SIGN)) {
+        nextItem = "";
+      }
+      return nextItem;
+    })
+    .filter(
+      (item) =>
+        item?.trim()?.length && !item.match(REGEXP_ELEMENT_VALUE_AS_WORLD)
+    );
 
   return formula;
 }
 
 watch(localShowInsideElementStatus, (newValue) => {
   tryToggleShowInsideElementStatus(newValue);
-})
+});
 
 /**
  * не существующие имена в формулах отвечающих за отображение элементов
@@ -241,8 +241,8 @@ const notExistNamesInDisplayFormula = computed(() => {
   listDisplayFormula.value.forEach((item) => {
     item.displayFormula.forEach((name) => {
       if (
-          !usedArrayNamesInElements.has(name) &&
-          !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
+        !usedArrayNamesInElements.has(name) &&
+        !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -252,7 +252,7 @@ const notExistNamesInDisplayFormula = computed(() => {
     });
   });
   return usedNamesDependencyListOut;
-})
+});
 
 /**
  * не существующие имена в формулах на расчет
@@ -263,8 +263,8 @@ const notExistNamesInComputedFormula = computed(() => {
   listComputedFormula.value.forEach((item) => {
     item?.formula.forEach((name) => {
       if (
-          !usedArrayNamesInElements.has(name) &&
-          !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
+        !usedArrayNamesInElements.has(name) &&
+        !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -274,7 +274,7 @@ const notExistNamesInComputedFormula = computed(() => {
     });
   });
   return usedNamesDependencyListOut;
-})
+});
 
 /**
  * Повторяющиеся имена переменных
@@ -292,33 +292,30 @@ const recurringTemplateNames = computed(() => {
     }
   });
   for (let key in recurring) {
-    recurring[key].length > 1
-        ? (resultRecurring[key] = recurring[key])
-        : false;
+    recurring[key].length > 1 ? (resultRecurring[key] = recurring[key]) : false;
   }
   return resultRecurring;
-})
+});
 
 const isExistDoubleNames = computed(() => {
-      return Boolean(Object.keys(recurringTemplateNames.value).length);
-    })
+  return Boolean(Object.keys(recurringTemplateNames.value).length);
+});
 
 const isExistNamesIsDisplayFormula = computed(() => {
-      return Boolean(notExistNamesInDisplayFormula.value.length);
-    })
+  return Boolean(notExistNamesInDisplayFormula.value.length);
+});
 
 const isExistNamesInComputedFormula = computed(() => {
-      return Boolean(notExistNamesInComputedFormula.value.length);
-    })
+  return Boolean(notExistNamesInComputedFormula.value.length);
+});
 
 const isExistError = computed(() => {
   return (
-      isExistDoubleNames.value ||
-      isExistNamesIsDisplayFormula.value ||
-      isExistNamesInComputedFormula.value
+    isExistDoubleNames.value ||
+    isExistNamesIsDisplayFormula.value ||
+    isExistNamesInComputedFormula.value
   );
-})
-
+});
 </script>
 
 <template>

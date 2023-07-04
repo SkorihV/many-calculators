@@ -14,13 +14,12 @@ import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
-import {getProxyFreeVariables} from "@/composables/getProxyFreeVariables"
-import {useGetOtherGlobalSum} from "@/composables/useGetOtherGlobalSum";
+import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
+import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import { onMounted, ref, watch, computed } from "vue";
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
-
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 import {
   IS_LOCAL,
@@ -38,11 +37,18 @@ import {
 import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore"
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
 import { REGEXP_HTML_TAG } from "@/constants/regexp";
-import { NAME_RESERVED_VARIABLE_GLOBAL_SUM, NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+import {
+  NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  NAME_RESERVED_VARIABLE_SUM,
+} from "@/constants/variables";
 
-const {isCanShowAllTooltips,
+const {
+  isCanShowAllTooltips,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
   devMode,
   showInsideElementStatus,
@@ -55,14 +61,29 @@ const {isCanShowAllTooltips,
   checkedIsStructureTemplate,
   getSignAfterDot,
   getRoundOffType,
-  getTitleSum
-} = getBaseStoreGetters()
-const {showAllTooltipsOn, tryAddResultElement, tryModifiedResultElement, tryToggleDevMode,
-  setTooltipOn, setInitEnabledSendForm, setAllowShowResultBlock,
-  tryAddDependencyElement, setInputOptions} = getBaseStoreAction([
-  'showAllTooltipsOn', 'tryAddResultElement', 'tryModifiedResultElement',
-'tryToggleDevMode', 'setTooltipOn', 'setInitEnabledSendForm', 'setAllowShowResultBlock', 'tryAddDependencyElement', 'setInputOptions'
-])
+  getTitleSum,
+} = getBaseStoreGetters();
+const {
+  showAllTooltipsOn,
+  tryAddResultElement,
+  tryModifiedResultElement,
+  tryToggleDevMode,
+  setTooltipOn,
+  setInitEnabledSendForm,
+  setAllowShowResultBlock,
+  tryAddDependencyElement,
+  setInputOptions,
+} = getBaseStoreAction([
+  "showAllTooltipsOn",
+  "tryAddResultElement",
+  "tryModifiedResultElement",
+  "tryToggleDevMode",
+  "setTooltipOn",
+  "setInitEnabledSendForm",
+  "setAllowShowResultBlock",
+  "tryAddDependencyElement",
+  "setInputOptions",
+]);
 
 const eventNotShowTooltips = [
   "delete",
@@ -73,26 +94,27 @@ const eventNotShowTooltips = [
   "changeAmountSelectList",
   "changeValueDependenciesElements",
   "system",
-]  // События при которых не должно срабатывать отображение ошибок
+]; // События при которых не должно срабатывать отображение ошибок
 
-const inputTemplates = ref( {}) // внешние данные с шаблонами элементов калькулятора
-const inputOptions = ref( {}) // внешние данные с общими настройками калькулятора
-const calculatorTemplates = ref( []) // список шаблонов элементов
-const isUseFormula = ref( false) // использовать формулу
-const displayResultData = ref( false) // включить работу формул и вывод данных
-const methodWorksForm = ref( "show")
-const formElement = ref( null)
-const teleportField = ref( null)
-const submitResult = ref( null)
-const eventSubmittingFormAdded = ref( null)
-const intervalName = ref( null)
-const existFormulaForHiddenResultButton = ref( false)
+const inputTemplates = ref({}); // внешние данные с шаблонами элементов калькулятора
+const inputOptions = ref({}); // внешние данные с общими настройками калькулятора
+const calculatorTemplates = ref([]); // список шаблонов элементов
+const isUseFormula = ref(false); // использовать формулу
+const displayResultData = ref(false); // включить работу формул и вывод данных
+const methodWorksForm = ref("show");
+const formElement = ref(null);
+const teleportField = ref(null);
+const submitResult = ref(null);
+const eventSubmittingFormAdded = ref(null);
+const intervalName = ref(null);
+const existFormulaForHiddenResultButton = ref(false);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
 
 const isExistDependencyMainFormula = computed(() => {
   return Boolean(inputOptions.value?.dependencyMainFormula?.length);
-})
+});
 
 const mainFormulaResult = computed(() => {
   if (!isExistDependencyMainFormula.value) {
@@ -101,355 +123,357 @@ const mainFormulaResult = computed(() => {
       : "";
   }
   const formulaAfterDependency =
-    inputOptions.value.dependencyMainFormula?.reduce(
-      (resultFormula, item) => {
-        let dependencyFormula = getArrayElementsFromFormula(
-          item.dependencyFormula
-        );
-        constructLocalListElementDependencyInFormula(
-          dependencyFormula
-        );
-        dependencyFormula = processingVariablesOnFormula(
-          dependencyFormula,
-          localDependencyList
-        );
+    inputOptions.value.dependencyMainFormula?.reduce((resultFormula, item) => {
+      let dependencyFormula = getArrayElementsFromFormula(
+        item.dependencyFormula
+      );
+      constructLocalListElementDependencyInFormula(dependencyFormula);
+      dependencyFormula = processingVariablesOnFormula(
+        dependencyFormula,
+        localDependencyList
+      );
 
-        const formulaIsExist = Boolean(item?.formula?.length);
-        try {
-          if (eval(dependencyFormula) && formulaIsExist) {
-            resultFormula = item.formula;
-          }
-        } catch (e) {
-          if (devMode.value) {
-            console.error(
-              "Формула зависимости для смены главной формулы: " + e.message
-            );
-          }
+      const formulaIsExist = Boolean(item?.formula?.length);
+      try {
+        if (eval(dependencyFormula) && formulaIsExist) {
+          resultFormula = item.formula;
         }
-        return resultFormula;
-      },
-      ""
-    );
+      } catch (e) {
+        if (devMode.value) {
+          console.error(
+            "Формула зависимости для смены главной формулы: " + e.message
+          );
+        }
+      }
+      return resultFormula;
+    }, "");
 
   const isFormulaAfterDependency = Boolean(formulaAfterDependency?.length);
   if (isFormulaAfterDependency) {
     return formulaAfterDependency;
   }
 
-  return inputOptions.value?.formula?.length
-    ? inputOptions.value?.formula
-    : "";
-})
+  return inputOptions.value?.formula?.length ? inputOptions.value?.formula : "";
+});
 const mainFormulaIsExist = computed(() => {
-    return Boolean(mainFormulaResult.value?.length);
-  })
+  return Boolean(mainFormulaResult.value?.length);
+});
 
-const {variablesInFormula, summaFreeVariables, baseDataForCalculate } = useGetOtherGlobalSum(mainFormulaResult)
+const { variablesInFormula, summaFreeVariables, baseDataForCalculate } =
+  useGetOtherGlobalSum(mainFormulaResult);
 
-watch(summaFreeVariables, () => {
-  tryPassDependency(
-    NAME_RESERVED_VARIABLE_SUM,
-    summaFreeVariables.value,
-    Boolean(summaFreeVariables.value !== null),
-    summaFreeVariables.value,
-    NAME_RESERVED_VARIABLE_SUM,
-    summaFreeVariables.value
-  );
-},{
-  immediate: true
-})
-
-  /**
-   * Список переменных из формулы вместе с данными
-   * @returns {*}
-   */
-const dataListVariablesOnFormula = computed(() => {
-    return variablesInFormula.value?.map((item) => {
-      if (item === NAME_RESERVED_VARIABLE_SUM) {
-        return getProxyFreeVariables(summaFreeVariables.value);
-      } else {
-        const data = baseDataForCalculate.value.filter(
-          (itemInner) => itemInner.name === item
-        );
-        return data.length ? data[0] : item;
-      }
-    });
-  })
-
-  /**
-   * Отдает формулу с подставленными значениями
-   * @returns {*}
-   */
-const resultTextForComputed = computed(() => {
-    return parsingDataInFormulaOnSum(
-      processingArrayOnFormulaProcessingLogic(dataListVariablesOnFormula.value)
-    );
-  })
-
-  /**
-   *  рассчитываем формулу через eval
-   * @returns {boolean|any}
-   */
-const combinedFormulaDataTogether = computed(() => {
-    try {
-      const resultNumber = eval(resultTextForComputed.value);
-      if (!isNaN(resultNumber) && isFinite(resultNumber)) {
-        return resultNumber;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      if (devMode.value) {
-        console.warn("Рассчитываемая формула: ", resultTextForComputed.value);
-      }
-      return null;
-    }
-  })
-
-  /**
-   * Данные нужные только для вывода в форму
-   * @returns {*[]}
-   */
-const sortPositionDataForOutput = computed(() => {
-    return baseDataForCalculate.value.sort(
-      (itemA, itemB) => itemA.position - itemB.position
-    );
-  })
-
-  /**
-   * Текст со всеми полями которые должны отображаться в форме
-   * @returns {string}
-   */
-const resultTextDataForForm = computed(() => {
-    let result = "";
-    sortPositionDataForOutput.value.forEach((item) => {
-      if (item.type === "duplicator") {
-        if (item?.insertedTemplates?.length && item.isShow) {
-          item?.insertedTemplates.forEach((duplicator) => {
-            if (duplicator?.insertedTemplates?.length) {
-              const resultValueObjectItem = parseResultValueObjectItem(
-                duplicator,
-                "formOutputMethod",
-                duplicator?.unit
-              );
-              if (resultValueObjectItem?.length) {
-                result += resultValueObjectItem;
-              }
-              duplicator?.insertedTemplates.forEach(
-                (templateInDuplicator) => {
-                  const resultValueObjectItemInDuplicator =
-                    parseResultValueObjectItem(
-                      templateInDuplicator,
-                      "formOutputMethod",
-                      getCurrency.value
-                    );
-                  if (resultValueObjectItemInDuplicator?.length) {
-                    result += resultValueObjectItemInDuplicator;
-                  }
-                }
-              );
-            }
-          });
-        }
-      } else {
-        const data = parseResultValueObjectItem(
-          item,
-          "formOutputMethod",
-          getCurrency.value
-        );
-        if (data.length) {
-          result += data;
-        }
-      }
-    });
-    return result;
-  })
-
-  /**
-   * Общая сумма расчета
-   * @returns {*|boolean}
-   */
-const finalSummaForOutput = computed(() => {
-    if (
-      !displayResultData.value ||
-      isExistGlobalErrorsValidationIgnoreHiddenElement.value
-    ) {
-      tryPassDependency(NAME_RESERVED_VARIABLE_GLOBAL_SUM, null, false, null, "App_calc");
-      return null;
-    }
-    let resultSum = null;
-    if (isUseFormula.value && mainFormulaIsExist.value) {
-      resultSum = combinedFormulaDataTogether.value;
-    } else {
-      resultSum = baseDataForCalculate.value.reduce((sum, item) => {
-        if (item.cost !== null && !item.excludeFromCalculations) {
-          return sum + parseFloat(item.cost);
-        }
-        return sum + 0;
-      }, 0);
-    }
-    resultSum = decimalAdjust(
-      resultSum,
-      getSignAfterDot.value,
-      getRoundOffType.value
-    );
-
+watch(
+  summaFreeVariables,
+  () => {
     tryPassDependency(
-      "_globalSum_",
-      resultSum,
-      Boolean(resultSum !== null),
-      resultSum,
-      "App_calc",
-      resultSum
+      NAME_RESERVED_VARIABLE_SUM,
+      summaFreeVariables.value,
+      Boolean(summaFreeVariables.value !== null),
+      summaFreeVariables.value,
+      NAME_RESERVED_VARIABLE_SUM,
+      summaFreeVariables.value
     );
+  },
+  {
+    immediate: true,
+  }
+);
 
-    return resultSum;
-  })
-
-  /**
-   * Текст для вывода в форму
-   * @returns {string}
-   */
-const finalTextForOutput = computed(() => {
-    let result = resultTextDataForForm.value;
-    if (finalSummaForOutput.value === null) {
-      return result;
-    }
-
-    if (finalSummaForOutput.value === false) {
-      result += "Есть ошибка в расчетах!";
+/**
+ * Список переменных из формулы вместе с данными
+ * @returns {*}
+ */
+const dataListVariablesOnFormula = computed(() => {
+  return variablesInFormula.value?.map((item) => {
+    if (item === NAME_RESERVED_VARIABLE_SUM) {
+      return getProxyFreeVariables(summaFreeVariables.value);
     } else {
-      result +=
-        "\n" +
-        getTitleSum.value +
-        " " +
-        finalSummaForOutput.value +
-        " " +
-        getCurrency.value;
+      const data = baseDataForCalculate.value.filter(
+        (itemInner) => itemInner.name === item
+      );
+      return data.length ? data[0] : item;
     }
+  });
+});
+
+/**
+ * Отдает формулу с подставленными значениями
+ * @returns {*}
+ */
+const resultTextForComputed = computed(() => {
+  return parsingDataInFormulaOnSum(
+    processingArrayOnFormulaProcessingLogic(dataListVariablesOnFormula.value)
+  );
+});
+
+/**
+ *  рассчитываем формулу через eval
+ * @returns {boolean|any}
+ */
+const combinedFormulaDataTogether = computed(() => {
+  try {
+    const resultNumber = eval(resultTextForComputed.value);
+    if (!isNaN(resultNumber) && isFinite(resultNumber)) {
+      return resultNumber;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    if (devMode.value) {
+      console.warn("Рассчитываемая формула: ", resultTextForComputed.value);
+    }
+    return null;
+  }
+});
+
+/**
+ * Данные нужные только для вывода в форму
+ * @returns {*[]}
+ */
+const sortPositionDataForOutput = computed(() => {
+  return baseDataForCalculate.value.sort(
+    (itemA, itemB) => itemA.position - itemB.position
+  );
+});
+
+/**
+ * Текст со всеми полями которые должны отображаться в форме
+ * @returns {string}
+ */
+const resultTextDataForForm = computed(() => {
+  let result = "";
+  sortPositionDataForOutput.value.forEach((item) => {
+    if (item.type === "duplicator") {
+      if (item?.insertedTemplates?.length && item.isShow) {
+        item?.insertedTemplates.forEach((duplicator) => {
+          if (duplicator?.insertedTemplates?.length) {
+            const resultValueObjectItem = parseResultValueObjectItem(
+              duplicator,
+              "formOutputMethod",
+              duplicator?.unit
+            );
+            if (resultValueObjectItem?.length) {
+              result += resultValueObjectItem;
+            }
+            duplicator?.insertedTemplates.forEach((templateInDuplicator) => {
+              const resultValueObjectItemInDuplicator =
+                parseResultValueObjectItem(
+                  templateInDuplicator,
+                  "formOutputMethod",
+                  getCurrency.value
+                );
+              if (resultValueObjectItemInDuplicator?.length) {
+                result += resultValueObjectItemInDuplicator;
+              }
+            });
+          }
+        });
+      }
+    } else {
+      const data = parseResultValueObjectItem(
+        item,
+        "formOutputMethod",
+        getCurrency.value
+      );
+      if (data.length) {
+        result += data;
+      }
+    }
+  });
+  return result;
+});
+
+/**
+ * Общая сумма расчета
+ * @returns {*|boolean}
+ */
+const finalSummaForOutput = computed(() => {
+  if (
+    !displayResultData.value ||
+    isExistGlobalErrorsValidationIgnoreHiddenElement.value
+  ) {
+    tryPassDependency(
+      NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+      null,
+      false,
+      null,
+      "App_calc"
+    );
+    return null;
+  }
+  let resultSum = null;
+  if (isUseFormula.value && mainFormulaIsExist.value) {
+    resultSum = combinedFormulaDataTogether.value;
+  } else {
+    resultSum = baseDataForCalculate.value.reduce((sum, item) => {
+      if (item.cost !== null && !item.excludeFromCalculations) {
+        return sum + parseFloat(item.cost);
+      }
+      return sum + 0;
+    }, 0);
+  }
+  resultSum = decimalAdjust(
+    resultSum,
+    getSignAfterDot.value,
+    getRoundOffType.value
+  );
+
+  tryPassDependency(
+    "_globalSum_",
+    resultSum,
+    Boolean(resultSum !== null),
+    resultSum,
+    "App_calc",
+    resultSum
+  );
+
+  return resultSum;
+});
+
+/**
+ * Текст для вывода в форму
+ * @returns {string}
+ */
+const finalTextForOutput = computed(() => {
+  let result = resultTextDataForForm.value;
+  if (finalSummaForOutput.value === null) {
     return result;
-  })
+  }
+
+  if (finalSummaForOutput.value === false) {
+    result += "Есть ошибка в расчетах!";
+  } else {
+    result +=
+      "\n" +
+      getTitleSum.value +
+      " " +
+      finalSummaForOutput.value +
+      " " +
+      getCurrency.value;
+  }
+  return result;
+});
 
 const finalTextForOutputForTeleport = computed(() => {
-    return finalTextForOutput.value.replaceAll(REGEXP_HTML_TAG, "");
-  })
-  /**
-   * Отобразить блок с текстом о наличии ошибок,
-   * если ошибки есть и глобально разрешено их отображение
-   * @returns {false|boolean}
-   */
+  return finalTextForOutput.value.replaceAll(REGEXP_HTML_TAG, "");
+});
+/**
+ * Отобразить блок с текстом о наличии ошибок,
+ * если ошибки есть и глобально разрешено их отображение
+ * @returns {false|boolean}
+ */
 const showErrorTextBlock = computed(() => {
-    return Boolean(
-      isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+  return Boolean(
+    isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
       isCanShowAllTooltips.value
-    );
-  })
+  );
+});
 
 const showErrorSummaBlock = computed(() => {
   return Boolean(
     (finalSummaForOutput.value === null ||
       finalSummaForOutput.value === false) &&
-    isCanShowAllTooltips.value &&
-    displayResultData.value
+      isCanShowAllTooltips.value &&
+      displayResultData.value
   );
-})
+});
 
 const isEnabledSendForm = computed(() => {
-    return (
-      checkInitEnabledSendForm.value &&
-      finalTextForOutput.value?.length &&
-      !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
-      !showErrorSummaBlock.value
-    );
-  })
+  return (
+    checkInitEnabledSendForm.value &&
+    finalTextForOutput.value?.length &&
+    !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+    !showErrorSummaBlock.value
+  );
+});
 
-  /**
-   * Отправить данные в форму если нет ошибок валидации и разрешена отправка
-   * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
-   */
+/**
+ * Отправить данные в форму если нет ошибок валидации и разрешена отправка
+ * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
+ */
 const allowTeleport = computed(() => {
-    return Boolean(
-      submitResult.value &&
+  return Boolean(
+    submitResult.value &&
       !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
       checkInitEnabledSendForm.value
-    );
-  })
+  );
+});
 
 const showFormIsAllow = computed(() => {
-    if (formElement.value === false || methodWorksForm.value === "hidden") {
-      return false;
-    }
+  if (formElement.value === false || methodWorksForm.value === "hidden") {
+    return false;
+  }
 
-    if (methodWorksForm.value === "show") {
-      return true;
-    }
+  if (methodWorksForm.value === "show") {
+    return true;
+  }
 
-    return Boolean(
-      !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
+  return Boolean(
+    !isExistGlobalErrorsValidationIgnoreHiddenElement.value &&
       checkInitEnabledSendForm.value &&
       checkAllowShowResultBlock.value
-    );
-  })
+  );
+});
 
 watch(isExistGlobalErrorsValidationIgnoreHiddenElement, () => {
-      checkEnabledResultButton();
-    })
+  checkEnabledResultButton();
+});
 
 watch(showFormIsAllow, (newValue) => {
-        if (newValue) {
-          showForm();
-        } else {
-          hiddenForm();
-        }
-    })
+  if (newValue) {
+    showForm();
+  } else {
+    hiddenForm();
+  }
+});
 
 watch(showInsideElementStatus, () => {
-      toggleTextAreaResultForDevMode();
-    })
+  toggleTextAreaResultForDevMode();
+});
 
 watch(showErrorSummaBlock, (newValue) => {
-        if (newValue) {
-          setAllowShowResultBlock(false);
-        }
-    })
+  if (newValue) {
+    setAllowShowResultBlock(false);
+  }
+});
 
 function changeValue(data) {
-      if (typeof data !== "object") {
-        return null;
-      }
-      const { name, type, eventType } = data;
-      if (eventType === "delete") {
-        hiddenElementOnResults(name);
-        checkEnabledResultButton();
-        return false;
-      }
-      tryAddResultElement(data);
+  if (typeof data !== "object") {
+    return null;
+  }
+  const { name, type, eventType } = data;
+  if (eventType === "delete") {
+    hiddenElementOnResults(name);
+    checkEnabledResultButton();
+    return false;
+  }
+  tryAddResultElement(data);
 
-      if (type === "duplicator") {
-        tryModifiedResultElement({
-          elementName: name,
-          modifiedFieldName: "insertedTemplates",
-          newData: data.insertedTemplates,
-        });
-      }
+  if (type === "duplicator") {
+    tryModifiedResultElement({
+      elementName: name,
+      modifiedFieldName: "insertedTemplates",
+      newData: data.insertedTemplates,
+    });
+  }
 
-      if (
-        !eventNotShowTooltips.includes(eventType) &&
-        methodBeginningCalculationIsAutomatic.value
-      ) {
-        showAllTooltipsOn();
-        setAllowShowResultBlock(true);
-      }
-      if (
-        !eventNotShowTooltips.includes(eventType) &&
-        existFormulaForHiddenResultButton.value &&
-        methodBeginningCalculationIsButton.value
-      ) {
-        showAllTooltipsOn();
-      }
+  if (
+    !eventNotShowTooltips.includes(eventType) &&
+    methodBeginningCalculationIsAutomatic.value
+  ) {
+    showAllTooltipsOn();
+    setAllowShowResultBlock(true);
+  }
+  if (
+    !eventNotShowTooltips.includes(eventType) &&
+    existFormulaForHiddenResultButton.value &&
+    methodBeginningCalculationIsButton.value
+  ) {
+    showAllTooltipsOn();
+  }
 
-      checkEnabledResultButton();
-    }
+  checkEnabledResultButton();
+}
 
 /**
  * Разрешаем отправку формы
@@ -495,98 +519,105 @@ function hiddenElementOnResults(name) {
 }
 
 function showForm() {
-      if (!formElement.value) {
-        return false;
-      }
-      if (
-        Number(inputOptions.value?.resultOptions?.timerForSpinner) > 0 &&
-        methodWorksForm.value !== "show"
-      ) {
-        setTimeout(() => {
-          if (showFormIsAllow.value) {
-            formElement.value.style.display = "block";
-          }
-        }, inputOptions.value?.resultOptions?.timerForSpinner * 1000);
-      } else {
+  if (!formElement.value) {
+    return false;
+  }
+  if (
+    Number(inputOptions.value?.resultOptions?.timerForSpinner) > 0 &&
+    methodWorksForm.value !== "show"
+  ) {
+    setTimeout(() => {
+      if (showFormIsAllow.value) {
         formElement.value.style.display = "block";
       }
-    }
+    }, inputOptions.value?.resultOptions?.timerForSpinner * 1000);
+  } else {
+    formElement.value.style.display = "block";
+  }
+}
 
 function hiddenForm() {
-      if (formElement.value) {
-        formElement.value.style.display = "none";
-      }
-    }
+  if (formElement.value) {
+    formElement.value.style.display = "none";
+  }
+}
 
 function findForm() {
-      const form = document.querySelector("#calc__form-for-result");
-      formElement.value = form ? form : null;
-    }
+  const form = document.querySelector("#calc__form-for-result");
+  formElement.value = form ? form : null;
+}
 function findSubmitForm() {
-      if (formElement.value) {
-        const submit = formElement.value.querySelector("button[type=submit]");
-        submitResult.value = submit ? submit : null;
-      }
-    }
+  if (formElement.value) {
+    const submit = formElement.value.querySelector("button[type=submit]");
+    submitResult.value = submit ? submit : null;
+  }
+}
 
 function findTeleportField() {
-      if (formElement.value) {
-        const field = formElement.value.querySelector("#teleport");
-        teleportField.value = field ? field : null;
-      }
-    }
+  if (formElement.value) {
+    const field = formElement.value.querySelector("#teleport");
+    teleportField.value = field ? field : null;
+  }
+}
 
 function setReadOnlyForTeleportField() {
-      if (teleportField.value) {
-        findTeleportField();
-      }
-      if (teleportField.value) {
-        teleportField.value.readOnly = true;
-      }
-    }
+  if (teleportField.value) {
+    findTeleportField();
+  }
+  if (teleportField.value) {
+    teleportField.value.readOnly = true;
+  }
+}
 function setEventOnSubmit() {
-      if (!intervalName.value) {
-        submitResult.value.addEventListener("click", () => {
-          let counter = 0;
-          intervalName.value = setInterval(() => {
-            formElement.value = null;
-            submitResult.value = null;
-            eventSubmittingFormAdded.value = false;
-            checkEnabledResultButton();
-            counter++;
-            if (counter > 5) {
-              clearInterval(intervalName.value);
-            }
-          }, 1000);
-        });
-      }
-      eventSubmittingFormAdded.value = true;
-    }
+  if (!intervalName.value) {
+    submitResult.value.addEventListener("click", () => {
+      let counter = 0;
+      intervalName.value = setInterval(() => {
+        formElement.value = null;
+        submitResult.value = null;
+        eventSubmittingFormAdded.value = false;
+        checkEnabledResultButton();
+        counter++;
+        if (counter > 5) {
+          clearInterval(intervalName.value);
+        }
+      }, 1000);
+    });
+  }
+  eventSubmittingFormAdded.value = true;
+}
 
 function toggleTextAreaResultForDevMode() {
-      if (showInsideElementStatus.value) {
-        if (teleportField.value) {
-          findTeleportField();
-        }
-        if (teleportField.value) {
-          teleportField.value.style.display = "block";
-        }
-      }
-      if (!showInsideElementStatus.value && teleportField.value) {
-        teleportField.value.style.display = "none";
-      }
+  if (showInsideElementStatus.value) {
+    if (teleportField.value) {
+      findTeleportField();
     }
+    if (teleportField.value) {
+      teleportField.value.style.display = "block";
+    }
+  }
+  if (!showInsideElementStatus.value && teleportField.value) {
+    teleportField.value.style.display = "none";
+  }
+}
 
-function tryPassDependency(name, value, isShow, displayValue, type, cost = null) {
-      tryAddDependencyElement({
-        name,
-        value,
-        isShow,
-        displayValue,
-        type,
-        cost
-      });
-    }
+function tryPassDependency(
+  name,
+  value,
+  isShow,
+  displayValue,
+  type,
+  cost = null
+) {
+  tryAddDependencyElement({
+    name,
+    value,
+    isShow,
+    displayValue,
+    type,
+    cost,
+  });
+}
 
 onMounted(async () => {
   if (IS_LOCAL) {
@@ -617,9 +648,7 @@ onMounted(async () => {
         JSON.stringify(window?.calculatorOptions)
       );
     } catch (e) {
-      console.error(
-        "Ошибка при получении настроек калькулятора " + e.message
-      );
+      console.error("Ошибка при получении настроек калькулятора " + e.message);
       inputOptions.value = {};
     }
   }
@@ -649,12 +678,16 @@ onMounted(async () => {
 
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;
-})
-
+});
 </script>
 
 <template>
-  <div class="calc calc__wrapper" id="custom-stile" v-show="appIsMounted" ref="parentRef">
+  <div
+    class="calc calc__wrapper"
+    id="custom-stile"
+    v-show="appIsMounted"
+    ref="parentRef"
+  >
     <template v-for="(template, index) in calculatorTemplates" :key="index">
       <templates-wrapper-structural
         v-if="checkedIsStructureTemplate(template?.template)"
@@ -1001,11 +1034,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       &.is-highlight {
         border: 2px dashed blue;
         background: repeating-linear-gradient(
-            -60deg,
-            blue 0,
-            blue 1px,
-            transparent 1px,
-            transparent 15px
+          -60deg,
+          blue 0,
+          blue 1px,
+          transparent 1px,
+          transparent 15px
         );
         background-color: #fff;
       }
@@ -2784,7 +2817,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       }
       &.is-not-exist {
         background: red;
-        color:white;
+        color: white;
       }
       &.is-hidden {
         background: yellow;
@@ -2796,7 +2829,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         margin: 5px 0;
       }
       &.is-pointer {
-        cursor:pointer;
+        cursor: pointer;
       }
     }
   }

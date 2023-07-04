@@ -9,22 +9,47 @@ import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
 import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { onMounted, onUnmounted, ref, watch, computed, reactive, toRef } from "vue";
-import {useEventListener} from "@/composables/useEventsListener";
-import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  computed,
+  reactive,
+  toRef,
+} from "vue";
+import { useEventListener } from "@/composables/useEventsListener";
+import {
+  getBaseStoreAction,
+  getBaseStoreGetters,
+} from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
-import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
-import {checkedValueOnVoid} from '@/servises/UtilityServices'
-import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
-import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
+import {
+  getCurrentWidthElement,
+  getIsMakeElementColumn,
+} from "@/composables/useWidthElement";
+import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
-import {useCheckedValueMinMax} from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
+import { useCheckedValueMinMax } from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
 
-const {isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState} = getBaseStoreGetters()
-const {tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, tryDeleteAllDataOnStoreForElementName} = getBaseStoreAction(['tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'tryDeleteAllDataOnStoreForElementName',])
-const emits = defineEmits(["changedValue"])
+const { isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState } =
+  getBaseStoreGetters();
+const {
+  tryAddDependencyElement,
+  checkValidationDataAndToggle,
+  tryToggleElementIsMounted,
+  tryDeleteAllDataOnStoreForElementName,
+} = getBaseStoreAction([
+  "tryAddDependencyElement",
+  "checkValidationDataAndToggle",
+  "tryToggleElementIsMounted",
+  "tryDeleteAllDataOnStoreForElementName",
+]);
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   rangeValue: {
     type: [Number, String],
@@ -110,266 +135,281 @@ const props = defineProps({
     "positionElement",
     "zeroValueDisplayIgnore",
   ]),
-})
+});
 
-const thisElementInputRangeRef = ref(null)
-const staticRef = ref(null)
-const parentRef = ref(null)
+const thisElementInputRangeRef = ref(null);
+const staticRef = ref(null);
+const parentRef = ref(null);
 
-const elementWidth = ref( 0);
-const resultValue = ref( null);
-const textErrorNotEmpty = ref( "Обязательное поле.");
-const updateValueTimer = ref( null);
-const canBeShownTooltip = ref( false);
-const timerNameForLocalValue = ref( null);
-const minimalWidthStaticElement = ref( 15);
-const staticElementWidth = ref( minimalWidthStaticElement.value);
+const elementWidth = ref(0);
+const resultValue = ref(null);
+const textErrorNotEmpty = ref("Обязательное поле.");
+const updateValueTimer = ref(null);
+const canBeShownTooltip = ref(false);
+const timerNameForLocalValue = ref(null);
+const minimalWidthStaticElement = ref(15);
+const staticElementWidth = ref(minimalWidthStaticElement.value);
 
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
-  reactive(
-    {
-      formula: toRef(props, "dependencyFormulaDisplay"),
-      parentIsShow: toRef(props, 'parentIsShow'),
-      localDependencyList: localDependencyList,
-      constructLocalListElementDependencyInFormula
-    }
-  )
-)
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const {
+  isVisibilityFromDependency,
+  formulaAfterProcessingVariables,
+  costAfterProcessingDependencyPrice,
+} = useProcessingFormula(
+  reactive({
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
+    localDependencyList: localDependencyList,
+    constructLocalListElementDependencyInFormula,
+  })
+);
 
-const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
+const { initProcessingDependencyPrice } = useInitProcessingDependencyPrice(
+  toRef(props, "dependencyPrices")
+);
 
-const {currentWidthElement, updatedCurrentWidth} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+const { currentWidthElement, updatedCurrentWidth } = getCurrentWidthElement(
+  isVisibilityFromDependency,
+  parentRef
+);
 
-useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
+useDisplaySpinner(props.elementName);
+useReportInitialStatusForElement(
+  toRef(props, "parentIsShow"),
+  changeValue,
+  changeValid
+);
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
-const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
+});
+const { isMakeElementColumn } = getIsMakeElementColumn(
+  currentWidthElement,
+  isExistLabel
+);
 
 const localMin = computed(() => {
-      return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
-    })
+  return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
+});
 
 const localMax = computed(() => {
-      return checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10;
-    })
+  return checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10;
+});
 
-const {checkValidValueReturnNumber} = useCheckedValueMinMax(localMin, localMax)
+const { checkValidValueReturnNumber } = useCheckedValueMinMax(
+  localMin,
+  localMax
+);
 
 const localStep = computed(() => {
-      return checkedValueOnVoid(props.step) ? parseFloat(props.step) : 1;
-    })
+  return checkedValueOnVoid(props.step) ? parseFloat(props.step) : 1;
+});
 
 const localElementName = computed(() => {
-      return checkedValueOnVoid(props.elementName)
-        ? props.elementName
-        : Math.random().toString();
-    })
-const {isHighlightElement} = useHighlightElement(localElementName)
+  return checkedValueOnVoid(props.elementName)
+    ? props.elementName
+    : Math.random().toString();
+});
+const { isHighlightElement } = useHighlightElement(localElementName);
 
 const isErrorEmpty = computed(() => {
-      return props.notEmpty && resultValue.value === null;
-    })
+  return props.notEmpty && resultValue.value === null;
+});
 
 const localCanBeShownTooltip = computed(() => {
-      return canBeShownTooltip.value && isVisibilityFromDependency.value;
-    })
+  return canBeShownTooltip.value && isVisibilityFromDependency.value;
+});
 
 const isClassError = computed(() => {
-      return (
-        (localCanBeShownTooltip.value || isCanShowAllTooltips.value) &&
-        isErrorEmpty.value
-      );
+  return (
+    (localCanBeShownTooltip.value || isCanShowAllTooltips.value) &&
+    isErrorEmpty.value
+  );
+});
+/**
+ * Возвращает цену подходящую условию, если поле отображается
+ * Если не одна цена не подходит, то возвращается стандартная
+ * @returns {Number|String|*}
+ */ const localCost = computed(() => {
+  if (!isVisibilityFromDependency.value) {
+    return null;
+  }
+
+  if (!initProcessingDependencyPrice.value || !props.dependencyPrices) {
+    return updatedCostForOut(props.cost);
+  }
+
+  let { cost: newCost } = costAfterProcessingDependencyPrice(
+    reactive({
+      dependencyArrayItems: toRef(props, "dependencyPrices"),
+      formulaFieldName: "dependencyFormulaCost",
+      templateName: "UiRange",
+      value: resultValue.value,
     })
-    /**
-     * Возвращает цену подходящую условию, если поле отображается
-     * Если не одна цена не подходит, то возвращается стандартная
-     * @returns {Number|String|*}
-     */const localCost = computed(() => {
-      if (!isVisibilityFromDependency.value) {
-        return null;
-      }
-
-      if (!initProcessingDependencyPrice.value || !props.dependencyPrices) {
-        return updatedCostForOut(props.cost);
-      }
-
-      let { cost: newCost } = costAfterProcessingDependencyPrice(
-        reactive({
-          dependencyArrayItems: toRef(props, 'dependencyPrices'),
-          formulaFieldName:  "dependencyFormulaCost",
-          templateName: "UiRange",
-          value: resultValue.value
-        })
-
-      );
-      if (newCost !== null) {
-        return updatedCostForOut(newCost);
-      }
-      return updatedCostForOut(props.cost);
-    })
+  );
+  if (newCost !== null) {
+    return updatedCostForOut(newCost);
+  }
+  return updatedCostForOut(props.cost);
+});
 
 const positionStaticResultValue = computed(() => {
-      updateWidthElement();
-      if (resultValue.value === null) {
-        return null;
-      }
-      const width = elementWidth.value - staticElementWidth.value / 2 - 10;
+  updateWidthElement();
+  if (resultValue.value === null) {
+    return null;
+  }
+  const width = elementWidth.value - staticElementWidth.value / 2 - 10;
 
-      let newPosition =
-        (resultValue.value - localMin.value) / (localMax.value - localMin.value);
+  let newPosition =
+    (resultValue.value - localMin.value) / (localMax.value - localMin.value);
 
-      if (newPosition < 0) {
-        newPosition = 5;
-      } else if (newPosition >= 1) {
-        newPosition = width;
-      } else {
-        newPosition = width * newPosition - staticElementWidth.value / 10;
-      }
-      return newPosition + "px";
-    })
+  if (newPosition < 0) {
+    newPosition = 5;
+  } else if (newPosition >= 1) {
+    newPosition = width;
+  } else {
+    newPosition = width * newPosition - staticElementWidth.value / 10;
+  }
+  return newPosition + "px";
+});
 
 const isStaticValue = computed(() => {
-      return (
-        props.showStaticValue &&
-        typeof resultValue.value === "number" &&
-        isFinite(resultValue.value) &&
-        positionStaticResultValue.value !== null
-      );
-    })
+  return (
+    props.showStaticValue &&
+    typeof resultValue.value === "number" &&
+    isFinite(resultValue.value) &&
+    positionStaticResultValue.value !== null
+  );
+});
 
 /**
  * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
  * @param newValue
  */
-watch(() => props.rangeValue, (newValue) => {
-      clearTimeout(updateValueTimer.value);
-      updateValueTimer.value = setTimeout(() => {
-        resultValue.value = parseFloat(newValue);
-      }, 1500);
-    })
+watch(
+  () => props.rangeValue,
+  (newValue) => {
+    clearTimeout(updateValueTimer.value);
+    updateValueTimer.value = setTimeout(() => {
+      resultValue.value = parseFloat(newValue);
+    }, 1500);
+  }
+);
 
 watch(isVisibilityFromDependency, (newValue) => {
-        if (newValue) {
-          setTimeout(() => {
-            elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
-          }, 500);
-        }
-        changeValue("dependency");
-
-    })
+  if (newValue) {
+    setTimeout(() => {
+      elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
+    }, 500);
+  }
+  changeValue("dependency");
+});
 
 watch(resultValue, () => {
-      tryChangeValue();
-    })
+  tryChangeValue();
+});
 
 watch(getSomeElementChangedSelfVisibilityState, () => {
-      updatedCurrentWidth();
-      setTimeout(() => {
-        updateWidthElement();
-      }, 10);
-    })
+  updatedCurrentWidth();
+  setTimeout(() => {
+    updateWidthElement();
+  }, 10);
+});
 
 function initBaseData(eventType = "mounted") {
-      let timer = setInterval(() => {
-        if (checkedValueOnVoid(props.rangeValue)) {
-          resultValue.value = parseFloat(props.rangeValue);
-          changeValue(eventType);
-          clearInterval(timer);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(timer);
-      }, 10000);
+  let timer = setInterval(() => {
+    if (checkedValueOnVoid(props.rangeValue)) {
+      resultValue.value = parseFloat(props.rangeValue);
+      changeValue(eventType);
+      clearInterval(timer);
     }
+  }, 100);
+  setTimeout(() => {
+    clearInterval(timer);
+  }, 10000);
+}
 
 function tryChangeValue(e) {
-      clearTimeout(timerNameForLocalValue.value);
-      resultValue.value = checkValidValueReturnNumber(resultValue);
-      updateStaticElementWidth();
-      timerNameForLocalValue.value = setTimeout(() => {
-        changeValue();
-      }, 500);
-    }
+  clearTimeout(timerNameForLocalValue.value);
+  resultValue.value = checkValidValueReturnNumber(resultValue);
+  updateStaticElementWidth();
+  timerNameForLocalValue.value = setTimeout(() => {
+    changeValue();
+  }, 500);
+}
 
 function changeValue(eventType = "input") {
-      updateWidthElement();
-      emits("changedValue", {
-        value: isVisibilityFromDependency.value ? resultValue.value : null,
-        displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
-        name: localElementName.value,
-        type: "range",
-        cost: localCost.value,
-        label: props.label,
-        formOutputMethod:
-          props.formOutputMethod !== "no" ? props.formOutputMethod : null,
-        resultOutputMethod:
-          props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
-        excludeFromCalculations: props.excludeFromCalculations,
-        isShow: isVisibilityFromDependency.value,
-        unit: props.unit,
-        eventType,
-        formulaProcessingLogic: props.formulaProcessingLogic,
-        position: props.positionElement,
-        zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
-      });
-      tryPassDependency();
-      changeValid(eventType);
-      if (eventType !== "mounted") {
-        shownTooltip();
-      }
-    }
+  updateWidthElement();
+  emits("changedValue", {
+    value: isVisibilityFromDependency.value ? resultValue.value : null,
+    displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
+    name: localElementName.value,
+    type: "range",
+    cost: localCost.value,
+    label: props.label,
+    formOutputMethod:
+      props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+    resultOutputMethod:
+      props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
+    excludeFromCalculations: props.excludeFromCalculations,
+    isShow: isVisibilityFromDependency.value,
+    unit: props.unit,
+    eventType,
+    formulaProcessingLogic: props.formulaProcessingLogic,
+    position: props.positionElement,
+    zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
+  });
+  tryPassDependency();
+  changeValid(eventType);
+  if (eventType !== "mounted") {
+    shownTooltip();
+  }
+}
 function changeValid(eventType) {
-      checkValidationDataAndToggle({
-        error: isVisibilityFromDependency.value
-          ? isErrorEmpty.value
-          : isVisibilityFromDependency.value,
-        name: localElementName.value,
-        type: "range",
-        label: props.label,
-        eventType,
-        isShow: isVisibilityFromDependency.value,
-        parentName: props.parentName,
-      });
-    }
+  checkValidationDataAndToggle({
+    error: isVisibilityFromDependency.value
+      ? isErrorEmpty.value
+      : isVisibilityFromDependency.value,
+    name: localElementName.value,
+    type: "range",
+    label: props.label,
+    eventType,
+    isShow: isVisibilityFromDependency.value,
+    parentName: props.parentName,
+  });
+}
 function tryPassDependency() {
-      tryAddDependencyElement({
-        name: localElementName.value,
-        value: isVisibilityFromDependency.value ? resultValue.value : null,
-        isShow: isVisibilityFromDependency.value,
-        displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
-        type: "range",
-      });
-    }
+  tryAddDependencyElement({
+    name: localElementName.value,
+    value: isVisibilityFromDependency.value ? resultValue.value : null,
+    isShow: isVisibilityFromDependency.value,
+    displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
+    type: "range",
+  });
+}
 function shownTooltip() {
-      if (!canBeShownTooltip.value) {
-        canBeShownTooltip.value = true;
-      }
-    }
+  if (!canBeShownTooltip.value) {
+    canBeShownTooltip.value = true;
+  }
+}
 function updatedCostForOut(cost) {
-      return checkedValueOnVoid(cost)
-        ? cost * Math.abs(resultValue.value)
-        : null;
-    }
+  return checkedValueOnVoid(cost) ? cost * Math.abs(resultValue.value) : null;
+}
 
 function updateWidthElement() {
-      if (
-        elementWidth.value !== thisElementInputRangeRef.value?.offsetWidth
-      ) {
-        elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
-      }
-    }
+  if (elementWidth.value !== thisElementInputRangeRef.value?.offsetWidth) {
+    elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
+  }
+}
 function updateStaticElementWidth() {
-      staticElementWidth.value = staticRef.value
-        ? staticRef.value?.offsetWidth
-        : minimalWidthStaticElement.value;
-    }
+  staticElementWidth.value = staticRef.value
+    ? staticRef.value?.offsetWidth
+    : minimalWidthStaticElement.value;
+}
 
-useEventListener(window, "resize", updateWidthElement)
-useEventListener(document, "DOMContentLoaded", updateWidthElement)
+useEventListener(window, "resize", updateWidthElement);
+useEventListener(document, "DOMContentLoaded", updateWidthElement);
 
 onMounted(() => {
   if (!props.isNeedChoice) {
@@ -394,19 +434,18 @@ onMounted(() => {
       clearInterval(timerStatic);
     }
   }, 500);
-})
+});
 
 onUnmounted(() => {
-    tryDeleteAllDataOnStoreForElementName(localElementName.value);
-})
-
+  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+});
 </script>
 
 <template>
   <div
     ref="parentRef"
     class="calc__wrapper-group-data isRange"
-    :class="{'is-highlight':isHighlightElement}"
+    :class="{ 'is-highlight': isHighlightElement }"
     :id="localElementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >

@@ -2,11 +2,11 @@
 import { computed } from "vue";
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
 
-const emits = defineEmits(['update:modelValue', 'changeValueStep'])
+const emits = defineEmits(["update:modelValue", "changeValueStep"]);
 const props = defineProps({
   modelValue: {
     value: {
-      type: [String, Number]
+      type: [String, Number],
     },
   },
   /**
@@ -25,7 +25,7 @@ const props = defineProps({
   },
   localMax: {
     type: [String, Number],
-    default: false
+    default: false,
   },
   /**
    * Шаг деления в ленте
@@ -42,14 +42,14 @@ const props = defineProps({
     validator(value) {
       return !isNaN(Number(value));
     },
-  }
-})
+  },
+});
 
 const localStepPrompt = computed(() => {
   return checkedValueOnVoid(props.stepPrompt)
     ? parseFloat(props.stepPrompt)
     : 1;
-})
+});
 
 const isHidePromptSteps = computed(() => {
   return (
@@ -58,7 +58,7 @@ const isHidePromptSteps = computed(() => {
     !props.localMax &&
     localStepPrompt.value < 1
   );
-})
+});
 
 const returnSteps = computed(() => {
   let steps = [];
@@ -74,11 +74,11 @@ const returnSteps = computed(() => {
     steps.push(i);
   }
   return steps;
-})
+});
 
 const amountSteps = computed(() => {
   return (props.localMax - props.localMin) / localStepPrompt.value;
-})
+});
 const pointsForStepsLine = computed(() => {
   const rightShiftElementWidth = 21;
   const firstPointPosition = 12;
@@ -100,16 +100,15 @@ const pointsForStepsLine = computed(() => {
     points.push(position.toFixed(4));
   }
   return points;
-})
+});
 
 const isShowStepLine = computed(() => {
   return props.showSteps && props.elementWidth > 220;
-})
+});
 
 function changeValueStep(step) {
-  emits('update:modelValue',step)
+  emits("update:modelValue", step);
 }
-
 </script>
 
 <template>
@@ -120,7 +119,7 @@ function changeValueStep(step) {
       v-for="(step, inx) in returnSteps"
       :style="{ left: pointsForStepsLine[inx] + 'px' }"
       :key="inx"
-      :class="{'calc__range-steps-item_selected': step === modelValue}"
+      :class="{ 'calc__range-steps-item_selected': step === modelValue }"
     >
       <div class="calc__range-steps-item-value">{{ step }}</div>
     </div>

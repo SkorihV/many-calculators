@@ -6,13 +6,23 @@ const typeElement = "UiImage";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {computed, reactive, onBeforeMount, onMounted, onUnmounted, toRef} from "vue";
-import {getBaseStoreAction, getBaseStoreGetters} from "@/composables/useBaseStore";
-import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import {
+  computed,
+  reactive,
+  onBeforeMount,
+  onMounted,
+  onUnmounted,
+  toRef,
+} from "vue";
+import {
+  getBaseStoreAction,
+  getBaseStoreGetters,
+} from "@/composables/useBaseStore";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 const props = defineProps({
   defaultImage: {
@@ -36,45 +46,49 @@ const props = defineProps({
     "parentIsShow",
     "dependencyFormulaDisplay",
   ]),
-})
+});
 const width = "max-width:" + props.maxWidth + "px";
 const height = "max-height:" + props.maxHeight + "px";
-const isExistDependencyImages = Boolean(props.dependencyImages?.length)
+const isExistDependencyImages = Boolean(props.dependencyImages?.length);
 
+const { devMode, getImageDir } = getBaseStoreGetters();
+const { tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted } =
+  getBaseStoreAction([
+    "tryDeleteAllDataOnStoreForElementName",
+    "tryToggleElementIsMounted",
+  ]);
 
-const {devMode, getImageDir} = getBaseStoreGetters();
-const {tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryToggleElementIsMounted"])
-
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
     reactive({
       localDependencyList: localDependencyList,
       constructLocalListElementDependencyInFormula,
-      parentIsShow: toRef(props, 'parentIsShow'),
-      formula: toRef(props, 'dependencyFormulaDisplay')
+      parentIsShow: toRef(props, "parentIsShow"),
+      formula: toRef(props, "dependencyFormulaDisplay"),
     })
-)
-useDisplaySpinner(props.elementName)
+  );
+useDisplaySpinner(props.elementName);
 
 onBeforeMount(() => {
   tryToggleElementIsMounted(props.elementName, false);
-})
+});
 
 onMounted(() => {
   setTimeout(() => {
     tryToggleElementIsMounted(props.elementName, true);
   }, 200);
-})
+});
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(props.elementName);
-})
+});
 const url = computed(() => {
   return Boolean(props.defaultImage?.filename?.length)
     ? getImageDir.value + props.defaultImage?.filename
     : "";
-})
-
+});
 
 const localDataForDisplay = computed(() => {
   let dataForOut = {
@@ -87,25 +101,26 @@ const localDataForDisplay = computed(() => {
   }
   props.dependencyImages.forEach((imageItem) => {
     if (
-        imageItem.dependencyFormulaDisplay?.length &&
-        imageItem?.image?.filename.length
+      imageItem.dependencyFormulaDisplay?.length &&
+      imageItem?.image?.filename.length
     ) {
       let formula = getArrayElementsFromFormula(
-          imageItem.dependencyFormulaDisplay
+        imageItem.dependencyFormulaDisplay
       );
       constructLocalListElementDependencyInFormula(formula);
-      formula = processingVariablesOnFormula(
-          formula,
-          localDependencyList
-      );
+      formula = processingVariablesOnFormula(formula, localDependencyList);
 
       const currentUrlIsExist = Boolean(imageItem?.image?.filename.length);
       try {
         if (eval(formula) && currentUrlIsExist) {
-          const label = imageItem.label?.toString().length ? imageItem.label : props.label;
+          const label = imageItem.label?.toString().length
+            ? imageItem.label
+            : props.label;
           const url = getImageDir.value + imageItem.image.filename;
-          const prompt = imageItem?.prompt?.length ? imageItem.prompt : props.prompt;
-          dataForOut = {label, url, prompt, };
+          const prompt = imageItem?.prompt?.length
+            ? imageItem.prompt
+            : props.prompt;
+          dataForOut = { label, url, prompt };
         }
       } catch (e) {
         if (devMode.value) {
@@ -115,14 +130,12 @@ const localDataForDisplay = computed(() => {
     }
   });
   return dataForOut;
-})
+});
 
 const urlIsExist = computed(() => {
-    return Boolean(localDataForDisplay.value?.url?.length);
-  })
-
+  return Boolean(localDataForDisplay.value?.url?.length);
+});
 </script>
-
 
 <template>
   <div
@@ -157,6 +170,5 @@ const urlIsExist = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-
   />
 </template>

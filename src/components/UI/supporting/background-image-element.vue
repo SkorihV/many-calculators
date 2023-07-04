@@ -7,7 +7,7 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 const { getImageDir, devMode } = getBaseStoreGetters();
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 const props = defineProps({
   imageSettingsData: {

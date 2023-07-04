@@ -3,29 +3,41 @@ const typeElement = "UiCheckbox";
 const textErrorNotEmpty = "Обязательное поле.";
 </script>
 
-
 <script setup>
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
-import {computed, onMounted, onUnmounted, reactive, ref, toRef, watch} from "vue";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
-import {checkedValueOnVoid} from "@/servises/UtilityServices"
-import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
+import {
+  getBaseStoreGetters,
+  getBaseStoreAction,
+} from "@/composables/useBaseStore";
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+} from "vue";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import {
+  getCurrentWidthElement,
+  getIsMakeElementColumn,
+} from "@/composables/useWidthElement";
 import goScrollToElement from "@/composables/goScrollToElement";
-import {useIsCheckedType} from "@/components/UI/mainCalculated/UiCheckbox/useIsCheckedType";
+import { useIsCheckedType } from "@/components/UI/mainCalculated/UiCheckbox/useIsCheckedType";
 
-import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
-import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
-import {useHighlightElement} from "@/composables/useHighlightElement";
+import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
+import { useHighlightElement } from "@/composables/useHighlightElement";
 
-
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   /**
    *  альтернативный способ смены вида чекбокас - текстом
@@ -81,38 +93,66 @@ const props = defineProps({
     "zeroValueDisplayIgnore",
     "baseValue",
   ]),
-})
+});
 
-const currentLocalTextButton = ref("")
-const isLocalChecked = ref(null)
-const canBeShownTooltip = ref(false)
-const isChecked = ref(false) // активирована
-const notActive = ref(false) // невозможно активировать
-const checkboxValue = ref(false) // начальное значение
-const parentRef = ref(null)
+const currentLocalTextButton = ref("");
+const isLocalChecked = ref(null);
+const canBeShownTooltip = ref(false);
+const isChecked = ref(false); // активирована
+const notActive = ref(false); // невозможно активировать
+const checkboxValue = ref(false); // начальное значение
+const parentRef = ref(null);
 
-const {isCanShowAllTooltips} = getBaseStoreGetters()
-const {checkValidationDataAndToggle, tryAddDependencyElement, tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryAddDependencyElement", "checkValidationDataAndToggle", "tryToggleElementIsMounted",
-  "tryDeleteAllDataOnStoreForElementName",])
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAfterProcessingVariables} = useProcessingFormula(
-    reactive({
-      formula: toRef(props, "dependencyFormulaDisplay"),
-      parentIsShow: toRef(props, 'parentIsShow'),
-      localDependencyList: localDependencyList,
-      constructLocalListElementDependencyInFormula
-    })
-)
-useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
-useDisplaySpinner(props.elementName)
+const { isCanShowAllTooltips } = getBaseStoreGetters();
+const {
+  checkValidationDataAndToggle,
+  tryAddDependencyElement,
+  tryDeleteAllDataOnStoreForElementName,
+  tryToggleElementIsMounted,
+} = getBaseStoreAction([
+  "tryAddDependencyElement",
+  "checkValidationDataAndToggle",
+  "tryToggleElementIsMounted",
+  "tryDeleteAllDataOnStoreForElementName",
+]);
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const {
+  isVisibilityFromDependency,
+  costAfterProcessingDependencyPrice,
+  formulaAfterProcessingVariables,
+} = useProcessingFormula(
+  reactive({
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
+    localDependencyList: localDependencyList,
+    constructLocalListElementDependencyInFormula,
+  })
+);
+useReportInitialStatusForElement(
+  toRef(props, "parentIsShow"),
+  changeValue,
+  changeValid
+);
+useDisplaySpinner(props.elementName);
 
-const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+const { currentWidthElement } = getCurrentWidthElement(
+  isVisibilityFromDependency,
+  parentRef
+);
 const isExistLabel = computed(() => {
   return Boolean(props.label.toString()?.length);
-})
-const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExistLabel)
-const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
-const {isBase, isButton, isSwitcher, isSwitcherVertical} = useIsCheckedType(props.typeDisplayClass)
+});
+const { isMakeElementColumn } = getIsMakeElementColumn(
+  currentWidthElement,
+  isExistLabel
+);
+const { initProcessingDependencyPrice } = useInitProcessingDependencyPrice(
+  toRef(props, "dependencyPrices")
+);
+const { isBase, isButton, isSwitcher, isSwitcherVertical } = useIsCheckedType(
+  props.typeDisplayClass
+);
 
 onMounted(() => {
   checkboxValue.value = props.baseValue === "active";
@@ -120,36 +160,36 @@ onMounted(() => {
   notActive.value = props.baseValue === "notActive";
 
   if (!props.isNeedChoice) {
-    isLocalChecked.value= Boolean(checkboxValue.value || isChecked.value);
+    isLocalChecked.value = Boolean(checkboxValue.value || isChecked.value);
   }
   if (isLocalChecked.value) {
     currentLocalTextButton.value = props.buttonTextChecked?.length
-        ? props.buttonTextChecked
-        : props.buttonText;
+      ? props.buttonTextChecked
+      : props.buttonText;
   } else {
     currentLocalTextButton.value = props.buttonText;
   }
   changeValue("mounted");
-})
+});
 
 const localElementName = computed(() => {
-    return checkedValueOnVoid(props.elementName)
-        ? props.elementName
-        : Math.random().toString();
-  })
+  return checkedValueOnVoid(props.elementName)
+    ? props.elementName
+    : Math.random().toString();
+});
 
-const {isHighlightElement} = useHighlightElement(localElementName)
+const { isHighlightElement } = useHighlightElement(localElementName);
 
 const isErrorEmpty = computed(() => {
-    return Boolean(props.isNeedChoice && !isLocalChecked.value);
-})
+  return Boolean(props.isNeedChoice && !isLocalChecked.value);
+});
 const isErrorClass = computed(() => {
   return Boolean(
-      isErrorEmpty.value &&
+    isErrorEmpty.value &&
       isVisibilityFromDependency.value &&
       isCanShowAllTooltips.value
   );
-})
+});
 
 /**
  * Возвращает цену подходящую условию, если моле отображается
@@ -161,40 +201,40 @@ const localCost = computed(() => {
     return null;
   }
   if (!initProcessingDependencyPrice.value || !props.dependencyPrices) {
-    return isLocalChecked.value&& checkedValueOnVoid(props.cost)
-        ? parseFloat(props.cost)
-        : !isLocalChecked.value&& checkedValueOnVoid(props.costForVoid)
-            ? parseFloat(props.costForVoid)
-            : null;
+    return isLocalChecked.value && checkedValueOnVoid(props.cost)
+      ? parseFloat(props.cost)
+      : !isLocalChecked.value && checkedValueOnVoid(props.costForVoid)
+      ? parseFloat(props.costForVoid)
+      : null;
   }
 
   let { cost: newCost } = costAfterProcessingDependencyPrice(
-      reactive({
-        dependencyArrayItems: toRef(props, 'dependencyPrices'),
-        formulaFieldName:  "dependencyFormulaCost"
-      })
+    reactive({
+      dependencyArrayItems: toRef(props, "dependencyPrices"),
+      formulaFieldName: "dependencyFormulaCost",
+    })
   );
 
   if (newCost !== null) {
     return newCost;
   }
-  return isLocalChecked.value&& checkedValueOnVoid(props.cost)
-      ? parseFloat(props.cost)
-      : !isLocalChecked.value&& checkedValueOnVoid(props.costForVoid)
-          ? parseFloat(props.costForVoid)
-          : null;
-})
+  return isLocalChecked.value && checkedValueOnVoid(props.cost)
+    ? parseFloat(props.cost)
+    : !isLocalChecked.value && checkedValueOnVoid(props.costForVoid)
+    ? parseFloat(props.costForVoid)
+    : null;
+});
 
 watch(isVisibilityFromDependency, (value) => {
   if (value) {
     isLocalChecked.value = !props.isNeedChoice
-        ? Boolean(checkboxValue.value || isChecked.value)
-        : null;
+      ? Boolean(checkboxValue.value || isChecked.value)
+      : null;
   } else {
     isLocalChecked.value = null;
   }
   changeValue("dependency");
-})
+});
 function inputLocalValue() {
   if (notActive.value) {
     return null;
@@ -203,23 +243,23 @@ function inputLocalValue() {
     isLocalChecked.value = !isLocalChecked.value;
   }
   currentLocalTextButton.value =
-      isLocalChecked.value && props.buttonTextChecked?.length
-          ? props.buttonTextChecked
-          : props.buttonText;
+    isLocalChecked.value && props.buttonTextChecked?.length
+      ? props.buttonTextChecked
+      : props.buttonText;
   changeValue("click");
 }
 function changeValue(eventType = "click") {
   emits("changedValue", {
-    value: isVisibilityFromDependency.value ? isLocalChecked.value: null,
-    displayValue: isLocalChecked.value? "Да" : "Нет",
+    value: isVisibilityFromDependency.value ? isLocalChecked.value : null,
+    displayValue: isLocalChecked.value ? "Да" : "Нет",
     name: localElementName.value,
     type: "UiCheckbox",
     label: props.label || props.buttonText,
     cost: localCost.value,
     formOutputMethod:
-        props.formOutputMethod !== "no" ? props.formOutputMethod : null,
+      props.formOutputMethod !== "no" ? props.formOutputMethod : null,
     resultOutputMethod:
-        props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
+      props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
     eventType,
@@ -236,8 +276,8 @@ function changeValue(eventType = "click") {
 function changeValid(eventType) {
   checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
-        ? isErrorEmpty.value
-        : isVisibilityFromDependency.value,
+      ? isErrorEmpty.value
+      : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "UiCheckbox",
     label: props.label,
@@ -252,7 +292,7 @@ function changeValid(eventType) {
 function tryPassDependency() {
   tryAddDependencyElement({
     name: localElementName.value,
-    value: isVisibilityFromDependency.value ? isLocalChecked.value: null,
+    value: isVisibilityFromDependency.value ? isLocalChecked.value : null,
     isShow: isVisibilityFromDependency.value,
     displayValue: currentLocalTextButton.value,
     type: "UiCheckbox",
@@ -261,14 +301,13 @@ function tryPassDependency() {
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
-})
-
+});
 </script>
 
 <template>
   <div
     class="calc__wrapper-group-data"
-    :class="{'is-highlight':isHighlightElement}"
+    :class="{ 'is-highlight': isHighlightElement }"
     v-if="isVisibilityFromDependency"
     :id="elementName"
     ref="parentRef"

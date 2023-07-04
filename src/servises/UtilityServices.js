@@ -1,13 +1,13 @@
 import {
   SPEC_SYMBOLS,
   ERROR_PADDING,
-  ERROR_ELEMENT_IS_NOT_EXIST
+  ERROR_ELEMENT_IS_NOT_EXIST,
 } from "@/constants/variables";
 import {
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
   REGEXP_QUOTES_AND_WORD,
   REGEXP_SPACES_IN_AROUND,
-  REGEXP_VARIABLE_SIGN_NUMBERS
+  REGEXP_VARIABLE_SIGN_NUMBERS,
 } from "@/constants/regexp";
 
 const parseResultValueObjectItem = function (item, fieldName, currency) {
@@ -88,7 +88,7 @@ const processingArrayOnFormulaProcessingLogic = function (dataList) {
     } else if (isNullData) {
       resultList.push(ERROR_ELEMENT_IS_NOT_EXIST);
     } else if (isItemObject(currentItemList)) {
-      const pushValue = checkLogicAndReturnValue(currentItemList)
+      const pushValue = checkLogicAndReturnValue(currentItemList);
       if (pushValue !== null) {
         resultList.push(pushValue);
       }
@@ -100,18 +100,17 @@ const processingArrayOnFormulaProcessingLogic = function (dataList) {
 };
 
 const isLogicDataExist = (item) => {
-  return Boolean(item?.formulaProcessingLogic?.length)
-
-}
+  return Boolean(item?.formulaProcessingLogic?.length);
+};
 const isCostNull = (item) => {
   return item?.cost === null;
-}
+};
 const isItemObject = (item) => {
   return typeof item === "object";
-}
+};
 const isCostExist = (item) => {
   return typeof item?.cost === "number";
-}
+};
 /**
  *
  * @param item
@@ -126,10 +125,10 @@ const checkLogicAndReturnValue = (item) => {
     }
   }
   if (isCostExist(item)) {
-    return item.cost
+    return item.cost;
   }
   return null;
-}
+};
 
 /**
  * Обрабатываем массив данных и получаем сумму всех значений из item.cost
@@ -161,9 +160,7 @@ const parsingDataInFormulaOnSum = function (dataListVariables) {
 const getSummaVariablesInFormula = function (dataList) {
   return dataList.reduce((sum, item) => {
     const isAllowSummingCost =
-      item?.cost !== null &&
-      !item.excludeFromCalculations &&
-      item.isShow
+      item?.cost !== null && !item.excludeFromCalculations && item.isShow;
 
     if (isAllowSummingCost) {
       sum += parseFloat(item.cost);
@@ -180,15 +177,12 @@ const getSummaVariablesInFormula = function (dataList) {
  * @returns {*}
  */
 const getListVariablesMissedInFormula = function (dataList, variablesList) {
-  return dataList
-    ?.filter((dataOnCalcComponent) => {
-      const isFormula = variablesList.some(
-        (varOnFormula) => {
-          return varOnFormula === dataOnCalcComponent.name;
-        }
-      );
-      return !isFormula;
-    })
+  return dataList?.filter((dataOnCalcComponent) => {
+    const isFormula = variablesList.some((varOnFormula) => {
+      return varOnFormula === dataOnCalcComponent.name;
+    });
+    return !isFormula;
+  });
 };
 
 /**
@@ -198,15 +192,12 @@ const getListVariablesMissedInFormula = function (dataList, variablesList) {
  * @returns {*}
  */
 const getListVariablesUsedInFormula = function (dataList, variablesList) {
-  return dataList
-    ?.filter((dataOnCalcComponent) => {
-      const isFormula = variablesList.some(
-        (varOnFormula) => {
-          return varOnFormula === dataOnCalcComponent.name;
-        }
-      );
-      return isFormula;
-    })
+  return dataList?.filter((dataOnCalcComponent) => {
+    const isFormula = variablesList.some((varOnFormula) => {
+      return varOnFormula === dataOnCalcComponent.name;
+    });
+    return isFormula;
+  });
 };
 
 /**
@@ -268,8 +259,7 @@ const replaceSpecSymbols = (formula) => {
     formula = formula?.replaceAll(specItem[0], specItem[1]);
   });
   return formula;
-}
-
+};
 
 /**
  * преобразовывает формулу в массив
@@ -278,9 +268,7 @@ const replaceSpecSymbols = (formula) => {
  */
 const getArrayOnFormula = (formula) => {
   let formulaInOut = formula
-    ?.split(
-      REGEXP_VARIABLE_SIGN_NUMBERS
-    )
+    ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     .filter((item) => item?.trim()?.length);
 
   formulaInOut = formulaInOut?.map((item) => {
@@ -289,7 +277,8 @@ const getArrayOnFormula = (formula) => {
     // если по краям есть кавычки, то удаляем пробелы между
     // кавычками и текстом в середине, не трогая пробелы внутри текста
     if (nextItem.match(REGEXP_QUOTES_AND_WORD)) {
-      nextItem = "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
+      nextItem =
+        "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
     }
     return nextItem;
   });
@@ -318,5 +307,5 @@ export {
   getArrayElementsFromFormula,
   getArrayOnFormula,
   checkLogicAndReturnValue,
-  getListVariablesUsedInFormula
+  getListVariablesUsedInFormula,
 };

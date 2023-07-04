@@ -3,18 +3,18 @@ const typeElement = "Tab";
 </script>
 
 <script setup>
-import {computed, reactive, ref, toRef} from "vue";
+import { computed, reactive, ref, toRef } from "vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/tab/UiTabItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {getBaseStoreGetters} from "@/composables/useBaseStore";
-import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
-import {useProcessingFormula} from "@/composables/useProcessingFormula";
+import { getBaseStoreGetters } from "@/composables/useBaseStore";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
-const emits = defineEmits(["changedValue"])
+const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   tabData: {
     type: Object,
@@ -35,22 +35,28 @@ const props = defineProps({
     "parentIsShow",
     "dependencyFormulaDisplay",
   ]),
-})
-const parent = ref(null)
+});
+const parent = ref(null);
 
-const {isCanShowAllTooltips, isValidationShowOnParentName, isValidationErrorOnParentName} = getBaseStoreGetters();
-const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
-const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
+const {
+  isCanShowAllTooltips,
+  isValidationShowOnParentName,
+  isValidationErrorOnParentName,
+} = getBaseStoreGetters();
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+  useProcessingFormula(
     reactive({
       parentIsShow: toRef(props, "parentIsShow"),
       formula: toRef(props, "dependencyFormulaDisplay"),
       constructLocalListElementDependencyInFormula,
       localDependencyList: localDependencyList,
     })
-)
+  );
 
-const shownIdTab = ref(null)
-const hoverElementIndex = ref(null)
+const shownIdTab = ref(null);
+const hoverElementIndex = ref(null);
 
 function openItem(index) {
   shownIdTab.value = index;
@@ -76,11 +82,11 @@ const showBlock = computed(() => {
     });
   }
   return result.some((item) => item);
-})
+});
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
-})
+});
 </script>
 
 <template>
