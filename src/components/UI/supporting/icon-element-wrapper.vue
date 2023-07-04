@@ -30,12 +30,15 @@ const props = defineProps({
 const isImage = computed(() => {
   return Boolean(props.iconSettings?.image?.filename);
 });
+
 const showLeftIcon = computed(() => {
   return isImage.value && props.iconSettings?.location === "leftSide";
 });
+
 const showRightIcon = computed(() => {
   return isImage.value && props.iconSettings?.location === "rightSide";
 });
+
 </script>
 
 <template>

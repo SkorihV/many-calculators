@@ -35,11 +35,13 @@ function changeValue(data) {
 const isShowItem = computed(() => {
   return props.tabItemId === props.shownIdTab;
 })
+
 const {currentWidthElement} = getCurrentWidthElement(isShowItem, parentRef)
 
 const itemName = computed(() => {
   return props.tabName + "_" + props.elementName;
 })
+
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600
       ? props.tabItem?.maxWidthSide + "%"

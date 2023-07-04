@@ -2,7 +2,6 @@
 const typeElement = "Column";
 </script>
 
-
 <script setup>
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
@@ -33,7 +32,6 @@ const props = defineProps({
 
 const parentRef = ref(null)
 
-
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
     useLocalDependencyList();
 
@@ -58,10 +56,10 @@ const isExistLabel = computed(() => {
 const showColumn = computed(() =>  {
       return Boolean(isVisibilityFromDependency.value && props.parentIsShow);
     })
+
 const isHorizontal = computed(() => {
   return props.elementPosition === "horizontal";
 })
-
 
 </script>
 

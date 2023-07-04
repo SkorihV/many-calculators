@@ -105,6 +105,7 @@ const pointsForStepsLine = computed(() => {
 const isShowStepLine = computed(() => {
   return props.showSteps && props.elementWidth > 220;
 })
+
 function changeValueStep(step) {
   emits('update:modelValue',step)
 }

@@ -8,7 +8,6 @@ const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
 });
-
 const changeValue = (data) => {
   emits("changedValue", data);
 };

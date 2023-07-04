@@ -1,6 +1,5 @@
 <script setup>
 import { computed, defineProps, ref, watch } from "vue";
-
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -25,6 +24,7 @@ const baseUrlImage = computed(() => {
     ? props.imageSettingsData.image.filename
     : null;
 });
+
 const currentImageUrl = ref(baseUrlImage.value);
 
 function changeValue() {
@@ -54,6 +54,7 @@ function getImageAndUpdated(url) {
 const isBackgroundImage = computed(() => {
   return Boolean(currentImageUrl.value);
 });
+
 const isSubstrate = computed(() => {
   return Boolean(props.imageSettingsData?.isSubstrate);
 });
@@ -73,9 +74,11 @@ const opacitySubstrate = computed(() => {
 const styleBackgroundImageUrl = computed(() => {
   return 'background-UiImage : url("' + currentImageUrl.value + '");';
 });
+
 const styleBackgroundRepeat = computed(() => {
   return "background-repeat:" + props.imageSettingsData?.backgroundRepeat + ";";
 });
+
 const styleBackgroundPosition = computed(() => {
   return (
     "background-position:" +
@@ -118,6 +121,7 @@ const styleLimitWrapperImagePosition = computed(() => {
 
   return result;
 });
+
 const styleBackgroundSize = computed(() => {
   return `background-size: ${props.imageSettingsData?.behaviorImage}`;
 });
@@ -131,6 +135,7 @@ const styleLimitWrapperImageSize = computed(() => {
 
   return [width, height];
 });
+
 const styleBackground = computed(() => {
   if (isBackgroundImage.value) {
     return [

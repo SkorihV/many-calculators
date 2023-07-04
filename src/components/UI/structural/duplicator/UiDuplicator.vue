@@ -20,10 +20,7 @@ import {
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 
-const {getRoundOffType, getSignAfterDot} = getBaseStoreGetters()
 const {tryAddDependencyElement} = getBaseStoreAction(['tryAddDependencyElement'])
-
-
 
 const emits = defineEmits(['changedValue'])
 const props = defineProps({
@@ -63,12 +60,10 @@ const props = defineProps({
   ]),
 })
 
-
 let originData = ref({})
 const localResultsElements = reactive({})
 const localTemplates = ref([])
 const localCost = ref(0)
-
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterProcessingDependencyPrice} = useProcessingFormula(
@@ -79,26 +74,28 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterPro
     parentIsShow: toRef(props, "parentIsShow")
   })
 )
+
 useDisplaySpinner(props.elementName)
 useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid)
-
 
 const returnsLocalResultsElements = computed(() => {
       return Object.values(localResultsElements).sort(
         (itemA, itemB) => itemA?.position - itemB?.position
       );
     })
+
 const originVariablesInDuplicator = computed(() => {
       let result = getNameElementsRecursive(originData.value?.templates);
       return result.filter((item) => item?.length > 0);
     })
+
 const countElementsDuple = computed(() => {
       return localTemplates.value?.length ? localTemplates.value?.length : 0;
     })
+
 const IsExistPrompt = computed(() => {
       return Boolean(originData.value.prompt?.length);
     })
-
 
 watch(isVisibilityFromDependency, (newValue) => {
   if (newValue === false) {
@@ -106,10 +103,10 @@ watch(isVisibilityFromDependency, (newValue) => {
   }
 })
 
-
 function changeValid() {
       return null;
     }
+
 function changeValue(data) {
       if (data === "dependency") {
         data = { eventType: "dependency" };
@@ -123,18 +120,11 @@ function changeValue(data) {
       updateLocalCost();
       emitChangeValue(data.eventType);
     }
-function calculateResult() {
-      this.shownAllTooltips = true;
-      this.initEnabledSendForm = true;
-    }
-function hiddenElementOnResults(name) {
-      if (name in localResultsElements) {
-        localResultsElements[name].isShow = false;
-      }
-    }
+
 function duplicate(duplicateElement) {
       localTemplates.value.push(duplicateElement);
     }
+
 function deleteDuplicator(elementName) {
       let index = localTemplates.value.findIndex(
         (item) => item.elementName === elementName
@@ -167,6 +157,7 @@ function updateLocalCost() {
       );
       localCost.value = resultCost;
     }
+
 function emitChangeValue(eventType) {
       emits("changedValue", {
         name: props.elementName,
@@ -188,6 +179,7 @@ function emitChangeValue(eventType) {
       });
       tryPassDependency();
     }
+
 function tryPassDependency() {
       tryAddDependencyElement({
         name: props.elementName,
@@ -198,9 +190,6 @@ function tryPassDependency() {
       });
     }
 
-
-
-
 onMounted(() => {
   originData.value = JSON.parse(JSON.stringify(props.duplicateTemplate));
   localTemplates.value.push(
@@ -209,11 +198,7 @@ onMounted(() => {
   changeValue({ eventType: "mounted" });
 })
 
-
-
-
 </script>
-
 
 <template>
   <div

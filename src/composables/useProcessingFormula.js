@@ -7,7 +7,6 @@ import {
 import {computed, toRef, watch} from "vue";
 import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
-
 export function useProcessingFormula(dataObject) {
   const dependencyFormulaDisplay = toRef(
     dataObject,

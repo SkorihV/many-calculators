@@ -1,8 +1,4 @@
 export const IS_LOCAL = window.location.hostname === "localhost";
-export const LOCAL_PATH_DATA = "http://localhost:5000/test-calc";
-export const LOCAL_PATH_OPTIONS = "http://localhost:5000/calculator-options2";
-
-
-
-
+export const LOCAL_PATH_DATA = "http://localhost:5000/test-icons";
+export const LOCAL_PATH_OPTIONS = "http://localhost:5000/calculator-options";
 

@@ -378,6 +378,8 @@ class Props {
         }
       });
       return propsForReturn;
+    } else {
+      throw "Переданный список не является массивом " + props;
     }
   }
 }

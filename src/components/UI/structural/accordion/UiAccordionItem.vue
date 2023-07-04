@@ -61,6 +61,7 @@ const currentChildrenItem = computed(() => {
       ? props.accordionItem?.templates.length
       : 0;
 })
+
 /**
  *
  * @returns {*}
@@ -69,10 +70,10 @@ const currentHiddenItem = computed(() => {
   return localListValidationError.value?.filter((item) => !item.isShow)
       .length;
 })
+
 const isShowAccordionItem = computed(() => {
   return currentChildrenItem.value !== currentHiddenItem.value;
 })
-
 
 const itemIdName = computed(() => {
   return (
@@ -80,13 +81,11 @@ const itemIdName = computed(() => {
   );
 })
 
-
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600
       ? `${props.accordionItem?.maxWidthSide}%`
       : "100%";
 })
-
 
 </script>
 

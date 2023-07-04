@@ -19,6 +19,8 @@ import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useW
 import {checkedValueOnVoid} from '@/servises/UtilityServices'
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
+import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useCheckedValueMinMax} from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
 
 const {isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState} = getBaseStoreGetters()
 const {tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, tryDeleteAllDataOnStoreForElementName} = getBaseStoreAction(['tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'tryDeleteAllDataOnStoreForElementName',])
@@ -135,11 +137,13 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables, costAfterPro
   )
 )
 
-useDisplaySpinner(props.elementName)
-useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
 
 const {currentWidthElement, updatedCurrentWidth} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
+
+useDisplaySpinner(props.elementName)
+useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
+
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
@@ -148,9 +152,13 @@ const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExis
 const localMin = computed(() => {
       return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
     })
+
 const localMax = computed(() => {
       return checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10;
     })
+
+const {checkValidValueReturnNumber} = useCheckedValueMinMax(localMin, localMax)
+
 const localStep = computed(() => {
       return checkedValueOnVoid(props.step) ? parseFloat(props.step) : 1;
     })
@@ -160,13 +168,16 @@ const localElementName = computed(() => {
         ? props.elementName
         : Math.random().toString();
     })
+const {isHighlightElement} = useHighlightElement(localElementName)
 
 const isErrorEmpty = computed(() => {
       return props.notEmpty && resultValue.value === null;
     })
+
 const localCanBeShownTooltip = computed(() => {
       return canBeShownTooltip.value && isVisibilityFromDependency.value;
     })
+
 const isClassError = computed(() => {
       return (
         (localCanBeShownTooltip.value || isCanShowAllTooltips.value) &&
@@ -200,6 +211,7 @@ const isClassError = computed(() => {
       }
       return updatedCostForOut(props.cost);
     })
+
 const positionStaticResultValue = computed(() => {
       updateWidthElement();
       if (resultValue.value === null) {
@@ -219,6 +231,7 @@ const positionStaticResultValue = computed(() => {
       }
       return newPosition + "px";
     })
+
 const isStaticValue = computed(() => {
       return (
         props.showStaticValue &&
@@ -238,6 +251,7 @@ watch(() => props.rangeValue, (newValue) => {
         resultValue.value = parseFloat(newValue);
       }, 1500);
     })
+
 watch(isVisibilityFromDependency, (newValue) => {
         if (newValue) {
           setTimeout(() => {
@@ -251,6 +265,7 @@ watch(isVisibilityFromDependency, (newValue) => {
 watch(resultValue, () => {
       tryChangeValue();
     })
+
 watch(getSomeElementChangedSelfVisibilityState, () => {
       updatedCurrentWidth();
       setTimeout(() => {
@@ -270,28 +285,16 @@ function initBaseData(eventType = "mounted") {
         clearInterval(timer);
       }, 10000);
     }
+
 function tryChangeValue(e) {
       clearTimeout(timerNameForLocalValue.value);
-      resultValue.value = checkValidValueReturnNumber(resultValue.value);
+      resultValue.value = checkValidValueReturnNumber(resultValue);
       updateStaticElementWidth();
       timerNameForLocalValue.value = setTimeout(() => {
         changeValue();
       }, 500);
     }
-function checkValidValueReturnNumber(checkedValue) {
-      let value = !isNaN(parseFloat(checkedValue))
-        ? parseFloat(checkedValue)
-        : null;
 
-      if (value > localMax.value) {
-        value = localMax.value;
-      }
-
-      if (value < localMin.value) {
-        value = localMin.value;
-      }
-      return value;
-    }
 function changeValue(eventType = "input") {
       updateWidthElement();
       emits("changedValue", {
@@ -351,16 +354,7 @@ function updatedCostForOut(cost) {
         ? cost * Math.abs(resultValue.value)
         : null;
     }
-function plus() {
-      resultValue.value = checkValidValueReturnNumber(
-        resultValue.value + localStep.value
-      );
-    }
-function minus() {
-  resultValue.value = checkValidValueReturnNumber(
-    resultValue.value - localStep.value
-      );
-    }
+
 function updateWidthElement() {
       if (
         elementWidth.value !== thisElementInputRangeRef.value?.offsetWidth
@@ -373,7 +367,6 @@ function updateStaticElementWidth() {
         ? staticRef.value?.offsetWidth
         : minimalWidthStaticElement.value;
     }
-
 
 useEventListener(window, "resize", updateWidthElement)
 useEventListener(document, "DOMContentLoaded", updateWidthElement)
@@ -407,15 +400,14 @@ onUnmounted(() => {
     tryDeleteAllDataOnStoreForElementName(localElementName.value);
 })
 
-
 </script>
-
 
 <template>
   <div
     ref="parentRef"
     class="calc__wrapper-group-data isRange"
-    :id="elementName"
+    :class="{'is-highlight':isHighlightElement}"
+    :id="localElementName"
     v-if="rangeValue !== null && isVisibilityFromDependency"
   >
     <div
@@ -466,23 +458,14 @@ onUnmounted(() => {
             {{ resultValue }}
           </div>
         </div>
-        <div
-          class="calc__range-current-wrapper"
-          v-if="showDynamicValue || unit?.length"
-        >
-          <input
-            class="calc__range-current-dynamic"
-            :class="{ isError: isClassError }"
-            v-if="showDynamicValue"
-            type="text"
-            v-model="resultValue"
-            @keydown.up="plus"
-            @keydown.down="minus"
-          />
-          <div class="calc__range-unit" v-if="unit?.length">
-            {{ unit }}
-          </div>
-        </div>
+        <dynamic-input-value
+          :show-dynamic-value="showDynamicValue"
+          :unit="unit"
+          :min="localMin"
+          :max="localMax"
+          :is-error="isClassError"
+          v-model:dynamicValue="resultValue"
+        />
       </div>
       <ui-tooltip
         :is-show="isErrorEmpty"
@@ -499,6 +482,5 @@ onUnmounted(() => {
     :local-cost="localCost"
     :is-visibility-from-dependency="isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
   />
 </template>

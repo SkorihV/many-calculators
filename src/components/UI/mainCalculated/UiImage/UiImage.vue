@@ -12,6 +12,7 @@ import {processingVariablesOnFormula} from "@/servises/ProcessingFormula";
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList";
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 
 const props = defineProps({
   defaultImage: {
@@ -38,11 +39,12 @@ const props = defineProps({
 })
 const width = "max-width:" + props.maxWidth + "px";
 const height = "max-height:" + props.maxHeight + "px";
+const isExistDependencyImages = Boolean(props.dependencyImages?.length)
+
 
 const {devMode, getImageDir} = getBaseStoreGetters();
 const {tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted} = getBaseStoreAction(["tryDeleteAllDataOnStoreForElementName", "tryToggleElementIsMounted"])
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
-useDisplaySpinner(props.elementName)
+
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList();
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
     reactive({
@@ -52,6 +54,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
       formula: toRef(props, 'dependencyFormulaDisplay')
     })
 )
+useDisplaySpinner(props.elementName)
 
 onBeforeMount(() => {
   tryToggleElementIsMounted(props.elementName, false);
@@ -66,15 +69,13 @@ onMounted(() => {
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(props.elementName);
 })
-
-
 const url = computed(() => {
   return Boolean(props.defaultImage?.filename?.length)
     ? getImageDir.value + props.defaultImage?.filename
     : "";
 })
 
-const isExistDependencyImages = Boolean(props.dependencyImages?.length)
+
 const localDataForDisplay = computed(() => {
   let dataForOut = {
     label: props.label,
@@ -156,6 +157,6 @@ const urlIsExist = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
+
   />
 </template>

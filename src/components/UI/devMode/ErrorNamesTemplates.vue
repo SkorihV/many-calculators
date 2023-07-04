@@ -114,6 +114,7 @@ function getNeedleDataInTemplates(
 function isExistField(template, field) {
   return Boolean(template[field]?.length);
 }
+
 /**
  * @param data
  */
@@ -125,6 +126,7 @@ function isDataObject(data) {
       data !== "undefined"
   );
 }
+
 /**
  *
  * @param data
@@ -230,7 +232,6 @@ watch(localShowInsideElementStatus, (newValue) => {
   tryToggleShowInsideElementStatus(newValue);
 })
 
-
 /**
  * не существующие имена в формулах отвечающих за отображение элементов
  * @returns {*[]}
@@ -275,7 +276,6 @@ const notExistNamesInComputedFormula = computed(() => {
   return usedNamesDependencyListOut;
 })
 
-
 /**
  * Повторяющиеся имена переменных
  * @returns {{}}
@@ -299,7 +299,6 @@ const recurringTemplateNames = computed(() => {
   return resultRecurring;
 })
 
-
 const isExistDoubleNames = computed(() => {
       return Boolean(Object.keys(recurringTemplateNames.value).length);
     })
@@ -319,7 +318,6 @@ const isExistError = computed(() => {
       isExistNamesInComputedFormula.value
   );
 })
-
 
 </script>
 

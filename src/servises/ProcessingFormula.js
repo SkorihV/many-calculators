@@ -19,11 +19,7 @@ const processingVariablesOnFormula = function (formula, localDependencyList) {
       item in localDependencyList ? localDependencyList[item] : null;
 
     const elementIsExist = elementDependency !== null;
-    // const valueIsExist = !isNaN(
-    //   parseFloat(elementDependency?.value) &&
-    //     !Array.isArray(elementDependency?.value) &&
-    //     typeof elementDependency?.value !== "boolean"
-    // );
+
     const valueIsBool = typeof elementDependency?.value === "boolean";
     const valueIsNull = elementDependency?.value === null;
     const valueIsArray = Array.isArray(elementDependency?.value);
@@ -47,7 +43,5 @@ const processingVariablesOnFormula = function (formula, localDependencyList) {
   }, "");
   return result;
 };
-
-
 
 export { processingVariablesOnFormula };

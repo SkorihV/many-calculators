@@ -18,7 +18,6 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
     }, 500);
   })
 
-
   function resizeWidth() {
     updatedCurrentWidth();
   }

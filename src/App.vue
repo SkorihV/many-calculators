@@ -3,7 +3,6 @@ const typeElement = "Main App Calc";
 const label = "Основная формула расчета";
 </script>
 
-
 <script setup>
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
@@ -33,8 +32,6 @@ import {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
   parsingDataInFormulaOnSum,
-  getSummaVariablesInFormula,
-  getListVariablesMissedInFormula,
   decimalAdjust,
 } from "@/servises/UtilityServices.js";
 
@@ -67,8 +64,6 @@ const {showAllTooltipsOn, tryAddResultElement, tryModifiedResultElement, tryTogg
 'tryToggleDevMode', 'setTooltipOn', 'setInitEnabledSendForm', 'setAllowShowResultBlock', 'tryAddDependencyElement', 'setInputOptions'
 ])
 
-
-
 const eventNotShowTooltips = [
   "delete",
   "mounted",
@@ -79,7 +74,6 @@ const eventNotShowTooltips = [
   "changeValueDependenciesElements",
   "system",
 ]  // События при которых не должно срабатывать отображение ошибок
-
 
 const inputTemplates = ref( {}) // внешние данные с шаблонами элементов калькулятора
 const inputOptions = ref( {}) // внешние данные с общими настройками калькулятора
@@ -94,14 +88,12 @@ const eventSubmittingFormAdded = ref( null)
 const intervalName = ref( null)
 const existFormulaForHiddenResultButton = ref( false)
 
-
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
-
-
 
 const isExistDependencyMainFormula = computed(() => {
   return Boolean(inputOptions.value?.dependencyMainFormula?.length);
 })
+
 const mainFormulaResult = computed(() => {
   if (!isExistDependencyMainFormula.value) {
     return inputOptions.value?.formula?.length
@@ -152,47 +144,7 @@ const mainFormulaIsExist = computed(() => {
     return Boolean(mainFormulaResult.value?.length);
   })
 
-//   /**
-//    * Данные которые подходят для вывода или расчета
-//    * @returns {{length}|unknown[]|*[]}
-//    */
-// const baseDataForCalculate = computed(() => {
-//     return Object.values(getAllResultsElements.value).filter(
-//       (item) => !Boolean(item?.isDuplicator)
-//     );
-//   })
-
 const {variablesInFormula, summaFreeVariables, baseDataForCalculate } = useGetOtherGlobalSum(mainFormulaResult)
-
-
-//   /**
-//    * Разбиваем полученную формулу на массив с переменными и знаками.
-//    * Избавляемся от пустых элементов.
-//    * @returns {*[]|*}
-//    */
-// const variablesInFormula = computed(() => {
-//     if (mainFormulaIsExist.value) {
-//       return getArrayElementsFromFormula(mainFormulaResult.value);
-//     }
-//     return [];
-//   })
-//   /**
-//    * Список переменных не используемых в формуле
-//    * @returns {[]}
-//    */
-// const freeVariablesOutsideFormula = computed(() => {
-//     return getListVariablesMissedInFormula(
-//       baseDataForCalculate.value,
-//       variablesInFormula.value
-//     );
-//   })
-//   /**
-//    * сумма всех не используемых в формуле переменных
-//    * @returns {*}
-//    */
-// const summaFreeVariables = computed(() => {
-//     return getSummaFreeVariablesInFormula(freeVariablesOutsideFormula.value);
-//   })
 
 watch(summaFreeVariables, () => {
   tryPassDependency(
@@ -223,6 +175,7 @@ const dataListVariablesOnFormula = computed(() => {
       }
     });
   })
+
   /**
    * Отдает формулу с подставленными значениями
    * @returns {*}
@@ -232,6 +185,7 @@ const resultTextForComputed = computed(() => {
       processingArrayOnFormulaProcessingLogic(dataListVariablesOnFormula.value)
     );
   })
+
   /**
    *  рассчитываем формулу через eval
    * @returns {boolean|any}
@@ -251,6 +205,7 @@ const combinedFormulaDataTogether = computed(() => {
       return null;
     }
   })
+
   /**
    * Данные нужные только для вывода в форму
    * @returns {*[]}
@@ -260,6 +215,7 @@ const sortPositionDataForOutput = computed(() => {
       (itemA, itemB) => itemA.position - itemB.position
     );
   })
+
   /**
    * Текст со всеми полями которые должны отображаться в форме
    * @returns {string}
@@ -308,6 +264,7 @@ const resultTextDataForForm = computed(() => {
     });
     return result;
   })
+
   /**
    * Общая сумма расчета
    * @returns {*|boolean}
@@ -348,6 +305,7 @@ const finalSummaForOutput = computed(() => {
 
     return resultSum;
   })
+
   /**
    * Текст для вывода в форму
    * @returns {string}
@@ -371,6 +329,7 @@ const finalTextForOutput = computed(() => {
     }
     return result;
   })
+
 const finalTextForOutputForTeleport = computed(() => {
     return finalTextForOutput.value.replaceAll(REGEXP_HTML_TAG, "");
   })
@@ -385,6 +344,7 @@ const showErrorTextBlock = computed(() => {
       isCanShowAllTooltips.value
     );
   })
+
 const showErrorSummaBlock = computed(() => {
   return Boolean(
     (finalSummaForOutput.value === null ||
@@ -393,6 +353,7 @@ const showErrorSummaBlock = computed(() => {
     displayResultData.value
   );
 })
+
 const isEnabledSendForm = computed(() => {
     return (
       checkInitEnabledSendForm.value &&
@@ -401,6 +362,7 @@ const isEnabledSendForm = computed(() => {
       !showErrorSummaBlock.value
     );
   })
+
   /**
    * Отправить данные в форму если нет ошибок валидации и разрешена отправка
    * @returns {null|false|(function({initEnabledSendForm: *}): *)|*}
@@ -429,14 +391,10 @@ const showFormIsAllow = computed(() => {
     );
   })
 
-
-
-
-
-
 watch(isExistGlobalErrorsValidationIgnoreHiddenElement, () => {
       checkEnabledResultButton();
     })
+
 watch(showFormIsAllow, (newValue) => {
         if (newValue) {
           showForm();
@@ -444,9 +402,11 @@ watch(showFormIsAllow, (newValue) => {
           hiddenForm();
         }
     })
+
 watch(showInsideElementStatus, () => {
       toggleTextAreaResultForDevMode();
     })
+
 watch(showErrorSummaBlock, (newValue) => {
         if (newValue) {
           setAllowShowResultBlock(false);
@@ -490,6 +450,7 @@ function changeValue(data) {
 
       checkEnabledResultButton();
     }
+
 /**
  * Разрешаем отправку формы
  */
@@ -532,6 +493,7 @@ function hiddenElementOnResults(name) {
     });
   }
 }
+
 function showForm() {
       if (!formElement.value) {
         return false;
@@ -549,11 +511,13 @@ function showForm() {
         formElement.value.style.display = "block";
       }
     }
+
 function hiddenForm() {
       if (formElement.value) {
         formElement.value.style.display = "none";
       }
     }
+
 function findForm() {
       const form = document.querySelector("#calc__form-for-result");
       formElement.value = form ? form : null;
@@ -564,12 +528,14 @@ function findSubmitForm() {
         submitResult.value = submit ? submit : null;
       }
     }
+
 function findTeleportField() {
       if (formElement.value) {
         const field = formElement.value.querySelector("#teleport");
         teleportField.value = field ? field : null;
       }
     }
+
 function setReadOnlyForTeleportField() {
       if (teleportField.value) {
         findTeleportField();
@@ -596,6 +562,7 @@ function setEventOnSubmit() {
       }
       eventSubmittingFormAdded.value = true;
     }
+
 function toggleTextAreaResultForDevMode() {
       if (showInsideElementStatus.value) {
         if (teleportField.value) {
@@ -609,6 +576,7 @@ function toggleTextAreaResultForDevMode() {
         teleportField.value.style.display = "none";
       }
     }
+
 function tryPassDependency(name, value, isShow, displayValue, type, cost = null) {
       tryAddDependencyElement({
         name,
@@ -682,7 +650,6 @@ onMounted(async () => {
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;
 })
-
 
 </script>
 
@@ -771,8 +738,7 @@ onMounted(async () => {
     v-if="appIsMounted"
     :label="label"
     :type-element="typeElement"
-    :formula="mainFormulaResult"
-    :formula-variables="resultTextForComputed"
+    :calculated-formula="mainFormulaResult"
     :local-cost="finalSummaForOutput"
     hidden-value
   />
@@ -1032,6 +998,17 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding-bottom: 10px;
       position: relative;
       flex-direction: column;
+      &.is-highlight {
+        border: 2px dashed blue;
+        background: repeating-linear-gradient(
+            -60deg,
+            blue 0,
+            blue 1px,
+            transparent 1px,
+            transparent 15px
+        );
+        background-color: #fff;
+      }
       &.indent {
         padding-left: 10px;
         padding-right: 10px;
@@ -1814,6 +1791,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
           color: $c_element_text_selected;
           border-color: $c_element_border_color_selected;
         }
+
         &.error {
           color: $c_base_error_color;
           border-color: $c_base_error_color;

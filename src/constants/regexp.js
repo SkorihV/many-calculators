@@ -10,7 +10,6 @@ export const REGEXP_VARIABLE_SIGN_NUMBERS = /([A-Za-zА-Яа-яЁё0-9_.,"']*)(\
 //([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9]*(\.[0-9])*)
 //([A-Za-zА-Яа-яЁё0-9_]*)(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)([0-9]*(\.[0-9])*)/g
 
-
 export const REGEXP_SPACES_IN_AROUND = /^\s*|\s*$/g;
 export const REGEXP_SPACES = /\s/g;
 export const REGEXP_QUOTES_AND_WORD = /^('|").*('|")$/;

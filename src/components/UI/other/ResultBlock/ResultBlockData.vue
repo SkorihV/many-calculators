@@ -17,7 +17,7 @@ const props = defineProps({
   },
 })
 
-const {isShowSumma} = useIsChecks(props.resultOptions)
+const {isShowSuma} = useIsChecks(props.resultOptions)
 
 /**
  * Текст со всеми полями которые должны отображаться в блоке
@@ -94,7 +94,7 @@ const finalTextForOutput = computed(() => {
 
   if (props.sum === false) {
     result += "Есть ошибка в расчетах!";
-  } else if (props.sum !== false && isShowSumma) {
+  } else if (props.sum !== false && isShowSuma) {
     const sum = parseFloat(props.sum)?.toLocaleString("ru");
     result +=
       "\n" +
@@ -112,7 +112,6 @@ const finalTextForOutput = computed(() => {
   }
   return result;
 })
-
 </script>
 
 <template>

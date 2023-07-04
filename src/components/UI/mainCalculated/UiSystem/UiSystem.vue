@@ -24,6 +24,9 @@ import {useReportInitialStatusForElement} from "@/composables/useReportInitialSt
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useDisplaySpinner} from "@/composables/useDisplaySpinner";
 
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+import { useHighlightElement } from "@/composables/useHighlightElement";
 
 const {devMode, getResultElementOnName} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle'])
@@ -91,8 +94,7 @@ useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, cha
 useDisplaySpinner(props.elementName)
 const {initProcessingDependencyPrice} = useInitProcessingDependencyPrice(toRef(props, 'dependencyPrices'))
 
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
-import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+
 
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 const isExistLabel = computed(() => {
@@ -106,7 +108,7 @@ const localElementName = computed(() => {
       ? props.elementName
       : "Math.random().toString()";
 })
-
+const {isHighlightElement} = useHighlightElement(localElementName)
 /**
  * Возвращает формулу цены без данных
  * @returns {number|*|number|string|null}
@@ -240,8 +242,6 @@ const allowProcessingDependencyPrices = computed(() => {
     );
   })
 
-
-
 watch(localCost,
     (newValue, oldValue) => {
           if (newValue !== oldValue) {
@@ -250,6 +250,7 @@ watch(localCost,
         },
     {deep:true}
 )
+
 watch(isVisibilityFromDependency, () => {
   changeValue("dependency");
 })
@@ -287,6 +288,7 @@ function changeValid(eventType) {
     parentName: props.parentName,
   });
 }
+
 function tryPassDependency() {
   tryAddDependencyElement({
     name: localElementName.value,
@@ -296,13 +298,14 @@ function tryPassDependency() {
     type: "system",
   });
 }
+
 onMounted(() => {
   changeValue("mounted");
 })
+
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
 })
-
 
 </script>
 
@@ -312,6 +315,7 @@ onUnmounted(() => {
     ref="parentRef"
     v-if="isVisibilityFromDependency && isShowElement"
     :id="elementName"
+    :class="{'is-highlight':isHighlightElement}"
   >
     <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
       <div class="calc__system-label-wrapper" v-if="!onlyText">
@@ -344,9 +348,7 @@ onUnmounted(() => {
     :value="localCost"
     :local-cost="localCost"
     :is-visibility-from-dependency="isVisibilityFromDependency"
-    :formula-variables="processingVariablesInFormula"
-    :formula="localCostFormula"
+    :calculated-formula="localCostFormula"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
   />
 </template>

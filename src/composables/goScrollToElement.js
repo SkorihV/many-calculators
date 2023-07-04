@@ -1,6 +1,6 @@
 import { nextTick } from "vue";
 
-export default function goScrollToElement(elementNameToScroll) {
+export default function goScrollToElement(elementNameToScroll, blockPosition = "start") {
   nextTick(() => {
     const elementToScroll = document.querySelector(
       "#" + elementNameToScroll
@@ -9,7 +9,7 @@ export default function goScrollToElement(elementNameToScroll) {
     if (Boolean(elementToScroll)) {
       elementToScroll.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: blockPosition,
         inline: "start",
       });
     }

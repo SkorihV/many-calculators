@@ -66,7 +66,6 @@ const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
 
-
 </script>
 
 <template>
@@ -107,7 +106,6 @@ const isExistLabel = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-cost
     hidden-value
   />

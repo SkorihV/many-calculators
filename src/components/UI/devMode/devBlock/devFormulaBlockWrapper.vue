@@ -1,10 +1,9 @@
 <script setup>
 
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import {getArrayOnFormula, replaceSpecSymbols} from "@/servises/UtilityServices";
 import devFormulaItem from "@/components/UI/devMode/devBlock/devFormulaItem.vue"
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
-import {useGetOtherGlobalSum} from "@/composables/useGetOtherGlobalSum";
 import {getBaseStoreGetters} from "@/composables/useBaseStore";
 
 
@@ -43,10 +42,6 @@ const localFormula = computed(() => {
 const localFormulaArray = computed(() => {
   return getArrayOnFormula(localFormula.value)
 })
-
-// const isExistOtherSum = computed(() => {
-//   return localFormula.value.match(NAME_RESERVED_VARIABLE_SUM) !== null
-// })
 
 const formulaArrayInOut = computed(() => {
     return localFormulaArray.value.map(item => {

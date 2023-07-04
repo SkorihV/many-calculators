@@ -20,10 +20,6 @@ const props = defineProps({
     type: [String, Boolean],
     default: null,
   },
-  parsingFormulaVariables: {
-    type: [String, Boolean],
-    default: null,
-  },
   isVisibilityFromDependency: {
     type: Boolean,
     default: null,
@@ -40,10 +36,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  formula: {
-    default: null,
-  },
-  formulaVariables: {
+  calculatedFormula: {
     default: null,
   },
   typeElement: {

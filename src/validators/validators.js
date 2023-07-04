@@ -13,7 +13,6 @@ export const isNotNaN = (value) => {
   return !isNaN(Number(value));
 };
 
-
 export const isSign = (sign) => {
   return sign.toString().trim().match(REGEXP_SIGN) !== null
 }

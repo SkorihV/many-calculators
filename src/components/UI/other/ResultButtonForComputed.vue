@@ -31,6 +31,7 @@ const props = defineProps({
 const isHoverButton = ref(false)
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
   reactive({
     localDependencyList: localDependencyList,
@@ -39,7 +40,6 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
     parentIsShow: true
   })
 )
-
 
 function calculateResult() {
   showAllTooltipsOn();
@@ -56,7 +56,9 @@ watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
 })
 
 const showResultBtn = computed(() => methodBeginningCalculationIsButton.value)
+
 const isFormulaDisplayButton = computed(() => Boolean(props.resultOptions?.formulaDisplayButton?.length))
+
 const showButtonOnDependency = computed(() =>  !isFormulaDisplayButton.value
     ? true
     : isVisibilityFromDependency.value
@@ -88,7 +90,6 @@ const showBtn = computed(() => showResultBtn.value && showButtonOnDependency.val
     :type-element="typeElement"
     :is-visibility-from-dependency="showBtn"
     :dependency-formula-display="resultOptions?.formulaDisplayButton"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-value
     hidden-cost
 

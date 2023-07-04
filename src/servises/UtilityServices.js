@@ -305,9 +305,6 @@ const getArrayElementsFromFormula = (formula) => {
   return getArrayOnFormula(replaceSpecSymbols(formula));
 };
 
-
-
-
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,

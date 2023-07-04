@@ -8,7 +8,7 @@ import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { onMounted, reactive, ref, onUnmounted, watch, nextTick, computed, toRef, getCurrentInstance } from "vue";
+import { onMounted, reactive, ref, onUnmounted, watch, nextTick, computed, toRef } from "vue";
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import {useEventListener} from "@/composables/useEventsListener";
@@ -19,6 +19,8 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import {getCurrentWidthElement, getIsMakeElementColumn} from "@/composables/useWidthElement";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 
+import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
+import { useHighlightElement } from "@/composables/useHighlightElement";
 
 const emits = defineEmits(['changedValue'])
 const props = defineProps({
@@ -94,8 +96,6 @@ const changeElement = ref(null)
 const parentRef = ref(null)
 const selectRef = ref(null)
 
-
-import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 const {devMode, isCanShowAllTooltips} = getBaseStoreGetters()
 const {tryDeleteAllDataOnStoreForElementName, tryAddDependencyElement, checkValidationDataAndToggle, tryToggleElementIsMounted, isElementDependency} = getBaseStoreAction(['tryDeleteAllDataOnStoreForElementName', 'tryAddDependencyElement', 'checkValidationDataAndToggle', 'tryToggleElementIsMounted', 'isElementDependency'])
 const {localDependencyList, constructLocalListElementDependencyInFormula, } = useLocalDependencyList()
@@ -111,7 +111,6 @@ const {isVisibilityFromDependency, costAfterProcessingDependencyPrice, formulaAf
 useReportInitialStatusForElement(toRef(props, 'parentIsShow'),  changeValue, changeValid)
 const {currentWidthElement} = getCurrentWidthElement(isVisibilityFromDependency, parentRef)
 
-
 const isExistLabel = computed(() => {
       return Boolean(props.label?.toString().length);
     })
@@ -120,28 +119,37 @@ const {isMakeElementColumn} = getIsMakeElementColumn(currentWidthElement, isExis
 const isExistCurrentPrompt = computed(() => {
       return Boolean(currentOption.value?.prompt?.length);
     })
+
 const currentAmountSelectList = computed(() => {
       return Object.values(selectValuesAfterProcessingDependency.value)?.filter(
         (item) => item?.isShow
       )?.length;
     })
+
 const isShowArrow = computed(() => {
       return Boolean(currentAmountSelectList.value > 1);
     })
+
 const needMockValue = computed(() => {
       return props.notEmpty || props.isNeedChoice;
     })
+
 const localElementName = computed(() => {
       return checkedValueOnVoid(props.elementName)
         ? props.elementName
         : Math.random().toString();
     })
+
+const {isHighlightElement} = useHighlightElement(localElementName)
+
 const isCurrentIndexOptionsNotExist = computed(() => {
   return currentIndexOption.value === null;
 })
+
 const isErrorEmpty = computed(() => {
       return props.notEmpty && isCurrentIndexOptionsNotExist.value;
     })
+
 const isErrorClass = computed(() => {
       return (
         isErrorEmpty.value &&
@@ -179,6 +187,7 @@ const localCost = computed(() => {
   }
   return currentOption.value?.cost ? currentOption.value?.cost : null;
 })
+
 const currentOptionDisplayValue = computed(() => {
   if (
     (needMockValue.value && isCurrentIndexOptionsNotExist.value) ||
@@ -189,6 +198,7 @@ const currentOptionDisplayValue = computed(() => {
 
   return currentOption.value?.selectName;
 })
+
 const currentOptionValue = computed(() => {
   if (
     (needMockValue.value && isCurrentIndexOptionsNotExist.value) ||
@@ -196,7 +206,6 @@ const currentOptionValue = computed(() => {
   ) {
     return null;
   }
-
 
   const isExistExtraValue = Boolean(
     currentOption.value?.extraValueForDependency?.toString()?.length
@@ -207,6 +216,7 @@ const currentOptionValue = computed(() => {
       ? currentOption?.value.value
       : null;
 })
+
 const mutationSelectValue = computed(() => {
       return localSelectValues.value.map((selectItem, index) => {
         const localIndex = needMockValue.value ? index : index + 1;
@@ -216,6 +226,7 @@ const mutationSelectValue = computed(() => {
         return selectItem;
       });
     })
+
 /**
  * Получить список селектов после обработки формул на отображение самих селектов
  * @returns {*[]}
@@ -294,20 +305,18 @@ const selectValuesAfterProcessingDependency = computed(() => {
       return selectItem;
     });
 })
+
 const maxWidthForChangeElement = computed(() => {
       return maxWidthSelectList.value
         ? "max-width:" + maxWidthSelectList.value + "px; width: 100%;"
         : null;
     })
+
 const maxWidthForOptionList = computed(() => {
       return maxWidthSelectList.value
         ? "max-width:" + maxWidthSelectList.value + "px; width: 100%;"
         : null;
     })
-
-
-
-
 
 watch(isOpen, (newValue) => {
   if (newValue && !Object.keys(localDependencyList)?.length) {
@@ -326,6 +335,7 @@ watch(isOpen, (newValue) => {
     });
   }
 })
+
 watch(isVisibilityFromDependency, (newValue, oldValue) => {
   if (newValue && !oldValue) {
     resetWidthSelect();
@@ -334,7 +344,6 @@ watch(isVisibilityFromDependency, (newValue, oldValue) => {
     changeValue("dependency");
   }
 })
-
 
 watch(localCost, () => {
   changeValue('dependency')
@@ -352,12 +361,12 @@ watch(isVisibilityFromDependency, (newValue) => {
   }
 })
 
-
 function initSelectMockData(eventType = "mounted") {
     if (needMockValue.value) {
       changeSelect(localSelectValues.value[0], null, eventType);
     }
   }
+
 function initSelectData(eventType = "mounted") {
     if (localSelectValues.value.length) {
       localSelectedItem.value = !!parseInt(props.selectedItem)
@@ -376,6 +385,7 @@ function initSelectData(eventType = "mounted") {
       );
     }
   }
+
 function open() {
     if (
       selectValuesAfterProcessingDependency.value.filter(
@@ -385,6 +395,7 @@ function open() {
       isOpen.value = true;
     }
   }
+
 function toggleOpenClose() {
   if (
     selectValuesAfterProcessingDependency.value.filter(
@@ -394,9 +405,11 @@ function toggleOpenClose() {
     isOpen.value = !isOpen.value;
   }
 }
+
 function close() {
     isOpen.value = false;
   }
+
 function changeSelect(item, inx, eventType = "click") {
   if (needMockValue.value && inx === 0) {
     currentIndexOption.value = null;
@@ -409,6 +422,7 @@ function changeSelect(item, inx, eventType = "click") {
   }, 100);
   close();
 }
+
 function changeValue(eventType = "click") {
     emits("changedValue", {
       value: currentOptionValue.value,
@@ -432,6 +446,7 @@ function changeValue(eventType = "click") {
     tryPassDependency();
     changeValid(eventType);
   }
+
 function changeValid(eventType) {
     checkValidationDataAndToggle({
       error: isVisibilityFromDependency.value
@@ -448,6 +463,7 @@ function changeValid(eventType) {
       canBeShownTooltip.value = true;
     }
   }
+
 function tryPassDependency() {
     tryAddDependencyElement({
       name: localElementName.value,
@@ -457,6 +473,7 @@ function tryPassDependency() {
       type: "select",
     });
   }
+
 function resetSelectedValue() {
     nextTick(() => {
       let length = selectValuesAfterProcessingDependency.value.length;
@@ -469,9 +486,11 @@ function resetSelectedValue() {
       }
     });
   }
+
 function resetWidthSelect() {
     maxWidthSelectList.value = null;
   }
+
 function updatedWidthSelect() {
     if (
       optionList.value?.offsetWidth === 0 ||
@@ -491,6 +510,7 @@ function updatedWidthSelect() {
       }
     }, 100);
   }
+
 function clickClose(e) {
     if (!selectRef?.value?.contains(e.target)) {
       close();
@@ -504,7 +524,6 @@ function initSelect(eventType) {
     initSelectData(eventType);
   }
 }
-
 
 useDisplaySpinner(localElementName.value)
 useEventListener(window, 'click', clickClose)
@@ -521,16 +540,15 @@ onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
 })
 
-
 </script>
-
 
 <template>
   <div
     class="calc__wrapper-group-data"
+    :class="{'is-highlight':isHighlightElement}"
     ref="parentRef"
     v-if="isVisibilityFromDependency"
-    :id="elementName"
+    :id="localElementName"
   >
     <div
       class="calc__select-wrapper"
@@ -640,7 +658,6 @@ onUnmounted(() => {
       :local-cost="localCost"
       :is-visibility-from-dependency="isVisibilityFromDependency"
       :dependency-formula-display="dependencyFormulaDisplay"
-      :parsing-formula-variables="formulaAfterProcessingVariables"
     />
   </div>
 </template>

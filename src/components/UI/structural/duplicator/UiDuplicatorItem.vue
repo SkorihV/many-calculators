@@ -20,7 +20,7 @@ import {
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import { REGEXP_NUMBERS, REGEXP_SIGN, REGEXP_STRING_SPLIT_FORMULA, REGEXP_VARIABLE } from "@/constants/regexp";
+import { REGEXP_NUMBERS, REGEXP_SIGN, REGEXP_VARIABLE } from "@/constants/regexp";
 import {getArrayElementsFromFormula} from "@/servises/UtilityServices"
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum"
@@ -68,13 +68,11 @@ const props = defineProps({
   ]),
 })
 
-
 const counterDuplicate = ref(0)
 const localResultData = ref({})
 const mutationsInputData = ref(null)
 const localParentName = props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
 const LOCAL_NAME_RESERVED_VARIABLE_SUM = NAME_RESERVED_VARIABLE_SUM + "_" + props.index;
-
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula( reactive({
@@ -84,7 +82,6 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
   parentIsShow: toRef(props, "parentIsShow")
 }))
 
-
 /**
  *
  * @returns {boolean}
@@ -92,6 +89,7 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
 const isExistDependencyMainFormula = computed(() => {
   return Boolean(props.originData?.dependencyMainFormula?.length);
 })
+
 /**
  *
  * @type {ComputedRef<unknown>}
@@ -142,6 +140,7 @@ const mainFormulaResult = computed(() => {
 
   return props.formula?.length ? props.formula : "";
 })
+
 /**
  * Разбиваем полученную формулу на массив с переменными и знаками.
  * Избавляемся от пустых элементов.
@@ -194,11 +193,9 @@ const mutationFormulaResult = computed(() => {
   return attachIndexForFormulaElements.value.join(" ");
 })
 
-
 const {
   summaFreeVariables,
   usedVariablesOutsideFormula,
-  freeVariablesOutsideFormula
 } = useGetOtherGlobalSum(mutationFormulaResult, true, localParentName )
 
 
@@ -227,8 +224,6 @@ const dataListVariablesOnFormula = computed(() => {
     }
   });
 })
-
-
 
 /**
  * формула со всеми конечными данными и обработанными переменными
@@ -268,6 +263,7 @@ const compileFormulaWitchData = computed(() => {
     .join(" ")
     ?.replace(/[\+\-\*\/] *\( *\)|\( *\) *[\+\-\*\/]/g, "");
 })
+
 /**
  *
  * @returns {any|null}
@@ -303,6 +299,7 @@ const localCost = computed(() => {
     return null;
   }
 })
+
 /**
  *
  * @returns {unknown[]}
@@ -312,6 +309,7 @@ const returnsLocalResultData = computed(() => {
     (itemA, itemB) => itemA.position - itemB.position
   );
 })
+
 /**
  *
  * @returns {boolean}
@@ -319,6 +317,7 @@ const returnsLocalResultData = computed(() => {
 const isExistLabel = computed(() => {
   return Boolean(mutationsInputData.value?.label?.toString()?.length);
 })
+
 const buttonDupleTitle = computed(() => {
   const inputTitleIsExist = Boolean(
     props.duplicatorData?.buttonName?.length
@@ -327,7 +326,6 @@ const buttonDupleTitle = computed(() => {
     ? props.duplicatorData?.buttonName
     : "Дублировать";
 })
-
 
 watch(localCost, (newValue, oldValue) => {
   if (newValue !== oldValue) {
@@ -347,11 +345,9 @@ watch(summaFreeVariables, (newValue) => {
         cost: newValue
       }
     );
-    // return getProxyFreeVariables(summaFreeVariables.value);
 }, {
   immediate: true
 })
-
 
 function changeValue(data) {
       if (data?.name) {
@@ -380,6 +376,7 @@ function changeValue(data) {
         formulaProcessingLogic: props.originData?.formulaProcessingLogic,
       });
     }
+
 function tryDuplicate() {
       counterDuplicate.value++;
       const returnData = updateInputData(
@@ -388,9 +385,11 @@ function tryDuplicate() {
       );
       emits("duplicate", returnData);
     }
+
 function deleteDuplicate() {
       emits("deleteDuplicator", props.duplicatorData.elementName);
     }
+
 /**
  * @param data
  * @param index
@@ -406,6 +405,7 @@ function updateInputData(data, index) {
 
   return mutationsData;
 }
+
 /**
  * @param object
  * @param index
@@ -450,6 +450,7 @@ function updateIndexElementsInDuple(object, index) {
   }
   return object;
 }
+
 /**
  * @param item
  * @param index
@@ -460,13 +461,6 @@ function updateNameItem(item, index) {
         ? item?.elementName + "_" + index
         : item?.json_id + "_" + index;
       return item.elementName;
-    }
-function assignThePrefixArrayItems(arr) {
-      let newArr = [];
-      for (let i = 0; i < arr.length; i++) {
-        newArr.push(arr[i] + "_" + props.index);
-      }
-      return newArr;
     }
 
 /**
@@ -497,7 +491,6 @@ function isLocalVariable(item) {
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
 
-
 onMounted(() => {
   if (props.isDuplicate) {
     mutationsInputData.value = props.duplicatorData;
@@ -509,7 +502,6 @@ onMounted(() => {
 onUnmounted(() => {
   deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index)
 })
-
 
 </script>
 
@@ -577,7 +569,7 @@ onUnmounted(() => {
     :type-element="typeElement"
     :element-name="mutationsInputData?.elementName"
     :local-cost="localCost"
-    :formula="mutationFormulaResult"
+    :calculated-formula="mutationFormulaResult"
     hidden-value
   />
 </template>

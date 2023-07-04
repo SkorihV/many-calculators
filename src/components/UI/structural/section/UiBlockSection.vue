@@ -63,15 +63,19 @@ function changeValue(data) {
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
+
 const isExistTemplatesData = computed(() => {
   return Boolean(props.templatesData.length);
 })
+
 const isExistLabelSub = computed(() => {
   return Boolean(props.labelSub?.length);
 })
+
 const isVisualSeparate = computed(() => {
   return Boolean(props.visualSeparate);
 })
+
 const showSection = computed(() => {
   return Boolean(
       isExistTemplatesData.value &&
@@ -79,11 +83,13 @@ const showSection = computed(() => {
       isVisibilityFromDependency.value
   );
 })
+
 const {currentWidthElement} = getCurrentWidthElement(showSection, parentRef)
 
 const maxWidth = computed(() => {
   return currentWidthElement.value > 600 ? props.maxWidthSide + "%" : "100%";
 })
+
 const isHorizontal = computed(() => {
   return props.elementPosition === "horizontal";
 })
@@ -155,7 +161,6 @@ const isHorizontal = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="showSection"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-cost
     hidden-value
   />

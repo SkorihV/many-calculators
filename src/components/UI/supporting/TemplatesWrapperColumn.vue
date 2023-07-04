@@ -15,7 +15,6 @@ const props = defineProps({
     "parentName",
   ]),
 });
-
 const changeValue = (data) => {
   emits("changedValue", data);
 };

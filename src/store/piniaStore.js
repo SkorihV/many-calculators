@@ -17,6 +17,7 @@ export const useBaseStore = defineStore("base", {
       initEnabledSendForm: false,
       allowShowResultBlock: false,
       someElementChangedSelfVisibilityState: 0,
+      nameHighlightElement: null
     };
   },
   getters: {
@@ -192,6 +193,9 @@ export const useBaseStore = defineStore("base", {
     }) {
       return someElementChangedSelfVisibilityState;
     },
+    getNameHighlightElement({nameHighlightElement}) {
+      return nameHighlightElement;
+    }
   },
   actions: {
     tryAddResultElement(dataResultItem) {
@@ -369,6 +373,12 @@ export const useBaseStore = defineStore("base", {
         return item.isShow
       }
       return null;
+    },
+    setNameHighlightElement(elementName) {
+      this.nameHighlightElement = elementName;
+      setTimeout(() => {
+        this.nameHighlightElement = null;
+      }, 2000)
     }
   },
 });

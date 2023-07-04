@@ -22,6 +22,7 @@ import {useIsCheckedType} from "@/components/UI/mainCalculated/UiCheckbox/useIsC
 
 import {useInitProcessingDependencyPrice} from "@/composables/useInitProcessingDependencyPrice";
 import {useReportInitialStatusForElement} from "@/composables/useReportInitialStatusForElement";
+import {useHighlightElement} from "@/composables/useHighlightElement";
 
 
 const emits = defineEmits(["changedValue"])
@@ -137,6 +138,8 @@ const localElementName = computed(() => {
         : Math.random().toString();
   })
 
+const {isHighlightElement} = useHighlightElement(localElementName)
+
 const isErrorEmpty = computed(() => {
     return Boolean(props.isNeedChoice && !isLocalChecked.value);
 })
@@ -192,7 +195,6 @@ watch(isVisibilityFromDependency, (value) => {
   }
   changeValue("dependency");
 })
-
 function inputLocalValue() {
   if (notActive.value) {
     return null;
@@ -257,11 +259,7 @@ function tryPassDependency() {
   });
 }
 
-
-
-
 onUnmounted(() => {
-  console.log(tryDeleteAllDataOnStoreForElementName);
   tryDeleteAllDataOnStoreForElementName(localElementName.value);
 })
 
@@ -270,6 +268,7 @@ onUnmounted(() => {
 <template>
   <div
     class="calc__wrapper-group-data"
+    :class="{'is-highlight':isHighlightElement}"
     v-if="isVisibilityFromDependency"
     :id="elementName"
     ref="parentRef"
@@ -357,6 +356,5 @@ onUnmounted(() => {
     :local-cost="localCost"
     :is-visibility-from-dependency="isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
   />
 </template>

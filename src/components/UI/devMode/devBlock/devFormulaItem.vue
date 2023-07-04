@@ -2,13 +2,12 @@
 
 import {getBaseStoreGetters, getBaseStoreAction} from "@/composables/useBaseStore";
 import { computed } from "vue";
-import { isSpecSymbol, isVariable } from "@/validators/validators";
+import { isVariable } from "@/validators/validators";
 import {checkLogicAndReturnValue} from "@/servises/UtilityServices"
 import goScrollToElement from "@/composables/goScrollToElement";
 
 const {getResultElementOnName, getDependencyElementOnName} = getBaseStoreGetters()
-const {isElementDependency, isElementResult, isShowElement} = getBaseStoreAction(['isElementDependency', 'isElementResult', 'isShowElement'])
-
+const {isElementDependency, isElementResult, isShowElement, setNameHighlightElement} = getBaseStoreAction(['isElementDependency', 'isElementResult', 'isShowElement', "setNameHighlightElement"])
 
 const props = defineProps({
   formulaItem: {
@@ -38,7 +37,6 @@ const localIsVariable = computed(() => {
     return isVariable(props.formulaItem.name)
   } else {
     return isVariable(props.formulaItem)
-
   }
 })
 
@@ -58,11 +56,9 @@ const itemResultData = computed(() => {
   return formula
 })
 
-
 const itemValue = computed(() => {
   if (props.isDependency) {
     if (itemDependencyData.value?.value !== undefined) {
-
       return itemDependencyData.value.value === null ? 'null' : itemDependencyData.value.value
     }
     return itemDependencyData?.value
@@ -94,7 +90,6 @@ const isExist = computed(() => {
   if (!localIsVariable.value) {
     return true
   }
-
   return isElementDependency(props.formulaItem) || isElementResult(props.formulaItem)
 })
 
@@ -106,11 +101,9 @@ const title = computed(() => {
   if (isHiddenElement?.value && isExist.value) {
     return "Элемент скрыт"
   }
-
   if (!isExist.value) {
     return "Элемент не существует"
   }
-
   return null;
 })
 
@@ -122,10 +115,12 @@ const classes = computed(() => {
     !isHiddenElement.value && isExist.value && localIsVariable.value ? 'is-pointer': ""
   ]
 })
-
 function goToElement() {
   if (!isHiddenElement.value && localIsVariable.value) {
-    goScrollToElement(props.formulaItem)
+    goScrollToElement(props.formulaItem, 'center');
+    if (localIsVariable.value) {
+      setNameHighlightElement(props.formulaItem)
+    }
   }
 }
 

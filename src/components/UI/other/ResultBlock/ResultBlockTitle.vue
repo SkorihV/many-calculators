@@ -1,5 +1,4 @@
 <script setup>
-
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 
 const props = defineProps({
@@ -8,6 +7,7 @@ const props = defineProps({
     default: () => {}
   }
 })
+
 const {isShowResultBlockSubtitle,isShowResultBlockTitle} = useIsChecks(props.data)
 
 </script>

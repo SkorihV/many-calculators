@@ -1,6 +1,5 @@
 import { computed } from "vue";
 
-
 export function useIsCheckedType(type) {
   const checkboxType = computed(() => {
     return type ? type : "base";

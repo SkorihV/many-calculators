@@ -55,9 +55,11 @@ const hoverElementIndex = ref(null)
 function openItem(index) {
   shownIdTab.value = index;
 }
+
 function changeValue(data) {
   emits("changedValue", data);
 }
+
 function checkIsShowError(parentName, key) {
   const isError = isValidationErrorOnParentName.value(parentName);
   return key !== shownIdTab.value && isError && isCanShowAllTooltips.value;
@@ -75,6 +77,7 @@ const showBlock = computed(() => {
   }
   return result.some((item) => item);
 })
+
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 })
@@ -176,7 +179,6 @@ const isExistLabel = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="showBlock && isVisibilityFromDependency"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-cost
   />
 </template>

@@ -16,7 +16,6 @@ import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
 const emits = defineEmits(["changedValue"]);
-
 const props = defineProps({
   columnList: {
     type: Array,
@@ -82,12 +81,14 @@ onMounted(() => {
 function changeValue(data) {
   emits("changedValue", data);
 }
+
 function getMaxLengthColumn(index) {
   if (!stateColumns.value[index]?.maxWidth) {
     return null;
   }
   return `max-width: ${stateColumns.value[index]?.maxWidth}%;`;
 }
+
 function updatedCurrentWidth() {
   const parent = getParent();
   if (parent && parent?.offsetWidth !== 0) {
@@ -95,6 +96,7 @@ function updatedCurrentWidth() {
     clearInterval(timerName.value);
   }
 }
+
 function resize() {
   updatedCurrentWidth();
 }
@@ -128,6 +130,7 @@ watch(
 const columnListBeforeLimiting = computed(() => {
   return props.columnList?.filter((column, index) => index < maximumColumns);
 });
+
 const countColumns = computed(() => {
   return columnListBeforeLimiting.value?.length;
 });
@@ -208,15 +211,14 @@ watch(currentWidthElement, (width) => {
 
 const showElementColumns = computed(() => {
   return Boolean(
-    unref(isVisibilityFromDependency) &&
+    isVisibilityFromDependency.value &&
       props.parentIsShow &&
-      unref(countColumns)
+      countColumns.value
   );
 });
 
-const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString()?.length);
-});
+const isExistLabel = computed(() => Boolean(props.label?.toString()?.length));
+
 </script>
 
 <template>
@@ -261,7 +263,6 @@ const isExistLabel = computed(() => {
     :element-name="elementName"
     :is-visibility-from-dependency="showElementColumns"
     :dependency-formula-display="dependencyFormulaDisplay"
-    :parsing-formula-variables="formulaAfterProcessingVariables"
     hidden-cost
     hidden-value
   />

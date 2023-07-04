@@ -10,9 +10,7 @@ import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
 import { computed, reactive, ref, watch } from "vue";
-
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
-
 import {useLocalDependencyList} from "@/composables/useLocalDependencyList"
 import {useProcessingFormula} from "@/composables/useProcessingFormula";
 
@@ -22,7 +20,6 @@ const {
   checkAllowShowResultBlock,
   globalDependenciesList,
 } = getBaseStoreGetters();
-
 
 const props = defineProps({
   resultOptions: {
@@ -41,6 +38,7 @@ const props = defineProps({
 const isNeedSpinner = ref(false);
 
 const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+
 const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcessingFormula(
   reactive({
     localDependencyList,
@@ -50,16 +48,18 @@ const {isVisibilityFromDependency, formulaAfterProcessingVariables} = useProcess
   })
 )
 
-
 const isFormulaDisplayResultBlock = computed(() => Boolean(
   props.resultOptions?.formulaDependencyForResultBlock?.length))
+
 const showResultBlockForDependency = computed(() => isFormulaDisplayResultBlock.value
   ? isVisibilityFromDependency.value
   : true)
+
 const allowShowResultInOptions = computed(() => props.resultOptions
     ? !props.resultOptions?.hiddenResultBlock &&
     showResultBlockForDependency.value
-    : false) ;
+    : false)
+
 /**
  * Добавить данные в форму если нет ошибок валидации
  * @returns {boolean}
@@ -73,7 +73,6 @@ watch(isShowResultBlock, (newValue) => {
   isNeedSpinner.value =
       Boolean(props.resultOptions?.timerForSpinner) && newValue;
 });
-
 
 const spinnerIsFinished = () => isNeedSpinner.value = false;
 const timeForSpinner = Number(props.resultOptions?.timerForSpinner)
@@ -107,7 +106,6 @@ const textForSpinner = props.resultOptions?.textForSpinner
     :label="label"
     :type-element="typeElement"
     :dependency-formula-display="resultOptions?.formulaDependencyForResultBlock"
-    :formula-variables="formulaAfterProcessingVariables"
     :is-visibility-from-dependency="isShowResultBlock"
     hidden-cost
     hidden-value

@@ -1,7 +1,6 @@
 <script setup>
 import { computed, defineProps, ref } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
 const { getImageDir } = getBaseStoreGetters();
@@ -46,6 +45,7 @@ const height = computed(() => {
     : baseSizeIcon.value;
   return "height:" + value + "px;";
 });
+
 const behaviorImage = computed(() => {
   const behaviorImage = props.iconSettings?.behaviorImage
     ? props.iconSettings.behaviorImage
@@ -61,27 +61,35 @@ const isIconFilenameExist = computed(() => {
 const showIcon = computed(() => {
   return isIconFilenameExist.value && !showHoverIcon.value && !showSelectedIcon.value;
 });
+
 const urlIcon = computed(() => {
   return imageDir.value + props.iconSettings.image?.filename;
 });
+
 const isIconHoverFilenameExist = computed(() => {
   return Boolean(props.iconSettings?.imageHover?.filename);
 });
+
 const showHoverIcon = computed(() => {
   return props.isParentHover && !showSelectedIcon.value && isIconHoverFilenameExist.value;
 });
+
 const urlIconHover = computed(() => {
   return imageDir.value + props.iconSettings.imageHover?.filename;
 });
+
 const isIconSelectedFilenameExist = computed(() => {
   return Boolean(props.iconSettings?.imageSelected?.filename);
 });
+
 const showSelectedIcon = computed(() => {
   return props.isParentSelected && isIconSelectedFilenameExist.value;
 });
+
 const urlIconSelected = computed(() => {
   return imageDir.value + props.iconSettings.imageSelected?.filename;
 });
+
 </script>
 
 <template>
