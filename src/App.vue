@@ -1,5 +1,5 @@
 <script>
-const typeElement = "Main App Calc";
+const typeElement = "Базовый Элемент калькулятора";
 const label = "Основная формула расчета";
 </script>
 
@@ -2579,6 +2579,9 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       margin: 5px 0;
       &-name {
         color: $c_decor_text_default;
+        display: flex;
+        align-items: center;
+        gap: 5px;
       }
     }
     &-alert {
@@ -2782,6 +2785,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       );
       background-color: #fff;
     }
+    &-switcher {
+      width: 70px;
+      display: flex;
+      justify-content: center;
+    }
     &-button {
       cursor: pointer;
       align-self: flex-end;
@@ -2811,6 +2819,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
     &-item {
       padding: 3px;
+      &-main-wrapper{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
       &.is-variable {
         border-radius: 3px;
         border: 1px solid gray;

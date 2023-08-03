@@ -450,32 +450,38 @@
           {
             "title": "Элемент списка - Москва",
             "selectName": "Москва",
-            "extraValueForDependency": "москва"
+            "extraValueForDependency": "москва",
+            "dependencyFormulaItem": "_self_ !== откуда"
           },
           {
             "title": "Элемент списка - Московская Область",
             "selectName": "Московская Область",
-            "extraValueForDependency": "мо"
+            "extraValueForDependency": "мо",
+            "dependencyFormulaItem": "_self_ !== откуда"
           },
           {
             "title": "Элемент списка - Белгород",
             "selectName": "Белгород",
-            "extraValueForDependency": "белгород"
+            "extraValueForDependency": "белгород",
+            "dependencyFormulaItem": "_self_ !== откуда"
           },
           {
             "title": "Элемент списка - Брянск",
             "selectName": "Брянск",
-            "extraValueForDependency": "брянск"
+            "extraValueForDependency": "брянск",
+            "dependencyFormulaItem": "_self_ !== откуда"
           },
           {
             "title": "Элемент списка - Владимир",
             "selectName": "Владимир",
-            "extraValueForDependency": "владимир"
+            "extraValueForDependency": "владимир",
+            "dependencyFormulaItem": "_self_ !== откуда"
           },
           {
             "title": "Элемент списка - Воронеж",
             "selectName": "Воронеж",
-            "extraValueForDependency": "воронеж"
+            "extraValueForDependency": "воронеж",
+            "dependencyFormulaItem": "_self_ !== откуда"
           }
         ],
         "prompt": "",
@@ -4268,6 +4274,7 @@
         "title": "стоимость за кг груза в км",
         "cost": "5 + страховка",
         "elementName": "кгГрузаЗаКм",
+        "showElement": "show",
         "formulaProcessingLogic": "zero",
         "template": "UiSystem",
         "dependencyPrices": null,

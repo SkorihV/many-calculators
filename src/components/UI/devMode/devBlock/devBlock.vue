@@ -49,7 +49,7 @@ const props = defineProps({
 const isShowInnerData = ref(false);
 
 const localFormula = computed(() => {
-  return replaceSpecSymbols(props.formula);
+  return replaceSpecSymbols(props.calculatedFormula);
 });
 </script>
 
@@ -95,17 +95,18 @@ const localFormula = computed(() => {
         Значение: {{ value === null ? "null" : value }}
       </div>
       <div
+          class="calc__dev-block-element calc__dev-block-element-cost"
+          v-if="!hiddenCost"
+      >
+        Стоимость: {{ localCost === null ? "null" : localCost }}
+      </div>
+      <div
         class="calc__dev-block-element calc__dev-block-element-show"
         v-if="isVisibilityFromDependency !== null"
       >
         Виден: {{ isVisibilityFromDependency }}
       </div>
-      <div
-        class="calc__dev-block-element calc__dev-block-element-cost"
-        v-if="!hiddenCost"
-      >
-        Стоимость: {{ localCost === null ? "null" : localCost }}
-      </div>
+
     </div>
   </div>
 </template>

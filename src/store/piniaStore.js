@@ -381,6 +381,10 @@ export const useBaseStore = defineStore("base", {
       }
       return null;
     },
+    /**
+     * Подсветить указанный элемент по его имени
+     * @param elementName
+     */
     setNameHighlightElement(elementName) {
       this.nameHighlightElement = elementName;
       setTimeout(() => {

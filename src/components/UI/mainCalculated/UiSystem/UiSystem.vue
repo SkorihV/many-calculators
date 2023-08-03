@@ -298,7 +298,7 @@ function changeValue(eventType = "system") {
     label: props.label,
     formOutputMethod: props.formOutputMethod,
     resultOutputMethod: props.resultOutputMethod,
-    isShow: props.parentIsShow,
+    isShow: isVisibilityFromDependency.value && isShowElement.value,
     excludeFromCalculations: props.excludeFromCalculations,
     unit: props.unit,
     eventType,
@@ -317,7 +317,7 @@ function changeValid(eventType) {
     type: "system",
     label: "",
     eventType,
-    isShow: isVisibilityFromDependency.value,
+    isShow: isVisibilityFromDependency.value && isShowElement.value,
     parentName: props.parentName,
   });
 }
@@ -326,7 +326,7 @@ function tryPassDependency() {
   tryAddDependencyElement({
     name: localElementName.value,
     value: props.localCost,
-    isShow: isVisibilityFromDependency.value,
+    isShow: isVisibilityFromDependency.value && isShowElement.value,
     displayValue: props.localCost,
     type: "system",
   });

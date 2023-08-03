@@ -1,4 +1,6 @@
 <script setup>
+import devFormulaItem from '@/components/UI/devMode/devBlock/devFormulaItem.vue'
+import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
 import {
   getBaseStoreAction,
   getBaseStoreGetters,
@@ -352,7 +354,10 @@ const isExistError = computed(() => {
           >
             <div class="calc__error-item-name">
               {{ data.label ? data.label : "Без заголовка " }} /
-              {{ data.elementName }}
+              <dev-formula-block-wrapper
+                :formula="data.elementName"
+                is-result
+              />
             </div>
           </div>
         </template>

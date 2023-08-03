@@ -62,7 +62,7 @@ function isExistOtherSum(variable) {
   <div class="calc__dev-block-element" v-if="localFormula?.length">
     <div class="calc__dev-block-item-label">
       {{ label
-      }}<button v-if="isResult" @click="switchTypeData">{{ typeData }}</button>
+      }}
     </div>
     <div class="calc__dev-block-item-wrapper" v-if="isDependency">
       <dev-formula-item
@@ -73,7 +73,8 @@ function isExistOtherSum(variable) {
         show-value
       />
     </div>
-    <template v-if="isResult">
+    <div class="calc__dev-block-item-main-wrapper" v-if="isResult">
+      <button class="calc__dev-block-switcher" v-if="isResult" @click="switchTypeData">{{ typeData }}</button>
       <div class="calc__dev-block-item-wrapper" v-if="typeData === 'value'">
         <dev-formula-item
           v-for="(item, index) in formulaArrayInOut"
@@ -92,6 +93,6 @@ function isExistOtherSum(variable) {
           show-cost
         />
       </div>
-    </template>
+    </div>
   </div>
 </template>

@@ -43,6 +43,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  onlyName: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const localIsVariable = computed(() => {
@@ -104,6 +108,10 @@ const itemCost = computed(() => {
 });
 
 const localName = computed(() => {
+  if (props.onlyName) {
+    return props.formulaItem
+  }
+
   if (props.isDependency) {
     return typeof itemDependencyData.value === "object"
       ? itemDependencyData.value?.name + " : "
@@ -169,10 +177,9 @@ function goToElement() {
     :class="[...classes]"
     @click="goToElement"
   >
-    <template v-if="showValue"> {{ localName }}{{ itemValue }} </template>
-    <template v-if="showCost && isResult">
-      {{ localName }}{{ itemCost }}
-    </template>
+    {{ localName }}
+    <template v-if="showValue">  {{ itemValue }}</template>
+    <template v-if="showCost">   {{ itemCost }}</template>
   </div>
 </template>
 
