@@ -22,6 +22,7 @@ import {
 } from "@/servises/UtilityServices";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { tryAddDependencyElement } = getBaseStoreAction([
   "tryAddDependencyElement",
@@ -87,6 +88,7 @@ const {
 
 useDisplaySpinner(props.elementName);
 useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid);
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 
 const returnsLocalResultsElements = computed(() => {
   return Object.values(localResultsElements).sort(

@@ -35,6 +35,7 @@ import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessin
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import { useCheckedValueMinMax } from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState } =
   getBaseStoreGetters();
@@ -212,7 +213,7 @@ const localElementName = computed(() => {
     : Math.random().toString();
 });
 const { isHighlightElement } = useHighlightElement(localElementName);
-
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 const isErrorEmpty = computed(() => {
   return props.notEmpty && resultValue.value === null;
 });

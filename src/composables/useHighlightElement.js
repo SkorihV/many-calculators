@@ -1,12 +1,12 @@
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
-import { computed } from "vue";
+import { computed, unref } from "vue";
 
 export function useHighlightElement(elementName) {
   const { getNameHighlightElement } = getBaseStoreGetters([
     "getNameHighlightElement",
   ]);
   const isHighlightElement = computed(() => {
-    return elementName.value === getNameHighlightElement.value;
+    return unref(elementName) === getNameHighlightElement.value;
   });
 
   return {

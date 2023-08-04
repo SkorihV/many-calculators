@@ -14,6 +14,7 @@ import { getParent } from "@/composables/useInstance";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -68,7 +69,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       localDependencyList: localDependencyList,
     })
   );
-
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 useEventListener(window, "resize", resize);
 onMounted(() => {
   updatedCurrentWidth();

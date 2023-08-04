@@ -34,6 +34,7 @@ import {
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { REGEXP_SPACES } from "@/constants/regexp";
 import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { devMode, isCanShowAllTooltips } = getBaseStoreGetters();
 const {
@@ -249,6 +250,7 @@ const localElementName = computed(() => {
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 
 const resultValue = computed(() => {
   if (!isVisibilityFromDependency.value) {

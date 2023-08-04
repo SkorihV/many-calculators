@@ -22,6 +22,7 @@ import {
   getBaseStoreGetters,
   getBaseStoreAction,
 } from "@/composables/useBaseStore";
+
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useEventListener } from "@/composables/useEventsListener";
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
@@ -36,6 +37,7 @@ import { useReportInitialStatusForElement } from "@/composables/useReportInitial
 
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -183,7 +185,7 @@ const localElementName = computed(() => {
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
-
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 const isCurrentIndexOptionsNotExist = computed(() => {
   return currentIndexOption.value === null;
 });
@@ -379,6 +381,9 @@ watch(isVisibilityFromDependency, (newValue, oldValue) => {
   } else {
     changeValue("dependency");
   }
+  if (!newValue) {
+    resetSelectedValue();
+  }
 });
 
 watch(
@@ -398,12 +403,6 @@ watch(
   },
   { deep: true }
 );
-
-watch(isVisibilityFromDependency, (newValue) => {
-  if (!newValue) {
-    resetSelectedValue();
-  }
-});
 
 function initSelectMockData(eventType = "mounted") {
   if (needMockValue.value) {

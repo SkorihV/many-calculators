@@ -96,7 +96,7 @@ const props = defineProps({
 
 const currentIndexRadioButton = ref(null);
 const textErrorNotEmpty = ref("Обязательное поле.");
-const localElementName = ref(null);
+// const localElementName = ref(null);
 const bufferRadioListOnOut = ref([]);
 const originRadioList = ref([]);
 const canBeShownTooltip = ref(false);
@@ -115,6 +115,7 @@ const {
 ]);
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -134,7 +135,6 @@ const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
 );
-
 useDisplaySpinner(props.elementName);
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
@@ -142,18 +142,19 @@ useReportInitialStatusForElement(
   changeValid
 );
 
-onMounted(() => {
-  localElementName.value = checkedValueOnVoid(props.elementName)
-    ? props.elementName
-    : Math.random().toString();
+const localElementName = computed(()=> {
+  return checkedValueOnVoid(props.elementName)
+      ? props.elementName
+      : Math.random().toString();
+})
 
+onMounted(() => {
   originRadioList.value = JSON.parse(JSON.stringify(props.radioValues)).map(
     (item, index) => {
       item.index = index + 1;
       return item;
     }
   );
-
   if (!props.isNeedChoice && isVisibilityFromDependency.value) {
     currentIndexRadioButton.value = parseInt(props.selectedItem);
   }
@@ -162,6 +163,7 @@ onMounted(() => {
     changeValue("mounted");
   }, 100);
 });
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 
 onUnmounted(() => {
   tryDeleteAllDataOnStoreForElementName(localElementName.value);

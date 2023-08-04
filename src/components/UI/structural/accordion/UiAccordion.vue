@@ -7,10 +7,10 @@ import { computed, reactive, ref, toRef } from "vue";
 import UiAccordionItem from "@/components/UI/structural/accordion/UiAccordionItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -47,6 +47,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       localDependencyList: localDependencyList,
     })
   );
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 function changeValue(data) {
   emits("changedValue", data);
 }

@@ -36,6 +36,7 @@ import { useIsCheckedType } from "@/components/UI/mainCalculated/UiCheckbox/useI
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -129,6 +130,7 @@ const {
     constructLocalListElementDependencyInFormula,
   })
 );
+
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -179,7 +181,7 @@ const localElementName = computed(() => {
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
-
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 const isErrorEmpty = computed(() => {
   return Boolean(props.isNeedChoice && !isLocalChecked.value);
 });

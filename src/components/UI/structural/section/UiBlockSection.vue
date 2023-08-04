@@ -8,15 +8,21 @@ import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperC
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+
+import { computed, reactive, ref, toRef, watch, onMounted } from "vue";
+import {storeToRefs} from "pinia";
+import {useBaseStore} from "@/store/piniaStore";
+
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
+
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { getCurrentWidthElement } from "@/composables/useWidthElement";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
-import { computed, reactive, ref, toRef } from "vue";
+import {useHighlightElement} from '@/composables/useHighlightElement'
 
-const { devMode } = getBaseStoreGetters();
-
+const baseStore = useBaseStore()
+const { devMode } = storeToRefs(baseStore);
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   templatesData: {
@@ -56,6 +62,8 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       constructLocalListElementDependencyInFormula,
     })
   );
+const {isHighlightElement} = useHighlightElement(props.elementName)
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 
 function changeValue(data) {
   emits("changedValue", data);
@@ -94,12 +102,13 @@ const maxWidth = computed(() => {
 const isHorizontal = computed(() => {
   return props.elementPosition === "horizontal";
 });
+
 </script>
 
 <template>
   <div
     class="calc__wrapper-group-data"
-    :class="{ indent: isVisualSeparate }"
+    :class="{ indent: isVisualSeparate, 'is-highlight': isHighlightElement }"
     v-show="showSection"
     :id="elementName"
     ref="parentRef"

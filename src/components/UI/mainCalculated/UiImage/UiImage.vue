@@ -23,6 +23,7 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const props = defineProps({
   defaultImage: {
@@ -69,6 +70,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       formula: toRef(props, "dependencyFormulaDisplay"),
     })
   );
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 useDisplaySpinner(props.elementName);
 
 onBeforeMount(() => {

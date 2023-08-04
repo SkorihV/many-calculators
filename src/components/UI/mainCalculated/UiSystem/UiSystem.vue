@@ -40,6 +40,7 @@ import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { devMode, getResultElementOnName } = getBaseStoreGetters();
 const {
@@ -145,6 +146,7 @@ const localElementName = computed(() => {
     : "Math.random().toString()";
 });
 const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 /**
  * Возвращает формулу цены без данных
  * @returns {number|*|number|string|null}

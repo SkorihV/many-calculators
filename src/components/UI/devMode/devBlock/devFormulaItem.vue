@@ -1,26 +1,21 @@
 <script setup>
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
+import {storeToRefs} from "pinia";
+import {useBaseStore} from "@/store/piniaStore";
+
+const baseStore = useBaseStore()
+const displayStore = useDisplayComponentsStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const displayStoreRefs = storeToRefs(displayStore)
+
 import { computed } from "vue";
 import { isVariable } from "@/validators/validators";
 import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
 import goScrollToElement from "@/composables/goScrollToElement";
+import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
 
-const { getResultElementOnName, getDependencyElementOnName } =
-  getBaseStoreGetters();
-const {
-  isElementDependency,
-  isElementResult,
-  isShowElement,
-  setNameHighlightElement,
-} = getBaseStoreAction([
-  "isElementDependency",
-  "isElementResult",
-  "isShowElement",
-  "setNameHighlightElement",
-]);
+const { getResultElementOnName, getDependencyElementOnName } = baseStoreRefs
+const { isDisplayingComponent, isExistComponent } = displayStoreRefs
+
 
 const props = defineProps({
   formulaItem: {
@@ -49,7 +44,7 @@ const props = defineProps({
   },
 });
 
-const localIsVariable = computed(() => {
+const isVariableParam = computed(() => {
   if (typeof props.formulaItem === "object") {
     return isVariable(props.formulaItem.name);
   } else {
@@ -60,9 +55,9 @@ const localIsVariable = computed(() => {
 const itemDependencyData = computed(() => {
   const formula = props.formulaItem;
   if (
-    localIsVariable.value &&
+    isVariableParam.value &&
     props.isDependency &&
-    isElementDependency(formula)
+    baseStore.isElementDependency(formula)
   ) {
     return getDependencyElementOnName.value(formula);
   }
@@ -71,7 +66,7 @@ const itemDependencyData = computed(() => {
 
 const itemResultData = computed(() => {
   const formula = props.formulaItem;
-  if (localIsVariable.value && props.isResult && isElementResult(formula)) {
+  if (isVariableParam.value && props.isResult && baseStore.isElementResult(formula)) {
     return getResultElementOnName.value(formula);
   }
   return formula;
@@ -124,19 +119,19 @@ const localName = computed(() => {
 });
 
 const isExist = computed(() => {
-  if (!localIsVariable.value) {
+  if (!isVariableParam.value) {
     return true;
   }
   return (
-    isElementDependency(props.formulaItem) || isElementResult(props.formulaItem)
+      isExistComponent.value(props.formulaItem)
   );
 });
 
 const isHiddenElement = computed(() => {
-  return localIsVariable.value &&
-    isShowElement(props.formulaItem) !== null &&
+  return isVariableParam.value &&
+    isDisplayingComponent.value(props.formulaItem) !== null &&
     isExist.value
-    ? !isShowElement(props.formulaItem)
+    ? !isDisplayingComponent.value(props.formulaItem)
     : false;
 });
 
@@ -152,19 +147,19 @@ const title = computed(() => {
 
 const classes = computed(() => {
   return [
-    localIsVariable.value ? "is-variable" : "",
+    isVariableParam.value ? "is-variable" : "",
     isHiddenElement.value ? "is-hidden" : "",
     !isExist.value ? "is-not-exist" : "",
-    !isHiddenElement.value && isExist.value && localIsVariable.value
+    !isHiddenElement.value && isExist.value && isVariableParam.value
       ? "is-pointer"
       : "",
   ];
 });
 function goToElement() {
-  if (!isHiddenElement.value && localIsVariable.value) {
+  if (!isHiddenElement.value && isVariableParam.value) {
     goScrollToElement(props.formulaItem, "center");
-    if (localIsVariable.value) {
-      setNameHighlightElement(props.formulaItem);
+    if (isVariableParam.value) {
+      baseStore.setNameHighlightElement(props.formulaItem);
     }
   }
 }

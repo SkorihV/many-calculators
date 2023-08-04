@@ -13,6 +13,7 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -54,7 +55,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       localDependencyList: localDependencyList,
     })
   );
-
+useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 const shownIdTab = ref(null);
 const hoverElementIndex = ref(null);
 

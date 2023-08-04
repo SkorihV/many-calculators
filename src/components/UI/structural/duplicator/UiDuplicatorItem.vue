@@ -39,6 +39,7 @@ import {
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { devMode, checkedIsStructureTemplate, getResultElementOnName } =
   getBaseStoreGetters();
@@ -112,6 +113,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       parentIsShow: toRef(props, "parentIsShow"),
     })
   );
+useDisplayComponents(mutationsInputData.value.elementName, isVisibilityFromDependency, typeElement)
 
 /**
  *
