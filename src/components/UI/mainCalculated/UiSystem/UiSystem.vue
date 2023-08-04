@@ -3,14 +3,21 @@ const typeElement = "UiSystem";
 </script>
 
 <script setup>
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+} from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -24,15 +31,7 @@ import {
   decimalAdjust,
   processingArrayOnFormulaProcessingLogic,
 } from "@/servises/UtilityServices";
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-  toRef,
-  watch,
-} from "vue";
+
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
@@ -42,16 +41,9 @@ import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
-const { devMode, getResultElementOnName } = getBaseStoreGetters();
-const {
-  tryDeleteAllDataOnStoreForElementName,
-  tryAddDependencyElement,
-  checkValidationDataAndToggle,
-} = getBaseStoreAction([
-  "tryDeleteAllDataOnStoreForElementName",
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, getResultElementOnName } = baseStoreRefs;
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -313,7 +305,7 @@ function changeValue(eventType = "system") {
 }
 
 function changeValid(eventType) {
-  checkValidationDataAndToggle({
+  baseStore.checkValidationDataAndToggle({
     error: false,
     name: localElementName.value,
     type: "system",
@@ -325,7 +317,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: props.localCost,
     isShow: isVisibilityFromDependency.value && isShowElement.value,
@@ -339,7 +331,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
 });
 </script>
 

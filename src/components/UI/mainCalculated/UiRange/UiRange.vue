@@ -3,12 +3,6 @@ const typeElement = "UiRange";
 </script>
 
 <script setup>
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
-import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {
   onMounted,
   onUnmounted,
@@ -18,11 +12,17 @@ import {
   reactive,
   toRef,
 } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
+import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
 import { useEventListener } from "@/composables/useEventsListener";
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
@@ -37,19 +37,10 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import { useCheckedValueMinMax } from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
-const { isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState } =
-  getBaseStoreGetters();
-const {
-  tryAddDependencyElement,
-  checkValidationDataAndToggle,
-  tryToggleElementIsMounted,
-  tryDeleteAllDataOnStoreForElementName,
-} = getBaseStoreAction([
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-  "tryToggleElementIsMounted",
-  "tryDeleteAllDataOnStoreForElementName",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { isCanShowAllTooltips, getSomeElementChangedSelfVisibilityState } = baseStoreRefs;
+
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   rangeValue: {
@@ -368,7 +359,7 @@ function changeValue(eventType = "input") {
   }
 }
 function changeValid(eventType) {
-  checkValidationDataAndToggle({
+  baseStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,
@@ -381,7 +372,7 @@ function changeValid(eventType) {
   });
 }
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: isVisibilityFromDependency.value ? resultValue.value : null,
     isShow: isVisibilityFromDependency.value,
@@ -438,7 +429,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

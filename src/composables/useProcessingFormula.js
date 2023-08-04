@@ -1,13 +1,14 @@
+import { computed, toRef, watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
-import { computed, toRef, watch } from "vue";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 export function useProcessingFormula(dataObject) {
+  const baseStore = useBaseStore()
+  const baseStoreRefs = storeToRefs(baseStore)
+
   const dependencyFormulaDisplay = toRef(dataObject, "formula");
   const parentIsShow = toRef(dataObject, "parentIsShow");
   const localDependencyList = dataObject.localDependencyList;
@@ -15,11 +16,7 @@ export function useProcessingFormula(dataObject) {
     dataObject,
     "constructLocalListElementDependencyInFormula"
   );
-
-  const { devMode } = getBaseStoreGetters();
-  const initSomeElementChangedSelfVisibilityState = getBaseStoreAction(
-    "initSomeElementChangedSelfVisibilityState"
-  );
+  const { devMode } = baseStoreRefs;
 
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -133,7 +130,7 @@ export function useProcessingFormula(dataObject) {
     return parentIsShow.value;
   });
   watch(isVisibilityFromDependency, () => {
-    initSomeElementChangedSelfVisibilityState();
+    baseStore.initSomeElementChangedSelfVisibilityState();
   });
 
   return {

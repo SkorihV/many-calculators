@@ -1,18 +1,17 @@
 <script setup>
+import { computed } from "vue";
 import {storeToRefs} from "pinia";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
+
+import { isVariable } from "@/validators/validators";
+import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
+import goScrollToElement from "@/composables/goScrollToElement";
 
 const baseStore = useBaseStore()
 const displayStore = useDisplayComponentsStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const displayStoreRefs = storeToRefs(displayStore)
-
-import { computed } from "vue";
-import { isVariable } from "@/validators/validators";
-import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
-import goScrollToElement from "@/composables/goScrollToElement";
-import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
-
 const { getResultElementOnName, getDependencyElementOnName } = baseStoreRefs
 const { isDisplayingComponent, isExistComponent } = displayStoreRefs
 

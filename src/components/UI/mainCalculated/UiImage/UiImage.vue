@@ -14,10 +14,9 @@ import {
   onUnmounted,
   toRef,
 } from "vue";
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
+import { useBaseStore } from "@/store/piniaStore";
+import { storeToRefs } from "pinia";
+
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -52,12 +51,9 @@ const width = "max-width:" + props.maxWidth + "px";
 const height = "max-height:" + props.maxHeight + "px";
 const isExistDependencyImages = Boolean(props.dependencyImages?.length);
 
-const { devMode, getImageDir } = getBaseStoreGetters();
-const { tryDeleteAllDataOnStoreForElementName, tryToggleElementIsMounted } =
-  getBaseStoreAction([
-    "tryDeleteAllDataOnStoreForElementName",
-    "tryToggleElementIsMounted",
-  ]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, getImageDir } = baseStoreRefs;
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -74,17 +70,17 @@ useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 useDisplaySpinner(props.elementName);
 
 onBeforeMount(() => {
-  tryToggleElementIsMounted(props.elementName, false);
+  baseStore.tryToggleElementIsMounted(props.elementName, false);
 });
 
 onMounted(() => {
   setTimeout(() => {
-    tryToggleElementIsMounted(props.elementName, true);
+    baseStore.tryToggleElementIsMounted(props.elementName, true);
   }, 200);
 });
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(props.elementName);
+  baseStore.tryDeleteAllDataOnStoreForElementName(props.elementName);
 });
 const url = computed(() => {
   return Boolean(props.defaultImage?.filename?.length)

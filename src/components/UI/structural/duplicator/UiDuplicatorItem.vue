@@ -3,12 +3,6 @@ const typeElement = "DuplicatorItem";
 </script>
 
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-
 import {
   ref,
   onMounted,
@@ -18,10 +12,15 @@ import {
   toRef,
   onUnmounted,
 } from "vue";
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
+import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -41,19 +40,10 @@ import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
-const { devMode, checkedIsStructureTemplate, getResultElementOnName } =
-  getBaseStoreGetters();
-const {
-  tryAddResultElement,
-  tryAddDependencyElement,
-  deleteElementInDependencyList,
-  isElementResult,
-} = getBaseStoreAction([
-  "tryAddResultElement",
-  "tryAddDependencyElement",
-  "deleteElementInDependencyList",
-  "isElementResult",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, checkedIsStructureTemplate, getResultElementOnName } = baseStoreRefs;
+
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"]);
 const props = defineProps({
@@ -362,7 +352,7 @@ watch(localCost, (newValue, oldValue) => {
 watch(
   summaFreeVariables,
   (newValue) => {
-    tryAddDependencyElement({
+    baseStore.tryAddDependencyElement({
       name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
       value: newValue,
       isShow: Boolean(newValue !== null),
@@ -381,7 +371,7 @@ function changeValue(data) {
     const mutationData = data;
     mutationData.isDuplicator = true;
     mutationData.parentName = localParentName;
-    tryAddResultElement(mutationData);
+    baseStore.tryAddResultElement(mutationData);
     localResultData.value[data.name] = data;
   }
   emits("changedValue", {
@@ -508,7 +498,7 @@ function addIndexIndexInFormulaElements(formulaString, index) {
 function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
-  const isGlobalVariable = isElementResult(item);
+  const isGlobalVariable = baseStore.isElementResult(item);
 
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
@@ -522,7 +512,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
+  baseStore.deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
 });
 </script>
 

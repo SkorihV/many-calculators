@@ -1,5 +1,5 @@
 import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
-import {onMounted, unref, watch} from "vue";
+import {onMounted, watch} from "vue";
 
 export const useDisplayComponents = (name, isVisibilityFromDependency, typeElement) => {
     const displayStore = useDisplayComponentsStore()

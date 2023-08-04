@@ -3,24 +3,6 @@ const typeElement = "UiInput";
 </script>
 
 <script setup>
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
-
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
-import { checkedValueOnVoid } from "@/servises/UtilityServices";
-import { useProcessingFormula } from "@/composables/useProcessingFormula";
-import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
-import {
-  getCurrentWidthElement,
-  getIsMakeElementColumn,
-} from "@/composables/useWidthElement";
 import {
   onMounted,
   onUnmounted,
@@ -31,23 +13,32 @@ import {
   computed,
   nextTick,
 } from "vue";
+import { useBaseStore } from "@/store/piniaStore";
+import { storeToRefs } from "pinia";
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
+
+import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
+import {
+  getCurrentWidthElement,
+  getIsMakeElementColumn,
+} from "@/composables/useWidthElement";
+
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { REGEXP_SPACES } from "@/constants/regexp";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
-const { devMode, isCanShowAllTooltips } = getBaseStoreGetters();
-const {
-  tryAddDependencyElement,
-  checkValidationDataAndToggle,
-  tryToggleElementIsMounted,
-  tryDeleteAllDataOnStoreForElementName,
-} = getBaseStoreAction([
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-  "tryToggleElementIsMounted",
-  "tryDeleteAllDataOnStoreForElementName",
-]);
+
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, isCanShowAllTooltips } = baseStoreRefs;
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -516,7 +507,7 @@ function changeValid(eventType) {
       isErrorNumber.value,
     ].some((item) => item);
 
-    checkValidationDataAndToggle({
+    baseStore.checkValidationDataAndToggle({
       error: isVisibilityFromDependency.value
         ? isInvalid.value
         : isVisibilityFromDependency.value,
@@ -534,7 +525,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: resultValue.value?.toString()?.length ? resultValue.value : null,
     isShow: isVisibilityFromDependency.value,
@@ -647,7 +638,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

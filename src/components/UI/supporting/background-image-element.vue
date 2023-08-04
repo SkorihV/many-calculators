@@ -1,13 +1,15 @@
 <script setup>
 import { computed, defineProps, ref, watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
-import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
-const { getImageDir, devMode } = getBaseStoreGetters();
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+
+const { getImageDir, devMode } = storeToRefs(useBaseStore());
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
-import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 const props = defineProps({
   imageSettingsData: {

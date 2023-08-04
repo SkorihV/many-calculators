@@ -3,15 +3,24 @@ const typeElement = "UiRadio";
 </script>
 
 <script setup>
+import {
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  computed,
+} from "vue";
+import {useBaseStore } from "@/store/piniaStore";
+import { storeToRefs } from "pinia";
+
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
+
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -22,15 +31,7 @@ import {
 } from "@/composables/useWidthElement";
 
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
-import {
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-  toRef,
-  watch,
-  computed,
-} from "vue";
+
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 const emits = defineEmits(["changedValue"]);
@@ -103,16 +104,10 @@ const canBeShownTooltip = ref(false);
 const hoverElementIndex = ref(null);
 const parentRef = ref(null);
 
-const { devMode, isCanShowAllTooltips } = getBaseStoreGetters();
-const {
-  tryDeleteAllDataOnStoreForElementName,
-  tryAddDependencyElement,
-  checkValidationDataAndToggle,
-} = getBaseStoreAction([
-  "tryDeleteAllDataOnStoreForElementName",
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
@@ -166,7 +161,7 @@ onMounted(() => {
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
@@ -410,7 +405,7 @@ function changeValue(eventType = "click") {
 }
 
 function changeValid(eventType) {
-  checkValidationDataAndToggle({
+  baseStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,
@@ -427,7 +422,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: selectedValueInRadio.value,
     isShow: isVisibilityFromDependency.value,

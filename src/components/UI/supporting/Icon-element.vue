@@ -1,9 +1,13 @@
 <script setup>
 import { computed, defineProps, ref } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
-const { getImageDir } = getBaseStoreGetters();
+
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { getImageDir } = baseStoreRefs;
 const props = defineProps({
   iconSettings: {
     type: Object,

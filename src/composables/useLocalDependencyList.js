@@ -1,12 +1,11 @@
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
-import { ref, reactive, watch, isReactive, onMounted } from "vue";
+import { ref, reactive, watch} from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 
 export function useLocalDependencyList() {
-  const { globalDependenciesList } = getBaseStoreGetters();
-  const isElementDependency = getBaseStoreAction("isElementDependency");
+  const baseStore = useBaseStore()
+  const baseStoreRefs = storeToRefs(baseStore)
+  const { globalDependenciesList } = baseStoreRefs;
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
 
@@ -16,7 +15,7 @@ export function useLocalDependencyList() {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula?.forEach((name) => {
-      if (isElementDependency(name) && !existLocalElementDependency(name)) {
+      if (baseStore.isElementDependency(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
     });

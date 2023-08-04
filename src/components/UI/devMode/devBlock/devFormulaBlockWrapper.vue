@@ -6,7 +6,10 @@ import {
 } from "@/servises/UtilityServices";
 import devFormulaItem from "@/components/UI/devMode/devBlock/devFormulaItem.vue";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
+
 
 const props = defineProps({
   label: {
@@ -28,7 +31,8 @@ const props = defineProps({
 });
 
 const typeData = ref("value");
-const { getDependencyElementOnName } = getBaseStoreGetters();
+const baseStoreRefs = storeToRefs(useBaseStore())
+const { getDependencyElementOnName } = baseStoreRefs;
 function switchTypeData() {
   if (typeData.value === "value") {
     typeData.value = "cost";

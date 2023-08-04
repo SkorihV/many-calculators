@@ -1,4 +1,7 @@
 <script setup>
+import { computed, ref, toRef } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
@@ -7,12 +10,12 @@ import BackgroundImageElement from "@/components/UI/supporting/background-image-
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { computed, ref, toRef } from "vue";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { getCurrentWidthElement } from "@/composables/useWidthElement";
 
-const { isCanShowAllTooltips, getValidationListOnParentName, getImageDir } =
-  getBaseStoreGetters();
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { isCanShowAllTooltips, getValidationListOnParentName } =
+    baseStoreRefs;
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({

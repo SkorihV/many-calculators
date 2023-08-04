@@ -1,7 +1,7 @@
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
-
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 const isElementDependency = (name) => {
-  const { globalDependenciesList } = getBaseStoreGetters();
+  const { globalDependenciesList } = storeToRefs(useBaseStore());
   const elementIsNotExist = !name?.length && !globalDependenciesList.value;
   if (elementIsNotExist) {
     return false;

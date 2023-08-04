@@ -4,13 +4,16 @@ const typeElement = "Tab";
 
 <script setup>
 import { computed, reactive, ref, toRef } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 import UiTabItem from "@/components/UI/structural/tab/UiTabItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
+
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
@@ -39,11 +42,13 @@ const props = defineProps({
 });
 const parent = ref(null);
 
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
 const {
   isCanShowAllTooltips,
   isValidationShowOnParentName,
   isValidationErrorOnParentName,
-} = getBaseStoreGetters();
+} = baseStoreRefs;
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 const { isVisibilityFromDependency, formulaAfterProcessingVariables } =

@@ -3,18 +3,16 @@ const typeElement = "DuplicatorMain";
 </script>
 
 <script setup>
+import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+
 import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
 
-import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {
   decimalAdjust,
@@ -24,9 +22,7 @@ import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
-const { tryAddDependencyElement } = getBaseStoreAction([
-  "tryAddDependencyElement",
-]);
+const baseStore = useBaseStore()
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -190,7 +186,7 @@ function emitChangeValue(eventType) {
 }
 
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: props.elementName,
     value: localCost.value,
     isShow: isVisibilityFromDependency.value,

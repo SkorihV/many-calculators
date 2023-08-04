@@ -1,16 +1,15 @@
 import { onBeforeMount, onMounted } from "vue";
-import { getBaseStoreAction } from "@/composables/useBaseStore";
+import {useBaseStore} from "@/store/piniaStore";
 
 export function useDisplaySpinner(elementName) {
-  const { tryToggleElementIsMounted } = getBaseStoreAction([
-    "tryToggleElementIsMounted",
-  ]);
+  const baseStore = useBaseStore()
+
   onBeforeMount(() => {
-    tryToggleElementIsMounted(elementName, false);
+    baseStore.tryToggleElementIsMounted(elementName, false);
   });
   onMounted(() => {
     setTimeout(() => {
-      tryToggleElementIsMounted(elementName, true);
+      baseStore.tryToggleElementIsMounted(elementName, true);
     }, 200);
   });
 }

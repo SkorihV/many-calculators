@@ -4,6 +4,10 @@ const label = "Основная формула расчета";
 </script>
 
 <script setup>
+import { onMounted, ref, watch, computed } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
 import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
@@ -14,11 +18,11 @@ import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 
+
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
 import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
-import { onMounted, ref, watch, computed } from "vue";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 import {
@@ -37,15 +41,14 @@ import {
 import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
 import { REGEXP_HTML_TAG } from "@/constants/regexp";
 import {
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
   NAME_RESERVED_VARIABLE_SUM,
 } from "@/constants/variables";
+
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
 
 const {
   isCanShowAllTooltips,
@@ -62,28 +65,7 @@ const {
   getSignAfterDot,
   getRoundOffType,
   getTitleSum,
-} = getBaseStoreGetters();
-const {
-  showAllTooltipsOn,
-  tryAddResultElement,
-  tryModifiedResultElement,
-  tryToggleDevMode,
-  setTooltipOn,
-  setInitEnabledSendForm,
-  setAllowShowResultBlock,
-  tryAddDependencyElement,
-  setInputOptions,
-} = getBaseStoreAction([
-  "showAllTooltipsOn",
-  "tryAddResultElement",
-  "tryModifiedResultElement",
-  "tryToggleDevMode",
-  "setTooltipOn",
-  "setInitEnabledSendForm",
-  "setAllowShowResultBlock",
-  "tryAddDependencyElement",
-  "setInputOptions",
-]);
+} = baseStoreRefs;
 
 const eventNotShowTooltips = [
   "delete",
@@ -433,7 +415,7 @@ watch(showInsideElementStatus, () => {
 
 watch(showErrorSummaBlock, (newValue) => {
   if (newValue) {
-    setAllowShowResultBlock(false);
+    baseStore.setAllowShowResultBlock(false);
   }
 });
 
@@ -447,10 +429,10 @@ function changeValue(data) {
     checkEnabledResultButton();
     return false;
   }
-  tryAddResultElement(data);
+  baseStore.tryAddResultElement(data);
 
   if (type === "duplicator") {
-    tryModifiedResultElement({
+    baseStore.tryModifiedResultElement({
       elementName: name,
       modifiedFieldName: "insertedTemplates",
       newData: data.insertedTemplates,
@@ -461,15 +443,15 @@ function changeValue(data) {
     !eventNotShowTooltips.includes(eventType) &&
     methodBeginningCalculationIsAutomatic.value
   ) {
-    showAllTooltipsOn();
-    setAllowShowResultBlock(true);
+    baseStore.showAllTooltipsOn();
+    baseStore.setAllowShowResultBlock(true);
   }
   if (
     !eventNotShowTooltips.includes(eventType) &&
     existFormulaForHiddenResultButton.value &&
     methodBeginningCalculationIsButton.value
   ) {
-    showAllTooltipsOn();
+    baseStore.showAllTooltipsOn();
   }
 
   checkEnabledResultButton();
@@ -510,7 +492,7 @@ function checkEnabledResultButton() {
  */
 function hiddenElementOnResults(name) {
   if (name in baseDataForCalculate.value) {
-    tryModifiedResultElement({
+    baseStore.tryModifiedResultElement({
       elementName: name,
       modifiedFieldName: "isShow",
       newData: false,
@@ -609,7 +591,7 @@ function tryPassDependency(
   type,
   cost = null
 ) {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name,
     value,
     isShow,
@@ -663,7 +645,7 @@ onMounted(async () => {
     inputOptions.value?.resultOptions?.formulaDisplayButton?.length
   );
 
-  setInputOptions(inputOptions.value);
+  baseStore.setInputOptions(inputOptions.value);
   findForm();
   findTeleportField();
   findSubmitForm();
@@ -672,9 +654,9 @@ onMounted(async () => {
     showForm();
   }
 
-  setInitEnabledSendForm(methodBeginningCalculationIsAutomatic.value);
-  tryToggleDevMode(Boolean(inputOptions.value?.devModeEnabled));
-  setTooltipOn(inputOptions.value);
+  baseStore.setInitEnabledSendForm(methodBeginningCalculationIsAutomatic.value);
+  baseStore.tryToggleDevMode(Boolean(inputOptions.value?.devModeEnabled));
+  baseStore.setTooltipOn(inputOptions.value);
 
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;

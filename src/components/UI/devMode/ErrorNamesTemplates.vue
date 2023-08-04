@@ -1,11 +1,9 @@
 <script setup>
-import devFormulaItem from '@/components/UI/devMode/devBlock/devFormulaItem.vue'
-import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
-import {
-  getBaseStoreAction,
-  getBaseStoreGetters,
-} from "@/composables/useBaseStore";
 import { computed, onMounted, reactive, ref, watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
+
 import {
   REGEXP_ELEMENT_VALUE_AS_WORLD,
   REGEXP_SIGN,
@@ -19,10 +17,9 @@ import {
 
 import { replaceSpecSymbols } from "@/servises/UtilityServices";
 
-const tryToggleShowInsideElementStatus = getBaseStoreAction(
-  "tryToggleShowInsideElementStatus"
-);
-const { devMode } = getBaseStoreGetters();
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode } = baseStoreRefs;
 
 const props = defineProps({
   templates: {
@@ -231,7 +228,7 @@ function processingFormulaSpecialsSymbols(formula) {
 }
 
 watch(localShowInsideElementStatus, (newValue) => {
-  tryToggleShowInsideElementStatus(newValue);
+  baseStore.tryToggleShowInsideElementStatus(newValue);
 });
 
 /**

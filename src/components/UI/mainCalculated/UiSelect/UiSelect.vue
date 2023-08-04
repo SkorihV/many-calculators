@@ -3,11 +3,6 @@ const typeElement = "UiSelect";
 </script>
 
 <script setup>
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {
   onMounted,
   reactive,
@@ -18,10 +13,14 @@ import {
   computed,
   toRef,
 } from "vue";
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useEventListener } from "@/composables/useEventsListener";
@@ -113,20 +112,10 @@ const changeElement = ref(null);
 const parentRef = ref(null);
 const selectRef = ref(null);
 
-const { devMode, isCanShowAllTooltips } = getBaseStoreGetters();
-const {
-  tryDeleteAllDataOnStoreForElementName,
-  tryAddDependencyElement,
-  checkValidationDataAndToggle,
-  tryToggleElementIsMounted,
-  isElementDependency,
-} = getBaseStoreAction([
-  "tryDeleteAllDataOnStoreForElementName",
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-  "tryToggleElementIsMounted",
-  "isElementDependency",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 const {
@@ -292,7 +281,7 @@ const selectValuesAfterProcessingDependency = computed(() => {
       constructLocalListElementDependencyInFormula(formula);
 
       let allDependencyShow = formula.every((item) => {
-        if (isElementDependency(item)) {
+        if (baseStore.isElementDependency(item)) {
           return localDependencyList[item]?.isShow;
         }
         return true;
@@ -491,7 +480,7 @@ function changeValue(eventType = "click") {
 }
 
 function changeValid(eventType) {
-  checkValidationDataAndToggle({
+  baseStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,
@@ -508,7 +497,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: currentOptionValue,
     isShow: isVisibilityFromDependency.value,
@@ -577,7 +566,7 @@ onMounted(() => {
   }, 200);
 });
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

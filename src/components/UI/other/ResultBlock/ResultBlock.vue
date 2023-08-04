@@ -4,22 +4,26 @@ const label = "Блок с результатами";
 </script>
 
 <script setup>
+import { computed, reactive, ref, watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
-import { computed, reactive, ref, watch } from "vue";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
+
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
 const {
   isExistGlobalErrorsValidationIgnoreHiddenElement,
   checkInitEnabledSendForm,
   checkAllowShowResultBlock,
-  globalDependenciesList,
-} = getBaseStoreGetters();
+} = baseStoreRefs;
 
 const props = defineProps({
   resultOptions: {

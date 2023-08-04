@@ -1,10 +1,13 @@
 <script setup>
 import { computed } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 
-const { getCurrency, getTitleSum } = getBaseStoreGetters();
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { getCurrency, getTitleSum } = baseStoreRefs;
 
 const props = defineProps({
   data: {

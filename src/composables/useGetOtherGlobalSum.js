@@ -1,12 +1,12 @@
 import { computed } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import {
   getArrayElementsFromFormula,
   getListVariablesMissedInFormula,
   getSummaVariablesInFormula,
   getListVariablesUsedInFormula,
 } from "@/servises/UtilityServices";
-
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
 /**
  *
@@ -20,7 +20,8 @@ export function useGetOtherGlobalSum(
   viewDuplicator = false,
   parentName = null
 ) {
-  const { getAllResultsElements } = getBaseStoreGetters();
+  const baseStoreRefs = storeToRefs(useBaseStore())
+  const { getAllResultsElements } = baseStoreRefs;
   /**
    * Данные которые подходят для вывода или расчета
    * @returns {{length}|unknown[]|*[]}

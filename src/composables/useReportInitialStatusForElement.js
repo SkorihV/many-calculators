@@ -1,5 +1,6 @@
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 
 /**
  *
@@ -13,7 +14,7 @@ export const useReportInitialStatusForElement = (
   changeValue,
   changeValid
 ) => {
-  const { isCanShowAllTooltips } = getBaseStoreGetters();
+  const { isCanShowAllTooltips } = storeToRefs(useBaseStore());
   /**
    * При глобальном включении возможности отображать подсказки - отправить состояние элемента
    */

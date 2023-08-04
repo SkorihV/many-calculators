@@ -1,10 +1,11 @@
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { computed, unref } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 
 export function useHighlightElement(elementName) {
-  const { getNameHighlightElement } = getBaseStoreGetters([
-    "getNameHighlightElement",
-  ]);
+  const baseStoreRefs = storeToRefs(useBaseStore())
+
+  const { getNameHighlightElement } = baseStoreRefs;
   const isHighlightElement = computed(() => {
     return unref(elementName) === getNameHighlightElement.value;
   });

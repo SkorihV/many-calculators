@@ -4,16 +4,6 @@ const textErrorNotEmpty = "Обязательное поле.";
 </script>
 
 <script setup>
-import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-
-import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
-import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
 import {
   computed,
   onMounted,
@@ -23,6 +13,16 @@ import {
   toRef,
   watch,
 } from "vue";
+import { useBaseStore } from "@/store/piniaStore";
+import { storeToRefs } from "pinia";
+
+import UiTooltip from "@/components/UI/other/UiTooltip.vue";
+import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+
+import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
+import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
@@ -36,7 +36,7 @@ import { useIsCheckedType } from "@/components/UI/mainCalculated/UiCheckbox/useI
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
-import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useDisplayComponents } from "@/composables/useDisplayComponents";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -104,18 +104,10 @@ const notActive = ref(false); // невозможно активировать
 const checkboxValue = ref(false); // начальное значение
 const parentRef = ref(null);
 
-const { isCanShowAllTooltips } = getBaseStoreGetters();
-const {
-  checkValidationDataAndToggle,
-  tryAddDependencyElement,
-  tryDeleteAllDataOnStoreForElementName,
-  tryToggleElementIsMounted,
-} = getBaseStoreAction([
-  "tryAddDependencyElement",
-  "checkValidationDataAndToggle",
-  "tryToggleElementIsMounted",
-  "tryDeleteAllDataOnStoreForElementName",
-]);
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { isCanShowAllTooltips } = baseStoreRefs;
+
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 const {
@@ -276,7 +268,7 @@ function changeValue(eventType = "click") {
   }
 }
 function changeValid(eventType) {
-  checkValidationDataAndToggle({
+  baseStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,
@@ -292,7 +284,7 @@ function changeValid(eventType) {
   }
 }
 function tryPassDependency() {
-  tryAddDependencyElement({
+  baseStore.tryAddDependencyElement({
     name: localElementName.value,
     value: isVisibilityFromDependency.value ? isLocalChecked.value : null,
     isShow: isVisibilityFromDependency.value,
@@ -302,7 +294,7 @@ function tryPassDependency() {
 }
 
 onUnmounted(() => {
-  tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

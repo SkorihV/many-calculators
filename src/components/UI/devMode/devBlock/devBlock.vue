@@ -1,12 +1,12 @@
 <script setup>
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 import { computed, ref } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
+
 import { replaceSpecSymbols } from "@/servises/UtilityServices";
 import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue";
 
-const { showInsideElementStatus } = getBaseStoreGetters(
-  "showInsideElementStatus"
-);
+const { showInsideElementStatus } = storeToRefs(useBaseStore())
 
 const props = defineProps({
   value: {},

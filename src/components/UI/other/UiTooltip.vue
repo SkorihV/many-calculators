@@ -1,12 +1,14 @@
 <script setup>
 import { defineProps, onMounted, ref, watch, computed } from "vue";
-
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import { isBoolean } from "@/validators/validators";
 import { useEventListener } from "@/composables/useEventsListener";
 import { getParent } from "@/composables/useInstance";
-import { getBaseStoreGetters } from "@/composables/useBaseStore";
 
-const { isCanShowAllTooltips, isTooltipOn } = getBaseStoreGetters();
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const { isCanShowAllTooltips, isTooltipOn } = baseStoreRefs;
 const props = defineProps({
   /**
    * Текст ошибки

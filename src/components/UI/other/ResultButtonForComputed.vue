@@ -3,30 +3,23 @@ const typeElement = "ResultButton";
 </script>
 
 <script setup>
+import { computed, reactive, ref, watch } from "vue";
+import {useBaseStore} from "@/store/piniaStore";
+import {storeToRefs} from "pinia";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import { computed, reactive, ref, watch } from "vue";
-import {
-  getBaseStoreGetters,
-  getBaseStoreAction,
-} from "@/composables/useBaseStore";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
-const {
+
+const baseStore = useBaseStore()
+const baseStoreRefs = storeToRefs(baseStore)
+const {  
   methodBeginningCalculationIsButton,
   isExistGlobalErrorsValidationIgnoreHiddenElement,
   checkAllowShowResultBlock,
-  globalDependenciesList,
   devMode,
-} = getBaseStoreGetters();
-
-const { setAllowShowResultBlock, setInitEnabledSendForm, showAllTooltipsOn } =
-  getBaseStoreAction([
-    "setAllowShowResultBlock",
-    "setInitEnabledSendForm",
-    "showAllTooltipsOn",
-  ]);
+} = baseStoreRefs;
 
 const emits = defineEmits(["checkEnabledResultButton"]);
 const props = defineProps({
@@ -52,16 +45,16 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
   );
 
 function calculateResult() {
-  showAllTooltipsOn();
-  setInitEnabledSendForm(true);
-  setAllowShowResultBlock(true);
+  baseStore.showAllTooltipsOn();
+  baseStore.setInitEnabledSendForm(true);
+  baseStore.setAllowShowResultBlock(true);
   emits("checkEnabledResultButton");
 }
 
 watch(isExistGlobalErrorsValidationIgnoreHiddenElement, (newValue) => {
   if (newValue && showResultBtn.value) {
-    setInitEnabledSendForm(false);
-    setAllowShowResultBlock(false);
+    baseStore.setInitEnabledSendForm(false);
+    baseStore.setAllowShowResultBlock(false);
   }
 });
 
