@@ -6,7 +6,7 @@ import {
 } from "@/servises/UtilityServices";
 import devFormulaItem from "@/components/UI/devMode/devBlock/devFormulaItem.vue";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
-import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 
 
@@ -31,8 +31,7 @@ const props = defineProps({
 });
 
 const typeData = ref("value");
-const baseStoreRefs = storeToRefs(useBaseStore())
-const { getDependencyElementOnName } = baseStoreRefs;
+const { getElementByNameInDependency } = storeToRefs(useDependencyListStore());
 function switchTypeData() {
   if (typeData.value === "value") {
     typeData.value = "cost";
@@ -51,7 +50,7 @@ const localFormulaArray = computed(() => {
 const formulaArrayInOut = computed(() => {
   return localFormulaArray.value.map((item) => {
     if (isExistOtherSum(item)) {
-      return getDependencyElementOnName.value(item);
+      return getElementByNameInDependency.value(item);
     }
     return item;
   });

@@ -14,6 +14,7 @@ import {
   watch,
 } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import { storeToRefs } from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
@@ -106,6 +107,7 @@ const parentRef = ref(null);
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
+const dependencyStore = useDependencyListStore()
 const { isCanShowAllTooltips } = baseStoreRefs;
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
@@ -284,7 +286,7 @@ function changeValid(eventType) {
   }
 }
 function tryPassDependency() {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name: localElementName.value,
     value: isVisibilityFromDependency.value ? isLocalChecked.value : null,
     isShow: isVisibilityFromDependency.value,

@@ -13,6 +13,7 @@ import {
   onUnmounted,
 } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
@@ -41,6 +42,7 @@ import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const baseStore = useBaseStore()
+const dependencyStore = useDependencyListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, checkedIsStructureTemplate, getResultElementOnName } = baseStoreRefs;
 
@@ -352,7 +354,7 @@ watch(localCost, (newValue, oldValue) => {
 watch(
   summaFreeVariables,
   (newValue) => {
-    baseStore.tryAddDependencyElement({
+    dependencyStore.addDependencyElement({
       name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
       value: newValue,
       isShow: Boolean(newValue !== null),
@@ -512,7 +514,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  baseStore.deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
+  dependencyStore.deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
 });
 </script>
 

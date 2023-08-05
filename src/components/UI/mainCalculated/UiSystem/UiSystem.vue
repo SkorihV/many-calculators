@@ -13,6 +13,7 @@ import {
   watch,
 } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -44,6 +45,7 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, getResultElementOnName } = baseStoreRefs;
+const dependencyStore = useDependencyListStore()
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -317,7 +319,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name: localElementName.value,
     value: props.localCost,
     isShow: isVisibilityFromDependency.value && isShowElement.value,

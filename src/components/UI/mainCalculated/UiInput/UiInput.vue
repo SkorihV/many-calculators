@@ -14,6 +14,7 @@ import {
   nextTick,
 } from "vue";
 import { useBaseStore } from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import { storeToRefs } from "pinia";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -21,7 +22,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
-import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import {checkedValueOnVoid, checkLogicAndReturnValue} from "@/servises/UtilityServices";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
@@ -39,6 +40,7 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+const dependencyStore = useDependencyListStore()
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -349,7 +351,8 @@ const localCost = computed(() => {
   if (!isVisibilityFromDependency.value) {
     return null;
   }
-  if (!initProcessingDependencyPrice || !props.dependencyPrices) {
+
+  if (!initProcessingDependencyPrice.value || !props.dependencyPrices) {
     return updatedCostForOut(props.cost);
   }
   let { cost: newCost } = costAfterProcessingDependencyPrice(
@@ -360,6 +363,7 @@ const localCost = computed(() => {
       value: localInputValue.value,
     })
   );
+
   if (newCost !== null) {
     return updatedCostForOut(newCost);
   }
@@ -525,12 +529,12 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name: localElementName.value,
-    value: resultValue.value?.toString()?.length ? resultValue.value : null,
+    value: resultValue.value?.toString()?.length ? resultValue : null,
     isShow: isVisibilityFromDependency.value,
     displayValue: resultValue.value?.toString()?.length
-      ? resultValue.value
+      ? resultValue
       : null,
     type: "input",
   });

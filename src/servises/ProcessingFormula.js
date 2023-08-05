@@ -8,6 +8,7 @@ import { unref } from "vue";
  * @returns {*|null}
  */
 const processingVariablesOnFormula = function (formula, localDependencyList) {
+
   localDependencyList = unref(localDependencyList);
   formula = unref(formula);
   if (!formula) {
@@ -17,7 +18,6 @@ const processingVariablesOnFormula = function (formula, localDependencyList) {
   const result = formula?.reduce((resultText, item) => {
     const elementDependency =
       item in localDependencyList ? localDependencyList[item] : null;
-
     const elementIsExist = elementDependency !== null;
 
     const valueIsBool = typeof elementDependency?.value === "boolean";

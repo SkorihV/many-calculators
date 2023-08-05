@@ -1,11 +1,9 @@
 import { ref, reactive, watch} from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 
 export function useLocalDependencyList() {
-  const baseStore = useBaseStore()
-  const baseStoreRefs = storeToRefs(baseStore)
-  const { globalDependenciesList } = baseStoreRefs;
+  const { getAllDependencyList, getElementByNameInDependency,isElementDependency } = storeToRefs(useDependencyListStore());
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
 
@@ -15,7 +13,7 @@ export function useLocalDependencyList() {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula?.forEach((name) => {
-      if (baseStore.isElementDependency(name) && !existLocalElementDependency(name)) {
+      if (isElementDependency.value(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
     });
@@ -32,11 +30,11 @@ export function useLocalDependencyList() {
    * @param name
    */
   const putElementDependencyInLocalList = (name) => {
-    localDependencyList[name] = globalDependenciesList.value[name];
+    localDependencyList[name] = getElementByNameInDependency.value(name);
   };
 
   watch(
-    globalDependenciesList,
+      getAllDependencyList,
     (newValue) => {
       let isUpdated = false;
       for (let key in newValue) {

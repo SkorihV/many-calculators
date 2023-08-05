@@ -13,6 +13,7 @@ import {
   computed,
 } from "vue";
 import {useBaseStore } from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import { storeToRefs } from "pinia";
 
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
@@ -107,6 +108,7 @@ const parentRef = ref(null);
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+const dependencyStore = useDependencyListStore()
 
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
@@ -422,7 +424,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name: localElementName.value,
     value: selectedValueInRadio.value,
     isShow: isVisibilityFromDependency.value,

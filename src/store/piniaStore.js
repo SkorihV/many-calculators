@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 
 export const useBaseStore = defineStore("base", {
   state: () => {
     return {
+      dependencyStore: useDependencyListStore(),
       inputOptions: null,
-      dataListForDependencies: {},
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
       nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
@@ -67,18 +68,7 @@ export const useBaseStore = defineStore("base", {
       (name) =>
         globalResultsElements[name] ? globalResultsElements[name] : null,
 
-    getDependencyElementOnName:
-      ({ dataListForDependencies }) =>
-      (name) =>
-        dataListForDependencies[name] ? dataListForDependencies[name] : null,
-    /**
-     * Массив со всеми зависимостями и значениями
-     * @param state
-     * @returns {{}}
-     */
-    globalDependenciesList: ({ dataListForDependencies }) => {
-      return dataListForDependencies;
-    },
+
     /**
      * Активирует возможность показывать всплывающие подсказки с ошибками
      * @param state
@@ -250,31 +240,7 @@ export const useBaseStore = defineStore("base", {
     tryModifiedResultElement({ elementName, modifiedFieldName, newData }) {
       this.globalResultsElements[elementName][modifiedFieldName] = newData;
     },
-    /**
-     * Добавить элемент зависимости в общий массив данных
-     * @param name
-     * @param value
-     * @param isShow
-     * @param displayValue
-     * @param type
-     */
-    tryAddDependencyElement({
-      name,
-      value,
-      isShow,
-      displayValue,
-      type,
-      cost = null,
-    }) {
-      this.dataListForDependencies[name] = {
-        name,
-        value,
-        isShow,
-        displayValue,
-        type,
-        cost,
-      };
-    },
+
     /**
      * разрешить отображение подсказок с ошибками
      */
@@ -316,23 +282,19 @@ export const useBaseStore = defineStore("base", {
     tryDeleteAllDataOnStoreForElementName(elementName) {
       if (Array.isArray(elementName)) {
         elementName.forEach((name) => {
-          this.deleteElementInDependencyList(name);
+          this.dependencyStore.deleteElementInDependencyList(name);
           this.deleteElementInResultsList(name);
           this.deleteElementInMountedList(name);
           this.deleteElementInValidationsErrorsList(name);
         });
       } else {
-        this.deleteElementInDependencyList(elementName);
+        this.dependencyStore.deleteElementInDependencyList(elementName);
         this.deleteElementInResultsList(elementName);
         this.deleteElementInMountedList(elementName);
         this.deleteElementInValidationsErrorsList(elementName);
       }
     },
-    deleteElementInDependencyList(elementName) {
-      if (elementName in this.dataListForDependencies) {
-        delete this.dataListForDependencies[elementName];
-      }
-    },
+
     deleteElementInResultsList(elementName) {
       if (elementName in this.globalResultsElements) {
         delete this.globalResultsElements[elementName];
@@ -352,17 +314,7 @@ export const useBaseStore = defineStore("base", {
       this.someElementChangedSelfVisibilityState =
         this.someElementChangedSelfVisibilityState + 1;
     },
-    /**
-     *
-     * @param nameItemList
-     * @returns {boolean}
-     */
-    isElementDependency(nameItemList = null) {
-      if (!nameItemList) {
-        return false;
-      }
-      return nameItemList in this.globalDependenciesList;
-    },
+
     /**
      *
      * @param nameItemList
@@ -391,5 +343,6 @@ export const useBaseStore = defineStore("base", {
         this.nameHighlightElement = null;
       }, 2000);
     },
+
   },
 });

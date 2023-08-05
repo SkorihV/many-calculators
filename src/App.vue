@@ -6,6 +6,7 @@ const label = "Основная формула расчета";
 <script setup>
 import { onMounted, ref, watch, computed } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
@@ -49,6 +50,7 @@ import {
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
+const dependencyStore = useDependencyListStore()
 
 const {
   isCanShowAllTooltips,
@@ -591,7 +593,7 @@ function tryPassDependency(
   type,
   cost = null
 ) {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name,
     value,
     isShow,

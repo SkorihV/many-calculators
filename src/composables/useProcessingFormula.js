@@ -131,7 +131,8 @@ export function useProcessingFormula(dataObject) {
   });
   watch(isVisibilityFromDependency, () => {
     baseStore.initSomeElementChangedSelfVisibilityState();
-  });
+  },
+      {deep: true});
 
   return {
     isVisibilityFromDependency,

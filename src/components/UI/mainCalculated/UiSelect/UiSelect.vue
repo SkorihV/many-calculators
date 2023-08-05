@@ -14,6 +14,7 @@ import {
   toRef,
 } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {storeToRefs} from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
@@ -113,8 +114,9 @@ const parentRef = ref(null);
 const selectRef = ref(null);
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+const { devMode, isCanShowAllTooltips } = storeToRefs(baseStore);
+const dependencyStore = useDependencyListStore()
+const {isElementDependency} = storeToRefs(dependencyStore)
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -124,10 +126,10 @@ const {
   formulaAfterProcessingVariables,
 } = useProcessingFormula(
   reactive({
-    formula: toRef(props, "dependencyFormulaDisplay"),
-    parentIsShow: toRef(props, "parentIsShow"),
     localDependencyList: localDependencyList,
     constructLocalListElementDependencyInFormula,
+    formula: toRef(props, "dependencyFormulaDisplay"),
+    parentIsShow: toRef(props, "parentIsShow"),
   })
 );
 
@@ -281,7 +283,7 @@ const selectValuesAfterProcessingDependency = computed(() => {
       constructLocalListElementDependencyInFormula(formula);
 
       let allDependencyShow = formula.every((item) => {
-        if (baseStore.isElementDependency(item)) {
+        if (isElementDependency.value(item)) {
           return localDependencyList[item]?.isShow;
         }
         return true;
@@ -497,7 +499,7 @@ function changeValid(eventType) {
 }
 
 function tryPassDependency() {
-  baseStore.tryAddDependencyElement({
+  dependencyStore.addDependencyElement({
     name: localElementName.value,
     value: currentOptionValue,
     isShow: isVisibilityFromDependency.value,

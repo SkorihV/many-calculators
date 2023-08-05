@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import {storeToRefs} from "pinia";
 import {useBaseStore} from "@/store/piniaStore";
+import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
 
 import { isVariable } from "@/validators/validators";
@@ -9,11 +10,10 @@ import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
 import goScrollToElement from "@/composables/goScrollToElement";
 
 const baseStore = useBaseStore()
-const displayStore = useDisplayComponentsStore()
 const baseStoreRefs = storeToRefs(baseStore)
-const displayStoreRefs = storeToRefs(displayStore)
-const { getResultElementOnName, getDependencyElementOnName } = baseStoreRefs
-const { isDisplayingComponent, isExistComponent } = displayStoreRefs
+const {getElementByNameInDependency, isElementDependency} = storeToRefs(useDependencyListStore())
+const { getResultElementOnName } = baseStoreRefs
+const { isDisplayingComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
 
 
 const props = defineProps({
@@ -56,9 +56,9 @@ const itemDependencyData = computed(() => {
   if (
     isVariableParam.value &&
     props.isDependency &&
-    baseStore.isElementDependency(formula)
+    isElementDependency.value(formula)
   ) {
-    return getDependencyElementOnName.value(formula);
+    return getElementByNameInDependency.value(formula);
   }
   return formula;
 });
