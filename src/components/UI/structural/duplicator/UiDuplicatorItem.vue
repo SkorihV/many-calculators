@@ -14,6 +14,7 @@ import {
 } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useResultListStore} from "@/store/resultListStore";
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
@@ -43,8 +44,9 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const baseStore = useBaseStore()
 const dependencyStore = useDependencyListStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { devMode, checkedIsStructureTemplate, getResultElementOnName } = baseStoreRefs;
+const resultStore = useResultListStore()
+const { devMode, checkedIsStructureTemplate } = storeToRefs(baseStore);
+const { getResultElementByName } = storeToRefs(resultStore)
 
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"]);
@@ -239,7 +241,7 @@ const dataListVariablesOnFormula = computed(() => {
         LOCAL_NAME_RESERVED_VARIABLE_SUM
       );
     } else if (isGlobalVariable) {
-      return getResultElementOnName.value(item);
+      return getResultElementByName.value(item);
     } else {
       const data = Object.values(localResultData.value).filter(
         (itemInner) => itemInner.name === item
@@ -269,7 +271,7 @@ const compileFormulaWitchData = computed(() => {
         !item.excludeFromCalculations;
       const isAllowReturnGlobalCost =
         listGlobalsVariables.value.includes(item.name) &&
-        getResultElementOnName.value(item.name)?.isShow &&
+          getResultElementByName.value(item.name)?.isShow &&
         !item.excludeFromCalculations;
 
       if (nameIsNotExist) {
@@ -279,7 +281,7 @@ const compileFormulaWitchData = computed(() => {
       } else if (isAllowReturnLocalCost) {
         return localResultData.value[item.name].cost;
       } else if (isAllowReturnGlobalCost) {
-        return getResultElementOnName.value(item.name)?.cost;
+        return getResultElementByName.value(item.name)?.cost;
       } else {
         return "null";
       }
@@ -373,7 +375,7 @@ function changeValue(data) {
     const mutationData = data;
     mutationData.isDuplicator = true;
     mutationData.parentName = localParentName;
-    baseStore.tryAddResultElement(mutationData);
+    resultStore.addResultElement(mutationData);
     localResultData.value[data.name] = data;
   }
   emits("changedValue", {
@@ -500,7 +502,7 @@ function addIndexIndexInFormulaElements(formulaString, index) {
 function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
-  const isGlobalVariable = baseStore.isElementResult(item);
+  const isGlobalVariable = resultStore.isElementResult(item);
 
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }

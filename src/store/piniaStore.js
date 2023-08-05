@@ -1,15 +1,13 @@
 import { defineStore } from "pinia";
 import {useDependencyListStore} from "@/store/dependencyListStore";
-
+import {useResultListStore} from "@/store/resultListStore";
 export const useBaseStore = defineStore("base", {
   state: () => {
     return {
-      dependencyStore: useDependencyListStore(),
       inputOptions: null,
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
       validationsErrorsList: {}, // список элементов с ошибками валидации
       nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
-      globalResultsElements: {}, // список элементов которые будут участвовать в расчетах результата
       devModeEnabled: false,
       showInsideElementStatusData: false,
       elementsIsMounted: {},
@@ -52,21 +50,6 @@ export const useBaseStore = defineStore("base", {
         ? inputOptions?.resultOptions?.currency
         : "руб";
     },
-    /**
-     * Получить весь список элементов результата
-     * @param globalResultsElements
-     * @returns {undefined}
-     */
-    getAllResultsElements: ({ globalResultsElements }) => globalResultsElements,
-    /**
-     * Получить элемент из списка по его имени
-     * @param globalResultsElements
-     * @returns {function(*): *|null}
-     */
-    getResultElementOnName:
-      ({ globalResultsElements }) =>
-      (name) =>
-        globalResultsElements[name] ? globalResultsElements[name] : null,
 
 
     /**
@@ -186,60 +169,29 @@ export const useBaseStore = defineStore("base", {
     getNameHighlightElement({ nameHighlightElement }) {
       return nameHighlightElement;
     },
+
+
+    /*****************************************/
+
+    /**
+     * Получить весь список элементов результата
+     * @param globalResultsElements
+     * @returns {undefined}
+     */
+    getAllResultsElements: ({ globalResultsElements }) => globalResultsElements,
+    /**
+     * Получить элемент из списка по его имени
+     * @param globalResultsElements
+     * @returns {function(*): *|null}
+     */
+    getResultElementOnName:
+        ({ globalResultsElements }) =>
+            (name) =>
+                globalResultsElements[name] ? globalResultsElements[name] : null,
+
+
   },
   actions: {
-    tryAddResultElement(dataResultItem) {
-      const {
-        name,
-        type,
-        label,
-        cost,
-        value,
-        displayValue,
-        formOutputMethod,
-        resultOutputMethod,
-        eventType,
-        unit,
-        isShow,
-        excludeFromCalculations,
-        formulaProcessingLogic,
-        position,
-        zeroValueDisplayIgnore,
-        isDuplicator,
-        parentName,
-      } = dataResultItem;
-
-      this.globalResultsElements[name] = {
-        name,
-        type,
-        label,
-        cost,
-        formOutputMethod,
-        resultOutputMethod,
-        value,
-        summ: cost,
-        displayValue,
-        unit: unit ? unit : null,
-        isShow,
-        excludeFromCalculations,
-        eventType,
-        formulaProcessingLogic,
-        position,
-        zeroValueDisplayIgnore,
-        parentName,
-        isDuplicator: isDuplicator ? isDuplicator : false,
-      };
-    },
-    /**
-     *
-     * Модифицировать поле из результирующего списка новыми данными
-     * @param elementName
-     * @param modifiedFieldName
-     * @param newData
-     */
-    tryModifiedResultElement({ elementName, modifiedFieldName, newData }) {
-      this.globalResultsElements[elementName][modifiedFieldName] = newData;
-    },
 
     /**
      * разрешить отображение подсказок с ошибками
@@ -280,26 +232,23 @@ export const useBaseStore = defineStore("base", {
      * @param elementName
      */
     tryDeleteAllDataOnStoreForElementName(elementName) {
+      const dependencyStore = useDependencyListStore()
+      const resultStore = useResultListStore()
       if (Array.isArray(elementName)) {
         elementName.forEach((name) => {
-          this.dependencyStore.deleteElementInDependencyList(name);
-          this.deleteElementInResultsList(name);
+          dependencyStore.deleteElementInDependencyList(name);
+          resultStore.deleteElementInResultsList(name);
           this.deleteElementInMountedList(name);
           this.deleteElementInValidationsErrorsList(name);
         });
       } else {
-        this.dependencyStore.deleteElementInDependencyList(elementName);
-        this.deleteElementInResultsList(elementName);
+        dependencyStore.deleteElementInDependencyList(elementName);
+        resultStore.deleteElementInResultsList(elementName);
         this.deleteElementInMountedList(elementName);
         this.deleteElementInValidationsErrorsList(elementName);
       }
     },
 
-    deleteElementInResultsList(elementName) {
-      if (elementName in this.globalResultsElements) {
-        delete this.globalResultsElements[elementName];
-      }
-    },
     deleteElementInMountedList(elementName) {
       if (elementName in this.elementsIsMounted) {
         delete this.elementsIsMounted[elementName];
@@ -315,24 +264,7 @@ export const useBaseStore = defineStore("base", {
         this.someElementChangedSelfVisibilityState + 1;
     },
 
-    /**
-     *
-     * @param nameItemList
-     * @returns {boolean}
-     */
-    isElementResult(nameItemList = null) {
-      if (!nameItemList) {
-        return false;
-      }
-      return nameItemList in this.globalResultsElements;
-    },
-    isShowElement(elementName) {
-      const item = this.getResultElementOnName(elementName);
-      if (item !== null) {
-        return item.isShow;
-      }
-      return null;
-    },
+
     /**
      * Подсветить указанный элемент по его имени
      * @param elementName
@@ -343,6 +275,5 @@ export const useBaseStore = defineStore("base", {
         this.nameHighlightElement = null;
       }, 2000);
     },
-
   },
 });

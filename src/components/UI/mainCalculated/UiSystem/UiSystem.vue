@@ -14,6 +14,7 @@ import {
 } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useResultListStore} from "@/store/resultListStore";
 import {storeToRefs} from "pinia";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -43,8 +44,8 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { devMode, getResultElementOnName } = baseStoreRefs;
+const { devMode } = storeToRefs(baseStore);
+const { getResultElementByName } = storeToRefs( useResultListStore());
 const dependencyStore = useDependencyListStore()
 
 const emits = defineEmits(["changedValue"]);
@@ -186,12 +187,12 @@ const processingVariablesInFormula = computed(() => {
   let formulaCostArr = getArrayElementsFromFormula(localCostFormula.value);
   let formulaCost = formulaCostArr?.map((item) => {
     const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
-    const isGlobalVariable = getResultElementOnName.value(item) !== null;
+    const isGlobalVariable = getResultElementByName.value(item) !== null;
 
     if (isReserveVariable) {
       return getProxyFreeVariables(0);
     } else if (isGlobalVariable) {
-      return getResultElementOnName.value(item);
+      return getResultElementByName.value(item);
     } else {
       return item;
     }

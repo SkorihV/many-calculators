@@ -1,6 +1,6 @@
-import { computed } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
 import {storeToRefs} from "pinia";
+import { computed } from "vue";
+import {useResultListStore} from "@/store/resultListStore";
 import {
   getArrayElementsFromFormula,
   getListVariablesMissedInFormula,
@@ -20,14 +20,13 @@ export function useGetOtherGlobalSum(
   viewDuplicator = false,
   parentName = null
 ) {
-  const baseStoreRefs = storeToRefs(useBaseStore())
-  const { getAllResultsElements } = baseStoreRefs;
+  const { getAllResultsList } = storeToRefs(useResultListStore());
   /**
    * Данные которые подходят для вывода или расчета
    * @returns {{length}|unknown[]|*[]}
    */
   const baseDataForCalculate = computed(() => {
-    return Object.values(getAllResultsElements.value).filter((item) => {
+    return Object.values(getAllResultsList.value).filter((item) => {
       if (!viewDuplicator) {
         return !Boolean(item?.isDuplicator);
       } else {

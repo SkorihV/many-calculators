@@ -7,6 +7,7 @@ const label = "Основная формула расчета";
 import { onMounted, ref, watch, computed } from "vue";
 import {useBaseStore} from "@/store/piniaStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useResultListStore} from "@/store/resultListStore";
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
@@ -49,6 +50,7 @@ import {
 } from "@/constants/variables";
 
 const baseStore = useBaseStore()
+const resultStore = useResultListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const dependencyStore = useDependencyListStore()
 
@@ -431,10 +433,10 @@ function changeValue(data) {
     checkEnabledResultButton();
     return false;
   }
-  baseStore.tryAddResultElement(data);
+  resultStore.addResultElement(data);
 
   if (type === "duplicator") {
-    baseStore.tryModifiedResultElement({
+    resultStore.modifiedResultElement({
       elementName: name,
       modifiedFieldName: "insertedTemplates",
       newData: data.insertedTemplates,
@@ -494,7 +496,7 @@ function checkEnabledResultButton() {
  */
 function hiddenElementOnResults(name) {
   if (name in baseDataForCalculate.value) {
-    baseStore.tryModifiedResultElement({
+    resultStore.modifiedResultElement({
       elementName: name,
       modifiedFieldName: "isShow",
       newData: false,
