@@ -5,9 +5,12 @@ const label = "Основная формула расчета";
 
 <script setup>
 import { onMounted, ref, watch, computed } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
+import {useMountedListStore} from "@/store/mountedListStore";
+import {useValidationListStore} from "@/store/validationListStore";
+
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
@@ -54,12 +57,11 @@ const resultStore = useResultListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const dependencyStore = useDependencyListStore()
 
+
 const {
   isCanShowAllTooltips,
-  isExistGlobalErrorsValidationIgnoreHiddenElement,
   devMode,
   showInsideElementStatus,
-  appIsMounted,
   getCurrency,
   methodBeginningCalculationIsAutomatic,
   methodBeginningCalculationIsButton,
@@ -70,6 +72,9 @@ const {
   getRoundOffType,
   getTitleSum,
 } = baseStoreRefs;
+
+const {appIsMounted} = storeToRefs(useMountedListStore())
+const {isExistGlobalErrorsValidationIgnoreHiddenElement} = storeToRefs(useValidationListStore())
 
 const eventNotShowTooltips = [
   "delete",

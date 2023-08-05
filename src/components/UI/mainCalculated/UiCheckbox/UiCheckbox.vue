@@ -13,8 +13,10 @@ import {
   toRef,
   watch,
 } from "vue";
-import { useBaseStore } from "@/store/piniaStore";
+import { useBaseStore } from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useValidationListStore} from "@/store/validationListStore";
+
 import { storeToRefs } from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
@@ -108,6 +110,7 @@ const parentRef = ref(null);
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const dependencyStore = useDependencyListStore()
+const validationStore = useValidationListStore()
 const { isCanShowAllTooltips } = baseStoreRefs;
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
@@ -270,7 +273,7 @@ function changeValue(eventType = "click") {
   }
 }
 function changeValid(eventType) {
-  baseStore.checkValidationDataAndToggle({
+  validationStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,

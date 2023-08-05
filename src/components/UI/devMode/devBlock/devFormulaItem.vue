@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import {storeToRefs} from "pinia";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useDisplayComponentsStore} from "@/store/displayComponentsStore";

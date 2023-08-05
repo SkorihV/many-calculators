@@ -14,8 +14,9 @@ import {
   onUnmounted,
   toRef,
 } from "vue";
-import { useBaseStore } from "@/store/piniaStore";
+import { useBaseStore } from "@/store/baseStore";
 import { storeToRefs } from "pinia";
+
 
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -69,15 +70,6 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
 useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 useDisplaySpinner(props.elementName);
 
-onBeforeMount(() => {
-  baseStore.tryToggleElementIsMounted(props.elementName, false);
-});
-
-onMounted(() => {
-  setTimeout(() => {
-    baseStore.tryToggleElementIsMounted(props.elementName, true);
-  }, 200);
-});
 
 onUnmounted(() => {
   baseStore.tryDeleteAllDataOnStoreForElementName(props.elementName);

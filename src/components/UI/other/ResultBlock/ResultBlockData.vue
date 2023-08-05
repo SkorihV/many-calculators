@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";

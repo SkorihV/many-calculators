@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
+import {useMountedListStore} from "@/store/mountedListStore";
+import {useValidationListStore} from "@/store/validationListStore";
 export const useBaseStore = defineStore("base", {
   state: () => {
     return {
       inputOptions: null,
       shownAllTooltips: false, //  показывать ошибки валидации для всех шаблонов
-      validationsErrorsList: {}, // список элементов с ошибками валидации
       nameTemplatesForStructure: ["UiAccordion", "UiTab", "UiBlockSection"],
       devModeEnabled: false,
       showInsideElementStatusData: false,
-      elementsIsMounted: {},
       tooltipOn: true,
       methodBeginningCalculation: "no",
       initEnabledSendForm: false,
@@ -51,7 +51,6 @@ export const useBaseStore = defineStore("base", {
         : "руб";
     },
 
-
     /**
      * Активирует возможность показывать всплывающие подсказки с ошибками
      * @param state
@@ -60,81 +59,11 @@ export const useBaseStore = defineStore("base", {
     isCanShowAllTooltips: ({ shownAllTooltips }) => {
       return shownAllTooltips;
     },
-    /**
-     * Показать все данные с ошибками по заданному родителю
-     *
-     * @param state
-     * @returns {function(*): unknown[]}
-     */
-    getValidationListOnParentName:
-      ({ validationsErrorsList }) =>
-      (parentName) =>
-        Object.values(validationsErrorsList).filter(
-          (item) => item.parentName === parentName
-        ),
-    /**
-     * Есть ли хоть один видимый элемент-ребенок у родителя
-     * @param state
-     * @returns {function(*): boolean}
-     */
-    isValidationShowOnParentName:
-      ({ validationsErrorsList }) =>
-      (parentName) =>
-        Boolean(
-          Object.values(validationsErrorsList).filter(
-            (item) => item.parentName === parentName && item.isShow
-          ).length
-        ),
-    /**
-     * Есть ли хоть один элемент-ребенок с ошибкой, у родителя
-     * @param state
-     * @returns {function(*): boolean}
-     */
-    isValidationErrorOnParentName:
-      ({ validationsErrorsList }) =>
-      (parentName) => {
-        return Boolean(
-          Object.values(validationsErrorsList).filter(
-            (item) => item.parentName === parentName && item.error
-          ).length
-        );
-      },
-    /**
-     * Есть ли во всем калькуляторе элементы с ошибками валидации
-     * игнорировать скрытые элементы
-     * @param state
-     * @returns {boolean}
-     */
-
-    isExistGlobalErrorsValidationIgnoreHiddenElement: ({
-      validationsErrorsList,
-    }) =>
-      Boolean(
-        Object.values(validationsErrorsList).filter(
-          (item) => item.error && item.isShow
-        ).length
-      ),
-    /**
-     * Есть ли во всем калькуляторе элементы с ошибками валидации
-     * учитывать скрытые элементы
-     * @param state
-     * @returns {boolean}
-     */
-    isExistGlobalErrorsValidationTakeIntoHiddenElement: ({
-      validationsErrorsList,
-    }) =>
-      Boolean(
-        Object.values(validationsErrorsList).filter((item) => item.error).length
-      ),
-
     devMode: ({ devModeEnabled }) => devModeEnabled,
     showInsideElementStatus: ({ showInsideElementStatusData }) =>
       showInsideElementStatusData,
     getImageDir: () => (window?.imageDir ? window.imageDir : ""),
-    appIsMounted: ({ elementsIsMounted }) =>
-      !Boolean(
-        Object.values(elementsIsMounted).filter((value) => !value).length
-      ),
+
     isTooltipOn: ({ tooltipOn }) => tooltipOn,
     checkedIsStructureTemplate:
       ({ nameTemplatesForStructure }) =>
@@ -169,27 +98,6 @@ export const useBaseStore = defineStore("base", {
     getNameHighlightElement({ nameHighlightElement }) {
       return nameHighlightElement;
     },
-
-
-    /*****************************************/
-
-    /**
-     * Получить весь список элементов результата
-     * @param globalResultsElements
-     * @returns {undefined}
-     */
-    getAllResultsElements: ({ globalResultsElements }) => globalResultsElements,
-    /**
-     * Получить элемент из списка по его имени
-     * @param globalResultsElements
-     * @returns {function(*): *|null}
-     */
-    getResultElementOnName:
-        ({ globalResultsElements }) =>
-            (name) =>
-                globalResultsElements[name] ? globalResultsElements[name] : null,
-
-
   },
   actions: {
 
@@ -199,22 +107,14 @@ export const useBaseStore = defineStore("base", {
     showAllTooltipsOn() {
       this.shownAllTooltips = true;
     },
-    /**
-     *  добавить/обновить ошибку в общий список
-     * @param data
-     */
-    checkValidationDataAndToggle(data) {
-      this.validationsErrorsList[data.name] = data;
-    },
+
     tryToggleDevMode(flag) {
       this.devModeEnabled = flag;
     },
     tryToggleShowInsideElementStatus(flag) {
       this.showInsideElementStatusData = flag;
     },
-    tryToggleElementIsMounted(name, flag) {
-      this.elementsIsMounted[name] = flag;
-    },
+
     setTooltipOn(dataOptions) {
       this.tooltipOn = !Boolean(dataOptions?.tooltipOff);
     },
@@ -234,37 +134,27 @@ export const useBaseStore = defineStore("base", {
     tryDeleteAllDataOnStoreForElementName(elementName) {
       const dependencyStore = useDependencyListStore()
       const resultStore = useResultListStore()
+      const mountedStore = useMountedListStore()
+      const validationStore = useValidationListStore()
       if (Array.isArray(elementName)) {
         elementName.forEach((name) => {
           dependencyStore.deleteElementInDependencyList(name);
           resultStore.deleteElementInResultsList(name);
-          this.deleteElementInMountedList(name);
-          this.deleteElementInValidationsErrorsList(name);
+          mountedStore.deleteElementInMountedList(name);
+          validationStore.deleteElementInValidationsErrorsList(name);
         });
       } else {
         dependencyStore.deleteElementInDependencyList(elementName);
         resultStore.deleteElementInResultsList(elementName);
-        this.deleteElementInMountedList(elementName);
-        this.deleteElementInValidationsErrorsList(elementName);
+        mountedStore.deleteElementInMountedList(elementName);
+        validationStore.deleteElementInValidationsErrorsList(elementName);
       }
     },
 
-    deleteElementInMountedList(elementName) {
-      if (elementName in this.elementsIsMounted) {
-        delete this.elementsIsMounted[elementName];
-      }
-    },
-    deleteElementInValidationsErrorsList(elementName) {
-      if (elementName in this.validationsErrorsList) {
-        delete this.validationsErrorsList[elementName];
-      }
-    },
     initSomeElementChangedSelfVisibilityState() {
       this.someElementChangedSelfVisibilityState =
         this.someElementChangedSelfVisibilityState + 1;
     },
-
-
     /**
      * Подсветить указанный элемент по его имени
      * @param elementName

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, defineProps, ref } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 

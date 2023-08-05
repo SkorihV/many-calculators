@@ -1,5 +1,5 @@
 import { computed, toRef, watch } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 

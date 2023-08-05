@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, toRef } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
+import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
 import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
@@ -13,9 +14,9 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { getCurrentWidthElement } from "@/composables/useWidthElement";
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { isCanShowAllTooltips, getValidationListOnParentName } =
-    baseStoreRefs;
+const { isCanShowAllTooltips } = storeToRefs(baseStore);
+const {getValidationListByParentName} = storeToRefs(useValidationListStore())
+
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -50,7 +51,7 @@ function changeValue(data) {
  * @returns {function(*): *[]}
  */
 const localListValidationError = computed(() => {
-  return getValidationListOnParentName.value(props.elementName);
+  return getValidationListByParentName.value(props.elementName);
 });
 
 const isShowError = computed(() => {

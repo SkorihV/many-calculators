@@ -4,7 +4,8 @@ const typeElement = "ResultButton";
 
 <script setup>
 import { computed, reactive, ref, watch } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
+import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -13,13 +14,13 @@ import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const {  
+const {
   methodBeginningCalculationIsButton,
-  isExistGlobalErrorsValidationIgnoreHiddenElement,
   checkAllowShowResultBlock,
   devMode,
-} = baseStoreRefs;
+} = storeToRefs(baseStore);
+
+const {isExistGlobalErrorsValidationIgnoreHiddenElement} = storeToRefs(useValidationListStore())
 
 const emits = defineEmits(["checkEnabledResultButton"]);
 const props = defineProps({

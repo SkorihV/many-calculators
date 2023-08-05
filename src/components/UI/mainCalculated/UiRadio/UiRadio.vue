@@ -12,8 +12,9 @@ import {
   watch,
   computed,
 } from "vue";
-import {useBaseStore } from "@/store/piniaStore";
+import {useBaseStore } from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useValidationListStore} from "@/store/validationListStore";
 import { storeToRefs } from "pinia";
 
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
@@ -34,6 +35,10 @@ import {
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import { useHighlightElement } from "@/composables/useHighlightElement";
+import {useDisplayComponents} from "@/composables/useDisplayComponents";
+
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -98,7 +103,7 @@ const props = defineProps({
 
 const currentIndexRadioButton = ref(null);
 const textErrorNotEmpty = ref("Обязательное поле.");
-// const localElementName = ref(null);
+
 const bufferRadioListOnOut = ref([]);
 const originRadioList = ref([]);
 const canBeShownTooltip = ref(false);
@@ -109,10 +114,8 @@ const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, isCanShowAllTooltips } = baseStoreRefs;
 const dependencyStore = useDependencyListStore()
+const validationStore = useValidationListStore()
 
-import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
-import { useHighlightElement } from "@/composables/useHighlightElement";
-import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -407,7 +410,7 @@ function changeValue(eventType = "click") {
 }
 
 function changeValid(eventType) {
-  baseStore.checkValidationDataAndToggle({
+  validationStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
       ? isErrorEmpty.value
       : isVisibilityFromDependency.value,

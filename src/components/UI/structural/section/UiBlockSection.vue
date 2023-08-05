@@ -11,7 +11,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 
 import { computed, reactive, ref, toRef, watch, onMounted } from "vue";
 import {storeToRefs} from "pinia";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 

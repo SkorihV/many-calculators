@@ -4,7 +4,7 @@ const typeElement = "DuplicatorMain";
 
 <script setup>
 import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 
 import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";

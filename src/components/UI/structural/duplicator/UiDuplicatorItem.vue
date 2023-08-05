@@ -12,7 +12,7 @@ import {
   toRef,
   onUnmounted,
 } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {storeToRefs} from "pinia";

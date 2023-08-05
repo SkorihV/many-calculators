@@ -12,10 +12,12 @@ import {
   toRef,
   watch,
 } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
+import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
+
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
@@ -47,6 +49,8 @@ const baseStore = useBaseStore()
 const { devMode } = storeToRefs(baseStore);
 const { getResultElementByName } = storeToRefs( useResultListStore());
 const dependencyStore = useDependencyListStore()
+const validationStore = useValidationListStore()
+
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -308,7 +312,7 @@ function changeValue(eventType = "system") {
 }
 
 function changeValid(eventType) {
-  baseStore.checkValidationDataAndToggle({
+  validationStore.checkValidationDataAndToggle({
     error: false,
     name: localElementName.value,
     type: "system",

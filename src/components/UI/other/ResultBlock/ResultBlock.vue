@@ -5,7 +5,9 @@ const label = "Блок с результатами";
 
 <script setup>
 import { computed, reactive, ref, watch } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
+import {useValidationListStore} from "@/store/validationListStore";
+
 import {storeToRefs} from "pinia";
 
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
@@ -18,12 +20,11 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
 const {
-  isExistGlobalErrorsValidationIgnoreHiddenElement,
   checkInitEnabledSendForm,
   checkAllowShowResultBlock,
-} = baseStoreRefs;
+} = storeToRefs(baseStore);
+const { isExistGlobalErrorsValidationIgnoreHiddenElement } = storeToRefs(useValidationListStore())
 
 const props = defineProps({
   resultOptions: {

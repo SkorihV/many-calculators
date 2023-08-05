@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 
 import { replaceSpecSymbols } from "@/servises/UtilityServices";

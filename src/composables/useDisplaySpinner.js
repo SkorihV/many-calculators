@@ -1,15 +1,15 @@
 import { onBeforeMount, onMounted } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useMountedListStore} from "@/store/mountedListStore";
 
 export function useDisplaySpinner(elementName) {
-  const baseStore = useBaseStore()
+  const mountedStore = useMountedListStore()
 
   onBeforeMount(() => {
-    baseStore.tryToggleElementIsMounted(elementName, false);
+    mountedStore.toggleElementIsMounted(elementName, false);
   });
   onMounted(() => {
     setTimeout(() => {
-      baseStore.tryToggleElementIsMounted(elementName, true);
+      mountedStore.toggleElementIsMounted(elementName, true);
     }, 200);
   });
 }

@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, onMounted, ref, watch, computed } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { isBoolean } from "@/validators/validators";
 import { useEventListener } from "@/composables/useEventsListener";

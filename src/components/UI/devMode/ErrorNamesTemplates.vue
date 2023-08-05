@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
 

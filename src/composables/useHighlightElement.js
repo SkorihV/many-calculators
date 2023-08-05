@@ -1,5 +1,5 @@
 import { computed, unref } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 
 export function useHighlightElement(elementName) {

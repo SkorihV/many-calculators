@@ -13,8 +13,10 @@ import {
   computed,
   nextTick,
 } from "vue";
-import { useBaseStore } from "@/store/piniaStore";
+import { useBaseStore } from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useValidationListStore} from "@/store/validationListStore";
+
 import { storeToRefs } from "pinia";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -41,6 +43,7 @@ const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const { devMode, isCanShowAllTooltips } = baseStoreRefs;
 const dependencyStore = useDependencyListStore()
+const validationStore = useValidationListStore()
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -511,7 +514,7 @@ function changeValid(eventType) {
       isErrorNumber.value,
     ].some((item) => item);
 
-    baseStore.checkValidationDataAndToggle({
+    validationStore.checkValidationDataAndToggle({
       error: isVisibilityFromDependency.value
         ? isInvalid.value
         : isVisibilityFromDependency.value,

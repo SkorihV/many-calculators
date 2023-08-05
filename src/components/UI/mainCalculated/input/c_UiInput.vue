@@ -7,7 +7,7 @@ import { MixinsGeneralItemData } from "@/mixins/MixinsGeneralItemData";
 import { MixinCurrentWidthElement } from "@/mixins/MixinCurrentWidthElement";
 import { MixinDisplaySpinner } from "@/mixins/MixinDisplaySpinner";
 
-import { useBaseStore } from "@/store/piniaStore";
+import { useBaseStore } from "@/store/baseStore";
 import { mapState } from "pinia";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";

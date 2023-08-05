@@ -4,7 +4,7 @@ const typeElement = "Tab";
 
 <script setup>
 import { computed, reactive, ref, toRef } from "vue";
-import {useBaseStore} from "@/store/piniaStore";
+import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
@@ -17,6 +17,7 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import {useValidationListStore} from "@/store/validationListStore";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -43,12 +44,9 @@ const props = defineProps({
 const parent = ref(null);
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const {
-  isCanShowAllTooltips,
-  isValidationShowOnParentName,
-  isValidationErrorOnParentName,
-} = baseStoreRefs;
+const { isCanShowAllTooltips } = storeToRefs(baseStore)
+const { isValidationErrorByParentName, isValidationShowByParentName } = storeToRefs(useValidationListStore())
+
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
@@ -73,7 +71,7 @@ function changeValue(data) {
 }
 
 function checkIsShowError(parentName, key) {
-  const isError = isValidationErrorOnParentName.value(parentName);
+  const isError = isValidationErrorByParentName.value(parentName);
   return key !== shownIdTab.value && isError && isCanShowAllTooltips.value;
 }
 
@@ -125,7 +123,7 @@ const isExistLabel = computed(() => {
               ),
             }"
             v-if="
-              isValidationShowOnParentName(
+              isValidationShowByParentName(
                 elementName + item?.json_id + '_' + idx ||
                   elementName + 'tabItem' + '_' + idx
               )
