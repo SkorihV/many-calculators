@@ -504,7 +504,7 @@ function changeValid(eventType) {
 function tryPassDependency() {
   dependencyStore.addDependencyElement({
     name: localElementName.value,
-    value: currentOptionValue,
+    value: currentOptionValue.value,
     isShow: isVisibilityFromDependency.value,
     displayValue: currentOptionDisplayValue,
     type: "select",

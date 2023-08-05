@@ -534,7 +534,7 @@ function changeValid(eventType) {
 function tryPassDependency() {
   dependencyStore.addDependencyElement({
     name: localElementName.value,
-    value: resultValue.value?.toString()?.length ? resultValue : null,
+    value: resultValue.value?.toString()?.length ? resultValue.value : null,
     isShow: isVisibilityFromDependency.value,
     displayValue: resultValue.value?.toString()?.length
       ? resultValue

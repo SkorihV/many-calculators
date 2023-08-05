@@ -13,7 +13,7 @@ import goScrollToElement from "@/composables/goScrollToElement";
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
 const {getElementByNameInDependency, isElementDependency} = storeToRefs(useDependencyListStore())
-const { isDisplayingComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
+const { isShowComponent: isShowComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
 const { getResultElementByName } = storeToRefs(resultStore)
 
 
@@ -129,9 +129,9 @@ const isExist = computed(() => {
 
 const isHiddenElement = computed(() => {
   return isVariableParam.value &&
-    isDisplayingComponent.value(props.formulaItem) !== null &&
+    isShowComponent.value(props.formulaItem) !== null &&
     isExist.value
-    ? !isDisplayingComponent.value(props.formulaItem)
+    ? !isShowComponent.value(props.formulaItem)
     : false;
 });
 

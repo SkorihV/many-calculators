@@ -8,7 +8,7 @@ export const useDisplayComponentsStore = defineStore( 'displayComponents',{
         isExistComponent: ({components}) => (name) => {
             return name in components;
         },
-        isDisplayingComponent: ({components}) => (name) => {
+        isShowComponent: ({components}) => (name) => {
            if (name in components) {
                return components[name]?.isShow;
            }

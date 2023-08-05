@@ -4,9 +4,11 @@ import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
+import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
+const {isShowComponent} = storeToRefs(useDisplayComponentsStore())
 const { getCurrency, getTitleSum } = baseStoreRefs;
 
 const props = defineProps({
