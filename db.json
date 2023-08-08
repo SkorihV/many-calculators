@@ -512,6 +512,7 @@
           {
             "title": "Элемент списка - Москва",
             "selectName": "Москва",
+            "cost": 50,
             "extraValueForDependency": "москва",
             "dependencyFormulaItem": "_self_ !== куда"
           },

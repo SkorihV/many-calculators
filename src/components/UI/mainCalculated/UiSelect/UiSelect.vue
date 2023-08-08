@@ -39,6 +39,7 @@ import { useReportInitialStatusForElement } from "@/composables/useReportInitial
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useElementNameList } from "@/composables/useElementNameList";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -136,6 +137,7 @@ const {
   })
 );
 
+
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -179,7 +181,10 @@ const localElementName = computed(() => {
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+
 const isCurrentIndexOptionsNotExist = computed(() => {
   return currentIndexOption.value === null;
 });
@@ -559,7 +564,7 @@ function initSelect(eventType) {
   }
 }
 
-useDisplaySpinner(localElementName.value);
+
 useEventListener(window, "click", clickClose);
 
 onMounted(() => {

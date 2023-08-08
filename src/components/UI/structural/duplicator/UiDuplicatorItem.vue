@@ -46,7 +46,7 @@ const baseStore = useBaseStore()
 const dependencyStore = useDependencyListStore()
 const resultStore = useResultListStore()
 const { devMode, checkedIsStructureTemplate } = storeToRefs(baseStore);
-const { getResultElementByName } = storeToRefs(resultStore)
+const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
 
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"]);
@@ -107,7 +107,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       parentIsShow: toRef(props, "parentIsShow"),
     })
   );
-useDisplayComponents(mutationsInputData.value.elementName, isVisibilityFromDependency, typeElement)
+useDisplayComponents(mutationsInputData.value?.elementName, isVisibilityFromDependency, typeElement)
 
 /**
  *
@@ -502,7 +502,7 @@ function addIndexIndexInFormulaElements(formulaString, index) {
 function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
-  const isGlobalVariable = resultStore.isElementResult(item);
+  const isGlobalVariable = isElementResult.value(item);
 
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }

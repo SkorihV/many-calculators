@@ -6,7 +6,6 @@ export default function goScrollToElement(
 ) {
   nextTick(() => {
     const elementToScroll = document.querySelector("#" + elementNameToScroll);
-
     if (Boolean(elementToScroll)) {
       elementToScroll.scrollIntoView({
         behavior: "smooth",

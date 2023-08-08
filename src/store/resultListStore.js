@@ -20,7 +20,17 @@ export const useResultListStore = defineStore('resultList', {
             ({ resultList }) =>
                 (name) =>
                    name in resultList ? resultList[name] : null,
-
+        /**
+         *
+         * @param name
+         * @returns {boolean}
+         */
+        isElementResult: ({ resultList }) => (name = null) => {
+            if (!name) {
+                return false;
+            }
+            return name in resultList;
+        },
     },
     actions: {
         addResultElement(dataResultItem) {
@@ -78,17 +88,6 @@ export const useResultListStore = defineStore('resultList', {
             if (elementName in this.resultList) {
                 delete this.resultList[elementName];
             }
-        },
-        /**
-         *
-         * @param name
-         * @returns {boolean}
-         */
-        isElementResult(name = null) {
-            if (!name) {
-                return false;
-            }
-            return name in this.resultList;
         },
 
     }

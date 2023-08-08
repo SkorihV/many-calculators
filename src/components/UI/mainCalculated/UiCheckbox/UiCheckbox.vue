@@ -16,6 +16,7 @@ import {
 import { useBaseStore } from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useValidationListStore} from "@/store/validationListStore";
+import {useElementNameList} from "@/composables/useElementNameList";
 
 import { storeToRefs } from "pinia";
 
@@ -133,7 +134,8 @@ useReportInitialStatusForElement(
   changeValue,
   changeValid
 );
-useDisplaySpinner(props.elementName);
+
+
 
 const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
@@ -179,6 +181,9 @@ const localElementName = computed(() => {
 
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useDisplaySpinner(localElementName.value);
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+
 const isErrorEmpty = computed(() => {
   return Boolean(props.isNeedChoice && !isLocalChecked.value);
 });

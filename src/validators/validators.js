@@ -44,8 +44,8 @@ export const isNotNull = (data) => {
   return data?.toString().trim() !== "null" && data !== null;
 };
 
-export const isSpecSymbol = (data) => {
-  return [...LIST_BANNED_ELEMENTS_NAME].includes(data);
+export const isSpecSymbol = (variable) => {
+  return [...LIST_BANNED_ELEMENTS_NAME].includes(variable);
 };
 
 export const IS_SPEC_VARIABLES = (variable) => {

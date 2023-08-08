@@ -38,6 +38,7 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useElementNameList } from "@/composables/useElementNameList";
 
 
 const emits = defineEmits(["changedValue"]);
@@ -135,7 +136,7 @@ const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
 );
-useDisplaySpinner(props.elementName);
+
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -147,6 +148,10 @@ const localElementName = computed(()=> {
       ? props.elementName
       : Math.random().toString();
 })
+const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useDisplaySpinner(localElementName.value);
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
 
 onMounted(() => {
   originRadioList.value = JSON.parse(JSON.stringify(props.radioValues)).map(
@@ -163,13 +168,12 @@ onMounted(() => {
     changeValue("mounted");
   }, 100);
 });
-useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 
 onUnmounted(() => {
   baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 
-const { isHighlightElement } = useHighlightElement(localElementName);
+
 
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);

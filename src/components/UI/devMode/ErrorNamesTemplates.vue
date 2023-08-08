@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import {useBaseStore} from "@/store/baseStore";
+import {useElementNamesStore} from "@/store/elementNamesStore";
 import {storeToRefs} from "pinia";
 import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
 
@@ -18,8 +19,8 @@ import {
 import { replaceSpecSymbols } from "@/servises/UtilityServices";
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { devMode } = baseStoreRefs;
+const {getAllNameListByArray} = storeToRefs(useElementNamesStore())
+const { devMode } = storeToRefs(baseStore);
 
 const props = defineProps({
   templates: {
@@ -340,19 +341,19 @@ const isExistError = computed(() => {
     </div>
     <template v-if="displayAlert">
       <div class="calc__error-content">
-        <template v-if="listExistElementNames.length">
+        <template v-if="getAllNameListByArray.length">
           <div class="calc__error-label">
-            Список всех имен элементов Заголовок / Имя:
+            Список всех элементов Заголовок / Имя:
           </div>
           <div
             class="calc__error-item"
-            v-for="(data, key) in listExistElementNames"
+            v-for="(data, key) in getAllNameListByArray"
             :key="key"
           >
             <div class="calc__error-item-name">
               {{ data.label ? data.label : "Без заголовка " }} /
               <dev-formula-block-wrapper
-                :formula="data.elementName"
+                :formula="data.name"
                 is-result
               />
             </div>

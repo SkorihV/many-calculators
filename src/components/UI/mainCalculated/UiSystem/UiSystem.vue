@@ -44,6 +44,7 @@ import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useElementNameList } from "@/composables/useElementNameList";
 
 const baseStore = useBaseStore()
 const { devMode } = storeToRefs(baseStore);
@@ -121,7 +122,6 @@ useReportInitialStatusForElement(
   changeValue,
   changeValid
 );
-useDisplaySpinner(props.elementName);
 const { initProcessingDependencyPrice } = useInitProcessingDependencyPrice(
   toRef(props, "dependencyPrices")
 );
@@ -145,7 +145,9 @@ const localElementName = computed(() => {
     : "Math.random().toString()";
 });
 const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
 /**
  * Возвращает формулу цены без данных
  * @returns {number|*|number|string|null}

@@ -2777,7 +2777,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       background-color: #fff;
     }
     &-switcher {
-      width: 70px;
+      width: 50px;
       display: flex;
       justify-content: center;
     }

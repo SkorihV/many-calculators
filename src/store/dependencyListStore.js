@@ -1,7 +1,7 @@
 
 import {defineStore} from "pinia";
 
-export const useDependencyListStore = defineStore('dependencyListStore', {
+export const useDependencyListStore = defineStore('dependencyList', {
     state: () => ({
             // dependencyList: new Map()
             dependencyList: {}

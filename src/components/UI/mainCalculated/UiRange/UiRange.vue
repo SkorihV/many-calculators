@@ -39,6 +39,7 @@ import { useReportInitialStatusForElement } from "@/composables/useReportInitial
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import { useCheckedValueMinMax } from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useElementNameList } from "@/composables/useElementNameList";
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
@@ -172,7 +173,6 @@ const { currentWidthElement, updatedCurrentWidth } = getCurrentWidthElement(
   parentRef
 );
 
-useDisplaySpinner(props.elementName);
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -210,7 +210,10 @@ const localElementName = computed(() => {
     : Math.random().toString();
 });
 const { isHighlightElement } = useHighlightElement(localElementName);
+useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+
 const isErrorEmpty = computed(() => {
   return props.notEmpty && resultValue.value === null;
 });

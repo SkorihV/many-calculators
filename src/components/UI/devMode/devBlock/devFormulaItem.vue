@@ -5,6 +5,7 @@ import {useBaseStore} from "@/store/baseStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
+import {useElementNamesStore} from "@/store/elementNamesStore";
 
 import { isVariable } from "@/validators/validators";
 import { checkLogicAndReturnValue } from "@/servises/UtilityServices";
@@ -14,7 +15,8 @@ const baseStore = useBaseStore()
 const resultStore = useResultListStore()
 const {getElementByNameInDependency, isElementDependency} = storeToRefs(useDependencyListStore())
 const { isShowComponent: isShowComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
-const { getResultElementByName } = storeToRefs(resultStore)
+const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
+const {getAllNameListByArray} = storeToRefs(useElementNamesStore())
 
 
 const props = defineProps({
@@ -46,16 +48,23 @@ const props = defineProps({
 
 const isVariableParam = computed(() => {
   if (typeof props.formulaItem === "object") {
-    return isVariable(props.formulaItem.name);
+    return getAllNameListByArray.value.find(item => item.name === props.formulaItem.name)
   } else {
-    return isVariable(props.formulaItem);
+    return getAllNameListByArray.value.find(item => item.name === props.formulaItem)
   }
 });
+
+const isId = computed(() => {
+  if (typeof props.formulaItem === "object") {
+    return !isVariable(props.formulaItem.name);
+  } else {
+    return !isVariable(props.formulaItem);
+  }
+})
 
 const itemDependencyData = computed(() => {
   const formula = props.formulaItem;
   if (
-    isVariableParam.value &&
     props.isDependency &&
     isElementDependency.value(formula)
   ) {
@@ -66,7 +75,7 @@ const itemDependencyData = computed(() => {
 
 const itemResultData = computed(() => {
   const formula = props.formulaItem;
-  if (isVariableParam.value && props.isResult && resultStore.isElementResult(formula)) {
+  if (props.isResult && isElementResult.value(formula)) {
     return getResultElementByName.value(formula);
   }
   return formula;
@@ -128,8 +137,7 @@ const isExist = computed(() => {
 });
 
 const isHiddenElement = computed(() => {
-  return isVariableParam.value &&
-    isShowComponent.value(props.formulaItem) !== null &&
+  return isShowComponent.value(props.formulaItem) !== null &&
     isExist.value
     ? !isShowComponent.value(props.formulaItem)
     : false;
@@ -157,10 +165,10 @@ const classes = computed(() => {
 });
 function goToElement() {
   if (!isHiddenElement.value && isVariableParam.value) {
-    goScrollToElement(props.formulaItem, "center");
-    if (isVariableParam.value) {
-      baseStore.setNameHighlightElement(props.formulaItem);
+    if (!isId.value) {
+      goScrollToElement(props.formulaItem, "center");
     }
+    baseStore.setNameHighlightElement(props.formulaItem);
   }
 }
 </script>
@@ -172,7 +180,7 @@ function goToElement() {
     :class="[...classes]"
     @click="goToElement"
   >
-    {{ localName }}
+    <span>{{ isId ? 'Без имени: ' : localName }}</span>
     <template v-if="showValue">  {{ itemValue }}</template>
     <template v-if="showCost">   {{ itemCost }}</template>
   </div>

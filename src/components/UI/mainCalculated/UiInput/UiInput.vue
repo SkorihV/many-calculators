@@ -37,6 +37,7 @@ import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessin
 import { REGEXP_SPACES } from "@/constants/regexp";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { useElementNameList } from "@/composables/useElementNameList";
 
 
 const baseStore = useBaseStore()
@@ -185,7 +186,7 @@ const { currentWidthElement } = getCurrentWidthElement(
   parentRef
 );
 
-useDisplaySpinner(props.elementName);
+
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -247,6 +248,8 @@ const localElementName = computed(() => {
 
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
+useDisplaySpinner(localElementName.value);
+useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
 
 const resultValue = computed(() => {
   if (!isVisibilityFromDependency.value) {
