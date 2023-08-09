@@ -1,7 +1,7 @@
 import {
   SPEC_SYMBOLS,
   ERROR_PADDING,
-  ERROR_ELEMENT_IS_NOT_EXIST,
+  ERROR_ELEMENT_IS_NOT_EXIST, NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM
 } from "@/constants/variables";
 import {
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
@@ -294,6 +294,10 @@ const getArrayElementsFromFormula = (formula) => {
   return getArrayOnFormula(replaceSpecSymbols(formula));
 };
 
+function isOtherOrGlobalSum(variable) {
+  return variable.match(NAME_RESERVED_VARIABLE_SUM) !== null || variable.match(NAME_RESERVED_VARIABLE_GLOBAL_SUM) !== null
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -308,4 +312,5 @@ export {
   getArrayOnFormula,
   checkLogicAndReturnValue,
   getListVariablesUsedInFormula,
+  isOtherOrGlobalSum
 };

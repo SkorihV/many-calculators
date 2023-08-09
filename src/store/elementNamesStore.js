@@ -6,7 +6,8 @@ export const useElementNamesStore = defineStore("elementNames", {
   }),
   getters: {
     getAllNameList: ({nameList}) => nameList,
-    getAllNameListByArray: ({nameList}) => Object.values(nameList).sort( (a, b) => a.position - b.position )
+    getAllNameListByArray: ({nameList}) => Object.values(nameList).sort( (a, b) => a.position - b.position ),
+    isExistName: ({nameList}) => (name) => name in nameList
   },
   actions: {
     addNameInList({name, label, position}) {

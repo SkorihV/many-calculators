@@ -10,6 +10,8 @@ import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useMountedListStore} from "@/store/mountedListStore";
 import {useValidationListStore} from "@/store/validationListStore";
+import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
+import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 
 import {storeToRefs} from "pinia";
 
@@ -51,11 +53,15 @@ import {
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
   NAME_RESERVED_VARIABLE_SUM,
 } from "@/constants/variables";
+import { useElementNamesStore } from "@/store/elementNamesStore";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const dependencyStore = useDependencyListStore()
+const nameStore = useElementNamesStore()
+const displayStore = useDisplayComponentsStore()
+const innerStore = useInnerVariablesStore()
 
 
 const {
@@ -156,14 +162,24 @@ const { variablesInFormula, summaFreeVariables, baseDataForCalculate } =
 watch(
   summaFreeVariables,
   () => {
-    tryPassDependency(
-      NAME_RESERVED_VARIABLE_SUM,
-      summaFreeVariables.value,
-      Boolean(summaFreeVariables.value !== null),
-      summaFreeVariables.value,
-      NAME_RESERVED_VARIABLE_SUM,
-      summaFreeVariables.value
-    );
+    let isShow = Boolean(summaFreeVariables.value !== null)
+    // tryPassDependency(
+    //   NAME_RESERVED_VARIABLE_SUM,
+    //   summaFreeVariables.value,
+    //   isShow,
+    //   summaFreeVariables.value,
+    //   NAME_RESERVED_VARIABLE_SUM,
+    //   summaFreeVariables.value
+    // );
+    innerStore.addInnerVariable({
+      name: NAME_RESERVED_VARIABLE_SUM,
+      value: summaFreeVariables.value,
+      cost: summaFreeVariables.value,
+      isShow,
+    })
+    nameStore.addNameInList({name: NAME_RESERVED_VARIABLE_SUM, label: NAME_RESERVED_VARIABLE_SUM, position: -1})
+    displayStore.addDisplayComponent({isShow: isShow, name: NAME_RESERVED_VARIABLE_SUM, type: NAME_RESERVED_VARIABLE_SUM})
+
   },
   {
     immediate: true,
@@ -283,15 +299,24 @@ const finalSummaForOutput = computed(() => {
     !displayResultData.value ||
     isExistGlobalErrorsValidationIgnoreHiddenElement.value
   ) {
-    tryPassDependency(
-      NAME_RESERVED_VARIABLE_GLOBAL_SUM,
-      null,
-      false,
-      null,
-      "App_calc"
-    );
+    // tryPassDependency(
+    //   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+    //   null,
+    //   false,
+    //   null,
+    //   "App_calc"
+    // );
+
+    innerStore.addInnerVariable({
+      name: NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+      value: null,
+      cost: null,
+      isShow: false
+    })
+    displayStore.addDisplayComponent({isShow: false, name: NAME_RESERVED_VARIABLE_GLOBAL_SUM, type: NAME_RESERVED_VARIABLE_GLOBAL_SUM})
     return null;
   }
+
   let resultSum = null;
   if (isUseFormula.value && mainFormulaIsExist.value) {
     resultSum = combinedFormulaDataTogether.value;
@@ -308,15 +333,24 @@ const finalSummaForOutput = computed(() => {
     getSignAfterDot.value,
     getRoundOffType.value
   );
+  let isShow = Boolean(resultSum !== null)
+  // tryPassDependency(
+  //   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  //   resultSum,
+  //   isShow,
+  //   resultSum,
+  //   "App_calc",
+  //   resultSum
+  // );
+  innerStore.addInnerVariable({
+    name: NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+    value: resultSum,
+    cost: resultSum,
+    isShow: isShow
+  })
+  nameStore.addNameInList({name: NAME_RESERVED_VARIABLE_GLOBAL_SUM, label: NAME_RESERVED_VARIABLE_GLOBAL_SUM, position: -2})
+  displayStore.addDisplayComponent({isShow: isShow, name: NAME_RESERVED_VARIABLE_GLOBAL_SUM, type: NAME_RESERVED_VARIABLE_GLOBAL_SUM})
 
-  tryPassDependency(
-    "_globalSum_",
-    resultSum,
-    Boolean(resultSum !== null),
-    resultSum,
-    "App_calc",
-    resultSum
-  );
 
   return resultSum;
 });
@@ -592,23 +626,23 @@ function toggleTextAreaResultForDevMode() {
   }
 }
 
-function tryPassDependency(
-  name,
-  value,
-  isShow,
-  displayValue,
-  type,
-  cost = null
-) {
-  dependencyStore.addDependencyElement({
-    name,
-    value,
-    isShow,
-    displayValue,
-    type,
-    cost,
-  });
-}
+// function tryPassDependency(
+//   name,
+//   value,
+//   isShow,
+//   displayValue,
+//   type,
+//   cost = null
+// ) {
+//   dependencyStore.addDependencyElement({
+//     name,
+//     value,
+//     isShow,
+//     displayValue,
+//     type,
+//     cost,
+//   });
+// }
 
 onMounted(async () => {
   if (IS_LOCAL) {

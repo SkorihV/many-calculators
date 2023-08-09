@@ -304,7 +304,7 @@
       {
         "json_id": "148686907",
         "title": "Параметр 1",
-        "label": "",
+        "label": "Галочка странная",
         "buttonText": "Параметр 1",
         "buttonTextChecked": "",
         "costForVoid": "1500",
@@ -451,7 +451,8 @@
             "title": "Элемент списка - Москва",
             "selectName": "Москва",
             "extraValueForDependency": "москва",
-            "dependencyFormulaItem": "_self_ !== откуда"
+            "dependencyFormulaItem": "_self_ !== откуда",
+            "cost": 4554
           },
           {
             "title": "Элемент списка - Московская Область",

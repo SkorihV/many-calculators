@@ -22,6 +22,11 @@ export const useDisplayComponentsStore = defineStore( 'displayComponents',{
             }
           this.components[dataElement.name] = dataElement
         },
+        deleteDisplayInList(name) {
+            if (name in this.components) {
+                delete this.components[name]
+            }
+        }
 
     }
 })

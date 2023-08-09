@@ -15,6 +15,9 @@ import {
 import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
+import { useElementNamesStore } from "@/store/elementNamesStore";
+import { useDisplayComponentsStore } from "@/store/displayComponentsStore";
+import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import {storeToRefs} from "pinia";
 
 import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
@@ -38,13 +41,17 @@ import {
   REGEXP_VARIABLE,
 } from "@/constants/regexp";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
-import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+import { NAME_RESERVED_VARIABLE_GLOBAL_SUM, NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+
 
 const baseStore = useBaseStore()
 const dependencyStore = useDependencyListStore()
 const resultStore = useResultListStore()
+const displayStore = useDisplayComponentsStore()
+const nameStore = useElementNamesStore()
+const innerStore = useInnerVariablesStore()
 const { devMode, checkedIsStructureTemplate } = storeToRefs(baseStore);
 const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
 
@@ -356,14 +363,29 @@ watch(localCost, (newValue, oldValue) => {
 watch(
   summaFreeVariables,
   (newValue) => {
-    dependencyStore.addDependencyElement({
-      name: NAME_RESERVED_VARIABLE_SUM + "_" + props.index,
+    const isShow = Boolean(newValue !== null)
+    const name = LOCAL_NAME_RESERVED_VARIABLE_SUM
+
+
+    // dependencyStore.addDependencyElement({
+    //   name,
+    //   value: newValue,
+    //   isShow,
+    //   displayValue: newValue,
+    //   type: typeElement,
+    //   cost: newValue,
+    // });
+
+
+    innerStore.addInnerVariable({
+      name,
       value: newValue,
-      isShow: Boolean(newValue !== null),
-      displayValue: newValue,
-      type: "duplicatorItem",
       cost: newValue,
-    });
+      isShow,
+      type: typeElement,
+    })
+    nameStore.addNameInList({name, label: name, position: props.positionElement})
+    displayStore.addDisplayComponent({isShow, name, type: name})
   },
   {
     immediate: true,
@@ -516,7 +538,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  dependencyStore.deleteElementInDependencyList(NAME_RESERVED_VARIABLE_SUM + "_" + props.index);
+  innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM)
+  dependencyStore.deleteElementInDependencyList(LOCAL_NAME_RESERVED_VARIABLE_SUM);
+  nameStore.deleteNameInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
+  displayStore.deleteDisplayInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
 });
 </script>
 

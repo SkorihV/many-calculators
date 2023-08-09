@@ -1,8 +1,11 @@
 import { ref, reactive, watch} from "vue";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import {storeToRefs} from "pinia";
+import { isOtherOrGlobalSum } from "@/servises/UtilityServices";
 
 export function useLocalDependencyList() {
+  const {getInnerVariable} = storeToRefs(useInnerVariablesStore())
   const { getAllDependencyList, getElementByNameInDependency,isElementDependency } = storeToRefs(useDependencyListStore());
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
@@ -13,6 +16,10 @@ export function useLocalDependencyList() {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula?.forEach((name) => {
+      if (isOtherOrGlobalSum(name)) {
+        putInnerVariableInLocalList(name)
+      }
+
       if (isElementDependency.value(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
@@ -31,6 +38,9 @@ export function useLocalDependencyList() {
    */
   const putElementDependencyInLocalList = (name) => {
     localDependencyList[name] = getElementByNameInDependency.value(name);
+  };
+  const putInnerVariableInLocalList = (name) => {
+    localDependencyList[name] = getInnerVariable.value(name);
   };
 
   watch(
