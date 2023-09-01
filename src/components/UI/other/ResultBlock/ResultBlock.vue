@@ -18,6 +18,7 @@ import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.v
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import ResultBlockText from "@/components/UI/other/ResultBlock/ResultBlockText.vue";
 
 const baseStore = useBaseStore()
 const {
@@ -45,7 +46,7 @@ const isNeedSpinner = ref(false);
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 
-const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+const { isVisibilityFromDependency} =
   useProcessingFormula(
     reactive({
       localDependencyList,
@@ -112,7 +113,12 @@ const textForSpinner = props.resultOptions?.textForSpinner;
       :image-settings-data="resultOptions?.backgroundImageSettings"
     />
     <result-block-title :data="resultOptions" />
-    <result-block-data :data="dataForResult" :sum="finalSummaForOutput" />
+    <result-block-data
+      :data="dataForResult"
+      :sum="finalSummaForOutput"
+      :result-options="props?.resultOptions"
+    />
+    <result-block-text :result-options="props?.resultOptions"/>
   </div>
   <dev-block
     :label="label"

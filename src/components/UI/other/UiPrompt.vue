@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 const props = defineProps({
   promptText: {
@@ -31,6 +32,10 @@ const topPopupWrapper = computed(() => {
     btn.height;
   return `top: ${btnCoordTop}px;`;
 });
+
+const localPromptText = computed(() => {
+  return updateTextOnVariables(props.promptText)
+})
 
 function show() {
   clearTimeout(timerName.value);
@@ -80,7 +85,7 @@ function getTopBtnPrompt() {
           @mouseenter="show"
           @mouseleave="hidden"
           class="prompt-content"
-          v-html="promptText"
+          v-html="localPromptText"
         ></div>
       </div>
     </transition>

@@ -39,6 +39,7 @@ import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 
 const emits = defineEmits(["changedValue"]);

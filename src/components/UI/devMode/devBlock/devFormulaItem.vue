@@ -8,13 +8,14 @@ import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
 import {useElementNamesStore} from "@/store/elementNamesStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 
-import { isSign, isVariable } from "@/validators/validators";
+import { isNumber, isSign, isVariable } from "@/validators/validators";
 import { checkLogicAndReturnValue, isOtherOrGlobalSum } from "@/servises/UtilityServices";
 import goScrollToElement from "@/composables/goScrollToElement";
+import { REGEXP_NUMBERS } from "@/constants/regexp";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
-const  {isExistInnerVariable, getInnerVariable} = storeToRefs(useInnerVariablesStore())
+const  {isExistInnerVariable, getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
 const {getElementByNameInDependency, isElementDependency} = storeToRefs(useDependencyListStore())
 const { isShowComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
 const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
@@ -48,23 +49,31 @@ const props = defineProps({
   },
 });
 
-const isVariableParam = computed(() => {
+const isExistNameVariable = computed(() => {
     return isExistName.value(props.formulaItem)
 });
+
+const isNameParams = computed(() => {
+  return isVariable(props.formulaItem)
+})
+
+const isNotExist = computed(() => {
+  return  isNameParams.value && !isExistNameVariable.value && !isOtherOrGlobalSum(props.formulaItem) && !isSingVariable.value && !isId.value
+})
 
 const isSingVariable = computed(() => {
   return isSign(props.formulaItem)
 })
 
 const isId = computed(() => {
-    return isVariableParam.value && !isSingVariable.value;
+  return isNumber(props.formulaItem)
 })
 
 const itemDependencyData = computed(() => {
   const variable = props.formulaItem;
 
   if (isInnerVariable(variable)) {
-    return getInnerVariable.value(variable)
+    return getInnerVariableByName.value(variable)
   }
 
   if (
@@ -80,7 +89,7 @@ const itemResultData = computed(() => {
   const variable = props.formulaItem;
 
   if (isInnerVariable(variable)) {
-    return getInnerVariable.value(variable)
+    return getInnerVariableByName.value(variable)
   }
 
   if (props.isResult && isElementResult.value(variable)) {
@@ -110,7 +119,7 @@ const itemCost = computed(() => {
 });
 
 const localName = computed(() => {
-  if (props.onlyName || !isVariableParam.value) {
+  if (props.onlyName || !isExistNameVariable.value) {
     return props.formulaItem
   }
 
@@ -128,20 +137,20 @@ const localName = computed(() => {
 
 const isHiddenElement = computed(() => {
   return isShowComponent.value(props.formulaItem) !== null &&
-    isVariableParam.value
+    isExistNameVariable.value
     ? !isShowComponent.value(props.formulaItem)
     : false;
 });
 
 const title = computed(() => {
-  if (!isId.value && !isVariableParam.value) {
+  if (!isId.value && !isExistNameVariable.value) {
     return null
   }
 
   if (isHiddenElement?.value) {
     return "Элемент скрыт";
   }
-  if (!isVariableParam.value) {
+  if (!isExistNameVariable.value) {
     return "Элемент не существует";
   }
   return null;
@@ -149,9 +158,9 @@ const title = computed(() => {
 
 const classes = computed(() => {
   return [
-    isVariableParam.value ? "is-variable" : "",
+    isExistNameVariable.value ? "is-variable" : "",
     isHiddenElement.value ? "is-hidden" : "",
-    !isVariableParam.value && !isSingVariable.value  ? "is-not-exist" : "",
+    isNotExist.value  ? "is-not-exist" : "",
     !isHiddenElement.value && !isSingVariable.value
       ? "is-pointer"
       : "",
@@ -159,15 +168,15 @@ const classes = computed(() => {
 });
 
 const isShowValue = computed(() => {
-  return props.showValue && (isVariableParam.value || isId.value)
+  return props.showValue && (isExistNameVariable.value || isId.value)
 })
 
 const isShowCost = computed(() => {
-  return props.showCost && (isVariableParam.value || isId.value)
+  return props.showCost && (isExistNameVariable.value || isId.value)
 })
 
 function goToElement() {
-  if (!isHiddenElement.value && isVariableParam.value && !isSingVariable.value) {
+  if (!isHiddenElement.value && isExistNameVariable.value && !isSingVariable.value) {
     if (!isId.value) {
       goScrollToElement(props.formulaItem, "center");
     }

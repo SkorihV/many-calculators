@@ -252,10 +252,11 @@ const currentOptionValue = computed(() => {
   const isExistExtraValue = Boolean(
     currentOption.value?.extraValueForDependency?.toString()?.length
   );
+
   return isExistExtraValue
     ? currentOption.value?.extraValueForDependency
-    : !isNaN(parseInt(currentOption?.value.value))
-    ? currentOption?.value.value
+    : !isNaN(parseInt(currentOption?.value?.value))
+    ? currentOption?.value?.value
     : null;
 });
 
@@ -569,7 +570,11 @@ useEventListener(window, "click", clickClose);
 
 onMounted(() => {
   localSelectValues.value = props.selectValues;
-  localSelectValues.value.unshift(mockOption);
+
+  if (needMockValue.value) {
+    localSelectValues.value.unshift(mockOption);
+  }
+
   initSelect("mounted");
   setTimeout(() => {
     updatedWidthSelect();

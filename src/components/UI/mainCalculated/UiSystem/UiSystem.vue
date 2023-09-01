@@ -45,6 +45,7 @@ import { NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 const baseStore = useBaseStore()
 const { devMode } = storeToRefs(baseStore);
@@ -255,20 +256,23 @@ const allowProcessingDependencyHtmlText = computed(() => {
 });
 const currentHtmlText = computed(() => {
   if (!allowProcessingDependencyHtmlText.value) {
-    return props.htmlText;
+    return updateTextOnVariables(props.htmlText)
   }
   const { item } = costAfterProcessingDependencyPrice(
-    props.dependencyHtmlText,
-    "dependencyFormulaHtmlText"
-  );
-  const textIsExist = Boolean(item?.htmlText?.length);
+    reactive({
+        dependencyArrayItems: toRef(props, "dependencyHtmlText"),
+        formulaFieldName: "dependencyFormulaHtmlText"
+      }
+    ))
+
+  const textIsExist = Boolean(item?.htmlText?.length)
   if (textIsExist) {
-    return item.htmlText;
+    return updateTextOnVariables(item.htmlText)
   }
-  return props.htmlText;
+  return updateTextOnVariables(props.htmlText)
 });
 const isExistCurrentHtmlText = computed(() => {
-  return Boolean(currentHtmlText.value?.toString()?.length);
+  return Boolean(currentHtmlText.value?.toString()?.length)
 });
 const isShowElement = computed(() => {
   return props.showElement !== "no";

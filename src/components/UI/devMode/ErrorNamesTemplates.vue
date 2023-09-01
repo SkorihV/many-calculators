@@ -27,6 +27,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  resultOptions: {
+    type: Object,
+    default: () => {}
+  },
   formula: {
     type: String,
     default: null,
@@ -48,6 +52,19 @@ const listDisplayFormula = ref([]); //список всех формул отв�
 const listComputedFormula = ref([]); //Список всех формул отвечающих за расчет
 const displayAlert = ref(false);
 const localShowInsideElementStatus = ref(false);
+
+
+const listFieldsInFormula = [
+  "dependencyFormulaDisplay",
+  "dependencyFormulaItem",
+  "dependencyFormulaDisplayLeftSide",
+  "dependencyFormulaDisplayRightSide",
+  "dependencyFormulaHtmlText",
+  "formulaDisplayButton",
+  "formulaDependencyForResultBlock",
+  "formulaDependencyTextAfterSumma",
+  "dependencyFormulaTextAfterSumma"
+];
 
 /**
  * рекурсивно обходим все шаблоны и получаем нужный массив данных
@@ -153,12 +170,6 @@ function processingAllTemplatesOnData() {
   if (!props.templates?.length) {
     return [];
   }
-  const listFieldsInFormula = [
-    "dependencyFormulaDisplay",
-    "dependencyFormulaItem",
-    "dependencyFormulaDisplayLeftSide",
-    "dependencyFormulaDisplayRightSide",
-  ];
 
   getNeedleDataInTemplates(
     props.templates,
@@ -174,8 +185,14 @@ function processingAllTemplatesOnData() {
     "displayFormula"
   );
   getNeedleDataInTemplates(
+    props.resultOptions,
+    listFieldsInFormula,
+    listDisplayFormula,
+    "displayFormula"
+  );
+  getNeedleDataInTemplates(
     props.templates,
-    ["formula", "dependencyFormulaCost", "cost"],
+    ["formula", "dependencyFormulaCost", "cost",],
     listComputedFormula,
     "formula"
   );

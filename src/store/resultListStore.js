@@ -61,7 +61,6 @@ export const useResultListStore = defineStore('resultList', {
                 formOutputMethod,
                 resultOutputMethod,
                 value,
-                summ: cost,
                 displayValue,
                 unit: unit ? unit : null,
                 isShow,

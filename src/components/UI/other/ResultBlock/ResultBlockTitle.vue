@@ -1,5 +1,7 @@
 <script setup>
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
+import { computed } from "vue";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 const props = defineProps({
   data: {
@@ -11,6 +13,10 @@ const props = defineProps({
 const { isShowResultBlockSubtitle, isShowResultBlockTitle } = useIsChecks(
   props.data
 );
+const localSubtitle = computed(() => {
+  return updateTextOnVariables(props.data?.subtitle)
+})
+
 </script>
 
 <template>
@@ -24,7 +30,7 @@ const { isShowResultBlockSubtitle, isShowResultBlockTitle } = useIsChecks(
     <div
       class="calc__result-block-title-sub"
       v-if="isShowResultBlockSubtitle"
-      v-html="data.subtitle"
+      v-html="localSubtitle"
     />
   </div>
 </template>

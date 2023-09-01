@@ -20,19 +20,23 @@ export function useProcessingFormula(dataObject) {
 
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
+   * dependencyArrayItems - название массива в котором хранятся все данные с вариантами
+   * formulaFieldName - имя поля с формулой
+   * templateName - имя шаблона не обязательно. нужно только для: UiInput, UiRange
+   * value - необходимо только для передачи текущего значения : UiInput, UiRange
    * @param dataObject
    * @returns {*|{item: null, cost: null}}
    */
   const costAfterProcessingDependencyPrice = (dataObject) => {
     const dependencyArrayItems = toRef(dataObject, "dependencyArrayItems");
-    const formulaFieldName = dataObject?.formulaFieldName;
+    const formulaFieldName = toRef(dataObject, 'formulaFieldName');
     const templateName = toRef(dataObject, "templateName");
     const value = toRef(dataObject, "value");
 
     // let localInputValue = toRef(dataObject, "localInputValue");
     // let resultValue = toRef(dataObject, "resultValue");
 
-    if (!dependencyArrayItems.value || !formulaFieldName) {
+    if (!dependencyArrayItems.value || !formulaFieldName.value) {
       return { item: null, cost: null };
     }
 
@@ -40,14 +44,14 @@ export function useProcessingFormula(dataObject) {
       (resultReduce, item) => {
         const notExistFormula =
           item?.disabledFormula ||
-          typeof item[formulaFieldName] === "undefined" ||
-          !Boolean(item[formulaFieldName].toString().length);
+          typeof item[formulaFieldName.value] === "undefined" ||
+          !Boolean(item[formulaFieldName.value].toString().length);
 
         if (notExistFormula) {
           return resultReduce;
         }
 
-        let formula = getArrayElementsFromFormula(item[formulaFieldName]);
+        let formula = getArrayElementsFromFormula(item[formulaFieldName.value]);
 
         if (
           templateName.value === "UiInput" ||

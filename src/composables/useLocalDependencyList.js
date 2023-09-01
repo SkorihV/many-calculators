@@ -5,7 +5,7 @@ import {storeToRefs} from "pinia";
 import { isOtherOrGlobalSum } from "@/servises/UtilityServices";
 
 export function useLocalDependencyList() {
-  const {getInnerVariable} = storeToRefs(useInnerVariablesStore())
+  const {getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
   const { getAllDependencyList, getElementByNameInDependency,isElementDependency } = storeToRefs(useDependencyListStore());
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
@@ -40,7 +40,7 @@ export function useLocalDependencyList() {
     localDependencyList[name] = getElementByNameInDependency.value(name);
   };
   const putInnerVariableInLocalList = (name) => {
-    localDependencyList[name] = getInnerVariable.value(name);
+    localDependencyList[name] = getInnerVariableByName.value(name);
   };
 
   watch(

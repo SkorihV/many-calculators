@@ -19,3 +19,6 @@ export const REGEXP_QUOTES_AND_SPACE_AND_WORD = /^('|")\s*|\s*('|")$/g;
 export const REGEXP_ELEMENT_VALUE_AS_WORLD = /^('|"|[0-9])\s*|\s*('|")$/g;
 export const REGEXP_STRING_SPLIT_FORMULA =
   /(\)|\(|>=|<=|<|>|!==|===|&&|\|\||\+|-|\/|\*)|([0-9]*(\.[0-9])*)/;
+
+export const REGEXP_VARIABLE_IN_TEXT_RESULT_COST = /{{[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё0-9_]*}}/g
+export const REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE = /##_?[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё0-9_]*_?##/g

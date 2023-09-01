@@ -24,7 +24,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
-import {checkedValueOnVoid, checkLogicAndReturnValue} from "@/servises/UtilityServices";
+import {checkedValueOnVoid} from "@/servises/UtilityServices";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
@@ -349,7 +349,7 @@ const localCanBeShownTooltip = computed(() => {
 });
 
 /**
- * Возвращает цену подходящую условию, если моле отображается
+ * Возвращает цену подходящую условию, если поле отображается
  * Если не одна цена не подходит, то возвращается стандартная
  * @returns {Number|String|*}
  */

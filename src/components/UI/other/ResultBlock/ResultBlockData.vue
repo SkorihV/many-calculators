@@ -1,14 +1,19 @@
 <script setup>
-import { computed } from "vue";
+import { computed, reactive } from "vue";
+
 import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 import { parseResultValueObjectItem } from "@/servises/UtilityServices";
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
-import {useDisplayComponentsStore} from "@/store/displayComponentsStore";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { useProcessingFormula } from "@/composables/useProcessingFormula";
+
+import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
-const {isShowComponent} = storeToRefs(useDisplayComponentsStore())
+
 const { getCurrency, getTitleSum } = baseStoreRefs;
 
 const props = defineProps({
@@ -16,13 +21,30 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  resultOptions: {
+    type: Object,
+    default: () => {},
+  },
   sum: {
     type: [Number, Boolean],
     default: null,
-  },
+  }
 });
 
 const { isShowSuma } = useIsChecks(props.resultOptions);
+const localTitleSum = computed(() => {
+  return updateTextOnVariables(getTitleSum.value)
+})
+
+const {localDependencyList, constructLocalListElementDependencyInFormula} = useLocalDependencyList()
+const {isVisibilityFromDependency: showTitleSumBlock, formulaAfterProcessingVariables} = useProcessingFormula(
+  reactive({
+    localDependencyList,
+    constructLocalListElementDependencyInFormula,
+    parentIsShow: true,
+    formula: props.resultOptions?.formulaDependencyForTitleSumma,
+  })
+)
 
 /**
  * Текст со всеми полями которые должны отображаться в блоке
@@ -80,6 +102,11 @@ const resultTextDataForResultBlock = computed(() => {
   });
   return result;
 });
+
+const showTitleSum = computed(() => {
+  return props.sum !== false && isShowSuma && showTitleSumBlock.value
+})
+
 /**
  * Текст для вывода в форму
  * @returns {string}
@@ -92,13 +119,13 @@ const finalTextForOutput = computed(() => {
 
   if (props.sum === false) {
     result += "Есть ошибка в расчетах!";
-  } else if (props.sum !== false && isShowSuma) {
+  } else if (showTitleSum.value) {
     const sum = parseFloat(props.sum)?.toLocaleString("ru");
     result +=
       "\n" +
       "<div class='calc__result-block-field-summ'>" +
       "<div class='calc__result-block-field-summ-title'>" +
-      getTitleSum.value +
+      localTitleSum.value +
       "</div>" +
       "<div class='calc__result-block-field-summ-cost'> " +
       sum +
@@ -110,8 +137,16 @@ const finalTextForOutput = computed(() => {
   }
   return result;
 });
+
 </script>
 
 <template>
   <div class="calc__result-block-data" v-html="finalTextForOutput"></div>
+  <dev-block
+    :label="getTitleSum"
+    :is-visibility-from-dependency="showTitleSum"
+    :dependency-formula-display="props.resultOptions?.formulaDependencyForTitleSumma"
+    hidden-cost
+    hidden-value
+  />
 </template>

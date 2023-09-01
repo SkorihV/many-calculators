@@ -54,6 +54,7 @@ import {
   NAME_RESERVED_VARIABLE_SUM,
 } from "@/constants/variables";
 import { useElementNamesStore } from "@/store/elementNamesStore";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
@@ -376,7 +377,7 @@ const finalTextForOutput = computed(() => {
       " " +
       getCurrency.value;
   }
-  return result;
+  return updateTextOnVariables(result);
 });
 
 const finalTextForOutputForTeleport = computed(() => {
@@ -785,6 +786,7 @@ onMounted(async () => {
     <error-names-templates
       v-if="devMode"
       :templates="calculatorTemplates"
+      :result-options="inputOptions?.resultOptions"
       :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
     />
     <div id="prompt-text-element"></div>
