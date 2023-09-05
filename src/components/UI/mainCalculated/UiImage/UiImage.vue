@@ -72,7 +72,7 @@ useDisplaySpinner(props.elementName);
 
 
 onUnmounted(() => {
-  baseStore.tryDeleteAllDataOnStoreForElementName(props.elementName);
+  baseStore?.tryDeleteAllDataOnStoreForElementName(props.elementName);
 });
 const url = computed(() => {
   return Boolean(props.defaultImage?.filename?.length)

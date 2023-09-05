@@ -27,6 +27,7 @@ const props = defineProps({
     "template",
     "dependencyFormulaDisplay",
     "elementPosition",
+    "options"
   ]),
 });
 
@@ -83,6 +84,7 @@ const isHorizontal = computed(() => {
       :template="template"
       :index="parentName + '_' + idColumn + '_' + index_in"
       :parent-name="parentName"
+      :options="options"
       @changedValue="changeValue"
     />
   </div>

@@ -39,6 +39,7 @@ const props = defineProps({
     "elementName",
     "parentIsShow",
     "dependencyFormulaDisplay",
+    "options",
   ]),
 });
 const parent = ref(null);
@@ -178,6 +179,7 @@ const isExistLabel = computed(() => {
             elementName + 'tabItem' + '_' + key
           "
           :shown-id-tab="shownIdTab"
+          :options="options"
           @changedValue="changeValue"
         />
       </template>

@@ -100,6 +100,7 @@ const props = defineProps({
     "isStretch",
     "globalMaxWidth",
     "globalMaxHeight",
+    "options"
   ]),
 });
 
@@ -171,7 +172,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 
 
@@ -510,7 +511,7 @@ function tryPassDependency() {
                 </div>
               </div>
             </icon-element-wrapper>
-            <ui-prompt :prompt-text="radio.prompt" />
+            <ui-prompt :prompt-text="radio.prompt" :options="options"/>
           </div>
         </template>
       </div>

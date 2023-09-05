@@ -13,6 +13,7 @@ const props = defineProps({
     "index",
     "parentIsShow",
     "parentName",
+    "options"
   ]),
 });
 const changeValue = (data) => {
@@ -38,6 +39,7 @@ const changeValue = (data) => {
       "
       :adaptation-method="template?.adaptationMethod"
       :parent-name="parentName"
+      :options="options"
       @changedValue="changeValue"
     ></ui-columns>
   </div>

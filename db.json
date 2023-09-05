@@ -526,7 +526,8 @@
             "selectName": "Москва",
             "cost": 50,
             "extraValueForDependency": "москва",
-            "dependencyFormulaItem": "_self_ !== куда"
+            "dependencyFormulaItem": "_self_ !== куда",
+            "prompt": "{{откуда}}   ---  ##откуда##"
           },
           {
             "title": "Элемент списка - Московская Область",
@@ -618,7 +619,7 @@
                             "classes": "",
                             "template": "UiInput",
                             "dependencyPrices": null,
-                            "prompt": "{{вес}} -  ##вес## --- ##вес4##",
+                            "prompt": "{{вес}} -  ##вес## ---{{вес4}} --- ##вес4## --- ##_otherSum_##  ***** {{_otherSum_}}",
                             "iconSettingsInputLabel": {
                               "title": "",
                               "image": {
@@ -877,7 +878,8 @@
               },
               "behaviorImage": "contain",
               "location": "leftSide"
-            }
+            },
+            "prompt": "{{откуда}} ++++ ##откуда##"
           },
           {
             "title": "Элемент радио-кнопка - 2",
@@ -913,7 +915,7 @@
             }
           }
         ],
-        "prompt": "",
+        "prompt": "{{откуда}} ++++ ##откуда##",
         "iconSettingsRadioLabel": {
           "title": "",
           "image": {

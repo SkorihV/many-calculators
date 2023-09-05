@@ -47,6 +47,7 @@ const props = defineProps({
     "backgroundImageSettings",
     "maxWidthSide",
     "elementPosition",
+    "options"
   ]),
 });
 const parentRef = ref(null);
@@ -149,6 +150,7 @@ const isHorizontal = computed(() => {
             :template="item"
             :index="elementName + '_' + 'block-section' + '_' + inx"
             :parent-name="elementName"
+            :options="options"
             @changedValue="changeValue"
           />
           <templates-wrapper
@@ -157,6 +159,7 @@ const isHorizontal = computed(() => {
             :template="item"
             :index="elementName + '_' + 'block-section' + '_' + inx"
             :parent-name="elementName"
+            :options="options"
             @changedValue="changeValue"
           />
         </template>

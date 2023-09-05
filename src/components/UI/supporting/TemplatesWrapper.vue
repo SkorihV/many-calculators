@@ -16,6 +16,7 @@ const props = defineProps({
     "index",
     "parentIsShow",
     "parentName",
+    "options"
   ]),
 });
 
@@ -67,7 +68,7 @@ const changeValue = (data) => {
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-input>
 
@@ -104,7 +105,7 @@ const changeValue = (data) => {
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-checkbox>
 
@@ -138,10 +139,11 @@ const changeValue = (data) => {
       :icon-settings-radio-label="template?.iconSettingsRadioLabel"
       :global-max-width="template?.globalMaxWidth"
       :global-max-height="template?.globalMaxHeight"
+      :options="options"
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-radio>
 
@@ -182,7 +184,7 @@ const changeValue = (data) => {
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-range>
 
@@ -215,10 +217,11 @@ const changeValue = (data) => {
       :is-search="template?.isSearch"
       :global-max-width="template?.globalMaxWidth"
       :global-max-height="template?.globalMaxHeight"
+      :options="options"
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-select>
 
@@ -266,7 +269,7 @@ const changeValue = (data) => {
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
-        <ui-prompt :prompt-text="template.prompt" />
+        <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-system>
   </div>

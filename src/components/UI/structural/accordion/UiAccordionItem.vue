@@ -31,7 +31,7 @@ const props = defineProps({
   accordionItemId: {
     type: Number,
   },
-  ...propsTemplate.getProps(["elementName", "parentIsShow"]),
+  ...propsTemplate.getProps(["elementName", "parentIsShow", "options"]),
 });
 
 const parentRef = ref(null);
@@ -155,6 +155,7 @@ const maxWidth = computed(() => {
           :index="itemIdName + '_' + key_in"
           :parent-name="elementName"
           :change-state-parent="isOpen"
+          :options="options"
           @changedValue="changeValue"
         />
         <templates-wrapper
@@ -163,6 +164,7 @@ const maxWidth = computed(() => {
           :template="template"
           :index="itemIdName + '_' + key_in"
           :parent-name="elementName"
+          :options="options"
           @changedValue="changeValue"
         />
       </template>

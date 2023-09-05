@@ -48,6 +48,7 @@ const props = defineProps({
     "parentIsShow",
     "dependencyFormulaDisplay",
     "parentName",
+    "options"
   ]),
 });
 
@@ -250,6 +251,7 @@ const isExistLabel = computed(() => Boolean(props.label?.toString()?.length));
           :parent-name="elementName"
           :dependency-formula-display="column?.dependencyFormulaDisplay"
           :element-position="column?.elementPosition"
+          :options="options"
           @changedValue="changeValue"
         />
       </div>

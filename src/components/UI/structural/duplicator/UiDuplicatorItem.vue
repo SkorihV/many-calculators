@@ -569,6 +569,7 @@ onUnmounted(() => {
         :parent-is-show="parentIsShow"
         :template="template"
         :index="index + '_' + inx"
+        :options="{isDuplicator: true, index: index ? index : 0}"
         @changedValue="changeValue"
       />
       <templates-wrapper-column
@@ -577,6 +578,7 @@ onUnmounted(() => {
         :template="template"
         :index="index + '_' + inx"
         :parent-name="mutationsInputData.elementName"
+        :options="{isDuplicator: true, index: index ? index : 0}"
         @changedValue="changeValue"
       />
       <templates-wrapper
@@ -585,6 +587,7 @@ onUnmounted(() => {
         :template="template"
         :index="index + '_' + inx"
         :parent-name="mutationsInputData.elementName"
+        :options="{isDuplicator: true, index: index ? index : 0}"
         @changedValue="changeValue"
       />
     </template>

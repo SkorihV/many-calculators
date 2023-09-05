@@ -88,6 +88,7 @@ const props = defineProps({
     "zeroValueDisplayIgnore",
     "globalMaxWidth",
     "globalMaxHeight",
+    "options"
   ]),
 });
 
@@ -581,7 +582,7 @@ onMounted(() => {
   }, 200);
 });
 onUnmounted(() => {
-  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
+    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 
@@ -638,6 +639,7 @@ onUnmounted(() => {
             <ui-prompt
               v-if="isExistCurrentPrompt"
               :prompt-text="currentOption.prompt"
+              :options="options"
             />
             <div class="calc__select-arrow" v-if="isShowArrow"></div>
           </div>
@@ -680,6 +682,7 @@ onUnmounted(() => {
                   <ui-prompt
                     v-if="option?.prompt?.length"
                     :prompt-text="option.prompt"
+                    :options="options"
                   />
                 </div>
               </template>

@@ -6,7 +6,7 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
-  ...propsTemplate.getProps(["template", "index", "parentIsShow"]),
+  ...propsTemplate.getProps(["template", "index", "parentIsShow", "options"]),
 });
 const changeValue = (data) => {
   emits("changedValue", data);
@@ -28,6 +28,7 @@ const changeValue = (data) => {
       :parent-is-show="parentIsShow"
       :dependency-formula-display="template?.dependencyFormulaDisplay"
       :icon-settings-accordion-label="template?.iconSettingsAccordionLabel"
+      :options="options"
       @changedValue="changeValue"
     />
     <ui-tab
@@ -43,6 +44,7 @@ const changeValue = (data) => {
       :parent-is-show="parentIsShow"
       :dependency-formula-display="template?.dependencyFormulaDisplay"
       :icon-settings-tabs-label="template?.iconSettingsTabsLabel"
+      :options="options"
       @changedValue="changeValue"
     />
     <ui-block-section
@@ -63,6 +65,7 @@ const changeValue = (data) => {
       :background-image-settings="template?.backgroundImageSettings"
       :element-position="template?.elementPosition"
       :max-width-side="template?.maxWidthSide"
+      :options="options"
       @changedValue="changeValue"
     />
   </div>

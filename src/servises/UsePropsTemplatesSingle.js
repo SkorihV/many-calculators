@@ -49,6 +49,7 @@ class Props {
       templates: this.templates(),
       isStretch: this.isStretch(),
       elementPosition: this.elementPosition(),
+      options: this.options(),
     };
     Props.instance = this;
     return this;
@@ -347,6 +348,12 @@ class Props {
   }
 
   iconSettings() {
+    return {
+      type: Object,
+      default: () => {},
+    };
+  }
+  options() {
     return {
       type: Object,
       default: () => {},

@@ -344,7 +344,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  baseStore.tryDeleteAllDataOnStoreForElementName.value(localElementName.value);
+  baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

@@ -304,7 +304,7 @@ function tryPassDependency() {
 }
 
 onUnmounted(() => {
-  baseStore.tryDeleteAllDataOnStoreForElementName(localElementName.value);
+    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

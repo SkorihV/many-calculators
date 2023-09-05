@@ -32,6 +32,7 @@ const props = defineProps({
     "classes",
     "parentIsShow",
     "dependencyFormulaDisplay",
+    "options"
   ]),
 });
 const parent = ref(null);
@@ -97,6 +98,7 @@ const isExistLabel = computed(() => {
           :accordion-name="elementName"
           :accordion-item-id="key"
           :element-name="elementName + item?.json_id + '_' + key"
+          :options="options"
           @changedValue="changeValue"
         />
       </template>
