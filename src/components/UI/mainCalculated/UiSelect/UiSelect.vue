@@ -118,7 +118,7 @@ const selectRef = ref(null);
 const baseStore = useBaseStore()
 const { devMode, isCanShowAllTooltips } = storeToRefs(baseStore);
 const dependencyStore = useDependencyListStore()
-const {isElementDependency} = storeToRefs(dependencyStore)
+const {isDependencyElement} = storeToRefs(dependencyStore)
 const validationStore = useValidationListStore()
 
 
@@ -292,7 +292,7 @@ const selectValuesAfterProcessingDependency = computed(() => {
       constructLocalListElementDependencyInFormula(formula);
 
       let allDependencyShow = formula.every((item) => {
-        if (isElementDependency.value(item)) {
+        if (isDependencyElement.value(item)) {
           return localDependencyList[item]?.isShow;
         }
         return true;

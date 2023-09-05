@@ -9,6 +9,10 @@ const props = defineProps({
   classes: {
     type: String,
   },
+  options: {
+    type: Object,
+    default: () => {}
+  }
 });
 
 const isShow = ref(false);
@@ -34,7 +38,7 @@ const topPopupWrapper = computed(() => {
 });
 
 const localPromptText = computed(() => {
-  return updateTextOnVariables(props.promptText)
+  return updateTextOnVariables(props.promptText, props.options)
 })
 
 function show() {

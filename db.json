@@ -559,7 +559,7 @@
             "dependencyFormulaItem": "_self_ !== куда"
           }
         ],
-        "prompt": "",
+        "prompt": "534535345",
         "iconSettingsSelectLabel": null,
         "parent": "0;30492307;35352507;35352707;"
       },
@@ -567,7 +567,7 @@
       {
         "json_id": "146367307",
         "title": "Дупликатор",
-        "label": "Дупликатор",
+        "label": "Дупликатор label",
         "templates": [
           {
             "json_id": "146367107",
@@ -618,7 +618,7 @@
                             "classes": "",
                             "template": "UiInput",
                             "dependencyPrices": null,
-                            "prompt": "",
+                            "prompt": "{{вес}} -  ##вес## --- ##вес4##",
                             "iconSettingsInputLabel": {
                               "title": "",
                               "image": {
@@ -724,7 +724,7 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiDuplicator",
-        "prompt": "",
+        "prompt": "заголовок дупликатора {{вес}} --- ##вес##  ----- {{вес4}}",
         "dependencyMainFormula": null,
         "iconSettingsDuplicatorLabel": {
           "title": "",
@@ -3684,7 +3684,7 @@
           "title": "",
           "image": {
             "image_id": "1392700107",
-            "filename": "55319723_2_2.png",
+            "filename": "",
             "ver_id": 4858673,
             "image_width": "1219",
             "image_height": "775",
@@ -3710,11 +3710,6 @@
         "meta_id": "30492307",
         "ver_id": "4858673",
         "title": "Упаковка блок",
-        "json": "{\"title\":\"Упаковка блок\",\"label\":\"Вид упаковки\",\"labelSub\":\"\",\"dependencyFormulaDisplay\":\"упаковкаКнопка === true\",\"visuallySeparateElement\":1,\"elementName\":\"упаковкаБлок\",\"classes\":\"\",\"template\":\"UiBlockSection\",\"templates\":[\"120261907\"],\"maxWidthSide\":\"100\",\"elementPosition\":\"default\"}",
-        "modified": "2023-05-30 14:01:22",
-        "created": "2023-03-16 17:58:09",
-        "json_large": "{\"backgroundImageSettings\":null,\"iconSettingsSectionLabel\":null}",
-        "type_group_id": "9011",
         "label": "Вид упаковки",
         "labelSub": "",
         "dependencyFormulaDisplay": "упаковкаКнопка === true",

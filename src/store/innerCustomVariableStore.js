@@ -6,7 +6,7 @@ export const useInnerVariablesStore = defineStore('innerStore', {
   }),
   getters: {
     getAllInnerVariablesL: ({innerVariablesList}) => innerVariablesList,
-    isExistInnerVariable: ({innerVariablesList}) => (name) => name in innerVariablesList,
+    isInnerVariable: ({innerVariablesList}) => (name) => name in innerVariablesList,
     getInnerVariableByName: ({innerVariablesList}) => (name) => name in innerVariablesList ? innerVariablesList[name] : null,
   },
   actions: {

@@ -7,17 +7,17 @@ export const useDependencyListStore = defineStore('dependencyList', {
             dependencyList: {}
         }),
     getters: {
-        getElementByNameInDependency:
+        getDependencyElementByName:
             ({ dependencyList }) =>
                 (name) =>
                    name in dependencyList ? dependencyList[name] : null,
-        getAllDependencyList: ({ dependencyList }) =>  dependencyList,
+        getDependencyAllList: ({ dependencyList }) =>  dependencyList,
         /**
          *
          * @param nameItemList
          * @returns {boolean}
          */
-        isElementDependency: ({dependencyList}) =>  (name = null) => {
+        isDependencyElement: ({dependencyList}) =>  (name = null) => {
             if (!name) {
                 return false;
             }
@@ -44,7 +44,7 @@ export const useDependencyListStore = defineStore('dependencyList', {
 
             this.dependencyList[name] = {name,value,isShow,displayValue,type,cost}
         },
-        deleteElementInDependencyList(name) {
+        deleteDependencyElementInList(name) {
             if (name in this.dependencyList) {
                 delete this.dependencyList[name];
             }

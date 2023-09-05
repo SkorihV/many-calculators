@@ -20,13 +20,13 @@ export function useGetOtherGlobalSum(
   viewDuplicator = false,
   parentName = null
 ) {
-  const { getAllResultsList } = storeToRefs(useResultListStore());
+  const { getResultsAllList } = storeToRefs(useResultListStore());
   /**
    * Данные которые подходят для вывода или расчета
    * @returns {{length}|unknown[]|*[]}
    */
   const baseDataForCalculate = computed(() => {
-    return Object.values(getAllResultsList.value).filter((item) => {
+    return Object.values(getResultsAllList.value).filter((item) => {
       if (!viewDuplicator) {
         return !Boolean(item?.isDuplicator);
       } else {

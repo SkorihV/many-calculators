@@ -6,7 +6,7 @@ import { isOtherOrGlobalSum } from "@/servises/UtilityServices";
 
 export function useLocalDependencyList() {
   const {getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
-  const { getAllDependencyList, getElementByNameInDependency,isElementDependency } = storeToRefs(useDependencyListStore());
+  const { getDependencyAllList, getDependencyElementByName,isDependencyElement } = storeToRefs(useDependencyListStore());
   const localDependencyList = reactive({});
   const countUpdatedDependency = ref(0);
 
@@ -20,7 +20,7 @@ export function useLocalDependencyList() {
         putInnerVariableInLocalList(name)
       }
 
-      if (isElementDependency.value(name) && !existLocalElementDependency(name)) {
+      if (isDependencyElement.value(name) && !existLocalElementDependency(name)) {
         putElementDependencyInLocalList(name);
       }
     });
@@ -37,14 +37,14 @@ export function useLocalDependencyList() {
    * @param name
    */
   const putElementDependencyInLocalList = (name) => {
-    localDependencyList[name] = getElementByNameInDependency.value(name);
+    localDependencyList[name] = getDependencyElementByName.value(name);
   };
   const putInnerVariableInLocalList = (name) => {
     localDependencyList[name] = getInnerVariableByName.value(name);
   };
 
   watch(
-      getAllDependencyList,
+      getDependencyAllList,
     (newValue) => {
       let isUpdated = false;
       for (let key in newValue) {

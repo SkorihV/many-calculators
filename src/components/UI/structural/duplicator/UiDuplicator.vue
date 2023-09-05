@@ -7,7 +7,7 @@ import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 
-import UiDuplicatorWrapper from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
+import UiDuplicatorItem from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
@@ -214,7 +214,7 @@ onMounted(() => {
     :id="elementName"
   >
     <div class="calc__duplicator">
-      <ui-duplicator-wrapper
+      <UiDuplicatorItem
         v-for="(duplicator, idx) in localTemplates"
         :origin-data="originData"
         :key="duplicator?.index ? duplicator?.index : 0"
@@ -237,9 +237,9 @@ onMounted(() => {
         @changedValue="changeValue"
       >
         <template v-slot:prompt v-if="IsExistPrompt">
-          <ui-prompt :prompt-text="originData.prompt" />
+          <ui-prompt :prompt-text="originData.prompt" :options="{isDuplicator: true, index: duplicator?.index ? duplicator?.index : 0}"/>
         </template>
-      </ui-duplicator-wrapper>
+      </UiDuplicatorItem>
     </div>
   </div>
   <dev-block

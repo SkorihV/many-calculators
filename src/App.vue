@@ -1052,6 +1052,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin: 30px 20px;
+    @media all and (max-width: 480px) {
+      margin: 30px 5px;
+    }
     &-group-data {
       display: flex;
       width: 100%;
@@ -3034,6 +3038,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
 .calc__form-for-result-style {
   display: none;
+  margin: 30px 20px;
+  @media all and (max-width: 480px) {
+    margin: 30px 5px;
+  }
   * {
     margin: 0;
     padding: 0;

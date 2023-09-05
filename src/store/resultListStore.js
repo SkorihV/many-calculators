@@ -10,7 +10,7 @@ export const useResultListStore = defineStore('resultList', {
          * @param globalResultsElements
          * @returns {undefined}
          */
-        getAllResultsList: ({ resultList }) => resultList,
+        getResultsAllList: ({ resultList }) => resultList,
         /**
          * Получить элемент из списка по его имени
          * @param globalResultsElements
@@ -25,7 +25,7 @@ export const useResultListStore = defineStore('resultList', {
          * @param name
          * @returns {boolean}
          */
-        isElementResult: ({ resultList }) => (name = null) => {
+        isResultElement: ({ resultList }) => (name = null) => {
             if (!name) {
                 return false;
             }
@@ -83,7 +83,7 @@ export const useResultListStore = defineStore('resultList', {
         modifiedResultElement({ elementName, modifiedFieldName, newData }) {
             this.resultList[elementName][modifiedFieldName] = newData;
         },
-        deleteElementInResultsList(elementName) {
+        deleteResultElementInList(elementName) {
             if (elementName in this.resultList) {
                 delete this.resultList[elementName];
             }

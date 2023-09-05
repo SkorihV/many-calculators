@@ -53,7 +53,7 @@ const displayStore = useDisplayComponentsStore()
 const nameStore = useElementNamesStore()
 const innerStore = useInnerVariablesStore()
 const { devMode, checkedIsStructureTemplate } = storeToRefs(baseStore);
-const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
+const { getResultElementByName, isResultElement } = storeToRefs(resultStore)
 
 
 const emits = defineEmits(["changedValue", "duplicate", "deleteDuplicator"]);
@@ -524,7 +524,7 @@ function addIndexIndexInFormulaElements(formulaString, index) {
 function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
-  const isGlobalVariable = isElementResult.value(item);
+  const isGlobalVariable = isResultElement.value(item);
 
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
@@ -539,7 +539,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM)
-  dependencyStore.deleteElementInDependencyList(LOCAL_NAME_RESERVED_VARIABLE_SUM);
+  dependencyStore.deleteDependencyElementInList(LOCAL_NAME_RESERVED_VARIABLE_SUM);
   nameStore.deleteNameInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
   displayStore.deleteDisplayInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
 });
@@ -553,15 +553,13 @@ onUnmounted(() => {
     <icon-element-wrapper
       :icon-settings="iconSettingsDuplicatorLabel"
       :alt="isExistLabel ? mutationsInputData.label : ''"
+      :is-exist-label="isExistLabel"
     >
-      <template>
-        <div class="calc__duplicator-label" v-if="isExistLabel">
-          {{ mutationsInputData.label }}
-        </div>
-        <slot name="prompt" />
-      </template>
+      <div class="calc__duplicator-label" v-if="isExistLabel">
+        {{ mutationsInputData.label }}
+      </div>
+      <slot name="prompt" />
     </icon-element-wrapper>
-
     <template
       v-for="(template, inx) in mutationsInputData?.templates"
       :key="index + '_' + inx"

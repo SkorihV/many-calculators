@@ -15,10 +15,10 @@ import { REGEXP_NUMBERS } from "@/constants/regexp";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
-const  {isExistInnerVariable, getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
-const {getElementByNameInDependency, isElementDependency} = storeToRefs(useDependencyListStore())
+const  {isInnerVariable, getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
+const {getDependencyElementByName, isDependencyElement} = storeToRefs(useDependencyListStore())
 const { isShowComponent, isExistComponent } = storeToRefs(useDisplayComponentsStore())
-const { getResultElementByName, isElementResult } = storeToRefs(resultStore)
+const { getResultElementByName, isResultElement } = storeToRefs(resultStore)
 const { isExistName } = storeToRefs(useElementNamesStore())
 
 
@@ -72,15 +72,15 @@ const isId = computed(() => {
 const itemDependencyData = computed(() => {
   const variable = props.formulaItem;
 
-  if (isInnerVariable(variable)) {
+  if (isExistInnerVariable(variable)) {
     return getInnerVariableByName.value(variable)
   }
 
   if (
     props.isDependency &&
-    isElementDependency.value(variable)
+    isDependencyElement.value(variable)
   ) {
-    return getElementByNameInDependency.value(variable);
+    return getDependencyElementByName.value(variable);
   }
   return variable;
 });
@@ -88,11 +88,11 @@ const itemDependencyData = computed(() => {
 const itemResultData = computed(() => {
   const variable = props.formulaItem;
 
-  if (isInnerVariable(variable)) {
+  if (isExistInnerVariable(variable)) {
     return getInnerVariableByName.value(variable)
   }
 
-  if (props.isResult && isElementResult.value(variable)) {
+  if (props.isResult && isResultElement.value(variable)) {
     return getResultElementByName.value(variable);
   }
   return variable;
@@ -184,8 +184,8 @@ function goToElement() {
   }
 }
 
-function isInnerVariable (variable) {
-  return isOtherOrGlobalSum(variable) && isExistInnerVariable.value(variable)
+function isExistInnerVariable (variable) {
+  return isOtherOrGlobalSum(variable) && isInnerVariable.value(variable)
 }
 
 </script>

@@ -138,14 +138,14 @@ export const useBaseStore = defineStore("base", {
       const validationStore = useValidationListStore()
       if (Array.isArray(elementName)) {
         elementName.forEach((name) => {
-          dependencyStore.deleteElementInDependencyList(name);
-          resultStore.deleteElementInResultsList(name);
+          dependencyStore.deleteDependencyElementInList(name);
+          resultStore.deleteResultElementInList(name);
           mountedStore.deleteElementInMountedList(name);
           validationStore.deleteElementInValidationsErrorsList(name);
         });
       } else {
-        dependencyStore.deleteElementInDependencyList(elementName);
-        resultStore.deleteElementInResultsList(elementName);
+        dependencyStore.deleteDependencyElementInList(elementName);
+        resultStore.deleteResultElementInList(elementName);
         mountedStore.deleteElementInMountedList(elementName);
         validationStore.deleteElementInValidationsErrorsList(elementName);
       }
