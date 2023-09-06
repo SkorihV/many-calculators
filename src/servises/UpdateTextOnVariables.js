@@ -74,10 +74,13 @@ function getValueOrSpace(data) {
   return data !== null ? data : ' '
 }
 
-function addIdAndClass(div, name) {
-  div.id = name
-  div.classList.add(name)
-  return div
+function addIdAndClass(node, name, storeFuncForGetElement, nameGettingField = 'value') {
+  const value = getValueOrSpace(storeFuncForGetElement.value(name)[nameGettingField])
+  node.id = name
+  node.classList.add(name)
+  node.dataset.data = value
+  node.innerText = value
+  return node
 }
 
 function getInnerSpan(name, options) {
@@ -88,13 +91,9 @@ function getInnerSpan(name, options) {
   const isExistInnerVariable = options?.isDuplicator && isInnerVariable.value(nameForDuplicator)
 
   if (isExistInnerVariable) {
-    span = addIdAndClass(span, nameForDuplicator)
-    const value = getInnerVariableByName.value(nameForDuplicator).value
-    span.innerText = getValueOrSpace(value)
+    span = addIdAndClass(span, nameForDuplicator, getInnerVariableByName)
   } else if (isInnerVariable.value(name)) {
-    span = addIdAndClass(span, name)
-    const value = getInnerVariableByName.value(name).value
-    span.innerText = getValueOrSpace(value)
+    span = addIdAndClass(span, name, getInnerVariableByName)
   }
   return span
 }
@@ -107,13 +106,9 @@ function getValueSpan(name, options) {
 
   const isExistDuplicatorVariable = options?.isDuplicator && isDependencyElement.value(nameForDuplicator)
   if (isExistDuplicatorVariable) {
-    span = addIdAndClass(span, nameForDuplicator)
-    const value = getDependencyElementByName.value(nameForDuplicator).value
-    span.innerText = getValueOrSpace(value)
+    span = addIdAndClass(span, nameForDuplicator, getDependencyElementByName)
   } else if (isDependencyElement.value(name)) {
-    span = addIdAndClass(span, name)
-    const value = getDependencyElementByName.value(name).value
-    span.innerText =  getValueOrSpace(value)
+    span = addIdAndClass(span, name, getDependencyElementByName)
   }
   return span
 }
@@ -126,13 +121,9 @@ function getCostSpan(name, options) {
 
   const isExistDuplicatorVariable = options?.isDuplicator && isResultElement.value(nameForDuplicator)
   if (isExistDuplicatorVariable) {
-    span = addIdAndClass(span, nameForDuplicator)
-    const cost = getResultElementByName.value(nameForDuplicator).cost
-    span.innerText = getValueOrSpace(cost)
+    span = addIdAndClass(span, nameForDuplicator, getResultElementByName, 'cost')
   } else if (isResultElement.value(name)) {
-    span = addIdAndClass(span, name)
-    const cost = getResultElementByName.value(name).cost
-    span.innerText = getValueOrSpace(cost)
+    span = addIdAndClass(span, name, getResultElementByName, 'cost')
   }
   return span
 }

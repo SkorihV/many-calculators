@@ -749,7 +749,7 @@ onMounted(async () => {
       :result-options="inputOptions?.resultOptions"
       :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
     />
-    <div v-html="textAfterResultBlock"/>
+    <div class="calc__text-after-result-block" v-html="textAfterResultBlock"/>
     <div id="prompt-text-element"></div>
   </div>
   <teleport v-if="allowTeleport && appIsMounted" to="#teleport">
@@ -1073,6 +1073,11 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       padding: 11px 50px;
     }
   }
+
+  &__text-after-result-block {
+    padding: 30px 0;
+  }
+
   //--------Стили input text-----
   &__input {
     &-wrapper {
