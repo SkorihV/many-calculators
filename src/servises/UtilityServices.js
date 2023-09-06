@@ -4,10 +4,11 @@ import {
   ERROR_ELEMENT_IS_NOT_EXIST, NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM
 } from "@/constants/variables";
 import {
+  REGEXP_HTML_TAG,
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
   REGEXP_QUOTES_AND_WORD,
   REGEXP_SPACES_IN_AROUND,
-  REGEXP_VARIABLE_SIGN_NUMBERS,
+  REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
 
 const parseResultValueObjectItem = function (item, fieldName, currency) {
@@ -298,6 +299,10 @@ function isOtherOrGlobalSum(variable) {
   return variable.match(NAME_RESERVED_VARIABLE_SUM) !== null || variable.match(NAME_RESERVED_VARIABLE_GLOBAL_SUM) !== null
 }
 
+function deleteTagsInText(text) {
+  return text?.replaceAll(REGEXP_HTML_TAG, "");
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -312,5 +317,6 @@ export {
   getArrayOnFormula,
   checkLogicAndReturnValue,
   getListVariablesUsedInFormula,
-  isOtherOrGlobalSum
+  isOtherOrGlobalSum,
+  deleteTagsInText
 };

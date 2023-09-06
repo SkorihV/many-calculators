@@ -6,7 +6,6 @@ const label = "Основная формула расчета";
 <script setup>
 import { onMounted, ref, watch, computed } from "vue";
 import {useBaseStore} from "@/store/baseStore";
-import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useMountedListStore} from "@/store/mountedListStore";
 import {useValidationListStore} from "@/store/validationListStore";
@@ -30,7 +29,7 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
 import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
-import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import { deleteTagsInText, getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 import {
   IS_LOCAL,
@@ -48,7 +47,6 @@ import {
 import { initUpdatingPositionData } from "@/servises/UpdatedPositionOnTemplates.js";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
-import { REGEXP_HTML_TAG } from "@/constants/regexp";
 import {
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
   NAME_RESERVED_VARIABLE_SUM,
@@ -59,7 +57,6 @@ import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
 const baseStoreRefs = storeToRefs(baseStore)
-const dependencyStore = useDependencyListStore()
 const nameStore = useElementNamesStore()
 const displayStore = useDisplayComponentsStore()
 const innerStore = useInnerVariablesStore()
@@ -164,14 +161,6 @@ watch(
   summaFreeVariables,
   () => {
     let isShow = Boolean(summaFreeVariables.value !== null)
-    // tryPassDependency(
-    //   NAME_RESERVED_VARIABLE_SUM,
-    //   summaFreeVariables.value,
-    //   isShow,
-    //   summaFreeVariables.value,
-    //   NAME_RESERVED_VARIABLE_SUM,
-    //   summaFreeVariables.value
-    // );
     innerStore.addInnerVariable({
       name: NAME_RESERVED_VARIABLE_SUM,
       value: summaFreeVariables.value,
@@ -300,14 +289,6 @@ const finalSummaForOutput = computed(() => {
     !displayResultData.value ||
     isExistGlobalErrorsValidationIgnoreHiddenElement.value
   ) {
-    // tryPassDependency(
-    //   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
-    //   null,
-    //   false,
-    //   null,
-    //   "App_calc"
-    // );
-
     innerStore.addInnerVariable({
       name: NAME_RESERVED_VARIABLE_GLOBAL_SUM,
       value: null,
@@ -335,14 +316,6 @@ const finalSummaForOutput = computed(() => {
     getRoundOffType.value
   );
   let isShow = Boolean(resultSum !== null)
-  // tryPassDependency(
-  //   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
-  //   resultSum,
-  //   isShow,
-  //   resultSum,
-  //   "App_calc",
-  //   resultSum
-  // );
   innerStore.addInnerVariable({
     name: NAME_RESERVED_VARIABLE_GLOBAL_SUM,
     value: resultSum,
@@ -381,7 +354,7 @@ const finalTextForOutput = computed(() => {
 });
 
 const finalTextForOutputForTeleport = computed(() => {
-  return finalTextForOutput.value.replaceAll(REGEXP_HTML_TAG, "");
+  return deleteTagsInText(finalTextForOutput.value)
 });
 /**
  * Отобразить блок с текстом о наличии ошибок,
@@ -440,6 +413,11 @@ const showFormIsAllow = computed(() => {
       checkAllowShowResultBlock.value
   );
 });
+
+
+const textAfterResultBlock = computed(() => {
+  return updateTextOnVariables(inputOptions.value?.resultOptions?.textAfterResultBlock)
+})
 
 watch(isExistGlobalErrorsValidationIgnoreHiddenElement, () => {
   checkEnabledResultButton();
@@ -627,24 +605,6 @@ function toggleTextAreaResultForDevMode() {
   }
 }
 
-// function tryPassDependency(
-//   name,
-//   value,
-//   isShow,
-//   displayValue,
-//   type,
-//   cost = null
-// ) {
-//   dependencyStore.addDependencyElement({
-//     name,
-//     value,
-//     isShow,
-//     displayValue,
-//     type,
-//     cost,
-//   });
-// }
-
 onMounted(async () => {
   if (IS_LOCAL) {
     await fetch(LOCAL_PATH_DATA)
@@ -789,6 +749,7 @@ onMounted(async () => {
       :result-options="inputOptions?.resultOptions"
       :formula="mainFormulaIsExist && isUseFormula ? mainFormulaResult : ''"
     />
+    <div v-html="textAfterResultBlock"/>
     <div id="prompt-text-element"></div>
   </div>
   <teleport v-if="allowTeleport && appIsMounted" to="#teleport">

@@ -15,7 +15,7 @@ export function updateTextOnVariables(text, options) {
 function replaceCostsVariables(text, options) {
   const costsInText = text?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST)
 
-  costsInText?.map(item => {
+  costsInText?.forEach(item => {
     let name = item.replaceAll(getPattern("{{|}}"),'')
     const span = getInnerSpan(name, options)
 
@@ -24,7 +24,7 @@ function replaceCostsVariables(text, options) {
     }
   })
 
-  costsInText?.map(item => {
+  costsInText?.forEach(item => {
     let name = item.replaceAll(getPattern("{{|}}"),'')
     const span= getCostSpan(name, options)
 
@@ -38,7 +38,7 @@ function replaceCostsVariables(text, options) {
 function replaceValuesVariables(text, options) {
   const valuesInText = text?.match(REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE)
 
-  valuesInText?.map(item => {
+  valuesInText?.forEach(item => {
     let name = item.replaceAll('##','')
     const span = getInnerSpan(name, options)
 
@@ -47,7 +47,7 @@ function replaceValuesVariables(text, options) {
     }
   })
 
-  valuesInText?.map(item => {
+  valuesInText?.forEach(item => {
     let name = item.replaceAll('##','')
     const span = getValueSpan(name, options)
 

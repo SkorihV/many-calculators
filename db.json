@@ -21,6 +21,7 @@
       "titleSumma": "Общая сумма составляет {{откуда}}  + ##откуда##",
       "formulaDependencyTextAfterSumma": "объем > 5",
       "textAfterSumma" : "Общая сумма составляет {{откуда}}  + ##откуда## +  ##_otherSum_## ----  ##_globalSum_##",
+      "textAfterResultBlock": "Общая сумма составляет {{откуда}}  + ##откуда## +  ##_otherSum_## ----  ##_globalSum_##",
       "dependencyTextAfterSumma": [
         {
           "dependencyFormulaTextAfterSumma":"объем > 6",
@@ -79,6 +80,7 @@
       "currency": "руб.",
       "showResultDataForBlock": 1,
       "minimalSum": 0,
+      "textAfterResultBlock": "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px;\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t<pre>\n{{откуда}}</pre>\n\t\t\t</td>\n\t\t\t<td>\n\t\t\t<pre>\n ##откуда##</pre>\n\t\t\t</td>\n\t\t\t<td>\n\t\t\t<pre>\n##_otherSum_##</pre>\n\t\t\t</td>\n\t\t\t<td>\n\t\t\t<pre>\n##_globalSum_##</pre>\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>",
       "timerForSpinner": 0,
       "textForSpinner": "Идет расчет...",
       "roundOffType": "ceil",
@@ -527,7 +529,7 @@
             "cost": 50,
             "extraValueForDependency": "москва",
             "dependencyFormulaItem": "_self_ !== куда",
-            "prompt": "{{откуда}}   ---  ##откуда##"
+            "prompt": "{{откуда}}##откуда##"
           },
           {
             "title": "Элемент списка - Московская Область",

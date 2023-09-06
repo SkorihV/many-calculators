@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { deleteTagsInText } from "@/servises/UtilityServices";
+
 
 const props = defineProps({
   promptText: {
@@ -22,8 +24,8 @@ const topBtnPrompt = ref(null);
 const topCalcWrapper = ref(null);
 
 const hiddenPromptWrapper = computed(() => {
-  const text = props.promptText;
-  return Boolean(text?.toString()?.trim().length);
+
+  return Boolean(deleteTagsInText(localPromptText.value)?.toString()?.trim().length);
 });
 
 const topPopupWrapper = computed(() => {
