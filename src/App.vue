@@ -29,7 +29,7 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
 import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
-import { deleteTagsInText, getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import { deleteTagsInText, getArrayElementsFromFormula, getPattern } from "@/servises/UtilityServices";
 
 import {
   IS_LOCAL,
@@ -53,9 +53,12 @@ import {
 } from "@/constants/variables";
 import { useElementNamesStore } from "@/store/elementNamesStore";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { useDependencyListStore } from "@/store/dependencyListStore";
+import { useFieldsForOutput } from "@/composables/useFieldsForOutput";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
+const dependencyStore = useDependencyListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const nameStore = useElementNamesStore()
 const displayStore = useDisplayComponentsStore()
@@ -662,9 +665,15 @@ onMounted(async () => {
   baseStore.tryToggleDevMode(Boolean(inputOptions.value?.devModeEnabled));
   baseStore.setTooltipOn(inputOptions.value);
 
+  if (inputOptions?.value?.fieldsForOutputData?.length) {
+      useFieldsForOutput(inputOptions?.value?.fieldsForOutputData)
+  }
+
+
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;
 });
+
 </script>
 
 <template>

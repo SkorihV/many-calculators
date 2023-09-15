@@ -4,6 +4,7 @@ import {REGEXP_VARIABLE_IN_TEXT_RESULT_COST, REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
+import { getPattern } from "@/servises/UtilityServices";
 
 export function updateTextOnVariables(text, options) {
   text = replaceCostsVariables(text, options)
@@ -58,9 +59,6 @@ function replaceValuesVariables(text, options) {
   return text
 }
 
-function getPattern(text) {
-  return new RegExp(`${text}`, 'g')
-}
 
 function getNameDuplicator(name, index) {
   return `${name}_${index}`

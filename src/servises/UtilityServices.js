@@ -299,6 +299,10 @@ function isOtherOrGlobalSum(variable) {
   return variable.match(NAME_RESERVED_VARIABLE_SUM) !== null || variable.match(NAME_RESERVED_VARIABLE_GLOBAL_SUM) !== null
 }
 
+function getPattern(text) {
+  return new RegExp(`${text}`, 'g')
+}
+
 function deleteTagsInText(text) {
   return text?.replaceAll(REGEXP_HTML_TAG, "");
 }
@@ -318,5 +322,6 @@ export {
   checkLogicAndReturnValue,
   getListVariablesUsedInFormula,
   isOtherOrGlobalSum,
-  deleteTagsInText
+  deleteTagsInText,
+  getPattern
 };
