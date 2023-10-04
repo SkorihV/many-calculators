@@ -239,6 +239,11 @@ watch(isVisibilityFromDependency, (value) => {
   }
   changeValue("dependency");
 });
+
+watch(localCost, () => {
+  changeValue("cost");
+})
+
 function inputLocalValue() {
   if (notActive.value) {
     return null;

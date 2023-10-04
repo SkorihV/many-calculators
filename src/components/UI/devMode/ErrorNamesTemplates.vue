@@ -16,8 +16,6 @@ import {
   LIST_BANNED_ELEMENTS_NAME,
 } from "@/constants/variables";
 
-import { replaceSpecSymbols } from "@/servises/UtilityServices";
-
 const baseStore = useBaseStore()
 const {getAllNameListByArray} = storeToRefs(useElementNamesStore())
 const { devMode } = storeToRefs(baseStore);
@@ -225,8 +223,7 @@ function processingAllTemplatesOnData() {
 function processingFormulaSpecialsSymbols(formula) {
   // разбиваем формулу на массив отдельных данных
 
-  formula = replaceSpecSymbols(formula)
-    ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
+  formula = formula?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     ?.map((item) => {
       //удаляем пробелы по краям
       let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");

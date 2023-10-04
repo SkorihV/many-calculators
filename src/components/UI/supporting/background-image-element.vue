@@ -74,7 +74,7 @@ const opacitySubstrate = computed(() => {
 });
 
 const styleBackgroundImageUrl = computed(() => {
-  return 'background-UiImage : url("' + currentImageUrl.value + '");';
+  return 'background-image : url("' + currentImageUrl.value + '");';
 });
 
 const styleBackgroundRepeat = computed(() => {

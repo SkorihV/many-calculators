@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useMountedListStore} from "@/store/mountedListStore";
@@ -47,7 +48,7 @@ export const useBaseStore = defineStore("base", {
      */
     getCurrency: ({ inputOptions }) => {
       return Boolean(inputOptions?.resultOptions?.currency)
-        ? inputOptions?.resultOptions?.currency
+        ? updateTextOnVariables(inputOptions?.resultOptions?.currency)
         : "руб";
     },
 

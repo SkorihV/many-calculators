@@ -29,7 +29,11 @@ import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
 import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
-import { deleteTagsInText, getArrayElementsFromFormula, getPattern } from "@/servises/UtilityServices";
+import {
+  deleteTagsInText,
+  getArrayElementsFromFormula,
+  replaceSpecSymbols
+} from "@/servises/UtilityServices";
 
 import {
   IS_LOCAL,
@@ -613,17 +617,23 @@ onMounted(async () => {
     await fetch(LOCAL_PATH_DATA)
       .then((response) => response.json())
       .then((data) => {
-        inputTemplates.value = data;
+        // inputTemplates.value = data;
+        inputTemplates.value = JSON.parse(
+          replaceSpecSymbols(JSON.stringify(data))
+        );
       });
     await fetch(LOCAL_PATH_OPTIONS)
       .then((response) => response.json())
       .then((data) => {
-        inputOptions.value = data;
+        // inputOptions.value = data;
+        inputOptions.value = JSON.parse(
+          replaceSpecSymbols(JSON.stringify(data))
+        );
       });
   } else {
     try {
       inputTemplates.value.calculatorTemplates = JSON.parse(
-        JSON.stringify(window?.calculatorTemplates)
+        replaceSpecSymbols(JSON.stringify(window?.calculatorTemplates))
       );
     } catch (e) {
       inputTemplates.value.calculatorTemplates = [];
@@ -634,7 +644,7 @@ onMounted(async () => {
 
     try {
       inputOptions.value = JSON.parse(
-        JSON.stringify(window?.calculatorOptions)
+        replaceSpecSymbols(JSON.stringify(window?.calculatorOptions))
       );
     } catch (e) {
       console.error("Ошибка при получении настроек калькулятора " + e.message);
@@ -2795,6 +2805,10 @@ $c_prompt_element_sing_bg_hover: #ff6531;
       width: 50px;
       display: flex;
       justify-content: center;
+      border: 1px solid black;
+      border-radius: 3px;
+      background: white;
+      cursor: pointer;
     }
     &-button {
       cursor: pointer;

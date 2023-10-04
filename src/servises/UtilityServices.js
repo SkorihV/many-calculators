@@ -255,11 +255,11 @@ const checkedValueOnVoid = (value) => {
   return value?.length !== 0 && value !== undefined && value !== null;
 };
 
-const replaceSpecSymbols = (formula) => {
+const replaceSpecSymbols = (innerString) => {
   SPEC_SYMBOLS.forEach((specItem) => {
-    formula = formula?.replaceAll(specItem[0], specItem[1]);
+    innerString = innerString?.replaceAll(specItem[0], specItem[1]);
   });
-  return formula;
+  return innerString;
 };
 
 /**
@@ -292,7 +292,7 @@ const getArrayOnFormula = (formula) => {
  * @returns {*}
  */
 const getArrayElementsFromFormula = (formula) => {
-  return getArrayOnFormula(replaceSpecSymbols(formula));
+  return getArrayOnFormula(formula);
 };
 
 function isOtherOrGlobalSum(variable) {

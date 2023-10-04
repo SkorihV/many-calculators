@@ -39,7 +39,8 @@ export const SPEC_SYMBOLS = Object.entries({
   "&gt;": ">",
   "&lt;": "<",
   "&amp;": "&",
-  "&quot;": '"',
+  "&quot;": "'",
+  '&#39;': "'"
 });
 
 export const ERROR_PADDING = "ОшибкаЗаполнения";

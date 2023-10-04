@@ -3,7 +3,6 @@ import { computed, ref } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 
-import { replaceSpecSymbols } from "@/servises/UtilityServices";
 import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue";
 
 const { showInsideElementStatus } = storeToRefs(useBaseStore())
@@ -49,7 +48,7 @@ const props = defineProps({
 const isShowInnerData = ref(false);
 
 const localFormula = computed(() => {
-  return replaceSpecSymbols(props.calculatedFormula);
+  return props.calculatedFormula;
 });
 </script>
 

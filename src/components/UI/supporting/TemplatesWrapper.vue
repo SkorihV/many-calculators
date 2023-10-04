@@ -187,7 +187,6 @@ const changeValue = (data) => {
         <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-range>
-
     <ui-select
       v-else-if="template.template === 'UiSelect'"
       :label="template?.label"

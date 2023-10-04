@@ -6,6 +6,7 @@ const typeElement = "DuplicatorMain";
 import { onMounted, reactive, ref, toRef, watch, computed } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
+import { useElementNamesStore } from "@/store/elementNamesStore";
 
 import UiDuplicatorItem from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
@@ -23,8 +24,11 @@ import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
+
+
 const baseStore = useBaseStore()
 const dependencyStore = useDependencyListStore()
+const nameStore = useElementNamesStore()
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -185,6 +189,8 @@ function emitChangeValue(eventType) {
     zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
   tryPassDependency();
+  nameStore.addNameInList({name: props.elementName, label: props.duplicateTemplate.label, position: props.positionElement})
+
 }
 
 function tryPassDependency() {

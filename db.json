@@ -96,7 +96,7 @@
     "ver_id": "4848407",
     "title": "тест",
     "computedMethod": "formula",
-    "formula": "инпут1",
+    "formula": "дупликатор",
     "methodBeginningCalculation": "useButton",
     "methodWorksForm": "show",
     "tooltipOff": false,
@@ -108,7 +108,7 @@
       "subtitle": "<p><b>Текст над блоком с результатом работы калькулятора</b></p>\n\n<p>&nbsp;</p>\n\n<p><b>Текст над блоком с результатом работы калькулятора</b></p>\n\n<p>&nbsp;</p>",
       "titleSumma": "Общая сумма составляет",
       "roundOffType": "round",
-      "currency": "руб.",
+      "currency": "руб. {{инпут1}}  ---  ##инпут1##",
       "backgroundImageSettings": {
         "title": "",
         "image": {
@@ -144,8 +144,43 @@
       }
     ]
   },
+
   "test-duplicator": {
     "calculatorTemplates": [
+      {
+        "json_id": "147714907",
+        "title": "системное",
+        "label": "системное",
+        "unit": "",
+        "cost": "радио3 + 10 + дупликатор + дупликатор",
+        "showElement": "show",
+        "formOutputMethod": "no",
+        "resultOutputMethod": "no",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": false,
+        "elementName": "Системное123",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "template": "UiSystem",
+        "dependencyPrices": null,
+        "prompt": "",
+        "htmlText": "{{дупликатор}}",
+        "dependencyHtmlText": null,
+        "iconSettingsSystemLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1882366907",
+            "filename": "https://calculators-works.oml.ru/d/container.png",
+            "ver_id": 4601302,
+            "image_width": "128",
+            "image_height": "128",
+            "ext": "png"
+          },
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
       {
         "json_id": "298833307",
         "meta_id": "35854107",
@@ -153,6 +188,40 @@
         "title": "Дупликатор",
         "label": "Дупликатор",
         "templates": [
+          {
+            "json_id": "147714924507",
+            "title": "системное",
+            "label": "системное",
+            "unit": "",
+            "cost": "радио3 + 10 + ипут3",
+            "showElement": "show",
+            "formOutputMethod": "no",
+            "resultOutputMethod": "no",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "Системное1",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "template": "UiSystem",
+            "dependencyPrices": null,
+            "prompt": "",
+            "htmlText": "{{дупликатор}}",
+            "dependencyHtmlText": null,
+            "iconSettingsSystemLabel": {
+              "title": "",
+              "image": {
+                "image_id": "1882366907",
+                "filename": "https://calculators-works.oml.ru/d/container.png",
+                "ver_id": 4601302,
+                "image_width": "128",
+                "image_height": "128",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            },
+            "parent": "0;"
+          },
           {
             "json_id": "178053907",
             "meta_id": "35851907",
@@ -352,7 +421,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -497,7 +566,7 @@
         "json_id": "100916907",
         "title": "Куда",
         "label": "Куда",
-        "isColumn": true,
+        "isColumn": false,
         "selectedItem": "1",
         "isNeedChoice": true,
         "notEmpty": 1,
@@ -510,7 +579,7 @@
         "dependencyFormulaDisplay": "",
         "classes": "",
         "template": "UiSelect",
-        "isStretch": false,
+        "isStretch": true,
         "globalMaxWidth": "",
         "globalMaxHeight": "",
         "values": [
@@ -1531,7 +1600,7 @@
             "title": "инпут1 > 10",
             "image": {
               "image_id": "1595369107",
-              "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+              "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
               "ver_id": 4848407,
               "image_width": "1920",
               "image_height": "1260",
@@ -1655,7 +1724,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -1760,7 +1829,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -1807,7 +1876,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -1876,7 +1945,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -1917,7 +1986,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -2016,7 +2085,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -2063,7 +2132,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -2296,7 +2365,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -2373,7 +2442,7 @@
                       "title": "",
                       "image": {
                         "image_id": "1750859907",
-                        "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                        "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                         "ver_id": 4848407,
                         "image_width": "512",
                         "image_height": "512",
@@ -2458,7 +2527,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -2484,7 +2553,7 @@
               "title": "ползунок2 &gt; 10",
               "image": {
                 "image_id": "1595369107",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "1920",
                 "image_height": "1260",
@@ -2596,7 +2665,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -2691,7 +2760,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -2727,7 +2796,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -2805,7 +2874,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -2894,7 +2963,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                    "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -2912,7 +2981,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+                "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -2948,7 +3017,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+            "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -3036,7 +3105,7 @@
             "title": "инпут1 > 10",
             "image": {
               "image_id": "1595369107",
-              "filename": "http://testing.calculators-works.oml.ru/d/location_2.png",
+              "filename": "http://testing.calculators-works.oml.ru/d/https://calculators-works.oml.ru/d/container_2.png",
               "ver_id": 4848407,
               "image_width": "1920",
               "image_height": "1260",
@@ -4270,6 +4339,333 @@
     ]
   },
 
+  "test-test2": {
+    "calculatorTemplates": [
+      {
+        "json_id": "177974507",
+        "ver_id": "4848407",
+        "title": "радио без оберток",
+        "label": "радио без оберток",
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notReset": false,
+        "notEmpty": false,
+        "isColumn": "",
+        "isStretch": "",
+        "typeDisplayClass": "buttons",
+        "resultOutputMethod": "valueSumm",
+        "formOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "радио1",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "template": "UiRadio",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - первое значение",
+            "radioName": "первое значение",
+            "subradioName": "подсказка очень длинная",
+            "cost": 10,
+            "dependencyPrices": [
+              {
+                "title": "цена 1",
+                "cost": 50,
+                "dependencyFormulaCost": "инпут1 &gt; 5"
+              },
+              {
+                "title": "цена 2",
+                "cost": 150,
+                "dependencyFormulaCost": "инпут1 &gt; 20"
+              }
+            ],
+            "iconSettingsRadioItem": {
+              "title": "",
+              "image": {
+                "image_id": "1750859907",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
+                "ver_id": 4848407,
+                "image_width": "512",
+                "image_height": "512",
+                "ext": "png"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент радио-кнопка - второе значение с очень длинным названием",
+            "radioName": "второе значение с очень длинным названием",
+            "subradioName": "подзаголовок",
+            "cost": 55,
+            "prompt": "&amp;&amp; - логическое И.<br />\n!== логическое отрицание НЕ РАВНО<br />\n() - объединение в группу<br />\n&gt;, &gt;=, &lt;, &lt;= - больше, б"
+          },
+          {
+            "title": "Элемент радио-кнопка - третий элемент",
+            "radioName": "третий элемент",
+            "subradioName": "третий элемент",
+            "cost": 66,
+            "prompt": "ыфав фы ф фы&nbsp;"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsRadioLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "107437508",
+        "title": "Селект - доставка",
+        "label": "Направление - Китай -> Ереван",
+        "selectedItem": "1",
+        "isNeedChoice": "1",
+        "notEmpty": "1",
+        "isColumn": "",
+        "isStretch": "",
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": "",
+        "excludeFromCalculations": "1",
+        "elementName": "направления",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - Китай -&gt; Ереван",
+            "selectName": "Китай -&gt; Ереван",
+            "extraValueForDependency": "китайЕреван"
+          },
+          {
+            "title": "Элемент списка - Китай -&gt; Москва",
+            "selectName": "Китай -&gt; Москва",
+            "extraValueForDependency": "китайМосква"
+          },
+          {
+            "title": "Элемент списка - Москва -&gt; Армения",
+            "selectName": "Москва -&gt; Армения",
+            "extraValueForDependency": "москваАрмения"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "44081908",
+        "title": "Список для поиска",
+        "label": "",
+        "selectedItem": "1",
+        "isNeedChoice": "1",
+        "notEmpty": "",
+        "isColumn": "",
+        "isStretch": "",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": "",
+        "excludeFromCalculations": "",
+        "elementName": "spisok",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - Один",
+            "selectName": "Один",
+            "cost": 1,
+            "extraValueForDependency": "один"
+          },
+          {
+            "title": "Элемент списка - 2",
+            "selectName": 2,
+            "cost": 2,
+            "extraValueForDependency": 2
+          },
+          {
+            "title": "Элемент списка - 3",
+            "selectName": 3,
+            "cost": 3,
+            "extraValueForDependency": 3
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "178227307",
+        "title": "селект для колонки",
+        "label": "селект для колонки",
+        "selectedItem": "1",
+        "isNeedChoice": "",
+        "notEmpty": "",
+        "isColumn": "1",
+        "isStretch": "",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": "",
+        "excludeFromCalculations": "",
+        "elementName": "селект3",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - 1",
+            "selectName": 1,
+            "cost": 1
+          },
+          {
+            "title": "Элемент списка - 2",
+            "selectName": 2,
+            "cost": 2
+          },
+          {
+            "title": "Элемент списка - 3",
+            "selectName": 3,
+            "cost": 3
+          }
+        ],
+        "prompt": "13123",
+        "iconSettingsSelectLabel": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "178055507",
+        "title": "Селект для блока секции",
+        "label": "Селект для блока секции",
+        "selectedItem": "1",
+        "isNeedChoice": "",
+        "notEmpty": "",
+        "isColumn": "1",
+        "isStretch": "",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": "",
+        "excludeFromCalculations": "",
+        "elementName": "селект2",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - Селект для блока секции 1",
+            "selectName": "Селект для блока секции 1",
+            "cost": 34
+          },
+          {
+            "title": "Элемент списка - Селект для блока секции 2",
+            "selectName": "Селект для блока секции 2",
+            "cost": 43
+          },
+          {
+            "title": "Элемент списка - Селект для блока секции 3",
+            "selectName": "Селект для блока секции 3"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": "",
+        "parent": "0;"
+      },
+      {
+        "json_id": "177999107",
+        "title": "селект без оберток",
+        "label": "селект без оберток",
+        "selectedItem": "1",
+        "isNeedChoice": "1",
+        "notEmpty": "",
+        "isColumn": "1",
+        "isStretch": "1",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": "",
+        "excludeFromCalculations": "",
+        "elementName": "селект1",
+        "formulaProcessingLogic": "error",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "globalMaxWidth": "55",
+        "globalMaxHeight": "55",
+        "template": "UiSelect",
+        "values": [
+          {
+            "title": "Элемент списка - Значение первое",
+            "selectName": "Значение первое",
+            "cost": 50,
+            "iconSettingsSelectItem": {
+              "title": "",
+              "image": {
+                "image_id": "1750859907",
+                "filename": "location_2.png",
+                "ver_id": 4848407,
+                "image_width": "512",
+                "image_height": "512",
+                "ext": "png"
+              },
+              "maxWidth": 33,
+              "maxHeight": 33,
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент списка - второе значение ",
+            "selectName": "второе значение",
+            "cost": 30,
+            "iconSettingsSelectItem": {
+              "title": "",
+              "image": {
+                "image_id": "1595366307",
+                "filename": "fence2_1.svg",
+                "ver_id": 4848407,
+                "image_width": "0",
+                "image_height": "0",
+                "ext": "svg"
+              },
+              "behaviorImage": "contain",
+              "location": "leftSide"
+            }
+          },
+          {
+            "title": "Элемент списка - Тест отображения",
+            "selectName": "Тест отображения"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1750859907",
+            "filename": "location_2.png",
+            "ver_id": 4848407,
+            "image_width": "512",
+            "image_height": "512",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      }
+    ]
+  },
+
 
   "data-options-3": {
     "calculatorTemplates":  [
@@ -4290,6 +4686,7 @@
         "dataType": "onlyNumber",
         "notEmpty": false,
         "isCurrency": false,
+        "localCurrency": "aaaasda",
         "isColumn": 1,
         "isStretch": 1,
         "formOutputMethod": "valueSumm",
@@ -4379,7 +4776,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -4441,7 +4838,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -4484,7 +4881,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -4524,7 +4921,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -4561,7 +4958,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -4585,7 +4982,6 @@
             "json_id": "178053907",
             "ver_id": "4848407",
             "title": "Инпут для блока секции",
-            "json_meta": "{\n  \"title\": {\n    \"name\": \"Текстовое поле - Input\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"value\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"value\": 0,\n    \"name\": \"Начальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Только числа\"\n  },\n  \"placeholder\": {\n    \"name\": \"Подсказка внутри текстового поля (placeholder)\",\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"size\": 50,\n    \"note\": \"Работает при отключенной опции 'Обязательно для заполнения'\"\n  },\n  \"cost\": {\n    \"name\": \"Стоимость за единицу по умолчанию\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"Сработает при включенной опции - только числа.\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. Ни на что на сайте не влияет.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость за единицу\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при включенной опции - 'Только числа' и выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"unit\": {\n    \"type\": \"text\",\n    \"name\": \"Единица измерения\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"note\": \"Отображается после поля для заполнения\"\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"min\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 0,\n    \"name\": \"Минимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"max\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"value\": 10,\n    \"name\": \"Максимальное значение\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"note\": \"При выходе за указанное число - на сайте будет отображаться сообщение об ошибке, и сбрасываться на указанное значение.\"\n  },\n  \"controls\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Включить элементы управления (+ , -):\"\n  },\n  \"step\": {\n    \"type\": \"text\",\n    \"name\": \"Шаг при нажатии на кнопки управления\",\n    \"size\": 10,\n    \"maxlength\": 10,\n    \"required\": true,\n    \"value\": 1,\n    \"validator\": \"^[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"discreteStep\": {\n    \"name\": \"Включить кратность шага для поля ввода:\",\n    \"type\": \"checkbox\",\n    \"note\": \"При ручном изменении значения в поле ввода, оно будет автоматически корректироваться</br> кратно значению указанному в поле 'Шаг'\"\n  },\n  \"dataType\": {\n  \t\"name\":\"Тип данных в поле\",\n  \t\"type\": \"radio\",\n  \t\"options\": {\n  \t\t\"mixed\":\"Смешанный\",\n  \t\t\"onlyNumber\": \"Только числа\",\n  \t\t\"onlyInteger\": \"Только целые числа\"\n  \t},\n  \t\"value\": \"onlyNumber\",\n  \t\"no_empty\": true,\n  \t\"note\": \"Смешанный - любой текст.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для заполнения:\"\n  },\n  \"isCurrency\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Разделять тысячные:\",\n    \"note\": \"При включенной опции - 'Только числа'\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"isStretch\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Растянуть элемент по доступной ширине:\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  },\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"staff_only\": true,\n    \"maxlength\": 255,\n    \"size\": 50\n  },\n  \"iconSettingsInputLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"maxlength\": \"255\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiInput\": \"Строка\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
             "label": "Инпут для блока секции",
             "value": "0",
             "placeholder": "",
@@ -4645,7 +5041,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -4689,7 +5085,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "location_2.png",
+                    "filename": "https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -4747,7 +5143,6 @@
             "json_id": "178055307",
             "ver_id": "4848407",
             "title": "ползунок для блока секции",
-            "json_meta": "{\n  \"title\": {\n    \"name\": \"Ползунок - Range\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 255,\n    \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n  },\n  \"label\": {\n    \"type\": \"text\",\n    \"maxlength\": 255,\n    \"name\": \"Заголовок блока\",\n    \"size\": 50\n  },\n  \"value\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"name\": \"Начальное значение\",\n    \"required\": true,\n    \"value\": 0,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"min\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"name\": \"Минимальное значение\",\n    \"value\": 0,\n    \"required\": true,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"max\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"name\": \"Максимальное значение\",\n    \"value\": 100,\n    \"required\": true,\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"cost\": {\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 50,\n    \"name\": \"Стоимость за единицу\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\"\n  },\n  \"dependencyPrices\": {\n    \"name\": \"Набор цен с условиями\",\n    \"note\": \"<div style='color:red;'>Для каждой цены прописывается условие на сравнение с указанным 'ИмяЭлемента'</br> Условия обязательно прописывать по восходящей. </br> Цена того условия которое будет удовлетворительным самым последним из списка - будет отображаться в результате. </br> Если ни одно условие не выполнено - сработает базовая стоимость.</div>\",\n    \"type\": \"meta\",\n    \"value\": {\n      \"title\": {\n        \"type\": \"text\",\n        \"name\": \"Системное название\",\n        \"required\": false,\n        \"size\": 50,\n        \"maxlength\": 255,\n        \"note\": \"Системное поле необходимо для идентификации в общем списке элементов. На сайте не отображается.\"\n      },\n      \"cost\": {\n        \"name\": \"Стоимость за единицу\",\n        \"type\": \"text\",\n        \"size\": 50,\n        \"maxlength\": 50,\n        \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n        \"note\": \"Только числа. Сработает при выполнении указанных условий. Пустое значение приравнивается к нулю.\"\n      },\n      \"dependencyFormulaCost\": {\n        \"type\": \"textarea\",\n        \"name\": \"Условие использования указанной цены\",\n        \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\",\n        \"required\": true\n      },\n      \"disabledFormula\": {\n        \"type\": \"checkbox\",\n        \"value\": true,\n        \"no_empty\": true,\n        \"name\": \"Отключить проверку условия:\",\n        \"note\": \"Опция позволяет проигнорировать текущее условие и указанное значение стоимости.\"\n      }\n    }\n  },\n  \"unit\": {\n    \"name\": \"Единицы измерения\",\n    \"type\": \"text\",\n    \"size\": 50,\n    \"maxlength\": 30,\n    \"node\": \"Информационный параметр ни на что не влияет.\"\n  },\n  \"prompt\": {\n    \"type\": \"html\",\n    \"name\": \"Текст подсказки:\"\n  },\n  \"step\": {\n    \"name\": \"Шаг в ползунке\",\n    \"type\": \"text\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"value\": 1,\n    \"required\": true,\n    \"size\": 50,\n    \"maxlength\": 30\n  },\n  \"showSteps\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить ленту с шагами под ползунком\"\n  },\n  \"stepPrompt\": {\n    \"name\": \"Шаг деления в ленте\",\n    \"type\": \"text\",\n    \"validator\": \"^-?[0-9]+(.[0-9]{1,5})?$\",\n    \"value\": 1,\n    \"required\": true,\n    \"size\": 50,\n    \"maxlength\": 30\n  },\n  \"isNeedChoice\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отключен предвыбор:\",\n    \"note\": \"По умолчанию ничего не будет выбрано.\"\n  },\n  \"notEmpty\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Обязательно для выбора:\"\n  },\n  \"showStaticValue\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить текущее значение в блоке ( статичное ):\"\n  },\n  \"showDynamicValue\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить текущее значение ( динамичное ):\",\n    \"note\": \"Отобразится поле в которое в ручную можно прописывать значение.\"\n  },\n  \"isColumn\": {\n    \"type\": \"checkbox\",\n    \"name\": \"Отобразить колонкой:\",\n    \"note\": \"Заголовок с элементом управления будут выстроены в колонку\"\n  },\n  \"formOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные передавать в форму обратной связи по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в поле формы.\"\n  },\n  \"resultOutputMethod\": {\n    \"type\": \"select\",\n    \"name\": \"Какие данные отображать в результирующем блоке по этому полю\",\n    \"value\": \"valueSumm\",\n    \"no_empty\": true,\n    \"options\": {\n      \"valueSumm\": \"Заголовок, значение и стоимость (сумму)\",\n      \"value\": \"Заголовок и выбранное значение\",\n      \"summ\": \"Заголовок и стоимость (сумму)\",\n      \"no\": \"Ничего\"\n    },\n    \"note\": \"По умолчанию поле участвует в расчете, но не выводится в блок с результатами.\"\n  },\n  \"zeroValueDisplayIgnore\": {\n  \t\"type\":\"checkbox\",\n  \t\"name\":\"Игнорировать нулевые/пустые значения для вывода:\",\n  \t\"note\":\"Если результатом расчета элемента будет ноль (0, Null, false) </br>этот элемент будет проигнорирован при выводе в результирующем блоке и в форме.</br> Но останется участвовать в расчетах.\"\n  \t},\n  \"excludeFromCalculations\": {\n    \"name\": \"Исключить из расчетов:\",\n    \"type\": \"checkbox\",\n    \"note\": \"Опция используется когда значение элемента не должно использоваться в расчетах.\"\n  },\n  \"elementName\": {\n    \"name\": \"ИмяЭлемента в формуле расчета\",\n    \"type\": \"text\",\n    \"note\": \"Указанное ИМЯ может участвовать в формуле расчета.</br> Значение должно быть уникальным среди ИМЁН остальных элементов калькулятора! </br> Имя может состоять из букв, цифр и нижнее подчеркивание.\",\n    \"size\": 50,\n    \"validator\": \"^[A-Za-zА-яа-яёЁ][A-Za-zА-яа-яёЁ0-9_]*$\",\n    \"maxlength\": 255\n  },\n  \"formulaProcessingLogic\": {\n    \"type\": \"select\",\n    \"name\": \"Как обрабатывать пустое значение элемента в формуле\",\n    \"options\": {\n\t  \"zero\": \"Заменять на НОЛЬ\",\n      \"error\": \"Выдавать ОШИБКУ\"\n    },\n    \"no_empty\": true,\n    \"note\": \"<div>Описываемая логика распространяется на случаи, когда значение в поле не выбрано или поле скрыто условиями НО само поле Явно(!) указано в формуле.</br>Заменять на НОЛЬ - если в поле ничего не выбрано, то его значение всегда будет равно нулю.</br>Отдавать ОШИБКУ - результата вычисления формулы ошибочным пока не будет выбрано в значение в поля.</div>\"\n  },\n  \"dependencyFormulaDisplay\": {\n    \"type\": \"textarea\",\n    \"name\": \"Формула условия отображения поля\",\n    \"note\": \"Пример: ИмяЭлемента1 > 10 && ИмяЭлемента1 < 30 && ( ИмяЭлемента2 === 1 || ИмяЭлемента2 === 2 ). </br> === - логическое сравнение. </br> || - логическое ИЛИ. </br> && - логическое И. </br> !== логическое отрицание НЕ РАВНО </br> () - объединение в группу </br> >, >=, <, <= - больше, больше или равно, меньше, меньше или равно. </br> Для элемента типа 'Галочка' условия вкл / выкл === true / false. </br>Для выпадающего списка и радио кнопок указывается порядковый номер элемента </br>\"\n  },\n  \"classes\": {\n    \"type\": \"text\",\n    \"name\": \"Список собственных классов для обертки компонента ( через пробел )\",\n    \"size\": 50,\n    \"staff_only\": true,\n    \"maxlength\": 255\n  },\n    \"iconSettingsRangeLabel\": {\n    \"type\": \"meta\",\n    \"name\": \"Настройки иконки\",\n    \"single\": true,\n    \"note\":\"Для заголовка блока\",\n    \"value\": {\n      \"title\": {\n        \"required\": false,\n        \"type\": \"hidden\"\n      },\n      \"image\": {\n        \"name\": \"Иконка\",\n        \"type\": \"image2\",\n        \"required\": true\n      },\n      \"maxWidth\": {\n        \"name\": \"Максимальная ширина иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n      \"maxHeight\": {\n        \"name\": \"Максимальная высота иконки в px\",\n        \"type\": \"text\",\n        \"value\": 32,\n        \"validator\": \"^[0-9]*$\",\n        \"note\": \"Только целые числа.\"\n      },\n    \"behaviorImage\": {\n\t    \"name\": \"Поведение картинки в блоке (размер)\",\n\t    \"type\": \"select\",\n\t    \"no_empty\": true,\n\t    \"options\": {\n\t      \"contain\": \"Встраивать - contain\",\n\t      \"cover\": \"Масштабировать - cover\"\n\t    }\n\t  },\n      \"location\": {\n        \"type\": \"select\",\n        \"name\": \"Расположение иконки\",\n        \"no_empty\": true,\n        \"options\": {\n          \"leftSide\": \"Слева\",\n          \"rightSide\": \"Справа\"\n        }\n      }\n    }\n  },\n  \"template\": {\n    \"name\": \"Тип шаблона\",\n    \"type\": \"select\",\n    \"no_empty\": true,\n    \"options\": {\n      \"UiRange\": \"Ползунок\"\n    },\n    \"note\": \"Системное поле\"\n  }\n}",
             "label": "ползунок для блока секции",
             "value": "10",
             "min": "0",
@@ -4903,7 +5298,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "location_2.png",
+                    "filename": "https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -4967,7 +5362,7 @@
                       "title": "",
                       "image": {
                         "image_id": "1750859907",
-                        "filename": "location_2.png",
+                        "filename": "https://calculators-works.oml.ru/d/container_2.png",
                         "ver_id": 4848407,
                         "image_width": "512",
                         "image_height": "512",
@@ -5049,7 +5444,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -5064,7 +5459,7 @@
           "title": "",
           "image": {
             "image_id": "1595369507",
-            "filename": "55323200.png",
+            "filename": "https://calculators-works.oml.ru/d/img_003.png",
             "ver_id": 4848407,
             "image_width": "1341",
             "image_height": "1068",
@@ -5174,7 +5569,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "location_2.png",
+                    "filename": "https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -5258,7 +5653,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -5299,7 +5694,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",
@@ -5367,7 +5762,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -5375,7 +5770,7 @@
               },
               "imageHover": {
                 "image_id": "1595369507",
-                "filename": "55323200.png",
+                "filename": "https://calculators-works.oml.ru/d/img_003.png",
                 "ver_id": 4848407,
                 "image_width": "1341",
                 "image_height": "1068",
@@ -5383,7 +5778,7 @@
               },
               "imageSelected": {
                 "image_id": "1595369507",
-                "filename": "55323200.png",
+                "filename": "https://calculators-works.oml.ru/d/img_003.png",
                 "ver_id": 4848407,
                 "image_width": "1341",
                 "image_height": "1068",
@@ -5450,7 +5845,7 @@
                   "title": "",
                   "image": {
                     "image_id": "1750859907",
-                    "filename": "location_2.png",
+                    "filename": "https://calculators-works.oml.ru/d/container_2.png",
                     "ver_id": 4848407,
                     "image_width": "512",
                     "image_height": "512",
@@ -5468,7 +5863,7 @@
               "title": "",
               "image": {
                 "image_id": "1750859907",
-                "filename": "location_2.png",
+                "filename": "https://calculators-works.oml.ru/d/container_2.png",
                 "ver_id": 4848407,
                 "image_width": "512",
                 "image_height": "512",
@@ -5504,7 +5899,7 @@
           "title": "",
           "image": {
             "image_id": "1750859907",
-            "filename": "location_2.png",
+            "filename": "https://calculators-works.oml.ru/d/container_2.png",
             "ver_id": 4848407,
             "image_width": "512",
             "image_height": "512",

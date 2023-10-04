@@ -525,7 +525,6 @@ function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
   const isGlobalVariable = isResultElement.value(item);
-
   return (isVariable || isSpecVariable) && !isGlobalVariable;
 }
 

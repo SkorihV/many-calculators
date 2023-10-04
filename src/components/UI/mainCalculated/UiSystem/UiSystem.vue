@@ -285,7 +285,7 @@ watch(
   localCost,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      changeValue();
+      changeValue('cost');
     }
   },
   { deep: true }

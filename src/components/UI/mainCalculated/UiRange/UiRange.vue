@@ -310,6 +310,9 @@ watch(isVisibilityFromDependency, (newValue) => {
 watch(resultValue, () => {
   tryChangeValue();
 });
+watch(localCost, () => {
+  changeValue('cost');
+});
 
 watch(getSomeElementChangedSelfVisibilityState, () => {
   updatedCurrentWidth();

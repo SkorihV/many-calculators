@@ -2,7 +2,6 @@
 import { computed, ref } from "vue";
 import {
   getArrayOnFormula,
-  replaceSpecSymbols
 } from "@/servises/UtilityServices";
 import devFormulaItem from "@/components/UI/devMode/devBlock/devFormulaItem.vue";
 
@@ -36,18 +35,14 @@ function switchTypeData() {
   }
 }
 
-const localFormula = computed(() => {
-  return replaceSpecSymbols(props.formula);
-});
 const localFormulaArray = computed(() => {
-  return getArrayOnFormula(localFormula.value);
+  return getArrayOnFormula(props.formula);
 });
-
 
 </script>
 
 <template>
-  <div class="calc__dev-block-element" v-if="localFormula?.length">
+  <div class="calc__dev-block-element" v-if="formula?.length">
     <div class="calc__dev-block-item-label">
       {{ label
       }}

@@ -391,6 +391,9 @@ const numberSignsAfterComma = computed(() => {
 watch(isVisibilityFromDependency, () => {
   changeValue("dependency");
 });
+watch(localCost, () => {
+  changeValue("cost");
+});
 
 watch(inputFocus, (isFocus) => {
   if (!isFocus) {

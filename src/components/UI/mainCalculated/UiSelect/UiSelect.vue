@@ -390,7 +390,7 @@ watch(isVisibilityFromDependency, (newValue, oldValue) => {
 watch(
   localCost,
   () => {
-    changeValue("dependency");
+    changeValue("cost");
   },
   { deep: true }
 );
