@@ -78,7 +78,6 @@ const { localDependencyList, constructLocalListElementDependencyInFormula } =
 const {
   isVisibilityFromDependency,
   formulaAfterProcessingVariables,
-  costAfterProcessingDependencyPrice,
 } = useProcessingFormula(
   reactive({
     localDependencyList: localDependencyList,

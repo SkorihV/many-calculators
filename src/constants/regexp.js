@@ -22,3 +22,7 @@ export const REGEXP_STRING_SPLIT_FORMULA =
 
 export const REGEXP_VARIABLE_IN_TEXT_RESULT_COST = /{{_?[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё0-9_]*_?}}/g
 export const REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE = /##_?[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё0-9_]*_?##/g
+
+
+export const REGEXP_QUOTES_FOR_VALUE = /##/g
+export const REGEXP_QUOTES_FOR_COST = /{{|}}/g

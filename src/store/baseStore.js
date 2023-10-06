@@ -99,6 +99,14 @@ export const useBaseStore = defineStore("base", {
     getNameHighlightElement({ nameHighlightElement }) {
       return nameHighlightElement;
     },
+    getTextErrorRequire({inputOptions}) {
+      let text = inputOptions?.resultOptions?.textErrorRequire
+      return text?.length ? text : "Заполните, пожалуйста, все обязательные поля."
+    },
+    getTextErrorSum({inputOptions}) {
+      let text = inputOptions?.resultOptions?.textErrorSum
+      return text?.length ? text : "Не все поля участвующие в расчете были заполнены."
+    }
   },
   actions: {
 

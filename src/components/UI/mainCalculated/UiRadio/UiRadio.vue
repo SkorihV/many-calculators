@@ -39,7 +39,6 @@ import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
-import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 
 const emits = defineEmits(["changedValue"]);
@@ -175,10 +174,12 @@ onUnmounted(() => {
   baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 
-
+const localLabel = computed(() => {
+  return props.label
+})
 
 const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString()?.length);
+  return Boolean(localLabel.value?.toString()?.length);
 });
 
 const { isMakeElementColumn } = getIsMakeElementColumn(
@@ -222,7 +223,7 @@ const isErrorClass = computed(() => {
 
 const localCost = computed(() => {
   return isRadioItemSelected.value
-    ? currentSelectedRadioButton.value?.cost
+    ? parseFloat(currentSelectedRadioButton.value?.cost)
     : null;
 });
 
@@ -397,7 +398,7 @@ function changeValue(eventType = "click") {
     name: localElementName.value,
     type: "radio",
     cost: localCost.value,
-    label: props.label,
+    label: localLabel.value,
     formOutputMethod:
       props.formOutputMethod !== "no" ? props.formOutputMethod : null,
     resultOutputMethod:
@@ -464,11 +465,11 @@ function tryPassDependency() {
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsRadioLabel"
-        :alt="isExistLabel ? label : ''"
+        :alt="isExistLabel ? localLabel : ''"
         :isExistLabel="isExistLabel"
       >
         <div class="calc__radio-label-text" v-if="isExistLabel">
-          {{ label }}
+          {{ localLabel }}
           <div class="empty-block" v-if="notEmpty">*</div>
           <slot name="prompt" />
         </div>
@@ -523,7 +524,7 @@ function tryPassDependency() {
     </div>
   </div>
   <dev-block
-    :label="label || localElementName"
+    :label="localLabel || localElementName"
     :type-element="typeElement"
     :element-name="localElementName"
     :value="selectedValueInRadio"

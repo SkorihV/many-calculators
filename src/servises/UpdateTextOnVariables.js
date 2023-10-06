@@ -4,7 +4,8 @@ import {REGEXP_VARIABLE_IN_TEXT_RESULT_COST, REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useResultListStore} from "@/store/resultListStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
-import { getPattern } from "@/servises/UtilityServices";
+import { getPattern, trimVariableCost, trimVariableValue } from "@/servises/UtilityServices";
+
 
 export function updateTextOnVariables(text, options) {
   text = replaceCostsVariables(text, options)
@@ -15,48 +16,45 @@ export function updateTextOnVariables(text, options) {
 
 function replaceCostsVariables(text, options) {
   const costsInText = text?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST)
-
   costsInText?.forEach(item => {
-    let name = item.replaceAll(getPattern("{{|}}"),'')
-    const span = getInnerSpan(name, options)
-
-    if (span.innerText?.length) {
-      text = text.replaceAll(getPattern(item), span.outerHTML)
-    }
+    let name = trimVariableCost(item)
+    const element = getInnerSpan(name, options)
+    text = replaceElementOrText(text, item, element)
   })
 
   costsInText?.forEach(item => {
-    let name = item.replaceAll(getPattern("{{|}}"),'')
-    const span= getCostSpan(name, options)
-
-    if (span.innerText?.length) {
-      text = text.replaceAll(getPattern(item), span.outerHTML)
-    }
+    let name = trimVariableCost((item))
+    const element= getCostSpan(name, options)
+    text = replaceElementOrText(text, item, element)
   })
-  return text
+  return text ? text : ''
 }
 
 function replaceValuesVariables(text, options) {
   const valuesInText = text?.match(REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE)
-
   valuesInText?.forEach(item => {
-    let name = item.replaceAll('##','')
-    const span = getInnerSpan(name, options)
+    let name = trimVariableValue(item)
+    const element = getInnerSpan(name, options)
 
-    if (span.innerText?.length) {
-      text = text.replaceAll(getPattern(item), span.outerHTML)
-    }
+    text = replaceElementOrText(text, item, element)
   })
 
   valuesInText?.forEach(item => {
-    let name = item.replaceAll('##','')
-    const span = getValueSpan(name, options)
+    let name = trimVariableValue(item)
+    const element = getValueSpan(name, options)
 
-    if (span.innerText?.length) {
-      text = text.replaceAll(getPattern(item), span.outerHTML)
-    }
+    text = replaceElementOrText(text, item, element)
   })
-  return text
+  return text ? text : ''
+}
+
+function replaceElementOrText(innerText, replaceableItem, element) {
+  if (element?.innerText?.length) {
+    innerText = innerText.replaceAll(getPattern(replaceableItem), element.outerHTML)
+  } else if (element !== null && element.toString?.length) {
+    innerText = innerText.replaceAll(getPattern(replaceableItem), element)
+  }
+  return innerText
 }
 
 
@@ -72,8 +70,15 @@ function getValueOrSpace(data) {
   return data !== null ? data : ' '
 }
 
-function addIdAndClass(node, name, storeFuncForGetElement, nameGettingField = 'value') {
+function addIdAndClass(name, storeFuncForGetElement, nameGettingField = 'value', options) {
+  let node = getSpan()
+  let isPrueValue = Boolean(options?.prueValue)
+
   const value = getValueOrSpace(storeFuncForGetElement.value(name)[nameGettingField])
+
+  if (isPrueValue) {
+    return value
+  }
   node.id = name
   node.classList.add(name)
   node.dataset.data = value
@@ -83,45 +88,45 @@ function addIdAndClass(node, name, storeFuncForGetElement, nameGettingField = 'v
 
 function getInnerSpan(name, options) {
   const {isInnerVariable, getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
+  let elem = null;
 
-  let span = getSpan()
   const nameForDuplicator = getNameDuplicator(name, options?.index)
   const isExistInnerVariable = options?.isDuplicator && isInnerVariable.value(nameForDuplicator)
 
   if (isExistInnerVariable) {
-    span = addIdAndClass(span, nameForDuplicator, getInnerVariableByName)
+    elem = addIdAndClass(nameForDuplicator, getInnerVariableByName, 'value', options)
   } else if (isInnerVariable.value(name)) {
-    span = addIdAndClass(span, name, getInnerVariableByName)
+    elem = addIdAndClass( name, getInnerVariableByName, 'value', options)
   }
-  return span
+  return elem
 }
 
 function getValueSpan(name, options) {
   const {isDependencyElement, getDependencyElementByName} = storeToRefs(useDependencyListStore())
 
-  let span = getSpan()
+  let elem = null
   const nameForDuplicator = getNameDuplicator(name, options?.index)
-
   const isExistDuplicatorVariable = options?.isDuplicator && isDependencyElement.value(nameForDuplicator)
+
   if (isExistDuplicatorVariable) {
-    span = addIdAndClass(span, nameForDuplicator, getDependencyElementByName)
+    elem = addIdAndClass(nameForDuplicator, getDependencyElementByName, 'value', options)
   } else if (isDependencyElement.value(name)) {
-    span = addIdAndClass(span, name, getDependencyElementByName)
+    elem = addIdAndClass(name, getDependencyElementByName, 'value', options)
   }
-  return span
+  return elem
 }
 
 function getCostSpan(name, options) {
   const {isResultElement, getResultElementByName} = storeToRefs(useResultListStore())
 
-  let span = getSpan()
+  let elem = null
   const nameForDuplicator = getNameDuplicator(name, options?.index)
 
   const isExistDuplicatorVariable = options?.isDuplicator && isResultElement.value(nameForDuplicator)
   if (isExistDuplicatorVariable) {
-    span = addIdAndClass(span, nameForDuplicator, getResultElementByName, 'cost')
+    elem = addIdAndClass(nameForDuplicator, getResultElementByName, 'cost', options)
   } else if (isResultElement.value(name)) {
-    span = addIdAndClass(span, name, getResultElementByName, 'cost')
+    elem = addIdAndClass(name, getResultElementByName, 'cost', options)
   }
-  return span
+  return elem
 }

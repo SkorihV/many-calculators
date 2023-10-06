@@ -11,6 +11,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 
 const baseStore = useBaseStore()
@@ -44,6 +45,10 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
       parentIsShow: true,
     })
   );
+
+const titleButton = computed(() => {
+  return updateTextOnVariables(props.resultOptions?.titleButton, {prueValue: true}) ?? "Рассчитать"
+})
 
 function calculateResult() {
   baseStore.showAllTooltipsOn();
@@ -86,16 +91,16 @@ const showBtn = computed(
     @mouseleave="isHoverButton = false"
   >
     <icon-element-wrapper
-      :alt="resultOptions?.titleButton ?? 'Рассчитать'"
+      :alt="titleButton"
       :icon-settings="resultOptions?.iconSettings"
       :is-parent-hover="isHoverButton"
     >
-      {{ resultOptions?.titleButton ?? "Рассчитать" }}
+      {{ titleButton }}
     </icon-element-wrapper>
   </button>
   <dev-block
     v-if="showResultBtn"
-    :label="resultOptions?.titleButton ?? 'Рассчитать'"
+    :label="titleButton"
     :type-element="typeElement"
     :is-visibility-from-dependency="showBtn"
     :dependency-formula-display="resultOptions?.formulaDisplayButton"

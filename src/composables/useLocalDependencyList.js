@@ -2,7 +2,7 @@ import { ref, reactive, watch} from "vue";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import {storeToRefs} from "pinia";
-import { isOtherOrGlobalSum } from "@/servises/UtilityServices";
+import { getPattern, isOtherOrGlobalSum, trimVariableValue } from "@/servises/UtilityServices";
 
 export function useLocalDependencyList() {
   const {getInnerVariableByName} = storeToRefs(useInnerVariablesStore())
@@ -16,6 +16,7 @@ export function useLocalDependencyList() {
    */
   const constructLocalListElementDependencyInFormula = (formula) => {
     formula?.forEach((name) => {
+      name = trimVariableValue(name)
       if (isOtherOrGlobalSum(name)) {
         putInnerVariableInLocalList(name)
       }

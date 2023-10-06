@@ -2,6 +2,8 @@
 import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 import { computed } from "vue";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
+import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 const props = defineProps({
   data: {
@@ -13,8 +15,15 @@ const props = defineProps({
 const { isShowResultBlockSubtitle, isShowResultBlockTitle } = useIsChecks(
   props.data
 );
+const { localDependencyList, constructLocalListElementDependencyInFormula } =
+  useLocalDependencyList();
+
 const localSubtitle = computed(() => {
-  return updateTextOnVariables(props.data?.subtitle)
+  return props.data?.subtitle
+})
+
+const localTitle = computed(() => {
+  return props.data?.title
 })
 
 </script>
@@ -25,7 +34,7 @@ const localSubtitle = computed(() => {
     v-if="isShowResultBlockTitle || isShowResultBlockSubtitle"
   >
     <div class="calc__result-block-title-main" v-if="isShowResultBlockTitle">
-      {{ data.title }}
+      {{ localTitle }}
     </div>
     <div
       class="calc__result-block-title-sub"

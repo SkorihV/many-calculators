@@ -179,13 +179,21 @@ useReportInitialStatusForElement(
   changeValid
 );
 
+const localLabel = computed(() => {
+  return props.label
+})
+
 const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString()?.length);
+  return Boolean(localLabel.value?.toString()?.length);
 });
 const { isMakeElementColumn } = getIsMakeElementColumn(
   currentWidthElement,
   isExistLabel
 );
+
+const localUnit = computed(() => {
+  return props.unit
+})
 
 const localMin = computed(() => {
   return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
@@ -212,7 +220,7 @@ const localElementName = computed(() => {
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
-useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 
 const isErrorEmpty = computed(() => {
   return props.notEmpty && resultValue.value === null;
@@ -351,14 +359,14 @@ function changeValue(eventType = "input") {
     name: localElementName.value,
     type: "range",
     cost: localCost.value,
-    label: props.label,
+    label: localLabel.value,
     formOutputMethod:
       props.formOutputMethod !== "no" ? props.formOutputMethod : null,
     resultOutputMethod:
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
-    unit: props.unit,
+    unit: localUnit.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
@@ -377,7 +385,7 @@ function changeValid(eventType) {
       : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "range",
-    label: props.label,
+    label: localLabel.value,
     eventType,
     isShow: isVisibilityFromDependency.value,
     parentName: props.parentName,
@@ -462,11 +470,11 @@ onUnmounted(() => {
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsRangeLabel"
-        :alt="isExistLabel ? label : ''"
+        :alt="isExistLabel ? localLabel : ''"
         :isExistLabel="isExistLabel"
       >
         <div class="calc__range-label-text" v-if="isExistLabel">
-          {{ label }}
+          {{ localLabel }}
           <div class="empty-block" v-if="notEmpty">*</div>
           <slot name="prompt"></slot>
         </div>
@@ -503,7 +511,7 @@ onUnmounted(() => {
         </div>
         <dynamic-input-value
           :show-dynamic-value="showDynamicValue"
-          :unit="unit"
+          :unit="localUnit.value"
           :min="localMin"
           :max="localMax"
           :is-error="isClassError"
@@ -518,7 +526,7 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label || localElementName"
+    :label="localLabel || localElementName"
     :type-element="typeElement"
     :element-name="localElementName"
     :value="isVisibilityFromDependency ? resultValue : null"

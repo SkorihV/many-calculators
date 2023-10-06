@@ -19,6 +19,7 @@ import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.v
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import ResultBlockText from "@/components/UI/other/ResultBlock/ResultBlockText.vue";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 const baseStore = useBaseStore()
 const {
@@ -90,7 +91,9 @@ watch(isShowResultBlock, (newValue) => {
 
 const spinnerIsFinished = () => (isNeedSpinner.value = false);
 const timeForSpinner = Number(props.resultOptions?.timerForSpinner);
-const textForSpinner = props.resultOptions?.textForSpinner;
+const textForSpinner = computed(() => {
+  return updateTextOnVariables(props.resultOptions?.textForSpinner, {prueValue: true})
+})
 </script>
 
 <template>

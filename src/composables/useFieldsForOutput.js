@@ -1,5 +1,5 @@
 import { REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE, REGEXP_VARIABLE_IN_TEXT_RESULT_COST } from "@/constants/regexp";
-import { getPattern, isOtherOrGlobalSum } from "@/servises/UtilityServices";
+import { getPattern, isOtherOrGlobalSum, trimVariableCost, trimVariableValue } from "@/servises/UtilityServices";
 import { useResultListStore } from "@/store/resultListStore";
 import { useDependencyListStore } from "@/store/dependencyListStore";
 import { useInnerVariablesStore } from "@/store/innerCustomVariableStore";
@@ -20,14 +20,14 @@ export function useFieldsForOutput(fields) {
 
   let variablesCostsComponents = fields?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST)
   if (variablesCostsComponents !== null) {
-    variablesCostsComponents = variablesCostsComponents.map(item => item.replaceAll(getPattern("{{|}}"),''))
+    variablesCostsComponents = variablesCostsComponents.map(item => trimVariableCost(item))
     resultStore.setFieldsForOutputData(variablesCostsComponents)
 
     unitedVariables = [...variablesCostsComponents]
   }
   let variablesValueComponents = fields?.match(REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE)
   if (variablesValueComponents !== null) {
-    variablesValueComponents = variablesValueComponents.map(item => item.replace(getPattern("##"),''))
+    variablesValueComponents = variablesValueComponents.map(item => trimVariableValue(item))
     dependencyStore.setFieldsForOutputData(variablesValueComponents)
 
     unitedVariables = [...unitedVariables, ...variablesValueComponents]

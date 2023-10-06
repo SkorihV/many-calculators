@@ -20,7 +20,7 @@ import {storeToRefs} from "pinia";
 
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import { checkedValueOnVoid, deleteTagsInText } from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -46,6 +46,7 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { isBoolean } from "@/validators/validators";
 
 const baseStore = useBaseStore()
 const { devMode } = storeToRefs(baseStore);
@@ -81,6 +82,11 @@ const props = defineProps({
   signAfterDot: {
     type: [Number, String],
     default: -2,
+  },
+  returnTextValue: {
+    type: [Boolean, Number],
+    default: false,
+    validator: isBoolean
   },
   ...propsTemplate.getProps([
     "elementName",
@@ -131,8 +137,12 @@ const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
 );
+const localLabel = computed(() => {
+  return props?.label
+})
+
 const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString()?.length);
+  return Boolean(localLabel.value?.toString()?.length);
 });
 
 const { isMakeElementColumn } = getIsMakeElementColumn(
@@ -148,7 +158,7 @@ const localElementName = computed(() => {
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
-useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 /**
  * Возвращает формулу цены без данных
  * @returns {number|*|number|string|null}
@@ -193,6 +203,7 @@ const processingVariablesInFormula = computed(() => {
 
   let formulaCostArr = getArrayElementsFromFormula(localCostFormula.value);
   let formulaCost = formulaCostArr?.map((item) => {
+
     const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = getResultElementByName.value(item) !== null;
 
@@ -212,10 +223,15 @@ const processingVariablesInFormula = computed(() => {
  * @returns {number|null|any}
  */
 const localCost = computed(() => {
-  if (
-    !isVisibilityFromDependency.value ||
-    processingVariablesInFormula.value === null
-  ) {
+  if (!isVisibilityFromDependency.value) {
+    return null;
+  }
+
+  if (props?.returnTextValue) {
+    return deleteTagsInText(currentHtmlText.value)
+  }
+
+  if (processingVariablesInFormula.value === null) {
     return null;
   }
 
@@ -244,8 +260,13 @@ const localCost = computed(() => {
 const isExistLocalCost = computed(() => {
   return localCost.value !== null && props.showElement !== "notValue";
 });
+
+const localUnit = computed(() => {
+  return props.unit
+})
+
 const isExistUnit = computed(() => {
-  return Boolean(props.unit?.toString()?.length);
+  return Boolean(localUnit.value?.toString()?.length);
 });
 const onlyText = computed(() => {
   return props.showElement === "onlyText";
@@ -302,12 +323,12 @@ function changeValue(eventType = "system") {
     name: localElementName.value,
     type: "system",
     cost: localCost.value,
-    label: props.label,
+    label: localLabel.value,
     formOutputMethod: props.formOutputMethod,
     resultOutputMethod: props.resultOutputMethod,
     isShow: isVisibilityFromDependency.value && isShowElement.value,
-    excludeFromCalculations: props.excludeFromCalculations,
-    unit: props.unit,
+    excludeFromCalculations: props.excludeFromCalculations || props.returnTextValue,
+    unit: localUnit.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
@@ -332,9 +353,9 @@ function changeValid(eventType) {
 function tryPassDependency() {
   dependencyStore.addDependencyElement({
     name: localElementName.value,
-    value: props.localCost,
+    value: localCost.value,
     isShow: isVisibilityFromDependency.value && isShowElement.value,
-    displayValue: props.localCost,
+    displayValue: localCost.value,
     type: "system",
   });
 }
@@ -360,18 +381,18 @@ onUnmounted(() => {
       <div class="calc__system-label-wrapper" v-if="!onlyText">
         <icon-element-wrapper
           :icon-settings="iconSettingsSystemLabel"
-          :alt="isExistLabel ? label : ''"
+          :alt="isExistLabel ? localLabel : ''"
           :isExistLabel="isExistLabel"
         >
           <div class="calc__system-label-text" v-if="isExistLabel">
-            {{ label }}
+            {{ localLabel }}
             <slot name="prompt" />
           </div>
         </icon-element-wrapper>
         <div class="calc__system-data-wrapper" v-if="isExistLocalCost">
           <div class="calc__system-data-value">{{ localCost }}</div>
           <div class="calc__system-data-unit" v-if="isExistUnit">
-            {{ unit }}
+            {{ localUnit }}
           </div>
         </div>
       </div>
@@ -381,7 +402,7 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label || localElementName"
+    :label="localLabel || localElementName"
     :type-element="typeElement"
     :element-name="localElementName"
     :value="localCost"

@@ -26,7 +26,7 @@ const props = defineProps({
     default: null,
   },
   localCost: {
-    type: Number,
+    type: [Number, String],
     default: null,
   },
   hiddenCost: {

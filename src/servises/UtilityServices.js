@@ -6,7 +6,7 @@ import {
 import {
   REGEXP_HTML_TAG,
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
-  REGEXP_QUOTES_AND_WORD,
+  REGEXP_QUOTES_AND_WORD, REGEXP_QUOTES_FOR_COST, REGEXP_QUOTES_FOR_VALUE,
   REGEXP_SPACES_IN_AROUND,
   REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
@@ -224,6 +224,11 @@ const getNameElementsRecursive = function (object) {
 };
 
 const decimalAdjust = function (value, exp = 0, type = "round") {
+  // Если значение не является числом, либо степень не является целым числом...
+  if (isNaN(value) || value === null || !(typeof exp === "number" && exp % 1 === 0)) {
+    return null;
+  }
+
   if (typeof exp === "undefined" || +exp === 0) {
     try {
       return Math[type](value);
@@ -234,10 +239,7 @@ const decimalAdjust = function (value, exp = 0, type = "round") {
   }
   value = +value;
   exp = +exp;
-  // Если значение не является числом, либо степень не является целым числом...
-  if (isNaN(value) || !(typeof exp === "number" && exp % 1 === 0)) {
-    return null;
-  }
+
   // Сдвиг разрядов
   value = value.toString().split("e");
   value = Math[type](+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
@@ -274,7 +276,9 @@ const getArrayOnFormula = (formula) => {
 
   formulaInOut = formulaInOut?.map((item) => {
     //удаляем пробелы по краям
-    let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
+    let nextItem = trimVariableValue(item)
+    nextItem = trimVariableCost(nextItem)
+    nextItem = nextItem?.replace(REGEXP_SPACES_IN_AROUND, "")
     // если по краям есть кавычки, то удаляем пробелы между
     // кавычками и текстом в середине, не трогая пробелы внутри текста
     if (nextItem.match(REGEXP_QUOTES_AND_WORD)) {
@@ -307,6 +311,14 @@ function deleteTagsInText(text) {
   return text?.replaceAll(REGEXP_HTML_TAG, "");
 }
 
+function trimVariableValue(text) {
+  return text.replaceAll(REGEXP_QUOTES_FOR_VALUE, '')
+}
+
+function trimVariableCost(text) {
+  return text.replaceAll(REGEXP_QUOTES_FOR_COST, '')
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -323,5 +335,7 @@ export {
   getListVariablesUsedInFormula,
   isOtherOrGlobalSum,
   deleteTagsInText,
-  getPattern
+  getPattern,
+  trimVariableValue,
+  trimVariableCost
 };

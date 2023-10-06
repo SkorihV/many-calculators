@@ -135,14 +135,17 @@ useReportInitialStatusForElement(
   changeValid
 );
 
-
-
 const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
 );
+
+const localLabel = computed(() => {
+  return props.label
+})
+
 const isExistLabel = computed(() => {
-  return Boolean(props.label.toString()?.length);
+  return Boolean(localLabel.value.toString()?.length);
 });
 const { isMakeElementColumn } = getIsMakeElementColumn(
   currentWidthElement,
@@ -156,9 +159,9 @@ const { isBase, isButton, isSwitcher, isSwitcherVertical } = useIsCheckedType(
 );
 
 onMounted(() => {
-  checkboxValue.value = props.baseValue === "active";
-  isChecked.value = props.baseValue === "selected";
-  notActive.value = props.baseValue === "notActive";
+  checkboxValue.value = props.baseValue === "active"
+  isChecked.value = props.baseValue === "selected"
+  notActive.value = props.baseValue === "notActive"
 
   if (!props.isNeedChoice) {
     isLocalChecked.value = Boolean(checkboxValue.value || isChecked.value);
@@ -166,7 +169,7 @@ onMounted(() => {
   if (isLocalChecked.value) {
     currentLocalTextButton.value = props.buttonTextChecked?.length
       ? props.buttonTextChecked
-      : props.buttonText;
+      : props.buttonText
   } else {
     currentLocalTextButton.value = props.buttonText;
   }
@@ -194,6 +197,8 @@ const isErrorClass = computed(() => {
       isCanShowAllTooltips.value
   );
 });
+
+
 
 /**
  * Возвращает цену подходящую условию, если моле отображается
@@ -237,11 +242,11 @@ watch(isVisibilityFromDependency, (value) => {
   } else {
     isLocalChecked.value = null;
   }
-  changeValue("dependency");
+  changeValue("dependency")
 });
 
 watch(localCost, () => {
-  changeValue("cost");
+  changeValue("cost")
 })
 
 function inputLocalValue() {
@@ -255,7 +260,7 @@ function inputLocalValue() {
     isLocalChecked.value && props.buttonTextChecked?.length
       ? props.buttonTextChecked
       : props.buttonText;
-  changeValue("click");
+  changeValue("click")
 }
 function changeValue(eventType = "click") {
   emits("changedValue", {
@@ -263,7 +268,7 @@ function changeValue(eventType = "click") {
     displayValue: isLocalChecked.value ? "Да" : "Нет",
     name: localElementName.value,
     type: "UiCheckbox",
-    label: props.label || props.buttonText,
+    label: localLabel.value || props.buttonText,
     cost: localCost.value,
     formOutputMethod:
       props.formOutputMethod !== "no" ? props.formOutputMethod : null,
@@ -276,10 +281,10 @@ function changeValue(eventType = "click") {
     position: props.positionElement,
     zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
-  tryPassDependency();
-  changeValid(eventType);
+  tryPassDependency()
+  changeValid(eventType)
   if (isLocalChecked.value && props.scrollIntoName) {
-    goScrollToElement(props.scrollIntoName);
+    goScrollToElement(props.scrollIntoName)
   }
 }
 function changeValid(eventType) {
@@ -289,13 +294,13 @@ function changeValid(eventType) {
       : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "UiCheckbox",
-    label: props.label,
+    label: localLabel.value,
     eventType,
     isShow: isVisibilityFromDependency.value,
     parentName: props.parentName,
   });
   if (eventType !== "mounted") {
-    canBeShownTooltip.value = true;
+    canBeShownTooltip.value = true
   }
 }
 function tryPassDependency() {
@@ -309,7 +314,7 @@ function tryPassDependency() {
 }
 
 onUnmounted(() => {
-    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
+    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value)
 });
 </script>
 
@@ -327,11 +332,11 @@ onUnmounted(() => {
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsCheckboxLabel"
-        :alt="isExistLabel ? label : ''"
+        :alt="isExistLabel ? localLabel : ''"
         :isExistLabel="isExistLabel"
       >
         <div class="calc__checkbox-label-text" v-if="isExistLabel">
-          {{ label }}
+          {{ localLabel }}
           <div class="empty-block" v-if="isNeedChoice">*</div>
           <slot name="prompt" v-if="isExistLabel"></slot>
         </div>
@@ -397,7 +402,7 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label || localElementName"
+    :label="localLabel || localElementName"
     :type-element="typeElement"
     :element-name="localElementName"
     :value="isLocalChecked"

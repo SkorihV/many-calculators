@@ -9,8 +9,6 @@ import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {
   computed,
   reactive,
-  onBeforeMount,
-  onMounted,
   onUnmounted,
   toRef,
 } from "vue";
@@ -74,6 +72,11 @@ useDisplaySpinner(props.elementName);
 onUnmounted(() => {
   baseStore?.tryDeleteAllDataOnStoreForElementName(props.elementName);
 });
+
+const localLabel = computed(() => {
+  return props.label
+})
+
 const url = computed(() => {
   return Boolean(props.defaultImage?.filename?.length)
     ? getImageDir.value + props.defaultImage?.filename
@@ -82,7 +85,7 @@ const url = computed(() => {
 
 const localDataForDisplay = computed(() => {
   let dataForOut = {
-    label: props.label,
+    label: localLabel.value,
     url: url.value,
     prompt: props.prompt,
   };
@@ -105,7 +108,7 @@ const localDataForDisplay = computed(() => {
         if (eval(formula) && currentUrlIsExist) {
           const label = imageItem.label?.toString().length
             ? imageItem.label
-            : props.label;
+            : localLabel.value;
           const url = getImageDir.value + imageItem.image.filename;
           const prompt = imageItem?.prompt?.length
             ? imageItem.prompt
@@ -155,7 +158,7 @@ const urlIsExist = computed(() => {
   <dev-block
     hidden-value
     hidden-cost
-    :label="label || elementName"
+    :label="localDataForDisplay?.label || elementName"
     :type-element="typeElement"
     :element-name="elementName"
     :is-visibility-from-dependency="isVisibilityFromDependency"

@@ -15,6 +15,7 @@ import {
   EXCEPTION_VARIABLES_IN_FORMULA,
   LIST_BANNED_ELEMENTS_NAME,
 } from "@/constants/variables";
+import { trimVariableCost, trimVariableValue } from "@/servises/UtilityServices";
 
 const baseStore = useBaseStore()
 const {getAllNameListByArray} = storeToRefs(useElementNamesStore())
@@ -254,6 +255,7 @@ const notExistNamesInDisplayFormula = computed(() => {
   let usedNamesDependencyListOut = [];
   listDisplayFormula.value.forEach((item) => {
     item.displayFormula.forEach((name) => {
+      name = trimVariableValue(name)
       if (
         !usedArrayNamesInElements.has(name) &&
         !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
@@ -276,6 +278,8 @@ const notExistNamesInComputedFormula = computed(() => {
   let usedNamesDependencyListOut = [];
   listComputedFormula.value.forEach((item) => {
     item?.formula.forEach((name) => {
+      name = trimVariableValue(name)
+      name = trimVariableCost(name)
       if (
         !usedArrayNamesInElements.has(name) &&
         !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
@@ -365,7 +369,7 @@ const isExistError = computed(() => {
             :key="key"
           >
             <div class="calc__error-item-name">
-              {{ data.label ? data.label : "Без заголовка " }} /
+              {{ data.label ? data.label : "Без заголовка " }}
               <dev-formula-block-wrapper
                 :formula="data.name"
                 is-result

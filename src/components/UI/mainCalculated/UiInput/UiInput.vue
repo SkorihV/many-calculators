@@ -38,6 +38,7 @@ import { REGEXP_SPACES } from "@/constants/regexp";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 
 
 const baseStore = useBaseStore()
@@ -56,12 +57,6 @@ const props = defineProps({
     default: null,
   },
   inputPlaceholder: {
-    type: String,
-  },
-  /**
-   * единицы измерения
-   */
-  unit: {
     type: String,
   },
   cost: {
@@ -193,9 +188,22 @@ useReportInitialStatusForElement(
   changeValid
 );
 
+const localLabel = computed(() => {
+  return updateTextOnVariables(props.label)
+})
+
 const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString()?.length);
+  return Boolean(localLabel.value?.toString()?.length);
 });
+
+const localUnit = computed(() => {
+  return updateTextOnVariables(props.unit, {prueValue: true})
+})
+
+const isExistUnit = computed(() => {
+  return Boolean(localUnit.value?.toString()?.length);
+});
+
 const { isMakeElementColumn } = getIsMakeElementColumn(
   currentWidthElement,
   isExistLabel
@@ -249,7 +257,7 @@ const localElementName = computed(() => {
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 useDisplaySpinner(localElementName.value);
-useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 
 const resultValue = computed(() => {
   if (!isVisibilityFromDependency.value) {
@@ -497,7 +505,7 @@ function changeValue(eventType = "input") {
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     isShow: isVisibilityFromDependency.value,
     excludeFromCalculations: props.excludeFromCalculations,
-    unit: props.unit,
+    unit: localUnit.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
@@ -526,7 +534,7 @@ function changeValid(eventType) {
         : isVisibilityFromDependency.value,
       name: localElementName.value,
       type: "input",
-      label: props.label,
+      label: localLabel.value,
       eventType,
       isShow: isVisibilityFromDependency.value,
       parentName: props.parentName,
@@ -669,11 +677,11 @@ onUnmounted(() => {
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsInputLabel"
-        :alt="isExistLabel ? label : ''"
+        :alt="isExistLabel ? localLabel : ''"
         :isExistLabel="isExistLabel"
       >
         <div class="calc__input-label-text" v-if="isExistLabel">
-          {{ label }}
+          {{ localLabel }}
           <div class="empty-block" v-if="notEmpty">*</div>
           <slot name="prompt" />
         </div>
@@ -712,7 +720,7 @@ onUnmounted(() => {
         >
           +
         </div>
-        <div v-if="unit?.length" class="calc__input-unit">{{ unit }}</div>
+        <div v-if="isExistUnit" class="calc__input-unit">{{ localUnit }}</div>
       </div>
       <ui-tooltip
         :is-show="Boolean(tooltipError?.error)"
@@ -722,7 +730,7 @@ onUnmounted(() => {
     </div>
   </div>
   <dev-block
-    :label="label || localElementName"
+    :label="localLabel || localElementName"
     :type-element="typeElement"
     :element-name="localElementName"
     :value="resultValue"

@@ -52,7 +52,6 @@ export function useProcessingFormula(dataObject) {
         }
 
         let formula = getArrayElementsFromFormula(item[formulaFieldName.value]);
-
         if (
           templateName.value === "UiInput" ||
           templateName.value === "UiRange"
@@ -61,7 +60,6 @@ export function useProcessingFormula(dataObject) {
             item.toLowerCase() === "_self_" ? value.value : item
           );
         }
-
         constructLocalListElementDependencyInFormula.value(formula);
         formula = processingVariablesOnFormula(formula, localDependencyList);
 
@@ -100,7 +98,6 @@ export function useProcessingFormula(dataObject) {
     }
 
     let formula = getArrayElementsFromFormula(dependencyFormulaDisplay.value);
-
     constructLocalListElementDependencyInFormula.value(formula);
     return formula;
   });

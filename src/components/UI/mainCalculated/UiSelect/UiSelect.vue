@@ -40,6 +40,7 @@ import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
+import { isBoolean } from "@/validators/validators";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -60,9 +61,7 @@ const props = defineProps({
   isSearch: {
     type: [Boolean, Number],
     default: false,
-    validator(value) {
-      return value === false || value === true || value === 0 || value === 1;
-    },
+    validator: isBoolean,
   },
   iconSettingsSelectLabel: {
     type: Object,
@@ -138,7 +137,6 @@ const {
   })
 );
 
-
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,
@@ -149,8 +147,12 @@ const { currentWidthElement } = getCurrentWidthElement(
   parentRef
 );
 
+const localLabel = computed(() => {
+  return props.label
+})
+
 const isExistLabel = computed(() => {
-  return Boolean(props.label?.toString().length);
+  return Boolean(localLabel.value?.toString().length);
 });
 const { isMakeElementColumn } = getIsMakeElementColumn(
   currentWidthElement,
@@ -184,7 +186,7 @@ const localElementName = computed(() => {
 const { isHighlightElement } = useHighlightElement(localElementName);
 useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
-useElementNameList({name: localElementName.value, label: props.label, position: props.positionElement})
+useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 
 const isCurrentIndexOptionsNotExist = computed(() => {
   return currentIndexOption.value === null;
@@ -203,7 +205,7 @@ const isErrorClass = computed(() => {
 });
 
 /**
- * Возвращает цену подходящую условию, если моле отображается
+ * Возвращает цену подходящую условию, если поле отображается
  * Если не одна цена не подходит, то возвращается стандартная
  * @returns {Number|String|*}
  */
@@ -215,7 +217,7 @@ const localCost = computed(() => {
     return null;
   }
   if (!currentOption.value?.dependencyPrices?.length) {
-    return currentOption.value?.cost ? currentOption.value?.cost : null;
+    return currentOption.value?.cost ? currentOption.value?.cost : null
   }
 
   let { cost: newCost } = costAfterProcessingDependencyPrice(
@@ -224,11 +226,10 @@ const localCost = computed(() => {
       formulaFieldName: "dependencyFormulaCost",
     })
   );
-
   if (newCost !== null) {
-    return newCost;
+    return parseFloat(newCost)
   }
-  return currentOption.value?.cost ? currentOption.value?.cost : null;
+  return currentOption.value?.cost ? parseFloat(currentOption.value?.cost) : null
 });
 
 const currentOptionDisplayValue = computed(() => {
@@ -236,10 +237,10 @@ const currentOptionDisplayValue = computed(() => {
     (needMockValue.value && isCurrentIndexOptionsNotExist.value) ||
     !isVisibilityFromDependency.value
   ) {
-    return null;
+    return null
   }
 
-  return currentOption.value?.selectName;
+  return currentOption.value?.selectName
 });
 
 const currentOptionValue = computed(() => {
@@ -475,7 +476,7 @@ function changeValue(eventType = "click") {
     name: localElementName.value,
     type: "select",
     cost: localCost.value,
-    label: props.label,
+    label: localLabel.value,
     formOutputMethod:
       props.formOutputMethod !== "no" ? props.formOutputMethod : null,
     resultOutputMethod:
@@ -498,7 +499,7 @@ function changeValid(eventType) {
       : isVisibilityFromDependency.value,
     name: localElementName.value,
     type: "select",
-    label: props.label,
+    label: localLabel.value,
     eventType,
     isShow: isVisibilityFromDependency.value,
     parentName: props.parentName,
@@ -604,11 +605,11 @@ onUnmounted(() => {
     >
       <icon-element-wrapper
         :icon-settings="iconSettingsSelectLabel"
-        :alt="isExistLabel ? label : ''"
+        :alt="isExistLabel ? localLabel : ''"
         :isExistLabel="isExistLabel"
       >
         <div class="calc__select-label-text" v-if="isExistLabel">
-          {{ label }}
+          {{ localLabel }}
           <div class="empty-block" v-if="notEmpty">*</div>
           <slot name="prompt"></slot>
         </div>
@@ -697,7 +698,7 @@ onUnmounted(() => {
       />
     </div>
     <dev-block
-      :label="label || localElementName"
+      :label="localLabel || localElementName"
       :type-element="typeElement"
       :element-name="localElementName"
       :value="currentOptionValue"

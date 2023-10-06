@@ -59,6 +59,7 @@ import { useElementNamesStore } from "@/store/elementNamesStore";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useDependencyListStore } from "@/store/dependencyListStore";
 import { useFieldsForOutput } from "@/composables/useFieldsForOutput";
+import ErrorBlockPrompt from "@/components/UI/other/errorBlockPrompt.vue";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
@@ -322,7 +323,8 @@ const finalSummaForOutput = computed(() => {
     getSignAfterDot.value,
     getRoundOffType.value
   );
-  let isShow = Boolean(resultSum !== null)
+
+  const isShow = Boolean(resultSum !== null)
   innerStore.addInnerVariable({
     name: NAME_RESERVED_VARIABLE_GLOBAL_SUM,
     value: resultSum,
@@ -331,7 +333,6 @@ const finalSummaForOutput = computed(() => {
   })
   nameStore.addNameInList({name: NAME_RESERVED_VARIABLE_GLOBAL_SUM, label: NAME_RESERVED_VARIABLE_GLOBAL_SUM, position: -2})
   displayStore.addDisplayComponent({isShow: isShow, name: NAME_RESERVED_VARIABLE_GLOBAL_SUM, type: NAME_RESERVED_VARIABLE_GLOBAL_SUM})
-
 
   return resultSum;
 });
@@ -741,21 +742,15 @@ onMounted(async () => {
         @changedValue="changeValue"
       />
     </template>
-    <div v-if="showErrorTextBlock" class="calc__error-block">
-      Заполните, пожалуйста, все обязательные поля.
-    </div>
-    <div
-      v-if="!showErrorTextBlock && showErrorSummaBlock"
-      class="calc__error-block"
-    >
-      Не все поля участвующие в расчете были заполнены.
-    </div>
+    <error-block-prompt
+      :show-error-summa-block="showErrorSummaBlock"
+      :show-error-text-block="showErrorTextBlock"
+    />
     <result-button-for-computed
       v-if="inputOptions?.resultOptions"
       :resultOptions="inputOptions?.resultOptions"
       @checkEnabledResultButton="checkEnabledResultButton"
     />
-
     <result-block-for-output
       v-if="inputOptions?.resultOptions"
       :result-options="inputOptions?.resultOptions"

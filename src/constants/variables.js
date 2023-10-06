@@ -40,7 +40,8 @@ export const SPEC_SYMBOLS = Object.entries({
   "&lt;": "<",
   "&amp;": "&",
   "&quot;": "'",
-  '&#39;': "'"
+  '&#39;': "'",
+  "&nbsp;": " "
 });
 
 export const ERROR_PADDING = "ОшибкаЗаполнения";
