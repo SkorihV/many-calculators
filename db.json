@@ -153,7 +153,7 @@
     "methodWorksForm": "show",
     "tooltipOff": 1,
     "devModeEnabled": 1,
-    "fieldsForOutputData": "",
+    "fieldsForOutputData": "##объем##, {{объем}}, {{_otherSum_}}",
     "resultOptions": {
       "title": "ИТОГО: ##направление##",
       "titleButton": "Рассчитать  ##направление##",

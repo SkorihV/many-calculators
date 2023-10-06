@@ -58,7 +58,6 @@ import {
 import { useElementNamesStore } from "@/store/elementNamesStore";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useDependencyListStore } from "@/store/dependencyListStore";
-import { useFieldsForOutput } from "@/composables/useFieldsForOutput";
 import ErrorBlockPrompt from "@/components/UI/other/errorBlockPrompt.vue";
 
 const baseStore = useBaseStore()
@@ -618,7 +617,6 @@ onMounted(async () => {
     await fetch(LOCAL_PATH_DATA)
       .then((response) => response.json())
       .then((data) => {
-        // inputTemplates.value = data;
         inputTemplates.value = JSON.parse(
           replaceSpecSymbols(JSON.stringify(data))
         );
@@ -626,7 +624,6 @@ onMounted(async () => {
     await fetch(LOCAL_PATH_OPTIONS)
       .then((response) => response.json())
       .then((data) => {
-        // inputOptions.value = data;
         inputOptions.value = JSON.parse(
           replaceSpecSymbols(JSON.stringify(data))
         );
@@ -675,10 +672,6 @@ onMounted(async () => {
   baseStore.setInitEnabledSendForm(methodBeginningCalculationIsAutomatic.value);
   baseStore.tryToggleDevMode(Boolean(inputOptions.value?.devModeEnabled));
   baseStore.setTooltipOn(inputOptions.value);
-
-  if (inputOptions?.value?.fieldsForOutputData?.length) {
-      useFieldsForOutput(inputOptions?.value?.fieldsForOutputData)
-  }
 
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;

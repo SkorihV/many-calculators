@@ -3,7 +3,6 @@ import {defineStore} from "pinia";
 export const useResultListStore = defineStore('resultList', {
     state: () => ({
         resultList: {}, // список элементов которые будут участвовать в расчетах результата
-        fieldsForOutputData: []
     }),
     getters: {
         /**
@@ -32,7 +31,6 @@ export const useResultListStore = defineStore('resultList', {
             }
             return name in resultList;
         },
-        isFieldsOutput: ({fieldsForOutputData}) => Boolean(fieldsForOutputData.length)
     },
     actions: {
         addResultElement(dataResultItem) {
@@ -74,10 +72,6 @@ export const useResultListStore = defineStore('resultList', {
                 parentName,
                 isDuplicator: isDuplicator ? isDuplicator : false,
             };
-
-            if (this.isFieldsOutput && this.fieldsForOutputData.includes(name)) {
-                window.calcDataFields[name] = cost
-            }
         },
         /**
          *
@@ -94,9 +88,5 @@ export const useResultListStore = defineStore('resultList', {
                 delete this.resultList[elementName];
             }
         },
-        setFieldsForOutputData(fieldsArr) {
-            this.fieldsForOutputData = fieldsArr
-        }
-
     }
 })
