@@ -103,6 +103,7 @@ const props = defineProps({
     "positionElement",
     "zeroValueDisplayIgnore",
     "excludeFromCalculations",
+    "classes",
     "htmlText",
     "unit",
   ]),
@@ -377,7 +378,7 @@ onUnmounted(() => {
     :id="elementName"
     :class="{ 'is-highlight': isHighlightElement }"
   >
-    <div class="calc__system-wrapper" :class="{ column: isMakeElementColumn }">
+    <div class="calc__system-wrapper" :class="[classes, { column: isMakeElementColumn }]">
       <div class="calc__system-label-wrapper" v-if="!onlyText">
         <icon-element-wrapper
           :icon-settings="iconSettingsSystemLabel"

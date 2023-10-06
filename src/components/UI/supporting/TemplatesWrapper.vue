@@ -266,6 +266,7 @@ const changeValue = (data) => {
       :round-off-type="template?.roundOffType"
       :sign-after-dot="template?.signAfterDot"
       :return-text-value="template?.returnTextValue"
+      :classes="template?.classes"
       @changedValue="changeValue"
     >
       <template v-slot:prompt>
