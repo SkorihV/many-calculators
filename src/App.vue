@@ -680,7 +680,6 @@ onMounted(async () => {
       useFieldsForOutput(inputOptions?.value?.fieldsForOutputData)
   }
 
-
   // delete window?.calculatorTemplates;
   // delete window?.calculatorOptions;
 });
