@@ -43,14 +43,6 @@ const props = defineProps({
       return !isNaN(Number(value));
     },
   },
-  roundOffType: {
-    type: String,
-    default: "round",
-  },
-  signAfterDot: {
-    type: [Number, String],
-    default: -2,
-  },
   ...propsTemplate.getProps([
     "formOutputMethod",
     "resultOutputMethod",
@@ -65,6 +57,8 @@ const props = defineProps({
     "positionElement",
     "zeroValueDisplayIgnore",
     "unit",
+    "roundOffType",
+    "signAfterDot"
   ]),
 });
 
@@ -237,6 +231,8 @@ onMounted(() => {
         "
         :prompt="originData?.prompt"
         :unit="originData?.unit"
+        :round-off-type="roundOffType"
+        :sign-after-dot="signAfterDot"
         @duplicate="duplicate"
         @deleteDuplicator="deleteDuplicator"
         @changedValue="changeValue"

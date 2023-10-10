@@ -1,6 +1,12 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useEventListener } from "@/composables/useEventsListener";
 
+/**
+ * Получаем ширину элемента
+ * @param elementIsShow
+ * @param parentRef
+ * @returns {{currentWidthElement: Ref<UnwrapRef<number>>, updatedCurrentWidth: updatedCurrentWidth}}
+ */
 export const getCurrentWidthElement = (elementIsShow, parentRef) => {
   const currentWidthElement = ref(980);
   const timerName = ref(null);
@@ -50,6 +56,12 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
   };
 };
 
+/**
+ * Переключаем элемент в режим Колонка при достижении ширины элемента в 220px и в 350px если у него есть заголовок
+ * @param currentWidthElement
+ * @param isExistLabel
+ * @returns {{isMakeElementColumn: ComputedRef<unknown>}}
+ */
 export const getIsMakeElementColumn = (currentWidthElement, isExistLabel) => {
   const isMakeElementColumn = computed(() => {
     return (

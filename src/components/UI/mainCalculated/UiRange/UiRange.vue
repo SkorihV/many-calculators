@@ -322,8 +322,8 @@ watch(isVisibilityFromDependency, (newValue) => {
   changeValue("dependency");
 });
 
-watch(resultValue, (newValue) => {
-  tryChangeValue();
+watch(resultValue, () => {
+  tryChangeValue('resultValue');
 });
 watch(localCost, () => {
   changeValue('cost');
@@ -357,12 +357,12 @@ function initBaseData(eventType = "mounted") {
   }, 10000);
 }
 
-function tryChangeValue(e) {
+function tryChangeValue(eventType) {
   clearTimeout(timerNameForLocalValue.value);
   resultValue.value = decimalAdjust(checkValidValueReturnNumber(resultValue), signAfterComa.value, 'round');
   updateStaticElementWidth();
   timerNameForLocalValue.value = setTimeout(() => {
-    changeValue();
+    changeValue(eventType);
   }, 500);
 }
 

@@ -96,6 +96,8 @@ const eventNotShowTooltips = [
   "changeAmountSelectList",
   "changeValueDependenciesElements",
   "system",
+  "resultValue",
+  "first"
 ]; // События при которых не должно срабатывать отображение ошибок
 
 const inputTemplates = ref({}); // внешние данные с шаблонами элементов калькулятора
@@ -449,6 +451,7 @@ watch(showErrorSummaBlock, (newValue) => {
 });
 
 function changeValue(data) {
+
   if (typeof data !== "object") {
     return null;
   }

@@ -285,10 +285,7 @@ const isAmountVisibleItemsRadioListChanged = computed(() => {
 
 const radioListAfterCheckVisibility = computed(() => {
   if (isAmountVisibleItemsRadioListChanged.value) {
-
     bufferRadioListOnOut.value = JSON.parse(JSON.stringify(radioListAfterCheckDependency.value))
-
-    // bufferRadioListOnOut.value = radioListAfterCheckDependency.value;
   }
   return bufferRadioListOnOut.value.filter((item) => item.isShow);
 });

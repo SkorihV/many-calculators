@@ -6,7 +6,7 @@
     "title": "Калькулятор грузоперевозок",
     "computedMethod": "formula",
     "formula": "",
-    "methodBeginningCalculation": "useButton",
+    "methodBeginningCalculation": "useAutomatic",
     "methodWorksForm": "show",
     "tooltipOff": 1,
     "devModeEnabled": 1,
@@ -272,6 +272,8 @@
         "ver_id": "4848407",
         "title": "Дупликатор",
         "label": "Дупликатор",
+        "roundOffType": "ceil",
+        "signAfterDot": 2,
         "unit": "единица измерения",
         "templates": [
           {
