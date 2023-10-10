@@ -50,6 +50,9 @@ class Props {
       isStretch: this.isStretch(),
       elementPosition: this.elementPosition(),
       options: this.options(),
+      signAfterDot: this.signAfterDot(),
+      roundOffType: this.roundOffType()
+
     };
     Props.instance = this;
     return this;
@@ -327,6 +330,20 @@ class Props {
       type: Number,
       default: 0,
     };
+  }
+
+  signAfterDot() {
+    return {
+    type: [Number, String],
+    default: -2,
+      validator: isNotNaN
+    }
+  }
+  roundOffType() {
+    return {
+      type: String,
+      default: "round",
+    }
   }
 
   /**

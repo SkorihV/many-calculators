@@ -1,8 +1,8 @@
 <script setup>
-import { computed } from "vue";
-import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import { computed, onBeforeMount, watch } from "vue";
+import { checkedValueOnVoid, decimalAdjust, getSignsAfterComma } from "@/servises/UtilityServices";
 
-const emits = defineEmits(["update:modelValue", "changeValueStep"]);
+const emits = defineEmits(["update:modelValue",]);
 const props = defineProps({
   modelValue: {
     value: {
@@ -21,11 +21,11 @@ const props = defineProps({
   },
   localMin: {
     type: [String, Number],
-    default: false,
+    default: null,
   },
   localMax: {
     type: [String, Number],
-    default: false,
+    default: null,
   },
   /**
    * Шаг деления в ленте
@@ -71,7 +71,7 @@ const returnSteps = computed(() => {
     i <= props.localMax;
     i += localStepPrompt.value
   ) {
-    steps.push(i);
+    steps.push(decimalAdjust(i, numberSignsAfterCommaForStepPrompt.value, 'round'));
   }
   return steps;
 });
@@ -79,6 +79,7 @@ const returnSteps = computed(() => {
 const amountSteps = computed(() => {
   return (props.localMax - props.localMin) / localStepPrompt.value;
 });
+
 const pointsForStepsLine = computed(() => {
   const rightShiftElementWidth = 21;
   const firstPointPosition = 12;
@@ -97,7 +98,7 @@ const pointsForStepsLine = computed(() => {
       position = width * percent + 10;
     }
 
-    points.push(position.toFixed(4));
+    points.push(decimalAdjust(position, -4, 'round'));
   }
   return points;
 });
@@ -106,9 +107,15 @@ const isShowStepLine = computed(() => {
   return props.showSteps && props.elementWidth > 220;
 });
 
+
+const numberSignsAfterCommaForStepPrompt = computed(() => {
+  return getSignsAfterComma(props.stepPrompt)
+});
+
 function changeValueStep(step) {
   emits("update:modelValue", step);
 }
+
 </script>
 
 <template>

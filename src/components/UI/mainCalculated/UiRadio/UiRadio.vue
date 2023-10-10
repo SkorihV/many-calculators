@@ -118,7 +118,6 @@ const { devMode, isCanShowAllTooltips } = baseStoreRefs;
 const dependencyStore = useDependencyListStore()
 const validationStore = useValidationListStore()
 
-
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 const {
@@ -161,6 +160,7 @@ onMounted(() => {
       return item;
     }
   );
+
   if (!props.isNeedChoice && isVisibilityFromDependency.value) {
     currentIndexRadioButton.value = parseInt(props.selectedItem);
   }
@@ -222,8 +222,9 @@ const isErrorClass = computed(() => {
 });
 
 const localCost = computed(() => {
-  return isRadioItemSelected.value
-    ? parseFloat(currentSelectedRadioButton.value?.cost)
+  let cost = parseFloat(currentSelectedRadioButton.value?.cost)
+  return isRadioItemSelected.value && !isNaN(cost)
+    ? cost
     : null;
 });
 
@@ -284,7 +285,10 @@ const isAmountVisibleItemsRadioListChanged = computed(() => {
 
 const radioListAfterCheckVisibility = computed(() => {
   if (isAmountVisibleItemsRadioListChanged.value) {
-    bufferRadioListOnOut.value = radioListAfterCheckDependency.value;
+
+    bufferRadioListOnOut.value = JSON.parse(JSON.stringify(radioListAfterCheckDependency.value))
+
+    // bufferRadioListOnOut.value = radioListAfterCheckDependency.value;
   }
   return bufferRadioListOnOut.value.filter((item) => item.isShow);
 });
@@ -298,13 +302,11 @@ const radioListAfterCheckedCostElements = computed(() => {
           formulaFieldName: "dependencyFormulaCost",
         })
       );
-
       if (newCost !== null) {
         item.cost = newCost;
-      } else {
-        item.cost = props.radioValues[index].cost;
       }
     }
+
     item.cost = item?.cost ? item?.cost : null;
     return item;
   });

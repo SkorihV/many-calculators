@@ -33,7 +33,12 @@ import {
   getCurrentWidthElement,
   getIsMakeElementColumn,
 } from "@/composables/useWidthElement";
-import { checkedValueOnVoid } from "@/servises/UtilityServices";
+import {
+  checkedValueOnVoid,
+  decimalAdjust,
+  getSignsAfterComma,
+  roundingValueToInputNumber
+} from "@/servises/UtilityServices";
 import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessingDependencyPrice";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
@@ -133,9 +138,10 @@ const props = defineProps({
     "parentIsShow",
     "positionElement",
     "zeroValueDisplayIgnore",
+    "roundOffType",
+    "signAfterDot"
   ]),
 });
-
 const thisElementInputRangeRef = ref(null);
 const staticRef = ref(null);
 const parentRef = ref(null);
@@ -148,6 +154,9 @@ const canBeShownTooltip = ref(false);
 const timerNameForLocalValue = ref(null);
 const minimalWidthStaticElement = ref(15);
 const staticElementWidth = ref(minimalWidthStaticElement.value);
+
+const localMin = ref( checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0)
+const localMax = ref(checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10)
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -195,13 +204,7 @@ const localUnit = computed(() => {
   return props.unit
 })
 
-const localMin = computed(() => {
-  return checkedValueOnVoid(props.min) ? parseFloat(props.min) : 0;
-});
 
-const localMax = computed(() => {
-  return checkedValueOnVoid(props.max) ? parseFloat(props.max) : 10;
-});
 
 const { checkValidValueReturnNumber } = useCheckedValueMinMax(
   localMin,
@@ -292,6 +295,10 @@ const isStaticValue = computed(() => {
   );
 });
 
+const signAfterComa = computed(() => {
+  return getSignsAfterComma(props.step)
+})
+
 /**
  * Обработка значений поступающих извне необходим с задержкой для отображения ошибок остальных компонентов
  * @param newValue
@@ -301,7 +308,7 @@ watch(
   (newValue) => {
     clearTimeout(updateValueTimer.value);
     updateValueTimer.value = setTimeout(() => {
-      resultValue.value = parseFloat(newValue);
+      resultValue.value = decimalAdjust(newValue, signAfterComa.value, 'round');
     }, 1500);
   }
 );
@@ -315,7 +322,7 @@ watch(isVisibilityFromDependency, (newValue) => {
   changeValue("dependency");
 });
 
-watch(resultValue, () => {
+watch(resultValue, (newValue) => {
   tryChangeValue();
 });
 watch(localCost, () => {
@@ -329,10 +336,18 @@ watch(getSomeElementChangedSelfVisibilityState, () => {
   }, 10);
 });
 
+function processingFinalValue(value) {
+  value = checkValidValueReturnNumber(value)
+
+  value = roundingValueToInputNumber(value,localStep.value)
+  return decimalAdjust(value, signAfterComa.value, 'round')
+}
+
 function initBaseData(eventType = "mounted") {
   let timer = setInterval(() => {
     if (checkedValueOnVoid(props.rangeValue)) {
-      resultValue.value = parseFloat(props.rangeValue);
+
+      resultValue.value = processingFinalValue(props.rangeValue)
       changeValue(eventType);
       clearInterval(timer);
     }
@@ -344,7 +359,7 @@ function initBaseData(eventType = "mounted") {
 
 function tryChangeValue(e) {
   clearTimeout(timerNameForLocalValue.value);
-  resultValue.value = checkValidValueReturnNumber(resultValue);
+  resultValue.value = decimalAdjust(checkValidValueReturnNumber(resultValue), signAfterComa.value, 'round');
   updateStaticElementWidth();
   timerNameForLocalValue.value = setTimeout(() => {
     changeValue();
@@ -406,7 +421,7 @@ function shownTooltip() {
   }
 }
 function updatedCostForOut(cost) {
-  return checkedValueOnVoid(cost) ? cost * Math.abs(resultValue.value) : null;
+  return checkedValueOnVoid(cost) ? decimalAdjust((cost * Math.abs(resultValue.value)), props.signAfterDot, props.roundOffType ): null;
 }
 
 function updateWidthElement() {
@@ -493,11 +508,11 @@ onUnmounted(() => {
             :name="localElementName"
           />
           <step-line
-            :local-max="localMax"
-            :local-min="localMin"
             :step-prompt="stepPrompt"
             :show-steps="showSteps"
             :element-width="elementWidth"
+            :local-max="localMax"
+            :local-min="localMin"
             v-model:modelValue="resultValue"
           />
           <div
@@ -515,6 +530,7 @@ onUnmounted(() => {
           :min="localMin"
           :max="localMax"
           :is-error="isClassError"
+          :step="step"
           v-model:dynamicValue="resultValue"
         />
       </div>

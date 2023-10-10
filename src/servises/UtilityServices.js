@@ -10,6 +10,7 @@ import {
   REGEXP_SPACES_IN_AROUND,
   REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
+import { computed } from "vue";
 
 const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
@@ -223,13 +224,24 @@ const getNameElementsRecursive = function (object) {
   return resultArray;
 };
 
+/**
+ *
+ * @param value
+ * @param exp
+ * @param type
+ * @returns {number|null}
+ */
 const decimalAdjust = function (value, exp = 0, type = "round") {
   // Если значение не является числом, либо степень не является целым числом...
-  if (isNaN(value) || value === null || !(typeof exp === "number" && exp % 1 === 0)) {
+  value = parseFloat(value)
+  if (isNaN(value) || value === null ) {
     return null;
   }
 
-  if (typeof exp === "undefined" || +exp === 0) {
+  type = type?.length ? type : "round"
+  exp = parseFloat(exp)
+
+  if (typeof exp !== "number" || exp % 1 !== 0 || isNaN(exp)) {
     try {
       return Math[type](value);
     } catch (e) {
@@ -237,14 +249,14 @@ const decimalAdjust = function (value, exp = 0, type = "round") {
       return value;
     }
   }
-  value = +value;
-  exp = +exp;
 
   // Сдвиг разрядов
   value = value.toString().split("e");
   value = Math[type](+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
+
   // Обратный сдвиг
   value = value.toString().split("e");
+
   return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
 };
 
@@ -291,6 +303,17 @@ const getArrayOnFormula = (formula) => {
 };
 
 /**
+ * получить количество символов после запятой в виде отрицательного числа
+ * @param value
+ * @returns {number|number}
+ */
+const getSignsAfterComma = (value) => {
+  return value?.toString().includes(".")
+    ? value.toString().split(".").pop().length * -1
+    : 0;
+};
+
+/**
  * получить из формулы массив элементов
  * @param formula
  * @returns {*}
@@ -319,6 +342,10 @@ function trimVariableCost(text) {
   return text.replaceAll(REGEXP_QUOTES_FOR_COST, '')
 }
 
+function roundingValueToInputNumber(value, stepNumber) {
+  return Math.round(parseFloat(value) / stepNumber) * stepNumber
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -337,5 +364,7 @@ export {
   deleteTagsInText,
   getPattern,
   trimVariableValue,
-  trimVariableCost
+  trimVariableCost,
+  getSignsAfterComma,
+  roundingValueToInputNumber
 };

@@ -24,7 +24,7 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
-import {checkedValueOnVoid} from "@/servises/UtilityServices";
+import { checkedValueOnVoid, decimalAdjust, roundingValueToInputNumber } from "@/servises/UtilityServices";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
@@ -149,6 +149,8 @@ const props = defineProps({
     "parentIsShow",
     "positionElement",
     "zeroValueDisplayIgnore",
+    "roundOffType",
+    "signAfterDot"
   ]),
 });
 
@@ -392,7 +394,7 @@ const needFixedResult = computed(() => {
 
 const numberSignsAfterComma = computed(() => {
   return props.step.toString().includes(".") && needFixedResult.value
-    ? props.step.toString().split(".").pop().length
+    ? props.step.toString().split(".").pop().length * -1
     : 0;
 });
 
@@ -460,8 +462,7 @@ function resultWitchNumberValid() {
     }
 
     if (props.discreteStep) {
-      localInputValue.value =
-        Math.round(parseFloat(localInputValue.value) / props.step) * props.step;
+      localInputValue.value = roundingValueToInputNumber(localInputValue.value, props.step)
     } else {
       localInputValue.value = parseFloat(localInputValue.value);
     }
@@ -611,7 +612,7 @@ function minus(payload) {
 
 function updateValueAfterSignComma(value) {
   return needFixedResult.value
-    ? parseFloat(value.toFixed(numberSignsAfterComma.value))
+    ? decimalAdjust(value, numberSignsAfterComma.value, 'round')
     : value;
 }
 
@@ -625,10 +626,15 @@ function resetNumberValue() {
   changeValueWitchTimer(localMin.value || 0);
 }
 function updatedCostForOut(cost) {
+  const resultCost = decimalAdjust(
+    parseFloat((cost * localInputValue.value)),
+    props.signAfterDot,
+    props.roundOffType
+  )
+
   return isOnlyNumber.value &&
-    checkedValueOnVoid(cost) &&
-    !isNaN(parseFloat((cost * localInputValue.value).toFixed(5)))
-    ? parseFloat((cost * localInputValue.value).toFixed(5))
+    checkedValueOnVoid(resultCost)
+    ? resultCost
     : null;
 }
 

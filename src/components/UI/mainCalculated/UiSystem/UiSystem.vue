@@ -75,14 +75,6 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
-  roundOffType: {
-    type: String,
-    default: "round",
-  },
-  signAfterDot: {
-    type: [Number, String],
-    default: -2,
-  },
   returnTextValue: {
     type: [Boolean, Number],
     default: false,
@@ -106,6 +98,8 @@ const props = defineProps({
     "classes",
     "htmlText",
     "unit",
+    "roundOffType",
+    "signAfterDot"
   ]),
 });
 const parentRef = ref(null);
@@ -278,7 +272,7 @@ const allowProcessingDependencyHtmlText = computed(() => {
 });
 const currentHtmlText = computed(() => {
   if (!allowProcessingDependencyHtmlText.value) {
-    return updateTextOnVariables(props.htmlText)
+    return updateTextOnVariables(props.htmlText )
   }
   const { item } = costAfterProcessingDependencyPrice(
     reactive({

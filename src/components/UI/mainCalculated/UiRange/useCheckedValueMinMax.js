@@ -1,8 +1,14 @@
 import { unref } from "vue";
 
 export function useCheckedValueMinMax(min, max) {
-  let localMin = unref(min);
-  let localMax = unref(max);
+  let localMin = parseFloat(unref(min));
+  let localMax = parseFloat(unref(max));
+
+  /**
+   *
+   * @param checkedValue
+   * @returns {number}
+   */
   function checkValidValueReturnNumber(checkedValue) {
     let localCheckedValue = unref(checkedValue);
     let value = !isNaN(parseFloat(localCheckedValue))
