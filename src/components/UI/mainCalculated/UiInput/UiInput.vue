@@ -155,6 +155,7 @@ const props = defineProps({
 });
 
 const parentRef = ref(null);
+const countChangeValue = ref(0)
 
 const inputFocus = ref(false);
 const focusTimerName = ref(null);
@@ -402,7 +403,11 @@ watch(isVisibilityFromDependency, () => {
   changeValue("dependency");
 });
 watch(localCost, () => {
-  changeValue("cost");
+  if (countChangeValue.value > 2) {
+    changeValue("cost");
+  } else {
+    countChangeValue.value++
+  }
 });
 
 watch(inputFocus, (isFocus) => {

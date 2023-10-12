@@ -97,7 +97,8 @@ const eventNotShowTooltips = [
   "changeValueDependenciesElements",
   "system",
   "resultValue",
-  "first"
+  "first",
+  "costSystem"
 ]; // События при которых не должно срабатывать отображение ошибок
 
 const inputTemplates = ref({}); // внешние данные с шаблонами элементов калькулятора
@@ -1068,7 +1069,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     display: flex;
     gap: 20px;
     align-items: center;
-    font-weight: 900;
     font-size: 17px;
     line-height: 23px;
     text-transform: uppercase;
