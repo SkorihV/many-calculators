@@ -23,7 +23,6 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
   const isAllowDataOutput =
     item[fieldName] &&
     item.displayValue !== null &&
-    item.isShow &&
     isAllowZeroValue &&
     item[fieldName] !== "no";
   const onlyTitle = item[fieldName] === "onlyTitle";
