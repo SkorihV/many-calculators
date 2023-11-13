@@ -6,7 +6,12 @@ import {useResultListStore} from "@/store/resultListStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import { getPattern, trimVariableCost, trimVariableValue } from "@/servises/UtilityServices";
 
-
+/**
+ * Проверить текст на наличие переменных и подставить реальные значения
+ * @param text
+ * @param options
+ * @returns {*|string}
+ */
 export function updateTextOnVariables(text, options) {
   text = replaceCostsVariables(text, options)
   text = replaceValuesVariables(text, options)
@@ -15,7 +20,10 @@ export function updateTextOnVariables(text, options) {
 }
 
 function replaceCostsVariables(text, options) {
-  const costsInText = text?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST)
+  const costsInText = text?.length ? text?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST) : []
+  if (costsInText == null) {
+    return text
+  }
   costsInText?.forEach(item => {
     let name = trimVariableCost(item)
     const element = getInnerSpan(name, options)
@@ -31,7 +39,10 @@ function replaceCostsVariables(text, options) {
 }
 
 function replaceValuesVariables(text, options) {
-  const valuesInText = text?.match(REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE)
+  const valuesInText = text?.length ? text?.match(REGEXP_VARIABLE_IN_TEXT_DEPENDENCY_VALUE) : []
+  if (valuesInText == null) {
+    return text
+  }
   valuesInText?.forEach(item => {
     let name = trimVariableValue(item)
     const element = getInnerSpan(name, options)
@@ -81,6 +92,7 @@ function addIdAndClass(name, storeFuncForGetElement, nameGettingField = 'value',
   }
   node.id = name
   node.classList.add(name)
+  node.classList.add(`calcCustom${nameGettingField}`)
   node.dataset.data = value
   node.innerText = value
   return node

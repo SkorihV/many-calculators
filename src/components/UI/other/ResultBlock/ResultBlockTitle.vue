@@ -19,11 +19,11 @@ const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
 
 const localSubtitle = computed(() => {
-  return props.data?.subtitle
+  return updateTextOnVariables(props.data?.subtitle)
 })
 
 const localTitle = computed(() => {
-  return props.data?.title
+  return updateTextOnVariables(props.data?.title, {prueValue: true})
 })
 
 </script>

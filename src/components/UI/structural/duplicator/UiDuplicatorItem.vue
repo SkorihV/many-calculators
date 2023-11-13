@@ -41,7 +41,11 @@ import {
   REGEXP_VARIABLE,
 } from "@/constants/regexp";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
-import { NAME_RESERVED_VARIABLE_GLOBAL_SUM, NAME_RESERVED_VARIABLE_SUM } from "@/constants/variables";
+import {
+  BANNED_STANDARD_NAME,
+  NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  NAME_RESERVED_VARIABLE_SUM
+} from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
@@ -443,7 +447,6 @@ function updateInputData(data, index) {
   mutationsData.formula = mutationFormulaResult.value;
   mutationsData.index = props.index + index;
   mutationsData = updateIndexElementsInDuple(mutationsData, index);
-
   return mutationsData;
 }
 
@@ -462,22 +465,14 @@ function updateIndexElementsInDuple(object, index) {
         prop === "dependencyFormulaHtmlText" ||
         prop === "cost") &&
       object[prop].length;
-    const propIsSecondField = prop === "labelSecond";
-    const propIsLabelField = prop === "label";
-    const propIsButtonText = prop === "buttonText";
-    const propIsButtonTextChecked = prop === "buttonTextChecked";
+    const propsIsLabel = prop === "labelSecond" || prop === "label" || prop === "buttonText" || prop === "buttonTextChecked"
     const propIsObject = typeof object[prop] === "object";
 
     if (propIsObject) {
       object[prop] = updateIndexElementsInDuple(object[prop], index);
     } else if (propIsElementNameField) {
       object[prop] = updateNameItem(object, index);
-    } else if (
-      propIsLabelField ||
-      propIsSecondField ||
-      propIsButtonText ||
-      propIsButtonTextChecked
-    ) {
+    } else if (propsIsLabel) {
       object[prop] =
         object[prop]?.length && index > 0
           ? object[prop] + " ( " + index + " )"
@@ -527,7 +522,8 @@ function isLocalVariable(item) {
   const isVariable = Boolean(item.match(REGEXP_VARIABLE));
   const isSpecVariable = Boolean(item.match(NAME_RESERVED_VARIABLE_SUM));
   const isGlobalVariable = isResultElement.value(item);
-  return (isVariable || isSpecVariable) && !isGlobalVariable;
+  const isStandardName = BANNED_STANDARD_NAME.includes(item)
+  return (isVariable || isSpecVariable) && !isGlobalVariable && !isStandardName;
 }
 
 onMounted(() => {

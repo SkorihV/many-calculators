@@ -1,12 +1,16 @@
 export const NAME_RESERVED_VARIABLE_SUM = "_otherSum_";
 export const NAME_RESERVED_VARIABLE_GLOBAL_SUM = "_globalSum_";
+export const BANNED_STANDARD_NAME = [
+  "true",
+  "false",
+  "null"
+]
 export const LIST_BANNED_ELEMENTS_NAME = [
   NAME_RESERVED_VARIABLE_SUM,
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
-  "_self_",
-  "true",
-  "false",
+  ...BANNED_STANDARD_NAME,
   "empty",
+  "_self_",
 ];
 export const EXCEPTION_VARIABLES_IN_FORMULA = [
   "-",
