@@ -204,8 +204,6 @@ const localUnit = computed(() => {
   return props.unit
 })
 
-
-
 const { checkValidValueReturnNumber } = useCheckedValueMinMax(
   localMin,
   localMax
@@ -393,6 +391,7 @@ function changeValue(eventType = "input") {
     shownTooltip();
   }
 }
+
 function changeValid(eventType) {
   validationStore.checkValidationDataAndToggle({
     error: isVisibilityFromDependency.value
@@ -406,6 +405,7 @@ function changeValid(eventType) {
     parentName: props.parentName,
   });
 }
+
 function tryPassDependency() {
   dependencyStore.addDependencyElement({
     name: localElementName.value,
@@ -415,11 +415,13 @@ function tryPassDependency() {
     type: "range",
   });
 }
+
 function shownTooltip() {
   if (!canBeShownTooltip.value) {
     canBeShownTooltip.value = true;
   }
 }
+
 function updatedCostForOut(cost) {
   return checkedValueOnVoid(cost) ? decimalAdjust((cost * Math.abs(resultValue.value)), props.signAfterDot, props.roundOffType ): null;
 }

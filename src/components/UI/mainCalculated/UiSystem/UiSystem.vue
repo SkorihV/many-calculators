@@ -150,8 +150,9 @@ const localElementName = computed(() => {
     ? props.elementName
     : "Math.random().toString()";
 });
-const { isHighlightElement } = useHighlightElement(localElementName);
-useDisplaySpinner(localElementName.value);
+
+const { isHighlightElement } = useHighlightElement(localElementName)
+useDisplaySpinner(localElementName.value)
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 /**
@@ -176,7 +177,7 @@ const localCostFormula = computed(() => {
     return formulaCost;
   }
 
-  return props.cost;
+  return props.cost
 });
 
 /**
@@ -188,12 +189,12 @@ const processingVariablesInFormula = computed(() => {
     !isVisibilityFromDependency.value ||
     !localCostFormula.value?.toString()?.length
   ) {
-    return null;
+    return null
   }
 
   let cost = Number(localCostFormula.value);
   if (!isNaN(cost) && typeof cost === "number") {
-    return cost;
+    return cost
   }
 
   let formulaCostArr = getArrayElementsFromFormula(localCostFormula.value);
@@ -203,14 +204,14 @@ const processingVariablesInFormula = computed(() => {
     const isGlobalVariable = getResultElementByName.value(item) !== null;
 
     if (isReserveVariable) {
-      return getProxyFreeVariables(0);
+      return getProxyFreeVariables(0)
     } else if (isGlobalVariable) {
-      return getResultElementByName.value(item);
+      return getResultElementByName.value(item)
     } else {
-      return item;
+      return item
     }
   });
-  return processingArrayOnFormulaProcessingLogic(formulaCost).join(" ");
+  return processingArrayOnFormulaProcessingLogic(formulaCost).join(" ")
 });
 
 /**
@@ -219,7 +220,7 @@ const processingVariablesInFormula = computed(() => {
  */
 const localCost = computed(() => {
   if (!isVisibilityFromDependency.value) {
-    return null;
+    return null
   }
 
   if (props?.returnTextValue) {
@@ -227,7 +228,7 @@ const localCost = computed(() => {
   }
 
   if (processingVariablesInFormula.value === null) {
-    return null;
+    return null
   }
 
   try {
@@ -239,7 +240,7 @@ const localCost = computed(() => {
         props.roundOffType
       );
     } else {
-      return null;
+      return null
     }
   } catch (e) {
     if (devMode.value) {
@@ -248,7 +249,7 @@ const localCost = computed(() => {
         processingVariablesInFormula.value
       );
     }
-    return null;
+    return null
   }
 });
 
@@ -264,12 +265,13 @@ const isExistUnit = computed(() => {
   return Boolean(localUnit.value?.toString()?.length);
 });
 const onlyText = computed(() => {
-  return props.showElement === "onlyText";
+  return props.showElement === "onlyText"
 });
 
 const allowProcessingDependencyHtmlText = computed(() => {
-  return props.dependencyHtmlText?.length;
+  return props.dependencyHtmlText?.length
 });
+
 const currentHtmlText = computed(() => {
   if (!allowProcessingDependencyHtmlText.value) {
     return updateTextOnVariables(props.htmlText )
@@ -286,29 +288,32 @@ const currentHtmlText = computed(() => {
     return updateTextOnVariables(item.htmlText)
   }
   return updateTextOnVariables(props.htmlText)
-});
+})
+
 const isExistCurrentHtmlText = computed(() => {
   return Boolean(currentHtmlText.value?.toString()?.length)
-});
+})
+
 const isShowElement = computed(() => {
-  return props.showElement !== "no";
-});
+  return props.showElement !== "no"
+})
+
 const allowProcessingDependencyPrices = computed(() => {
-  return initProcessingDependencyPrice.value && props.dependencyPrices?.length;
-});
+  return initProcessingDependencyPrice.value && props.dependencyPrices?.length
+})
 
 watch(
   localCost,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      changeValue('costSystem');
+      changeValue('costSystem')
     }
   },
   { deep: true }
 );
 
 watch(isVisibilityFromDependency, () => {
-  changeValue("dependency");
+  changeValue("dependency")
 });
 
 function changeValue(eventType = "system") {

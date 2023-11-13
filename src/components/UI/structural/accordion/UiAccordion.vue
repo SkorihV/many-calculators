@@ -49,6 +49,7 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
     })
   );
 useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
+
 function changeValue(data) {
   emits("changedValue", data);
 }
@@ -69,6 +70,7 @@ const showBlock = computed(() => {
 const isExistLabel = computed(() => {
   return Boolean(props.label?.toString()?.length);
 });
+
 </script>
 
 <template>

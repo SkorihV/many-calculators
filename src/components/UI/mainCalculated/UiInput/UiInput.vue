@@ -184,7 +184,6 @@ const { currentWidthElement } = getCurrentWidthElement(
   parentRef
 );
 
-
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
   changeValue,

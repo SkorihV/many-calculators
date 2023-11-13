@@ -9,7 +9,7 @@ import ColumnElement from "@/components/UI/structural/column/ColumnElement.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
-import { computed, onMounted, reactive, ref, toRef, unref, watch } from "vue";
+import { computed, onMounted, reactive, ref, toRef, watch } from "vue";
 import { getParent } from "@/composables/useInstance";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";

@@ -24,7 +24,6 @@ const topBtnPrompt = ref(null);
 const topCalcWrapper = ref(null);
 
 const hiddenPromptWrapper = computed(() => {
-
   return Boolean(deleteTagsInText(localPromptText.value)?.toString()?.trim().length);
 });
 

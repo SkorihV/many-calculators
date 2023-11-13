@@ -11,7 +11,6 @@ import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import { isNumber, isSign, isVariable } from "@/validators/validators";
 import { checkLogicAndReturnValue, isOtherOrGlobalSum } from "@/servises/UtilityServices";
 import goScrollToElement from "@/composables/goScrollToElement";
-import { REGEXP_NUMBERS } from "@/constants/regexp";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
@@ -202,5 +201,3 @@ function isExistInnerVariable (variable) {
     <template v-if="isShowCost">   {{ itemCost }}</template>
   </div>
 </template>
-
-<style scoped></style>

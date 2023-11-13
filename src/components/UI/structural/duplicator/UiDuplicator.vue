@@ -25,7 +25,6 @@ import { useReportInitialStatusForElement } from "@/composables/useReportInitial
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 
 
-
 const baseStore = useBaseStore()
 const dependencyStore = useDependencyListStore()
 const nameStore = useElementNamesStore()
@@ -113,7 +112,6 @@ watch(isVisibilityFromDependency, (newValue) => {
 function changeValid() {
   return null;
 }
-
 function changeValue(data) {
   if (data === "dependency") {
     data = { eventType: "dependency" };
@@ -131,7 +129,6 @@ function changeValue(data) {
 function duplicate(duplicateElement) {
   localTemplates.value.push(duplicateElement);
 }
-
 function deleteDuplicator(elementName) {
   let index = localTemplates.value.findIndex(
     (item) => item.elementName === elementName
@@ -183,7 +180,6 @@ function emitChangeValue(eventType) {
   });
   tryPassDependency();
   nameStore.addNameInList({name: props.elementName, label: props.duplicateTemplate.label, position: props.positionElement})
-
 }
 
 function tryPassDependency() {

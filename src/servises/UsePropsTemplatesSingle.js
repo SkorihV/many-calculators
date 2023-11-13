@@ -1,8 +1,5 @@
 import { isBoolean, isNotNaN } from "@/validators/validators";
 
-/**
- *
- */
 class Props {
   constructor() {
     if (typeof Props.instance === "object") {

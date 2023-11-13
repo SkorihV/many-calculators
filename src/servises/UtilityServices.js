@@ -1,3 +1,4 @@
+import escapeStringRegexp from "escape-string-regexp";
 import {
   SPEC_SYMBOLS,
   ERROR_PADDING,
@@ -10,7 +11,6 @@ import {
   REGEXP_SPACES_IN_AROUND,
   REGEXP_VARIABLE_SIGN_NUMBERS
 } from "@/constants/regexp";
-import { computed } from "vue";
 
 const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
@@ -284,7 +284,7 @@ const getArrayOnFormula = (formula) => {
   let formulaInOut = formula
     ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     .filter((item) => item?.trim()?.length);
-
+console.log(formulaInOut)
   formulaInOut = formulaInOut?.map((item) => {
     //удаляем пробелы по краям
     let nextItem = trimVariableValue(item)
@@ -326,7 +326,7 @@ function isOtherOrGlobalSum(variable) {
 }
 
 function getPattern(text) {
-  return new RegExp(`${text}`, 'g')
+  return new RegExp(`${escapeStringRegexp(text)}`, 'g')
 }
 
 function deleteTagsInText(text) {

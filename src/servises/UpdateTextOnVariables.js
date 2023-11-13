@@ -21,6 +21,7 @@ export function updateTextOnVariables(text, options) {
 
 function replaceCostsVariables(text, options) {
   const costsInText = text?.length ? text?.match(REGEXP_VARIABLE_IN_TEXT_RESULT_COST) : []
+
   if (costsInText == null) {
     return text
   }

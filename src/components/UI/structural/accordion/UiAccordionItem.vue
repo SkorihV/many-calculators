@@ -17,7 +17,6 @@ const baseStore = useBaseStore()
 const { isCanShowAllTooltips } = storeToRefs(baseStore);
 const {getValidationListByParentName} = storeToRefs(useValidationListStore())
 
-
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   accordionItem: {
@@ -41,7 +40,6 @@ const { currentWidthElement } = getCurrentWidthElement(
   toRef(props, "parentIsShow"),
   parentRef
 );
-
 function changeValue(data) {
   emits("changedValue", data);
 }

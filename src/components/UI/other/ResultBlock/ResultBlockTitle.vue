@@ -3,7 +3,6 @@ import { useIsChecks } from "@/components/UI/other/ResultBlock/useIsChecks";
 import { computed } from "vue";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 
 const props = defineProps({
   data: {

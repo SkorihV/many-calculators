@@ -1,8 +1,8 @@
 import { unref } from "vue";
 
 export function useCheckedValueMinMax(min, max) {
-  let localMin = parseFloat(unref(min));
-  let localMax = parseFloat(unref(max));
+  let localMin = parseFloat(unref(min))
+  let localMax = parseFloat(unref(max))
 
   /**
    *
@@ -16,13 +16,13 @@ export function useCheckedValueMinMax(min, max) {
       : null;
 
     if (value > localMax) {
-      value = localMax;
+      value = localMax
     }
 
     if (value < localMin) {
-      value = localMin;
+      value = localMin
     }
-    return value;
+    return value
   }
   return {
     checkValidValueReturnNumber,

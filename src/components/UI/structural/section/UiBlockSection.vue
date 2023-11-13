@@ -9,7 +9,7 @@ import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 
-import { computed, reactive, ref, toRef, watch, onMounted } from "vue";
+import { computed, reactive, ref, toRef } from "vue";
 import {storeToRefs} from "pinia";
 import {useBaseStore} from "@/store/baseStore";
 

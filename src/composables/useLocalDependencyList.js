@@ -2,7 +2,7 @@ import { ref, reactive, watch} from "vue";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import {storeToRefs} from "pinia";
-import { getPattern, isOtherOrGlobalSum, trimVariableValue } from "@/servises/UtilityServices";
+import { isOtherOrGlobalSum, trimVariableValue } from "@/servises/UtilityServices";
 
 export function useLocalDependencyList() {
   const {getInnerVariableByName} = storeToRefs(useInnerVariablesStore())

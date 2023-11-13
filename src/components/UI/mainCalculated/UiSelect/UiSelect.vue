@@ -160,27 +160,27 @@ const { isMakeElementColumn } = getIsMakeElementColumn(
 );
 
 const isExistCurrentPrompt = computed(() => {
-  return Boolean(currentOption.value?.prompt?.length);
+  return Boolean(currentOption.value?.prompt?.length)
 });
 
 const currentAmountSelectList = computed(() => {
   return Object.values(selectValuesAfterProcessingDependency.value)?.filter(
     (item) => item?.isShow
-  )?.length;
+  )?.length
 });
 
 const isShowArrow = computed(() => {
-  return Boolean(currentAmountSelectList.value > 1);
+  return Boolean(currentAmountSelectList.value > 1)
 });
 
 const needMockValue = computed(() => {
-  return props.notEmpty || props.isNeedChoice;
+  return props.notEmpty || props.isNeedChoice
 });
 
 const localElementName = computed(() => {
   return checkedValueOnVoid(props.elementName)
     ? props.elementName
-    : Math.random().toString();
+    : Math.random().toString()
 });
 
 const { isHighlightElement } = useHighlightElement(localElementName);
@@ -189,7 +189,7 @@ useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeEle
 useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 
 const isCurrentIndexOptionsNotExist = computed(() => {
-  return currentIndexOption.value === null;
+  return currentIndexOption.value === null
 });
 
 const isErrorEmpty = computed(() => {
@@ -248,7 +248,7 @@ const currentOptionValue = computed(() => {
     (needMockValue.value && isCurrentIndexOptionsNotExist.value) ||
     !isVisibilityFromDependency.value
   ) {
-    return null;
+    return null
   }
 
   const isExistExtraValue = Boolean(
@@ -259,7 +259,7 @@ const currentOptionValue = computed(() => {
     ? currentOption.value?.extraValueForDependency
     : !isNaN(parseInt(currentOption?.value?.value))
     ? currentOption?.value?.value
-    : null;
+    : null
 });
 
 const mutationSelectValue = computed(() => {
@@ -267,8 +267,8 @@ const mutationSelectValue = computed(() => {
     const localIndex = needMockValue.value ? index : index + 1;
     selectItem.value = selectItem.value?.toString()?.length
       ? selectItem.value
-      : localIndex;
-    return selectItem;
+      : localIndex
+    return selectItem
   });
 });
 
@@ -284,57 +284,57 @@ const selectValuesAfterProcessingDependency = computed(() => {
       );
 
       if (!selectItem?.dependencyFormulaItem?.length) {
-        selectItem.isShow = true;
-        return selectItem;
+        selectItem.isShow = true
+        return selectItem
       }
 
       let formula = getArrayElementsFromFormula(
         selectItem.dependencyFormulaItem
       );
-      constructLocalListElementDependencyInFormula(formula);
+      constructLocalListElementDependencyInFormula(formula)
 
       let allDependencyShow = formula.every((item) => {
         if (isDependencyElement.value(item)) {
-          return localDependencyList[item]?.isShow;
+          return localDependencyList[item]?.isShow
         }
-        return true;
+        return true
       });
 
       if (!allDependencyShow) {
-        selectItem.isShow = true;
-        return selectItem;
+        selectItem.isShow = true
+        return selectItem
       }
 
       formula = formula.map((item) => {
         if (item.toLowerCase() === "_self_" && extraValueIsExist) {
           return '"' + selectItem?.extraValueForDependency + '"';
         } else if (item.toLowerCase() === "_self_" && !extraValueIsExist) {
-          return selectItem.value;
+          return selectItem.value
         }
-        return item;
+        return item
       });
 
-      formula = processingVariablesOnFormula(formula, localDependencyList);
+      formula = processingVariablesOnFormula(formula, localDependencyList)
 
-      let newDataIsShow;
+      let newDataIsShow
       try {
-        newDataIsShow = eval(formula);
+        newDataIsShow = eval(formula)
       } catch (e) {
         if (devMode.value) {
-          console.error(e.message, formula);
+          console.error(e.message, formula)
         }
-        newDataIsShow = false;
+        newDataIsShow = false
       }
       selectItem.isShow = newDataIsShow;
       const valueInDependency = Boolean(
         selectItem?.extraValueForDependency?.toString()?.length
       )
         ? selectItem?.extraValueForDependency
-        : selectItem.value;
+        : selectItem.value
       if (!newDataIsShow && valueInDependency === currentOptionValue) {
-        resetSelectedValue();
+        resetSelectedValue()
       }
-      return selectItem;
+      return selectItem
     })
     .filter((selectItem) => {
       if (props.isSearch && searchField.value?.length) {
@@ -344,54 +344,54 @@ const selectValuesAfterProcessingDependency = computed(() => {
             .indexOf(searchField.value.toLowerCase()) !== -1
         );
       }
-      return selectItem;
+      return selectItem
     });
 });
 
 const maxWidthForChangeElement = computed(() => {
   return maxWidthSelectList.value
     ? "max-width:" + maxWidthSelectList.value + "px; width: 100%;"
-    : null;
+    : null
 });
 
 const maxWidthForOptionList = computed(() => {
   return maxWidthSelectList.value
     ? "max-width:" + maxWidthSelectList.value + "px; width: 100%;"
-    : null;
+    : null
 });
 
 watch(isOpen, (newValue) => {
   if (newValue && !Object.keys(localDependencyList)?.length) {
     localSelectValues.value?.forEach((select) => {
       if (select?.dependencyFormulaItem?.length) {
-        let formula = getArrayElementsFromFormula(select.dependencyFormulaItem);
-        constructLocalListElementDependencyInFormula(formula);
+        let formula = getArrayElementsFromFormula(select.dependencyFormulaItem)
+        constructLocalListElementDependencyInFormula(formula)
       }
     });
   }
   if (newValue) {
     nextTick(() => {
-      updatedWidthSelect();
+      updatedWidthSelect()
     });
   }
 });
 
 watch(isVisibilityFromDependency, (newValue, oldValue) => {
   if (newValue && !oldValue) {
-    resetWidthSelect();
-    initSelect("dependency");
+    resetWidthSelect()
+    initSelect("dependency")
   } else {
-    changeValue("dependency");
+    changeValue("dependency")
   }
   if (!newValue) {
-    resetSelectedValue();
+    resetSelectedValue()
   }
 });
 
 watch(
   localCost,
   () => {
-    changeValue("cost");
+    changeValue("cost")
   },
   { deep: true }
 );
@@ -408,7 +408,7 @@ watch(
 
 function initSelectMockData(eventType = "mounted") {
   if (needMockValue.value) {
-    changeSelect(localSelectValues.value[0], null, eventType);
+    changeSelect(localSelectValues.value[0], null, eventType)
   }
 }
 
@@ -437,7 +437,7 @@ function open() {
       (option) => option.isShow
     ).length > 1
   ) {
-    isOpen.value = true;
+    isOpen.value = true
   }
 }
 
@@ -447,25 +447,25 @@ function toggleOpenClose() {
       (option) => option.isShow
     ).length > 1
   ) {
-    isOpen.value = !isOpen.value;
+    isOpen.value = !isOpen.value
   }
 }
 
 function close() {
-  isOpen.value = false;
+  isOpen.value = false
 }
 
 function changeSelect(item, inx, eventType = "click") {
   if (needMockValue.value && inx === 0) {
     currentIndexOption.value = null;
   } else {
-    currentIndexOption.value = inx;
+    currentIndexOption.value = inx
   }
-  currentOption.value = item;
+  currentOption.value = item
   setTimeout(() => {
-    changeValue(eventType);
-  }, 100);
-  close();
+    changeValue(eventType)
+  }, 100)
+  close()
 }
 
 function changeValue(eventType = "click") {
@@ -488,8 +488,8 @@ function changeValue(eventType = "click") {
     position: props.positionElement,
     zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
-  tryPassDependency();
-  changeValid(eventType);
+  tryPassDependency()
+  changeValid(eventType)
 }
 
 function changeValid(eventType) {
@@ -505,7 +505,7 @@ function changeValid(eventType) {
     parentName: props.parentName,
   });
   if (eventType === "click") {
-    canBeShownTooltip.value = true;
+    canBeShownTooltip.value = true
   }
 }
 
@@ -521,12 +521,12 @@ function tryPassDependency() {
 
 function resetSelectedValue() {
   nextTick(() => {
-    let length = selectValuesAfterProcessingDependency.value.length;
+    let length = selectValuesAfterProcessingDependency.value.length
     for (let i = 0; i < length; i++) {
-      let currentOptionItem = selectValuesAfterProcessingDependency.value[i];
+      let currentOptionItem = selectValuesAfterProcessingDependency.value[i]
       if (currentOptionItem.isShow) {
-        changeSelect(currentOptionItem, i, "changeAmountSelectList");
-        return;
+        changeSelect(currentOptionItem, i, "changeAmountSelectList")
+        return
       }
     }
   });
@@ -542,20 +542,20 @@ function updatedWidthSelect() {
     changeElement.value?.offsetWidth === 0 ||
     maxWidthSelectList.value !== null
   ) {
-    return false;
+    return false
   }
   setTimeout(() => {
     if (optionList.value?.offsetWidth > changeElement.value?.offsetWidth) {
-      maxWidthSelectList.value = optionList.value?.offsetWidth;
+      maxWidthSelectList.value = optionList.value?.offsetWidth
     } else {
-      maxWidthSelectList.value = changeElement.value?.offsetWidth;
+      maxWidthSelectList.value = changeElement.value?.offsetWidth
     }
-  }, 100);
+  }, 100)
 }
 
 function clickClose(e) {
   if (!selectRef?.value?.contains(e.target)) {
-    close();
+    close()
   }
 }
 
@@ -567,8 +567,7 @@ function initSelect(eventType) {
   }
 }
 
-
-useEventListener(window, "click", clickClose);
+useEventListener(window, "click", clickClose)
 
 onMounted(() => {
   localSelectValues.value = props.selectValues;
@@ -577,14 +576,16 @@ onMounted(() => {
     localSelectValues.value.unshift(mockOption);
   }
 
-  initSelect("mounted");
+  initSelect("mounted")
   setTimeout(() => {
     updatedWidthSelect();
-  }, 200);
-});
+  }, 200)
+})
+
 onUnmounted(() => {
-    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
-});
+    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value)
+})
+
 </script>
 
 <template>

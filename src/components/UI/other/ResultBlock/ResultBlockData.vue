@@ -14,7 +14,7 @@ import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
 
-const { getCurrency, getTitleSum } = baseStoreRefs;
+const { getCurrency, getTitleSum } = baseStoreRefs
 
 const props = defineProps({
   data: {
@@ -96,11 +96,11 @@ const resultTextDataForResultBlock = computed(() => {
       );
       if (data?.length) {
         result +=
-          "<div class='calc__result-block-field-wrapper'> " + data + "</div>";
+          "<div class='calc__result-block-field-wrapper'> " + data + "</div>"
       }
     }
   });
-  return result;
+  return result
 });
 
 const showTitleSum = computed(() => {

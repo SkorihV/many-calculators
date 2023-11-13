@@ -15,7 +15,6 @@ import {
 import { useBaseStore } from "@/store/baseStore";
 import { storeToRefs } from "pinia";
 
-
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -67,7 +66,6 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
   );
 useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
 useDisplaySpinner(props.elementName);
-
 
 onUnmounted(() => {
   baseStore?.tryDeleteAllDataOnStoreForElementName(props.elementName);
