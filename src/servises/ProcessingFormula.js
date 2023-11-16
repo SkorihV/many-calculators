@@ -8,7 +8,6 @@ import { unref } from "vue";
  * @returns {*|null}
  */
 const processingVariablesOnFormula = function (formula, localDependencyList) {
-
   localDependencyList = unref(localDependencyList);
   formula = unref(formula);
   if (!formula) {

@@ -52,6 +52,7 @@ export function useProcessingFormula(dataObject) {
         }
 
         let formula = getArrayElementsFromFormula(item[formulaFieldName.value]);
+
         if (
           templateName.value === "UiInput" ||
           templateName.value === "UiRange"

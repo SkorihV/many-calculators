@@ -145,6 +145,7 @@ const props = defineProps({
 const thisElementInputRangeRef = ref(null);
 const staticRef = ref(null);
 const parentRef = ref(null);
+const isMounted = ref(false);
 
 const elementWidth = ref(0);
 const resultValue = ref(null);
@@ -324,7 +325,12 @@ watch(resultValue, () => {
   tryChangeValue('resultValue');
 });
 watch(localCost, () => {
-  changeValue('cost');
+  if (!isMounted.value) {
+    changeValue('mounted');
+    isMounted.value = true
+  } else {
+    changeValue('cost');
+  }
 });
 
 watch(getSomeElementChangedSelfVisibilityState, () => {
@@ -463,10 +469,13 @@ onMounted(() => {
       clearInterval(timerStatic);
     }
   }, 500);
+  setTimeout(() => {
+    isMounted.value = true
+  }, 500)
 });
 
 onUnmounted(() => {
-    baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
+  baseStore?.tryDeleteAllDataOnStoreForElementName(localElementName.value);
 });
 </script>
 

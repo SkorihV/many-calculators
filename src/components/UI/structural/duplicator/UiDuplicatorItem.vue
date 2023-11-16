@@ -244,10 +244,13 @@ const { summaFreeVariables, usedVariablesOutsideFormula } =
  */
 const dataListVariablesOnFormula = computed(() => {
   return attachIndexForFormulaElements.value?.map((item) => {
-    const isReserveVariable = item === LOCAL_NAME_RESERVED_VARIABLE_SUM;
-    const isGlobalVariable = listGlobalsVariables.value.includes(item);
+    const isReserveVariable = item === LOCAL_NAME_RESERVED_VARIABLE_SUM
+    const isGlobalVariable = listGlobalsVariables.value.includes(item)
+    const isNumber = !isNaN(Number(item))
 
-    if (isReserveVariable) {
+    if (isNumber) {
+      return parseFloat(item)
+    } else if (isReserveVariable) {
       return getProxyFreeVariables(
         summaFreeVariables.value,
         summaFreeVariables.value,
@@ -272,6 +275,7 @@ const compileFormulaWitchData = computed(() => {
   if (!variablesInFormula.value.length) {
     return summaFreeVariables.value;
   }
+
   return processingArrayOnFormulaProcessingLogic(
     dataListVariablesOnFormula.value
   )

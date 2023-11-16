@@ -20,7 +20,7 @@ import {storeToRefs} from "pinia";
 
 import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import { checkedValueOnVoid, deleteTagsInText } from "@/servises/UtilityServices";
+import { checkedValueOnVoid, deleteTagsInText, replaceCommaOnDot } from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -163,6 +163,7 @@ const localCostFormula = computed(() => {
   if (!isVisibilityFromDependency.value) {
     return null;
   }
+
   if (!allowProcessingDependencyPrices.value) {
     return props.cost;
   }
@@ -192,14 +193,14 @@ const processingVariablesInFormula = computed(() => {
     return null
   }
 
-  let cost = Number(localCostFormula.value);
+  let cost = replaceCommaOnDot(localCostFormula.value);
+
   if (!isNaN(cost) && typeof cost === "number") {
     return cost
   }
 
   let formulaCostArr = getArrayElementsFromFormula(localCostFormula.value);
   let formulaCost = formulaCostArr?.map((item) => {
-
     const isReserveVariable = item === NAME_RESERVED_VARIABLE_SUM;
     const isGlobalVariable = getResultElementByName.value(item) !== null;
 
@@ -238,7 +239,7 @@ const localCost = computed(() => {
         resultNumber,
         props.signAfterDot,
         props.roundOffType
-      );
+      )
     } else {
       return null
     }
@@ -252,6 +253,16 @@ const localCost = computed(() => {
     return null
   }
 });
+
+const localCostForHtml = computed(() => {
+  if (isExistLocalCost.value) {
+    return localCost.value?.toLocaleString("ru-RU", {
+      useGrouping: true,
+    })
+  } else {
+    return localCost.value
+  }
+})
 
 const isExistLocalCost = computed(() => {
   return localCost.value !== null && props.showElement !== "notValue";
@@ -390,7 +401,7 @@ onUnmounted(() => {
           </div>
         </icon-element-wrapper>
         <div class="calc__system-data-wrapper" v-if="isExistLocalCost">
-          <div class="calc__system-data-value">{{ localCost }}</div>
+          <div class="calc__system-data-value">{{ localCostForHtml }}</div>
           <div class="calc__system-data-unit" v-if="isExistUnit">
             {{ localUnit }}
           </div>

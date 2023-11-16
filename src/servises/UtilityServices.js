@@ -5,7 +5,7 @@ import {
   ERROR_ELEMENT_IS_NOT_EXIST, NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM
 } from "@/constants/variables";
 import {
-  REGEXP_HTML_TAG,
+  REGEXP_HTML_TAG, REGEXP_NUMBER_ON_COMMA, REGEXP_NUMBERS,
   REGEXP_QUOTES_AND_SPACE_AND_WORD,
   REGEXP_QUOTES_AND_WORD, REGEXP_QUOTES_FOR_COST, REGEXP_QUOTES_FOR_VALUE,
   REGEXP_SPACES_IN_AROUND,
@@ -281,18 +281,19 @@ const replaceSpecSymbols = (innerString) => {
  * @returns {*}
  */
 const getArrayOnFormula = (formula) => {
-  let formulaInOut = formula
+  let formulaInOut = formula?.toString()
     ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     .filter((item) => item?.trim()?.length);
-console.log(formulaInOut)
+
   formulaInOut = formulaInOut?.map((item) => {
     //удаляем пробелы по краям
-    let nextItem = trimVariableValue(item)
+    let nextItem = replaceCommaOnDot(item)
+    nextItem = trimVariableValue(item)
     nextItem = trimVariableCost(nextItem)
     nextItem = nextItem?.replace(REGEXP_SPACES_IN_AROUND, "")
     // если по краям есть кавычки, то удаляем пробелы между
     // кавычками и текстом в середине, не трогая пробелы внутри текста
-    if (nextItem.match(REGEXP_QUOTES_AND_WORD)) {
+    if (nextItem.match(REGEXP_QUOTES_AND_WORD) !== null) {
       nextItem =
         "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
     }
@@ -337,8 +338,27 @@ function trimVariableValue(text) {
   return text.replaceAll(REGEXP_QUOTES_FOR_VALUE, '')
 }
 
+/**
+ *
+ * @param text
+ * @returns {*|string}
+ */
 function trimVariableCost(text) {
   return text.replaceAll(REGEXP_QUOTES_FOR_COST, '')
+}
+
+/**
+ *
+ * @param text
+ * @returns {number|string}
+ */
+function replaceCommaOnDot(text){
+  let result = text?.toString()
+  if (result?.match(REGEXP_NUMBER_ON_COMMA) !== null) {
+    let newRes = result?.replaceAll(",", ".")
+    return isNaN(Number(newRes)) ? newRes : Number(newRes)
+  }
+  return text
 }
 
 function roundingValueToInputNumber(value, stepNumber) {
@@ -365,5 +385,6 @@ export {
   trimVariableValue,
   trimVariableCost,
   getSignsAfterComma,
-  roundingValueToInputNumber
+  roundingValueToInputNumber,
+  replaceCommaOnDot
 };

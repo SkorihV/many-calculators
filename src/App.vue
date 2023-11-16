@@ -98,7 +98,8 @@ const eventNotShowTooltips = [
   "system",
   "resultValue",
   "first",
-  "costSystem"
+  "costSystem",
+
 ]; // События при которых не должно срабатывать отображение ошибок
 
 const inputTemplates = ref({}); // внешние данные с шаблонами элементов калькулятора
@@ -129,19 +130,21 @@ const mainFormulaResult = computed(() => {
   }
   const formulaAfterDependency =
     inputOptions.value.dependencyMainFormula?.reduce((resultFormula, item) => {
+      const formula = item?.formula?.toString()
       let dependencyFormula = getArrayElementsFromFormula(
         item.dependencyFormula
       );
+
       constructLocalListElementDependencyInFormula(dependencyFormula);
       dependencyFormula = processingVariablesOnFormula(
         dependencyFormula,
         localDependencyList
       );
+      const formulaIsExist = Boolean(formula?.length);
 
-      const formulaIsExist = Boolean(item?.formula?.length);
       try {
         if (eval(dependencyFormula) && formulaIsExist) {
-          resultFormula = item.formula;
+          resultFormula = formula;
         }
       } catch (e) {
         if (devMode.value) {
@@ -471,7 +474,6 @@ function changeValue(data) {
       newData: data.insertedTemplates,
     });
   }
-
   if (
     !eventNotShowTooltips.includes(eventType) &&
     methodBeginningCalculationIsAutomatic.value
@@ -653,6 +655,7 @@ onMounted(async () => {
       inputOptions.value = {};
     }
   }
+
   calculatorTemplates.value = initUpdatingPositionData(inputTemplates.value);
 
   isUseFormula.value = inputOptions.value?.computedMethod === "formula";
@@ -952,16 +955,6 @@ $c_prompt_element_sing_bg_hover: #ff6531;
     flex: 0 1 auto;
     &.isRange {
       flex: 1 1 auto;
-    }
-  }
-
-  > .calc__template-main-wrapper {
-    padding: 0 10px;
-    &:first-child {
-      padding-left: 0;
-    }
-    &:last-child {
-      padding-right: 0;
     }
   }
 }
@@ -2448,6 +2441,7 @@ $c_prompt_element_sing_bg_hover: #ff6531;
 
       &.horizontal {
         @include style-horizontal-elements;
+        gap: 0 10px;
       }
     }
   }
