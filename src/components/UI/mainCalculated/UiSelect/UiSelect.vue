@@ -100,6 +100,7 @@ const mockOption = {
 
 const searchField = ref("");
 const isOpen = ref(true);
+const isMounted = ref(false);
 const currentOption = ref(null);
 const currentIndexOption = ref(null);
 const textErrorNotEmpty = ref("Обязательное поле.");
@@ -391,7 +392,12 @@ watch(isVisibilityFromDependency, (newValue, oldValue) => {
 watch(
   localCost,
   () => {
-    changeValue("cost")
+    if (!isMounted.value) {
+      changeValue('mounted');
+      isMounted.value = true
+    } else {
+      changeValue('cost');
+    }
   },
   { deep: true }
 );
@@ -580,6 +586,9 @@ onMounted(() => {
   setTimeout(() => {
     updatedWidthSelect();
   }, 200)
+  setTimeout(() => {
+    isMounted.value = true
+  }, 500)
 })
 
 onUnmounted(() => {
