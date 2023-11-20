@@ -23,7 +23,7 @@ import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-
+import UiSlider from "@/components/UI/other/UiSlider.vue";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
@@ -62,7 +62,6 @@ import ErrorBlockPrompt from "@/components/UI/other/errorBlockPrompt.vue";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
-const dependencyStore = useDependencyListStore()
 const baseStoreRefs = storeToRefs(baseStore)
 const nameStore = useElementNamesStore()
 const displayStore = useDisplayComponentsStore()
@@ -687,6 +686,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <UiSlider></UiSlider>
   <div
     class="calc calc__wrapper"
     id="custom-stile"

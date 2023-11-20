@@ -515,7 +515,7 @@ onUnmounted(() => {
             :min="localMin"
             :max="localMax"
             :step="localStep"
-            v-model="resultValue"
+            v-model.number="resultValue"
             :name="localElementName"
           />
           <step-line
