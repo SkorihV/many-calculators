@@ -32,6 +32,10 @@ const props = defineProps({
     type: Boolean,
   },
 });
+let parentRef = ref(null)
+onMounted(() => {
+  parentRef.value = getParent();
+})
 
 onMounted(checkPosition);
 useEventListener(window, "resize", resize);
@@ -42,13 +46,13 @@ function checkPosition() {
   setTimeout(() => {
     if (tooltip.value) {
       classPosition.value = null;
-      const parent = getParent();
-      if (!parent || parent.nodeType === 3) {
+
+      if (!parentRef?.value || parentRef?.value.nodeType === 3) {
         return false;
       }
-      const parentRightSide = parent?.getBoundingClientRect().right;
-      const parentLeftSide = parent?.getBoundingClientRect().left;
-      const parentWidth = parent?.offsetWidth;
+      const parentRightSide = parentRef?.value?.getBoundingClientRect().right;
+      const parentLeftSide = parentRef?.value?.getBoundingClientRect().left;
+      const parentWidth = parentRef?.value?.offsetWidth;
       const docWidth = document.documentElement.clientWidth;
       classPosition.value =
         parentWidth > 400

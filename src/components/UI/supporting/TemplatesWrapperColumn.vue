@@ -1,6 +1,7 @@
 <script setup>
 import UiColumns from "@/components/UI/structural/column/UiColumns.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
+import { ref } from "vue";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -19,11 +20,14 @@ const props = defineProps({
 const changeValue = (data) => {
   emits("changedValue", data);
 };
+
+const parentRef = ref(null)
 </script>
 
 <template>
   <div class="calc__template-main-wrapper_structural">
     <ui-columns
+      ref="parentRef"
       v-if="template?.template === 'UiColumns'"
       :column-list="template?.columns"
       :label="template?.label"
