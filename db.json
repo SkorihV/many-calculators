@@ -10566,6 +10566,57 @@
   "test-carloan": {
     "calculatorTemplates": [
       {
+        "json_id": "227760708",
+        "title": "Слайдер 1",
+        "label": "Слайдер 1",
+        "isZoom": 1,
+        "maxHeight": 150,
+        "isNavigation": 1,
+        "paginationType": "bullets",
+        "isAutoHeight": 1,
+        "isAutoplay": 1,
+        "delay": "5000",
+        "isThumbs": 1,
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSlider",
+        "images": [
+          {
+            "title": "",
+            "image": {
+              "image_id": "1595369507",
+              "filename": "https://bipbap.ru/wp-content/uploads/2017/04/132638948_beautiful_nature_9_5.jpg",
+              "ver_id": 4848407,
+              "image_width": "1341",
+              "image_height": "1068",
+              "ext": "png"
+            }
+          },
+          {
+            "title": "",
+            "image": {
+              "image_id": "1595369307",
+              "filename": "https://bipbap.ru/wp-content/uploads/2017/04/priroda_kartinki_foto_03.jpg",
+              "image_width": "1452",
+              "image_height": "1152",
+              "ext": "png"
+            }
+          },
+          {
+            "title": "",
+            "image": {
+              "image_id": "1595368307",
+              "filename": "https://bipbap.ru/wp-content/uploads/2017/04/4-2.jpg",
+              "ver_id": 4848407,
+              "image_width": "1920",
+              "image_height": "1920",
+              "ext": "png"
+            }
+          }
+        ],
+        "parent": "0;"
+      },
+      {
         "json_id": "143480107",
         "title": "блок",
         "label": "",

@@ -39,8 +39,6 @@ const props = defineProps({
     "prompt",
     "label",
     "templateName",
-    "formulaProcessingLogic",
-    "parentName",
     "parentIsShow",
     "dependencyFormulaDisplay",
   ]),
@@ -50,12 +48,11 @@ const height = "max-height:" + props.maxHeight + "px";
 const isExistDependencyImages = Boolean(props.dependencyImages?.length);
 
 const baseStore = useBaseStore()
-const baseStoreRefs = storeToRefs(baseStore)
-const { devMode, getImageDir } = baseStoreRefs;
+const { devMode, getImageDir } = storeToRefs(baseStore);
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
-const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
+const { isVisibilityFromDependency } =
   useProcessingFormula(
     reactive({
       localDependencyList: localDependencyList,

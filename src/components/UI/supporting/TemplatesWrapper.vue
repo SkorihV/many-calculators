@@ -7,6 +7,7 @@ import UiCheckbox from "@/components/UI/mainCalculated/UiCheckbox/UiCheckbox.vue
 import UiImage from "@/components/UI/mainCalculated/UiImage/UiImage.vue";
 import UiSystem from "@/components/UI/mainCalculated/UiSystem/UiSystem.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
+import UiSlider from "@/components/UI/other/UiSlider.vue"
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 const emits = defineEmits(["changedValue"]);
@@ -277,5 +278,22 @@ const changeValue = (data) => {
         <ui-prompt :prompt-text="template.prompt" :options="options"/>
       </template>
     </ui-system>
+    <ui-slider
+      v-else-if="template.template === 'UiSlider'"
+      :label="template?.label"
+      :images="template?.images"
+      :isZoom="template?.isZoom"
+      :maxHeight="template?.maxHeight"
+      :isNavigation="template?.isNavigation"
+      :paginationType="template?.paginationType"
+
+      :isAutoplay="template?.isAutoplay"
+      :delay="template?.delay"
+      :isThumbs="template?.isThumbs"
+      :element-name="template?.json_id || 'UiSlider' + index"
+      :dependency-formula-display="template?.dependencyFormulaDisplay"
+      :classes="template?.classes"
+      :parent-is-show="parentIsShow"
+    ></ui-slider>
   </div>
 </template>

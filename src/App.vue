@@ -23,7 +23,6 @@ import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
 import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import UiSlider from "@/components/UI/other/UiSlider.vue";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
@@ -686,7 +685,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UiSlider></UiSlider>
   <div
     class="calc calc__wrapper"
     id="custom-stile"
@@ -2996,6 +2994,108 @@ $c_prompt_element_sing_bg_hover: #ff6531;
         top: (100px - 90px) / 2;
         left: (100px - 90px) / 2;
         animation: anti-rotate-animation 0.85s linear 0s infinite;
+      }
+    }
+  }
+
+  //------------------Слайдер--------------------------------
+  &__swiper {
+    * {
+      box-sizing: border-box;
+    }
+    &-wrapper {
+      @include style-element-main-wrapper;
+      flex-direction: column;
+      align-items: start;
+    }
+    &-label-wrapper {
+      @include style-title-main;
+    }
+    .swiper-button-prev,
+    .swiper-button-next{
+      color: black;
+    }
+    &-pagination {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin: 10px;
+      gap:3px;
+      &-bullet {
+        width: 15px;
+        height: 15px;
+        display: inline-block;
+        border-radius: 50%;
+        background: $c_base_button_border;
+        opacity:  0.2;
+        cursor: pointer;
+        &_active {
+          opacity: 1;
+        }
+      }
+    }
+
+    &-button {
+      &-next,
+      &-prev {
+        position: absolute;
+        top:  50%;
+        width: 50px;
+        height: 50px;
+        margin-top: 0;
+        z-index: 10;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $c_base_button_border;
+        &:hover {
+          color: $c_base_button_border_hover;
+        }
+        &:after {
+          font-family: swiper-icons;
+          font-size: 50px;
+          text-transform: none !important;
+          letter-spacing: 0;
+          font-variant: initial;
+          line-height: 1;
+        }
+      }
+
+      &-prev {
+        left: 10px;
+        &:after {
+          content: 'prev';
+        }
+      }
+      &-next {
+        right: 10px;
+        &:after {
+          content: 'next';
+        }
+      }
+      &_disabled {
+        opacity: 0.2;
+      }
+    }
+
+    &-thumb {
+      max-height: 100px;
+      height: 100%;
+      &__image {
+        position: relative;
+        padding: 0;
+        cursor: pointer;
+        overflow: hidden;
+        display: flex;
+        height: 100px;
+        img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          bottom: 0;
+        }
       }
     }
   }
