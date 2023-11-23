@@ -10,7 +10,6 @@ import ColumnElement from "@/components/UI/structural/column/ColumnElement.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useEventListener } from "@/composables/useEventsListener";
 import { computed, onMounted, reactive, ref, toRef, watch } from "vue";
-import { getParent } from "@/composables/useInstance";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -52,11 +51,11 @@ const props = defineProps({
   ]),
 });
 
-const maximumColumns = 4;
-const currentWidthElement = ref(null);
-const stateColumns = ref([]);
-const timerName = ref(null);
-const parent = ref(null);
+const maximumColumns = 4
+const currentWidthElement = ref(null)
+const stateColumns = ref([])
+const timerName = ref(null)
+const parentRef = ref(null)
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
@@ -92,15 +91,14 @@ function getMaxLengthColumn(index) {
 }
 
 function updatedCurrentWidth() {
-  const parent = getParent();
-  if (parent && parent?.offsetWidth !== 0) {
-    currentWidthElement.value = parent.offsetWidth;
+  if (parentRef?.value && parentRef?.value?.offsetWidth !== 0) {
+    currentWidthElement.value = parentRef?.value.offsetWidth;
     clearInterval(timerName.value);
   }
 }
 
 function resize() {
-  updatedCurrentWidth();
+  updatedCurrentWidth()
 }
 
 watch(
@@ -224,7 +222,7 @@ const isExistLabel = computed(() => Boolean(props.label?.toString()?.length));
   <div
     class="calc__columns-wrapper"
     :class="[classes]"
-    ref="parent"
+    ref="parentRef"
     v-show="showElementColumns"
     :id="elementName"
   >
