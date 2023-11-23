@@ -9274,7 +9274,7 @@
         "elementName": "дупликаторОкно",
         "formulaProcessingLogic": "zero",
         "formula": "_otherSum_",
-        "dependencyFormulaDisplay": "",
+        "dependencyFormulaDisplay": "{{коэффициентТипДома}} !== null",
         "classes": "",
         "template": "UiDuplicator",
         "unit": "руб.",

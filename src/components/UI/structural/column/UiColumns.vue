@@ -8,12 +8,12 @@ import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.
 import ColumnElement from "@/components/UI/structural/column/ColumnElement.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { useEventListener } from "@/composables/useEventsListener";
 import { computed, onMounted, reactive, ref, toRef, watch } from "vue";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useDisplayComponents } from "@/composables/useDisplayComponents";
+import { getCurrentWidthElement } from "@/composables/useWidthElement";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -27,10 +27,6 @@ const props = defineProps({
   adaptationMethod: {
     type: String,
     default: "first",
-  },
-  changedStateParent: {
-    type: Boolean,
-    default: false,
   },
   iconSettingsColumnsLabel: {
     type: Object,
@@ -52,9 +48,7 @@ const props = defineProps({
 });
 
 const maximumColumns = 4
-const currentWidthElement = ref(null)
 const stateColumns = ref([])
-const timerName = ref(null)
 const parentRef = ref(null)
 
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
@@ -70,10 +64,11 @@ const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
     })
   );
 useDisplayComponents(props.elementName, isVisibilityFromDependency, typeElement)
-useEventListener(window, "resize", resize);
+const {currentWidthElement} = getCurrentWidthElement(
+  isVisibilityFromDependency,
+  parentRef
+)
 onMounted(() => {
-  updatedCurrentWidth();
-
   props.columnList.forEach((item) => {
     stateColumns.value.push({ maxWidth: item.maxWidth });
   });
@@ -89,43 +84,6 @@ function getMaxLengthColumn(index) {
   }
   return `max-width: ${stateColumns.value[index]?.maxWidth}%;`;
 }
-
-function updatedCurrentWidth() {
-  if (parentRef?.value && parentRef?.value?.offsetWidth !== 0) {
-    currentWidthElement.value = parentRef?.value.offsetWidth;
-    clearInterval(timerName.value);
-  }
-}
-
-function resize() {
-  updatedCurrentWidth()
-}
-
-watch(
-  () => props.parentIsShow,
-  () => {
-    let step = 0;
-    timerName.value = setInterval(() => {
-      updatedCurrentWidth();
-      if (step > 10) {
-        clearInterval(timerName.value);
-      }
-    }, 500);
-  }
-);
-
-watch(
-  () => props.changedStateParent,
-  () => {
-    let step = 0;
-    timerName.value = setInterval(() => {
-      updatedCurrentWidth();
-      if (step > 10) {
-        clearInterval(timerName.value);
-      }
-    }, 100);
-  }
-);
 
 const columnListBeforeLimiting = computed(() => {
   return props.columnList?.filter((column, index) => index < maximumColumns);

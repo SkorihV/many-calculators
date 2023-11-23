@@ -111,15 +111,10 @@ const LOCAL_NAME_RESERVED_VARIABLE_SUM =
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
-const { isVisibilityFromDependency, formulaAfterProcessingVariables } =
-  useProcessingFormula(
-    reactive({
-      localDependencyList: localDependencyList,
-      constructLocalListElementDependencyInFormula,
-      formula: toRef(props, "dependencyFormulaDisplay"),
-      parentIsShow: toRef(props, "parentIsShow"),
-    })
-  );
+
+const isVisibilityFromDependency = computed(() => {
+  return props.parentIsShow
+})
 useDisplayComponents(mutationsInputData.value?.elementName, isVisibilityFromDependency, typeElement)
 
 /**

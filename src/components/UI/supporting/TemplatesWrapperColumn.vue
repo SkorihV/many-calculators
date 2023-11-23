@@ -5,10 +5,6 @@ import { ref } from "vue";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
-  changeStateParent: {
-    type: Boolean,
-    default: false,
-  },
   ...propsTemplate.getProps([
     "template",
     "index",
@@ -35,7 +31,6 @@ const parentRef = ref(null)
       :dependency-formula-display="template?.dependencyFormulaDisplay"
       :parent-is-show="parentIsShow"
       :icon-settings-columns-label="template?.iconSettingsColumnsLabel"
-      :changed-state-parent="changeStateParent"
       :element-name="
         template?.elementName?.length
           ? template?.elementName
