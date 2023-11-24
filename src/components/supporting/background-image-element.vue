@@ -44,7 +44,7 @@ function getImageAndUpdated(url) {
   }).then((img) => {
     currentImageUrl.value = img.src;
   }).catch((img) => {
-    errorMessage("Картина по адресу " + img.src + " не была загружен.")
+    errorMessage("Картина по адресу " + img.src + " не была загружен.", "error")
   });
 }
 
@@ -166,7 +166,7 @@ const urlImageAfterProcessingDependency = computed(() => {
           newCurrentUrl = imageItem.image.filename;
         }
       } catch (e) {
-        errorMessage(e.message, formula)
+        errorMessage([e.message, formula], "error")
       }
     }
   });

@@ -490,7 +490,7 @@ function resultWitchNumberValid() {
 
     return localInputValue.value;
   } catch (e) {
-    errorMessage(e.message)
+    errorMessage(e.message, "error")
   }
 }
 function changeValue(eventType = "input") {

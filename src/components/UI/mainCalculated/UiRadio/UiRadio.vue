@@ -257,7 +257,7 @@ const radioListAfterCheckDependency = computed(() => {
       try {
         radio.isShow = eval(formula);
       } catch (e) {
-        errorMessage(e.message, formula)
+        errorMessage([e.message, formula], "error")
         radio.isShow = false;
       }
     } else {

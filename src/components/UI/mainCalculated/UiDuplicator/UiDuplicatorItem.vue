@@ -155,7 +155,7 @@ const mainFormulaResult = computed(() => {
           resultFormula = item.formula;
         }
       } catch (e) {
-        errorMessage("Формула зависимости для смены главной формулы дупликатора: " + e.message)
+        errorMessage("Формула зависимости для смены главной формулы дупликатора: " + e.message, 'error')
       }
       return resultFormula;
     },
@@ -316,7 +316,7 @@ const localCost = computed(() => {
       throw new Error();
     }
   } catch (e) {
-    errorMessage( "Рассчитываемая формула в дупликаторе: " + compileFormulaWitchData.value)
+    errorMessage( "Рассчитываемая формула в дупликаторе: " + compileFormulaWitchData.value, "error")
   }
 });
 

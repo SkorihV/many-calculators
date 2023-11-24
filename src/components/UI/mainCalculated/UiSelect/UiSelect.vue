@@ -322,7 +322,7 @@ const selectValuesAfterProcessingDependency = computed(() => {
       try {
         newDataIsShow = eval(formula)
       } catch (e) {
-        errorMessage((e.message, formula))
+        errorMessage([e.message, formula], 'error')
         newDataIsShow = false
       }
       selectItem.isShow = newDataIsShow;

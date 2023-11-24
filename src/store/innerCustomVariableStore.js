@@ -8,7 +8,6 @@ export const useInnerVariablesStore = defineStore('innerStore', {
     getInnerVariablesAllList: ({innerVariablesList}) => innerVariablesList,
     isInnerVariable: ({innerVariablesList}) => (name) => name in innerVariablesList,
     getInnerVariableByName: ({innerVariablesList}) => (name) => name in innerVariablesList ? innerVariablesList[name] : null,
-    // isFieldsOutput: ({fieldsForOutputData}) => Boolean(fieldsForOutputData.length),
   },
   actions: {
     addInnerVariable(data) {

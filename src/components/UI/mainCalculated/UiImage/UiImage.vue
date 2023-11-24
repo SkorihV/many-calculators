@@ -112,7 +112,7 @@ const localDataForDisplay = computed(() => {
           dataForOut = { label, url, prompt };
         }
       } catch (e) {
-        errorMessage(e.message, formula)
+        errorMessage([e.message, formula], 'error')
       }
     }
   });

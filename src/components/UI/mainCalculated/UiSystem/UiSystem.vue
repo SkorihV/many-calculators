@@ -244,7 +244,7 @@ const localCost = computed(() => {
       return null
     }
   } catch (e) {
-    errorMessage("Системное поле, обработка формулы стоимости: ", processingVariablesInFormula.value)
+    errorMessage(["Системное поле, обработка формулы стоимости: ", processingVariablesInFormula.value], 'error')
   }
 });
 

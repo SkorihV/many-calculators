@@ -146,7 +146,7 @@ const mainFormulaResult = computed(() => {
           resultFormula = formula;
         }
       } catch (e) {
-        errorMessage("Формула зависимости для смены главной формулы: " + e.message)
+        errorMessage("Формула зависимости для смены главной формулы: " + e.message, 'error')
       }
       return resultFormula;
     }, "");
@@ -224,7 +224,7 @@ const combinedFormulaDataTogether = computed(() => {
       return null;
     }
   } catch (e) {
-    errorMessage("Рассчитываемая формула: ", resultTextForComputed.value)
+    errorMessage(["Рассчитываемая формула: ", resultTextForComputed.value], 'error')
   }
 });
 

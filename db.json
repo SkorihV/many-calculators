@@ -1,30 +1,26 @@
 {
   "options-cargo" : {
-    "json_id": "113810308",
+    "json_id": "100822907",
     "title": "Калькулятор грузоперевозок",
     "computedMethod": "formula",
-    "formula": "$$базоваяСтоимостьДоставки$$ + $$номерЭтажа$$ + ($$упаковка$$ * $$объем$$) + ($$страховка$$ * $$вес$$) +  ($$дни$$ * $$длина$$ * $$ширина$$) + $$_otherSum_$$",
+    "formula": "(откуда * вес * кгГрузаЗаКм) + номерЭтажа + (упаковка * объем) + (страховка * вес) +  (дни * длина * ширина) + _otherSum_",
     "methodBeginningCalculation": "useButton",
     "methodWorksForm": "show",
     "tooltipOff": 1,
     "devModeEnabled": 1,
-    "fieldsForOutputData": "{{объем}}, $$объем$$, $$_otherSum_$$",
     "resultOptions": {
-      "title": "ИТОГО: {{направление}}",
-      "titleButton": "Рассчитать  {{направление}}",
-      "formulaDisplayButton": "{{направление}} !== null &amp;&amp; {{плотность}}  &gt; 109  &amp;&amp; {{объем}} &gt; 0 &amp;&amp; {{вес}} &gt; 0",
-      "formulaDependencyForResultBlock": "{{направление}} !== null &amp;&amp; {{плотность}}  &gt; 109  &amp;&amp; {{объем}} &gt; 0 &amp;&amp; {{вес}} &gt; 0",
-      "titleSumma": "Общая сумма составляет $$валюта$$",
-      "textAfterSumma": "{{валюта}}dsa&nbsp; &nbsp; &nbsp;das dasd",
-      "textAfterResultBlock": "asda sda da&nbsp;{{валюта}}",
-      "roundOffType": "round",
-      "currency": "{{валюта}}",
+      "title": "ИТОГО:",
+      "titleButton": "Рассчитать",
+      "formulaDisplayButton": "куда !== null &amp;&amp; откуда  !== null  &amp;&amp; объем &gt; 0 &amp;&amp; вес &gt; 0",
+      "showResultDataForBlock": 1,
+      "titleSumma": "Общая сумма составляет",
+      "currency": "руб.",
       "backgroundImageSettings": {
         "title": "",
         "image": {
           "image_id": "1392700907",
           "filename": "cargo.png",
-          "ver_id": "4858673",
+          "ver_id": 4858673,
           "image_width": "1770",
           "image_height": "1455",
           "ext": "png"
@@ -34,17 +30,15 @@
         "backgroundRepeat": "no-repeat",
         "behaviorImage": "contain",
         "unitSize": "px",
-        "isSubstrate": "1",
+        "isSubstrate": 1,
         "colorSubstrate": "#eeeeee",
-        "opacitySubstrate": "5"
+        "opacitySubstrate": 5
       },
       "visuallySeparateElement": 1,
-      "textForSpinner": "Идет расчет... {{направление}}",
-      "textErrorRequire": "какой-то текст ошибки азаза",
-      "textErrorSum": "другой текст ошибки для суммы"
+      "textForSpinner": "Идет расчет..."
     },
-    "textAbove": "",
-    "textAfter": "",
+    "textAbove": "<p>&nbsp;</p>\n\n<p>&nbsp;</p>",
+    "textAfter": "<p>Описание логики и работы калькулятора.</p>\n\n<p>Элементы калькулятора:</p>\n\n<p>Каждый элемент имеет свою стоимость при выборе того или иного значения.</p>\n\n<p>Для элемента калькулятора имеющего значение в виде количества ( ползунок / поле ввода) конечная стоимость рассчитывается как произведение указанного количества на стоимость за единицу ( внутреннее значение задается для отдельного элемент ).</p>\n\n<p>&nbsp;</p>\n\n<p>Формула расчета&nbsp;- в&nbsp;формуле расчета подставляется стоимость указанного в ней элемента калькулятора значение у которого было выбрано.</p>\n\n<p>&nbsp;</p>\n\n<p>Особенности работы некоторых элементов:</p>\n\n<p>Откуда - Куда - Основной коэффициент расчета стоимости. Меняется в&nbsp;зависимости от выбора и сочетания населенных пунктов.</p>\n\n<p>Дополнительные услуги - переключатель для отображается список дополнительных параметров для расчета.</p>\n\n<p>Упаковка&nbsp;- переключатель для отображения&nbsp;блока с выбором &quot;Вида упаковки&quot;.&nbsp;</p>\n\n<p>Погрузо-разгрузочные работы - переключатель для отображения&nbsp;блока &quot;Погрузо-разгрузочные работы&quot;.</p>\n\n<p><br />\nДополнительные формулы расчета:</p>\n\n<p>Номер этажа - указанное количество *&nbsp;заданный коэффициент за этаж.</p>\n\n<p>Дни хранения груза - указанное количество *&nbsp;заданный коэффициент за день.</p>\n\n<p>&nbsp;</p>\n\n<p>Формула расчета результата:</p>\n\n<p>(Откуда (коэффициент) * вес * стоимость за кг (коэффициент)) + номер этажа + ( упаковка * объем ) + (страховка (коэффициент) * вес ) + (дни хранения груза * длина * ширина ) + экспедирование + СМС + паллетирование</p>",
     "dependencyMainFormula": null,
     "parent": "0;"
   },
@@ -764,7 +758,1106 @@
       }
     ]
   },
-
+  "data-cargo": {
+    "calculatorTemplates": [
+      {
+        "json_id": "100886707",
+        "title": "Первый блок",
+        "label": "",
+        "labelSub": "",
+        "dependencyFormulaDisplay": "",
+        "visuallySeparateElement": 1,
+        "classes": "",
+        "template": "UiBlockSection",
+        "elementName": "",
+        "templates": [
+          {
+            "json_id": "120257507",
+            "title": "Первый блок - колонки",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "120257107",
+                "title": "Первая колонка - 1",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "100886307",
+                    "title": "Откуда",
+                    "label": "Откуда",
+                    "isColumn": false,
+                    "selectedItem": "1",
+                    "isNeedChoice": 1,
+                    "notEmpty": 1,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "откуда",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "isStretch": 1,
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Москва",
+                        "selectName": "Москва",
+                        "extraValueForDependency": "москва",
+                        "dependencyPrices": [
+                          {
+                            "title": "Московская Область",
+                            "cost": 100,
+                            "dependencyFormulaCost": "куда === &quot;мо&quot;"
+                          },
+                          {
+                            "title": "Белгород",
+                            "cost": 671,
+                            "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                          },
+                          {
+                            "title": "Брянск",
+                            "cost": 671,
+                            "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                          },
+                          {
+                            "title": "Владимир",
+                            "cost": 186,
+                            "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                          },
+                          {
+                            "title": "Воронеж",
+                            "cost": 526,
+                            "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_ !== куда"
+                      },
+                      {
+                        "title": "Элемент списка - Московская Область",
+                        "selectName": "Московская Область",
+                        "extraValueForDependency": "мо",
+                        "dependencyPrices": [
+                          {
+                            "title": "Москва",
+                            "cost": 100,
+                            "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                          },
+                          {
+                            "title": "Белгород",
+                            "cost": 571,
+                            "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                          },
+                          {
+                            "title": "Брянск",
+                            "cost": 294,
+                            "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                          },
+                          {
+                            "title": "Владимир",
+                            "cost": 86,
+                            "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                          },
+                          {
+                            "title": "Воронеж",
+                            "cost": 426,
+                            "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_ !== куда"
+                      },
+                      {
+                        "title": "Элемент списка - Белгород",
+                        "selectName": "Белгород",
+                        "extraValueForDependency": "белгород",
+                        "dependencyPrices": [
+                          {
+                            "title": "Москва",
+                            "cost": 671,
+                            "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                          },
+                          {
+                            "title": "Московская Область",
+                            "cost": 571,
+                            "dependencyFormulaCost": "куда === &quot;мо&quot;"
+                          },
+                          {
+                            "title": "Брянск",
+                            "cost": 419,
+                            "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                          },
+                          {
+                            "title": "Владимир",
+                            "cost": 853,
+                            "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                          },
+                          {
+                            "title": "Воронеж",
+                            "cost": 257,
+                            "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_ !== куда"
+                      },
+                      {
+                        "title": "Элемент списка - Брянск",
+                        "selectName": "Брянск",
+                        "extraValueForDependency": "брянск",
+                        "dependencyPrices": [
+                          {
+                            "title": "Москва",
+                            "cost": 394,
+                            "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                          },
+                          {
+                            "title": "Московская Область",
+                            "cost": 294,
+                            "dependencyFormulaCost": "куда === &quot;мо&quot;"
+                          },
+                          {
+                            "title": "Белгород",
+                            "cost": 419,
+                            "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                          },
+                          {
+                            "title": "Владимир",
+                            "cost": 594,
+                            "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
+                          },
+                          {
+                            "title": "Воронеж",
+                            "cost": 441,
+                            "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_ !== куда"
+                      },
+                      {
+                        "title": "Элемент списка - Владимир",
+                        "selectName": "Владимир",
+                        "extraValueForDependency": "владимир",
+                        "dependencyPrices": [
+                          {
+                            "title": "Москва",
+                            "cost": 186,
+                            "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                          },
+                          {
+                            "title": "Московская Область",
+                            "cost": 86,
+                            "dependencyFormulaCost": "куда === &quot;мо&quot;"
+                          },
+                          {
+                            "title": "Белгород",
+                            "cost": 853,
+                            "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                          },
+                          {
+                            "title": "Брянск",
+                            "cost": 594,
+                            "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                          },
+                          {
+                            "title": "Воронеж",
+                            "cost": 682,
+                            "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_  !== куда"
+                      },
+                      {
+                        "title": "Элемент списка - Воронеж",
+                        "selectName": "Воронеж",
+                        "extraValueForDependency": "воронеж",
+                        "dependencyPrices": [
+                          {
+                            "title": "Москва",
+                            "cost": 526,
+                            "dependencyFormulaCost": "куда === &quot;москва&quot;"
+                          },
+                          {
+                            "title": "Московская Область",
+                            "cost": 426,
+                            "dependencyFormulaCost": "куда === &quot;мо&quot;"
+                          },
+                          {
+                            "title": "Белгород",
+                            "cost": 257,
+                            "dependencyFormulaCost": "куда === &quot;белгород&quot;"
+                          },
+                          {
+                            "title": "Брянск",
+                            "cost": 441,
+                            "dependencyFormulaCost": "куда === &quot;брянск&quot;"
+                          },
+                          {
+                            "title": "Владимир",
+                            "cost": 682,
+                            "dependencyFormulaCost": "куда === &quot;владимир&quot;"
+                          }
+                        ],
+                        "dependencyFormulaItem": "_self_ !== куда"
+                      }
+                    ],
+                    "prompt": "Откуда отправляем груз?",
+                    "iconSettingsSelectLabel": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100916907",
+                    "title": "Куда",
+                    "label": "Куда",
+                    "isColumn": false,
+                    "selectedItem": "1",
+                    "isNeedChoice": 1,
+                    "notEmpty": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "куда",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiSelect",
+                    "isStretch": 1,
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "values": [
+                      {
+                        "title": "Элемент списка - Москва",
+                        "selectName": "Москва",
+                        "extraValueForDependency": "москва",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      },
+                      {
+                        "title": "Элемент списка - Московская Область",
+                        "selectName": "Московская Область",
+                        "extraValueForDependency": "мо",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      },
+                      {
+                        "title": "Элемент списка - Белгород",
+                        "selectName": "Белгород",
+                        "extraValueForDependency": "белгород",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      },
+                      {
+                        "title": "Элемент списка - Брянск",
+                        "selectName": "Брянск",
+                        "extraValueForDependency": "брянск",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      },
+                      {
+                        "title": "Элемент списка - Владимир",
+                        "selectName": "Владимир",
+                        "extraValueForDependency": "владимир",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      },
+                      {
+                        "title": "Элемент списка - Воронеж",
+                        "selectName": "Воронеж",
+                        "extraValueForDependency": "воронеж",
+                        "dependencyFormulaItem": "_self_ !== откуда"
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettingsSelectLabel": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100943707",
+                    "title": "Объем",
+                    "label": "Объем",
+                    "value": "0",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "м3",
+                    "min": "0",
+                    "max": "100",
+                    "controls": 1,
+                    "step": "0.1",
+                    "discreteStep": 1,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": false,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "объем",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "isStretch": false,
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100960907",
+                    "title": "Вес",
+                    "label": "Вес",
+                    "value": "0",
+                    "placeholder": "",
+                    "cost": "1",
+                    "unit": "кг",
+                    "min": "0",
+                    "max": "5000",
+                    "controls": 1,
+                    "step": "0.1",
+                    "discreteStep": 1,
+                    "dataType": "onlyNumber",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": false,
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "вес",
+                    "formulaProcessingLogic": "error",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiInput",
+                    "isStretch": false,
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100965307",
+                    "title": "Дополнительные услуги",
+                    "label": "",
+                    "buttonText": "Дополнительные услуги",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "no",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": 1,
+                    "elementName": "большеНастроек",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "куда !== null &amp;&amp; откуда  !== null  &amp;&amp; объем &gt; 0 &amp;&amp; вес &gt; 0",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;30492307;35352507;"
+              },
+              {
+                "json_id": "120257307",
+                "title": "Вторая колонка - 2",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "100984507",
+                    "title": "Упаковка ( кнопка)",
+                    "label": "",
+                    "buttonText": "Упаковка",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": 1,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "no",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": 1,
+                    "elementName": "упаковкаКнопка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "упаковкаБлок",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100985507",
+                    "title": "Погрузо-разгрузочные работы (кнопка)",
+                    "label": "",
+                    "buttonText": "Погрузо-разгрузочные работы",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "no",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "погрузкаКнопка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "погрузкаБлок",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "100986107",
+                    "title": "Хранение груза ( кнопка )",
+                    "label": "",
+                    "buttonText": "Хранение груза",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "no",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "хранениеГрузаКнопка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "хранениеГрузаБлок",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101748307",
+                    "title": "Забор груза по адресу (кнопка)",
+                    "label": "",
+                    "buttonText": "Забор груза по адресу",
+                    "buttonTextChecked": "",
+                    "cost": "",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "грузПоАдресуКнопка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101748907",
+                    "title": "Адрес отгрузки",
+                    "label": "Адрес отгрузки",
+                    "value": "",
+                    "placeholder": "",
+                    "cost": "",
+                    "unit": "",
+                    "min": "0",
+                    "max": "10",
+                    "controls": false,
+                    "step": "1",
+                    "discreteStep": false,
+                    "dataType": "mixed",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "грузПоАдресуКнопка === true",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101749107",
+                    "title": "Доставка груза по адресу (кнопка)",
+                    "label": "",
+                    "buttonText": "Доставка груза по адресу",
+                    "buttonTextChecked": "",
+                    "cost": "350",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "switcher",
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "доставкаПоАдресуКнопка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "costForVoid": "",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettingsCheckboxLabel": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101749307",
+                    "title": "Адрес доставки",
+                    "label": "Адрес доставки",
+                    "value": "",
+                    "placeholder": "",
+                    "cost": "",
+                    "unit": "",
+                    "min": "0",
+                    "max": "10",
+                    "controls": false,
+                    "step": "1",
+                    "discreteStep": false,
+                    "dataType": "mixed",
+                    "notEmpty": 1,
+                    "isCurrency": false,
+                    "isColumn": 1,
+                    "formOutputMethod": "value",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": 1,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "доставкаПоАдресуКнопка === true",
+                    "classes": "",
+                    "template": "UiInput",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "большеНастроек === true",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;30492307;35352507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettingsColumnsLabel": null,
+            "parent": "0;30492307;"
+          }
+        ],
+        "maxWidthSide": "100",
+        "backgroundImageSettings": {
+          "title": "",
+          "image": {
+            "image_id": "1392700107",
+            "filename": "55319723_2_2.png",
+            "ver_id": 4858673,
+            "image_width": "1219",
+            "image_height": "775",
+            "ext": "png"
+          },
+          "backgroundHorizontalPosition": "right",
+          "backgroundVerticalPosition": "bottom",
+          "backgroundRepeat": "no-repeat",
+          "behaviorImage": "contain",
+          "fixedSize": 1,
+          "maxWidth": 540,
+          "maxHeight": 320,
+          "unitSize": "px",
+          "isSubstrate": 1,
+          "colorSubstrate": "#ffffff",
+          "opacitySubstrate": 40
+        },
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "101031507",
+        "title": "Упаковка блок",
+        "label": "Вид упаковки",
+        "labelSub": "",
+        "dependencyFormulaDisplay": "упаковкаКнопка === true",
+        "visuallySeparateElement": 1,
+        "elementName": "упаковкаБлок",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "120261907",
+            "title": "Вид упаковки - колонки",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "120261507",
+                "title": "Вид упаковки - 1 колонка",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "101019707",
+                    "title": "Грузоперевозки упаковка",
+                    "label": "",
+                    "selectedItem": "1",
+                    "isColumn": 1,
+                    "isNeedChoice": 1,
+                    "notEmpty": 1,
+                    "typeDisplayClass": "buttons",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": false,
+                    "excludeFromCalculations": false,
+                    "elementName": "упаковка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "classes": "",
+                    "template": "UiRadio",
+                    "isStretch": 1,
+                    "globalMaxWidth": "",
+                    "globalMaxHeight": "",
+                    "values": [
+                      {
+                        "title": "Элемент радио-кнопка - Упаковка в мешки",
+                        "radioName": "Упаковка в мешки",
+                        "cost": 300
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Упаковка в коробки",
+                        "radioName": "Упаковка в коробки",
+                        "cost": 500
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Упаковка стрейчпленкой",
+                        "radioName": "Упаковка стрейчпленкой",
+                        "cost": 550
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Упаковка в воздушно-пузырьковую пленку",
+                        "radioName": "Упаковка в воздушно-пузырьковую пленку",
+                        "cost": 700
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Жесткая упаковка(Обрешетка)",
+                        "radioName": "Жесткая упаковка(Обрешетка)",
+                        "cost": 900
+                      },
+                      {
+                        "title": "Элемент радио-кнопка - Евроборт (паллет,евроборт,лента,пломба)",
+                        "radioName": "Евроборт (паллет,евроборт,лента,пломба)",
+                        "cost": 1200
+                      }
+                    ],
+                    "prompt": "",
+                    "iconSettingsRadioLabel": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  }
+                ],
+                "maxWidth": "70",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;30492307;35352507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettingsColumnsLabel": null,
+            "parent": "0;30492307;"
+          }
+        ],
+        "maxWidthSide": "100",
+        "elementPosition": "default",
+        "backgroundImageSettings": null,
+        "iconSettingsSectionLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "101054507",
+        "title": "Погрузо-разгрузочные работы блок",
+        "label": "Погрузо-разгрузочные работы",
+        "labelSub": "",
+        "dependencyFormulaDisplay": "погрузкаКнопка === true",
+        "visuallySeparateElement": 1,
+        "elementName": "погрузкаБлок",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "101031307",
+            "title": "Погрузо-разгрузочные работы",
+            "label": "",
+            "selectedItem": "1",
+            "isColumn": 1,
+            "isNeedChoice": 1,
+            "notEmpty": 1,
+            "typeDisplayClass": "buttons",
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": 1,
+            "elementName": "погрузка",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiRadio",
+            "isStretch": 1,
+            "globalMaxWidth": "",
+            "globalMaxHeight": "",
+            "values": [
+              {
+                "title": "Элемент радио-кнопка - До подъезда",
+                "radioName": "До подъезда"
+              },
+              {
+                "title": "Элемент радио-кнопка - На этаж",
+                "radioName": "На этаж"
+              }
+            ],
+            "prompt": "",
+            "iconSettingsRadioLabel": null,
+            "parent": "0;30492307;"
+          },
+          {
+            "json_id": "101751107",
+            "title": "Номер этажа",
+            "label": "Номер этажа",
+            "value": "1",
+            "placeholder": "",
+            "cost": "200",
+            "unit": "этаж",
+            "min": "1",
+            "max": "50",
+            "controls": 1,
+            "step": "1",
+            "discreteStep": false,
+            "dataType": "onlyNumber",
+            "notEmpty": 1,
+            "isCurrency": false,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": false,
+            "excludeFromCalculations": false,
+            "elementName": "номерЭтажа",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "погрузка === 2",
+            "classes": "",
+            "template": "UiInput",
+            "isStretch": false,
+            "dependencyPrices": null,
+            "prompt": "",
+            "iconSettings": null,
+            "parent": "0;30492307;"
+          }
+        ],
+        "maxWidthSide": "50",
+        "backgroundImageSettings": null,
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "101049107",
+        "title": "Хранение груза блок",
+        "label": "Хранение груза",
+        "labelSub": "",
+        "dependencyFormulaDisplay": "хранениеГрузаКнопка === true",
+        "visuallySeparateElement": 1,
+        "elementName": "хранениеГрузаБлок",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "101047307",
+            "title": "дни",
+            "label": "Дни",
+            "value": "1",
+            "placeholder": "",
+            "cost": "100",
+            "unit": "",
+            "min": "1",
+            "max": "10",
+            "controls": 1,
+            "step": "1",
+            "discreteStep": 1,
+            "dataType": "onlyNumber",
+            "notEmpty": 1,
+            "isCurrency": false,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "дни",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiInput",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;30492307;"
+          },
+          {
+            "json_id": "101048107",
+            "title": "Длина",
+            "label": "Длина",
+            "value": "0",
+            "placeholder": "",
+            "cost": "1",
+            "unit": "м",
+            "min": "0",
+            "max": "5",
+            "controls": 1,
+            "step": "0.1",
+            "discreteStep": 1,
+            "dataType": "onlyNumber",
+            "notEmpty": 1,
+            "isCurrency": false,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "длина",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiInput",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;30492307;"
+          },
+          {
+            "json_id": "101048707",
+            "title": "Ширина",
+            "label": "Ширина",
+            "value": "0",
+            "placeholder": "",
+            "cost": "1",
+            "unit": "м",
+            "min": "0",
+            "max": "2.2",
+            "controls": 1,
+            "step": "0.1",
+            "discreteStep": 1,
+            "dataType": "onlyNumber",
+            "notEmpty": 1,
+            "isCurrency": false,
+            "isColumn": false,
+            "formOutputMethod": "valueSumm",
+            "resultOutputMethod": "value",
+            "zeroValueDisplayIgnore": 1,
+            "excludeFromCalculations": false,
+            "elementName": "ширина",
+            "formulaProcessingLogic": "zero",
+            "dependencyFormulaDisplay": "",
+            "classes": "",
+            "template": "UiInput",
+            "dependencyPrices": null,
+            "prompt": "",
+            "parent": "0;30492307;"
+          }
+        ],
+        "maxWidthSide": "50",
+        "backgroundImageSettings": null,
+        "iconSettings": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "101068507",
+        "title": "Дополнительные опции",
+        "label": "Дополнительные опции",
+        "labelSub": "",
+        "dependencyFormulaDisplay": "большеНастроек === true",
+        "visuallySeparateElement": 1,
+        "elementName": "",
+        "classes": "",
+        "template": "UiBlockSection",
+        "templates": [
+          {
+            "json_id": "120260307",
+            "title": "Дополнительные опции - колонки",
+            "label": "",
+            "columns": [
+              {
+                "json_id": "120259907",
+                "title": "Дополнительные опции - 1",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "101063107",
+                    "title": "Экспедирование",
+                    "label": "",
+                    "buttonText": "Экспедирование",
+                    "buttonTextChecked": "",
+                    "cost": "150",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "base",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101066307",
+                    "title": "СМС оповещение",
+                    "label": "",
+                    "buttonText": "СМС оповещение",
+                    "buttonTextChecked": "",
+                    "cost": "100",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "base",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "elementPosition": "default",
+                "iconSettingsColumnsItemLabel": null,
+                "parent": "0;30492307;35352507;"
+              },
+              {
+                "json_id": "120260107",
+                "title": "Дополнительные опции - 2",
+                "label": "",
+                "templates": [
+                  {
+                    "json_id": "101066707",
+                    "title": "Паллетирование (паллет, стрейч, лента, пломба)",
+                    "label": "",
+                    "buttonText": "Паллетирование (паллет, стрейч, лента, пломба)",
+                    "buttonTextChecked": "",
+                    "cost": "678",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "base",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "parent": "0;30492307;35352507;35352707;"
+                  },
+                  {
+                    "json_id": "101068307",
+                    "title": "Страховка груза",
+                    "label": "",
+                    "buttonText": "Страховка груза",
+                    "buttonTextChecked": "",
+                    "cost": "30",
+                    "baseValue": "default",
+                    "isNeedChoice": false,
+                    "isColumn": false,
+                    "typeDisplayClass": "base",
+                    "formOutputMethod": "valueSumm",
+                    "resultOutputMethod": "value",
+                    "zeroValueDisplayIgnore": 1,
+                    "excludeFromCalculations": false,
+                    "elementName": "страховка",
+                    "formulaProcessingLogic": "zero",
+                    "dependencyFormulaDisplay": "",
+                    "scrollIntoName": "",
+                    "classes": "",
+                    "template": "UiCheckbox",
+                    "dependencyPrices": null,
+                    "prompt": "",
+                    "iconSettings": null,
+                    "parent": "0;30492307;35352507;35352707;"
+                  }
+                ],
+                "maxWidth": "50",
+                "dependencyFormulaDisplay": "",
+                "iconSettings": null,
+                "parent": "0;30492307;35352507;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "adaptationMethod": "free",
+            "elementName": "",
+            "classes": "",
+            "template": "UiColumns",
+            "iconSettingsColumnsLabel": null,
+            "parent": "0;30492307;"
+          }
+        ],
+        "maxWidthSide": "100",
+        "elementPosition": "default",
+        "backgroundImageSettings": null,
+        "iconSettingsSectionLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "125437507",
+        "title": "стоимость за кг груза в км",
+        "cost": "5",
+        "elementName": "кгГрузаЗаКм",
+        "formulaProcessingLogic": "zero",
+        "template": "UiSystem",
+        "dependencyPrices": null,
+        "parent": "0;"
+      }
+    ]
+  },
   "data-cargo-5289607": {
     "calculatorTemplates": [
         {

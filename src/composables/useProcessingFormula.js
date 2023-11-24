@@ -68,7 +68,7 @@ export function useProcessingFormula(dataObject) {
             resultReduce.cost = item?.cost ? item.cost : 0;
           }
         } catch (e) {
-          errorMessage(e.message, formula)
+          errorMessage([e.message, formula], "error")
         }
         return resultReduce;
       },
@@ -119,7 +119,7 @@ export function useProcessingFormula(dataObject) {
       try {
         return eval(formulaAfterProcessingVariables?.value);
       } catch (e) {
-        errorMessage(e.message, formulaAfterProcessingVariables?.value)
+        errorMessage([e.message, formulaAfterProcessingVariables?.value], "error")
       }
     }
     return parentIsShow.value;
