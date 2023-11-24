@@ -3,12 +3,12 @@ import { computed, ref, toRef } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
+import TemplatesWrapper from "@/components/templates/calculator/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/templates/columns/TemplatesWrapperColumn.vue";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import BackgroundImageElement from "@/components/supporting/background-image-element.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { getCurrentWidthElement } from "@/composables/useWidthElement";
@@ -63,8 +63,8 @@ const isShowError = computed(() => {
  * @returns {*|number}
  */
 const currentChildrenItem = computed(() => {
-  return props.accordionItem?.templates.length
-    ? props.accordionItem?.templates.length
+  return props.accordionItem?.templates?.length
+    ? props.accordionItem?.templates?.length
     : 0;
 });
 

@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import {
   getArrayOnFormula,
 } from "@/servises/UtilityServices";
-import devFormulaItem from "@/components/UI/devMode/devBlock/devFormulaItem.vue";
+import devFormulaItem from "@/components/UI/devMode/devFormulaItem.vue";
 
 
 const props = defineProps({

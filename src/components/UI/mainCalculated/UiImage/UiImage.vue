@@ -4,7 +4,7 @@ const typeElement = "UiImage";
 
 <script setup>
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import {
   computed,
@@ -21,6 +21,7 @@ import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import errorMessage from "@/servises/devErrorMessage";
 
 const props = defineProps({
   defaultImage: {
@@ -48,7 +49,7 @@ const height = "max-height:" + props.maxHeight + "px";
 const isExistDependencyImages = Boolean(props.dependencyImages?.length);
 
 const baseStore = useBaseStore()
-const { devMode, getImageDir } = storeToRefs(baseStore);
+const { getImageDir } = storeToRefs(baseStore);
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -111,9 +112,7 @@ const localDataForDisplay = computed(() => {
           dataForOut = { label, url, prompt };
         }
       } catch (e) {
-        if (devMode.value) {
-          console.error(e.message, formula);
-        }
+        errorMessage(e.message, formula)
       }
     }
   });

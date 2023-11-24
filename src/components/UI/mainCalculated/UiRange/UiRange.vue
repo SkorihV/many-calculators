@@ -19,8 +19,8 @@ import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import iconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import iconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 import DynamicInputValue from "@/components/UI/mainCalculated/UiRange/DynamicInputValue.vue";
 import StepLine from "@/components/UI/mainCalculated/UiRange/StepLine.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
@@ -147,7 +147,7 @@ const staticRef = ref(null);
 const parentRef = ref(null);
 const isMounted = ref(false);
 
-const elementWidth = ref(0);
+const inputRangeWidth = ref(0);
 const resultValue = ref(null);
 const textErrorNotEmpty = ref("Обязательное поле.");
 const updateValueTimer = ref(null);
@@ -270,7 +270,7 @@ const positionStaticResultValue = computed(() => {
   if (resultValue.value === null) {
     return null;
   }
-  const width = elementWidth.value - staticElementWidth.value / 2 - 10;
+  const width = inputRangeWidth.value - staticElementWidth.value / 2 - 10;
 
   let newPosition =
     (resultValue.value - localMin.value) / (localMax.value - localMin.value);
@@ -315,7 +315,7 @@ watch(
 watch(isVisibilityFromDependency, (newValue) => {
   if (newValue) {
     setTimeout(() => {
-      elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
+      inputRangeWidth.value = thisElementInputRangeRef.value?.offsetWidth;
     }, 500);
   }
   changeValue("dependency");
@@ -333,6 +333,10 @@ watch(localCost, () => {
   }
 });
 
+watch(currentWidthElement, () => {
+  updateWidthElement();
+})
+
 watch(getSomeElementChangedSelfVisibilityState, () => {
   updatedCurrentWidth();
   setTimeout(() => {
@@ -342,7 +346,6 @@ watch(getSomeElementChangedSelfVisibilityState, () => {
 
 function processingFinalValue(value) {
   value = checkValidValueReturnNumber(value)
-
   value = roundingValueToInputNumber(value,localStep.value)
   return decimalAdjust(value, signAfterComa.value, 'round')
 }
@@ -350,7 +353,6 @@ function processingFinalValue(value) {
 function initBaseData(eventType = "mounted") {
   let timer = setInterval(() => {
     if (checkedValueOnVoid(props.rangeValue)) {
-
       resultValue.value = processingFinalValue(props.rangeValue)
       changeValue(eventType);
       clearInterval(timer);
@@ -433,8 +435,8 @@ function updatedCostForOut(cost) {
 }
 
 function updateWidthElement() {
-  if (elementWidth.value !== thisElementInputRangeRef.value?.offsetWidth) {
-    elementWidth.value = thisElementInputRangeRef.value?.offsetWidth;
+  if (inputRangeWidth.value !== thisElementInputRangeRef.value?.offsetWidth) {
+    inputRangeWidth.value = thisElementInputRangeRef.value?.offsetWidth;
   }
 }
 function updateStaticElementWidth() {
@@ -457,7 +459,7 @@ onMounted(() => {
   updateStaticElementWidth();
 
   let timerElementInputRange = setInterval(() => {
-    if (thisElementInputRangeRef.value?.offsetWidth || elementWidth.value) {
+    if (thisElementInputRangeRef.value?.offsetWidth || inputRangeWidth.value) {
       updateWidthElement();
       clearInterval(timerElementInputRange);
     }
@@ -521,7 +523,7 @@ onUnmounted(() => {
           <step-line
             :step-prompt="stepPrompt"
             :show-steps="showSteps"
-            :element-width="elementWidth"
+            :element-width="inputRangeWidth"
             :local-max="localMax"
             :local-min="localMin"
             v-model:modelValue="resultValue"

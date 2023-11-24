@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {storeToRefs} from "pinia";
 
-import devFormulaBlockWrapper from "@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue";
+import devFormulaBlockWrapper from "@/components/UI/devMode/devFormulaBlockWrapper.vue";
 
 const { showInsideElementStatus } = storeToRefs(useBaseStore())
 

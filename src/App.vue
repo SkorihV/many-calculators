@@ -14,15 +14,15 @@ import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 
 import {storeToRefs} from "pinia";
 
-import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
-import UiDuplicator from "@/components/UI/structural/duplicator/UiDuplicator.vue";
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import ErrorNamesTemplates from "@/components/UI/devMode/ErrorNamesTemplates.vue";
+import TemplatesWrapperStructural from "@/components/templates/structural/TemplatesWrapperStructural.vue";
+import UiDuplicator from "@/components/UI/mainCalculated/UiDuplicator/UiDuplicator.vue";
+import TemplatesWrapper from "@/components/templates/calculator/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/templates/columns/TemplatesWrapperColumn.vue";
+import ErrorNamesTemplates from "@/components/templates/errorNames/ErrorNamesTemplates.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
 import ResultBlockForOutput from "@/components/UI/other/ResultBlock/ResultBlock.vue";
 import ResultButtonForComputed from "@/components/UI/other/ResultButtonForComputed.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 
@@ -58,6 +58,7 @@ import { useElementNamesStore } from "@/store/elementNamesStore";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useDependencyListStore } from "@/store/dependencyListStore";
 import ErrorBlockPrompt from "@/components/UI/other/errorBlockPrompt.vue";
+import errorMessage from "@/servises/devErrorMessage";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
@@ -145,11 +146,7 @@ const mainFormulaResult = computed(() => {
           resultFormula = formula;
         }
       } catch (e) {
-        if (devMode.value) {
-          console.error(
-            "Формула зависимости для смены главной формулы: " + e.message
-          );
-        }
+        errorMessage("Формула зависимости для смены главной формулы: " + e.message)
       }
       return resultFormula;
     }, "");
@@ -227,10 +224,7 @@ const combinedFormulaDataTogether = computed(() => {
       return null;
     }
   } catch (e) {
-    if (devMode.value) {
-      console.warn("Рассчитываемая формула: ", resultTextForComputed.value);
-    }
-    return null;
+    errorMessage("Рассчитываемая формула: ", resultTextForComputed.value)
   }
 });
 
@@ -251,7 +245,7 @@ const sortPositionDataForOutput = computed(() => {
 const resultTextDataForForm = computed(() => {
   let result = "";
   sortPositionDataForOutput.value.forEach((item) => {
-    if (item.type === "duplicator") {
+    if (item.type === "UiDuplicator") {
       if (item?.insertedTemplates?.length && item.isShow) {
         item?.insertedTemplates.forEach((duplicator) => {
           if (duplicator?.insertedTemplates?.length) {
@@ -465,7 +459,7 @@ function changeValue(data) {
   }
   resultStore.addResultElement(data);
 
-  if (type === "duplicator") {
+  if (type === "UiDuplicator") {
     resultStore.modifiedResultElement({
       elementName: name,
       modifiedFieldName: "insertedTemplates",

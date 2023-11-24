@@ -3,9 +3,9 @@ const typeElement = "Column";
 </script>
 
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import TemplatesWrapper from "@/components/templates/calculator/TemplatesWrapper.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { computed, reactive, ref, toRef } from "vue";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";

@@ -18,8 +18,8 @@ import {useResultListStore} from "@/store/resultListStore";
 import {useValidationListStore} from "@/store/validationListStore";
 import {storeToRefs} from "pinia";
 
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import { checkedValueOnVoid, deleteTagsInText, replaceCommaOnDot } from "@/servises/UtilityServices";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
@@ -47,9 +47,9 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { isBoolean } from "@/validators/validators";
+import errorMessage from "@/servises/devErrorMessage";
 
 const baseStore = useBaseStore()
-const { devMode } = storeToRefs(baseStore);
 const { getResultElementByName } = storeToRefs( useResultListStore());
 const dependencyStore = useDependencyListStore()
 const validationStore = useValidationListStore()
@@ -244,13 +244,7 @@ const localCost = computed(() => {
       return null
     }
   } catch (e) {
-    if (devMode.value) {
-      console.error(
-        "Системное поле, обработка формулы стоимости: ",
-        processingVariablesInFormula.value
-      );
-    }
-    return null
+    errorMessage("Системное поле, обработка формулы стоимости: ", processingVariablesInFormula.value)
   }
 });
 

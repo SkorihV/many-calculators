@@ -21,8 +21,8 @@ import {useElementNameList} from "@/composables/useElementNameList";
 import { storeToRefs } from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";

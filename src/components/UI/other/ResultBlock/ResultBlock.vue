@@ -10,9 +10,9 @@ import {useValidationListStore} from "@/store/validationListStore";
 
 import {storeToRefs} from "pinia";
 
-import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
+import BackgroundImageElement from "@/components/supporting/background-image-element.vue";
 import SpinnerElement from "@/components/UI/other/Spinner-element.vue";
-import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 import ResultBlockTitle from "@/components/UI/other/ResultBlock/ResultBlockTitle.vue";
 import ResultBlockData from "@/components/UI/other/ResultBlock/ResultBlockData.vue";
 

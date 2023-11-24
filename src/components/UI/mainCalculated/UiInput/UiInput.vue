@@ -19,8 +19,8 @@ import {useValidationListStore} from "@/store/validationListStore";
 
 import { storeToRefs } from "pinia";
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
@@ -39,11 +39,12 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import errorMessage from "@/servises/devErrorMessage";
 
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
-const { devMode, isCanShowAllTooltips } = baseStoreRefs;
+const { isCanShowAllTooltips } = baseStoreRefs;
 const dependencyStore = useDependencyListStore()
 const validationStore = useValidationListStore()
 
@@ -489,9 +490,7 @@ function resultWitchNumberValid() {
 
     return localInputValue.value;
   } catch (e) {
-    if (devMode.value) {
-      console.error(e.message);
-    }
+    errorMessage(e.message)
   }
 }
 function changeValue(eventType = "input") {

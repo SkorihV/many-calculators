@@ -70,7 +70,7 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
 /**
  * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
  * zero - выводит ноль
- * error - выводит null что в расчете формулы приведет к ошибке
+ * errorNames - выводит null что в расчете формулы приведет к ошибке
  *
  * @param dataList
  * @returns {*[]}
@@ -365,6 +365,17 @@ function roundingValueToInputNumber(value, stepNumber) {
   return Math.round(parseFloat(value) / stepNumber) * stepNumber
 }
 
+function initFuncForInterval(fn, limit = 10, step = 1000){
+  let stepInterval = 0
+  let timerName = setInterval(() => {
+    fn();
+    if (stepInterval > limit) {
+      clearInterval(timerName);
+    }
+    stepInterval++;
+  }, step);
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -386,5 +397,6 @@ export {
   trimVariableCost,
   getSignsAfterComma,
   roundingValueToInputNumber,
-  replaceCommaOnDot
+  replaceCommaOnDot,
+  initFuncForInterval
 };

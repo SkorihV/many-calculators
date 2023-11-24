@@ -5,8 +5,8 @@ const typeElement = "AccordionItem";
 <script setup>
 import { computed, reactive, ref, toRef } from "vue";
 import UiAccordionItem from "@/components/UI/structural/accordion/UiAccordionItem.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
@@ -56,7 +56,7 @@ function changeValue(data) {
 
 const showBlock = computed(() => {
   let result = [];
-  if (props.accordionData?.items.length) {
+  if (props.accordionData?.items?.length) {
     result = props.accordionData?.items.map((item) => {
       if (item?.templates?.length) {
         return Boolean(item.templates.length);

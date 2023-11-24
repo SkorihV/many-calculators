@@ -20,8 +20,8 @@ import {storeToRefs} from "pinia";
 
 import UiTooltip from "@/components/UI/other/UiTooltip.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
@@ -41,6 +41,7 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import { isBoolean } from "@/validators/validators";
+import errorMessage from "@/servises/devErrorMessage";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -117,7 +118,7 @@ const parentRef = ref(null);
 const selectRef = ref(null);
 
 const baseStore = useBaseStore()
-const { devMode, isCanShowAllTooltips } = storeToRefs(baseStore);
+const { isCanShowAllTooltips } = storeToRefs(baseStore);
 const dependencyStore = useDependencyListStore()
 const {isDependencyElement} = storeToRefs(dependencyStore)
 const validationStore = useValidationListStore()
@@ -321,9 +322,7 @@ const selectValuesAfterProcessingDependency = computed(() => {
       try {
         newDataIsShow = eval(formula)
       } catch (e) {
-        if (devMode.value) {
-          console.error(e.message, formula)
-        }
+        errorMessage((e.message, formula))
         newDataIsShow = false
       }
       selectItem.isShow = newDataIsShow;

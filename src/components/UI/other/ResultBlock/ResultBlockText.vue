@@ -4,7 +4,7 @@ import { computed, reactive, ref, toRef } from "vue";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
-import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 const props = defineProps({
   resultOptions: {

@@ -1,13 +1,12 @@
 import { computed, toRef, watch } from "vue";
 import {useBaseStore} from "@/store/baseStore";
-import {storeToRefs} from "pinia";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import errorMessage from "@/servises/devErrorMessage";
 
 export function useProcessingFormula(dataObject) {
   const baseStore = useBaseStore()
-  const baseStoreRefs = storeToRefs(baseStore)
 
   const dependencyFormulaDisplay = toRef(dataObject, "formula");
   const parentIsShow = toRef(dataObject, "parentIsShow");
@@ -16,7 +15,6 @@ export function useProcessingFormula(dataObject) {
     dataObject,
     "constructLocalListElementDependencyInFormula"
   );
-  const { devMode } = baseStoreRefs;
 
   /**
    * Обработать список цен на подходящее условие и вернуть итоговую цену или null
@@ -70,9 +68,7 @@ export function useProcessingFormula(dataObject) {
             resultReduce.cost = item?.cost ? item.cost : 0;
           }
         } catch (e) {
-          if (devMode.value) {
-            console.error(e.message, formula);
-          }
+          errorMessage(e.message, formula)
         }
         return resultReduce;
       },
@@ -123,10 +119,7 @@ export function useProcessingFormula(dataObject) {
       try {
         return eval(formulaAfterProcessingVariables?.value);
       } catch (e) {
-        if (devMode.value) {
-          console.error(e.message, formulaAfterProcessingVariables?.value);
-        }
-        return false;
+        errorMessage(e.message, formulaAfterProcessingVariables?.value)
       }
     }
     return parentIsShow.value;

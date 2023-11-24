@@ -5,9 +5,10 @@ import {storeToRefs} from "pinia";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
-import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
+import { getArrayElementsFromFormula} from "@/servises/UtilityServices";
+import errorMessage from "@/servises/devErrorMessage";
 
-const { getImageDir, devMode } = storeToRefs(useBaseStore());
+const { getImageDir } = storeToRefs(useBaseStore());
 const { constructLocalListElementDependencyInFormula, localDependencyList } =
   useLocalDependencyList();
 
@@ -29,27 +30,21 @@ const baseUrlImage = computed(() => {
 
 const currentImageUrl = ref(baseUrlImage.value);
 
-function changeValue() {
-  return null;
-}
 
 function getImageAndUpdated(url) {
-  const urlImage = new Promise(function (resolve, reject) {
-    let img = new Image();
-    img.onload = () => {
-      resolve(img);
-    };
-    img.onerror = () => {
-      reject(img);
-    };
+  new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(img);
     img.src = url;
-  });
 
-  urlImage.then((img) => {
+    setTimeout(() => {
+      reject( new Error("Время попытки загрузки изображения по адресу " + url + "истекло." ))
+    }, 10000)
+  }).then((img) => {
     currentImageUrl.value = img.src;
-  });
-  urlImage.catch((img) => {
-    console.error("Картина по адресу " + img.src + " не была загружены");
+  }).catch((img) => {
+    errorMessage("Картина по адресу " + img.src + " не была загружен.")
   });
 }
 
@@ -171,9 +166,7 @@ const urlImageAfterProcessingDependency = computed(() => {
           newCurrentUrl = imageItem.image.filename;
         }
       } catch (e) {
-        if (devMode.value) {
-          console.error(e.message, formula);
-        }
+        errorMessage(e.message, formula)
       }
     }
   });

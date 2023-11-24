@@ -3,14 +3,13 @@ const typeElement = "BlockSection";
 </script>
 
 <script setup>
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import BackgroundImageElement from "@/components/UI/supporting/background-image-element.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import TemplatesWrapper from "@/components/templates/calculator/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/templates/columns/TemplatesWrapperColumn.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import BackgroundImageElement from "@/components/supporting/background-image-element.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 
 import { computed, reactive, ref, toRef } from "vue";
-import {storeToRefs} from "pinia";
 import {useBaseStore} from "@/store/baseStore";
 
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
@@ -22,7 +21,6 @@ import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import {useHighlightElement} from '@/composables/useHighlightElement'
 
 const baseStore = useBaseStore()
-const { devMode } = storeToRefs(baseStore);
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
   templatesData: {

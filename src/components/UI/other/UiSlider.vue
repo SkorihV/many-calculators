@@ -25,7 +25,7 @@ import { useDisplayComponents } from "@/composables/useDisplayComponents";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
 import { isBoolean } from "@/validators/validators";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue"
+import devBlock from "@/components/UI/devMode/devBlock.vue"
 import { checkedValueOnVoid } from "@/servises/UtilityServices";
 
 const baseStore = useBaseStore()

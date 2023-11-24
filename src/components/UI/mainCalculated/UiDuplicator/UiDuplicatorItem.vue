@@ -8,8 +8,6 @@ import {
   onMounted,
   watch,
   computed,
-  reactive,
-  toRef,
   onUnmounted,
 } from "vue";
 import {useBaseStore} from "@/store/baseStore";
@@ -20,14 +18,13 @@ import { useDisplayComponentsStore } from "@/store/displayComponentsStore";
 import {useInnerVariablesStore} from "@/store/innerCustomVariableStore";
 import {storeToRefs} from "pinia";
 
-import TemplatesWrapper from "@/components/UI/supporting/TemplatesWrapper.vue";
-import TemplatesWrapperColumn from "@/components/UI/supporting/TemplatesWrapperColumn.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
-import TemplatesWrapperStructural from "@/components/UI/supporting/TemplatesWrapperStructural.vue";
-import IconElementWrapper from "@/components/UI/supporting/icon-element-wrapper.vue";
+import TemplatesWrapper from "@/components/templates/calculator/TemplatesWrapper.vue";
+import TemplatesWrapperColumn from "@/components/templates/columns/TemplatesWrapperColumn.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
+import TemplatesWrapperStructural from "@/components/templates/structural/TemplatesWrapperStructural.vue";
+import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue";
 
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
-import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { getProxyFreeVariables } from "@/composables/getProxyFreeVariables";
 import {
@@ -43,11 +40,11 @@ import {
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import {
   BANNED_STANDARD_NAME,
-  NAME_RESERVED_VARIABLE_GLOBAL_SUM,
   NAME_RESERVED_VARIABLE_SUM
 } from "@/constants/variables";
 import { useGetOtherGlobalSum } from "@/composables/useGetOtherGlobalSum";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import errorMessage from "@/servises/devErrorMessage";
 
 
 const baseStore = useBaseStore()
@@ -56,7 +53,7 @@ const resultStore = useResultListStore()
 const displayStore = useDisplayComponentsStore()
 const nameStore = useElementNamesStore()
 const innerStore = useInnerVariablesStore()
-const { devMode, checkedIsStructureTemplate } = storeToRefs(baseStore);
+const { checkedIsStructureTemplate } = storeToRefs(baseStore);
 const { getResultElementByName, isResultElement } = storeToRefs(resultStore)
 
 
@@ -158,12 +155,7 @@ const mainFormulaResult = computed(() => {
           resultFormula = item.formula;
         }
       } catch (e) {
-        if (devMode.value) {
-          console.error(
-            "Формула зависимости для смены главной формулы дупликатора: " +
-              e.message
-          );
-        }
+        errorMessage("Формула зависимости для смены главной формулы дупликатора: " + e.message)
       }
       return resultFormula;
     },
@@ -324,13 +316,7 @@ const localCost = computed(() => {
       throw new Error();
     }
   } catch (e) {
-    if (devMode.value) {
-      console.warn(
-        "Рассчитываемая формула в дупликаторе: ",
-        compileFormulaWitchData.value
-      );
-    }
-    return null;
+    errorMessage( "Рассчитываемая формула в дупликаторе: " + compileFormulaWitchData.value)
   }
 });
 
@@ -407,7 +393,7 @@ function changeValue(data) {
   }
   emits("changedValue", {
     name: mutationsInputData.value.elementName,
-    type: "duplicator",
+    type: "UiDuplicator",
     label: mutationsInputData.value.label,
     cost: localCost.value,
     value: null,

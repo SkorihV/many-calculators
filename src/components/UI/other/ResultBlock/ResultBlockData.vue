@@ -9,7 +9,7 @@ import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 
-import DevBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import DevBlock from "@/components/UI/devMode/devBlock.vue";
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
@@ -53,7 +53,7 @@ const {isVisibilityFromDependency: showTitleSumBlock, formulaAfterProcessingVari
 const resultTextDataForResultBlock = computed(() => {
   let result = "";
   props.data.forEach((item) => {
-    if (item.type === "duplicator") {
+    if (item.type === "UiDuplicator") {
       if (item?.insertedTemplates?.length && item.isShow) {
         item?.insertedTemplates.forEach((duplicator) => {
           if (duplicator?.insertedTemplates?.length) {

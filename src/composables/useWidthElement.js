@@ -1,5 +1,6 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useEventListener } from "@/composables/useEventsListener";
+import { initFuncForInterval } from "@/servises/UtilityServices";
 
 /**
  * Получаем ширину элемента
@@ -13,19 +14,11 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
 
   useEventListener(window, "resize", resizeWidth);
   onMounted(() => {
-    let stepInterval = 0;
-    timerName.value = setInterval(() => {
-      updatedCurrentWidth();
-      if (stepInterval > 3) {
-        clearInterval(timerName.value);
-      }
-
-      stepInterval++;
-    }, 500);
+    initFuncForInterval(updatedCurrentWidth, 3, )
   });
 
   function resizeWidth() {
-    updatedCurrentWidth();
+    initFuncForInterval(updatedCurrentWidth, 3, )
   }
   function updatedCurrentWidth() {
     if (parentRef?.value && parentRef?.value?.offsetWidth !== 0) {
@@ -38,14 +31,7 @@ export const getCurrentWidthElement = (elementIsShow, parentRef) => {
     () => elementIsShow.value,
     (newValue) => {
       if (newValue) {
-        let stepInterval = 0;
-        timerName.value = setInterval(() => {
-          updatedCurrentWidth();
-          if (stepInterval > 10) {
-            clearInterval(timerName.value);
-          }
-          stepInterval++;
-        }, 500);
+        initFuncForInterval(updatedCurrentWidth, 10, )
       }
     }
   );

@@ -8,8 +8,8 @@ import {useBaseStore} from "@/store/baseStore";
 import {useDependencyListStore} from "@/store/dependencyListStore";
 import { useElementNamesStore } from "@/store/elementNamesStore";
 
-import UiDuplicatorItem from "@/components/UI/structural/duplicator/UiDuplicatorItem.vue";
-import devBlock from "@/components/UI/devMode/devBlock/devBlock.vue";
+import UiDuplicatorItem from "@/components/UI/mainCalculated/UiDuplicator/UiDuplicatorItem.vue";
+import devBlock from "@/components/UI/devMode/devBlock.vue";
 import UiPrompt from "@/components/UI/other/UiPrompt.vue";
 
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
@@ -162,7 +162,7 @@ function updateLocalCost() {
 function emitChangeValue(eventType) {
   emits("changedValue", {
     name: props.elementName,
-    type: "duplicator",
+    type: "UiDuplicator",
     label: props.duplicateTemplate.label,
     cost: localCost.value,
     value: localCost.value,
@@ -188,7 +188,7 @@ function tryPassDependency() {
     value: localCost.value,
     isShow: isVisibilityFromDependency.value,
     displayValue: localCost.value,
-    type: "duplicator",
+    type: "UiDuplicator",
   });
 }
 

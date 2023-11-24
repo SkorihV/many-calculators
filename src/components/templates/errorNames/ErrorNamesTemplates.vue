@@ -3,7 +3,7 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import {useBaseStore} from "@/store/baseStore";
 import {useElementNamesStore} from "@/store/elementNamesStore";
 import {storeToRefs} from "pinia";
-import devFormulaBlockWrapper from '@/components/UI/devMode/devBlock/devFormulaBlockWrapper.vue'
+import devFormulaBlockWrapper from '@/components/UI/devMode/devFormulaBlockWrapper.vue'
 
 import {
   REGEXP_ELEMENT_VALUE_AS_WORLD,
