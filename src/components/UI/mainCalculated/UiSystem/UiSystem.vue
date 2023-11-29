@@ -48,6 +48,7 @@ import { useElementNameList } from "@/composables/useElementNameList";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { isBoolean } from "@/validators/validators";
 import errorMessage from "@/servises/devErrorMessage";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 const baseStore = useBaseStore()
 const { getResultElementByName } = storeToRefs( useResultListStore());
@@ -99,7 +100,8 @@ const props = defineProps({
     "htmlText",
     "unit",
     "roundOffType",
-    "signAfterDot"
+    "signAfterDot",
+    "dependencyFormulaOutput"
   ]),
 });
 const parentRef = ref(null);
@@ -118,6 +120,31 @@ const {
     localDependencyList: localDependencyList,
   })
 );
+
+const dependencyFormulaOutputArray = computed(() => {
+  if (!props.dependencyFormulaOutput?.length) {
+    return []
+  }
+  return getArrayElementsFromFormula(props.dependencyFormulaOutput)
+})
+
+const isShowOutput = computed(() => {
+  constructLocalListElementDependencyInFormula(dependencyFormulaOutputArray.value)
+  const formula = processingVariablesOnFormula(dependencyFormulaOutputArray.value, localDependencyList)
+
+  if (!formula?.toString()?.length) {
+    return true
+  }
+  try {
+    return(eval(formula))
+  } catch (e) {
+    errorMessage([e.message, formula], 'error')
+  }
+})
+
+const isIgnoredValueOnZero = computed(() => {
+  return (props.zeroValueDisplayIgnore && !localCost.value)
+})
 
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
@@ -317,7 +344,7 @@ watch(
   { deep: true }
 );
 
-watch(isVisibilityFromDependency, () => {
+watch([isVisibilityFromDependency, isShowOutput], () => {
   changeValue("dependency")
 });
 
@@ -332,6 +359,7 @@ function changeValue(eventType = "system") {
     formOutputMethod: props.formOutputMethod,
     resultOutputMethod: props.resultOutputMethod,
     isShow: isVisibilityFromDependency.value && isShowElement.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value && isShowElement.value,
     excludeFromCalculations: props.excludeFromCalculations || props.returnTextValue,
     unit: localUnit.value,
     eventType,
