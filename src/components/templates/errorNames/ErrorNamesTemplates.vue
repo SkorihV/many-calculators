@@ -62,7 +62,8 @@ const listFieldsInFormula = [
   "formulaDisplayButton",
   "formulaDependencyForResultBlock",
   "formulaDependencyTextAfterSumma",
-  "dependencyFormulaTextAfterSumma"
+  "dependencyFormulaTextAfterSumma",
+  "dependencyFormulaOutput"
 ];
 
 /**

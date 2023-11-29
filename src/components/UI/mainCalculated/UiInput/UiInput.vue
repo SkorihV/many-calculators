@@ -24,7 +24,12 @@ import IconElementWrapper from "@/components/supporting/icon-element-wrapper.vue
 import { propsTemplate } from "@/servises/UsePropsTemplatesSingle";
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 
-import { checkedValueOnVoid, decimalAdjust, roundingValueToInputNumber } from "@/servises/UtilityServices";
+import {
+  checkedValueOnVoid,
+  decimalAdjust,
+  getArrayElementsFromFormula,
+  roundingValueToInputNumber
+} from "@/servises/UtilityServices";
 import { useProcessingFormula } from "@/composables/useProcessingFormula";
 import { useLocalDependencyList } from "@/composables/useLocalDependencyList";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
@@ -40,6 +45,7 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import errorMessage from "@/servises/devErrorMessage";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 
 const baseStore = useBaseStore()
@@ -151,7 +157,8 @@ const props = defineProps({
     "positionElement",
     "zeroValueDisplayIgnore",
     "roundOffType",
-    "signAfterDot"
+    "signAfterDot",
+    "dependencyFormulaOutput"
   ]),
 });
 
@@ -180,6 +187,32 @@ const {
     parentIsShow: toRef(props, "parentIsShow"),
   })
 );
+
+const dependencyFormulaOutputArray = computed(() => {
+  if (!props.dependencyFormulaOutput?.length) {
+    return []
+  }
+  return getArrayElementsFromFormula(props.dependencyFormulaOutput)
+})
+
+const isShowOutput = computed(() => {
+  constructLocalListElementDependencyInFormula(dependencyFormulaOutputArray.value)
+  const formula = processingVariablesOnFormula(dependencyFormulaOutputArray.value, localDependencyList)
+
+  if (!formula?.toString()?.length) {
+    return true
+  }
+  try {
+    return(eval(formula))
+  } catch (e) {
+    errorMessage([e.message, formula], 'error')
+  }
+})
+
+const isIgnoredValueOnZero = computed(() => {
+  return (props.zeroValueDisplayIgnore && !resultValue.value)
+})
+
 const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
@@ -266,11 +299,13 @@ const resultValue = computed(() => {
   if (!isVisibilityFromDependency.value) {
     return null;
   }
+  let value = null
   if (isOnlyNumber.value) {
-    return resultWitchNumberValid();
+    value = resultWitchNumberValid();
   } else {
-    return localInputValue.value;
+    value = localInputValue.value;
   }
+  return value?.toString()?.length ? value : null
 });
 
 const valueIsNaN = computed(() => {
@@ -399,7 +434,7 @@ const numberSignsAfterComma = computed(() => {
     : 0;
 });
 
-watch(isVisibilityFromDependency, () => {
+watch([isVisibilityFromDependency, isShowOutput], () => {
   changeValue("dependency");
 });
 watch(localCost, () => {
@@ -481,7 +516,6 @@ function resultWitchNumberValid() {
         ? parseInt(localInputValue.value)
         : null;
     }
-
     localInputValue.value = updateValueAfterSignComma(localInputValue.value);
 
     if (!inputFocus.value) {
@@ -495,10 +529,8 @@ function resultWitchNumberValid() {
 }
 function changeValue(eventType = "input") {
   emits("changedValue", {
-    value: resultValue.value?.toString()?.length ? resultValue.value : null,
-    displayValue: resultValue.value?.toString()?.length
-      ? resultValue.value
-      : null,
+    value: resultValue.value,
+    displayValue: resultValue.value,
     name: localElementName.value,
     type: "input",
     cost: localCost.value,
@@ -508,6 +540,7 @@ function changeValue(eventType = "input") {
     resultOutputMethod:
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     isShow: isVisibilityFromDependency.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     excludeFromCalculations: props.excludeFromCalculations,
     unit: localUnit.value,
     eventType,
@@ -738,6 +771,7 @@ onUnmounted(() => {
       />
     </div>
   </div>
+  {{isShowOutput}}
   <dev-block
     :label="localLabel || localElementName"
     :type-element="typeElement"

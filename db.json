@@ -3906,6 +3906,7 @@
                     "max": "10000",
                     "controls": 1,
                     "step": "10",
+                    "dependencyFormulaOutput": "{{монтаж}} === true",
                     "discreteStep": false,
                     "dataType": "onlyNumber",
                     "notEmpty": 1,

@@ -11,6 +11,7 @@ class Props {
       elementName: this.elementName(),
       classes: this.classes(),
       dependencyFormulaDisplay: this.dependencyFormulaDisplay(),
+      dependencyFormulaOutput: this.dependencyFormulaOutput(),
       parentIsShow: this.parentIsShow(),
       prompt: this.prompt(),
       notEmpty: this.notEmpty(),
@@ -95,6 +96,17 @@ class Props {
    * @returns {{default: string, type: StringConstructor}}
    */
   dependencyFormulaDisplay() {
+    return {
+      type: String,
+      default: "",
+    };
+  }
+
+  /**
+   * Формула на для проверки можно ли выводить данные эжлемента или нет
+   * @returns {{default: string, type: StringConstructor}}
+   */
+  dependencyFormulaOutput() {
     return {
       type: String,
       default: "",

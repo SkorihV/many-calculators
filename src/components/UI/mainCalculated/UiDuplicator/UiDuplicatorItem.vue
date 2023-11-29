@@ -436,6 +436,7 @@ function updateIndexElementsInDuple(object, index) {
     const propIsElementNameField = prop === "elementName";
     const propIsDependencyField =
       (prop === "dependencyFormulaDisplay" ||
+        prop === "dependencyFormulaOutput" ||
         prop === "dependencyFormulaCost" ||
         prop === "dependencyFormulaItem" ||
         prop === "dependencyFormulaHtmlText" ||
