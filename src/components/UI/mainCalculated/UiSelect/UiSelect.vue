@@ -88,7 +88,8 @@ const props = defineProps({
     "zeroValueDisplayIgnore",
     "globalMaxWidth",
     "globalMaxHeight",
-    "options"
+    "options",
+    "dependencyFormulaOutput"
   ]),
 });
 
@@ -138,6 +139,31 @@ const {
     parentIsShow: toRef(props, "parentIsShow"),
   })
 );
+
+const dependencyFormulaOutputArray = computed(() => {
+  if (!props.dependencyFormulaOutput?.length) {
+    return []
+  }
+  return getArrayElementsFromFormula(props.dependencyFormulaOutput)
+})
+
+const isShowOutput = computed(() => {
+  constructLocalListElementDependencyInFormula(dependencyFormulaOutputArray.value)
+  const formula = processingVariablesOnFormula(dependencyFormulaOutputArray.value, localDependencyList)
+
+  if (!formula?.toString()?.length) {
+    return true
+  }
+  try {
+    return(eval(formula))
+  } catch (e) {
+    errorMessage([e.message, formula], 'error')
+  }
+})
+
+const isIgnoredValueOnZero = computed(() => {
+  return (props.zeroValueDisplayIgnore && !currentOptionValue.value)
+})
 
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
@@ -376,7 +402,7 @@ watch(isOpen, (newValue) => {
   }
 });
 
-watch(isVisibilityFromDependency, (newValue, oldValue) => {
+watch([isVisibilityFromDependency, isShowOutput], (newValue, oldValue) => {
   if (newValue && !oldValue) {
     resetWidthSelect()
     initSelect("dependency")
@@ -487,6 +513,7 @@ function changeValue(eventType = "click") {
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,

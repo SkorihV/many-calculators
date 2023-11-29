@@ -3987,6 +3987,7 @@
                     "elementName": "тип",
                     "formulaProcessingLogic": "zero",
                     "dependencyFormulaDisplay": "",
+                    "dependencyFormulaOutput": "{{монтаж}} === true",
                     "classes": "",
                     "globalMaxWidth": "",
                     "globalMaxHeight": "",

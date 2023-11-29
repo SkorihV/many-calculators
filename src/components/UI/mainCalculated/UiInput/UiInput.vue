@@ -771,7 +771,6 @@ onUnmounted(() => {
       />
     </div>
   </div>
-  {{isShowOutput}}
   <dev-block
     :label="localLabel || localElementName"
     :type-element="typeElement"
