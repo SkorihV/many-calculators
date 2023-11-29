@@ -41,6 +41,7 @@ import { useInitProcessingDependencyPrice } from "@/composables/useInitProcessin
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import { useHighlightElement } from "@/composables/useHighlightElement";
 import { useDisplayComponents } from "@/composables/useDisplayComponents";
+import { getIsShowOutput } from "@/composables/getIsShowOutput";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -97,6 +98,7 @@ const props = defineProps({
     "isColumn",
     "zeroValueDisplayIgnore",
     "baseValue",
+    "dependencyFormulaOutput"
   ]),
 });
 
@@ -128,6 +130,12 @@ const {
     constructLocalListElementDependencyInFormula,
   })
 );
+
+const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
+const isIgnoredValueOnZero = computed(() => {
+  let value = isVisibilityFromDependency.value ? isLocalChecked.value : null
+  return (props.zeroValueDisplayIgnore && !value)
+})
 
 useReportInitialStatusForElement(
   toRef(props, "parentIsShow"),
@@ -232,7 +240,7 @@ const localCost = computed(() => {
     : null;
 });
 
-watch(isVisibilityFromDependency, (value) => {
+watch([isVisibilityFromDependency, isShowOutput], (value) => {
   if (value) {
     isLocalChecked.value = !props.isNeedChoice
       ? Boolean(checkboxValue.value || isChecked.value)
@@ -273,6 +281,7 @@ function changeValue(eventType = "click") {
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
