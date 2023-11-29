@@ -333,7 +333,516 @@
     ],
     "parent": "0;"
   },
+  "options-print": {
+    "json_id": "104708907",
+    "title": "Калькулятор печати",
+    "computedMethod": "formula",
+    "formula": "количество * $$_otherSum_$$ + доставка",
+    "methodBeginningCalculation": "useAutomatic",
+    "methodWorksForm": "show",
+    "tooltipOff": 1,
+    "devModeEnabled": 1,
+    "resultOptions": {
+      "title": "ИТОГО:",
+      "titleButton": "Рассчитать",
+      "titleSumma": "Общая сумма составляет",
+      "currency": "руб.",
+      "showResultDataForBlock": 1,
+      "minimalSum": 0,
+      "timerForSpinner": 0,
+      "textForSpinner": "Идет расчет..."
+    },
+    "textAbove": "",
+    "textAfter": "<p>Формула расчета:</p>\n\n<p>Количество * (тип услуги + оснастка + срок изготовления + макет клише) + доставка</p>",
+    "dependencyMainFormula": null,
+    "parent": "0;"
+  },
 
+  "data-print": {
+    "calculatorTemplates": [
+      {
+        "json_id": "104709107",
+        "title": "Тип услуги",
+        "label": "Тип услуги",
+        "selectedItem": "1",
+        "isColumn": false,
+        "isNeedChoice": "existValue",
+        "notEmpty": 1,
+        "typeDisplayClass": "buttons",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "isStretch": 1,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - Первичная печать по реквизитам",
+            "radioName": "Первичная печать по реквизитам",
+            "cost": 350
+          },
+          {
+            "title": "Элемент радио-кнопка - Точная копия печати по оттиску",
+            "radioName": "Точная копия печати по оттиску",
+            "cost": 500
+          },
+          {
+            "title": "Элемент радио-кнопка - Факсимиле",
+            "radioName": "Факсимиле",
+            "cost": 350
+          }
+        ],
+        "prompt": "<p><strong>Первичная печать по реквизитам</strong>&nbsp;&ndash; вы присылаете реквизиты печати (ОРГН, ИНН название или ФИО ИП), а мы вписываем их в один из наших шаблонов (выбрать шаблон можно на этой странице ниже).</p>\n\n<p><strong>Точная копия печати по оттиску</strong>&nbsp;&ndash; вы присылаете скан или фотографию&nbsp;печати или штампа (можно сфотографировать на телефон), а мы изготавливаем точную копию.</p>\n\n<p><strong>Факсимиле</strong>&nbsp;&ndash; точная копия подписи в виде штампа. Для изготовления достаточно фотографии или скана. Для изготовления, ниже нужно выбрать простой или автоматический&nbsp;штамп в качестве оснастки.<br />\nЕсли размер вашей подписи больше чем 58х22, то стоимость на автоматическом штампе увеличится на 200 руб.</p>",
+        "iconSettingsRadioLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585353107",
+            "filename": "plotter_1_traced-svg.png",
+            "ver_id": 4865030,
+            "image_width": "64",
+            "image_height": "64",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "104709907",
+        "title": "Оснастка",
+        "label": "Оснастка",
+        "isColumn": false,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "оснастка",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 1,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - Без оснастки",
+            "selectName": "Без оснастки"
+          },
+          {
+            "title": "Элемент списка - Ручная",
+            "selectName": "Ручная"
+          },
+          {
+            "title": "Элемент списка - Автоматическая",
+            "selectName": "Автоматическая",
+            "cost": 350
+          },
+          {
+            "title": "Элемент списка - Карманная",
+            "selectName": "Карманная",
+            "cost": 400
+          },
+          {
+            "title": "Элемент списка - Магнитик",
+            "selectName": "Магнитик",
+            "cost": 1200
+          },
+          {
+            "title": "Элемент списка - Черное золото",
+            "selectName": "Черное золото",
+            "cost": 1200
+          },
+          {
+            "title": "Элемент списка - Новый орион",
+            "selectName": "Новый орион",
+            "cost": 1000
+          },
+          {
+            "title": "Элемент списка - Штамп ручной",
+            "selectName": "Штамп ручной"
+          },
+          {
+            "title": "Элемент списка - Штамп автоматический",
+            "selectName": "Штамп автоматический",
+            "cost": 350
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585358107",
+            "filename": "ink-cartridge_1_traced-svg.png",
+            "ver_id": 4865030,
+            "image_width": "65",
+            "image_height": "49",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "104710307",
+        "title": "Срок изготовления",
+        "label": "Срок изготовления",
+        "selectedItem": "1",
+        "isColumn": false,
+        "isNeedChoice": "existValue",
+        "notEmpty": 1,
+        "typeDisplayClass": "buttons",
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiRadio",
+        "isStretch": 1,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент радио-кнопка - 1 день",
+            "radioName": "1 день"
+          },
+          {
+            "title": "Элемент радио-кнопка - 1 час",
+            "radioName": "1 час",
+            "cost": 400
+          }
+        ],
+        "prompt": "",
+        "iconSettingsRadioLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585334907",
+            "filename": "srok_izgotovleniya.png",
+            "ver_id": 4865030,
+            "image_width": "506",
+            "image_height": "513",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "104710507",
+        "title": "Макет клише",
+        "label": "Макет клише",
+        "isColumn": false,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 1,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - Полимер",
+            "selectName": "Полимер"
+          },
+          {
+            "title": "Элемент списка - Резина",
+            "selectName": "Резина",
+            "cost": 200
+          }
+        ],
+        "prompt": "<p><strong>Полимер</strong>&nbsp;&ndash; позволяет получать отличные оттиски печатей за невысокую цену. Клише выполненные по этой технологии служат 2000-3000 оттисков или 2-3 года.</p>\n\n<p><strong>Резина (лазерная гравировка)</strong>&nbsp;&ndash; такие печати служат 11000-14000 оттисков или 7-10 лет. Если на печати есть сложные, очень мелкие, узоры, то они получатся точнее, чем на полимере. При этом, цена всего на 150-200 руб выше.</p>",
+        "iconSettingsSelectLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585433907",
+            "filename": "material.png",
+            "ver_id": 4865030,
+            "image_width": "37",
+            "image_height": "45",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "104710907",
+        "title": "Количество",
+        "label": "Количество",
+        "value": "1",
+        "placeholder": "",
+        "cost": "1",
+        "unit": "",
+        "min": "1",
+        "max": "",
+        "controls": 1,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "onlyNumber",
+        "notEmpty": 1,
+        "isCurrency": false,
+        "isColumn": false,
+        "formOutputMethod": "value",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "количество",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiInput",
+        "isStretch": 1,
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsInputLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585338107",
+            "filename": "kolichestvo.png",
+            "ver_id": 4865030,
+            "image_width": "64",
+            "image_height": "64",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "104711907",
+        "title": "Доставка",
+        "label": "Доставка",
+        "isColumn": false,
+        "selectedItem": "1",
+        "isNeedChoice": 1,
+        "notEmpty": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "value",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "доставка",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "classes": "",
+        "template": "UiSelect",
+        "isStretch": 1,
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - До метро",
+            "selectName": "До метро",
+            "cost": 100
+          },
+          {
+            "title": "Элемент списка - По адресу",
+            "selectName": "По адресу",
+            "cost": 700
+          },
+          {
+            "title": "Элемент списка - Самовывоз",
+            "selectName": "Самовывоз"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1585339707",
+            "filename": "dostavka.png",
+            "ver_id": 4865030,
+            "image_width": "64",
+            "image_height": "61",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "123871107",
+        "title": "Название метро",
+        "label": "Метро:",
+        "value": "",
+        "placeholder": "",
+        "cost": "",
+        "unit": "",
+        "min": "0",
+        "max": "10",
+        "controls": false,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "mixed",
+        "notEmpty": 1,
+        "isCurrency": false,
+        "isColumn": false,
+        "isStretch": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "доставка === 1",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsInputLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1750762907",
+            "filename": "metro-station_1_traced.png",
+            "ver_id": 4865030,
+            "image_width": "409",
+            "image_height": "513",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "123878307",
+        "title": "Адрес доставки",
+        "label": "Адрес доставки",
+        "value": "",
+        "placeholder": "",
+        "cost": "",
+        "unit": "",
+        "min": "0",
+        "max": "10",
+        "controls": false,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "mixed",
+        "notEmpty": 1,
+        "isCurrency": false,
+        "isColumn": false,
+        "isStretch": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "доставка === 2",
+        "classes": "",
+        "template": "UiInput",
+        "dependencyPrices": null,
+        "prompt": "Доставка осуществляется в рамках МКАД. Другие варианты доставки оговариваются отдельно с менеджером.&nbsp;",
+        "iconSettingsInputLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1750762507",
+            "filename": "delivery_1.png",
+            "ver_id": 4865030,
+            "image_width": "512",
+            "image_height": "512",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      },
+      {
+        "json_id": "123879707",
+        "title": "Точки самовывоза",
+        "label": "Точка самовывоза",
+        "selectedItem": "1",
+        "isNeedChoice": false,
+        "notEmpty": false,
+        "isColumn": false,
+        "isStretch": 1,
+        "formOutputMethod": "valueSumm",
+        "resultOutputMethod": "valueSumm",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": 1,
+        "elementName": "",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "доставка === 3",
+        "classes": "",
+        "template": "UiSelect",
+        "globalMaxWidth": "",
+        "globalMaxHeight": "",
+        "values": [
+          {
+            "title": "Элемент списка - Адрес 1",
+            "selectName": "Адрес 1"
+          },
+          {
+            "title": "Элемент списка - Адрес 2",
+            "selectName": "Адрес 2"
+          },
+          {
+            "title": "Элемент списка - Адрес 3",
+            "selectName": "Адрес 3"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsSelectLabel": {
+          "title": "",
+          "image": {
+            "image_id": "1750762707",
+            "filename": "location_2.png",
+            "ver_id": 4865030,
+            "image_width": "512",
+            "image_height": "512",
+            "ext": "png"
+          },
+          "maxWidth": 48,
+          "maxHeight": 48,
+          "behaviorImage": "contain",
+          "location": "leftSide"
+        },
+        "parent": "0;"
+      }
+    ]
+  },
   "data-basement": {
     "calculatorTemplates": [
       {

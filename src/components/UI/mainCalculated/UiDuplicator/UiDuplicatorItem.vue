@@ -101,6 +101,7 @@ const props = defineProps({
 const counterDuplicate = ref(0);
 const localResultData = ref({});
 const mutationsInputData = ref(null);
+const isMounted = ref(false)
 const localParentName =
   props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
 const LOCAL_NAME_RESERVED_VARIABLE_SUM =
@@ -335,19 +336,20 @@ const returnsLocalResultData = computed(() => {
  * @returns {boolean}
  */
 const isExistLabel = computed(() => {
-  return Boolean(mutationsInputData.value?.label?.toString()?.length);
+  return Boolean(mutationsInputData.value?.label?.toString()?.length)
 });
 
 const buttonDupleTitle = computed(() => {
-  const inputTitleIsExist = Boolean(props.duplicatorData?.buttonName?.length);
-  return inputTitleIsExist ? props.duplicatorData?.buttonName : "Дублировать";
+  const inputTitleIsExist = Boolean(props.duplicatorData?.buttonName?.length)
+  return inputTitleIsExist ? props.duplicatorData?.buttonName : 'Дублировать'
 });
 
 watch(localCost, (newValue, oldValue) => {
   if (newValue !== oldValue) {
+    const event = isMounted.value ? 'dependencyCost' : 'mounted'
     const data = {};
-    data.eventType = "dependencyCost";
-    changeValue(data);
+    data.eventType = event
+    changeValue(data)
   }
 });
 
@@ -356,17 +358,6 @@ watch(
   (newValue) => {
     const isShow = Boolean(newValue !== null)
     const name = LOCAL_NAME_RESERVED_VARIABLE_SUM
-
-
-    // dependencyStore.addDependencyElement({
-    //   name,
-    //   value: newValue,
-    //   isShow,
-    //   displayValue: newValue,
-    //   type: typeElement,
-    //   cost: newValue,
-    // });
-
 
     innerStore.addInnerVariable({
       name,
@@ -517,11 +508,14 @@ onMounted(() => {
   } else {
     mutationsInputData.value = updateInputData(props.duplicatorData, 0);
   }
+  setTimeout(() => {
+    isMounted.value = true
+  }, 1000)
 });
 
 onUnmounted(() => {
-  innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM)
   dependencyStore.deleteDependencyElementInList(LOCAL_NAME_RESERVED_VARIABLE_SUM);
+  innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM)
   nameStore.deleteNameInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
   displayStore.deleteDisplayInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
 });

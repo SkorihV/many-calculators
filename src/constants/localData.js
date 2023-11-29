@@ -1,3 +1,3 @@
 export const IS_LOCAL = process.env.NODE_ENV === 'development'
-export const LOCAL_PATH_DATA = "http://localhost:5000/data-cargo";
-export const LOCAL_PATH_OPTIONS = "http://localhost:5000/options-cargo";
+export const LOCAL_PATH_DATA = "http://localhost:5000/data-curtains";
+export const LOCAL_PATH_OPTIONS = "http://localhost:5000/options-curtains";

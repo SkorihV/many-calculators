@@ -393,7 +393,6 @@ watch(
   () => {
     if (!isMounted.value) {
       changeValue('mounted');
-      isMounted.value = true
     } else {
       changeValue('cost');
     }
@@ -587,7 +586,7 @@ onMounted(() => {
   }, 200)
   setTimeout(() => {
     isMounted.value = true
-  }, 500)
+  }, 1000)
 })
 
 onUnmounted(() => {

@@ -65,6 +65,7 @@ let originData = ref({});
 const localResultsElements = reactive({});
 const localTemplates = ref([]);
 const localCost = ref(0);
+const isMounted = ref(false)
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -123,7 +124,8 @@ function changeValue(data) {
     localResultsElements[data.name] = data;
   }
   updateLocalCost();
-  emitChangeValue(data.eventType);
+  const eventType = isMounted.value ? data.eventType : 'mounted'
+  emitChangeValue(eventType);
 }
 
 function duplicate(duplicateElement) {
@@ -198,6 +200,9 @@ onMounted(() => {
     JSON.parse(JSON.stringify(props.duplicateTemplate))
   );
   changeValue({ eventType: "mounted" });
+  setTimeout(() => {
+    isMounted.value = true
+  }, 1500)
 });
 </script>
 
