@@ -40,6 +40,7 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import errorMessage from "@/servises/devErrorMessage";
+import { getIsShowOutput } from "@/composables/getIsShowOutput";
 
 
 const emits = defineEmits(["changedValue"]);
@@ -100,7 +101,8 @@ const props = defineProps({
     "isStretch",
     "globalMaxWidth",
     "globalMaxHeight",
-    "options"
+    "options",
+    "dependencyFormulaOutput"
   ]),
 });
 
@@ -133,6 +135,11 @@ const {
     parentIsShow: toRef(props, "parentIsShow"),
   })
 );
+const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
+const isIgnoredValueOnZero = computed(() => {
+  return (props.zeroValueDisplayIgnore && !selectedValueInRadio.value)
+})
+
 const { currentWidthElement } = getCurrentWidthElement(
   isVisibilityFromDependency,
   parentRef
@@ -331,7 +338,7 @@ watch(localCost, () => {
 });
 
 watch(
-  isVisibilityFromDependency,
+  [isVisibilityFromDependency, isShowOutput],
   (newValue) => {
     if (newValue) {
       if (!props.isNeedChoice) {
@@ -403,6 +410,7 @@ function changeValue(eventType = "click") {
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     eventType,
     unit: "",
     formulaProcessingLogic: props.formulaProcessingLogic,
@@ -521,6 +529,7 @@ function tryPassDependency() {
       />
     </div>
   </div>
+  {{isShowOutput}}
   <dev-block
     :label="localLabel || localElementName"
     :type-element="typeElement"

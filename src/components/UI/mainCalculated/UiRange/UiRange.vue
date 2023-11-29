@@ -180,7 +180,7 @@ const {
 
 const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
 const isIgnoredValueOnZero = computed(() => {
-  return (props.zeroValueDisplayIgnore && !localCost.value)
+  return (props.zeroValueDisplayIgnore && !resultValueInOutput.value)
 })
 
 
@@ -234,8 +234,12 @@ useDisplaySpinner(localElementName.value);
 useDisplayComponents(localElementName.value, isVisibilityFromDependency, typeElement)
 useElementNameList({name: localElementName.value, label: localLabel.value, position: props.positionElement})
 
+const resultValueInOutput = computed(() => {
+  return isVisibilityFromDependency.value ? resultValue.value : null
+})
+
 const isErrorEmpty = computed(() => {
-  return props.notEmpty && resultValue.value === null;
+  return props.notEmpty && resultValueInOutput.value === null;
 });
 
 const localCanBeShownTooltip = computed(() => {
@@ -298,8 +302,8 @@ const positionStaticResultValue = computed(() => {
 const isStaticValue = computed(() => {
   return (
     props.showStaticValue &&
-    typeof resultValue.value === "number" &&
-    isFinite(resultValue.value) &&
+    typeof resultValueInOutput.value === "number" &&
+    isFinite(resultValueInOutput.value) &&
     positionStaticResultValue.value !== null
   );
 });
@@ -331,7 +335,7 @@ watch([isVisibilityFromDependency, isShowOutput], (newValue) => {
   changeValue("dependency");
 });
 
-watch(resultValue, () => {
+watch(resultValueInOutput, () => {
   tryChangeValue('resultValue');
 });
 watch(localCost, () => {
@@ -384,8 +388,8 @@ function tryChangeValue(eventType) {
 function changeValue(eventType = "input") {
   updateWidthElement();
   emits("changedValue", {
-    value: isVisibilityFromDependency.value ? resultValue.value : null,
-    displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
+    value: resultValueInOutput.value ,
+    displayValue: resultValueInOutput.value,
     name: localElementName.value,
     type: "range",
     cost: localCost.value,
@@ -427,9 +431,9 @@ function changeValid(eventType) {
 function tryPassDependency() {
   dependencyStore.addDependencyElement({
     name: localElementName.value,
-    value: isVisibilityFromDependency.value ? resultValue.value : null,
+    value: resultValueInOutput.value ,
     isShow: isVisibilityFromDependency.value,
-    displayValue: isVisibilityFromDependency.value ? resultValue.value : null,
+    displayValue: resultValueInOutput.value,
     type: "range",
   });
 }

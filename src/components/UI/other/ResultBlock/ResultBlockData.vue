@@ -53,7 +53,7 @@ const {isVisibilityFromDependency: showTitleSumBlock, formulaAfterProcessingVari
 const resultTextDataForResultBlock = computed(() => {
   let result = "";
   props.data.forEach((item) => {
-    console.log(item);
+    // console.log(item);
     if (item.type === "UiDuplicator") {
       if (item?.insertedTemplates?.length && item.isShow) {
         item?.insertedTemplates.forEach((duplicator) => {
