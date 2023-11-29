@@ -127,7 +127,6 @@ function changeValue(data) {
   const eventType = isMounted.value ? data.eventType : 'mounted'
   emitChangeValue(eventType);
 }
-
 function duplicate(duplicateElement) {
   localTemplates.value.push(duplicateElement);
 }
