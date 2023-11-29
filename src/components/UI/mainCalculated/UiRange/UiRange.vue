@@ -35,7 +35,7 @@ import {
 } from "@/composables/useWidthElement";
 import {
   checkedValueOnVoid,
-  decimalAdjust,
+  decimalAdjust, getArrayElementsFromFormula,
   getSignsAfterComma,
   roundingValueToInputNumber
 } from "@/servises/UtilityServices";
@@ -45,6 +45,9 @@ import { useHighlightElement } from "@/composables/useHighlightElement";
 import { useCheckedValueMinMax } from "@/components/UI/mainCalculated/UiRange/useCheckedValueMinMax";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
+import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import errorMessage from "@/servises/devErrorMessage";
+import { getIsShowOutput } from "@/composables/getIsShowOutput";
 
 const baseStore = useBaseStore()
 const baseStoreRefs = storeToRefs(baseStore)
@@ -139,7 +142,8 @@ const props = defineProps({
     "positionElement",
     "zeroValueDisplayIgnore",
     "roundOffType",
-    "signAfterDot"
+    "signAfterDot",
+    "dependencyFormulaOutput"
   ]),
 });
 const thisElementInputRangeRef = ref(null);
@@ -173,6 +177,12 @@ const {
     constructLocalListElementDependencyInFormula,
   })
 );
+
+const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
+const isIgnoredValueOnZero = computed(() => {
+  return (props.zeroValueDisplayIgnore && !localCost.value)
+})
+
 
 const { initProcessingDependencyPrice } = useInitProcessingDependencyPrice(
   toRef(props, "dependencyPrices")
@@ -312,7 +322,7 @@ watch(
   }
 );
 
-watch(isVisibilityFromDependency, (newValue) => {
+watch([isVisibilityFromDependency, isShowOutput], (newValue) => {
   if (newValue) {
     setTimeout(() => {
       inputRangeWidth.value = thisElementInputRangeRef.value?.offsetWidth;
@@ -386,6 +396,7 @@ function changeValue(eventType = "input") {
       props.resultOutputMethod !== "no" ? props.resultOutputMethod : null,
     excludeFromCalculations: props.excludeFromCalculations,
     isShow: isVisibilityFromDependency.value,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     unit: localUnit.value,
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,

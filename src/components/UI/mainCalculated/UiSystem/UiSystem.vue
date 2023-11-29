@@ -49,6 +49,7 @@ import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { isBoolean } from "@/validators/validators";
 import errorMessage from "@/servises/devErrorMessage";
 import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
+import { getIsShowOutput } from "@/composables/getIsShowOutput";
 
 const baseStore = useBaseStore()
 const { getResultElementByName } = storeToRefs( useResultListStore());
@@ -121,26 +122,7 @@ const {
   })
 );
 
-const dependencyFormulaOutputArray = computed(() => {
-  if (!props.dependencyFormulaOutput?.length) {
-    return []
-  }
-  return getArrayElementsFromFormula(props.dependencyFormulaOutput)
-})
-
-const isShowOutput = computed(() => {
-  constructLocalListElementDependencyInFormula(dependencyFormulaOutputArray.value)
-  const formula = processingVariablesOnFormula(dependencyFormulaOutputArray.value, localDependencyList)
-
-  if (!formula?.toString()?.length) {
-    return true
-  }
-  try {
-    return(eval(formula))
-  } catch (e) {
-    errorMessage([e.message, formula], 'error')
-  }
-})
+const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
 
 const isIgnoredValueOnZero = computed(() => {
   return (props.zeroValueDisplayIgnore && !localCost.value)
