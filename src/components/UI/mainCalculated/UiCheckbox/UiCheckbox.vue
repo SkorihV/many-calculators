@@ -239,8 +239,11 @@ const localCost = computed(() => {
     ? parseFloat(props.costForVoid)
     : null;
 });
+watch(isShowOutput, () => {
+  changeValue("dependency")
+})
 
-watch([isVisibilityFromDependency, isShowOutput], (value) => {
+watch(isVisibilityFromDependency, (value) => {
   if (value) {
     isLocalChecked.value = !props.isNeedChoice
       ? Boolean(checkboxValue.value || isChecked.value)

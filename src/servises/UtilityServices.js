@@ -19,11 +19,11 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
       ? Math.abs(item.value)
       : item.value;
 
-  const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
+  const isShowOutput = item?.isShowOutput !== undefined ? item?.isShowOutput : true;
   const isAllowDataOutput =
     item[fieldName] &&
     item.displayValue !== null &&
-    isAllowZeroValue &&
+    isShowOutput &&
     item[fieldName] !== "no";
   const onlyTitle = item[fieldName] === "onlyTitle";
   const isAllowValueOutput =

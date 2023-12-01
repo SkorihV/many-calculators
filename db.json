@@ -867,6 +867,7 @@
         "globalMaxWidth": "50",
         "globalMaxHeight": "50",
         "notReset": false,
+        "dependencyFormulaOutput": "{{мансарда}} === true",
         "values": [
           {
             "title": "Элемент радио-кнопка - Баня",
