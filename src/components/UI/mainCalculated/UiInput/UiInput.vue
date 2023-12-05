@@ -528,7 +528,6 @@ function changeValue(eventType = "input") {
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
-    zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
   tryPassDependency();
   if (eventType !== "delete" || eventType !== "mounted") {

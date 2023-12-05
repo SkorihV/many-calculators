@@ -50,7 +50,6 @@ export const useResultListStore = defineStore('resultList', {
                 excludeFromCalculations,
                 formulaProcessingLogic,
                 position,
-                zeroValueDisplayIgnore,
                 isDuplicator,
                 parentName,
             } = dataResultItem;
@@ -70,7 +69,6 @@ export const useResultListStore = defineStore('resultList', {
                 eventType,
                 formulaProcessingLogic,
                 position,
-                zeroValueDisplayIgnore,
                 parentName,
                 isDuplicator: isDuplicator ? isDuplicator : false,
             };

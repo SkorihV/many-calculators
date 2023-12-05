@@ -416,7 +416,6 @@ function changeValue(eventType = "click") {
     formulaProcessingLogic: props.formulaProcessingLogic,
     mode: props.mode,
     position: props.positionElement,
-    zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
   tryPassDependency();
   changeValid(eventType);
@@ -529,7 +528,6 @@ function tryPassDependency() {
       />
     </div>
   </div>
-  {{isShowOutput}}
   <dev-block
     :label="localLabel || localElementName"
     :type-element="typeElement"

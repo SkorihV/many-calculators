@@ -1027,8 +1027,8 @@
                 "label": "Материал стен:",
                 "selectedItem": "1",
                 "isColumn": 1,
-                "isNeedChoice": 1,
-                "notEmpty": 1,
+                "isNeedChoice": 0,
+                "notEmpty": 0,
                 "typeDisplayClass": "buttons",
                 "formOutputMethod": "valueSumm",
                 "resultOutputMethod": "value",
@@ -1063,6 +1063,55 @@
                   {
                     "title": "Элемент радио-кнопка - Кирпич",
                     "radioName": "Кирпич",
+                    "cost": 30
+                  }
+                ],
+                "prompt": "Небольшая подсказка о сути данного параметра",
+                "iconSettingsRadioLabel": null,
+                "parent": "0;35193507;35193707;"
+              },
+              {
+                "json_id": "100364707",
+                "title": "Материал стен 2:",
+                "label": "Материал стен 2:",
+                "selectedItem": "1",
+                "isColumn": 1,
+                "isNeedChoice": 0,
+                "notEmpty": 0,
+                "typeDisplayClass": "buttons",
+                "formOutputMethod": "valueSumm",
+                "resultOutputMethod": "value",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "материал2",
+                "formulaProcessingLogic": "error",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "template": "UiRadio",
+                "dependencyFormulaOutput": "{{ширина}} > 5",
+                "isStretch": false,
+                "globalMaxWidth": "",
+                "globalMaxHeight": "",
+                "notReset": false,
+                "values": [
+                  {
+                    "title": "Элемент радио-кнопка - Sip-панель",
+                    "radioName": "Sip-панель 2",
+                    "cost": 10
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Брус/Бревно",
+                    "radioName": "Брус/Бревно 2",
+                    "cost": 15
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Пеноблок",
+                    "radioName": "Пеноблок 2",
+                    "cost": 20
+                  },
+                  {
+                    "title": "Элемент радио-кнопка - Кирпич",
+                    "radioName": "Кирпич 2",
                     "cost": 30
                   }
                 ],

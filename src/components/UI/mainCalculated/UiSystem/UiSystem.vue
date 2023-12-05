@@ -347,7 +347,6 @@ function changeValue(eventType = "system") {
     eventType,
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
-    zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
   });
   changeValid(eventType);
   tryPassDependency();
