@@ -51,7 +51,7 @@ const listDisplayFormula = ref([]); //список всех формул отв�
 const listComputedFormula = ref([]); //Список всех формул отвечающих за расчет
 const displayAlert = ref(false);
 const localShowInsideElementStatus = ref(false);
-
+const filterName = ref('');
 
 const listFieldsInFormula = [
   "dependencyFormulaDisplay",
@@ -335,6 +335,19 @@ const isExistError = computed(() => {
     isExistNamesInComputedFormula.value
   );
 });
+
+const allNameListByFiltered = computed(() => {
+  if (filterName.value?.trim()?.length) {
+    const findName = filterName.value?.trim()?.toLowerCase()
+    return getAllNameListByArray.value?.filter(item => {
+      const name = item.name?.toLowerCase()
+      const label = item.label?.toLowerCase()
+      return name.indexOf(findName) !== -1 || label.indexOf(findName) !== -1
+    })
+  }
+  return getAllNameListByArray.value
+})
+
 </script>
 
 <template>
@@ -364,9 +377,12 @@ const isExistError = computed(() => {
           <div class="calc__error-label">
             Список всех элементов Заголовок / Имя:
           </div>
+          <div class="calc__error-filter-name">
+            Фильтр по имени: <input v-model="filterName" type="text">
+          </div>
           <div
             class="calc__error-item"
-            v-for="(data, key) in getAllNameListByArray"
+            v-for="(data, key) in allNameListByFiltered"
             :key="key"
           >
             <div class="calc__error-item-name">
