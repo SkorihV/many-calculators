@@ -1156,7 +1156,13 @@
                 "classes": "",
                 "template": "UiRange",
                 "isColumn": 1,
-                "dependencyPrices": null,
+                "dependencyPrices": [
+                  {
+                    "cost": 10,
+                    "dependencyFormulaCost": "{{этажность}} > 4"
+
+                  }
+                ],
                 "prompt": "",
                 "iconSettings": null,
                 "parent": "0;35193507;35193707;"
