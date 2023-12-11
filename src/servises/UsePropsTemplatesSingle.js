@@ -1,6 +1,5 @@
-/**
- *
- */
+import { isBoolean, isNotNaN } from "@/validators/validators";
+
 class Props {
   constructor() {
     if (typeof Props.instance === "object") {
@@ -12,6 +11,7 @@ class Props {
       elementName: this.elementName(),
       classes: this.classes(),
       dependencyFormulaDisplay: this.dependencyFormulaDisplay(),
+      dependencyFormulaOutput: this.dependencyFormulaOutput(),
       parentIsShow: this.parentIsShow(),
       prompt: this.prompt(),
       notEmpty: this.notEmpty(),
@@ -47,6 +47,10 @@ class Props {
       templates: this.templates(),
       isStretch: this.isStretch(),
       elementPosition: this.elementPosition(),
+      options: this.options(),
+      signAfterDot: this.signAfterDot(),
+      roundOffType: this.roundOffType()
+
     };
     Props.instance = this;
     return this;
@@ -92,6 +96,17 @@ class Props {
    * @returns {{default: string, type: StringConstructor}}
    */
   dependencyFormulaDisplay() {
+    return {
+      type: String,
+      default: "",
+    };
+  }
+
+  /**
+   * Формула на для проверки можно ли выводить данные эжлемента или нет
+   * @returns {{default: string, type: StringConstructor}}
+   */
+  dependencyFormulaOutput() {
     return {
       type: String,
       default: "",
@@ -188,9 +203,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
   /**
@@ -200,9 +213,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
 
@@ -217,9 +228,7 @@ class Props {
     return {
       type: [Number, String],
       default: null,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN,
     };
   }
   /**
@@ -242,9 +251,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
 
@@ -252,9 +259,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
 
@@ -265,9 +270,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
   /**
@@ -297,9 +300,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: false,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
 
@@ -314,9 +315,7 @@ class Props {
     return {
       type: [Number, String],
       default: 0,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN,
     };
   }
 
@@ -324,9 +323,7 @@ class Props {
     return {
       type: [Number, String],
       default: 10,
-      validator(value) {
-        return !isNaN(Number(value));
-      },
+      validator: isNotNaN,
     };
   }
 
@@ -344,6 +341,20 @@ class Props {
     };
   }
 
+  signAfterDot() {
+    return {
+    type: [Number, String],
+    default: -2,
+      validator: isNotNaN
+    }
+  }
+  roundOffType() {
+    return {
+      type: String,
+      default: "round",
+    }
+  }
+
   /**
    * Игнорировать пустое значение при выводе в результат
    * @returns {{default: boolean, validator(*): *, type: (BooleanConstructor|NumberConstructor)[]}|boolean}
@@ -352,9 +363,7 @@ class Props {
     return {
       type: [Boolean, Number],
       default: true,
-      validator(value) {
-        return value === false || value === true || value === 0 || value === 1;
-      },
+      validator: isBoolean,
     };
   }
   baseValue() {
@@ -365,6 +374,12 @@ class Props {
   }
 
   iconSettings() {
+    return {
+      type: Object,
+      default: () => {},
+    };
+  }
+  options() {
     return {
       type: Object,
       default: () => {},
@@ -396,6 +411,8 @@ class Props {
         }
       });
       return propsForReturn;
+    } else {
+      throw "Переданный список не является массивом " + props;
     }
   }
 }

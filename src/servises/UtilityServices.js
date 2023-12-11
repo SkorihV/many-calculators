@@ -1,3 +1,17 @@
+import escapeStringRegexp from "escape-string-regexp";
+import {
+  SPEC_SYMBOLS,
+  ERROR_PADDING,
+  ERROR_ELEMENT_IS_NOT_EXIST, NAME_RESERVED_VARIABLE_SUM, NAME_RESERVED_VARIABLE_GLOBAL_SUM
+} from "@/constants/variables";
+import {
+  REGEXP_HTML_TAG, REGEXP_NUMBER_ON_COMMA, REGEXP_NUMBERS,
+  REGEXP_QUOTES_AND_SPACE_AND_WORD,
+  REGEXP_QUOTES_AND_WORD, REGEXP_QUOTES_FOR_COST, REGEXP_QUOTES_FOR_VALUE,
+  REGEXP_SPACES_IN_AROUND,
+  REGEXP_VARIABLE_SIGN_NUMBERS
+} from "@/constants/regexp";
+
 const parseResultValueObjectItem = function (item, fieldName, currency) {
   let result = "";
   let currentValue =
@@ -5,12 +19,9 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
       ? Math.abs(item.value)
       : item.value;
 
-  const isAllowZeroValue = !item?.zeroValueDisplayIgnore || !!currentValue;
   const isAllowDataOutput =
     item[fieldName] &&
     item.displayValue !== null &&
-    item.isShow &&
-    isAllowZeroValue &&
     item[fieldName] !== "no";
   const onlyTitle = item[fieldName] === "onlyTitle";
   const isAllowValueOutput =
@@ -57,7 +68,7 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
 /**
  * обрабатывает значение согласно опции в логике когда поле не заполнено или скрыто настройками
  * zero - выводит ноль
- * error - выводит null что в расчете формулы приведет к ошибке
+ * errorNames - выводит null что в расчете формулы приведет к ошибке
  *
  * @param dataList
  * @returns {*[]}
@@ -69,34 +80,53 @@ const processingArrayOnFormulaProcessingLogic = function (dataList) {
   for (let i = 0; i < localDataList.length; i++) {
     const currentItemList = localDataList[i];
 
-    const isProcessingLogic =
-      currentItemList?.formulaProcessingLogic?.length &&
-      currentItemList?.cost === null;
-    const isItemObject = typeof currentItemList === "object";
-    const isExistCost = typeof currentItemList?.cost === "number";
+    const isNullData = currentItemList === null;
 
-    const error = "ОшибкаЗаполнения";
-
-    const isNulData = currentItemList === null;
-    const errorNull = "ЭлементаСТакимИменемНеСуществует";
-
-    if (!isItemObject) {
+    if (!isItemObject(currentItemList)) {
       resultList.push(currentItemList);
-    } else if (isNulData) {
-      resultList.push(errorNull);
-    } else if (isItemObject && isProcessingLogic) {
-      if (currentItemList.formulaProcessingLogic === "error") {
-        resultList.push(error);
-      } else if (currentItemList.formulaProcessingLogic === "zero") {
-        resultList.push(0);
+    } else if (isNullData) {
+      resultList.push(ERROR_ELEMENT_IS_NOT_EXIST);
+    } else if (isItemObject(currentItemList)) {
+      const pushValue = checkLogicAndReturnValue(currentItemList);
+      if (pushValue !== null) {
+        resultList.push(pushValue);
       }
-    } else if (isItemObject && isExistCost) {
-      resultList.push(currentItemList.cost);
     } else {
       resultList.push(currentItemList);
     }
   }
   return resultList;
+};
+
+const isLogicDataExist = (item) => {
+  return Boolean(item?.formulaProcessingLogic?.length);
+};
+const isCostNull = (item) => {
+  return item?.cost === null;
+};
+const isItemObject = (item) => {
+  return typeof item === "object";
+};
+const isCostExist = (item) => {
+  return typeof item?.cost === "number";
+};
+/**
+ *
+ * @param item
+ * @returns {number|null|string}
+ */
+const checkLogicAndReturnValue = (item) => {
+  if (isLogicDataExist(item) && isCostNull(item)) {
+    if (item.formulaProcessingLogic === "error") {
+      return ERROR_PADDING;
+    } else if (item.formulaProcessingLogic === "zero") {
+      return 0;
+    }
+  }
+  if (isCostExist(item)) {
+    return item.cost;
+  }
+  return null;
 };
 
 /**
@@ -126,10 +156,10 @@ const parsingDataInFormulaOnSum = function (dataListVariables) {
  * @param dataList
  * @returns {*}
  */
-const getSummaFreeVariablesInFormula = function (dataList) {
+const getSummaVariablesInFormula = function (dataList) {
   return dataList.reduce((sum, item) => {
     const isAllowSummingCost =
-      item?.cost !== null && !item.excludeFromCalculations && item.isShow && !Boolean(item?.isDuplicator);
+      item?.cost !== null && !item.excludeFromCalculations && item.isShow;
 
     if (isAllowSummingCost) {
       sum += parseFloat(item.cost);
@@ -146,16 +176,27 @@ const getSummaFreeVariablesInFormula = function (dataList) {
  * @returns {*}
  */
 const getListVariablesMissedInFormula = function (dataList, variablesList) {
-  return dataList
-    ?.filter((dataOnCalcComponent) => {
-      const isFormula = variablesList.some(
-        (varOnFormula) => varOnFormula === dataOnCalcComponent.name
-      );
-      return !isFormula;
-    })
-    .filter((item) => {
-      return item;
+  return dataList?.filter((dataOnCalcComponent) => {
+    const isFormula = variablesList.some((varOnFormula) => {
+      return varOnFormula === dataOnCalcComponent.name;
     });
+    return !isFormula;
+  });
+};
+
+/**
+ * Сопоставить доступный список данных со списком переменных в формуле и получить список переменных используемых в формуле
+ * @param dataList
+ * @param variablesList
+ * @returns {*}
+ */
+const getListVariablesUsedInFormula = function (dataList, variablesList) {
+  return dataList?.filter((dataOnCalcComponent) => {
+    const isFormula = variablesList.some((varOnFormula) => {
+      return varOnFormula === dataOnCalcComponent.name;
+    });
+    return isFormula;
+  });
 };
 
 /**
@@ -180,8 +221,24 @@ const getNameElementsRecursive = function (object) {
   return resultArray;
 };
 
+/**
+ *
+ * @param value
+ * @param exp
+ * @param type
+ * @returns {number|null}
+ */
 const decimalAdjust = function (value, exp = 0, type = "round") {
-  if (typeof exp === "undefined" || +exp === 0) {
+  // Если значение не является числом, либо степень не является целым числом...
+  value = parseFloat(value)
+  if (isNaN(value) || value === null ) {
+    return null;
+  }
+
+  type = type?.length ? type : "round"
+  exp = parseFloat(exp)
+
+  if (typeof exp !== "number" || exp % 1 !== 0 || isNaN(exp)) {
     try {
       return Math[type](value);
     } catch (e) {
@@ -189,26 +246,156 @@ const decimalAdjust = function (value, exp = 0, type = "round") {
       return value;
     }
   }
-  value = +value;
-  exp = +exp;
-  // Если значение не является числом, либо степень не является целым числом...
-  if (isNaN(value) || !(typeof exp === "number" && exp % 1 === 0)) {
-    return null;
-  }
+
   // Сдвиг разрядов
   value = value.toString().split("e");
   value = Math[type](+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
+
   // Обратный сдвиг
   value = value.toString().split("e");
+
   return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
 };
+
+/**
+ *
+ * @param value
+ * @returns {boolean}
+ */
+const checkedValueOnVoid = (value) => {
+  return value?.length !== 0 && value !== undefined && value !== null;
+};
+
+const replaceSpecSymbols = (innerString) => {
+  SPEC_SYMBOLS.forEach((specItem) => {
+    innerString = innerString?.replaceAll(specItem[0], specItem[1]);
+  });
+  return innerString;
+};
+
+/**
+ * преобразовывает формулу в массив
+ * @param formula
+ * @returns {*}
+ */
+const getArrayOnFormula = (formula) => {
+
+  let formulaInOut = formula?.toString()
+    ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
+    .filter((item) => item?.trim()?.length);
+
+  formulaInOut = formulaInOut?.map((item) => {
+    //удаляем пробелы по краям
+    let nextItem = replaceCommaOnDot(item)
+    nextItem = trimVariableValue(item)
+    nextItem = trimVariableCost(nextItem)
+    nextItem = nextItem?.replace(REGEXP_SPACES_IN_AROUND, "")
+    // если по краям есть кавычки, то удаляем пробелы между
+    // кавычками и текстом в середине, не трогая пробелы внутри текста
+    if (nextItem.match(REGEXP_QUOTES_AND_WORD) !== null) {
+      nextItem =
+        "'" + nextItem?.replace(REGEXP_QUOTES_AND_SPACE_AND_WORD, "") + "'";
+    }
+    return nextItem;
+  });
+  return formulaInOut;
+};
+
+/**
+ * получить количество символов после запятой в виде отрицательного числа
+ * @param value
+ * @returns {number|number}
+ */
+const getSignsAfterComma = (value) => {
+  return value?.toString().includes(".")
+    ? value.toString().split(".").pop().length * -1
+    : 0;
+};
+
+/**
+ * получить из формулы массив элементов
+ * @param formula
+ * @returns {*}
+ */
+const getArrayElementsFromFormula = (formula) => {
+  return getArrayOnFormula(formula);
+};
+
+function isOtherOrGlobalSum(variable) {
+  return variable.match(NAME_RESERVED_VARIABLE_SUM) !== null || variable.match(NAME_RESERVED_VARIABLE_GLOBAL_SUM) !== null
+}
+
+function getPattern(text) {
+  return new RegExp(`${escapeStringRegexp(text)}`, 'g')
+}
+
+function deleteTagsInText(text) {
+  return text?.replaceAll(REGEXP_HTML_TAG, "");
+}
+
+function trimVariableValue(text) {
+  return text.replaceAll(REGEXP_QUOTES_FOR_VALUE, '')
+}
+
+/**
+ *
+ * @param text
+ * @returns {*|string}
+ */
+function trimVariableCost(text) {
+  return text.replaceAll(REGEXP_QUOTES_FOR_COST, '')
+}
+
+/**
+ *
+ * @param text
+ * @returns {number|string}
+ */
+function replaceCommaOnDot(text){
+  let result = text?.toString()
+  if (result?.match(REGEXP_NUMBER_ON_COMMA) !== null) {
+    let newRes = result?.replaceAll(",", ".")
+    return isNaN(Number(newRes)) ? newRes : Number(newRes)
+  }
+  return text
+}
+
+function roundingValueToInputNumber(value, stepNumber) {
+  return Math.round(parseFloat(value) / stepNumber) * stepNumber
+}
+
+function initFuncForInterval(fn, limit = 10, step = 1000){
+  let stepInterval = 0
+  let timerName = setInterval(() => {
+    fn();
+    if (stepInterval > limit) {
+      clearInterval(timerName);
+    }
+    stepInterval++;
+  }, step);
+}
 
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
   parsingDataInFormulaOnSum,
-  getSummaFreeVariablesInFormula,
+  getSummaVariablesInFormula,
   getListVariablesMissedInFormula,
   getNameElementsRecursive,
   decimalAdjust,
+  checkedValueOnVoid,
+  replaceSpecSymbols,
+  getArrayElementsFromFormula,
+  getArrayOnFormula,
+  checkLogicAndReturnValue,
+  getListVariablesUsedInFormula,
+  isOtherOrGlobalSum,
+  deleteTagsInText,
+  getPattern,
+  trimVariableValue,
+  trimVariableCost,
+  getSignsAfterComma,
+  roundingValueToInputNumber,
+  replaceCommaOnDot,
+  initFuncForInterval
 };
