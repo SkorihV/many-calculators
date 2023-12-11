@@ -54,7 +54,7 @@ const resultTextDataForResultBlock = computed(() => {
   let result = "";
   props.data.forEach((item) => {
     if (item.type === "UiDuplicator") {
-      if (item?.insertedTemplates?.length && item.isShow) {
+      if (item?.insertedTemplates?.length && item?.isShow && item?.isShowOutput) {
         item?.insertedTemplates.forEach((duplicator) => {
           if (duplicator?.insertedTemplates?.length) {
             const resultValueObjectItem = parseResultValueObjectItem(
@@ -89,11 +89,14 @@ const resultTextDataForResultBlock = computed(() => {
         });
       }
     } else {
-      const data = parseResultValueObjectItem(
-        item,
-        "resultOutputMethod",
-        getCurrency.value
-      );
+      let data = ""
+      if (item?.isShowOutput && item?.isShow) {
+        data = parseResultValueObjectItem(
+          item,
+          "resultOutputMethod",
+          getCurrency.value
+        );
+      }
       if (data?.length) {
         result +=
           "<div class='calc__result-block-field-wrapper'> " + data + "</div>"

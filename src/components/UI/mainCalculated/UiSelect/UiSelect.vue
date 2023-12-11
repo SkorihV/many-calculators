@@ -43,6 +43,7 @@ import { useElementNameList } from "@/composables/useElementNameList";
 import { isBoolean } from "@/validators/validators";
 import errorMessage from "@/servises/devErrorMessage";
 import { getIsShowOutput } from "@/composables/getIsShowOutput";
+import { NAME_CURRENT_VARIABLE } from "@/constants/variables";
 
 const emits = defineEmits(["changedValue"]);
 const props = defineProps({
@@ -316,9 +317,9 @@ const selectValuesAfterProcessingDependency = computed(() => {
       }
 
       formula = formula.map((item) => {
-        if (item.toLowerCase() === "_self_" && extraValueIsExist) {
+        if (item.toLowerCase() === NAME_CURRENT_VARIABLE && extraValueIsExist) {
           return '"' + selectItem?.extraValueForDependency + '"';
-        } else if (item.toLowerCase() === "_self_" && !extraValueIsExist) {
+        } else if (item.toLowerCase() === NAME_CURRENT_VARIABLE && !extraValueIsExist) {
           return selectItem.value
         }
         return item

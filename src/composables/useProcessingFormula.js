@@ -4,6 +4,7 @@ import { processingVariablesOnFormula } from "@/servises/ProcessingFormula";
 
 import { getArrayElementsFromFormula } from "@/servises/UtilityServices";
 import errorMessage from "@/servises/devErrorMessage";
+import { NAME_CURRENT_VARIABLE } from "@/constants/variables";
 
 export function useProcessingFormula(dataObject) {
   const baseStore = useBaseStore()
@@ -56,7 +57,7 @@ export function useProcessingFormula(dataObject) {
           templateName.value === "UiRange"
         ) {
           formula = formula.map((item) =>
-            item.toLowerCase() === "_self_" ? value.value : item
+            item.toLowerCase() === NAME_CURRENT_VARIABLE ? value.value : item
           );
         }
         constructLocalListElementDependencyInFormula.value(formula);

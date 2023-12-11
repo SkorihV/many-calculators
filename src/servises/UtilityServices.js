@@ -19,11 +19,9 @@ const parseResultValueObjectItem = function (item, fieldName, currency) {
       ? Math.abs(item.value)
       : item.value;
 
-  const isShowOutput = item?.isShowOutput !== undefined ? item?.isShowOutput : true;
   const isAllowDataOutput =
     item[fieldName] &&
     item.displayValue !== null &&
-    isShowOutput &&
     item[fieldName] !== "no";
   const onlyTitle = item[fieldName] === "onlyTitle";
   const isAllowValueOutput =
@@ -281,6 +279,7 @@ const replaceSpecSymbols = (innerString) => {
  * @returns {*}
  */
 const getArrayOnFormula = (formula) => {
+
   let formulaInOut = formula?.toString()
     ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     .filter((item) => item?.trim()?.length);

@@ -49,7 +49,6 @@ const localTextAfterSumma = computed(() => {
   return updateTextOnVariables(props.resultOptions?.textAfterSumma)
 })
 
-
 const isExistLocalText = computed(() => {
   return Boolean(localTextAfterSumma.value?.length)
 })

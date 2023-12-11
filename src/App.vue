@@ -59,6 +59,7 @@ import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
 import { useDependencyListStore } from "@/store/dependencyListStore";
 import ErrorBlockPrompt from "@/components/UI/other/errorBlockPrompt.vue";
 import errorMessage from "@/servises/devErrorMessage";
+import UiSelect from "@/components/UI/mainCalculated/UiSelect/UiSelect.vue";
 
 const baseStore = useBaseStore()
 const resultStore = useResultListStore()
@@ -246,7 +247,7 @@ const resultTextDataForForm = computed(() => {
   let result = "";
   sortPositionDataForOutput.value.forEach((item) => {
     if (item.type === "UiDuplicator") {
-      if (item?.insertedTemplates?.length && item.isShow) {
+      if (item?.insertedTemplates?.length && item.isShow && item.isShowOutput) {
         item?.insertedTemplates.forEach((duplicator) => {
           if (duplicator?.insertedTemplates?.length) {
             const resultValueObjectItem = parseResultValueObjectItem(
@@ -272,11 +273,15 @@ const resultTextDataForForm = computed(() => {
         });
       }
     } else {
-      const data = parseResultValueObjectItem(
-        item,
-        "formOutputMethod",
-        getCurrency.value
-      );
+      let data = ""
+      if (item.isShow && item.isShowOutput) {
+        data = parseResultValueObjectItem(
+          item,
+          "formOutputMethod",
+          getCurrency.value
+        );
+      }
+
       if (data.length) {
         result += data;
       }
@@ -703,6 +708,7 @@ onMounted(async () => {
         "
         :classes="template?.classes"
         :dependency-formula-display="template?.dependencyFormulaDisplay"
+        :dependency-formula-output="template?.dependencyFormulaOutput"
         :form-output-method="template?.formOutputMethod"
         :exclude-from-calculations="template?.excludeFromCalculations"
         :duplicate-template="template"

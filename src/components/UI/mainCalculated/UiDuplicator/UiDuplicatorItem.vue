@@ -94,7 +94,7 @@ const props = defineProps({
     "positionElement",
     "unit",
     "roundOffType",
-    "signAfterDot"
+    "signAfterDot",
   ]),
 });
 

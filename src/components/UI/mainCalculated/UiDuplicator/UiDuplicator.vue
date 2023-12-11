@@ -23,6 +23,7 @@ import {
 import { useDisplaySpinner } from "@/composables/useDisplaySpinner";
 import { useReportInitialStatusForElement } from "@/composables/useReportInitialStatusForElement";
 import {useDisplayComponents} from "@/composables/useDisplayComponents";
+import { getIsShowOutput } from "@/composables/getIsShowOutput";
 
 
 const baseStore = useBaseStore()
@@ -57,7 +58,8 @@ const props = defineProps({
     "zeroValueDisplayIgnore",
     "unit",
     "roundOffType",
-    "signAfterDot"
+    "signAfterDot",
+    "dependencyFormulaOutput"
   ]),
 });
 
@@ -80,6 +82,12 @@ const {
     parentIsShow: toRef(props, "parentIsShow"),
   })
 );
+
+const {isShowOutput} = getIsShowOutput(props.dependencyFormulaOutput, constructLocalListElementDependencyInFormula, localDependencyList)
+const isIgnoredValueOnZero = computed(() => {
+  let value = isVisibilityFromDependency.value ? localCost.value : null
+  return (props.zeroValueDisplayIgnore && !value)
+})
 
 useDisplaySpinner(props.elementName);
 useReportInitialStatusForElement(props.parentIsShow, changeValue, changeValid);
@@ -178,10 +186,15 @@ function emitChangeValue(eventType) {
     formulaProcessingLogic: props.formulaProcessingLogic,
     position: props.positionElement,
     zeroValueDisplayIgnore: props.zeroValueDisplayIgnore,
+    isShowOutput: isShowOutput.value && isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
   });
   tryPassDependency();
   nameStore.addNameInList({name: props.elementName, label: props.duplicateTemplate.label, position: props.positionElement})
 }
+
+watch(isShowOutput, () => {
+  changeValue("dependency")
+})
 
 function tryPassDependency() {
   dependencyStore.addDependencyElement({

@@ -1,16 +1,18 @@
 export const NAME_RESERVED_VARIABLE_SUM = "_otherSum_";
 export const NAME_RESERVED_VARIABLE_GLOBAL_SUM = "_globalSum_";
+
+export const NAME_CURRENT_VARIABLE = "_self_";
 export const BANNED_STANDARD_NAME = [
   "true",
   "false",
-  "null"
+  "null",
+  "empty"
 ]
 export const LIST_BANNED_ELEMENTS_NAME = [
   NAME_RESERVED_VARIABLE_SUM,
   NAME_RESERVED_VARIABLE_GLOBAL_SUM,
   ...BANNED_STANDARD_NAME,
-  "empty",
-  "_self_",
+  NAME_CURRENT_VARIABLE,
 ];
 export const EXCEPTION_VARIABLES_IN_FORMULA = [
   "-",
@@ -30,13 +32,10 @@ export const EXCEPTION_VARIABLES_IN_FORMULA = [
   "===",
   "||",
   "&&",
-  "_otherSum_",
-  "_self_",
-  "_globalSum_",
-  "true",
-  "false",
-  "empty",
-  "null",
+  NAME_RESERVED_VARIABLE_SUM,
+  NAME_CURRENT_VARIABLE,
+  NAME_RESERVED_VARIABLE_GLOBAL_SUM,
+  ...BANNED_STANDARD_NAME,
 ];
 
 export const SPEC_SYMBOLS = Object.entries({
