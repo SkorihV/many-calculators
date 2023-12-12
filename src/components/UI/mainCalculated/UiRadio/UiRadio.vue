@@ -41,6 +41,7 @@ import {useDisplayComponents} from "@/composables/useDisplayComponents";
 import { useElementNameList } from "@/composables/useElementNameList";
 import errorMessage from "@/servises/devErrorMessage";
 import { getIsShowOutput } from "@/composables/getIsShowOutput";
+import { NAME_CURRENT_VARIABLE } from "@/constants/variables";
 
 
 const emits = defineEmits(["changedValue"]);
@@ -256,21 +257,37 @@ const valueForDisplayRadioElement = computed(() => {
 });
 
 const radioListAfterCheckDependency = computed(() => {
-  return originRadioList.value?.map((radio) => {
-    if (radio?.dependencyFormulaItem?.length) {
-      let formula = getArrayElementsFromFormula(radio.dependencyFormulaItem);
+  return originRadioList.value?.map((radioItem) => {
+    if (radioItem?.dependencyFormulaItem?.length) {
+
+      const extraValueIsExist = Boolean(
+        radioItem?.extraValueForDependency?.toString()?.length
+      );
+
+
+      let formula = getArrayElementsFromFormula(radioItem.dependencyFormulaItem);
       constructLocalListElementDependencyInFormula(formula);
+
+      formula = formula.map((item) => {
+        if (item.toLowerCase() === NAME_CURRENT_VARIABLE && extraValueIsExist) {
+          return '"' + radioItem?.extraValueForDependency + '"';
+        } else if (item.toLowerCase() === NAME_CURRENT_VARIABLE && !extraValueIsExist) {
+          return radioItem.index
+        }
+        return item
+      });
+
       formula = processingVariablesOnFormula(formula, localDependencyList);
       try {
-        radio.isShow = eval(formula);
+        radioItem.isShow = eval(formula);
       } catch (e) {
         errorMessage([e.message, formula], "error")
-        radio.isShow = false;
+        radioItem.isShow = false;
       }
     } else {
-      radio.isShow = true;
+      radioItem.isShow = true;
     }
-    return radio;
+    return radioItem;
   });
 });
 

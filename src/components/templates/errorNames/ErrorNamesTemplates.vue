@@ -5,17 +5,15 @@ import {useElementNamesStore} from "@/store/elementNamesStore";
 import {storeToRefs} from "pinia";
 import devFormulaBlockWrapper from '@/components/UI/devMode/devFormulaBlockWrapper.vue'
 
-import {
-  REGEXP_ELEMENT_VALUE_AS_WORLD,
-  REGEXP_SIGN,
-  REGEXP_SPACES_IN_AROUND,
-  REGEXP_VARIABLE_SIGN_NUMBERS,
-} from "@/constants/regexp";
+import {REGEXP_QUOTES_AND_WORD} from "@/constants/regexp";
 import {
   EXCEPTION_VARIABLES_IN_FORMULA,
   LIST_BANNED_ELEMENTS_NAME,
 } from "@/constants/variables";
-import { trimVariableCost, trimVariableValue } from "@/servises/UtilityServices";
+import {
+  getArrayElementsFromFormula,
+  isNumeric,
+} from "@/servises/UtilityServices";
 
 const baseStore = useBaseStore()
 const {getAllNameListByArray} = storeToRefs(useElementNamesStore())
@@ -203,45 +201,17 @@ function processingAllTemplatesOnData() {
       formula: props.formula,
     });
   }
-
   listDisplayFormula.value = listDisplayFormula.value.map((item) => {
-    item.displayFormula = processingFormulaSpecialsSymbols(item.displayFormula);
+    item.displayFormula = getArrayElementsFromFormula(item.displayFormula)
     return item;
   });
   listComputedFormula.value = listComputedFormula.value.map((item) => {
-    item.formula = processingFormulaSpecialsSymbols(item.formula);
+    item.formula = getArrayElementsFromFormula(item.formula);
     return item;
   });
   listExistElementNames.value.forEach((item) =>
     usedArrayNamesInElements.add(item.elementName)
   );
-}
-
-/**
- *
- * @param formula
- * @returns {*}
- */
-function processingFormulaSpecialsSymbols(formula) {
-  // разбиваем формулу на массив отдельных данных
-
-  formula = formula?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
-    ?.map((item) => {
-      //удаляем пробелы по краям
-      let nextItem = item?.replace(REGEXP_SPACES_IN_AROUND, "");
-      // если по краям есть кавычки, то удаляем пробелы между
-      // кавычками и текстом в середине, не трогая пробелы внутри текста
-      if (item?.match(REGEXP_SIGN)) {
-        nextItem = "";
-      }
-      return nextItem;
-    })
-    .filter(
-      (item) =>
-        item?.trim()?.length && !item.match(REGEXP_ELEMENT_VALUE_AS_WORLD)
-    );
-
-  return formula;
 }
 
 watch(localShowInsideElementStatus, (newValue) => {
@@ -256,10 +226,8 @@ const notExistNamesInDisplayFormula = computed(() => {
   let usedNamesDependencyListOut = [];
   listDisplayFormula.value.forEach((item) => {
     item.displayFormula.forEach((name) => {
-      name = trimVariableValue(name)
       if (
-        !usedArrayNamesInElements.has(name) &&
-        !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
+        !isVariableNameOrSpecSymbol(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -277,13 +245,10 @@ const notExistNamesInDisplayFormula = computed(() => {
  */
 const notExistNamesInComputedFormula = computed(() => {
   let usedNamesDependencyListOut = [];
-  listComputedFormula.value.forEach((item) => {
+   listComputedFormula.value.forEach((item) => {
     item?.formula.forEach((name) => {
-      name = trimVariableValue(name)
-      name = trimVariableCost(name)
       if (
-        !usedArrayNamesInElements.has(name) &&
-        !EXCEPTION_VARIABLES_IN_FORMULA.includes(name)
+        !isVariableNameOrSpecSymbol(name)
       ) {
         usedNamesDependencyListOut.push({
           label: item.label,
@@ -294,6 +259,10 @@ const notExistNamesInComputedFormula = computed(() => {
   });
   return usedNamesDependencyListOut;
 });
+
+function isVariableNameOrSpecSymbol(name) {
+  return usedArrayNamesInElements.has(name) || EXCEPTION_VARIABLES_IN_FORMULA.includes(name) || name?.match(REGEXP_QUOTES_AND_WORD) !== null || isNumeric(name)
+}
 
 /**
  * Повторяющиеся имена переменных
