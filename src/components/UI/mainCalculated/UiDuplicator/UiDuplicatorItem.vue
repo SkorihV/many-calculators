@@ -101,12 +101,12 @@ const props = defineProps({
 
 const counterDuplicate = ref(0);
 const localResultData = ref({});
+const prefixName = ref("")
 const mutationsInputData = ref(null);
 const isMounted = ref(false)
 const localParentName =
-  props.index === 0 ? props.parentName + "_" + "0" : props.parentName;
-const LOCAL_NAME_RESERVED_VARIABLE_SUM =
-  NAME_RESERVED_VARIABLE_SUM + "_" + props.index;
+  props.index === 0 ? props.parentName + "_" + prefixName.value + "_" + "0" : props.parentName + "_" + prefixName.value;
+const LOCAL_NAME_RESERVED_VARIABLE_SUM = ref("")
 
 const { localDependencyList, constructLocalListElementDependencyInFormula } =
   useLocalDependencyList();
@@ -143,7 +143,7 @@ const mainFormulaResult = computed(() => {
 
       dependencyFormula = dependencyFormula.map((variable) => {
         if (isLocalVariable(variable)) {
-          return variable + "_" + props.index;
+          return variable + "_" + prefixName.value + "_" + props.index;
         }
         return variable;
       });
@@ -201,7 +201,7 @@ const listGlobalsVariables = computed(() => {
     return (
       !props.originVariables.includes(item) &&
       item !== NAME_RESERVED_VARIABLE_SUM &&
-      item !== LOCAL_NAME_RESERVED_VARIABLE_SUM
+      item !== LOCAL_NAME_RESERVED_VARIABLE_SUM.value
     );
   });
 });
@@ -213,7 +213,7 @@ const listGlobalsVariables = computed(() => {
 const attachIndexForFormulaElements = computed(() => {
   return variablesInFormula.value.map((item) => {
     if (isLocalVariable(item)) {
-      item = item + "_" + props.index;
+      item = item + "_" + prefixName.value + "_" + props.index;
     }
     return item;
   });
@@ -236,7 +236,7 @@ const { summaFreeVariables, usedVariablesOutsideFormula } =
  */
 const dataListVariablesOnFormula = computed(() => {
   return attachIndexForFormulaElements.value?.map((item) => {
-    const isReserveVariable = item === LOCAL_NAME_RESERVED_VARIABLE_SUM
+    const isReserveVariable = item === LOCAL_NAME_RESERVED_VARIABLE_SUM.value
     const isGlobalVariable = listGlobalsVariables.value.includes(item)
     const isNumber = !isNaN(Number(item))
 
@@ -246,7 +246,7 @@ const dataListVariablesOnFormula = computed(() => {
       return getProxyFreeVariables(
         summaFreeVariables.value,
         summaFreeVariables.value,
-        LOCAL_NAME_RESERVED_VARIABLE_SUM
+        LOCAL_NAME_RESERVED_VARIABLE_SUM.value
       );
     } else if (isGlobalVariable) {
       return getResultElementByName.value(item);
@@ -361,8 +361,7 @@ watch(
   summaFreeVariables,
   (newValue) => {
     const isShow = Boolean(newValue !== null)
-    const name = LOCAL_NAME_RESERVED_VARIABLE_SUM
-
+    const name = NAME_RESERVED_VARIABLE_SUM + "_" + props.originData.json_id + "_" + props.index;
     innerStore.addInnerVariable({
       name,
       value: newValue,
@@ -457,7 +456,7 @@ function updateIndexElementsInDuple(object, index) {
     } else if (propsIsLabel) {
       object[prop] =
         object[prop]?.length && index > 0
-          ? object[prop] + " ( " + index + " )"
+          ? object[prop] + " (" + index + ")"
           : object[prop];
     } else if (propIsDependencyField) {
       object[prop] = addIndexIndexInFormulaElements(object[prop], index).join(
@@ -475,7 +474,7 @@ function updateIndexElementsInDuple(object, index) {
  */
 function updateNameItem(item, index) {
   item.elementName = item?.elementName?.length
-    ? item?.elementName + "_" + index
+    ? item?.elementName + "_" + prefixName.value + "_" + index
     : item?.json_id + "_" + index;
   return item.elementName;
 }
@@ -489,7 +488,7 @@ function updateNameItem(item, index) {
 function addIndexIndexInFormulaElements(formulaString, index) {
   return getArrayElementsFromFormula(formulaString).map((item) => {
     if (isLocalVariable(item)) {
-      item = item + "_" + index;
+      item = item + "_" + prefixName.value + "_" + index;
     }
     return item;
   });
@@ -509,6 +508,8 @@ function isLocalVariable(item) {
 }
 
 onMounted(() => {
+  prefixName.value = props.originData.json_id;
+  LOCAL_NAME_RESERVED_VARIABLE_SUM.value = NAME_RESERVED_VARIABLE_SUM + "_" + prefixName.value + "_" + props.index
   if (props.isDuplicate) {
     mutationsInputData.value = props.duplicatorData;
   } else {
@@ -520,10 +521,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  dependencyStore.deleteDependencyElementInList(LOCAL_NAME_RESERVED_VARIABLE_SUM);
-  innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM)
-  nameStore.deleteNameInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
-  displayStore.deleteDisplayInList(LOCAL_NAME_RESERVED_VARIABLE_SUM)
+  dependencyStore.deleteDependencyElementInList(LOCAL_NAME_RESERVED_VARIABLE_SUM.value);
+  innerStore.deleteInnerVariable(LOCAL_NAME_RESERVED_VARIABLE_SUM.value)
+  nameStore.deleteNameInList(LOCAL_NAME_RESERVED_VARIABLE_SUM.value)
+  displayStore.deleteDisplayInList(LOCAL_NAME_RESERVED_VARIABLE_SUM.value)
 });
 </script>
 
