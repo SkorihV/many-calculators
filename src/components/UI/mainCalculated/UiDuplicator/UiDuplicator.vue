@@ -237,6 +237,7 @@ onMounted(() => {
         :parent-name="duplicator?.elementName"
         :parent-is-show="isVisibilityFromDependency"
         :origin-variables="originVariablesInDuplicator"
+        :zero-value-display-ignore="zeroValueDisplayIgnore"
         :position-element="idx"
         :show-duplicate-button="countElementsDuple < maximumDuple"
         :icon-settings-duplicator-label="

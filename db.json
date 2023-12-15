@@ -3,7 +3,7 @@
     "json_id": "100822907",
     "title": "Калькулятор грузоперевозок",
     "computedMethod": "formula",
-    "formula": "откуда + куда + типУслуги - 34 + атата",
+    "formula": "",
     "methodBeginningCalculation": "useButton",
     "methodWorksForm": "show",
     "tooltipOff": 1,
@@ -12,7 +12,7 @@
     "resultOptions": {
       "titleButton": "Рассчитать",
       "title": "ИТОГО:",
-      "formulaDisplayButton": "куда !== null &amp;&amp; откуда  !== null  &amp;&amp; объем &gt; 0 &amp;&amp; вес &gt; 0",
+      "formulaDisplayButton": "",
       "showResultDataForBlock": 1,
       "titleSumma": "Общая сумма составляет",
       "currency": "руб.",
@@ -388,386 +388,316 @@
   "data-test": {
     "calculatorTemplates": [
       {
-        "json_id": "100886307",
-        "title": "Откуда",
-        "label": "Откуда",
-        "isColumn": false,
-        "selectedItem": "1",
-        "isNeedChoice": 1,
-        "notEmpty": 1,
-        "formOutputMethod": "valueSumm",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
+        "json_id": "288310908",
+        "meta_id": "65468708",
+        "ver_id": "5625124",
+        "title": "Площадь стен",
+        "label": "Площадь стен:",
+        "zeroValueDisplayIgnore": true,
+        "templates": [
+          {
+            "json_id": "288310708",
+            "meta_id": "65469308",
+            "ver_id": "5625124",
+            "title": "Площадь стены",
+            "label": "",
+            "labelSub": "",
+            "templates": [
+              {
+                "json_id": "288310308",
+                "meta_id": "65466508",
+                "ver_id": "5625124",
+                "title": "Высота стены",
+                "label": "Высота стены",
+                "value": "0",
+                "placeholder": "",
+                "cost": "1",
+                "unit": "см",
+                "min": "1",
+                "max": "10000",
+                "controls": 1,
+                "step": "1",
+                "discreteStep": 1,
+                "dataType": "onlyNumber",
+                "notEmpty": 1,
+                "isCurrency": false,
+                "isColumn": 1,
+                "isStretch": 1,
+                "resultOutputMethod": "valueSumm",
+                "formOutputMethod": "valueSumm",
+                "dependencyFormulaOutput": "",
+                "zeroValueDisplayIgnore": 1,
+                "excludeFromCalculations": false,
+                "elementName": "высотаСтены",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "roundOffType": "round",
+                "signAfterDot": "0",
+                "template": "UiInput",
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettingsInputLabel": null,
+                "parent": "0;65468708;65469308;"
+              },
+              {
+                "json_id": "288310108",
+                "meta_id": "65466508",
+                "ver_id": "5625124",
+                "title": "Длина стены",
+                "label": "Длина стены",
+                "value": "0",
+                "placeholder": "",
+                "cost": "1",
+                "unit": "см",
+                "min": "0",
+                "max": "10000",
+                "controls": 1,
+                "step": "1",
+                "discreteStep": 1,
+                "dataType": "onlyNumber",
+                "notEmpty": 1,
+                "isCurrency": false,
+                "isColumn": 1,
+                "isStretch": 1,
+                "resultOutputMethod": "valueSumm",
+                "formOutputMethod": "valueSumm",
+                "dependencyFormulaOutput": "",
+                "zeroValueDisplayIgnore": 1,
+                "excludeFromCalculations": false,
+                "elementName": "длинаСтены",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "roundOffType": "round",
+                "signAfterDot": "0",
+                "template": "UiInput",
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettingsInputLabel": null,
+                "parent": "0;65468708;65469308;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "maxWidthSide": "100",
+            "visuallySeparateElement": 1,
+            "elementPosition": "horizontal",
+            "elementName": "",
+            "classes": "",
+            "template": "UiBlockSection",
+            "iconSettingsSectionLabel": null,
+            "backgroundImageSettings": null,
+            "parent": "0;65468708;"
+          }
+        ],
+        "buttonName": "+ Еще стена",
+        "maximumDuple": "10",
+        "unit": "м2",
+        "resultOutputMethod": "summ",
+        "formOutputMethod": "summ",
+        "dependencyFormulaOutput": "{{тест}} > 5",
         "excludeFromCalculations": false,
-        "elementName": "откуда",
-        "formulaProcessingLogic": "error",
-        "dependencyFormulaDisplay": "",
-        "classes": "",
-        "template": "UiSelect",
-        "isStretch": 1,
-        "isSearch": 1,
-        "globalMaxWidth": "",
-        "globalMaxHeight": "",
-        "values": [
-          {
-            "title": "Элемент списка - Москва",
-            "selectName": "Москва",
-            "extraValueForDependency": "москва",
-            "dependencyPrices": [
-              {
-                "title": "Московская Область",
-                "cost": 100,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 186,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 526,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Московская Область",
-            "selectName": "Московская Область",
-            "extraValueForDependency": "мо",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 100,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 571,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 294,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 86,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 426,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Белгород",
-            "selectName": "Белгород",
-            "extraValueForDependency": "белгород",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 671,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 571,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 419,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 853,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 257,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Брянск",
-            "selectName": "Брянск",
-            "extraValueForDependency": "брянск",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 394,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 294,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 419,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 594,
-                "dependencyFormulaCost": "куда ===&quot;владимир&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 441,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Владимир",
-            "selectName": "Владимир",
-            "extraValueForDependency": "владимир",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 186,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 86,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 853,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 594,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Воронеж",
-                "cost": 682,
-                "dependencyFormulaCost": "куда === &quot;воронеж&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_  !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "selectName": "Воронеж",
-            "extraValueForDependency": "воронеж",
-            "dependencyPrices": [
-              {
-                "title": "Москва",
-                "cost": 526,
-                "dependencyFormulaCost": "куда === &quot;москва&quot;"
-              },
-              {
-                "title": "Московская Область",
-                "cost": 426,
-                "dependencyFormulaCost": "куда === &quot;мо&quot;"
-              },
-              {
-                "title": "Белгород",
-                "cost": 257,
-                "dependencyFormulaCost": "куда === &quot;белгород&quot;"
-              },
-              {
-                "title": "Брянск",
-                "cost": 441,
-                "dependencyFormulaCost": "куда === &quot;брянск&quot;"
-              },
-              {
-                "title": "Владимир",
-                "cost": 682,
-                "dependencyFormulaCost": "куда === &quot;владимир&quot;"
-              }
-            ],
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - 25",
-            "selectName": "25",
-            "extraValueForDependency": "n25",
-            "dependencyFormulaItem": "_self_ !== куда && _self_ !== типУслуги"
-          }
-        ],
-        "prompt": "Откуда отправляем груз?",
-        "iconSettingsSelectLabel": null,
-        "parent": "0;30492307;35352507;35352707;"
-      },
-      {
-        "json_id": "100916907",
-        "title": "Куда",
-        "label": "Куда",
-        "isColumn": false,
-        "selectedItem": "1",
-        "isNeedChoice": 1,
-        "notEmpty": 1,
-        "formOutputMethod": "value",
-        "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": 1,
-        "excludeFromCalculations": 1,
-        "elementName": "куда",
+        "elementName": "площадьСтен",
         "formulaProcessingLogic": "zero",
+        "formula": "$$длинаСтены$$ * $$высотаСтены$$ / 10000",
         "dependencyFormulaDisplay": "",
         "classes": "",
-        "template": "UiSelect",
-        "isStretch": 1,
-        "isSearch": 1,
-        "globalMaxWidth": "",
-        "globalMaxHeight": "",
-        "values": [
-          {
-            "title": "Элемент списка - Москва",
-            "selectName": "Москва",
-            "extraValueForDependency": "москва",
-            "dependencyFormulaItem": "$$_self_$$ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Московская Область",
-            "selectName": "Московская Область",
-            "extraValueForDependency": "мо",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Белгород",
-            "selectName": "Белгород",
-            "extraValueForDependency": "белгород",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Брянск",
-            "selectName": "Брянск",
-            "extraValueForDependency": "брянск",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Владимир",
-            "selectName": "Владимир",
-            "extraValueForDependency": "владимир",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "selectName": "Воронеж",
-            "extraValueForDependency": "воронеж",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          },
-          {
-            "title": "Элемент списка - 25",
-            "selectName": "25",
-            "extraValueForDependency": "n25",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== типУслуги"
-          }
-        ],
+        "roundOffType": "round",
+        "signAfterDot": "-2",
+        "template": "UiDuplicator",
         "prompt": "",
-        "iconSettingsSelectLabel": null,
-        "parent": "0;30492307;35352507;35352707;"
+        "dependencyMainFormula": null,
+        "iconSettingsDuplicatorLabel": null,
+        "parent": "0;"
       },
       {
-        "json_id": "104709107",
-        "title": "Тип услуги",
-        "label": "Тип услуги",
-        "selectedItem": "1",
-        "isColumn": false,
-        "isNeedChoice": true,
-        "notEmpty": 1,
-        "typeDisplayClass": "buttons",
-        "formOutputMethod": "valueSumm",
+        "json_id": "288315508",
+        "meta_id": "65466708",
+        "ver_id": "5625124",
+        "title": "Вырезать площадь окон / дверей",
+        "label": "Вырезать площадь окон / дверей",
+        "buttonText": "Нет",
+        "buttonTextChecked": "Да",
+        "costForVoid": "0",
+        "cost": "",
+        "baseValue": "default",
+        "isNeedChoice": false,
+        "isColumn": 1,
+        "typeDisplayClass": "switcher",
         "resultOutputMethod": "value",
-        "zeroValueDisplayIgnore": false,
+        "formOutputMethod": "value",
+        "dependencyFormulaOutput": "",
+        "zeroValueDisplayIgnore": 1,
         "excludeFromCalculations": false,
-        "elementName": "типУслуги",
+        "elementName": "вырезатьОкно",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "scrollIntoName": "вырезатьОкно",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsCheckboxLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "288315108",
+        "meta_id": "65468708",
+        "ver_id": "5625124",
+        "title": "Площадь окон / дверей",
+        "label": "",
+        "templates": [
+          {
+            "json_id": "288314908",
+            "meta_id": "65469308",
+            "ver_id": "5625124",
+            "title": "Площадь окна",
+            "label": "",
+            "labelSub": "",
+            "templates": [
+              {
+                "json_id": "288314508",
+                "meta_id": "65466508",
+                "ver_id": "5625124",
+                "title": "Высота окна / двери",
+                "label": "Высота окна / двери",
+                "value": "0",
+                "placeholder": "",
+                "cost": "1",
+                "unit": "см",
+                "min": "0",
+                "max": "10000",
+                "controls": 1,
+                "step": "1",
+                "discreteStep": 1,
+                "dataType": "onlyNumber",
+                "notEmpty": 1,
+                "isCurrency": false,
+                "isColumn": 1,
+                "isStretch": 1,
+                "resultOutputMethod": "valueSumm",
+                "formOutputMethod": "valueSumm",
+                "dependencyFormulaOutput": "",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "высотаОкна",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "roundOffType": "round",
+                "signAfterDot": "0",
+                "template": "UiInput",
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettingsInputLabel": null,
+                "parent": "0;65468708;65469308;"
+              },
+              {
+                "json_id": "288314708",
+                "meta_id": "65466508",
+                "ver_id": "5625124",
+                "title": "Длина окна / двери",
+                "label": "Длина окна / двери",
+                "value": "0",
+                "placeholder": "",
+                "cost": "1",
+                "unit": "см",
+                "min": "0",
+                "max": "10000",
+                "controls": 1,
+                "step": "1",
+                "discreteStep": 1,
+                "dataType": "onlyNumber",
+                "notEmpty": 1,
+                "isCurrency": 1,
+                "isColumn": 1,
+                "isStretch": 1,
+                "resultOutputMethod": "valueSumm",
+                "formOutputMethod": "valueSumm",
+                "dependencyFormulaOutput": "",
+                "zeroValueDisplayIgnore": false,
+                "excludeFromCalculations": false,
+                "elementName": "длинаОкна",
+                "formulaProcessingLogic": "zero",
+                "dependencyFormulaDisplay": "",
+                "classes": "",
+                "roundOffType": "round",
+                "signAfterDot": "0",
+                "template": "UiInput",
+                "dependencyPrices": null,
+                "prompt": "",
+                "iconSettingsInputLabel": null,
+                "parent": "0;65468708;65469308;"
+              }
+            ],
+            "dependencyFormulaDisplay": "",
+            "maxWidthSide": "100",
+            "visuallySeparateElement": false,
+            "elementPosition": "horizontal",
+            "elementName": "",
+            "classes": "",
+            "template": "UiBlockSection",
+            "iconSettingsSectionLabel": null,
+            "backgroundImageSettings": null,
+            "parent": "0;65468708;"
+          }
+        ],
+        "buttonName": "+ окно / дверь",
+        "maximumDuple": "10",
+        "unit": "м2",
+        "resultOutputMethod": "summ",
+        "formOutputMethod": "summ",
+        "dependencyFormulaOutput": "",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": false,
+        "elementName": "площадьОкна",
+        "formulaProcessingLogic": "zero",
+        "formula": "$$длинаОкна$$ * $$высотаОкна$$ / 10000",
+        "dependencyFormulaDisplay": "{{вырезатьОкно}} === true",
+        "classes": "",
+        "roundOffType": "round",
+        "signAfterDot": "-2",
+        "template": "UiDuplicator",
+        "prompt": "<div id=\"gtx-trans\" style=\"position: absolute; left: -315px; top: -20px;\">\n<div class=\"gtx-trans-icon\">&nbsp;</div>\n</div>",
+        "dependencyMainFormula": null,
+        "iconSettingsDuplicatorLabel": null,
+        "parent": "0;"
+      },
+      {
+        "json_id": "288319308",
+        "meta_id": "65466508",
+        "ver_id": "5625124",
+        "title": "тест",
+        "label": "тест",
+        "value": "0",
+        "placeholder": "",
+        "cost": "1",
+        "unit": "",
+        "min": "0",
+        "max": "10",
+        "controls": false,
+        "step": "1",
+        "discreteStep": false,
+        "dataType": "onlyNumber",
+        "notEmpty": false,
+        "isCurrency": false,
+        "isColumn": false,
+        "isStretch": false,
+        "resultOutputMethod": "valueSumm",
+        "formOutputMethod": "valueSumm",
+        "dependencyFormulaOutput": "",
+        "zeroValueDisplayIgnore": 1,
+        "excludeFromCalculations": false,
+        "elementName": "тест",
         "formulaProcessingLogic": "zero",
         "dependencyFormulaDisplay": "",
         "classes": "",
-        "template": "UiRadio",
-        "isStretch": 1,
-        "globalMaxWidth": "",
-        "globalMaxHeight": "",
-        "values": [
-          {
-            "title": "Элемент списка - Москва",
-            "radioName": "Москва",
-            "extraValueForDependency": "москва",
-            "dependencyFormulaItem": "_self_ !== откуда"
-          },
-          {
-            "title": "Элемент списка - Московская Область",
-            "radioName": "Московская Область",
-            "extraValueForDependency": "мо",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Белгород",
-            "radioName": "Белгород",
-            "extraValueForDependency": "белгород",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Брянск",
-            "radioName": "Брянск",
-            "extraValueForDependency": "брянск",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Владимир",
-            "radioName": "Владимир",
-            "extraValueForDependency": "владимир",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "radioName": "Воронеж",
-            "extraValueForDependency": "воронеж",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          },
-          {
-            "title": "Элемент списка - Воронеж",
-            "radioName": "25",
-            "extraValueForDependency": "n25",
-            "dependencyFormulaItem": "_self_ !== откуда && _self_ !== куда"
-          }
-        ],
-        "prompt": "<p><strong>Первичная печать по реквизитам</strong>&nbsp;&ndash; вы присылаете реквизиты печати (ОРГН, ИНН название или ФИО ИП), а мы вписываем их в один из наших шаблонов (выбрать шаблон можно на этой странице ниже).</p>\n\n<p><strong>Точная копия печати по оттиску</strong>&nbsp;&ndash; вы присылаете скан или фотографию&nbsp;печати или штампа (можно сфотографировать на телефон), а мы изготавливаем точную копию.</p>\n\n<p><strong>Факсимиле</strong>&nbsp;&ndash; точная копия подписи в виде штампа. Для изготовления достаточно фотографии или скана. Для изготовления, ниже нужно выбрать простой или автоматический&nbsp;штамп в качестве оснастки.<br />\nЕсли размер вашей подписи больше чем 58х22, то стоимость на автоматическом штампе увеличится на 200 руб.</p>",
-        "iconSettingsRadioLabel": {
-          "title": "",
-          "image": {
-            "image_id": "1585353107",
-            "filename": "plotter_1_traced-svg.png",
-            "ver_id": 4865030,
-            "image_width": "64",
-            "image_height": "64",
-            "ext": "png"
-          },
-          "maxWidth": 48,
-          "maxHeight": 48,
-          "behaviorImage": "contain",
-          "location": "leftSide"
-        },
+        "roundOffType": "round",
+        "signAfterDot": "-2",
+        "template": "UiInput",
+        "dependencyPrices": null,
+        "prompt": "",
+        "iconSettingsInputLabel": null,
         "parent": "0;"
       }
     ]

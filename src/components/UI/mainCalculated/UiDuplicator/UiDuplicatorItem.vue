@@ -95,6 +95,7 @@ const props = defineProps({
     "unit",
     "roundOffType",
     "signAfterDot",
+    "zeroValueDisplayIgnore",
   ]),
 });
 
@@ -114,7 +115,10 @@ const isVisibilityFromDependency = computed(() => {
   return props.parentIsShow
 })
 useDisplayComponents(mutationsInputData.value?.elementName, isVisibilityFromDependency, typeElement)
-
+const isIgnoredValueOnZero = computed(() => {
+  let value = isVisibilityFromDependency.value ? localCost.value : null
+  return (props.zeroValueDisplayIgnore && !value)
+})
 /**
  *
  * @returns {boolean}
@@ -394,6 +398,7 @@ function changeValue(data) {
     eventType: data.eventType,
     unit: props.unit?.length ? props.unit : "",
     isShow: props.parentIsShow,
+    isShowOutput: isVisibilityFromDependency.value && !isIgnoredValueOnZero.value,
     excludeFromCalculations: mutationsInputData.value.excludeFromCalculations,
     insertedTemplates: returnsLocalResultData.value,
     position: props.positionElement,
