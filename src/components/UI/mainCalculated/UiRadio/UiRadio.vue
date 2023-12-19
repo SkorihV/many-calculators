@@ -238,7 +238,7 @@ const localCost = computed(() => {
 });
 
 const selectedValueInRadio = computed(() => {
-  if (!isRadioItemSelected.value) {
+  if (!isRadioItemSelected.value || !isVisibilityFromDependency.value) {
     return null;
   }
   const isExistExtraValue = Boolean(
@@ -251,9 +251,11 @@ const selectedValueInRadio = computed(() => {
 });
 
 const valueForDisplayRadioElement = computed(() => {
-  return isRadioItemSelected.value
-    ? currentSelectedRadioButton.value?.radioName
-    : null;
+  if (!isRadioItemSelected.value || !isVisibilityFromDependency.value) {
+    return null
+  }
+  return currentSelectedRadioButton.value?.radioName
+
 });
 
 const radioListAfterCheckDependency = computed(() => {
