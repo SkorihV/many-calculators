@@ -1,3 +1,5 @@
+import { unref } from "vue";
+
 /**
  * Обработать строку формулы зависимости и получает из нее данные
  * и получить строку со значениями
@@ -6,6 +8,8 @@
  * @returns {*|null}
  */
 const processingVariablesOnFormula = function (formula, localDependencyList) {
+  localDependencyList = unref(localDependencyList);
+  formula = unref(formula);
   if (!formula) {
     return null;
   }
@@ -13,13 +17,8 @@ const processingVariablesOnFormula = function (formula, localDependencyList) {
   const result = formula?.reduce((resultText, item) => {
     const elementDependency =
       item in localDependencyList ? localDependencyList[item] : null;
-
     const elementIsExist = elementDependency !== null;
-    // const valueIsExist = !isNaN(
-    //   parseFloat(elementDependency?.value) &&
-    //     !Array.isArray(elementDependency?.value) &&
-    //     typeof elementDependency?.value !== "boolean"
-    // );
+
     const valueIsBool = typeof elementDependency?.value === "boolean";
     const valueIsNull = elementDependency?.value === null;
     const valueIsArray = Array.isArray(elementDependency?.value);

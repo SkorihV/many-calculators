@@ -1,3 +1,66 @@
+<script setup>
+import { ref, computed } from "vue";
+import { updateTextOnVariables } from "@/servises/UpdateTextOnVariables";
+import { deleteTagsInText } from "@/servises/UtilityServices";
+
+
+const props = defineProps({
+  promptText: {
+    type: String,
+  },
+  classes: {
+    type: String,
+  },
+  options: {
+    type: Object,
+    default: () => {}
+  }
+});
+
+const isShow = ref(false);
+const promptBtn = ref(null);
+const timerName = ref(null);
+const topBtnPrompt = ref(null);
+const topCalcWrapper = ref(null);
+
+const hiddenPromptWrapper = computed(() => {
+  return Boolean(deleteTagsInText(localPromptText.value)?.toString()?.trim().length);
+});
+
+const topPopupWrapper = computed(() => {
+  const btn = promptBtn.value?.getBoundingClientRect();
+  const btnCoordTop =
+    topBtnPrompt.value -
+    topCalcWrapper.value +
+    window.pageYOffset +
+    5 +
+    btn.height;
+  return `top: ${btnCoordTop}px;`;
+});
+
+const localPromptText = computed(() => {
+  return updateTextOnVariables(props.promptText, props.options)
+})
+
+function show() {
+  clearTimeout(timerName.value);
+  getTopForCalcWrapper();
+  getTopBtnPrompt();
+  isShow.value = true;
+}
+function hidden() {
+  timerName.value = setTimeout(() => (isShow.value = false), 500);
+}
+function getTopForCalcWrapper() {
+  topCalcWrapper.value =
+    document.querySelector("#App_calc").getBoundingClientRect().top +
+    window.pageYOffset;
+}
+function getTopBtnPrompt() {
+  topBtnPrompt.value = promptBtn.value?.getBoundingClientRect().top;
+}
+</script>
+
 <template>
   <div
     @click.stop
@@ -27,67 +90,9 @@
           @mouseenter="show"
           @mouseleave="hidden"
           class="prompt-content"
-          v-html="promptText"
+          v-html="localPromptText"
         ></div>
       </div>
     </transition>
   </teleport>
 </template>
-
-<script>
-export default {
-  name: "UiPrompt",
-  props: {
-    promptText: {
-      type: String,
-    },
-    classes: {
-      type: String,
-    },
-  },
-  data() {
-    return {
-      isShow: false,
-      timerName: null,
-      topCalcWrapper: null,
-      topBtnPrompt: null,
-    };
-  },
-  methods: {
-    show() {
-      clearTimeout(this.timerName);
-      this.getTopForCalcWrapper();
-      this.getTopBtnPrompt();
-      this.isShow = true;
-    },
-    hidden() {
-      this.timerName = setTimeout(() => (this.isShow = false), 500);
-    },
-    getTopForCalcWrapper() {
-      this.topCalcWrapper =
-        document
-          .querySelector("#App_calc")
-          .getBoundingClientRect().top + window.pageYOffset;
-    },
-    getTopBtnPrompt() {
-      this.topBtnPrompt = this.$refs.promptBtn.getBoundingClientRect().top;
-    },
-  },
-  computed: {
-    hiddenPromptWrapper() {
-      const text = this.promptText;
-      return Boolean(text?.toString()?.trim().length);
-    },
-    topPopupWrapper() {
-      const btn = this.$refs.promptBtn.getBoundingClientRect();
-      const btnCoordTop =
-        this.topBtnPrompt -
-        this.topCalcWrapper +
-        window.pageYOffset +
-        5 +
-        btn.height;
-      return `top: ${btnCoordTop}px;`;
-    },
-  },
-};
-</script>
