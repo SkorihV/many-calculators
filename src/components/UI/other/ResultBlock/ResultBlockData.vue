@@ -56,13 +56,12 @@ const resultTextDataForResultBlock = computed(() => {
     if (item.type === "UiDuplicator") {
       if (item?.insertedTemplates?.length && item?.isShow && item?.isShowOutput) {
         item?.insertedTemplates.forEach((duplicator) => {
-          if (duplicator?.insertedTemplates?.length) {
+          if (duplicator?.insertedTemplates?.length && duplicator?.isShow && duplicator?.isShowOutput) {
             const resultValueObjectItem = parseResultValueObjectItem(
               duplicator,
               "resultOutputMethod",
               duplicator?.unit
             );
-
             if (resultValueObjectItem?.length) {
               result += "<div class='calc__result-block-delimiter'></div>";
               result +=
@@ -71,17 +70,19 @@ const resultTextDataForResultBlock = computed(() => {
                 "</div>";
             }
             duplicator?.insertedTemplates.forEach((templateInDuplicator) => {
-              const resultValueObjectItemInDuplicator =
-                parseResultValueObjectItem(
-                  templateInDuplicator,
-                  "resultOutputMethod",
-                  getCurrency.value
-                );
-              if (resultValueObjectItemInDuplicator?.length) {
-                result +=
-                  "<div class='calc__result-block-field-wrapper'>" +
-                  resultValueObjectItemInDuplicator +
-                  "</div>";
+              if (templateInDuplicator.isShow && templateInDuplicator.isShowOutput) {
+                const resultValueObjectItemInDuplicator =
+                  parseResultValueObjectItem(
+                    templateInDuplicator,
+                    "resultOutputMethod",
+                    getCurrency.value
+                  );
+                if (resultValueObjectItemInDuplicator?.length) {
+                  result +=
+                    "<div class='calc__result-block-field-wrapper'>" +
+                    resultValueObjectItemInDuplicator +
+                    "</div>";
+                }
               }
             });
             result += "<div class='calc__result-block-delimiter'></div>";

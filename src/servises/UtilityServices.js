@@ -283,11 +283,11 @@ const getArrayOnFormula = (formula) => {
   let formulaInOut = formula?.toString()
     ?.split(REGEXP_VARIABLE_SIGN_NUMBERS)
     .filter((item) => item?.trim()?.length);
-
   formulaInOut = formulaInOut?.map((item) => {
     //удаляем пробелы по краям
-    let nextItem = replaceCommaOnDot(item)
-    nextItem = trimVariableValue(item)
+    let nextItem = replaceCommaOnDot(item)?.toString()
+
+    nextItem = trimVariableValue(nextItem)
     nextItem = trimVariableCost(nextItem)
     nextItem = nextItem?.replace(REGEXP_SPACES_IN_AROUND, "")
     // если по краям есть кавычки, то удаляем пробелы между
@@ -347,7 +347,7 @@ function trimVariableCost(text) {
 }
 
 /**
- *
+ * у дробного числа заменяем запятую на точку
  * @param text
  * @returns {number|string}
  */
@@ -375,6 +375,15 @@ function initFuncForInterval(fn, limit = 10, step = 1000){
   }, step);
 }
 
+/**
+ * проверка на число
+ * @param num
+ * @returns {boolean}
+ */
+function isNumeric(num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
+}
+
 export {
   parseResultValueObjectItem,
   processingArrayOnFormulaProcessingLogic,
@@ -397,5 +406,6 @@ export {
   getSignsAfterComma,
   roundingValueToInputNumber,
   replaceCommaOnDot,
-  initFuncForInterval
+  initFuncForInterval,
+  isNumeric
 };

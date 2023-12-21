@@ -268,16 +268,16 @@ const currentOptionValue = computed(() => {
 
   return isExistExtraValue
     ? currentOption.value?.extraValueForDependency
-    : !isNaN(parseInt(currentOption?.value?.value))
-    ? currentOption?.value?.value
+    : !isNaN(parseInt(currentOption?.value?.index))
+    ? currentOption?.value?.index
     : null
 });
 
 const mutationSelectValue = computed(() => {
   return localSelectValues.value.map((selectItem, index) => {
     const localIndex = needMockValue.value ? index : index + 1;
-    selectItem.value = selectItem.value?.toString()?.length
-      ? selectItem.value
+    selectItem.index = selectItem.index?.toString()?.length
+      ? selectItem.index
       : localIndex
     return selectItem
   });
@@ -315,12 +315,11 @@ const selectValuesAfterProcessingDependency = computed(() => {
         selectItem.isShow = true
         return selectItem
       }
-
       formula = formula.map((item) => {
         if (item.toLowerCase() === NAME_CURRENT_VARIABLE && extraValueIsExist) {
           return '"' + selectItem?.extraValueForDependency + '"';
         } else if (item.toLowerCase() === NAME_CURRENT_VARIABLE && !extraValueIsExist) {
-          return selectItem.value
+          return selectItem.index
         }
         return item
       });
@@ -339,13 +338,17 @@ const selectValuesAfterProcessingDependency = computed(() => {
         selectItem?.extraValueForDependency?.toString()?.length
       )
         ? selectItem?.extraValueForDependency
-        : selectItem.value
+        : selectItem.index
       if (!newDataIsShow && valueInDependency === currentOptionValue) {
         resetSelectedValue()
       }
       return selectItem
     })
-    .filter((selectItem) => {
+    .filter((selectItem, index) => {
+      if(needMockValue.value && index === 0) {
+        return selectItem
+      }
+
       if (props.isSearch && searchField.value?.length) {
         return (
           selectItem.selectName
@@ -441,16 +444,6 @@ function initSelectData(eventType = "mounted") {
       currentIndexOption.value,
       eventType
     );
-  }
-}
-
-function open() {
-  if (
-    selectValuesAfterProcessingDependency.value.filter(
-      (option) => option.isShow
-    ).length > 1
-  ) {
-    isOpen.value = true
   }
 }
 
@@ -682,7 +675,7 @@ onUnmounted(() => {
                 <div
                   class="calc__select-option-item"
                   @click="changeSelect(option, idx)"
-                  v-if="currentOption?.value !== option?.value && option.isShow"
+                  v-if="currentOption?.index !== option?.index && option.isShow"
                   @mouseover="hoverElementIndex = idx"
                   @mouseleave="hoverElementIndex = null"
                 >
