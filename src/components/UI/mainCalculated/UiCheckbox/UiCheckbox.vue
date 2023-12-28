@@ -230,7 +230,7 @@ const localCost = computed(() => {
     })
   );
 
-  if (newCost !== null) {
+  if (newCost !== null && isLocalChecked.value) {
     return newCost;
   }
   return isLocalChecked.value && checkedValueOnVoid(props.cost)

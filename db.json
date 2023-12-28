@@ -11698,6 +11698,45 @@
   "data-cleaning": {
     "calculatorTemplates": [
       {
+        "json_id": "312453708",
+        "title": "кнопка",
+        "label": "кнопка",
+        "buttonText": "Нет",
+        "buttonTextChecked": "да",
+        "costForVoid": "50",
+        "cost": "150",
+        "baseValue": "active",
+        "isNeedChoice": false,
+        "isColumn": false,
+        "typeDisplayClass": "button",
+        "resultOutputMethod": "valueSumm",
+        "formOutputMethod": "valueSumm",
+        "dependencyFormulaOutput": "",
+        "zeroValueDisplayIgnore": false,
+        "excludeFromCalculations": false,
+        "elementName": "кнопка1",
+        "formulaProcessingLogic": "zero",
+        "dependencyFormulaDisplay": "",
+        "scrollIntoName": "",
+        "classes": "",
+        "template": "UiCheckbox",
+        "dependencyPrices": [
+          {
+            "title": "",
+            "cost": 200,
+            "dependencyFormulaCost": "{{инпут1}} &gt; 10"
+          },
+          {
+            "title": "",
+            "cost": 300,
+            "dependencyFormulaCost": "{{инпут1}} &gt; 20"
+          }
+        ],
+        "prompt": "",
+        "iconSettingsCheckboxLabel": null,
+        "parent": "0;"
+      },
+      {
         "json_id": "102252507",
         "title": "Уборка",
         "label": "",
@@ -11759,7 +11798,7 @@
                 "resultOutputMethod": "value",
                 "zeroValueDisplayIgnore": 1,
                 "excludeFromCalculations": false,
-                "elementName": "",
+                "elementName": "инпут1",
                 "formulaProcessingLogic": "zero",
                 "dependencyFormulaDisplay": "",
                 "classes": "",
