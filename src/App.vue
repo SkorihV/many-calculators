@@ -686,7 +686,7 @@ onMounted(async () => {
 <template>
   <div
     class="calc calc__wrapper"
-    id="custom-stile"
+    id="custom-style"
     v-show="appIsMounted"
     ref="parentRef"
   >
